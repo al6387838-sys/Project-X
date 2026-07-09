@@ -11,7 +11,8 @@ setup(
         'life_timeline',
         'evolution_engine',
         'future_engine',
-        'life_orchestrator'
+        'life_orchestrator',
+        'lifeos_sdk'
     ]),
     python_requires=">=3.9",
 )
