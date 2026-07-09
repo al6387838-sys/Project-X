@@ -20,8 +20,16 @@ class PluginFinanceiro:
             "status": "ok",
             "goals": goals_response.data if goals_response.success else [],
             "financial_risks": risks_response.data if risks_response.success else [],
+            "errors": [],
             "recommendations": []
         }
+        if not goals_response.success:
+            overview["errors"].append(f"Erro ao obter metas: {goals_response.error}")
+        if not risks_response.success:
+            overview["errors"].append(f"Erro ao obter riscos financeiros: {risks_response.error}")
+        
+        if overview["errors"]:
+            overview["status"] = "error"
         
         # Lógica de negócio do plugin
         if any("instabilidade financeira" in r.get("title", "").lower() for r in overview["financial_risks"]):

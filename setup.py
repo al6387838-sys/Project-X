@@ -12,7 +12,8 @@ setup(
         'evolution_engine',
         'future_engine',
         'life_orchestrator',
-        'lifeos_sdk'
+        'lifeos_sdk',
+        'human_experience'
     ]),
     python_requires=">=3.9",
 )
