@@ -1,0 +1,16 @@
+{
+  "generic": "出了点问题。",
+  "network": "连接错误。",
+  "not_found": "未找到资源。",
+  "unauthorized": "未经授权的访问。",
+  "validation": {
+    "required": "此字段为必填项。",
+    "invalid_email": "无效的电子邮件。",
+    "too_short": "最少{{min}}个字符。",
+    "too_long": "最多{{max}}个字符。"
+  },
+  "decision": {
+    "no_context": "情境不足。",
+    "invalid_category": "无效类别: {{category}}。"
+  }
+}

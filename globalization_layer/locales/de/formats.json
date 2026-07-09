@@ -1,0 +1,30 @@
+{
+  "date": {
+    "short": "dd.MM.yyyy",
+    "medium": "dd. MMM yyyy",
+    "long": "dd. MMMM yyyy",
+    "full": "EEEE, dd. MMMM yyyy"
+  },
+  "time": {
+    "short": "HH:mm",
+    "medium": "HH:mm:ss",
+    "long": "HH:mm:ss z"
+  },
+  "datetime": {
+    "short": "dd.MM.yyyy HH:mm",
+    "medium": "dd.MM.yyyy HH:mm:ss"
+  },
+  "number": {
+    "decimal_separator": ",",
+    "thousands_separator": ".",
+    "currency_symbol": "€",
+    "currency_code": "EUR",
+    "currency_position": "after"
+  },
+  "labels": {
+    "currency": "Währung",
+    "timezone": "Zeitzone",
+    "date_format": "Datumsformat",
+    "time_format": "Zeitformat"
+  }
+}

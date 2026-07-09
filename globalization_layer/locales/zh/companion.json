@@ -1,0 +1,29 @@
+{
+  "greeting": {
+    "morning": "早上好！我如何简化您的一天？",
+    "afternoon": "下午好！我能帮什么？",
+    "evening": "晚上好！我们来回顾一下今天吧？",
+    "generic": "你好！我在这里帮助您。"
+  },
+  "thinking": "正在分析您的情境...",
+  "processing": "处理中...",
+  "ready": "准备好帮助了！",
+  "suggestion": "建议: {{text}}",
+  "ask_placeholder": "询问您的伴侣...",
+  "decision_prompt": "根据您的情境，我建议: {{recommendation}}",
+  "feedback": {
+    "accepted": "太好了！我将从这个选择中学习。",
+    "rejected": "明白了。我会改进我的建议。",
+    "ask_why": "您能告诉我为什么拒绝吗？"
+  },
+  "context": {
+    "sleep_bad": "我注意到您睡眠不好。",
+    "high_energy": "您精力充沛！是处理重要任务的好时机。",
+    "low_energy": "检测到能量低。",
+    "busy_day": "繁忙的一天即将到来。"
+  },
+  "errors": {
+    "no_context": "我需要更多情境来更好地帮助。",
+    "unavailable": "我暂时不可用。"
+  }
+}

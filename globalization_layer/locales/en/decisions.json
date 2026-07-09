@@ -1,0 +1,30 @@
+{
+  "title": "Decision Engine",
+  "analyze": "Analyze context",
+  "recommendation": "Recommendation",
+  "justification": "Justification",
+  "alternatives": "Evaluated alternatives",
+  "risks": "Possible risks",
+  "benefits": "Possible benefits",
+  "score": "Decision Score",
+  "confidence": "AI Confidence",
+  "reasoning": "Reasoning",
+  "history": "Decision History",
+  "feedback": {
+    "title": "What do you think?",
+    "accept": "Accept recommendation",
+    "reject": "Reject recommendation",
+    "comment_placeholder": "Optional comment..."
+  },
+  "categories": {
+    "health": "Health",
+    "finance": "Finance",
+    "productivity": "Productivity",
+    "relationships": "Relationships",
+    "projects": "Projects",
+    "career": "Career",
+    "knowledge": "Knowledge"
+  },
+  "empty": "No decisions recorded yet.",
+  "loading": "Analyzing your context..."
+}

@@ -1,0 +1,43 @@
+{
+  "title": "メインダッシュボード",
+  "morning_briefing": {
+    "title": "朝のブリーフィング",
+    "weather": "天気: {{value}}",
+    "priority_today": "今日の優先事項: {{value}}",
+    "next_event": "次のイベント: {{value}}",
+    "daily_quote": "今日の名言"
+  },
+  "missions": {
+    "title": "アクティブミッション",
+    "empty": "アクティブなミッションはありません。",
+    "progress": "{{percent}}%完了",
+    "create": "ミッションを作成"
+  },
+  "decisions": {
+    "title": "最近の決断",
+    "empty": "記録された決断はありません。",
+    "score": "スコア: {{score}}/100",
+    "confidence": "信頼度: {{percent}}%"
+  },
+  "agenda": {
+    "title": "今日のアジェンダ",
+    "empty": "今日のイベントはありません。",
+    "at": "{{time}}に"
+  },
+  "companion": {
+    "title": "コンパニオン",
+    "status": "オンライン",
+    "ask": "コンパニオンに質問"
+  },
+  "life_score": {
+    "title": "ライフスコア",
+    "overall": "総合スコア",
+    "trend": "トレンド: {{direction}}"
+  },
+  "widgets": {
+    "energy": "エネルギーレベル",
+    "focus": "集中力",
+    "mood": "気分",
+    "streak": "連続: {{days}}日"
+  }
+}

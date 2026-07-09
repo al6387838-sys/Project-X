@@ -1,0 +1,43 @@
+{
+  "title": "Main Dashboard",
+  "morning_briefing": {
+    "title": "Morning Briefing",
+    "weather": "Weather: {{value}}",
+    "priority_today": "Today's priority: {{value}}",
+    "next_event": "Next event: {{value}}",
+    "daily_quote": "Quote of the day"
+  },
+  "missions": {
+    "title": "Active Missions",
+    "empty": "No active missions at the moment.",
+    "progress": "{{percent}}% complete",
+    "create": "Create mission"
+  },
+  "decisions": {
+    "title": "Recent Decisions",
+    "empty": "No decisions recorded.",
+    "score": "Score: {{score}}/100",
+    "confidence": "Confidence: {{percent}}%"
+  },
+  "agenda": {
+    "title": "Today's Agenda",
+    "empty": "No events today.",
+    "at": "at {{time}}"
+  },
+  "companion": {
+    "title": "Companion",
+    "status": "Online",
+    "ask": "Ask Companion"
+  },
+  "life_score": {
+    "title": "Life Score",
+    "overall": "Overall Score",
+    "trend": "Trend: {{direction}}"
+  },
+  "widgets": {
+    "energy": "Energy Level",
+    "focus": "Focus",
+    "mood": "Mood",
+    "streak": "Streak: {{days}} days"
+  }
+}

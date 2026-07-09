@@ -1,0 +1,29 @@
+{
+  "greeting": {
+    "morning": "Good morning! How can I simplify your day?",
+    "afternoon": "Good afternoon! How can I help?",
+    "evening": "Good evening! Shall we review the day?",
+    "generic": "Hello! I'm here to help."
+  },
+  "thinking": "Analyzing your context...",
+  "processing": "Processing...",
+  "ready": "Ready to help!",
+  "suggestion": "Suggestion: {{text}}",
+  "ask_placeholder": "Ask your Companion...",
+  "decision_prompt": "Based on your context, I recommend: {{recommendation}}",
+  "feedback": {
+    "accepted": "Great! I'll learn from this choice.",
+    "rejected": "Understood. I'll improve my suggestions.",
+    "ask_why": "Can you tell me why you rejected it? This helps me improve."
+  },
+  "context": {
+    "sleep_bad": "I noticed you slept poorly. I'll adjust my suggestions.",
+    "high_energy": "You have high energy! Great time for important tasks.",
+    "low_energy": "Low energy detected. I'll suggest lighter tasks.",
+    "busy_day": "Busy day ahead. I'll prioritize the essentials."
+  },
+  "errors": {
+    "no_context": "I need more context to help better.",
+    "unavailable": "I'm temporarily unavailable. Please try again shortly."
+  }
+}

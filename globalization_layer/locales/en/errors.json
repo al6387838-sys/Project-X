@@ -1,0 +1,16 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "network": "Connection error. Check your internet.",
+  "not_found": "Resource not found.",
+  "unauthorized": "Unauthorized access.",
+  "validation": {
+    "required": "This field is required.",
+    "invalid_email": "Invalid email.",
+    "too_short": "Minimum {{min}} characters.",
+    "too_long": "Maximum {{max}} characters."
+  },
+  "decision": {
+    "no_context": "Insufficient context to generate a decision.",
+    "invalid_category": "Invalid category: {{category}}."
+  }
+}

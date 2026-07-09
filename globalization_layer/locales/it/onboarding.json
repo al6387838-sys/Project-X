@@ -1,0 +1,36 @@
+{
+  "welcome": {
+    "title": "Benvenuto su LifeOS",
+    "subtitle": "Il sistema operativo della tua vita",
+    "description": "Configuriamo il tuo profilo.",
+    "start": "Inizia"
+  },
+  "steps": {
+    "language": {
+      "title": "Scegli la tua lingua",
+      "subtitle": "Puoi cambiarlo in qualsiasi momento."
+    },
+    "profile": {
+      "title": "Il tuo profilo",
+      "name_label": "Come vuoi essere chiamato?",
+      "name_placeholder": "Il tuo nome",
+      "timezone_label": "Il tuo fuso orario"
+    },
+    "goals": {
+      "title": "I tuoi obiettivi",
+      "subtitle": "Seleziona le aree da migliorare:",
+      "skip": "Salta per ora"
+    },
+    "companion": {
+      "title": "Incontra il tuo Companion",
+      "description": "Il tuo assistente IA personale.",
+      "activate": "Attiva Companion"
+    },
+    "complete": {
+      "title": "Tutto pronto!",
+      "description": "Il tuo LifeOS è configurato.",
+      "go_to_dashboard": "Vai al Pannello"
+    }
+  },
+  "progress": "Passo {{current}} di {{total}}"
+}

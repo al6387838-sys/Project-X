@@ -1,0 +1,88 @@
+{
+  "app": {
+    "name": "LifeOS",
+    "tagline": "El sistema operativo de tu vida",
+    "version": "Versión {{version}}"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "decisions": "Decisiones",
+    "missions": "Misiones",
+    "timeline": "Línea de Tiempo",
+    "companion": "Companion",
+    "settings": "Configuración",
+    "profile": "Perfil"
+  },
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "refresh": "Actualizar",
+    "loading": "Cargando...",
+    "submit": "Enviar",
+    "create": "Crear",
+    "view_all": "Ver todo",
+    "learn_more": "Saber más"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente",
+    "completed": "Completado",
+    "failed": "Fallido",
+    "accepted": "Aceptado",
+    "rejected": "Rechazado",
+    "in_progress": "En progreso",
+    "paused": "Pausado",
+    "archived": "Archivado"
+  },
+  "time": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "tomorrow": "Mañana",
+    "this_week": "Esta semana",
+    "last_week": "Semana pasada",
+    "this_month": "Este mes",
+    "just_now": "Ahora mismo",
+    "minutes_ago": "Hace {{count}} minuto(s)",
+    "hours_ago": "Hace {{count}} hora(s)",
+    "days_ago": "Hace {{count}} día(s)"
+  },
+  "greeting": {
+    "morning": "¡Buenos días, {{name}}!",
+    "afternoon": "¡Buenas tardes, {{name}}!",
+    "evening": "¡Buenas noches, {{name}}!",
+    "generic": "¡Hola, {{name}}!"
+  },
+  "language": {
+    "select": "Seleccionar idioma",
+    "current": "Idioma actual",
+    "changed": "Idioma cambiado a {{language}}"
+  },
+  "priority": {
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baja",
+    "critical": "Crítica"
+  },
+  "categories": {
+    "health": "Salud",
+    "finance": "Finanzas",
+    "productivity": "Productividad",
+    "relationships": "Relaciones",
+    "projects": "Proyectos",
+    "career": "Carrera",
+    "knowledge": "Conocimiento"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "title": "决策引擎",
+  "analyze": "分析情境",
+  "recommendation": "建议",
+  "justification": "理由",
+  "alternatives": "评估的替代方案",
+  "risks": "可能的风险",
+  "benefits": "可能的好处",
+  "score": "决策分数",
+  "confidence": "AI置信度",
+  "reasoning": "推理",
+  "history": "决策历史",
+  "feedback": {
+    "title": "您怎么看？",
+    "accept": "接受建议",
+    "reject": "拒绝建议",
+    "comment_placeholder": "可选评论..."
+  },
+  "categories": {
+    "health": "健康",
+    "finance": "财务",
+    "productivity": "生产力",
+    "relationships": "人际关系",
+    "projects": "项目",
+    "career": "职业",
+    "knowledge": "知识"
+  },
+  "empty": "尚未记录任何决策。",
+  "loading": "正在分析您的情境..."
+}

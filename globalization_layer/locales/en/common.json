@@ -1,0 +1,88 @@
+{
+  "app": {
+    "name": "LifeOS",
+    "tagline": "The operating system of your life",
+    "version": "Version {{version}}"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "decisions": "Decisions",
+    "missions": "Missions",
+    "timeline": "Timeline",
+    "companion": "Companion",
+    "settings": "Settings",
+    "profile": "Profile"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "accept": "Accept",
+    "reject": "Reject",
+    "close": "Close",
+    "open": "Open",
+    "search": "Search",
+    "filter": "Filter",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "submit": "Submit",
+    "create": "Create",
+    "view_all": "View all",
+    "learn_more": "Learn more"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "in_progress": "In progress",
+    "paused": "Paused",
+    "archived": "Archived"
+  },
+  "time": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "this_week": "This week",
+    "last_week": "Last week",
+    "this_month": "This month",
+    "just_now": "Just now",
+    "minutes_ago": "{{count}} minute(s) ago",
+    "hours_ago": "{{count}} hour(s) ago",
+    "days_ago": "{{count}} day(s) ago"
+  },
+  "greeting": {
+    "morning": "Good morning, {{name}}!",
+    "afternoon": "Good afternoon, {{name}}!",
+    "evening": "Good evening, {{name}}!",
+    "generic": "Hello, {{name}}!"
+  },
+  "language": {
+    "select": "Select language",
+    "current": "Current language",
+    "changed": "Language changed to {{language}}"
+  },
+  "priority": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "critical": "Critical"
+  },
+  "categories": {
+    "health": "Health",
+    "finance": "Finance",
+    "productivity": "Productivity",
+    "relationships": "Relationships",
+    "projects": "Projects",
+    "career": "Career",
+    "knowledge": "Knowledge"
+  }
+}

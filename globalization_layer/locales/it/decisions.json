@@ -1,0 +1,30 @@
+{
+  "title": "Motore Decisionale",
+  "analyze": "Analizza contesto",
+  "recommendation": "Raccomandazione",
+  "justification": "Giustificazione",
+  "alternatives": "Alternative valutate",
+  "risks": "Rischi possibili",
+  "benefits": "Benefici possibili",
+  "score": "Decision Score",
+  "confidence": "Fiducia dell'IA",
+  "reasoning": "Ragionamento",
+  "history": "Storico Decisioni",
+  "feedback": {
+    "title": "Cosa ne pensi?",
+    "accept": "Accetta raccomandazione",
+    "reject": "Rifiuta raccomandazione",
+    "comment_placeholder": "Commento opzionale..."
+  },
+  "categories": {
+    "health": "Salute",
+    "finance": "Finanze",
+    "productivity": "Produttività",
+    "relationships": "Relazioni",
+    "projects": "Progetti",
+    "career": "Carriera",
+    "knowledge": "Conoscenza"
+  },
+  "empty": "Nessuna decisione registrata.",
+  "loading": "Analisi del contesto..."
+}

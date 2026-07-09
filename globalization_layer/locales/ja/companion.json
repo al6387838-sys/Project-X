@@ -1,0 +1,29 @@
+{
+  "greeting": {
+    "morning": "おはようございます！今日をどのように簡単にできますか？",
+    "afternoon": "こんにちは！どのようにお手伝いできますか？",
+    "evening": "こんばんは！今日を振り返りましょうか？",
+    "generic": "こんにちは！お手伝いします。"
+  },
+  "thinking": "コンテキストを分析中...",
+  "processing": "処理中...",
+  "ready": "お手伝いする準備ができています！",
+  "suggestion": "提案: {{text}}",
+  "ask_placeholder": "コンパニオンに質問...",
+  "decision_prompt": "あなたのコンテキストに基づいて、推奨します: {{recommendation}}",
+  "feedback": {
+    "accepted": "素晴らしい！この選択から学びます。",
+    "rejected": "わかりました。提案を改善します。",
+    "ask_why": "なぜ拒否したか教えてもらえますか？"
+  },
+  "context": {
+    "sleep_bad": "睡眠が悪かったことに気づきました。",
+    "high_energy": "エネルギーが高い！重要なタスクに最適な時間です。",
+    "low_energy": "低エネルギーを検出しました。",
+    "busy_day": "忙しい一日が待っています。"
+  },
+  "errors": {
+    "no_context": "より多くのコンテキストが必要です。",
+    "unavailable": "一時的に利用できません。"
+  }
+}

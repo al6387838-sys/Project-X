@@ -1,0 +1,29 @@
+{
+  "greeting": {
+    "morning": "Bonjour ! Comment puis-je simplifier votre journée ?",
+    "afternoon": "Bon après-midi ! Comment puis-je aider ?",
+    "evening": "Bonsoir ! Révisons la journée ?",
+    "generic": "Bonjour ! Je suis là pour aider."
+  },
+  "thinking": "Analyse de votre contexte...",
+  "processing": "Traitement...",
+  "ready": "Prêt à aider !",
+  "suggestion": "Suggestion : {{text}}",
+  "ask_placeholder": "Demandez à votre Companion...",
+  "decision_prompt": "D'après votre contexte, je recommande : {{recommendation}}",
+  "feedback": {
+    "accepted": "Parfait ! J'apprendrai de ce choix.",
+    "rejected": "Compris. J'améliorerai mes suggestions.",
+    "ask_why": "Pouvez-vous me dire pourquoi vous l'avez rejeté ?"
+  },
+  "context": {
+    "sleep_bad": "J'ai remarqué que vous avez mal dormi.",
+    "high_energy": "Vous avez beaucoup d'énergie !",
+    "low_energy": "Énergie faible détectée.",
+    "busy_day": "Journée chargée à venir."
+  },
+  "errors": {
+    "no_context": "J'ai besoin de plus de contexte.",
+    "unavailable": "Je suis temporairement indisponible."
+  }
+}

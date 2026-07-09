@@ -1,0 +1,43 @@
+{
+  "title": "Painel Principal",
+  "morning_briefing": {
+    "title": "Briefing Matinal",
+    "weather": "Clima: {{value}}",
+    "priority_today": "Prioridade hoje: {{value}}",
+    "next_event": "Próximo evento: {{value}}",
+    "daily_quote": "Citação do dia"
+  },
+  "missions": {
+    "title": "Missões Ativas",
+    "empty": "Nenhuma missão ativa no momento.",
+    "progress": "{{percent}}% concluído",
+    "create": "Criar missão"
+  },
+  "decisions": {
+    "title": "Decisões Recentes",
+    "empty": "Nenhuma decisão registrada.",
+    "score": "Score: {{score}}/100",
+    "confidence": "Confiança: {{percent}}%"
+  },
+  "agenda": {
+    "title": "Agenda de Hoje",
+    "empty": "Nenhum evento hoje.",
+    "at": "às {{time}}"
+  },
+  "companion": {
+    "title": "Companion",
+    "status": "Online",
+    "ask": "Perguntar ao Companion"
+  },
+  "life_score": {
+    "title": "Life Score",
+    "overall": "Score Geral",
+    "trend": "Tendência: {{direction}}"
+  },
+  "widgets": {
+    "energy": "Nível de Energia",
+    "focus": "Foco",
+    "mood": "Humor",
+    "streak": "Sequência: {{days}} dias"
+  }
+}

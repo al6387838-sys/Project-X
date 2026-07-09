@@ -1,0 +1,88 @@
+{
+  "app": {
+    "name": "LifeOS",
+    "tagline": "あなたの人生のオペレーティングシステム",
+    "version": "バージョン {{version}}"
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "decisions": "決断",
+    "missions": "ミッション",
+    "timeline": "タイムライン",
+    "companion": "コンパニオン",
+    "settings": "設定",
+    "profile": "プロフィール"
+  },
+  "actions": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "delete": "削除",
+    "edit": "編集",
+    "back": "戻る",
+    "next": "次へ",
+    "finish": "完了",
+    "accept": "承認",
+    "reject": "拒否",
+    "close": "閉じる",
+    "open": "開く",
+    "search": "検索",
+    "filter": "フィルター",
+    "refresh": "更新",
+    "loading": "読み込み中...",
+    "submit": "送信",
+    "create": "作成",
+    "view_all": "すべて表示",
+    "learn_more": "詳細を見る"
+  },
+  "status": {
+    "active": "アクティブ",
+    "inactive": "非アクティブ",
+    "pending": "保留中",
+    "completed": "完了",
+    "failed": "失敗",
+    "accepted": "承認済み",
+    "rejected": "拒否済み",
+    "in_progress": "進行中",
+    "paused": "一時停止",
+    "archived": "アーカイブ"
+  },
+  "time": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "tomorrow": "明日",
+    "this_week": "今週",
+    "last_week": "先週",
+    "this_month": "今月",
+    "just_now": "たった今",
+    "minutes_ago": "{{count}}分前",
+    "hours_ago": "{{count}}時間前",
+    "days_ago": "{{count}}日前"
+  },
+  "greeting": {
+    "morning": "おはようございます、{{name}}！",
+    "afternoon": "こんにちは、{{name}}！",
+    "evening": "こんばんは、{{name}}！",
+    "generic": "こんにちは、{{name}}！"
+  },
+  "language": {
+    "select": "言語を選択",
+    "current": "現在の言語",
+    "changed": "言語を{{language}}に変更しました"
+  },
+  "priority": {
+    "high": "高",
+    "medium": "中",
+    "low": "低",
+    "critical": "緊急"
+  },
+  "categories": {
+    "health": "健康",
+    "finance": "財務",
+    "productivity": "生産性",
+    "relationships": "人間関係",
+    "projects": "プロジェクト",
+    "career": "キャリア",
+    "knowledge": "知識"
+  }
+}

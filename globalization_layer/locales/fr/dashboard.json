@@ -1,0 +1,43 @@
+{
+  "title": "Tableau de Bord Principal",
+  "morning_briefing": {
+    "title": "Briefing du Matin",
+    "weather": "Météo : {{value}}",
+    "priority_today": "Priorité du jour : {{value}}",
+    "next_event": "Prochain événement : {{value}}",
+    "daily_quote": "Citation du jour"
+  },
+  "missions": {
+    "title": "Missions Actives",
+    "empty": "Aucune mission active.",
+    "progress": "{{percent}}% terminé",
+    "create": "Créer une mission"
+  },
+  "decisions": {
+    "title": "Décisions Récentes",
+    "empty": "Aucune décision enregistrée.",
+    "score": "Score : {{score}}/100",
+    "confidence": "Confiance : {{percent}}%"
+  },
+  "agenda": {
+    "title": "Agenda du Jour",
+    "empty": "Aucun événement aujourd'hui.",
+    "at": "à {{time}}"
+  },
+  "companion": {
+    "title": "Companion",
+    "status": "En ligne",
+    "ask": "Demander au Companion"
+  },
+  "life_score": {
+    "title": "Life Score",
+    "overall": "Score Global",
+    "trend": "Tendance : {{direction}}"
+  },
+  "widgets": {
+    "energy": "Niveau d'Énergie",
+    "focus": "Concentration",
+    "mood": "Humeur",
+    "streak": "Série : {{days}} jours"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "title": "主仪表板",
+  "morning_briefing": {
+    "title": "早间简报",
+    "weather": "天气: {{value}}",
+    "priority_today": "今日优先事项: {{value}}",
+    "next_event": "下一个事件: {{value}}",
+    "daily_quote": "每日名言"
+  },
+  "missions": {
+    "title": "活跃任务",
+    "empty": "目前没有活跃任务。",
+    "progress": "{{percent}}%完成",
+    "create": "创建任务"
+  },
+  "decisions": {
+    "title": "最近决策",
+    "empty": "没有记录的决策。",
+    "score": "分数: {{score}}/100",
+    "confidence": "置信度: {{percent}}%"
+  },
+  "agenda": {
+    "title": "今日日程",
+    "empty": "今天没有事件。",
+    "at": "{{time}}"
+  },
+  "companion": {
+    "title": "伴侣",
+    "status": "在线",
+    "ask": "询问伴侣"
+  },
+  "life_score": {
+    "title": "生活评分",
+    "overall": "总体评分",
+    "trend": "趋势: {{direction}}"
+  },
+  "widgets": {
+    "energy": "能量水平",
+    "focus": "专注力",
+    "mood": "心情",
+    "streak": "连续: {{days}}天"
+  }
+}
