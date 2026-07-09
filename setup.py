@@ -10,7 +10,8 @@ setup(
         'intelligence_hub',
         'life_timeline',
         'evolution_engine',
-        'future_engine'
+        'future_engine',
+        'life_orchestrator'
     ]),
     python_requires=">=3.9",
 )
