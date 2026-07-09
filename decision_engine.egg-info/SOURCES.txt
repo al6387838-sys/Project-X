@@ -42,3 +42,15 @@ intelligence_hub/__init__.py
 intelligence_hub/intelligence_engine.py
 intelligence_hub/tests/__init__.py
 intelligence_hub/tests/test_magic_moment.py
+life_timeline/__init__.py
+life_timeline/engines/__init__.py
+life_timeline/engines/life_events_engine.py
+life_timeline/engines/timeline_engine.py
+life_timeline/mappers/__init__.py
+life_timeline/mappers/relationship_mapper.py
+life_timeline/models/__init__.py
+life_timeline/models/timeline_entry.py
+life_timeline/tests/__init__.py
+life_timeline/tests/test_timeline.py
+life_timeline/viewers/__init__.py
+life_timeline/viewers/history_viewer.py
