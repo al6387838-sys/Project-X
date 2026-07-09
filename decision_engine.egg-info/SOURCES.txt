@@ -1,5 +1,19 @@
 README.md
 setup.py
+action_engine/__init__.py
+action_engine/engines/__init__.py
+action_engine/engines/action_engine.py
+action_engine/engines/action_planner.py
+action_engine/engines/automation_engine.py
+action_engine/engines/execution_manager.py
+action_engine/managers/__init__.py
+action_engine/managers/approval_manager.py
+action_engine/managers/rollback_manager.py
+action_engine/models/__init__.py
+action_engine/models/action.py
+action_engine/models/action_group.py
+action_engine/tests/__init__.py
+action_engine/tests/test_action_engine.py
 decision_engine/__init__.py
 decision_engine.egg-info/PKG-INFO
 decision_engine.egg-info/SOURCES.txt
@@ -24,3 +38,7 @@ decision_engine/tests/test_prediction_engine.py
 decision_engine/tests/test_priority_engine.py
 decision_engine/tests/test_reasoning_engine.py
 decision_engine/tests/test_recommendation_engine.py
+intelligence_hub/__init__.py
+intelligence_hub/intelligence_engine.py
+intelligence_hub/tests/__init__.py
+intelligence_hub/tests/test_magic_moment.py
