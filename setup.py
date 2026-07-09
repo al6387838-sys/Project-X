@@ -1,9 +1,16 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="decision_engine",
+    name="project_x",
     version="1.0.0",
-    description="PROJECT-X Decision Engine — SPRINT 004",
-    packages=find_packages(),
+    description="PROJECT-X Core System",
+    packages=find_packages(include=[
+        'action_engine',
+        'decision_engine',
+        'intelligence_hub',
+        'life_timeline',
+        'evolution_engine',
+        'future_engine'
+    ]),
     python_requires=">=3.9",
 )
