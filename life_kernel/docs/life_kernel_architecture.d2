@@ -1,0 +1,123 @@
+direction: right
+
+LifeKernel: {
+  shape: rectangle
+  label: "Life Kernel"
+
+  KernelRuntime: {
+    shape: rectangle
+    label: "Kernel Runtime"
+  }
+  KernelEventManager: {
+    shape: rectangle
+    label: "Kernel Event Manager"
+  }
+  KernelStateManager: {
+    shape: rectangle
+    label: "Kernel State Manager"
+  }
+  KernelScheduler: {
+    shape: rectangle
+    label: "Kernel Scheduler"
+  }
+  KernelMonitor: {
+    shape: rectangle
+    label: "Kernel Monitor"
+  }
+
+  EventQueues: {
+    shape: rectangle
+    label: "Filas de Eventos"
+    Event_Queue: {
+      shape: queue
+      label: "Event Queue"
+    }
+    Priority_Queue: {
+      shape: queue
+      label: "Priority Queue"
+    }
+    Execution_Queue: {
+      shape: queue
+      label: "Execution Queue"
+    }
+  }
+
+  KernelRuntime -> KernelEventManager
+  KernelRuntime -> KernelStateManager
+  KernelRuntime -> KernelScheduler
+  KernelRuntime -> KernelMonitor
+
+  KernelEventManager -> EventQueues.Event_Queue
+  KernelScheduler -> EventQueues.Event_Queue
+  EventQueues.Event_Queue -> EventQueues.Priority_Queue
+  EventQueues.Event_Queue -> EventQueues.Execution_Queue
+
+}
+
+Engines: {
+  shape: rectangle
+  label: "Engines do LifeOS"
+
+  LifeGraph: {
+    shape: cylinder
+    label: "Life Graph"
+  }
+  MemoryEngine: {
+    shape: cylinder
+    label: "Memory Engine"
+  }
+  ContextEngine: {
+    shape: cylinder
+    label: "Context Engine"
+  }
+  DecisionEngine: {
+    shape: cylinder
+    label: "Decision Engine"
+  }
+  ActionEngine: {
+    shape: cylinder
+    label: "Action Engine"
+  }
+  FutureEngine: {
+    shape: cylinder
+    label: "Future Engine"
+  }
+  MissionEngine: {
+    shape: cylinder
+    label: "Mission Engine"
+  }
+  Companion: {
+    shape: cylinder
+    label: "Companion"
+  }
+  EvolutionEngine: {
+    shape: cylinder
+    label: "Evolution Engine"
+  }
+  TrustEngine: {
+    shape: cylinder
+    label: "Trust Engine"
+  }
+}
+
+Engines.LifeGraph <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.MemoryEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.ContextEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.DecisionEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.ActionEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.FutureEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.MissionEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.Companion <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.EvolutionEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+Engines.TrustEngine <-> LifeKernel.KernelEventManager: "Publica/Assina Eventos"
+
+LifeKernel.KernelStateManager <-> Engines.LifeGraph: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.MemoryEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.ContextEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.DecisionEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.ActionEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.FutureEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.MissionEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.Companion: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.EvolutionEngine: "Consulta/Atualiza Estado"
+LifeKernel.KernelStateManager <-> Engines.TrustEngine: "Consulta/Atualiza Estado"

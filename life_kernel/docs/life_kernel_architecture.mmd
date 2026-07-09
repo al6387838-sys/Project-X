@@ -1,0 +1,59 @@
+graph TD
+    subgraph Life Kernel
+        KR[Kernel Runtime]
+        KEM[Kernel Event Manager]
+        KSM[Kernel State Manager]
+        KS[Kernel Scheduler]
+        KM[Kernel Monitor]
+
+        subgraph Filas de Eventos
+            EQ[Event Queue]
+            PQ[Priority Queue]
+            ExQ[Execution Queue]
+        end
+
+        KR --> KEM
+        KR --> KSM
+        KR --> KS
+        KR --> KM
+
+        KEM --> EQ
+        KS --> EQ
+        EQ --> PQ
+        EQ --> ExQ
+    end
+
+    subgraph Engines do LifeOS
+        LG(Life Graph)
+        ME(Memory Engine)
+        CE(Context Engine)
+        DE(Decision Engine)
+        AE(Action Engine)
+        FE(Future Engine)
+        MIE(Mission Engine)
+        C(Companion)
+        EE(Evolution Engine)
+        TE(Trust Engine)
+    end
+
+    LG <--> KEM
+    ME <--> KEM
+    CE <--> KEM
+    DE <--> KEM
+    AE <--> KEM
+    FE <--> KEM
+    MIE <--> KEM
+    C <--> KEM
+    EE <--> KEM
+    TE <--> KEM
+
+    KSM <--> LG
+    KSM <--> ME
+    KSM <--> CE
+    KSM <--> DE
+    KSM <--> AE
+    KSM <--> FE
+    KSM <--> MIE
+    KSM <--> C
+    KSM <--> EE
+    KSM <--> TE
