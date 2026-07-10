@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS — Admin Dashboard | Sprint 029</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #0f172a;
+      --bg-secondary: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border: #334155;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 24px;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* GRID DE CARDS */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .metric-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+
+    .metric-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .metric-change {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metric-change.positive {
+      color: var(--success);
+    }
+
+    .metric-change.negative {
+      color: var(--danger);
+    }
+
+    /* SEÇÕES */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* TABELAS */
+    .table-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: rgba(124, 58, 237, 0.05);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: rgba(124, 58, 237, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .badge.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .badge.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .badge.info {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary);
+    }
+
+    /* CHARTS */
+    .chart-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      height: 300px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--primary), rgba(124, 58, 237, 0.3));
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      min-height: 20px;
+      transition: all 0.3s;
+    }
+
+    .chart-bar:hover {
+      background: linear-gradient(to top, var(--primary-dark), var(--primary));
+    }
+
+    .chart-bar-label {
+      position: absolute;
+      bottom: -24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* LISTA */
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .list-item-left {
+      flex: 1;
+    }
+
+    .list-item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .list-item-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .list-item-right {
+      text-align: right;
+    }
+
+    .list-item-value {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* BOTÕES */
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-container {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="logo">🧠 LifeOS Admin</div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Dashboard</div>
+        <a class="nav-link active" onclick="switchSection('overview')">📊 Overview</a>
+        <a class="nav-link" onclick="switchSection('users')">👥 Usuários</a>
+        <a class="nav-link" onclick="switchSection('analytics')">📈 Analytics</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Beta Program</div>
+        <a class="nav-link" onclick="switchSection('waitlist')">⏳ Lista de Espera</a>
+        <a class="nav-link" onclick="switchSection('invites')">🎟️ Convites</a>
+        <a class="nav-link" onclick="switchSection('beta-users')">🧪 Beta Testers</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Feedback</div>
+        <a class="nav-link" onclick="switchSection('bugs')">🐛 Bugs</a>
+        <a class="nav-link" onclick="switchSection('suggestions')">💡 Sugestões</a>
+        <a class="nav-link" onclick="switchSection('ratings')">⭐ Avaliações</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Técnico</div>
+        <a class="nav-link" onclick="switchSection('crashes')">💥 Crashes</a>
+        <a class="nav-link" onclick="switchSection('performance')">⚡ Performance</a>
+        <a class="nav-link" onclick="switchSection('heatmaps')">🔥 Heatmaps</a>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <!-- OVERVIEW -->
+      <div id="overview" class="section active">
+        <div class="header">
+          <h1>📊 Dashboard Overview</h1>
+          <p>Visão geral do programa beta e métricas principais</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">DAU</div>
+            <div class="metric-value" id="dau">0</div>
+            <div class="metric-change positive">↑ 12% esta semana</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">WAU</div>
+            <div class="metric-value" id="wau">0</div>
+            <div class="metric-change positive">↑ 8% este mês</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">MAU</div>
+            <div class="metric-value" id="mau">0</div>
+            <div class="metric-change positive">↑ 5% vs mês anterior</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Retenção D1</div>
+            <div class="metric-value" id="retention-d1">0%</div>
+            <div class="metric-change positive">↑ 3% vs baseline</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Retenção D7</div>
+            <div class="metric-value" id="retention-d7">0%</div>
+            <div class="metric-change positive">↑ 2% vs baseline</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Retenção D30</div>
+            <div class="metric-value" id="retention-d30">0%</div>
+            <div class="metric-change positive">↑ 1% vs baseline</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Taxa de Crash</div>
+            <div class="metric-value" id="crash-rate">0%</div>
+            <div class="metric-change positive">↓ 0.5% vs semana anterior</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Tempo Médio de Sessão</div>
+            <div class="metric-value" id="avg-session">0m</div>
+            <div class="metric-change positive">↑ 2min vs baseline</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Usuários Beta</div>
+            <div class="metric-value" id="beta-users">0</div>
+            <div class="metric-change positive">↑ 15 novos esta semana</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Lista de Espera</div>
+            <div class="metric-value" id="waitlist-count">0</div>
+            <div class="metric-change positive">↑ 42 novos esta semana</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Feedback Recebido</div>
+            <div class="metric-value" id="feedback-count">0</div>
+            <div class="metric-change positive">↑ 23 novos esta semana</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Bugs Reportados</div>
+            <div class="metric-value" id="bugs-count">0</div>
+            <div class="metric-change negative">↑ 5 novos esta semana</div>
+          </div>
+        </div>
+
+        <div class="section-title">🎯 Top Features Utilizadas</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Uso</th>
+                <th>% de Usuários</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="top-features">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USUÁRIOS -->
+      <div id="users" class="section">
+        <div class="header">
+          <h1>👥 Usuários Beta</h1>
+          <p>Gerenciar usuários e seu acesso ao programa</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Tier</th>
+                <th>Ativo</th>
+                <th>Sessões</th>
+                <th>Feedback</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="users-table">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div id="analytics" class="section">
+        <div class="header">
+          <h1>📈 Analytics Detalhado</h1>
+          <p>Métricas de uso e comportamento dos usuários</p>
+        </div>
+
+        <div class="section-title">Usuários Ativos (últimos 7 dias)</div>
+        <div class="chart-container" id="dau-chart">
+          <div class="chart-bar" style="height: 45%;"><div class="chart-bar-label">Seg</div></div>
+          <div class="chart-bar" style="height: 52%;"><div class="chart-bar-label">Ter</div></div>
+          <div class="chart-bar" style="height: 48%;"><div class="chart-bar-label">Qua</div></div>
+          <div class="chart-bar" style="height: 61%;"><div class="chart-bar-label">Qui</div></div>
+          <div class="chart-bar" style="height: 58%;"><div class="chart-bar-label">Sex</div></div>
+          <div class="chart-bar" style="height: 72%;"><div class="chart-bar-label">Sab</div></div>
+          <div class="chart-bar" style="height: 65%;"><div class="chart-bar-label">Dom</div></div>
+        </div>
+
+        <div class="section-title">Taxa de Conclusão de Tarefas</div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <div id="task-completion-list"></div>
+        </div>
+      </div>
+
+      <!-- LISTA DE ESPERA -->
+      <div id="waitlist" class="section">
+        <div class="header">
+          <h1>⏳ Lista de Espera</h1>
+          <p>Gerenciar e promover usuários da lista de espera</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Tier</th>
+                <th>Data</th>
+                <th>Posição</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="waitlist-table">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONVITES -->
+      <div id="invites" class="section">
+        <div class="header">
+          <h1>🎟️ Códigos de Convite</h1>
+          <p>Gerenciar códigos de convite gerados</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Para</th>
+                <th>Tier</th>
+                <th>Expira em</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="invites-table">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BETA TESTERS -->
+      <div id="beta-users" class="section">
+        <div class="header">
+          <h1>🧪 Beta Testers Ativos</h1>
+          <p>Usuários com acesso ao beta</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Tier</th>
+                <th>Entrou em</th>
+                <th>Ativo</th>
+                <th>Feedback</th>
+              </tr>
+            </thead>
+            <tbody id="beta-testers-table">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BUGS -->
+      <div id="bugs" class="section">
+        <div class="header">
+          <h1>🐛 Bugs Reportados</h1>
+          <p>Gerenciar bugs reportados pelos beta testers</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Severidade</th>
+                <th>Status</th>
+                <th>Reportado por</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="bugs-table">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUGESTÕES -->
+      <div id="suggestions" class="section">
+        <div class="header">
+          <h1>💡 Sugestões de Funcionalidade</h1>
+          <p>Ideias dos usuários para melhorias</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Impacto</th>
+                <th>Votos</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="suggestions-table">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AVALIAÇÕES -->
+      <div id="ratings" class="section">
+        <div class="header">
+          <h1>⭐ Avaliações de Funcionalidades</h1>
+          <p>Feedback de usuários sobre features</p>
+        </div>
+
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <div id="ratings-list"></div>
+        </div>
+      </div>
+
+      <!-- CRASHES -->
+      <div id="crashes" class="section">
+        <div class="header">
+          <h1>💥 Crash Reports</h1>
+          <p>Erros e exceções capturadas</p>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Mensagem</th>
+                <th>Tipo</th>
+                <th>Frequência</th>
+                <th>Última Ocorrência</th>
+              </tr>
+            </thead>
+            <tbody id="crashes-table">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-secondary);">Carregando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PERFORMANCE -->
+      <div id="performance" class="section">
+        <div class="header">
+          <h1>⚡ Performance Metrics</h1>
+          <p>Métricas de performance da aplicação</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Tempo Médio de Carregamento</div>
+            <div class="metric-value">1.2s</div>
+            <div class="metric-change positive">↓ 0.3s vs semana anterior</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">FCP (First Contentful Paint)</div>
+            <div class="metric-value">0.8s</div>
+            <div class="metric-change positive">✓ Excelente</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">LCP (Largest Contentful Paint)</div>
+            <div class="metric-value">1.5s</div>
+            <div class="metric-change positive">✓ Bom</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">CLS (Cumulative Layout Shift)</div>
+            <div class="metric-value">0.05</div>
+            <div class="metric-change positive">✓ Excelente</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEATMAPS -->
+      <div id="heatmaps" class="section">
+        <div class="header">
+          <h1>🔥 Heatmaps de Navegação</h1>
+          <p>Análise de comportamento dos usuários</p>
+        </div>
+
+        <div class="section-title">Elementos Mais Clicados</div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <div id="heatmap-clicks"></div>
+        </div>
+
+        <div class="section-title">Profundidade Média de Scroll</div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+          <div id="heatmap-scroll"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../beta/beta-manager.js"></script>
+  <script src="../beta/analytics-engine.js"></script>
+  <script src="../beta/feedback-center.js"></script>
+  <script src="../beta/feature-flags.js"></script>
+
+  <script>
+    // Função para trocar de seção
+    function switchSection(sectionId) {
+      // Desativar todas as seções
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+      // Ativar seção selecionada
+      document.getElementById(sectionId).classList.add('active');
+      event.target.classList.add('active');
+
+      // Carregar dados da seção
+      loadSectionData(sectionId);
+    }
+
+    // Função para carregar dados de cada seção
+    function loadSectionData(sectionId) {
+      switch (sectionId) {
+        case 'overview':
+          loadOverviewData();
+          break;
+        case 'users':
+          loadUsersData();
+          break;
+        case 'analytics':
+          loadAnalyticsData();
+          break;
+        case 'waitlist':
+          loadWaitlistData();
+          break;
+        case 'invites':
+          loadInvitesData();
+          break;
+        case 'beta-users':
+          loadBetaUsersData();
+          break;
+        case 'bugs':
+          loadBugsData();
+          break;
+        case 'suggestions':
+          loadSuggestionsData();
+          break;
+        case 'ratings':
+          loadRatingsData();
+          break;
+        case 'crashes':
+          loadCrashesData();
+          break;
+        case 'heatmaps':
+          loadHeatmapsData();
+          break;
+      }
+    }
+
+    // Carregar dados de Overview
+    function loadOverviewData() {
+      const analytics = window.LifeOSAnalytics.getSummary();
+      const beta = window.LifeOSBetaManager.getStats();
+      const feedback = window.LifeOSFeedback.getStats();
+
+      document.getElementById('dau').textContent = analytics.dau;
+      document.getElementById('wau').textContent = analytics.wau;
+      document.getElementById('mau').textContent = analytics.mau;
+      document.getElementById('retention-d1').textContent = analytics.retentionD1 + '%';
+      document.getElementById('retention-d7').textContent = analytics.retentionD7 + '%';
+      document.getElementById('retention-d30').textContent = analytics.retentionD30 + '%';
+      document.getElementById('crash-rate').textContent = analytics.crashRate + '%';
+      document.getElementById('avg-session').textContent = Math.round(analytics.averageSessionTime / 60000) + 'm';
+      document.getElementById('beta-users').textContent = beta.betaUsersCount;
+      document.getElementById('waitlist-count').textContent = beta.waitlistCount;
+      document.getElementById('feedback-count').textContent = feedback.totalRatings;
+      document.getElementById('bugs-count').textContent = feedback.totalBugs;
+
+      // Top features
+      const topFeatures = analytics.topFeatures;
+      const topFeaturesHtml = topFeatures.map(f => `
+        <tr>
+          <td>${f.name}</td>
+          <td><strong>${f.count}</strong></td>
+          <td>${Math.round((f.count / analytics.totalSessions) * 100)}%</td>
+          <td><span class="badge success">Ativo</span></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('top-features').innerHTML = topFeaturesHtml || '<tr><td colspan="4" style="text-align: center;">Sem dados</td></tr>';
+    }
+
+    // Carregar dados de Usuários
+    function loadUsersData() {
+      const users = window.LifeOSBetaManager.getBetaUsers();
+      const usersHtml = users.slice(0, 10).map(u => `
+        <tr>
+          <td>${u.email}</td>
+          <td><span class="badge info">${u.tier}</span></td>
+          <td>Sim</td>
+          <td>${u.sessionCount || 0}</td>
+          <td>${u.feedbackCount || 0}</td>
+          <td><button onclick="alert('Ações do usuário')">⋮</button></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('users-table').innerHTML = usersHtml || '<tr><td colspan="6" style="text-align: center;">Sem usuários</td></tr>';
+    }
+
+    // Carregar dados de Analytics
+    function loadAnalyticsData() {
+      const analytics = window.LifeOSAnalytics.getSummary();
+      const taskRates = analytics.taskCompletionRates;
+
+      const taskHtml = Object.entries(taskRates).map(([task, data]) => `
+        <div class="list-item">
+          <div class="list-item-left">
+            <div class="list-item-title">${task}</div>
+            <div class="list-item-subtitle">${data.completed} / ${data.total} concluídas</div>
+          </div>
+          <div class="list-item-right">
+            <div class="list-item-value">${data.rate}%</div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('task-completion-list').innerHTML = taskHtml || '<p style="color: var(--text-secondary);">Sem dados</p>';
+    }
+
+    // Carregar dados de Lista de Espera
+    function loadWaitlistData() {
+      const waitlist = window.LifeOSBetaManager.getWaitlist();
+      const waitlistHtml = waitlist.slice(0, 10).map((w, i) => `
+        <tr>
+          <td>${w.email}</td>
+          <td><span class="badge info">${w.tier}</span></td>
+          <td>${new Date(w.joinedAt).toLocaleDateString('pt-BR')}</td>
+          <td>#${i + 1}</td>
+          <td><button onclick="alert('Promover ${w.email}')">Promover</button></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('waitlist-table').innerHTML = waitlistHtml || '<tr><td colspan="5" style="text-align: center;">Lista vazia</td></tr>';
+    }
+
+    // Carregar dados de Bugs
+    function loadBugsData() {
+      const bugs = window.LifeOSFeedback.getBugs();
+      const bugsHtml = bugs.slice(0, 10).map(b => `
+        <tr>
+          <td>${b.title}</td>
+          <td><span class="badge ${b.severity === 'critical' ? 'danger' : b.severity === 'high' ? 'warning' : 'info'}">${b.severity}</span></td>
+          <td><span class="badge success">${b.status}</span></td>
+          <td>${b.userId}</td>
+          <td>${new Date(b.timestamp).toLocaleDateString('pt-BR')}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('bugs-table').innerHTML = bugsHtml || '<tr><td colspan="5" style="text-align: center;">Sem bugs</td></tr>';
+    }
+
+    // Carregar dados de Sugestões
+    function loadSuggestionsData() {
+      const suggestions = window.LifeOSFeedback.getSuggestions();
+      const suggestionsHtml = suggestions.slice(0, 10).map(s => `
+        <tr>
+          <td>${s.title}</td>
+          <td><span class="badge info">${s.category}</span></td>
+          <td>${s.impact}</td>
+          <td>${s.votes}</td>
+          <td><span class="badge success">${s.status}</span></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('suggestions-table').innerHTML = suggestionsHtml || '<tr><td colspan="5" style="text-align: center;">Sem sugestões</td></tr>';
+    }
+
+    // Carregar dados de Avaliações
+    function loadRatingsData() {
+      const ratings = window.LifeOSFeedback.getRatings();
+      const ratingsHtml = ratings.slice(0, 10).map(r => `
+        <div class="list-item">
+          <div class="list-item-left">
+            <div class="list-item-title">${r.featureName}</div>
+            <div class="list-item-subtitle">${r.comment || 'Sem comentário'}</div>
+          </div>
+          <div class="list-item-right">
+            <div class="list-item-value">⭐ ${r.score}/5</div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('ratings-list').innerHTML = ratingsHtml || '<p style="color: var(--text-secondary);">Sem avaliações</p>';
+    }
+
+    // Carregar dados de Crashes
+    function loadCrashesData() {
+      const analytics = window.LifeOSAnalytics.getSummary();
+      const crashesHtml = `
+        <tr>
+          <td>Erro genérico de aplicação</td>
+          <td>Error</td>
+          <td>${analytics.totalCrashes}</td>
+          <td>${new Date().toLocaleDateString('pt-BR')}</td>
+        </tr>
+      `;
+
+      document.getElementById('crashes-table').innerHTML = crashesHtml;
+    }
+
+    // Carregar dados de Heatmaps
+    function loadHeatmapsData() {
+      const heatmap = window.LifeOSFeatureFlags.exportHeatmapData();
+      const mostClicked = window.LifeOSFeatureFlags.getMostClickedElements(window.location.pathname, 5);
+
+      const clicksHtml = mostClicked.map(item => `
+        <div class="list-item">
+          <div class="list-item-left">
+            <div class="list-item-title">${item.elementId}</div>
+          </div>
+          <div class="list-item-right">
+            <div class="list-item-value">${item.count} cliques</div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('heatmap-clicks').innerHTML = clicksHtml || '<p style="color: var(--text-secondary);">Sem dados</p>';
+
+      const avgScroll = window.LifeOSFeatureFlags.getAverageScrollDepth(window.location.pathname);
+      document.getElementById('heatmap-scroll').innerHTML = `
+        <div class="list-item">
+          <div class="list-item-left">
+            <div class="list-item-title">Profundidade média</div>
+          </div>
+          <div class="list-item-right">
+            <div class="list-item-value">${avgScroll}px</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Carregar dados de Beta Testers
+    function loadBetaUsersData() {
+      const users = window.LifeOSBetaManager.getBetaUsers();
+      const usersHtml = users.map(u => `
+        <tr>
+          <td>${u.email.split('@')[0]}</td>
+          <td>${u.email}</td>
+          <td><span class="badge info">${u.tier}</span></td>
+          <td>${new Date(u.joinedAt).toLocaleDateString('pt-BR')}</td>
+          <td><span class="badge success">Ativo</span></td>
+          <td>${u.feedbackCount || 0}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('beta-testers-table').innerHTML = usersHtml || '<tr><td colspan="6" style="text-align: center;">Sem usuários</td></tr>';
+    }
+
+    // Carregar dados de Convites
+    function loadInvitesData() {
+      // Dados simulados
+      const invitesHtml = `
+        <tr>
+          <td>ABC123XYZ456</td>
+          <td>user@example.com</td>
+          <td><span class="badge info">standard</span></td>
+          <td>${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}</td>
+          <td><span class="badge success">Válido</span></td>
+        </tr>
+      `;
+
+      document.getElementById('invites-table').innerHTML = invitesHtml;
+    }
+
+    // Inicializar dashboard
+    window.addEventListener('load', () => {
+      loadOverviewData();
+    });
+  </script>
+</body>
+</html>

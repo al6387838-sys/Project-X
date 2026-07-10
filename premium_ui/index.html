@@ -495,6 +495,169 @@
     }
 
     /* ============================================================
+       MODALS
+       ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: var(--z-modal);
+      backdrop-filter: blur(var(--blur-md));
+      -webkit-backdrop-filter: blur(var(--blur-md));
+    }
+
+    .modal-content {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-6);
+      box-shadow: var(--elevation-4);
+      position: relative;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-5);
+    }
+
+    .modal-title {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: var(--text-2xl);
+      cursor: pointer;
+      padding: var(--space-1);
+      border-radius: var(--radius-md);
+      transition: all var(--duration-fast) var(--ease-in-out);
+    }
+
+    .modal-close:hover {
+      background: var(--surface-100);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      margin-bottom: var(--space-6);
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-3);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      cursor: pointer;
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+    }
+
+    .checkbox-input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      background-color: var(--surface-100);
+      position: relative;
+      flex-shrink: 0;
+      transition: all var(--duration-fast) var(--ease-in-out);
+    }
+
+    .checkbox-input:checked {
+      background-color: var(--color-primary-500);
+      border-color: var(--color-primary-500);
+    }
+
+    .checkbox-input:checked::after {
+      content: '✔';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+    }
+
+    .input-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .input-label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      background: var(--surface-100);
+      color: var(--text-primary);
+      font-size: var(--text-base);
+      transition: all var(--duration-fast) var(--ease-in-out);
+    }
+
+    .input-field:focus {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      outline: none;
+    }
+
+    textarea.input-field {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .message {
+      font-size: var(--text-sm);
+      text-align: center;
+      margin-top: var(--space-3);
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: var(--space-4);
+    }
+
+    .feedback-form {
+      display: none;
+    }
+
+    .feedback-form.active {
+      display: block;
+    }
+
+    /* ============================================================
        DASHBOARD V2
        ============================================================ */
     .dashboard-header {
@@ -1531,7 +1694,742 @@
 <!-- ============================================================
      MAIN APP SHELL
      ============================================================ -->
-<div id="app-shell" class="app-shell" style="display:none;">
+  <!-- Telemetry Consent Modal -->
+  <div id="telemetry-consent-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Privacidade é Importante</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Para melhorar sua experiência no LifeOS, gostaríamos de coletar dados anônimos de uso e relatórios de erros. Isso nos ajuda a entender como você usa o aplicativo e a corrigir problemas.</p>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Você pode escolher quais tipos de dados deseja compartilhar:</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-analytics" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Análises de Uso (páginas visitadas, recursos usados)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-crash" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Relatórios de Erros (informações sobre falhas)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-performance" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Métricas de Performance (velocidade de carregamento)</span>
+          </label>
+        </div>
+        <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 24px;">Você pode alterar suas preferências a qualquer momento nas Configurações de Privacidade.</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="consent-reject-btn" class="btn btn-ghost">Rejeitar Todos</button>
+        <button id="consent-accept-btn" class="btn btn-primary">Aceitar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Program Modal (Waitlist/Invite) -->
+  <div id="beta-program-modal" class="modal-overlay" style="display: none; z-index: 9998;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="beta-modal-title">Bem-vindo ao LifeOS Beta!</h3>
+        <button class="modal-close" id="beta-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="beta-modal-description" style="margin-bottom: 24px; color: var(--text-secondary);">Insira seu código de convite ou junte-se à lista de espera.</p>
+        
+        <div id="invite-code-section" style="margin-bottom: 24px;">
+          <label class="input-label" for="invite-code-input">Código de Convite:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="invite-code-input" class="input-field" placeholder="XXXX-XXXX-XXXX" style="flex: 1;">
+            <button id="redeem-invite-btn" class="btn btn-primary">Resgatar</button>
+          </div>
+          <p id="invite-code-message" style="font-size: 12px; margin-top: 8px; color: var(--color-danger-400); display: none;"></p>
+        </div>
+
+        <div id="waitlist-section" style="border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+          <p style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Não tem um código? Junte-se à nossa lista de espera:</p>
+          <label class="input-label" for="waitlist-email-input">Seu Email:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" id="waitlist-email-input" class="input-field" placeholder="seu.email@exemplo.com" style="flex: 1;">
+            <button id="join-waitlist-btn" class="btn btn-secondary">Entrar</button>
+          </div>
+          <p id="waitlist-message" style="font-size: 12px; margin-top: 8px; color: var(--color-success-400); display: none;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal-overlay" style="display: none; z-index: 9997;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Feedback</h3>
+        <button class="modal-close" id="feedback-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Sua opinião é muito importante para nós!</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+          <button id="tab-bug" class="btn btn-primary btn-sm" style="flex: 1;">Reportar Bug</button>
+          <button id="tab-suggestion" class="btn btn-ghost btn-sm" style="flex: 1;">Sugerir Melhoria</button>
+          <button id="tab-rating" class="btn btn-ghost btn-sm" style="flex: 1;">Avaliar Feature</button>
+        </div>
+
+        <div id="feedback-bug-form" style="display: block;">
+          <div class="input-group">
+            <label class="input-label" for="bug-title">Título do Bug:</label>
+            <input type="text" id="bug-title" class="input-field" placeholder="Ex: Botão de salvar não funciona">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-description">Descrição Detalhada:</label>
+            <textarea id="bug-description" class="input-field" placeholder="Passos para reproduzir, comportamento esperado, comportamento atual..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-severity">Severidade:</label>
+            <select id="bug-severity" class="input-field">
+              <option value="low">Baixa</option>
+              <option value="medium" selected>Média</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+          <button id="submit-bug-btn" class="btn btn-primary" style="width: 100%;">Enviar Bug</button>
+        </div>
+
+        <div id="feedback-suggestion-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="suggestion-title">Título da Sugestão:</label>
+            <input type="text" id="suggestion-title" class="input-field" placeholder="Ex: Adicionar modo escuro automático">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-description">Descrição Detalhada:</label>
+            <textarea id="suggestion-description" class="input-field" placeholder="Explique sua ideia e por que ela seria útil..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-category">Categoria:</label>
+            <select id="suggestion-category" class="input-field">
+              <option value="feature" selected>Nova Funcionalidade</option>
+              <option value="improvement">Melhoria Existente</option>
+              <option value="ui">Interface do Usuário</option>
+              <option value="performance">Performance</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+          <button id="submit-suggestion-btn" class="btn btn-primary" style="width: 100%;">Enviar Sugestão</button>
+        </div>
+
+        <div id="feedback-rating-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="rating-feature">Funcionalidade Avaliada:</label>
+            <input type="text" id="rating-feature" class="input-field" placeholder="Ex: Dashboard V2">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-score">Sua Avaliação (1-5 estrelas):</label>
+            <input type="number" id="rating-score" class="input-field" min="1" max="5" value="5">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-comment">Comentário (Opcional):</label>
+            <textarea id="rating-comment" class="input-field" placeholder="O que você gostou ou não gostou?" rows="3"></textarea>
+          </div>
+          <button id="submit-rating-btn" class="btn btn-primary" style="width: 100%;">Enviar Avaliação</button>
+        </div>
+        
+        <p id="feedback-message" style="font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
+      </div>
+    </div>
+  </div>
+
+    <!-- Telemetry Consent Modal -->
+  <div id="telemetry-consent-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Privacidade é Importante</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Para melhorar sua experiência no LifeOS, gostaríamos de coletar dados anônimos de uso e relatórios de erros. Isso nos ajuda a entender como você usa o aplicativo e a corrigir problemas.</p>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Você pode escolher quais tipos de dados deseja compartilhar:</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-analytics" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Análises de Uso (páginas visitadas, recursos usados)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-crash" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Relatórios de Erros (informações sobre falhas)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-performance" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Métricas de Performance (velocidade de carregamento)</span>
+          </label>
+        </div>
+        <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 24px;">Você pode alterar suas preferências a qualquer momento nas Configurações de Privacidade.</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="consent-reject-btn" class="btn btn-ghost">Rejeitar Todos</button>
+        <button id="consent-accept-btn" class="btn btn-primary">Aceitar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Program Modal (Waitlist/Invite) -->
+  <div id="beta-program-modal" class="modal-overlay" style="display: none; z-index: 9998;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="beta-modal-title">Bem-vindo ao LifeOS Beta!</h3>
+        <button class="modal-close" id="beta-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="beta-modal-description" style="margin-bottom: 24px; color: var(--text-secondary);">Insira seu código de convite ou junte-se à lista de espera.</p>
+        
+        <div id="invite-code-section" style="margin-bottom: 24px;">
+          <label class="input-label" for="invite-code-input">Código de Convite:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="invite-code-input" class="input-field" placeholder="XXXX-XXXX-XXXX" style="flex: 1;">
+            <button id="redeem-invite-btn" class="btn btn-primary">Resgatar</button>
+          </div>
+          <p id="invite-code-message" style="font-size: 12px; margin-top: 8px; color: var(--color-danger-400); display: none;"></p>
+        </div>
+
+        <div id="waitlist-section" style="border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+          <p style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Não tem um código? Junte-se à nossa lista de espera:</p>
+          <label class="input-label" for="waitlist-email-input">Seu Email:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" id="waitlist-email-input" class="input-field" placeholder="seu.email@exemplo.com" style="flex: 1;">
+            <button id="join-waitlist-btn" class="btn btn-secondary">Entrar</button>
+          </div>
+          <p id="waitlist-message" style="font-size: 12px; margin-top: 8px; color: var(--color-success-400); display: none;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal-overlay" style="display: none; z-index: 9997;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Feedback</h3>
+        <button class="modal-close" id="feedback-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Sua opinião é muito importante para nós!</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+          <button id="tab-bug" class="btn btn-primary btn-sm" style="flex: 1;">Reportar Bug</button>
+          <button id="tab-suggestion" class="btn btn-ghost btn-sm" style="flex: 1;">Sugerir Melhoria</button>
+          <button id="tab-rating" class="btn btn-ghost btn-sm" style="flex: 1;">Avaliar Feature</button>
+        </div>
+
+        <div id="feedback-bug-form" style="display: block;">
+          <div class="input-group">
+            <label class="input-label" for="bug-title">Título do Bug:</label>
+            <input type="text" id="bug-title" class="input-field" placeholder="Ex: Botão de salvar não funciona">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-description">Descrição Detalhada:</label>
+            <textarea id="bug-description" class="input-field" placeholder="Passos para reproduzir, comportamento esperado, comportamento atual..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-severity">Severidade:</label>
+            <select id="bug-severity" class="input-field">
+              <option value="low">Baixa</option>
+              <option value="medium" selected>Média</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+          <button id="submit-bug-btn" class="btn btn-primary" style="width: 100%;">Enviar Bug</button>
+        </div>
+
+        <div id="feedback-suggestion-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="suggestion-title">Título da Sugestão:</label>
+            <input type="text" id="suggestion-title" class="input-field" placeholder="Ex: Adicionar modo escuro automático">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-description">Descrição Detalhada:</label>
+            <textarea id="suggestion-description" class="input-field" placeholder="Explique sua ideia e por que ela seria útil..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-category">Categoria:</label>
+            <select id="suggestion-category" class="input-field">
+              <option value="feature" selected>Nova Funcionalidade</option>
+              <option value="improvement">Melhoria Existente</option>
+              <option value="ui">Interface do Usuário</option>
+              <option value="performance">Performance</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+          <button id="submit-suggestion-btn" class="btn btn-primary" style="width: 100%;">Enviar Sugestão</button>
+        </div>
+
+        <div id="feedback-rating-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="rating-feature">Funcionalidade Avaliada:</label>
+            <input type="text" id="rating-feature" class="input-field" placeholder="Ex: Dashboard V2">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-score">Sua Avaliação (1-5 estrelas):</label>
+            <input type="number" id="rating-score" class="input-field" min="1" max="5" value="5">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-comment">Comentário (Opcional):</label>
+            <textarea id="rating-comment" class="input-field" placeholder="O que você gostou ou não gostou?" rows="3"></textarea>
+          </div>
+          <button id="submit-rating-btn" class="btn btn-primary" style="width: 100%;">Enviar Avaliação</button>
+        </div>
+        
+        <p id="feedback-message" style="font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
+      </div>
+    </div>
+  </div>
+
+    <!-- Telemetry Consent Modal -->
+  <div id="telemetry-consent-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Privacidade é Importante</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Para melhorar sua experiência no LifeOS, gostaríamos de coletar dados anônimos de uso e relatórios de erros. Isso nos ajuda a entender como você usa o aplicativo e a corrigir problemas.</p>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Você pode escolher quais tipos de dados deseja compartilhar:</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-analytics" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Análises de Uso (páginas visitadas, recursos usados)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-crash" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Relatórios de Erros (informações sobre falhas)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-performance" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Métricas de Performance (velocidade de carregamento)</span>
+          </label>
+        </div>
+        <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 24px;">Você pode alterar suas preferências a qualquer momento nas Configurações de Privacidade.</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="consent-reject-btn" class="btn btn-ghost">Rejeitar Todos</button>
+        <button id="consent-accept-btn" class="btn btn-primary">Aceitar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Program Modal (Waitlist/Invite) -->
+  <div id="beta-program-modal" class="modal-overlay" style="display: none; z-index: 9998;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="beta-modal-title">Bem-vindo ao LifeOS Beta!</h3>
+        <button class="modal-close" id="beta-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="beta-modal-description" style="margin-bottom: 24px; color: var(--text-secondary);">Insira seu código de convite ou junte-se à lista de espera.</p>
+        
+        <div id="invite-code-section" style="margin-bottom: 24px;">
+          <label class="input-label" for="invite-code-input">Código de Convite:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="invite-code-input" class="input-field" placeholder="XXXX-XXXX-XXXX" style="flex: 1;">
+            <button id="redeem-invite-btn" class="btn btn-primary">Resgatar</button>
+          </div>
+          <p id="invite-code-message" style="font-size: 12px; margin-top: 8px; color: var(--color-danger-400); display: none;"></p>
+        </div>
+
+        <div id="waitlist-section" style="border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+          <p style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Não tem um código? Junte-se à nossa lista de espera:</p>
+          <label class="input-label" for="waitlist-email-input">Seu Email:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" id="waitlist-email-input" class="input-field" placeholder="seu.email@exemplo.com" style="flex: 1;">
+            <button id="join-waitlist-btn" class="btn btn-secondary">Entrar</button>
+          </div>
+          <p id="waitlist-message" style="font-size: 12px; margin-top: 8px; color: var(--color-success-400); display: none;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal-overlay" style="display: none; z-index: 9997;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Feedback</h3>
+        <button class="modal-close" id="feedback-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Sua opinião é muito importante para nós!</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+          <button id="tab-bug" class="btn btn-primary btn-sm" style="flex: 1;">Reportar Bug</button>
+          <button id="tab-suggestion" class="btn btn-ghost btn-sm" style="flex: 1;">Sugerir Melhoria</button>
+          <button id="tab-rating" class="btn btn-ghost btn-sm" style="flex: 1;">Avaliar Feature</button>
+        </div>
+
+        <div id="feedback-bug-form" style="display: block;">
+          <div class="input-group">
+            <label class="input-label" for="bug-title">Título do Bug:</label>
+            <input type="text" id="bug-title" class="input-field" placeholder="Ex: Botão de salvar não funciona">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-description">Descrição Detalhada:</label>
+            <textarea id="bug-description" class="input-field" placeholder="Passos para reproduzir, comportamento esperado, comportamento atual..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-severity">Severidade:</label>
+            <select id="bug-severity" class="input-field">
+              <option value="low">Baixa</option>
+              <option value="medium" selected>Média</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+          <button id="submit-bug-btn" class="btn btn-primary" style="width: 100%;">Enviar Bug</button>
+        </div>
+
+        <div id="feedback-suggestion-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="suggestion-title">Título da Sugestão:</label>
+            <input type="text" id="suggestion-title" class="input-field" placeholder="Ex: Adicionar modo escuro automático">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-description">Descrição Detalhada:</label>
+            <textarea id="suggestion-description" class="input-field" placeholder="Explique sua ideia e por que ela seria útil..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-category">Categoria:</label>
+            <select id="suggestion-category" class="input-field">
+              <option value="feature" selected>Nova Funcionalidade</option>
+              <option value="improvement">Melhoria Existente</option>
+              <option value="ui">Interface do Usuário</option>
+              <option value="performance">Performance</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+          <button id="submit-suggestion-btn" class="btn btn-primary" style="width: 100%;">Enviar Sugestão</button>
+        </div>
+
+        <div id="feedback-rating-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="rating-feature">Funcionalidade Avaliada:</label>
+            <input type="text" id="rating-feature" class="input-field" placeholder="Ex: Dashboard V2">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-score">Sua Avaliação (1-5 estrelas):</label>
+            <input type="number" id="rating-score" class="input-field" min="1" max="5" value="5">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-comment">Comentário (Opcional):</label>
+            <textarea id="rating-comment" class="input-field" placeholder="O que você gostou ou não gostou?" rows="3"></textarea>
+          </div>
+          <button id="submit-rating-btn" class="btn btn-primary" style="width: 100%;">Enviar Avaliação</button>
+        </div>
+        
+        <p id="feedback-message" style="font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
+      </div>
+    </div>
+  </div>
+
+    <!-- Telemetry Consent Modal -->
+  <div id="telemetry-consent-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Privacidade é Importante</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Para melhorar sua experiência no LifeOS, gostaríamos de coletar dados anônimos de uso e relatórios de erros. Isso nos ajuda a entender como você usa o aplicativo e a corrigir problemas.</p>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Você pode escolher quais tipos de dados deseja compartilhar:</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-analytics" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Análises de Uso (páginas visitadas, recursos usados)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-crash" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Relatórios de Erros (informações sobre falhas)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-performance" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Métricas de Performance (velocidade de carregamento)</span>
+          </label>
+        </div>
+        <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 24px;">Você pode alterar suas preferências a qualquer momento nas Configurações de Privacidade.</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="consent-reject-btn" class="btn btn-ghost">Rejeitar Todos</button>
+        <button id="consent-accept-btn" class="btn btn-primary">Aceitar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Program Modal (Waitlist/Invite) -->
+  <div id="beta-program-modal" class="modal-overlay" style="display: none; z-index: 9998;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="beta-modal-title">Bem-vindo ao LifeOS Beta!</h3>
+        <button class="modal-close" id="beta-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="beta-modal-description" style="margin-bottom: 24px; color: var(--text-secondary);">Insira seu código de convite ou junte-se à lista de espera.</p>
+        
+        <div id="invite-code-section" style="margin-bottom: 24px;">
+          <label class="input-label" for="invite-code-input">Código de Convite:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="invite-code-input" class="input-field" placeholder="XXXX-XXXX-XXXX" style="flex: 1;">
+            <button id="redeem-invite-btn" class="btn btn-primary">Resgatar</button>
+          </div>
+          <p id="invite-code-message" style="font-size: 12px; margin-top: 8px; color: var(--color-danger-400); display: none;"></p>
+        </div>
+
+        <div id="waitlist-section" style="border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+          <p style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Não tem um código? Junte-se à nossa lista de espera:</p>
+          <label class="input-label" for="waitlist-email-input">Seu Email:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" id="waitlist-email-input" class="input-field" placeholder="seu.email@exemplo.com" style="flex: 1;">
+            <button id="join-waitlist-btn" class="btn btn-secondary">Entrar</button>
+          </div>
+          <p id="waitlist-message" style="font-size: 12px; margin-top: 8px; color: var(--color-success-400); display: none;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal-overlay" style="display: none; z-index: 9997;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Feedback</h3>
+        <button class="modal-close" id="feedback-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Sua opinião é muito importante para nós!</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+          <button id="tab-bug" class="btn btn-primary btn-sm" style="flex: 1;">Reportar Bug</button>
+          <button id="tab-suggestion" class="btn btn-ghost btn-sm" style="flex: 1;">Sugerir Melhoria</button>
+          <button id="tab-rating" class="btn btn-ghost btn-sm" style="flex: 1;">Avaliar Feature</button>
+        </div>
+
+        <div id="feedback-bug-form" style="display: block;">
+          <div class="input-group">
+            <label class="input-label" for="bug-title">Título do Bug:</label>
+            <input type="text" id="bug-title" class="input-field" placeholder="Ex: Botão de salvar não funciona">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-description">Descrição Detalhada:</label>
+            <textarea id="bug-description" class="input-field" placeholder="Passos para reproduzir, comportamento esperado, comportamento atual..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-severity">Severidade:</label>
+            <select id="bug-severity" class="input-field">
+              <option value="low">Baixa</option>
+              <option value="medium" selected>Média</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+          <button id="submit-bug-btn" class="btn btn-primary" style="width: 100%;">Enviar Bug</button>
+        </div>
+
+        <div id="feedback-suggestion-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="suggestion-title">Título da Sugestão:</label>
+            <input type="text" id="suggestion-title" class="input-field" placeholder="Ex: Adicionar modo escuro automático">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-description">Descrição Detalhada:</label>
+            <textarea id="suggestion-description" class="input-field" placeholder="Explique sua ideia e por que ela seria útil..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-category">Categoria:</label>
+            <select id="suggestion-category" class="input-field">
+              <option value="feature" selected>Nova Funcionalidade</option>
+              <option value="improvement">Melhoria Existente</option>
+              <option value="ui">Interface do Usuário</option>
+              <option value="performance">Performance</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+          <button id="submit-suggestion-btn" class="btn btn-primary" style="width: 100%;">Enviar Sugestão</button>
+        </div>
+
+        <div id="feedback-rating-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="rating-feature">Funcionalidade Avaliada:</label>
+            <input type="text" id="rating-feature" class="input-field" placeholder="Ex: Dashboard V2">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-score">Sua Avaliação (1-5 estrelas):</label>
+            <input type="number" id="rating-score" class="input-field" min="1" max="5" value="5">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-comment">Comentário (Opcional):</label>
+            <textarea id="rating-comment" class="input-field" placeholder="O que você gostou ou não gostou?" rows="3"></textarea>
+          </div>
+          <button id="submit-rating-btn" class="btn btn-primary" style="width: 100%;">Enviar Avaliação</button>
+        </div>
+        
+        <p id="feedback-message" style="font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
+      </div>
+    </div>
+  </div>
+
+    <!-- Telemetry Consent Modal -->
+  <div id="telemetry-consent-modal" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Sua Privacidade é Importante</h3>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Para melhorar sua experiência no LifeOS, gostaríamos de coletar dados anônimos de uso e relatórios de erros. Isso nos ajuda a entender como você usa o aplicativo e a corrigir problemas.</p>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">Você pode escolher quais tipos de dados deseja compartilhar:</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-analytics" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Análises de Uso (páginas visitadas, recursos usados)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-crash" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Relatórios de Erros (informações sobre falhas)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="consent-performance" class="checkbox-input" checked>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Métricas de Performance (velocidade de carregamento)</span>
+          </label>
+        </div>
+        <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 24px;">Você pode alterar suas preferências a qualquer momento nas Configurações de Privacidade.</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="consent-reject-btn" class="btn btn-ghost">Rejeitar Todos</button>
+        <button id="consent-accept-btn" class="btn btn-primary">Aceitar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Program Modal (Waitlist/Invite) -->
+  <div id="beta-program-modal" class="modal-overlay" style="display: none; z-index: 9998;">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="beta-modal-title">Bem-vindo ao LifeOS Beta!</h3>
+        <button class="modal-close" id="beta-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="beta-modal-description" style="margin-bottom: 24px; color: var(--text-secondary);">Insira seu código de convite ou junte-se à lista de espera.</p>
+        
+        <div id="invite-code-section" style="margin-bottom: 24px;">
+          <label class="input-label" for="invite-code-input">Código de Convite:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="invite-code-input" class="input-field" placeholder="XXXX-XXXX-XXXX" style="flex: 1;">
+            <button id="redeem-invite-btn" class="btn btn-primary">Resgatar</button>
+          </div>
+          <p id="invite-code-message" style="font-size: 12px; margin-top: 8px; color: var(--color-danger-400); display: none;"></p>
+        </div>
+
+        <div id="waitlist-section" style="border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+          <p style="margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);">Não tem um código? Junte-se à nossa lista de espera:</p>
+          <label class="input-label" for="waitlist-email-input">Seu Email:</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" id="waitlist-email-input" class="input-field" placeholder="seu.email@exemplo.com" style="flex: 1;">
+            <button id="join-waitlist-btn" class="btn btn-secondary">Entrar</button>
+          </div>
+          <p id="waitlist-message" style="font-size: 12px; margin-top: 8px; color: var(--color-success-400); display: none;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal-overlay" style="display: none; z-index: 9997;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Enviar Feedback</h3>
+        <button class="modal-close" id="feedback-modal-close-btn" aria-label="Fechar modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Sua opinião é muito importante para nós!</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+          <button id="tab-bug" class="btn btn-primary btn-sm" style="flex: 1;">Reportar Bug</button>
+          <button id="tab-suggestion" class="btn btn-ghost btn-sm" style="flex: 1;">Sugerir Melhoria</button>
+          <button id="tab-rating" class="btn btn-ghost btn-sm" style="flex: 1;">Avaliar Feature</button>
+        </div>
+
+        <div id="feedback-bug-form" style="display: block;">
+          <div class="input-group">
+            <label class="input-label" for="bug-title">Título do Bug:</label>
+            <input type="text" id="bug-title" class="input-field" placeholder="Ex: Botão de salvar não funciona">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-description">Descrição Detalhada:</label>
+            <textarea id="bug-description" class="input-field" placeholder="Passos para reproduzir, comportamento esperado, comportamento atual..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="bug-severity">Severidade:</label>
+            <select id="bug-severity" class="input-field">
+              <option value="low">Baixa</option>
+              <option value="medium" selected>Média</option>
+              <option value="high">Alta</option>
+              <option value="critical">Crítica</option>
+            </select>
+          </div>
+          <button id="submit-bug-btn" class="btn btn-primary" style="width: 100%;">Enviar Bug</button>
+        </div>
+
+        <div id="feedback-suggestion-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="suggestion-title">Título da Sugestão:</label>
+            <input type="text" id="suggestion-title" class="input-field" placeholder="Ex: Adicionar modo escuro automático">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-description">Descrição Detalhada:</label>
+            <textarea id="suggestion-description" class="input-field" placeholder="Explique sua ideia e por que ela seria útil..." rows="4"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="suggestion-category">Categoria:</label>
+            <select id="suggestion-category" class="input-field">
+              <option value="feature" selected>Nova Funcionalidade</option>
+              <option value="improvement">Melhoria Existente</option>
+              <option value="ui">Interface do Usuário</option>
+              <option value="performance">Performance</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+          <button id="submit-suggestion-btn" class="btn btn-primary" style="width: 100%;">Enviar Sugestão</button>
+        </div>
+
+        <div id="feedback-rating-form" style="display: none;">
+          <div class="input-group">
+            <label class="input-label" for="rating-feature">Funcionalidade Avaliada:</label>
+            <input type="text" id="rating-feature" class="input-field" placeholder="Ex: Dashboard V2">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-score">Sua Avaliação (1-5 estrelas):</label>
+            <input type="number" id="rating-score" class="input-field" min="1" max="5" value="5">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="rating-comment">Comentário (Opcional):</label>
+            <textarea id="rating-comment" class="input-field" placeholder="O que você gostou ou não gostou?" rows="3"></textarea>
+          </div>
+          <button id="submit-rating-btn" class="btn btn-primary" style="width: 100%;">Enviar Avaliação</button>
+        </div>
+        
+        <p id="feedback-message" style="font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-shell" class="app-shell" style="display:none;">
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navegação principal">
@@ -2231,7 +3129,14 @@
 
 <!-- Scripts -->
 <script src="animations/motion.js"></script>
-<script src="themes/theme-engine.js"></script>
-<script src="screens/app.js"></script>
+  <script src="themes/theme-engine.js"></script>
+  <!-- Beta Program Scripts -->
+  <script src="beta/beta-manager.js"></script>
+  <script src="beta/telemetry-engine.js"></script>
+  <script src="beta/analytics-engine.js"></script>
+  <script src="beta/feedback-center.js"></script>
+  <script src="beta/feature-flags.js"></script>
+  <script src="screens/app.js"></script>
+
 </body>
 </html>
