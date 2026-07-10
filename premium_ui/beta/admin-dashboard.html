@@ -373,6 +373,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="/premium_ui/black_diamond.css" />
 </head>
 <body>
   <div class="container">
@@ -469,7 +470,7 @@
 
           <div class="metric-card">
             <div class="metric-label">Usuários Beta</div>
-            <div class="metric-value" id="beta-users">0</div>
+            <div class="metric-value" id="beta-users-count">0</div>
             <div class="metric-change positive">↑ 15 novos esta semana</div>
           </div>
 
@@ -865,7 +866,7 @@
       document.getElementById('retention-d30').textContent = analytics.retentionD30 + '%';
       document.getElementById('crash-rate').textContent = analytics.crashRate + '%';
       document.getElementById('avg-session').textContent = Math.round(analytics.averageSessionTime / 60000) + 'm';
-      document.getElementById('beta-users').textContent = beta.betaUsersCount;
+      document.getElementById('beta-users-count').textContent = beta.betaUsersCount;
       document.getElementById('waitlist-count').textContent = beta.waitlistCount;
       document.getElementById('feedback-count').textContent = feedback.totalRatings;
       document.getElementById('bugs-count').textContent = feedback.totalBugs;
@@ -1071,5 +1072,6 @@
       loadOverviewData();
     });
   </script>
+  <script src="/premium_ui/black_diamond.js"></script>
 </body>
 </html>

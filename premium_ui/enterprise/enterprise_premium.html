@@ -391,6 +391,7 @@ body {
 .alert-action { font-size:12px; font-weight:600; color:var(--brand-400); cursor:pointer; white-space:nowrap; }
 .alert-close { font-size:14px; color:var(--text-tertiary); cursor:pointer; margin-left:8px; }
 </style>
+<link rel="stylesheet" href="/premium_ui/black_diamond.css" />
 </head>
 <body>
 <div class="shell">
@@ -462,8 +463,8 @@ body {
       <button class="topbar-btn">⌕ Buscar</button>
       <button class="topbar-btn">↓ Exportar</button>
       <div class="topbar-divider"></div>
-      <button class="topbar-icon-btn notification-badge">🔔</button>
-      <button class="topbar-icon-btn">⚙</button>
+      <button class="topbar-icon-btn notification-badge" type="button" aria-label="Abrir notificações" title="Notificações">🔔</button>
+      <button class="topbar-icon-btn" type="button" aria-label="Abrir configurações" title="Configurações">⚙</button>
       <button class="topbar-btn primary">+ Nova Decisão</button>
     </div>
 
@@ -819,5 +820,6 @@ body {
     </div>
   </main>
 </div>
+<script src="/premium_ui/black_diamond.js"></script>
 </body>
 </html>
