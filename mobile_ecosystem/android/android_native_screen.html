@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=393, initial-scale=1.0">
+<title>LifeOS Android — Native Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BETA-002: Native Android Optimization
+   LifeOS Mobile — Pixel 8 Pro (393×852)
+   Material You / Material Design 3 compliant
+   ============================================================ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  /* Material You — LifeOS Dynamic Color */
+  --md-primary:        #6366F1;
+  --md-on-primary:     #FFFFFF;
+  --md-primary-container: rgba(99,102,241,0.15);
+  --md-on-primary-container: #818CF8;
+  --md-secondary:      #8B5CF6;
+  --md-tertiary:       #14B8A6;
+  --md-error:          #F43F5E;
+  --md-surface:        #1C1B1F;
+  --md-surface-1:      #252329;
+  --md-surface-2:      #2B2930;
+  --md-surface-3:      #302E37;
+  --md-surface-4:      #32303A;
+  --md-surface-5:      #35333E;
+  --md-on-surface:     #E6E1E5;
+  --md-on-surface-variant: #CAC4D0;
+  --md-outline:        #938F99;
+  --md-outline-variant: #49454F;
+  --md-scrim:          rgba(0,0,0,0.32);
+
+  /* Elevation overlays (Material You dark) */
+  --elev-1: rgba(103,80,164,0.05);
+  --elev-2: rgba(103,80,164,0.08);
+  --elev-3: rgba(103,80,164,0.11);
+  --elev-4: rgba(103,80,164,0.12);
+  --elev-5: rgba(103,80,164,0.14);
+
+  --status-bar: 24px;
+  --nav-bar:    48px;
+}
+
+@keyframes fadeIn    { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+@keyframes ripple    { 0%{transform:scale(0);opacity:0.4} 100%{transform:scale(4);opacity:0} }
+@keyframes breathe   { 0%,100%{opacity:0.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} }
+
+html, body { background:#000; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+
+.pixel-frame {
+  width: 393px;
+  min-height: 852px;
+  background: var(--md-surface);
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Google Sans', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Status bar */
+.status-bar {
+  height: var(--status-bar);
+  background: var(--md-surface);
+  display: flex; align-items: center;
+  padding: 0 16px;
+  justify-content: space-between;
+}
+.status-time { font-size: 12px; font-weight: 500; color: var(--md-on-surface); }
+.status-icons { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--md-on-surface); }
+
+/* Top App Bar */
+.top-app-bar {
+  height: 64px;
+  background: var(--md-surface);
+  display: flex; align-items: center;
+  padding: 0 4px 0 4px;
+  gap: 4px;
+}
+.app-bar-btn {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: transparent; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; cursor: pointer; color: var(--md-on-surface);
+  position: relative; overflow: hidden;
+}
+.app-bar-btn::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0; border-radius: 50%;
+  background: var(--md-on-surface); opacity: 0;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+}
+.app-bar-btn:active::after { width: 48px; height: 48px; opacity: 0.12; }
+.app-bar-title { flex: 1; font-size: 22px; font-weight: 400; color: var(--md-on-surface); padding-left: 4px; }
+.app-bar-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg,#6366F1,#8B5CF6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; color: #fff; margin-right: 8px;
+}
+
+/* Scroll content */
+.scroll-content {
+  overflow-y: auto;
+  height: calc(852px - var(--status-bar) - 64px - var(--nav-bar));
+  padding: 0 16px 16px;
+}
+.scroll-content::-webkit-scrollbar { display: none; }
+
+/* M3 Card */
+.m3-card {
+  background: var(--md-surface-1);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  animation: scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.m3-card-elevated {
+  background: var(--md-surface-2);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+/* Hero card */
+.hero-card {
+  background: var(--md-primary-container);
+  border-radius: 28px;
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(99,102,241,0.20);
+}
+.hero-card::before {
+  content: '';
+  position: absolute; top: -30px; right: -30px;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+}
+.hero-eyebrow {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--md-on-primary-container);
+  margin-bottom: 6px;
+}
+.hero-headline { font-size: 28px; font-weight: 400; color: var(--md-on-surface); margin-bottom: 8px; letter-spacing: -0.2px; }
+.hero-body { font-size: 14px; color: var(--md-on-surface-variant); line-height: 1.5; margin-bottom: 20px; }
+.hero-actions { display: flex; gap: 8px; }
+
+/* M3 Button */
+.btn-filled {
+  height: 40px; padding: 0 24px; border-radius: 20px;
+  background: var(--md-primary); color: var(--md-on-primary);
+  border: none; font-size: 14px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  font-family: inherit; letter-spacing: 0.01em;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(99,102,241,0.25);
+  transition: box-shadow 0.2s;
+}
+.btn-filled:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(99,102,241,0.35); }
+.btn-tonal {
+  height: 40px; padding: 0 24px; border-radius: 20px;
+  background: var(--md-surface-3); color: var(--md-on-primary-container);
+  border: none; font-size: 14px; font-weight: 500;
+  cursor: pointer; font-family: inherit; letter-spacing: 0.01em;
+}
+
+/* Section label */
+.section-label {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--md-outline);
+  margin: 16px 0 8px 4px;
+}
+
+/* Stats chips row */
+.stats-row { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
+.stats-row::-webkit-scrollbar { display: none; }
+.stat-chip {
+  flex-shrink: 0;
+  background: var(--md-surface-2);
+  border-radius: 12px; padding: 12px 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-width: 90px;
+}
+.stat-chip-value { font-size: 22px; font-weight: 700; color: var(--md-on-surface); letter-spacing: -0.5px; }
+.stat-chip-label { font-size: 11px; color: var(--md-on-surface-variant); }
+
+/* List item */
+.list-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--md-outline-variant);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background 0.12s;
+}
+.list-item:last-child { border-bottom: none; }
+.list-item:active { background: rgba(255,255,255,0.08); }
+.list-leading {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.list-content { flex: 1; min-width: 0; }
+.list-headline { font-size: 16px; font-weight: 400; color: var(--md-on-surface); }
+.list-supporting { font-size: 14px; color: var(--md-on-surface-variant); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-trailing { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.list-meta { font-size: 12px; color: var(--md-outline); }
+.m3-badge {
+  min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--md-error); color: #fff;
+  font-size: 10px; font-weight: 700; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Progress indicator */
+.linear-progress {
+  height: 4px; background: var(--md-surface-3);
+  border-radius: 2px; overflow: hidden; margin-top: 8px;
+}
+.linear-progress-fill {
+  height: 100%; border-radius: 2px;
+  background: var(--md-primary);
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* FAB */
+.fab {
+  position: absolute; bottom: calc(var(--nav-bar) + 16px); right: 16px;
+  width: 56px; height: 56px; border-radius: 16px;
+  background: var(--md-primary-container);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--md-on-primary-container);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3), 0 6px 12px rgba(99,102,241,0.20);
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.fab:hover { transform: scale(1.05); }
+.fab:active { transform: scale(0.95); }
+
+/* Navigation bar */
+.nav-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: var(--nav-bar);
+  background: var(--md-surface-2);
+  display: flex; align-items: center;
+  border-top: 1px solid var(--md-outline-variant);
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 2px; cursor: pointer; padding: 6px 0;
+}
+.nav-indicator {
+  width: 64px; height: 32px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; transition: background 0.15s;
+}
+.nav-item.active .nav-indicator { background: var(--md-primary-container); }
+.nav-item-label { font-size: 12px; font-weight: 500; color: var(--md-outline); }
+.nav-item.active .nav-item-label { color: var(--md-on-primary-container); }
+</style>
+</head>
+<body>
+
+<div class="pixel-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <span>●●●●</span>
+      <span>WiFi</span>
+      <span>🔋</span>
+    </div>
+  </div>
+
+  <!-- Top App Bar -->
+  <div class="top-app-bar">
+    <button class="app-bar-btn">☰</button>
+    <span class="app-bar-title">Hoje</span>
+    <button class="app-bar-btn">⌕</button>
+    <div class="app-bar-avatar">A</div>
+  </div>
+
+  <!-- Scroll Content -->
+  <div class="scroll-content">
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <div class="hero-eyebrow">✦ Companion · 09:41</div>
+      <div class="hero-headline">Bom dia, Alexandre</div>
+      <div class="hero-body">3 decisões críticas e reunião às 14h. Streak de exercícios: 12 dias.</div>
+      <div class="hero-actions">
+        <button class="btn-filled">Ver briefing</button>
+        <button class="btn-tonal">Decisões</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-chip">
+        <span class="stat-chip-value" style="color:#6366F1">87%</span>
+        <span class="stat-chip-label">Progresso</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-value" style="color:#FF9500">12</span>
+        <span class="stat-chip-label">Streak 🔥</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-value" style="color:#34C759">3</span>
+        <span class="stat-chip-label">Decisões</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-value" style="color:#14B8A6">230</span>
+        <span class="stat-chip-label">Memórias</span>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="section-label">Tarefas Críticas</div>
+    <div class="m3-card">
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(244,63,94,0.12)">⚡</div>
+        <div class="list-content">
+          <div class="list-headline">Decisão: Arquitetura Mobile</div>
+          <div class="list-supporting">PROJECT-X · Hoje até 17h</div>
+        </div>
+        <div class="list-trailing">
+          <span class="list-meta">17:00</span>
+          <span class="m3-badge">!</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(245,158,11,0.12)">📊</div>
+        <div class="list-content">
+          <div class="list-headline">Deck para investidores</div>
+          <div class="list-supporting">Reunião às 14h · 4h restantes</div>
+        </div>
+        <div class="list-trailing">
+          <span class="list-meta">14:00</span>
+          <span class="m3-badge">!</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(99,102,241,0.12)">◈</div>
+        <div class="list-content">
+          <div class="list-headline">Revisar Sprint 030</div>
+          <div class="list-supporting">Program Alpha</div>
+          <div class="linear-progress"><div class="linear-progress-fill" style="width:87%"></div></div>
+        </div>
+        <div class="list-trailing">
+          <span class="list-meta">87%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Habits -->
+    <div class="section-label">Hábitos</div>
+    <div class="m3-card-elevated">
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(52,199,89,0.12)">💪</div>
+        <div class="list-content">
+          <div class="list-headline">Exercício Físico</div>
+          <div class="list-supporting">✓ Concluído · Streak: 12 dias</div>
+          <div class="linear-progress"><div class="linear-progress-fill" style="width:100%;background:#34C759"></div></div>
+        </div>
+        <div class="list-trailing">
+          <span style="font-size:18px">✅</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(255,149,0,0.12)">🧠</div>
+        <div class="list-content">
+          <div class="list-headline">Foco Profundo</div>
+          <div class="list-supporting">2h de 4h · Em andamento</div>
+          <div class="linear-progress"><div class="linear-progress-fill" style="width:50%;background:#FF9500"></div></div>
+        </div>
+        <div class="list-trailing">
+          <span class="list-meta">50%</span>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-leading" style="background:rgba(90,200,250,0.12)">📚</div>
+        <div class="list-content">
+          <div class="list-headline">Leitura</div>
+          <div class="list-supporting">0 de 30min</div>
+          <div class="linear-progress"><div class="linear-progress-fill" style="width:0%"></div></div>
+        </div>
+        <div class="list-trailing">
+          <span class="list-meta">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memory -->
+    <div class="section-label">Memória Soberana</div>
+    <div class="m3-card" style="padding:16px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:20px">⬡</div>
+        <div>
+          <div style="font-size:16px;font-weight:500;color:var(--md-on-surface)">Grafo Ativo</div>
+          <div style="font-size:13px;color:var(--md-on-surface-variant)">230 nós · 47 memórias long-term</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="padding:4px 12px;border-radius:8px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);font-size:12px;color:#818CF8">PROJECT-X</span>
+        <span style="padding:4px 12px;border-radius:8px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);font-size:12px;color:#818CF8">Exercício</span>
+        <span style="padding:4px 12px;border-radius:8px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);font-size:12px;color:#818CF8">Ana</span>
+        <span style="padding:4px 12px;border-radius:8px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);font-size:12px;color:#818CF8">+44 mais</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <button class="fab">✦</button>
+
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <div class="nav-item active">
+      <div class="nav-indicator">🏠</div>
+      <span class="nav-item-label" style="color:var(--md-on-primary-container)">Hoje</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-indicator">✦</div>
+      <span class="nav-item-label">Companion</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-indicator">⬡</div>
+      <span class="nav-item-label">Memória</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-indicator">◎</div>
+      <span class="nav-item-label">Objetivos</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

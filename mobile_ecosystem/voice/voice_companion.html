@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>LifeOS Voice Companion — BETA-007</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BETA-007: Voice Companion
+   Hands-free interaction · Wake Word · Voice Commands
+   LifeOS Design System v4.0.0
+   ============================================================ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  --brand:    #6366F1; --brand-l: #818CF8; --accent: #8B5CF6;
+  --success:  #10B981; --warning: #F59E0B; --danger: #F43F5E;
+  --teal:     #14B8A6;
+  --bg:       #000000; --card:    #0F0F1A; --surface: #1A1A2E;
+  --border:   rgba(255,255,255,0.08);
+  --text-1:   #F1F5F9; --text-2: #94A3B8; --text-3: #64748B;
+}
+
+@keyframes breathe   { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.08);opacity:1} }
+@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes ripple    { 0%{transform:scale(0.8);opacity:0.8} 100%{transform:scale(2.5);opacity:0} }
+@keyframes waveform  { 0%,100%{height:4px} 50%{height:20px} }
+@keyframes fadeIn    { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes glow      { 0%,100%{box-shadow:0 0 20px rgba(99,102,241,0.20)} 50%{box-shadow:0 0 60px rgba(99,102,241,0.60)} }
+@keyframes orbit     { from{transform:rotate(0deg) translateX(60px) rotate(0deg)} to{transform:rotate(360deg) translateX(60px) rotate(-360deg)} }
+@keyframes spin      { to{transform:rotate(360deg)} }
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+html, body { height:100%; overflow:hidden; }
+body {
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg); color:var(--text-1);
+  -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column;
+}
+
+/* ── VOICE ORB ── */
+.voice-screen {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+
+/* Background ambient glow */
+.voice-screen::before {
+  content:''; position:absolute;
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+  animation:breathe 4s ease-in-out infinite;
+}
+
+/* Outer ripple rings */
+.ripple-ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(99,102,241,0.15);
+  animation:ripple 3s ease-out infinite;
+}
+.ripple-ring:nth-child(1) { width:200px; height:200px; animation-delay:0s; }
+.ripple-ring:nth-child(2) { width:280px; height:280px; animation-delay:0.8s; }
+.ripple-ring:nth-child(3) { width:360px; height:360px; animation-delay:1.6s; }
+
+/* Main orb */
+.voice-orb {
+  width:120px; height:120px; border-radius:50%;
+  background:linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+  background-size:200% 200%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:10; cursor:pointer;
+  animation:glow 3s ease-in-out infinite, gradientShift 4s ease infinite;
+  box-shadow:
+    0 0 40px rgba(99,102,241,0.40),
+    0 0 80px rgba(99,102,241,0.20),
+    0 20px 40px rgba(0,0,0,0.40);
+  transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.voice-orb:hover { transform:scale(1.06); }
+.voice-orb:active { transform:scale(0.96); }
+.voice-orb-icon { font-size:40px; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.40)); }
+
+/* Listening state: waveform bars */
+.waveform {
+  position:absolute; bottom:-30px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:3px; height:30px;
+}
+.wave-bar {
+  width:3px; background:var(--brand-l); border-radius:2px;
+  animation:waveform 0.6s ease-in-out infinite;
+}
+.wave-bar:nth-child(1) { animation-delay:0.0s; }
+.wave-bar:nth-child(2) { animation-delay:0.1s; }
+.wave-bar:nth-child(3) { animation-delay:0.2s; }
+.wave-bar:nth-child(4) { animation-delay:0.3s; }
+.wave-bar:nth-child(5) { animation-delay:0.4s; }
+.wave-bar:nth-child(6) { animation-delay:0.3s; }
+.wave-bar:nth-child(7) { animation-delay:0.2s; }
+.wave-bar:nth-child(8) { animation-delay:0.1s; }
+.wave-bar:nth-child(9) { animation-delay:0.0s; }
+
+/* Status text */
+.voice-status {
+  margin-top:60px; text-align:center; z-index:10;
+}
+.voice-status-label {
+  font-size:13px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--brand-l); margin-bottom:8px;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.status-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--brand-l);
+  animation:pulse 1.5s ease-in-out infinite;
+}
+.voice-transcript {
+  font-size:20px; font-weight:600; letter-spacing:-0.02em;
+  max-width:280px; text-align:center; line-height:1.3;
+  animation:fadeIn 0.3s ease-out;
+}
+.voice-transcript .highlight { color:var(--brand-l); }
+
+/* Wake word indicator */
+.wake-word-badge {
+  position:absolute; top:60px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:8px;
+  padding:8px 16px; border-radius:20px;
+  background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.25);
+  font-size:13px; font-weight:500; color:var(--brand-l);
+  z-index:10; white-space:nowrap;
+}
+.wake-dot { width:8px; height:8px; border-radius:50%; background:var(--success); animation:pulse 2s ease-in-out infinite; }
+
+/* ── RESPONSE CARD ── */
+.response-area {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:0 20px 40px;
+  z-index:20;
+}
+.response-card {
+  background:rgba(15,15,26,0.95);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(99,102,241,0.20);
+  border-radius:20px; padding:18px;
+  animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.response-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:12px;
+}
+.response-icon {
+  width:32px; height:32px; border-radius:9px;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+}
+.response-title { font-size:13px; font-weight:600; color:var(--brand-l); }
+.response-time { font-size:11px; color:var(--text-3); margin-left:auto; }
+.response-text { font-size:15px; line-height:1.5; margin-bottom:14px; }
+.response-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.response-action {
+  padding:7px 14px; border-radius:10px;
+  font-size:13px; font-weight:500;
+  background:rgba(99,102,241,0.15);
+  border:1px solid rgba(99,102,241,0.25);
+  color:var(--brand-l); cursor:pointer;
+  transition:all 0.15s;
+}
+.response-action.primary {
+  background:var(--brand); color:#fff; border-color:transparent;
+}
+.response-action:hover { opacity:0.85; }
+
+/* ── COMMAND SUGGESTIONS ── */
+.commands-panel {
+  position:absolute; top:0; left:0; right:0;
+  padding:80px 20px 0;
+  z-index:5;
+}
+.commands-title {
+  font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--text-3); margin-bottom:12px; text-align:center;
+}
+.commands-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.command-chip {
+  padding:10px 14px; border-radius:12px;
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  font-size:12px; font-weight:500; color:var(--text-2);
+  cursor:pointer; transition:all 0.15s;
+  display:flex; align-items:center; gap:8px;
+}
+.command-chip:hover { background:rgba(99,102,241,0.10); border-color:rgba(99,102,241,0.25); color:var(--text-1); }
+.command-icon { font-size:14px; }
+
+/* ── BOTTOM CONTROLS ── */
+.voice-controls {
+  display:flex; align-items:center; justify-content:space-around;
+  padding:16px 40px 40px;
+  border-top:1px solid var(--border);
+  background:rgba(0,0,0,0.60);
+  backdrop-filter:blur(20px);
+}
+.ctrl-btn {
+  width:48px; height:48px; border-radius:50%;
+  background:rgba(255,255,255,0.06); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; cursor:pointer; transition:all 0.15s;
+}
+.ctrl-btn:hover { background:rgba(255,255,255,0.10); }
+.ctrl-btn.active { background:rgba(99,102,241,0.20); border-color:rgba(99,102,241,0.40); }
+.ctrl-label { font-size:10px; color:var(--text-3); margin-top:4px; text-align:center; }
+.ctrl-wrap { display:flex; flex-direction:column; align-items:center; }
+</style>
+</head>
+<body>
+
+<!-- VOICE SCREEN -->
+<div class="voice-screen">
+
+  <!-- Ripple rings -->
+  <div class="ripple-ring"></div>
+  <div class="ripple-ring"></div>
+  <div class="ripple-ring"></div>
+
+  <!-- Wake word badge -->
+  <div class="wake-word-badge">
+    <div class="wake-dot"></div>
+    "Hey LifeOS" · Ouvindo
+  </div>
+
+  <!-- Main orb -->
+  <div class="voice-orb">
+    <span class="voice-orb-icon">✦</span>
+    <div class="waveform">
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="voice-status">
+    <div class="voice-status-label">
+      <div class="status-dot"></div>
+      Processando
+    </div>
+    <div class="voice-transcript">
+      "Qual é o meu <span class="highlight">progresso</span> no Sprint 030?"
+    </div>
+  </div>
+
+  <!-- Command suggestions (shown when idle) -->
+  <div class="commands-panel" style="display:none">
+    <div class="commands-title">Comandos disponíveis</div>
+    <div class="commands-grid">
+      <div class="command-chip"><span class="command-icon">◈</span>"Qual meu progresso?"</div>
+      <div class="command-chip"><span class="command-icon">⚡</span>"Decisões pendentes"</div>
+      <div class="command-chip"><span class="command-icon">🔥</span>"Meu streak hoje"</div>
+      <div class="command-chip"><span class="command-icon">⬡</span>"Lembrar que..."</div>
+      <div class="command-chip"><span class="command-icon">📅</span>"Próxima reunião"</div>
+      <div class="command-chip"><span class="command-icon">✦</span>"Briefing do dia"</div>
+    </div>
+  </div>
+
+  <!-- Response card -->
+  <div class="response-area">
+    <div class="response-card">
+      <div class="response-header">
+        <div class="response-icon">✦</div>
+        <span class="response-title">Companion</span>
+        <span class="response-time">agora</span>
+      </div>
+      <div class="response-text">
+        Sprint 030 está em <strong>87% de progresso</strong>. Você tem 13 tarefas restantes e o sprint termina em 3 dias. Health Score: 82. Quer que eu priorize as tarefas críticas?
+      </div>
+      <div class="response-actions">
+        <div class="response-action primary">Sim, priorizar</div>
+        <div class="response-action">Ver detalhes</div>
+        <div class="response-action">Não, obrigado</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM CONTROLS -->
+<div class="voice-controls">
+  <div class="ctrl-wrap">
+    <div class="ctrl-btn">🔇</div>
+    <div class="ctrl-label">Mudo</div>
+  </div>
+  <div class="ctrl-wrap">
+    <div class="ctrl-btn active">✦</div>
+    <div class="ctrl-label">Companion</div>
+  </div>
+  <div class="ctrl-wrap">
+    <div class="ctrl-btn">⚙</div>
+    <div class="ctrl-label">Config</div>
+  </div>
+</div>
+
+</body>
+</html>

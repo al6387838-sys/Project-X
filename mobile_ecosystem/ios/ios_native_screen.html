@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0, viewport-fit=cover">
+<title>LifeOS iOS — Native Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BETA-001: Native iOS Optimization
+   LifeOS Mobile — iPhone 15 Pro (390×844)
+   Apple Human Interface Guidelines compliant
+   ============================================================ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  /* iOS System Colors */
+  --ios-blue:    #007AFF;
+  --ios-indigo:  #5856D6;
+  --ios-purple:  #AF52DE;
+  --ios-pink:    #FF2D55;
+  --ios-red:     #FF3B30;
+  --ios-orange:  #FF9500;
+  --ios-yellow:  #FFCC00;
+  --ios-green:   #34C759;
+  --ios-teal:    #5AC8FA;
+  --ios-cyan:    #32ADE6;
+
+  /* LifeOS Brand on iOS */
+  --brand:       #6366F1;
+  --brand-light: #818CF8;
+  --accent:      #8B5CF6;
+
+  /* iOS Dark */
+  --bg-1:        #000000;
+  --bg-2:        #1C1C1E;
+  --bg-3:        #2C2C2E;
+  --bg-4:        #3A3A3C;
+  --label-1:     #FFFFFF;
+  --label-2:     rgba(235,235,245,0.60);
+  --label-3:     rgba(235,235,245,0.30);
+  --label-4:     rgba(235,235,245,0.18);
+  --separator:   rgba(84,84,88,0.65);
+  --fill-1:      rgba(120,120,128,0.36);
+  --fill-2:      rgba(120,120,128,0.32);
+  --fill-3:      rgba(118,118,128,0.24);
+  --fill-4:      rgba(116,116,128,0.18);
+
+  /* Safe Areas */
+  --safe-top:    44px;
+  --safe-bottom: 34px;
+  --corner:      47px;
+}
+
+@keyframes fadeIn    { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes scaleIn   { from{opacity:0;transform:scale(0.94)} to{opacity:1;transform:scale(1)} }
+@keyframes slideUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes breathe   { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.06);opacity:1} }
+@keyframes shimmer   { 0%{background-position:-300% 0} 100%{background-position:300% 0} }
+
+/* iPhone frame */
+.iphone-frame {
+  width: 390px;
+  min-height: 844px;
+  background: var(--bg-1);
+  border-radius: var(--corner);
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  font-family: -apple-system, 'SF Pro Display', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dynamic Island */
+.dynamic-island {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 37px;
+  background: #000; border-radius: 20px;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 12px;
+}
+.di-camera { width: 12px; height: 12px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; }
+.di-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); animation: breathe 3s ease-in-out infinite; box-shadow: 0 0 8px rgba(99,102,241,0.60); }
+
+/* Status bar */
+.status-bar {
+  height: var(--safe-top);
+  display: flex; align-items: flex-end;
+  padding: 0 28px 8px;
+  justify-content: space-between;
+}
+.status-time { font-size: 15px; font-weight: 600; color: var(--label-1); }
+.status-icons { display: flex; align-items: center; gap: 6px; }
+.status-icon { font-size: 12px; color: var(--label-1); }
+
+/* Navigation bar */
+.nav-bar {
+  padding: 8px 20px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-title { font-size: 34px; font-weight: 700; color: var(--label-1); letter-spacing: -0.5px; }
+.nav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--fill-3); border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer; color: var(--brand-light);
+}
+
+/* Scroll content */
+.scroll-content {
+  padding: 0 16px;
+  padding-bottom: calc(var(--safe-bottom) + 83px);
+  overflow-y: auto;
+  height: calc(844px - var(--safe-top) - 83px);
+}
+.scroll-content::-webkit-scrollbar { display: none; }
+
+/* Section header */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 20px 4px 10px;
+}
+.section-title { font-size: 22px; font-weight: 700; color: var(--label-1); letter-spacing: -0.3px; }
+.section-link { font-size: 15px; color: var(--brand-light); font-weight: 400; }
+
+/* Hero card — Companion greeting */
+.hero-card {
+  background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2a 100%);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(99,102,241,0.20);
+  animation: scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative; overflow: hidden;
+}
+.hero-card::before {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 70%);
+}
+.hero-greeting { font-size: 13px; color: var(--brand-light); font-weight: 500; margin-bottom: 4px; }
+.hero-title { font-size: 22px; font-weight: 700; color: var(--label-1); letter-spacing: -0.3px; margin-bottom: 8px; }
+.hero-subtitle { font-size: 14px; color: var(--label-2); line-height: 1.4; margin-bottom: 16px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-chip {
+  padding: 7px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  background: rgba(99,102,241,0.20);
+  color: var(--brand-light);
+  border: 1px solid rgba(99,102,241,0.30);
+}
+.hero-chip.primary {
+  background: var(--brand); color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.40);
+}
+
+/* Stats row */
+.stats-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px; margin-bottom: 12px;
+}
+.stat-card {
+  background: var(--bg-2); border-radius: 16px;
+  padding: 14px 12px;
+  animation: fadeIn 0.3s ease-out;
+}
+.stat-icon { font-size: 20px; margin-bottom: 6px; }
+.stat-value { font-size: 22px; font-weight: 700; color: var(--label-1); letter-spacing: -0.5px; line-height: 1; }
+.stat-label { font-size: 11px; color: var(--label-2); margin-top: 2px; }
+
+/* Habit ring card */
+.habit-card {
+  background: var(--bg-2); border-radius: 20px;
+  padding: 18px; margin-bottom: 12px;
+  animation: slideUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.habit-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.habit-title { font-size: 17px; font-weight: 600; color: var(--label-1); }
+.habit-subtitle { font-size: 13px; color: var(--label-2); }
+
+.rings-row { display: flex; align-items: center; gap: 16px; }
+.ring-wrap { position: relative; width: 64px; height: 64px; }
+.ring-svg { width: 64px; height: 64px; transform: rotate(-90deg); }
+.ring-track { fill: none; stroke: var(--fill-3); stroke-width: 6; }
+.ring-fill  { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease-out; }
+.ring-label {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-size: 13px; font-weight: 700; color: var(--label-1);
+}
+.ring-info { flex: 1; }
+.ring-name { font-size: 15px; font-weight: 600; color: var(--label-1); margin-bottom: 2px; }
+.ring-detail { font-size: 13px; color: var(--label-2); }
+.ring-streak {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 13px; font-weight: 600; color: var(--ios-orange);
+  margin-top: 4px;
+}
+
+/* Task list */
+.task-card {
+  background: var(--bg-2); border-radius: 20px;
+  overflow: hidden; margin-bottom: 12px;
+}
+.task-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--separator);
+  transition: background 0.12s;
+}
+.task-item:last-child { border-bottom: none; }
+.task-item:active { background: var(--fill-4); }
+.task-check {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--fill-1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 12px;
+}
+.task-check.done { background: var(--ios-green); border-color: var(--ios-green); color: #fff; }
+.task-check.urgent { border-color: var(--ios-orange); }
+.task-body { flex: 1; }
+.task-title { font-size: 15px; font-weight: 500; color: var(--label-1); }
+.task-title.done { text-decoration: line-through; color: var(--label-3); }
+.task-meta { font-size: 13px; color: var(--label-2); margin-top: 1px; }
+.task-priority {
+  font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 5px;
+}
+.task-priority.high { background: rgba(255,59,48,0.15); color: var(--ios-red); }
+.task-priority.med  { background: rgba(255,149,0,0.15); color: var(--ios-orange); }
+.task-priority.low  { background: rgba(52,199,89,0.15); color: var(--ios-green); }
+.task-chevron { font-size: 14px; color: var(--label-3); }
+
+/* Memory card */
+.memory-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px; padding: 18px;
+  border: 1px solid rgba(99,102,241,0.15);
+  margin-bottom: 12px;
+}
+.memory-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.memory-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg,#6366F1,#8B5CF6);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.memory-title { font-size: 17px; font-weight: 600; color: var(--label-1); }
+.memory-count { font-size: 13px; color: var(--brand-light); margin-top: 1px; }
+.memory-nodes { display: flex; gap: 8px; flex-wrap: wrap; }
+.memory-node {
+  padding: 6px 12px; border-radius: 8px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.20);
+  font-size: 12px; font-weight: 500; color: var(--brand-light);
+}
+
+/* Tab bar */
+.tab-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: calc(83px + var(--safe-bottom));
+  background: rgba(28,28,30,0.90);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--separator);
+  display: flex; align-items: flex-start;
+  padding-top: 10px;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; padding: 0 4px;
+}
+.tab-icon { font-size: 24px; transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1); }
+.tab-item.active .tab-icon { transform: scale(1.1); }
+.tab-label { font-size: 10px; font-weight: 500; color: var(--label-3); }
+.tab-item.active .tab-label { color: var(--brand-light); }
+.tab-badge {
+  position: absolute; top: -2px; right: -2px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  background: var(--ios-red); color: #fff;
+  font-size: 10px; font-weight: 700; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--bg-1);
+}
+.tab-icon-wrap { position: relative; }
+</style>
+</head>
+<body style="background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">
+
+<div class="iphone-frame">
+
+  <!-- Dynamic Island -->
+  <div class="dynamic-island">
+    <div class="di-camera"></div>
+    <div class="di-dot"></div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <span class="status-icon">●●●●</span>
+      <span class="status-icon">WiFi</span>
+      <span class="status-icon">🔋</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    <div class="nav-title">Hoje</div>
+    <div style="display:flex;gap:8px">
+      <button class="nav-btn">◎</button>
+      <button class="nav-btn">+</button>
+    </div>
+  </div>
+
+  <!-- Scroll Content -->
+  <div class="scroll-content">
+
+    <!-- Hero: Companion Greeting -->
+    <div class="hero-card">
+      <div class="hero-greeting">✦ Companion · 09:41</div>
+      <div class="hero-title">Bom dia, Alexandre.</div>
+      <div class="hero-subtitle">Você tem 3 decisões críticas e uma reunião às 14h. Streak de exercícios: 12 dias 🔥</div>
+      <div class="hero-chips">
+        <div class="hero-chip primary">Ver briefing</div>
+        <div class="hero-chip">Decisões</div>
+        <div class="hero-chip">Calendário</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" style="color:#6366F1">87%</div>
+        <div class="stat-label">Progresso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value" style="color:#FF9500">12</div>
+        <div class="stat-label">Streak dias</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" style="color:#34C759">3</div>
+        <div class="stat-label">Decisões</div>
+      </div>
+    </div>
+
+    <!-- Habits -->
+    <div class="section-header">
+      <span class="section-title">Hábitos</span>
+      <span class="section-link">Ver todos</span>
+    </div>
+
+    <div class="habit-card">
+      <div class="habit-header">
+        <div>
+          <div class="habit-title">Exercício Físico</div>
+          <div class="habit-subtitle">Meta: 4x/semana · Esta semana: 3x</div>
+        </div>
+        <div style="font-size:13px;color:var(--ios-green);font-weight:600">✓ Feito</div>
+      </div>
+      <div class="rings-row">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 64 64">
+            <circle class="ring-track" cx="32" cy="32" r="28"/>
+            <circle class="ring-fill" cx="32" cy="32" r="28"
+              stroke="#34C759"
+              stroke-dasharray="175.9"
+              stroke-dashoffset="26.4"/>
+          </svg>
+          <div class="ring-label">85%</div>
+        </div>
+        <div class="ring-info">
+          <div class="ring-name">Semana atual</div>
+          <div class="ring-detail">3 de 4 sessões completas</div>
+          <div class="ring-streak">🔥 12 dias de streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="habit-card">
+      <div class="habit-header">
+        <div>
+          <div class="habit-title">Foco Profundo</div>
+          <div class="habit-subtitle">Meta: 4h/dia · Hoje: 2h</div>
+        </div>
+        <div style="font-size:13px;color:var(--ios-orange);font-weight:600">Em andamento</div>
+      </div>
+      <div class="rings-row">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 64 64">
+            <circle class="ring-track" cx="32" cy="32" r="28"/>
+            <circle class="ring-fill" cx="32" cy="32" r="28"
+              stroke="#FF9500"
+              stroke-dasharray="175.9"
+              stroke-dashoffset="87.9"/>
+          </svg>
+          <div class="ring-label">50%</div>
+        </div>
+        <div class="ring-info">
+          <div class="ring-name">Hoje</div>
+          <div class="ring-detail">2h de 4h completas</div>
+          <div class="ring-streak" style="color:var(--ios-orange)">⏱ 2h restantes</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="section-header">
+      <span class="section-title">Tarefas Críticas</span>
+      <span class="section-link">Ver todas</span>
+    </div>
+
+    <div class="task-card">
+      <div class="task-item">
+        <div class="task-check urgent">!</div>
+        <div class="task-body">
+          <div class="task-title">Decisão: Arquitetura Mobile</div>
+          <div class="task-meta">PROJECT-X · Hoje até 17h</div>
+        </div>
+        <span class="task-priority high">Alta</span>
+        <span class="task-chevron">›</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check urgent">!</div>
+        <div class="task-body">
+          <div class="task-title">Preparar deck para investidores</div>
+          <div class="task-meta">Reunião às 14h · 2h restantes</div>
+        </div>
+        <span class="task-priority high">Alta</span>
+        <span class="task-chevron">›</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">Revisar Sprint 030</div>
+          <div class="task-meta">Program Alpha · 87% concluído</div>
+        </div>
+        <span class="task-priority med">Média</span>
+        <span class="task-chevron">›</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">✓</div>
+        <div class="task-body">
+          <div class="task-title done">Exercício matinal</div>
+          <div class="task-meta">Concluído às 07:30</div>
+        </div>
+        <span class="task-priority low">Feito</span>
+        <span class="task-chevron">›</span>
+      </div>
+    </div>
+
+    <!-- Memory -->
+    <div class="section-header">
+      <span class="section-title">Memória Soberana</span>
+      <span class="section-link">Explorar</span>
+    </div>
+
+    <div class="memory-card">
+      <div class="memory-header">
+        <div class="memory-icon">⬡</div>
+        <div>
+          <div class="memory-title">Grafo Ativo</div>
+          <div class="memory-count">230 nós · 47 memórias long-term</div>
+        </div>
+      </div>
+      <div class="memory-nodes">
+        <div class="memory-node">PROJECT-X</div>
+        <div class="memory-node">Exercício</div>
+        <div class="memory-node">Ana</div>
+        <div class="memory-node">Carlos</div>
+        <div class="memory-node">Decisões</div>
+        <div class="memory-node">+42 mais</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item active">
+      <div class="tab-icon-wrap">
+        <span class="tab-icon">🏠</span>
+      </div>
+      <span class="tab-label" style="color:var(--brand-light)">Hoje</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon-wrap">
+        <span class="tab-icon">✦</span>
+        <span class="tab-badge">3</span>
+      </div>
+      <span class="tab-label">Companion</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon-wrap">
+        <span class="tab-icon">⬡</span>
+      </div>
+      <span class="tab-label">Memória</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon-wrap">
+        <span class="tab-icon">◎</span>
+      </div>
+      <span class="tab-label">Objetivos</span>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon-wrap">
+        <span class="tab-icon">◉</span>
+      </div>
+      <span class="tab-label">Perfil</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
