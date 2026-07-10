@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeOS Observability Platform — GAMMA-005</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GAMMA-005: Observability Platform
+   Central Logs · Distributed Tracing · Metrics · Alerts
+   LifeOS Design System v4.0.0
+   ============================================================ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  --brand:    #6366F1; --brand-l: #818CF8; --accent: #8B5CF6;
+  --success:  #10B981; --warning: #F59E0B; --danger: #F43F5E;
+  --teal:     #14B8A6;
+  --bg:       #080810; --card:    #13131F; --surface: #1A1A2E;
+  --border:   rgba(255,255,255,0.08);
+  --text-1:   #F1F5F9; --text-2: #94A3B8; --text-3: #64748B;
+}
+
+body {
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg); color:var(--text-1);
+  min-height:100vh; padding:40px 24px;
+}
+
+.dashboard {
+  max-width: 1200px; margin: 0 auto;
+}
+
+h1 { font-size:28px; font-weight:700; margin-bottom:6px; }
+.subtitle { font-size:14px; color:var(--text-2); margin-bottom:40px; }
+.badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  padding:3px 10px; border-radius:5px;
+  background:rgba(99,102,241,0.12); color:var(--brand-l);
+  border:1px solid rgba(99,102,241,0.20); margin-bottom:12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.card-title {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.metric-value {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.metric-trend {
+  font-size: 13px;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.metric-trend.negative { color: var(--danger); }
+
+/* Distributed Tracing View */
+.trace-view {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.trace-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.trace-service { width: 150px; font-weight: 600; }
+.trace-bar-container { flex: 1; height: 24px; background: rgba(255,255,255,0.05); border-radius: 4px; position: relative; }
+.trace-bar { height: 100%; border-radius: 4px; position: absolute; display: flex; align-items: center; padding-left: 8px; font-size: 11px; }
+
+/* Alerts View */
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border-left: 4px solid var(--warning);
+}
+.alert-item.critical { border-left-color: var(--danger); }
+
+.alert-content { flex: 1; }
+.alert-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.alert-time { font-size: 12px; color: var(--text-3); }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+  <div class="badge">GAMMA-005 · Observability</div>
+  <h1>Global Observability Platform</h1>
+  <p class="subtitle">Central Logs · Distributed Tracing · Metrics · Alert Manager</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-title"><span>Global API Traffic</span> <span>⚡</span></div>
+      <div class="metric-value">42.5k <span style="font-size:16px;color:var(--text-3)">req/s</span></div>
+      <div class="metric-trend">↑ 12% vs last hour</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>P99 Latency</span> <span>⏱</span></div>
+      <div class="metric-value">124 <span style="font-size:16px;color:var(--text-3)">ms</span></div>
+      <div class="metric-trend negative">↓ 5ms vs last hour</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Error Rate (5xx)</span> <span>⚠️</span></div>
+      <div class="metric-value">0.01 <span style="font-size:16px;color:var(--text-3)">%</span></div>
+      <div class="metric-trend">✓ System Healthy</div>
+    </div>
+  </div>
+
+  <h2>Distributed Tracing (Sample Request)</h2>
+  <div class="trace-view">
+    <div style="margin-bottom: 20px; font-size: 14px; color: var(--text-2);">
+      Trace ID: <code>a1b2c3d4e5f6</code> | Endpoint: <code>POST /api/v4/companion/ask</code> | Total Time: 124ms
+    </div>
+    
+    <div class="trace-row">
+      <div class="trace-service">API Gateway</div>
+      <div class="trace-bar-container">
+        <div class="trace-bar" style="left: 0%; width: 100%; background: rgba(99,102,241,0.2); border: 1px solid var(--brand);">124ms</div>
+      </div>
+    </div>
+    <div class="trace-row">
+      <div class="trace-service">Auth Service</div>
+      <div class="trace-bar-container">
+        <div class="trace-bar" style="left: 2%; width: 10%; background: rgba(16,185,129,0.2); border: 1px solid var(--success);">12ms</div>
+      </div>
+    </div>
+    <div class="trace-row">
+      <div class="trace-service">Companion Engine</div>
+      <div class="trace-bar-container">
+        <div class="trace-bar" style="left: 12%; width: 70%; background: rgba(139,92,246,0.2); border: 1px solid var(--accent);">86ms</div>
+      </div>
+    </div>
+    <div class="trace-row">
+      <div class="trace-service">Cache (Redis)</div>
+      <div class="trace-bar-container">
+        <div class="trace-bar" style="left: 15%; width: 5%; background: rgba(245,158,11,0.2); border: 1px solid var(--warning);">6ms</div>
+      </div>
+    </div>
+    <div class="trace-row">
+      <div class="trace-service">Database (TiDB)</div>
+      <div class="trace-bar-container">
+        <div class="trace-bar" style="left: 60%; width: 15%; background: rgba(20,184,166,0.2); border: 1px solid var(--teal);">18ms</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Active Alerts</h2>
+  <div class="alerts-list">
+    <div class="alert-item critical">
+      <div class="alert-content">
+        <div class="alert-title">High Latency in EU-WEST-1 Database Replica</div>
+        <div class="alert-time">Triggered 2 mins ago · Assigned to: Database Team</div>
+      </div>
+      <button style="padding: 6px 12px; background: var(--danger); color: white; border: none; border-radius: 6px; cursor: pointer;">Acknowledge</button>
+    </div>
+    <div class="alert-item">
+      <div class="alert-content">
+        <div class="alert-title">Cache Miss Rate > 20% in US-EAST-1</div>
+        <div class="alert-time">Triggered 15 mins ago · Auto-scaling triggered</div>
+      </div>
+      <button style="padding: 6px 12px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 6px; cursor: pointer;">View Logs</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
