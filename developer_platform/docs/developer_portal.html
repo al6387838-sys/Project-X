@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifeOS Developer Portal — Build on the Intelligence Layer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens (LifeOS Design System v3.0.0) ── */
+    :root {
+      --color-bg-base: #080810;
+      --color-bg-elevated: #0F0F1A;
+      --color-bg-card: #141428;
+      --color-bg-card2: #1A1A2E;
+      --color-bg-overlay: #16213E;
+      --color-bg-glass: rgba(15,15,26,0.85);
+      --color-surface-100: #1E1E32;
+      --color-surface-200: #252540;
+      --color-surface-300: #2D2D4E;
+      --color-surface-400: #3A3A5C;
+      --color-border-subtle: rgba(255,255,255,0.06);
+      --color-border-default: rgba(255,255,255,0.10);
+      --color-border-strong: rgba(255,255,255,0.18);
+      --color-border-focus: rgba(99,102,241,0.60);
+      --color-text-primary: #F1F5F9;
+      --color-text-secondary: #94A3B8;
+      --color-text-tertiary: #64748B;
+      --color-text-link: #818CF8;
+      --color-brand-primary: #6366F1;
+      --color-brand-primary-hover: #4F46E5;
+      --color-brand-accent: #8B5CF6;
+      --color-brand-glow: rgba(99,102,241,0.25);
+      --color-success: #10B981;
+      --color-warning: #F59E0B;
+      --color-danger: #F43F5E;
+      --color-info: #38BDF8;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-aurora: linear-gradient(135deg, #6366F1 0%, #8B5CF6 40%, #EC4899 100%);
+      --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-2xl: 20px;
+      --radius-full: 9999px;
+      --shadow-glow: 0 0 40px rgba(99,102,241,0.15);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-elevated: 0 8px 40px rgba(0,0,0,0.5);
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg-base);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-fast); }
+    a:hover { color: var(--color-brand-primary); }
+    code, pre { font-family: var(--font-mono); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--color-bg-base); }
+    ::-webkit-scrollbar-thumb { background: var(--color-surface-300); border-radius: var(--radius-full); }
+
+    /* ── Layout ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .section { padding: 96px 0; }
+
+    /* ── Navigation ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--color-bg-glass);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--color-border-subtle);
+      height: 64px;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 100%;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 1rem; color: var(--color-text-primary);
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .nav-badge {
+      font-size: 0.625rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--color-brand-primary);
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
+      padding: 2px 8px; border-radius: var(--radius-full);
+    }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-link {
+      font-size: 0.875rem; font-weight: 500; color: var(--color-text-secondary);
+      padding: 6px 14px; border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+    }
+    .nav-link:hover { color: var(--color-text-primary); background: var(--color-surface-100); }
+    .nav-cta {
+      background: var(--gradient-primary);
+      color: #fff; font-size: 0.875rem; font-weight: 600;
+      padding: 8px 20px; border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      box-shadow: 0 0 20px rgba(99,102,241,0.3);
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(99,102,241,0.4); color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 160px 0 96px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% -10%, rgba(99,102,241,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 50%, rgba(139,92,246,0.08) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+    }
+    .hero-content { position: relative; text-align: center; max-width: 800px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--color-brand-primary);
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.20);
+      padding: 6px 16px; border-radius: var(--radius-full);
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow-dot { width: 6px; height: 6px; background: var(--color-brand-primary); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .hero-title-gradient {
+      background: var(--gradient-aurora);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem; color: var(--color-text-secondary);
+      line-height: 1.7; max-width: 600px; margin: 0 auto 48px;
+    }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gradient-primary);
+      color: #fff; font-size: 1rem; font-weight: 600;
+      padding: 14px 28px; border-radius: var(--radius-lg);
+      transition: all var(--transition-base);
+      box-shadow: 0 0 32px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(99,102,241,0.45); color: #fff; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--color-surface-100);
+      border: 1px solid var(--color-border-default);
+      color: var(--color-text-primary); font-size: 1rem; font-weight: 500;
+      padding: 14px 28px; border-radius: var(--radius-lg);
+      transition: all var(--transition-base);
+    }
+    .btn-secondary:hover { background: var(--color-surface-200); border-color: var(--color-border-strong); color: var(--color-text-primary); }
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center; gap: 48px;
+      margin-top: 80px; padding-top: 48px;
+      border-top: 1px solid var(--color-border-subtle);
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-size: 2rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-stat-label { font-size: 0.875rem; color: var(--color-text-tertiary); margin-top: 4px; }
+
+    /* ── Code Terminal ── */
+    .terminal {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-elevated);
+      margin: 64px auto 0;
+      max-width: 760px;
+    }
+    .terminal-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 20px;
+      background: var(--color-surface-100);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-dot.red { background: #FF5F57; }
+    .terminal-dot.yellow { background: #FEBC2E; }
+    .terminal-dot.green { background: #28C840; }
+    .terminal-title { flex: 1; text-align: center; font-size: 0.75rem; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+    .terminal-body { padding: 28px 32px; }
+    .terminal-body pre {
+      font-size: 0.875rem; line-height: 1.8;
+      white-space: pre-wrap; word-break: break-all;
+    }
+    .t-comment { color: #64748B; }
+    .t-keyword { color: #C084FC; }
+    .t-string { color: #86EFAC; }
+    .t-number { color: #FCA5A5; }
+    .t-func { color: #93C5FD; }
+    .t-var { color: #F1F5F9; }
+    .t-op { color: #94A3B8; }
+    .t-output { color: #10B981; }
+
+    /* ── Section Headers ── */
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--color-brand-primary); margin-bottom: 16px;
+    }
+    .section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .section-subtitle { font-size: 1.125rem; color: var(--color-text-secondary); max-width: 560px; margin: 0 auto; }
+
+    /* ── Feature Grid ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      transition: all var(--transition-base);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gradient-glass);
+      opacity: 0; transition: opacity var(--transition-base);
+    }
+    .feature-card:hover { border-color: var(--color-border-focus); transform: translateY(-4px); box-shadow: var(--shadow-glow); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.20);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+    }
+    .feature-title { font-size: 1.125rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-desc { font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.65; }
+
+    /* ── API Reference Preview ── */
+    .api-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    @media (max-width: 900px) { .api-preview { grid-template-columns: 1fr; } }
+    .api-endpoints { display: flex; flex-direction: column; gap: 8px; }
+    .endpoint-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .endpoint-item:hover, .endpoint-item.active {
+      border-color: var(--color-border-focus);
+      background: var(--color-surface-100);
+    }
+    .method-badge {
+      font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 700;
+      padding: 3px 8px; border-radius: var(--radius-sm);
+      min-width: 52px; text-align: center;
+    }
+    .method-get { background: rgba(16,185,129,0.15); color: #10B981; }
+    .method-post { background: rgba(99,102,241,0.15); color: #818CF8; }
+    .method-delete { background: rgba(244,63,94,0.15); color: #F43F5E; }
+    .endpoint-path { font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-text-primary); }
+    .endpoint-desc { font-size: 0.8125rem; color: var(--color-text-tertiary); margin-left: auto; }
+    .api-response {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .api-response-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      background: var(--color-surface-100);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .api-response-title { font-size: 0.8125rem; font-weight: 600; color: var(--color-text-secondary); }
+    .status-badge {
+      font-size: 0.75rem; font-weight: 600;
+      padding: 3px 10px; border-radius: var(--radius-full);
+      background: rgba(16,185,129,0.15); color: #10B981;
+    }
+    .api-response-body { padding: 24px; }
+    .api-response-body pre { font-size: 0.8125rem; line-height: 1.7; }
+
+    /* ── SDK Section ── */
+    .sdk-tabs { display: flex; gap: 4px; margin-bottom: 24px; }
+    .sdk-tab {
+      padding: 8px 20px; border-radius: var(--radius-md);
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--color-text-secondary);
+      cursor: pointer; transition: all var(--transition-fast);
+      border: 1px solid transparent;
+    }
+    .sdk-tab.active {
+      background: var(--color-surface-100);
+      border-color: var(--color-border-default);
+      color: var(--color-text-primary);
+    }
+    .sdk-code-block {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--color-surface-100);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .code-lang { font-size: 0.75rem; font-weight: 600; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .code-copy {
+      font-size: 0.75rem; color: var(--color-text-tertiary);
+      cursor: pointer; padding: 4px 10px; border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border-subtle);
+      transition: all var(--transition-fast);
+    }
+    .code-copy:hover { color: var(--color-text-primary); border-color: var(--color-border-default); }
+    .code-body { padding: 28px 32px; overflow-x: auto; }
+    .code-body pre { font-size: 0.875rem; line-height: 1.8; }
+
+    /* ── Pricing / Plans ── */
+    .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } }
+    .plan-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      position: relative;
+    }
+    .plan-card.featured {
+      border-color: rgba(99,102,241,0.40);
+      background: linear-gradient(180deg, rgba(99,102,241,0.05) 0%, var(--color-bg-card) 100%);
+      box-shadow: 0 0 40px rgba(99,102,241,0.12);
+    }
+    .plan-featured-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--gradient-primary);
+      color: #fff; font-size: 0.6875rem; font-weight: 700;
+      padding: 4px 16px; border-radius: var(--radius-full);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .plan-name { font-size: 1rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .plan-price { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .plan-period { font-size: 0.875rem; color: var(--color-text-tertiary); margin-bottom: 24px; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .plan-feature { display: flex; align-items: center; gap: 10px; font-size: 0.9375rem; color: var(--color-text-secondary); }
+    .plan-feature-check { color: var(--color-success); font-size: 1rem; }
+    .plan-btn {
+      width: 100%; padding: 12px; border-radius: var(--radius-lg);
+      font-size: 0.9375rem; font-weight: 600; text-align: center;
+      cursor: pointer; transition: all var(--transition-base);
+      display: block;
+    }
+    .plan-btn-primary { background: var(--gradient-primary); color: #fff; box-shadow: 0 0 24px rgba(99,102,241,0.3); }
+    .plan-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 32px rgba(99,102,241,0.4); color: #fff; }
+    .plan-btn-secondary {
+      background: transparent; color: var(--color-text-primary);
+      border: 1px solid var(--color-border-default);
+    }
+    .plan-btn-secondary:hover { background: var(--color-surface-100); border-color: var(--color-border-strong); color: var(--color-text-primary); }
+
+    /* ── Webhooks Section ── */
+    .webhook-events { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .webhook-event {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+    }
+    .webhook-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .webhook-event-name { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--color-text-primary); }
+    .webhook-event-desc { font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 2px; }
+
+    /* ── Rate Limits Table ── */
+    .rate-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-xl); overflow: hidden;
+    }
+    .rate-table th {
+      padding: 16px 20px; text-align: left;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      background: var(--color-surface-100);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .rate-table td {
+      padding: 16px 20px; font-size: 0.9375rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .rate-table tr:last-child td { border-bottom: none; }
+    .rate-table tr:hover td { background: var(--color-surface-100); }
+    .rate-highlight { color: var(--color-brand-primary); font-weight: 700; font-family: var(--font-mono); }
+
+    /* ── Footer ── */
+    .footer {
+      padding: 64px 0 48px;
+      border-top: 1px solid var(--color-border-subtle);
+    }
+    .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; flex-wrap: wrap; }
+    .footer-brand { max-width: 280px; }
+    .footer-brand-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+    .footer-brand-desc { font-size: 0.875rem; color: var(--color-text-tertiary); line-height: 1.65; }
+    .footer-links-group { display: flex; flex-direction: column; gap: 12px; }
+    .footer-links-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 4px; }
+    .footer-link { font-size: 0.875rem; color: var(--color-text-secondary); transition: color var(--transition-fast); }
+    .footer-link:hover { color: var(--color-text-primary); }
+    .footer-bottom { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 0.8125rem; color: var(--color-text-tertiary); }
+    .footer-version { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-tertiary); background: var(--color-surface-100); padding: 4px 12px; border-radius: var(--radius-full); }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">⬡</div>
+      <span>LifeOS</span>
+      <span class="nav-badge">Developers</span>
+    </div>
+    <div class="nav-links">
+      <a href="#api" class="nav-link">API Reference</a>
+      <a href="#sdk" class="nav-link">SDK</a>
+      <a href="#webhooks" class="nav-link">Webhooks</a>
+      <a href="#sandbox" class="nav-link">Sandbox</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#" class="nav-cta">Get API Key →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        EXECUTION-009 · Developer Platform · v2.0.0
+      </div>
+      <h1 class="hero-title">
+        Build on the<br />
+        <span class="hero-title-gradient">Intelligence Layer</span>
+      </h1>
+      <p class="hero-subtitle">
+        The LifeOS Developer Platform gives you full programmatic access to the world's most advanced personal intelligence system. Build apps, automate workflows, and create experiences that adapt to human life.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          <span>Start Building</span>
+          <span>→</span>
+        </a>
+        <a href="#api" class="btn-secondary">
+          <span>View API Reference</span>
+        </a>
+      </div>
+
+      <!-- Terminal Demo -->
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <div class="terminal-title">lifeos_quickstart.py</div>
+        </div>
+        <div class="terminal-body">
+          <pre><span class="t-comment"># Install: pip install lifeos-sdk</span>
+<span class="t-keyword">from</span> <span class="t-var">lifeos_sdk</span> <span class="t-keyword">import</span> <span class="t-func">LifeOSClient</span>
+
+<span class="t-comment"># Initialize with your API key</span>
+<span class="t-var">client</span> <span class="t-op">=</span> <span class="t-func">LifeOSClient</span>(<span class="t-var">api_key</span><span class="t-op">=</span><span class="t-string">"lk_live_..."</span>)
+
+<span class="t-comment"># List recent memories</span>
+<span class="t-var">memories</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">memory</span>.<span class="t-func">list</span>(<span class="t-var">limit</span><span class="t-op">=</span><span class="t-number">5</span>)
+<span class="t-keyword">for</span> <span class="t-var">mem</span> <span class="t-keyword">in</span> <span class="t-var">memories</span>[<span class="t-string">"data"</span>]:
+    <span class="t-func">print</span>(<span class="t-var">mem</span>[<span class="t-string">"content"</span>])
+
+<span class="t-comment"># Create a memory</span>
+<span class="t-var">memory</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">memory</span>.<span class="t-func">create</span>(
+    <span class="t-var">content</span><span class="t-op">=</span><span class="t-string">"Launched Developer Platform 🚀"</span>,
+    <span class="t-var">type</span><span class="t-op">=</span><span class="t-string">"milestone"</span>
+)
+
+<span class="t-comment"># Get AI insights</span>
+<span class="t-var">insights</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">insights</span>.<span class="t-func">list</span>()
+
+<span class="t-output"># → {"data": [{"type": "pattern", "title": "Peak productivity on Tuesdays", ...}]}</span></pre>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">v2</div>
+          <div class="hero-stat-label">Current API Version</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">15+</div>
+          <div class="hero-stat-label">API Endpoints</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">12</div>
+          <div class="hero-stat-label">Webhook Events</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">99.9%</div>
+          <div class="hero-stat-label">API Uptime SLA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Platform Capabilities</div>
+      <h2 class="section-title">Everything you need to build</h2>
+      <p class="section-subtitle">A complete developer ecosystem designed for production-grade integrations.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">API Gateway v2</div>
+        <div class="feature-desc">Unified entry point with request routing, versioning, rate limiting, and standardized response envelopes across all endpoints.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <div class="feature-title">OAuth 2.0 + PKCE</div>
+        <div class="feature-desc">Full Authorization Code Flow with PKCE, Client Credentials, token refresh, revocation (RFC 7009), and introspection (RFC 7662).</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗝️</div>
+        <div class="feature-title">API Key Management</div>
+        <div class="feature-desc">Create, scope, and revoke API keys with plan-based rate limits. Keys stored as SHA-256 hashes — never in plain text.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🪝</div>
+        <div class="feature-title">Official Webhooks</div>
+        <div class="feature-desc">Subscribe to 12 real-time events with HMAC-SHA256 payload signing, automatic retry with exponential backoff, and delivery logs.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">Python SDK</div>
+        <div class="feature-desc">Official SDK with typed resources for Memory, Timeline, Decisions, Insights, Webhooks, and API Keys. Zero configuration required.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⌨️</div>
+        <div class="feature-title">CLI Official</div>
+        <div class="feature-desc">Full-featured command-line interface for managing all platform resources. Designed for developer workflows and CI/CD pipelines.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <div class="feature-title">Developer Sandbox</div>
+        <div class="feature-desc">Isolated test environment with sample data seeding, instant reset, and separate API keys (lk_test_). No production data at risk.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Rate Limiting</div>
+        <div class="feature-desc">Sliding window rate limiting per API key with standard headers (X-RateLimit-*). Plans from 60 to 1000 req/min.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">API Versioning</div>
+        <div class="feature-desc">Stable versioned API (v1, v2) with clear deprecation notices, sunset dates, and migration guides for breaking changes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── API Reference ── -->
+<section class="section" id="api" style="background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.03) 50%, transparent 100%);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">API Reference</div>
+      <h2 class="section-title">Public API v2</h2>
+      <p class="section-subtitle">Base URL: <code style="color: var(--color-brand-primary); font-size: 0.9em;">https://api.lifeos.app/api/v2</code></p>
+    </div>
+    <div class="api-preview">
+      <div class="api-endpoints">
+        <div class="endpoint-item active">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/memory</span>
+          <span class="endpoint-desc">List memories</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-post">POST</span>
+          <span class="endpoint-path">/memory</span>
+          <span class="endpoint-desc">Create memory</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/timeline</span>
+          <span class="endpoint-desc">Get timeline</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/insights</span>
+          <span class="endpoint-desc">AI insights</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-post">POST</span>
+          <span class="endpoint-path">/webhooks</span>
+          <span class="endpoint-desc">Register webhook</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-post">POST</span>
+          <span class="endpoint-path">/api-keys</span>
+          <span class="endpoint-desc">Create API key</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/health</span>
+          <span class="endpoint-desc">Health check</span>
+        </div>
+        <div class="endpoint-item">
+          <span class="method-badge method-delete">DEL</span>
+          <span class="endpoint-path">/webhooks/{id}</span>
+          <span class="endpoint-desc">Delete webhook</span>
+        </div>
+      </div>
+      <div class="api-response">
+        <div class="api-response-header">
+          <span class="api-response-title">GET /api/v2/memory</span>
+          <span class="status-badge">200 OK</span>
+        </div>
+        <div class="api-response-body">
+          <pre><span class="t-op">{</span>
+  <span class="t-string">"data"</span><span class="t-op">: [</span>
+    <span class="t-op">{</span>
+      <span class="t-string">"id"</span><span class="t-op">:</span> <span class="t-string">"mem_01"</span><span class="t-op">,</span>
+      <span class="t-string">"content"</span><span class="t-op">:</span> <span class="t-string">"Q3 planning meeting"</span><span class="t-op">,</span>
+      <span class="t-string">"type"</span><span class="t-op">:</span> <span class="t-string">"work"</span><span class="t-op">,</span>
+      <span class="t-string">"created_at"</span><span class="t-op">:</span> <span class="t-string">"2026-07-10T09:00:00Z"</span>
+    <span class="t-op">}</span>
+  <span class="t-op">],</span>
+  <span class="t-string">"meta"</span><span class="t-op">: {</span>
+    <span class="t-string">"total"</span><span class="t-op">:</span> <span class="t-number">1</span><span class="t-op">,</span>
+    <span class="t-string">"cursor"</span><span class="t-op">:</span> <span class="t-keyword">null</span><span class="t-op">,</span>
+    <span class="t-string">"has_more"</span><span class="t-op">:</span> <span class="t-keyword">false</span>
+  <span class="t-op">},</span>
+  <span class="t-string">"_meta"</span><span class="t-op">: {</span>
+    <span class="t-string">"request_id"</span><span class="t-op">:</span> <span class="t-string">"req_abc123"</span><span class="t-op">,</span>
+    <span class="t-string">"processing_time_ms"</span><span class="t-op">:</span> <span class="t-number">42.0</span><span class="t-op">,</span>
+    <span class="t-string">"api_version"</span><span class="t-op">:</span> <span class="t-string">"v2"</span>
+  <span class="t-op">}</span>
+<span class="t-op">}</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Headers -->
+    <div style="margin-top: 48px;">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;">Authentication</h3>
+      <div class="sdk-code-block">
+        <div class="code-header">
+          <span class="code-lang">HTTP</span>
+          <span class="code-copy">Copy</span>
+        </div>
+        <div class="code-body">
+          <pre><span class="t-comment"># API Key Authentication</span>
+<span class="t-keyword">Authorization</span><span class="t-op">:</span> <span class="t-string">Bearer lk_live_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+
+<span class="t-comment"># OAuth 2.0 Bearer Token</span>
+<span class="t-keyword">Authorization</span><span class="t-op">:</span> <span class="t-string">Bearer lk_token_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+
+<span class="t-comment"># Rate Limit Response Headers</span>
+<span class="t-keyword">X-RateLimit-Limit</span><span class="t-op">:</span> <span class="t-number">300</span>
+<span class="t-keyword">X-RateLimit-Remaining</span><span class="t-op">:</span> <span class="t-number">299</span>
+<span class="t-keyword">X-RateLimit-Reset</span><span class="t-op">:</span> <span class="t-number">1720612800</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SDK ── -->
+<section class="section" id="sdk">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Official SDK</div>
+      <h2 class="section-title">Python SDK v2.0.0</h2>
+      <p class="section-subtitle">Type-safe, well-documented, zero-configuration SDK for the LifeOS API.</p>
+    </div>
+    <div class="sdk-tabs">
+      <div class="sdk-tab active">Python</div>
+      <div class="sdk-tab">cURL</div>
+      <div class="sdk-tab">Node.js</div>
+    </div>
+    <div class="sdk-code-block">
+      <div class="code-header">
+        <span class="code-lang">Python</span>
+        <span class="code-copy">Copy</span>
+      </div>
+      <div class="code-body">
+        <pre><span class="t-keyword">from</span> <span class="t-var">lifeos_sdk</span> <span class="t-keyword">import</span> <span class="t-func">LifeOSClient</span>
+
+<span class="t-comment"># Initialize client</span>
+<span class="t-var">client</span> <span class="t-op">=</span> <span class="t-func">LifeOSClient</span>(<span class="t-var">api_key</span><span class="t-op">=</span><span class="t-string">"lk_live_..."</span>)
+
+<span class="t-comment"># ── Memory ──────────────────────────────────────────────</span>
+<span class="t-var">memories</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">memory</span>.<span class="t-func">list</span>(<span class="t-var">limit</span><span class="t-op">=</span><span class="t-number">10</span>, <span class="t-var">type</span><span class="t-op">=</span><span class="t-string">"work"</span>)
+<span class="t-var">memory</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">memory</span>.<span class="t-func">create</span>(<span class="t-var">content</span><span class="t-op">=</span><span class="t-string">"Team standup notes"</span>, <span class="t-var">type</span><span class="t-op">=</span><span class="t-string">"work"</span>)
+
+<span class="t-comment"># ── Timeline ─────────────────────────────────────────────</span>
+<span class="t-var">events</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">timeline</span>.<span class="t-func">list</span>(<span class="t-var">from_date</span><span class="t-op">=</span><span class="t-string">"2026-01-01"</span>)
+<span class="t-var">client</span>.<span class="t-var">timeline</span>.<span class="t-func">add_event</span>(<span class="t-var">title</span><span class="t-op">=</span><span class="t-string">"Product launch"</span>, <span class="t-var">date</span><span class="t-op">=</span><span class="t-string">"2026-07-10"</span>, <span class="t-var">category</span><span class="t-op">=</span><span class="t-string">"milestone"</span>)
+
+<span class="t-comment"># ── Insights ─────────────────────────────────────────────</span>
+<span class="t-var">insights</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">insights</span>.<span class="t-func">list</span>()
+<span class="t-var">summary</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">insights</span>.<span class="t-func">summary</span>()
+
+<span class="t-comment"># ── Webhooks ─────────────────────────────────────────────</span>
+<span class="t-var">webhook</span> <span class="t-op">=</span> <span class="t-var">client</span>.<span class="t-var">webhooks</span>.<span class="t-func">create</span>(
+    <span class="t-var">url</span><span class="t-op">=</span><span class="t-string">"https://myapp.com/webhooks/lifeos"</span>,
+    <span class="t-var">events</span><span class="t-op">=</span>[<span class="t-string">"memory.created"</span>, <span class="t-string">"insight.generated"</span>]
+)
+
+<span class="t-comment"># ── Sandbox ──────────────────────────────────────────────</span>
+<span class="t-var">sandbox_client</span> <span class="t-op">=</span> <span class="t-func">LifeOSClient</span>(<span class="t-var">api_key</span><span class="t-op">=</span><span class="t-string">"lk_test_..."</span>)
+<span class="t-var">sandbox_client</span>.<span class="t-var">developer</span>.<span class="t-func">sandbox_seed</span>()  <span class="t-comment"># Load sample data</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Webhooks ── -->
+<section class="section" id="webhooks" style="background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.03) 50%, transparent 100%);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Real-time Events</div>
+      <h2 class="section-title">Official Webhooks</h2>
+      <p class="section-subtitle">Subscribe to 12 real-time events. All payloads signed with HMAC-SHA256.</p>
+    </div>
+    <div class="webhook-events">
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #10B981;"></div>
+        <div>
+          <div class="webhook-event-name">memory.created</div>
+          <div class="webhook-event-desc">New memory added</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #F59E0B;"></div>
+        <div>
+          <div class="webhook-event-name">memory.updated</div>
+          <div class="webhook-event-desc">Memory modified</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #F43F5E;"></div>
+        <div>
+          <div class="webhook-event-name">memory.deleted</div>
+          <div class="webhook-event-desc">Memory removed</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #6366F1;"></div>
+        <div>
+          <div class="webhook-event-name">timeline.event_added</div>
+          <div class="webhook-event-desc">Timeline event created</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #8B5CF6;"></div>
+        <div>
+          <div class="webhook-event-name">decision.created</div>
+          <div class="webhook-event-desc">New decision recorded</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #10B981;"></div>
+        <div>
+          <div class="webhook-event-name">decision.resolved</div>
+          <div class="webhook-event-desc">Decision finalized</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #38BDF8;"></div>
+        <div>
+          <div class="webhook-event-name">insight.generated</div>
+          <div class="webhook-event-desc">AI insight available</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #F43F5E;"></div>
+        <div>
+          <div class="webhook-event-name">api_key.revoked</div>
+          <div class="webhook-event-desc">API key revoked</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #94A3B8;"></div>
+        <div>
+          <div class="webhook-event-name">webhook.test</div>
+          <div class="webhook-event-desc">Manual test event</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #10B981;"></div>
+        <div>
+          <div class="webhook-event-name">user.connected</div>
+          <div class="webhook-event-desc">User authorized app</div>
+        </div>
+      </div>
+      <div class="webhook-event">
+        <div class="webhook-event-dot" style="background: #F59E0B;"></div>
+        <div>
+          <div class="webhook-event-name">user.disconnected</div>
+          <div class="webhook-event-desc">User revoked access</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signature Verification -->
+    <div style="margin-top: 48px;">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 20px;">Signature Verification</h3>
+      <div class="sdk-code-block">
+        <div class="code-header">
+          <span class="code-lang">Python</span>
+          <span class="code-copy">Copy</span>
+        </div>
+        <div class="code-body">
+          <pre><span class="t-keyword">import</span> <span class="t-var">hmac</span><span class="t-op">,</span> <span class="t-var">hashlib</span>
+
+<span class="t-keyword">def</span> <span class="t-func">verify_webhook</span>(<span class="t-var">payload</span><span class="t-op">:</span> <span class="t-var">bytes</span>, <span class="t-var">signature</span><span class="t-op">:</span> <span class="t-var">str</span>, <span class="t-var">secret</span><span class="t-op">:</span> <span class="t-var">str</span>) <span class="t-op">-></span> <span class="t-var">bool</span><span class="t-op">:</span>
+    <span class="t-comment"># signature format: "t=TIMESTAMP,v1=HMAC_SHA256"</span>
+    <span class="t-var">parts</span> <span class="t-op">=</span> <span class="t-var">dict</span>(<span class="t-var">p</span>.<span class="t-func">split</span>(<span class="t-string">"="</span>, <span class="t-number">1</span>) <span class="t-keyword">for</span> <span class="t-var">p</span> <span class="t-keyword">in</span> <span class="t-var">signature</span>.<span class="t-func">split</span>(<span class="t-string">","</span>))
+    <span class="t-var">timestamp</span> <span class="t-op">=</span> <span class="t-var">parts</span>[<span class="t-string">"t"</span>]
+    <span class="t-var">signed_content</span> <span class="t-op">=</span> <span class="t-string">f"</span><span class="t-op">{</span><span class="t-var">timestamp</span><span class="t-op">}</span><span class="t-string">."</span> <span class="t-op">+</span> <span class="t-var">payload</span>.<span class="t-func">decode</span>()
+    <span class="t-var">expected</span> <span class="t-op">=</span> <span class="t-var">hmac</span>.<span class="t-func">new</span>(
+        <span class="t-var">secret</span>.<span class="t-func">encode</span>()<span class="t-op">,</span>
+        <span class="t-var">signed_content</span>.<span class="t-func">encode</span>()<span class="t-op">,</span>
+        <span class="t-var">hashlib</span>.<span class="t-var">sha256</span>
+    ).<span class="t-func">hexdigest</span>()
+    <span class="t-keyword">return</span> <span class="t-var">hmac</span>.<span class="t-func">compare_digest</span>(<span class="t-var">expected</span><span class="t-op">,</span> <span class="t-var">parts</span>[<span class="t-string">"v1"</span>])</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Sandbox ── -->
+<section class="section" id="sandbox">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Developer Sandbox</div>
+      <h2 class="section-title">Test without risk</h2>
+      <p class="section-subtitle">Isolated environment with sample data, instant reset, and separate API keys.</p>
+    </div>
+    <div class="sdk-code-block">
+      <div class="code-header">
+        <span class="code-lang">CLI</span>
+        <span class="code-copy">Copy</span>
+      </div>
+      <div class="code-body">
+        <pre><span class="t-comment"># Authenticate</span>
+<span class="t-output">$</span> <span class="t-func">lifeos auth login</span>
+<span class="t-output">✓ Authenticated successfully!</span>
+
+<span class="t-comment"># Seed sandbox with sample data</span>
+<span class="t-output">$</span> <span class="t-func">lifeos sandbox seed</span>
+<span class="t-output">✓ Sandbox seeded with 25 sample records.</span>
+<span class="t-output">  Memories: 10 | Timeline: 8 | Decisions: 5 | Insights: 2</span>
+
+<span class="t-comment"># List memories in sandbox</span>
+<span class="t-output">$</span> <span class="t-func">lifeos memory list</span>
+<span class="t-output">  ID        Content                                    Type      Date</span>
+<span class="t-output">  ────────  ─────────────────────────────────────────  ────────  ──────────</span>
+<span class="t-output">  mem_01    Team meeting about Q3 roadmap              work      2026-07-10</span>
+<span class="t-output">  mem_02    Decided to prioritize Developer Platform   decision  2026-07-10</span>
+
+<span class="t-comment"># Register a webhook</span>
+<span class="t-output">$</span> <span class="t-func">lifeos webhooks create --url https://myapp.com/wh --events memory.created</span>
+<span class="t-output">✓ Webhook registered!</span>
+<span class="t-output">  ID:     wh_01abc</span>
+<span class="t-output">  Secret: whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</span>
+
+<span class="t-comment"># Reset sandbox</span>
+<span class="t-output">$</span> <span class="t-func">lifeos sandbox reset</span>
+<span class="t-output">✓ Sandbox reset to clean state.</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Rate Limits ── -->
+<section class="section" style="background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.03) 50%, transparent 100%);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Rate Limits</div>
+      <h2 class="section-title">Fair use by design</h2>
+      <p class="section-subtitle">Sliding window rate limiting with standard headers in every response.</p>
+    </div>
+    <table class="rate-table">
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Requests / Minute</th>
+          <th>Requests / Day</th>
+          <th>Concurrent Connections</th>
+          <th>Webhooks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Free</strong></td>
+          <td class="rate-highlight">60</td>
+          <td>10,000</td>
+          <td>5</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td><strong>Pro</strong></td>
+          <td class="rate-highlight">300</td>
+          <td>100,000</td>
+          <td>25</td>
+          <td>25</td>
+        </tr>
+        <tr>
+          <td><strong>Enterprise</strong></td>
+          <td class="rate-highlight">1,000</td>
+          <td>Unlimited</td>
+          <td>100</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr>
+          <td><strong>Sandbox</strong></td>
+          <td class="rate-highlight">300</td>
+          <td>Unlimited</td>
+          <td>25</td>
+          <td>25</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── Pricing ── -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Developer Plans</div>
+      <h2 class="section-title">Start free, scale with confidence</h2>
+      <p class="section-subtitle">All plans include sandbox access, full API documentation, and developer support.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-period">forever</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 60 req/min rate limit</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 3 webhooks</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 3 API keys</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Sandbox access</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Community support</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-secondary">Get Started Free</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-featured-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$49</div>
+        <div class="plan-period">per month</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 300 req/min rate limit</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 25 webhooks</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Unlimited API keys</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Priority support</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Analytics dashboard</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> OAuth app verified badge</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-primary">Start Pro Trial</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom</div>
+        <div class="plan-period">contact sales</div>
+        <ul class="plan-features">
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> 1,000+ req/min</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Unlimited webhooks</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Dedicated infrastructure</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> SLA 99.9% uptime</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Dedicated support</li>
+          <li class="plan-feature"><span class="plan-feature-check">✓</span> Custom integrations</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-secondary">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-icon">⬡</div>
+          <span>LifeOS</span>
+        </div>
+        <p class="footer-brand-desc">The intelligence layer for human life. Build apps that understand, adapt, and grow with your users.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-links-title">Developer</div>
+        <a href="#" class="footer-link">API Reference</a>
+        <a href="#" class="footer-link">SDK Documentation</a>
+        <a href="#" class="footer-link">CLI Reference</a>
+        <a href="#" class="footer-link">Webhooks</a>
+        <a href="#" class="footer-link">Sandbox</a>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-links-title">Resources</div>
+        <a href="#" class="footer-link">Quickstart Guide</a>
+        <a href="#" class="footer-link">Authentication</a>
+        <a href="#" class="footer-link">Rate Limits</a>
+        <a href="#" class="footer-link">Migration Guide</a>
+        <a href="#" class="footer-link">Changelog</a>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-links-title">Company</div>
+        <a href="#" class="footer-link">About</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="#" class="footer-link">Status Page</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 LifeOS. All rights reserved. PROJECT-X EXECUTION-009.</div>
+      <div class="footer-version">API v2.0.0 · SDK v2.0.0 · CLI v2.0.0</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
