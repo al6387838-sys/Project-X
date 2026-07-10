@@ -1,0 +1,518 @@
+{
+  "generated_at": "2026-07-10T05:23:53.690353+00:00",
+  "total_entries": 1,
+  "entries": [
+    {
+      "timestamp": "2026-07-10T05:23:53.690119+00:00",
+      "overall_score": 82.0,
+      "product_score": {
+        "domain": "product",
+        "score": 89,
+        "label": "BOM",
+        "trend": "stable",
+        "components": {
+          "test_pass_rate": 100,
+          "code_coverage": 94.19999999999999,
+          "bug_health": 86,
+          "crash_health": 99.96,
+          "adoption_rate": 67.0,
+          "churn_health": 99.76,
+          "response_health": 90.65,
+          "feature_completion": 71.0
+        },
+        "calculated_at": "2026-07-10T05:23:53.690056+00:00"
+      },
+      "platform_score": {
+        "domain": "platform",
+        "score": 77,
+        "label": "BOM",
+        "trend": "stable",
+        "components": {
+          "uptime": 99.94,
+          "cpu_health": 66.0,
+          "memory_health": 39.0,
+          "disk_health": 72.0,
+          "latency_health": 62.6,
+          "error_health": 98.4,
+          "crash_health": 99.9
+        },
+        "calculated_at": "2026-07-10T05:23:53.690066+00:00"
+      },
+      "ai_score": {
+        "domain": "ai",
+        "score": 69,
+        "label": "REGULAR",
+        "trend": "stable",
+        "components": {
+          "model_availability": 57.14285714285714,
+          "companion_available": 100,
+          "avg_success_rate": 78.91428571428571,
+          "avg_accuracy": 0.9025,
+          "latency_health": 77.91428571428571,
+          "sync_health": 100
+        },
+        "calculated_at": "2026-07-10T05:23:53.690083+00:00"
+      },
+      "sig_score": {
+        "domain": "sig",
+        "score": 77,
+        "label": "BOM",
+        "trend": "stable",
+        "components": {
+          "node_availability": 100.0,
+          "avg_accuracy": 0.9677142857142857,
+          "latency_health": 90.86666666666667,
+          "learning_accuracy": 94.6,
+          "sync_health": 96,
+          "learning_cycle_health": 100
+        },
+        "calculated_at": "2026-07-10T05:23:53.690097+00:00"
+      },
+      "security_score": {
+        "domain": "security",
+        "score": 96,
+        "label": "EXCELENTE",
+        "trend": "stable",
+        "components": {
+          "security_score": 94,
+          "vuln_health": 90,
+          "certificates_health": 100,
+          "mfa_health": 100,
+          "encryption_health": 100,
+          "audit_health": 100
+        },
+        "calculated_at": "2026-07-10T05:23:53.690115+00:00"
+      },
+      "business_score": {
+        "domain": "business",
+        "score": 84,
+        "label": "BOM",
+        "trend": "stable",
+        "components": {
+          "mrr_growth": 100,
+          "churn_health": 88.0,
+          "ltv_cac_health": 84.00000000000001,
+          "nps_health": 100,
+          "activation_health": 67.0,
+          "k_factor_health": 34.0
+        },
+        "calculated_at": "2026-07-10T05:23:53.690107+00:00"
+      },
+      "alerts": [
+        {
+          "alert_id": "ai_70980feb",
+          "domain": "ai",
+          "severity": "critical",
+          "title": "Companion Indispon\u00edvel",
+          "message": "O LifeOS Companion AI est\u00e1 indispon\u00edvel. Miss\u00f5es n\u00e3o ser\u00e3o processadas.",
+          "metric_name": "companion_status",
+          "metric_value": "standby",
+          "threshold": "online",
+          "timestamp": "2026-07-10T05:23:53.685152+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_ac82ac61",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: SIG Core",
+          "message": "N\u00f3 SIG Core est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.682132+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_de86d390",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Validation Layer",
+          "message": "N\u00f3 Validation Layer em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.682146+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.682158+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_bb8ee0a0",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Learning Pipeline",
+          "message": "N\u00f3 Learning Pipeline est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.682313+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_9226d299",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Data Ingestion",
+          "message": "N\u00f3 Data Ingestion est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.682783+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_bb558de9",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Learning Pipeline",
+          "message": "N\u00f3 Learning Pipeline est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.683945+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_31a73725",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Distribution Network",
+          "message": "N\u00f3 Distribution Network em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.685528+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.685540+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_eb97eb52",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Validation Layer",
+          "message": "N\u00f3 Validation Layer est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.685716+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_10cf5966",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Data Ingestion",
+          "message": "N\u00f3 Data Ingestion est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.685919+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_ff5cc923",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Model Registry",
+          "message": "N\u00f3 Model Registry est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.686093+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_ea1e2093",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: SIG Core",
+          "message": "N\u00f3 SIG Core est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.686930+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_65be6281",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Inference Engine",
+          "message": "N\u00f3 Inference Engine est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.688072+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_69be1d32",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Data Ingestion",
+          "message": "N\u00f3 Data Ingestion em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.688226+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.688236+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_2c2d445b",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Inference Engine",
+          "message": "N\u00f3 Inference Engine est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.688396+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_28deb9ac",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Inference Engine",
+          "message": "N\u00f3 Inference Engine em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.688562+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.688571+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_b646b7fa",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Inference Engine",
+          "message": "N\u00f3 Inference Engine est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.688578+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_b1e3da56",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Model Registry",
+          "message": "N\u00f3 Model Registry est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.688743+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_383a7b67",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Validation Layer",
+          "message": "N\u00f3 Validation Layer em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.688898+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.688909+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_a89aa8f0",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Distribution Network",
+          "message": "N\u00f3 Distribution Network em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.689216+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.689227+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_6c5c3f15",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "Dessincroniza\u00e7\u00e3o SIG: Inference Engine",
+          "message": "N\u00f3 Inference Engine est\u00e1 dessincronizado. Verificar conex\u00e3o com modelo principal.",
+          "metric_name": "sig_sync_status",
+          "metric_value": "desynced",
+          "threshold": "synced",
+          "timestamp": "2026-07-10T05:23:53.689384+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "sig_821788d1",
+          "domain": "sig",
+          "severity": "warning",
+          "title": "N\u00f3 SIG Degradado: Validation Layer",
+          "message": "N\u00f3 Validation Layer em status standby. \u00daltima atualiza\u00e7\u00e3o: 2026-07-10T05:23:53.689661+00:00.",
+          "metric_name": "sig_node_status",
+          "metric_value": "standby",
+          "threshold": "active",
+          "timestamp": "2026-07-10T05:23:53.689676+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "security_be0c1ded",
+          "domain": "security",
+          "severity": "warning",
+          "title": "Login Suspeito Detectado",
+          "message": "13 logins suspeitos nas \u00faltimas 24h.",
+          "metric_name": "suspicious_logins",
+          "metric_value": "13",
+          "threshold": "10",
+          "timestamp": "2026-07-10T05:23:53.686658+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "security_c623df24",
+          "domain": "security",
+          "severity": "warning",
+          "title": "Login Suspeito Detectado",
+          "message": "11 logins suspeitos nas \u00faltimas 24h.",
+          "metric_name": "suspicious_logins",
+          "metric_value": "11",
+          "threshold": "10",
+          "timestamp": "2026-07-10T05:23:53.687475+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "security_43527588",
+          "domain": "security",
+          "severity": "warning",
+          "title": "Login Suspeito Detectado",
+          "message": "13 logins suspeitos nas \u00faltimas 24h.",
+          "metric_name": "suspicious_logins",
+          "metric_value": "13",
+          "threshold": "10",
+          "timestamp": "2026-07-10T05:23:53.687961+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "security_e9a78353",
+          "domain": "security",
+          "severity": "warning",
+          "title": "Login Suspeito Detectado",
+          "message": "11 logins suspeitos nas \u00faltimas 24h.",
+          "metric_name": "suspicious_logins",
+          "metric_value": "11",
+          "threshold": "10",
+          "timestamp": "2026-07-10T05:23:53.689289+00:00",
+          "acknowledged": false
+        },
+        {
+          "alert_id": "security_dfcfa074",
+          "domain": "security",
+          "severity": "warning",
+          "title": "Login Suspeito Detectado",
+          "message": "13 logins suspeitos nas \u00faltimas 24h.",
+          "metric_name": "suspicious_logins",
+          "metric_value": "13",
+          "threshold": "10",
+          "timestamp": "2026-07-10T05:23:53.689910+00:00",
+          "acknowledged": false
+        }
+      ],
+      "recommendations": [
+        {
+          "rec_id": "platform_a09cc9ed",
+          "domain": "platform",
+          "priority": 1,
+          "title": "Lat\u00eancia Elevada Detectada",
+          "description": "Lat\u00eancia P95: 201ms. Sa\u00fade de lat\u00eancia em 60/100.",
+          "suggested_action": "Revisar m\u00f3dulo API Gateway \u2014 implementar caching agressivo e otimizar queries no Life Kernel.",
+          "module": "API Gateway",
+          "confidence": 0.78,
+          "generated_at": "2026-07-10T05:23:53.687054+00:00"
+        },
+        {
+          "rec_id": "platform_beb8794b",
+          "domain": "platform",
+          "priority": 1,
+          "title": "Lat\u00eancia Elevada Detectada",
+          "description": "Lat\u00eancia P95: 244ms. Sa\u00fade de lat\u00eancia em 51/100.",
+          "suggested_action": "Revisar m\u00f3dulo API Gateway \u2014 implementar caching agressivo e otimizar queries no Life Kernel.",
+          "module": "API Gateway",
+          "confidence": 0.78,
+          "generated_at": "2026-07-10T05:23:53.687676+00:00"
+        },
+        {
+          "rec_id": "platform_55dda460",
+          "domain": "platform",
+          "priority": 1,
+          "title": "Lat\u00eancia Elevada Detectada",
+          "description": "Lat\u00eancia P95: 223ms. Sa\u00fade de lat\u00eancia em 55/100.",
+          "suggested_action": "Revisar m\u00f3dulo API Gateway \u2014 implementar caching agressivo e otimizar queries no Life Kernel.",
+          "module": "API Gateway",
+          "confidence": 0.78,
+          "generated_at": "2026-07-10T05:23:53.688015+00:00"
+        },
+        {
+          "rec_id": "platform_b489e515",
+          "domain": "platform",
+          "priority": 1,
+          "title": "Lat\u00eancia Elevada Detectada",
+          "description": "Lat\u00eancia P95: 238ms. Sa\u00fade de lat\u00eancia em 52/100.",
+          "suggested_action": "Revisar m\u00f3dulo API Gateway \u2014 implementar caching agressivo e otimizar queries no Life Kernel.",
+          "module": "API Gateway",
+          "confidence": 0.78,
+          "generated_at": "2026-07-10T05:23:53.688514+00:00"
+        },
+        {
+          "rec_id": "platform_94bd876d",
+          "domain": "platform",
+          "priority": 1,
+          "title": "Lat\u00eancia Elevada Detectada",
+          "description": "Lat\u00eancia P95: 224ms. Sa\u00fade de lat\u00eancia em 55/100.",
+          "suggested_action": "Revisar m\u00f3dulo API Gateway \u2014 implementar caching agressivo e otimizar queries no Life Kernel.",
+          "module": "API Gateway",
+          "confidence": 0.78,
+          "generated_at": "2026-07-10T05:23:53.689571+00:00"
+        },
+        {
+          "rec_id": "ai_bbc66cc2",
+          "domain": "ai",
+          "priority": 1,
+          "title": "Companion Indispon\u00edvel \u2014 A\u00e7\u00e3o Imediata",
+          "description": "O Companion AI est\u00e1 offline. Nenhuma miss\u00e3o est\u00e1 sendo processada.",
+          "suggested_action": "Verificar API Key do GPT-4o, reiniciar o servi\u00e7o Life Kernel e verificar logs do Intelligence Hub.",
+          "module": "Life Kernel",
+          "confidence": 0.95,
+          "generated_at": "2026-07-10T05:23:53.682942+00:00"
+        },
+        {
+          "rec_id": "ai_387cd977",
+          "domain": "ai",
+          "priority": 1,
+          "title": "Companion Indispon\u00edvel \u2014 A\u00e7\u00e3o Imediata",
+          "description": "O Companion AI est\u00e1 offline. Nenhuma miss\u00e3o est\u00e1 sendo processada.",
+          "suggested_action": "Verificar API Key do GPT-4o, reiniciar o servi\u00e7o Life Kernel e verificar logs do Intelligence Hub.",
+          "module": "Life Kernel",
+          "confidence": 0.95,
+          "generated_at": "2026-07-10T05:23:53.683441+00:00"
+        },
+        {
+          "rec_id": "ai_5f603ea1",
+          "domain": "ai",
+          "priority": 1,
+          "title": "Companion Indispon\u00edvel \u2014 A\u00e7\u00e3o Imediata",
+          "description": "O Companion AI est\u00e1 offline. Nenhuma miss\u00e3o est\u00e1 sendo processada.",
+          "suggested_action": "Verificar API Key do GPT-4o, reiniciar o servi\u00e7o Life Kernel e verificar logs do Intelligence Hub.",
+          "module": "Life Kernel",
+          "confidence": 0.95,
+          "generated_at": "2026-07-10T05:23:53.685194+00:00"
+        },
+        {
+          "rec_id": "ai_47fffe48",
+          "domain": "ai",
+          "priority": 1,
+          "title": "Companion Indispon\u00edvel \u2014 A\u00e7\u00e3o Imediata",
+          "description": "O Companion AI est\u00e1 offline. Nenhuma miss\u00e3o est\u00e1 sendo processada.",
+          "suggested_action": "Verificar API Key do GPT-4o, reiniciar o servi\u00e7o Life Kernel e verificar logs do Intelligence Hub.",
+          "module": "Life Kernel",
+          "confidence": 0.95,
+          "generated_at": "2026-07-10T05:23:53.685349+00:00"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Health Dashboard - Screen captures info:
+
+Screen 1: Overview - Overall Score 82/100 (BOM), 6 engines active, 26 alerts, 9 recommendations
+Scores: Product 89 (BOM), Platform 77 (BOM), AI 69 (REGULAR), SIG 77 (BOM), Business 84 (BOM), Security 96 (EXCELENTE)
+All stable trend
