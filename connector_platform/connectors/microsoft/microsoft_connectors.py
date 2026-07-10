@@ -12,7 +12,7 @@ Connectors:
 from __future__ import annotations
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.core.connector_engine import BaseConnector, CredentialVault
@@ -102,7 +102,7 @@ class MicrosoftOutlookConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
@@ -111,8 +111,8 @@ class MicrosoftOutlookConnector(BaseConnector):
         logger.info("[MicrosoftOutlook] Refreshing token")
         # POST https://login.microsoftonline.com/common/oauth2/v2.0/token
         token.access_token = f"ms_refreshed_{token.access_token}"
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
-        token.last_refreshed = datetime.utcnow()
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+        token.last_refreshed = datetime.now(timezone.utc)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -131,7 +131,7 @@ class MicrosoftOutlookConnector(BaseConnector):
         Sync Outlook calendar events using Microsoft Graph delta queries.
         Delta queries return only changed items since last sync.
         """
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[MicrosoftOutlook] Syncing: job={job.job_id} delta={job.delta_token}")
 
         if job.delta_token:
@@ -140,9 +140,9 @@ class MicrosoftOutlookConnector(BaseConnector):
             events = await self._fetch_all_events()
 
         job.records_synced = len(events)
-        job.delta_token = f"ms_delta_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"ms_delta_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         logger.info(f"[MicrosoftOutlook] Sync complete: {job.records_synced} events")
         return job
 
@@ -156,8 +156,8 @@ class MicrosoftOutlookConnector(BaseConnector):
             {
                 "id": f"ms_event_{i}",
                 "subject": f"Outlook Meeting {i}",
-                "start": {"dateTime": datetime.utcnow().isoformat(), "timeZone": "UTC"},
-                "end": {"dateTime": (datetime.utcnow() + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
+                "start": {"dateTime": datetime.now(timezone.utc).isoformat(), "timeZone": "UTC"},
+                "end": {"dateTime": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
                 "@odata.etag": f"etag_{i}",
             }
             for i in range(3)
@@ -172,8 +172,8 @@ class MicrosoftOutlookConnector(BaseConnector):
             {
                 "id": f"ms_event_{i}",
                 "subject": f"Outlook Event {i}",
-                "start": {"dateTime": datetime.utcnow().isoformat(), "timeZone": "UTC"},
-                "end": {"dateTime": (datetime.utcnow() + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
+                "start": {"dateTime": datetime.now(timezone.utc).isoformat(), "timeZone": "UTC"},
+                "end": {"dateTime": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
             }
             for i in range(18)
         ]
@@ -182,7 +182,7 @@ class MicrosoftOutlookConnector(BaseConnector):
         """Create Outlook calendar event."""
         # POST /me/events
         logger.info(f"[MicrosoftOutlook] Creating event: {event_data.get('subject')}")
-        return {"id": f"ms_new_{datetime.utcnow().timestamp():.0f}", **event_data}
+        return {"id": f"ms_new_{datetime.now(timezone.utc).timestamp():.0f}", **event_data}
 
     async def update_event(self, event_id: str, updates: Dict[str, Any]) -> Dict:
         """Update Outlook calendar event."""
@@ -216,11 +216,11 @@ class MicrosoftOutlookConnector(BaseConnector):
         POST /subscriptions
         """
         return {
-            "id": f"sub_{datetime.utcnow().timestamp():.0f}",
+            "id": f"sub_{datetime.now(timezone.utc).timestamp():.0f}",
             "resource": resource,
             "changeType": "created,updated,deleted",
             "notificationUrl": webhook_url,
-            "expirationDateTime": (datetime.utcnow() + timedelta(days=3)).isoformat(),
+            "expirationDateTime": (datetime.now(timezone.utc) + timedelta(days=3)).isoformat(),
         }
 
 
@@ -275,12 +275,12 @@ class Microsoft365Connector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -290,11 +290,11 @@ class Microsoft365Connector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 30
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -348,12 +348,12 @@ class MicrosoftTeamsConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -363,18 +363,18 @@ class MicrosoftTeamsConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 10
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def create_meeting(self, subject: str, start: datetime, end: datetime) -> Dict:
         """Create a Teams online meeting."""
         # POST /me/onlineMeetings
         return {
-            "id": f"teams_meeting_{datetime.utcnow().timestamp():.0f}",
+            "id": f"teams_meeting_{datetime.now(timezone.utc).timestamp():.0f}",
             "subject": subject,
             "joinUrl": f"https://teams.microsoft.com/l/meetup-join/...",
             "start": {"dateTime": start.isoformat(), "timeZone": "UTC"},
@@ -424,12 +424,12 @@ class OneDriveConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -439,13 +439,13 @@ class OneDriveConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         # GET /me/drive/root/delta
         job.records_synced = 20
-        job.delta_token = f"od_delta_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"od_delta_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 

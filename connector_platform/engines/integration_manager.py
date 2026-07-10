@@ -12,7 +12,7 @@ Responsibilities:
 
 from __future__ import annotations
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.models.connector_models import (
@@ -45,7 +45,7 @@ class IntegrationManager:
         self._integrations: Dict[str, IntegrationConfig] = {}
         self._error_history: Dict[str, List[Dict]] = {}
         self._sync_history: Dict[str, List[SyncJob]] = {}
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[IntegrationManager] Initialized")
 
     # ── CRUD ──────────────────────────────────
@@ -131,7 +131,7 @@ class IntegrationManager:
             config.last_error = error
             config.error_count += 1
             self._error_history[config.integration_id].append({
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
                 "error": error,
                 "status": status.value,
             })
@@ -157,7 +157,7 @@ class IntegrationManager:
         """Record a completed sync job."""
         config = self.get_integration_by_id(job.integration_id)
         if config:
-            config.last_sync = job.completed_at or datetime.utcnow()
+            config.last_sync = job.completed_at or datetime.now(timezone.utc)
             config.next_sync = self._calculate_next_sync(config)
             if job.status == "completed":
                 config.health = IntegrationHealth.HEALTHY
@@ -183,7 +183,7 @@ class IntegrationManager:
             SyncFrequency.MANUAL: timedelta(days=365),
         }
         delta = freq_map.get(config.sync_frequency, timedelta(hours=1))
-        return datetime.utcnow() + delta
+        return datetime.now(timezone.utc) + delta
 
     def get_sync_history(self, integration_id: str, limit: int = 20) -> List[SyncJob]:
         return self._sync_history.get(integration_id, [])[-limit:]

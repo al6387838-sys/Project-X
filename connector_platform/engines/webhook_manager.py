@@ -21,7 +21,7 @@ import logging
 import secrets
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional
 
 from connector_platform.models.connector_models import (
@@ -56,7 +56,7 @@ class WebhookPayload:
         self.resource_type = resource_type
         self.resource_id = resource_id
         self.data = data
-        self.timestamp = timestamp or datetime.utcnow()
+        self.timestamp = timestamp or datetime.now(timezone.utc)
         self.version = "1.0"
 
     def to_dict(self) -> Dict[str, Any]:
@@ -95,20 +95,20 @@ class DeliveryRecord:
         self.payload = payload
         self.attempts: List[Dict[str, Any]] = []
         self.status = "pending"
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
         self.delivered_at: Optional[datetime] = None
 
     def record_attempt(self, success: bool, response_code: Optional[int] = None, error: Optional[str] = None):
         self.attempts.append({
             "attempt": len(self.attempts) + 1,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "success": success,
             "response_code": response_code,
             "error": error,
         })
         if success:
             self.status = "delivered"
-            self.delivered_at = datetime.utcnow()
+            self.delivered_at = datetime.now(timezone.utc)
         elif len(self.attempts) >= 5:
             self.status = "dead_letter"
 
@@ -165,7 +165,7 @@ class WebhookManager:
         self._event_handlers: Dict[str, List[Callable]] = defaultdict(list)
         self._event_log: List[WebhookPayload] = []
         self._max_log_size = 1000
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[WebhookManager] Initialized — HMAC-SHA256 + Guaranteed Delivery active")
 
     # ── Registration ──────────────────────────
@@ -312,7 +312,7 @@ class WebhookManager:
                 success = True  # Simulate successful delivery
 
                 delivery.record_attempt(success=True, response_code=200)
-                registration.last_delivery = datetime.utcnow()
+                registration.last_delivery = datetime.now(timezone.utc)
                 registration.delivery_count += 1
                 logger.debug(f"[WebhookManager] Delivered: {delivery.delivery_id}")
                 return

@@ -20,7 +20,7 @@ import json
 import logging
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Dict, List, Optional, Type
 
 from connector_platform.models.connector_models import (
@@ -153,7 +153,7 @@ class ZeroTrustEnforcer:
         key = f"{connector_id}:{scope}"
         has_consent = self._consent_store.get(user_id, {}).get(key, False)
         self._audit_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": "consent_check",
             "user_id": user_id,
             "connector_id": connector_id,
@@ -167,7 +167,7 @@ class ZeroTrustEnforcer:
         key = f"{connector_id}:{scope}"
         self._consent_store[user_id][key] = True
         self._audit_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": "consent_granted",
             "user_id": user_id,
             "connector_id": connector_id,
@@ -184,7 +184,7 @@ class ZeroTrustEnforcer:
         else:
             self._consent_store.get(user_id, {}).clear()
         self._audit_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": "consent_revoked",
             "user_id": user_id,
             "connector_id": connector_id,
@@ -321,7 +321,7 @@ class ConnectorEngine:
         self._zero_trust = ZeroTrustEnforcer()
         self._vault = CredentialVault()
         self._event_handlers: Dict[str, List[Callable]] = defaultdict(list)
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[ConnectorEngine] Initialized — Universal Connector Platform v1.0")
 
     # ── Registration ──────────────────────────

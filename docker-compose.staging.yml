@@ -1,0 +1,22 @@
+version: "3.9"
+
+# LifeOS V1.0 RC — Staging Override
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.staging.yml up
+
+services:
+  lifeos-core:
+    environment:
+      - LIFEOS_ENV=staging
+      - LOG_LEVEL=DEBUG
+    labels:
+      - "lifeos.environment=staging"
+
+  prometheus:
+    ports:
+      - "19090:9090"
+
+  grafana:
+    ports:
+      - "13000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=staging_admin

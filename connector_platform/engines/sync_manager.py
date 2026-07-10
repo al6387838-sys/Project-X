@@ -17,7 +17,7 @@ import asyncio
 import logging
 import random
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -89,7 +89,7 @@ class ConflictResolver:
         elif strategy == ConflictStrategy.MERGE:
             merged = {**remote_record, **local_record}
             merged["_merged"] = True
-            merged["_merge_timestamp"] = datetime.utcnow().isoformat()
+            merged["_merge_timestamp"] = datetime.now(timezone.utc).isoformat()
             return merged, "merge"
 
         else:  # MANUAL_REVIEW
@@ -98,7 +98,7 @@ class ConflictResolver:
                 "resource_type": resource_type,
                 "local": local_record,
                 "remote": remote_record,
-                "detected_at": datetime.utcnow().isoformat(),
+                "detected_at": datetime.now(timezone.utc).isoformat(),
                 "status": "pending_review",
             }
             self._conflicts.append(conflict)
@@ -315,7 +315,7 @@ class SyncManager:
         """
         Execute a sync job with retry and error handling.
         """
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         job.status = "running"
         self._active_jobs[job.job_id] = job
 
@@ -329,7 +329,7 @@ class SyncManager:
                 job.records_failed = result.get("records_failed", 0)
                 job.delta_token = result.get("next_delta_token")
                 job.status = "completed"
-                job.completed_at = datetime.utcnow()
+                job.completed_at = datetime.now(timezone.utc)
 
                 # Store delta token for next sync
                 if job.delta_token:
@@ -362,7 +362,7 @@ class SyncManager:
                 else:
                     job.status = "failed"
                     job.error = last_error
-                    job.completed_at = datetime.utcnow()
+                    job.completed_at = datetime.now(timezone.utc)
                     stats = self._sync_stats[job.connector_id]
                     stats["total_syncs"] += 1
                     stats["failed_syncs"] += 1
@@ -389,7 +389,7 @@ class SyncManager:
         return {
             "records_synced": random.randint(1, 50),
             "records_failed": 0,
-            "next_delta_token": f"delta_{job.connector_id}_{datetime.utcnow().timestamp():.0f}",
+            "next_delta_token": f"delta_{job.connector_id}_{datetime.now(timezone.utc).timestamp():.0f}",
         }
 
     # ── Multi-Connector Sync ──────────────────

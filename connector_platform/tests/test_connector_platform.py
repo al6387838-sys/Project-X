@@ -22,14 +22,14 @@ import sys
 import os
 import time
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Tuple
 
 # ─────────────────────────────────────────────
 # Test Framework (lightweight, no external deps)
 # ─────────────────────────────────────────────
 
-class TestResult:
+class _TestResult:
     def __init__(self, name: str, passed: bool, duration_ms: float,
                  error: str = None, details: str = None):
         self.name = name
@@ -46,26 +46,26 @@ class TestResult:
         return line
 
 
-class TestSuite:
+class _TestSuite:
     def __init__(self, name: str):
         self.name = name
-        self.results: List[TestResult] = []
+        self.results: List[_TestResult] = []
 
-    def run(self, test_name: str, test_fn, *args, **kwargs) -> TestResult:
+    def run(self, test_name: str, test_fn, *args, **kwargs) -> _TestResult:
         start = time.monotonic()
         try:
             if asyncio.iscoroutinefunction(test_fn):
-                asyncio.get_event_loop().run_until_complete(test_fn(*args, **kwargs))
+                asyncio.run(test_fn(*args, **kwargs))
             else:
                 test_fn(*args, **kwargs)
             duration = (time.monotonic() - start) * 1000
-            result = TestResult(test_name, True, duration)
+            result = _TestResult(test_name, True, duration)
         except AssertionError as e:
             duration = (time.monotonic() - start) * 1000
-            result = TestResult(test_name, False, duration, error=str(e))
+            result = _TestResult(test_name, False, duration, error=str(e))
         except Exception as e:
             duration = (time.monotonic() - start) * 1000
-            result = TestResult(test_name, False, duration, error=f"{type(e).__name__}: {e}")
+            result = _TestResult(test_name, False, duration, error=f"{type(e).__name__}: {e}")
         self.results.append(result)
         return result
 
@@ -145,7 +145,7 @@ from connector_platform.connectors.future.future_connectors_architecture import 
 # ─────────────────────────────────────────────
 
 def test_models():
-    suite = TestSuite("Models")
+    suite = _TestSuite("Models")
 
     def test_oauth_token():
         token = OAuthToken(
@@ -154,13 +154,13 @@ def test_models():
             access_token="at_test",
             refresh_token="rt_test",
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=["https://www.googleapis.com/auth/calendar"],
         )
         assert_equal(token.user_id, "user_1")
         assert_equal(token.connector_id, "google_calendar")
         # Token not expired (expires in 1 hour)
-        assert_true(token.expires_at > datetime.utcnow())
+        assert_true(token.expires_at > datetime.now(timezone.utc))
 
     def test_expired_token():
         token = OAuthToken(
@@ -169,10 +169,10 @@ def test_models():
             access_token="at_expired",
             refresh_token=None,
             token_type="Bearer",
-            expires_at=datetime.utcnow() - timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) - timedelta(hours=1),
             scopes=[],
         )
-        assert_true(token.expires_at < datetime.utcnow())
+        assert_true(token.expires_at < datetime.now(timezone.utc))
 
     def test_sync_job():
         job = SyncJob(
@@ -199,7 +199,8 @@ def test_models():
     suite.run("Expired token detection", test_expired_token)
     suite.run("SyncJob creation", test_sync_job)
     suite.run("IntegrationConfig creation", test_integration_config)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -207,7 +208,7 @@ def test_models():
 # ─────────────────────────────────────────────
 
 def test_registry():
-    suite = TestSuite("ConnectorRegistry")
+    suite = _TestSuite("ConnectorRegistry")
 
     def test_register_single():
         registry = ConnectorRegistry()
@@ -259,7 +260,8 @@ def test_registry():
     suite.run("Search connectors", test_search)
     suite.run("Unregister connector", test_unregister)
     suite.run("Registry statistics", test_stats)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -267,7 +269,7 @@ def test_registry():
 # ─────────────────────────────────────────────
 
 def test_manifests():
-    suite = TestSuite("ConnectorManifests")
+    suite = _TestSuite("ConnectorManifests")
 
     def test_google_calendar_manifest():
         m = GoogleCalendarConnector.manifest
@@ -305,7 +307,8 @@ def test_manifests():
     suite.run("Microsoft Outlook manifest", test_microsoft_outlook_manifest)
     suite.run("All manifests have required fields", test_all_manifests_have_required_fields)
     suite.run("Future connectors architecture", test_future_connectors_architecture)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -313,7 +316,7 @@ def test_manifests():
 # ─────────────────────────────────────────────
 
 def test_oauth():
-    suite = TestSuite("OAuthManager")
+    suite = _TestSuite("OAuthManager")
 
     def test_generate_pkce():
         pair = PKCEHelper.generate_pair()
@@ -338,7 +341,7 @@ def test_oauth():
             access_token="at_test_123",
             refresh_token="rt_test_456",
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=["https://www.googleapis.com/auth/calendar"],
         )
         oauth._token_store.save(token)
@@ -354,7 +357,7 @@ def test_oauth():
             access_token="at_expired",
             refresh_token="rt_test",
             token_type="Bearer",
-            expires_at=datetime.utcnow() - timedelta(minutes=1),
+            expires_at=datetime.now(timezone.utc) - timedelta(minutes=1),
             scopes=[],
         )
         assert_true(oauth._token_store.is_expired(token))
@@ -367,7 +370,7 @@ def test_oauth():
             access_token="at_to_revoke",
             refresh_token=None,
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=[],
         )
         oauth._token_store.save(token)
@@ -390,7 +393,8 @@ def test_oauth():
     suite.run("Token expiry detection", test_token_expiry_detection)
     suite.run("Revoke token", test_revoke_token)
     suite.run("Get provider config (Google + Microsoft)", test_get_provider_config)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -398,7 +402,7 @@ def test_oauth():
 # ─────────────────────────────────────────────
 
 def test_authentication():
-    suite = TestSuite("ConnectorAuthentication")
+    suite = _TestSuite("ConnectorAuthentication")
 
     async def test_google_calendar_auth():
         connector = GoogleCalendarConnector()
@@ -452,7 +456,8 @@ def test_authentication():
     suite.run("Apple Calendar authentication", test_apple_calendar_auth)
     suite.run("GitHub authentication", test_github_auth)
     suite.run("Connection tests for all major connectors", test_connection_test)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -460,7 +465,7 @@ def test_authentication():
 # ─────────────────────────────────────────────
 
 def test_sync():
-    suite = TestSuite("SyncManager")
+    suite = _TestSuite("SyncManager")
 
     def test_schedule_job():
         sync_mgr = SyncManager()
@@ -523,7 +528,8 @@ def test_sync():
     suite.run("Execute Microsoft Outlook sync", test_execute_microsoft_sync)
     suite.run("Delta sync (incremental)", test_delta_sync)
     suite.run("Sync manager statistics", test_sync_stats)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -531,7 +537,7 @@ def test_sync():
 # ─────────────────────────────────────────────
 
 def test_webhooks():
-    suite = TestSuite("WebhookManager")
+    suite = _TestSuite("WebhookManager")
 
     def test_register_webhook():
         wh_mgr = WebhookManager()
@@ -613,7 +619,8 @@ def test_webhooks():
     suite.run("HMAC signature validation", test_hmac_validation)
     suite.run("Process incoming event", test_process_event)
     suite.run("Webhook manager statistics", test_webhook_stats)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -621,7 +628,7 @@ def test_webhooks():
 # ─────────────────────────────────────────────
 
 def test_permissions():
-    suite = TestSuite("PermissionManager")
+    suite = _TestSuite("PermissionManager")
 
     def test_grant_consent():
         perm_mgr = PermissionManager()
@@ -674,7 +681,8 @@ def test_permissions():
     suite.run("Revoke consent", test_revoke_consent)
     suite.run("Zero Trust: deny by default", test_zero_trust_default_deny)
     suite.run("List active permissions", test_list_permissions)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -682,7 +690,7 @@ def test_permissions():
 # ─────────────────────────────────────────────
 
 def test_marketplace():
-    suite = TestSuite("ConnectorMarketplace")
+    suite = _TestSuite("ConnectorMarketplace")
 
     def make_registry_and_marketplace():
         registry = ConnectorRegistry()
@@ -748,7 +756,8 @@ def test_marketplace():
     suite.run("Search marketplace", test_search)
     suite.run("Add review", test_add_review)
     suite.run("Get full catalog", test_get_catalog)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -756,7 +765,7 @@ def test_marketplace():
 # ─────────────────────────────────────────────
 
 def test_monitor():
-    suite = TestSuite("IntegrationMonitor")
+    suite = _TestSuite("IntegrationMonitor")
 
     def test_record_sync():
         monitor = IntegrationMonitor()
@@ -800,7 +809,8 @@ def test_monitor():
     suite.run("Audit log recording", test_audit_log)
     suite.run("Health report generation", test_health_report)
     suite.run("Latency percentiles", test_latency_percentiles)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -808,7 +818,7 @@ def test_monitor():
 # ─────────────────────────────────────────────
 
 def test_e2e_dual_calendar():
-    suite = TestSuite("E2E: Google Calendar + Microsoft Outlook Simultaneous")
+    suite = _TestSuite("E2E: Google Calendar + Microsoft Outlook Simultaneous")
 
     async def test_simultaneous_auth():
         """Both connectors authenticate simultaneously."""
@@ -821,8 +831,8 @@ def test_e2e_dual_calendar():
         )
         assert_equal(google_token.connector_id, "google_calendar")
         assert_equal(ms_token.connector_id, "microsoft_outlook")
-        assert_true(google_token.expires_at > datetime.utcnow())
-        assert_true(ms_token.expires_at > datetime.utcnow())
+        assert_true(google_token.expires_at > datetime.now(timezone.utc))
+        assert_true(ms_token.expires_at > datetime.now(timezone.utc))
 
     async def test_simultaneous_sync():
         """Both connectors sync simultaneously."""
@@ -855,7 +865,7 @@ def test_e2e_dual_calendar():
         google = GoogleCalendarConnector()
         microsoft = MicrosoftOutlookConnector()
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         event_data = {
             "summary": "LifeOS Test Event",
             "start": {"dateTime": now.isoformat(), "timeZone": "UTC"},
@@ -892,7 +902,7 @@ def test_e2e_dual_calendar():
     async def test_free_busy_comparison():
         """Compare free/busy from Microsoft Outlook."""
         microsoft = MicrosoftOutlookConnector()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         schedule = await microsoft.get_schedule(
             ["user@company.com"],
             now,
@@ -920,9 +930,9 @@ def test_e2e_dual_calendar():
         microsoft = MicrosoftOutlookConnector()
 
         g_token = OAuthToken("user_1", "google_calendar", "old_g_at", "g_rt", "Bearer",
-                            datetime.utcnow() + timedelta(hours=1), [])
+                            datetime.now(timezone.utc) + timedelta(hours=1), [])
         ms_token = OAuthToken("user_1", "microsoft_outlook", "old_ms_at", "ms_rt", "Bearer",
-                             datetime.utcnow() + timedelta(hours=1), [])
+                             datetime.now(timezone.utc) + timedelta(hours=1), [])
 
         g_refreshed, ms_refreshed = await asyncio.gather(
             google.refresh_token(g_token),
@@ -938,7 +948,8 @@ def test_e2e_dual_calendar():
     suite.run("Free/busy schedule comparison", test_free_busy_comparison)
     suite.run("Monitor both integrations simultaneously", test_monitor_both_integrations)
     suite.run("Token refresh for both connectors", test_token_refresh_both)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────
@@ -946,7 +957,7 @@ def test_e2e_dual_calendar():
 # ─────────────────────────────────────────────
 
 def test_security():
-    suite = TestSuite("Security")
+    suite = _TestSuite("Security")
 
     def test_credential_vault_store_retrieve():
         vault = CredentialVault()
@@ -1008,9 +1019,9 @@ def test_security():
         """Tokens must be isolated per user."""
         oauth = OAuthManager()
         t1 = OAuthToken("user_A", "google_calendar", "token_A", None, "Bearer",
-                       datetime.utcnow() + timedelta(hours=1), [])
+                       datetime.now(timezone.utc) + timedelta(hours=1), [])
         t2 = OAuthToken("user_B", "google_calendar", "token_B", None, "Bearer",
-                       datetime.utcnow() + timedelta(hours=1), [])
+                       datetime.now(timezone.utc) + timedelta(hours=1), [])
         oauth._token_store.save(t1)
         oauth._token_store.save(t2)
         r1 = oauth._token_store.get("user_A", "google_calendar")
@@ -1025,7 +1036,8 @@ def test_security():
     suite.run("Scope boundary enforcement", test_scope_boundaries)
     suite.run("HMAC tamper detection", test_hmac_tamper_detection)
     suite.run("Token isolation per user", test_token_isolation)
-    return suite
+    passed, total = suite.summary()
+    assert passed == total, f"Connector tests failed: {passed}/{total} passed"
 
 
 # ─────────────────────────────────────────────

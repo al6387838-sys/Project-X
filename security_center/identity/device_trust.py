@@ -5,7 +5,7 @@ Manages the trust state of user devices.
 Implements device fingerprinting and health checks.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 class DeviceTrustManager:
@@ -22,8 +22,8 @@ class DeviceTrustManager:
             "device_id": device_id,
             "name": metadata.get("name", "Unknown Device"),
             "os": metadata.get("os"),
-            "first_seen": datetime.utcnow().isoformat(),
-            "last_seen": datetime.utcnow().isoformat(),
+            "first_seen": datetime.now(timezone.utc).isoformat(),
+            "last_seen": datetime.now(timezone.utc).isoformat(),
             "is_trusted": True,
             "security_patch_level": metadata.get("security_patch_level")
         }
@@ -34,7 +34,7 @@ class DeviceTrustManager:
         # Check if already exists
         for d in self.trusted_devices[user_id]:
             if d["device_id"] == device_id:
-                d["last_seen"] = datetime.utcnow().isoformat()
+                d["last_seen"] = datetime.now(timezone.utc).isoformat()
                 return d
 
         self.trusted_devices[user_id].append(device)

@@ -6,7 +6,7 @@ Implements token rotation and automatic revocation on risk detection.
 """
 
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional, List
 
 class SessionManager:
@@ -23,9 +23,9 @@ class SessionManager:
         self.sessions[token] = {
             "user_id": user_id,
             "device_id": device_id,
-            "created_at": datetime.utcnow(),
-            "expires_at": datetime.utcnow() + timedelta(hours=24),
-            "last_activity": datetime.utcnow(),
+            "created_at": datetime.now(timezone.utc),
+            "expires_at": datetime.now(timezone.utc) + timedelta(hours=24),
+            "last_activity": datetime.now(timezone.utc),
             "status": "ACTIVE"
         }
         return token
@@ -36,11 +36,11 @@ class SessionManager:
         if not session or session["status"] != "ACTIVE":
             return False
         
-        if datetime.utcnow() > session["expires_at"]:
+        if datetime.now(timezone.utc) > session["expires_at"]:
             session["status"] = "EXPIRED"
             return False
         
-        session["last_activity"] = datetime.utcnow()
+        session["last_activity"] = datetime.now(timezone.utc)
         return True
 
     def revoke_session(self, token: str):

@@ -7,7 +7,7 @@ the connection is restored.
 """
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 from .models import SyncOperation
 
@@ -27,7 +27,7 @@ class OfflineQueue:
             entity_type=entity_type,
             action=action,
             data=data,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         self.queue.append(op)
         return op

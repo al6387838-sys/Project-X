@@ -15,7 +15,7 @@ Connectors:
 from __future__ import annotations
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.core.connector_engine import BaseConnector, CredentialVault
@@ -98,13 +98,13 @@ class NotionConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[Notion] Syncing: job={job.job_id}")
         # POST /search with filter.last_edited_time
         await asyncio.sleep(0.05)
         job.records_synced = 22
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def search(self, query: str, filter_type: Optional[str] = None) -> List[Dict]:
@@ -179,17 +179,17 @@ class SlackConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 50
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def send_message(self, channel: str, text: str, blocks: Optional[List] = None) -> Dict:
         """Send a message to a Slack channel."""
         # POST /chat.postMessage
-        return {"ok": True, "ts": f"{datetime.utcnow().timestamp():.6f}", "channel": channel}
+        return {"ok": True, "ts": f"{datetime.now(timezone.utc).timestamp():.6f}", "channel": channel}
 
     async def send_notification(self, user_id: str, title: str, message: str) -> Dict:
         """Send a LifeOS notification via Slack DM."""
@@ -240,12 +240,12 @@ class DiscordConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(days=7),
+            expires_at=datetime.now(timezone.utc) + timedelta(days=7),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(days=7)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(days=7)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -256,11 +256,11 @@ class DiscordConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 5
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -327,12 +327,12 @@ class GitHubConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[GitHub] Syncing: job={job.job_id}")
         await asyncio.sleep(0.05)
         job.records_synced = 35
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def list_notifications(self, all_notifications: bool = False) -> List[Dict]:
@@ -385,12 +385,12 @@ class GitLabConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=2),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=2),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=2)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=2)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -402,11 +402,11 @@ class GitLabConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 28
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -456,12 +456,12 @@ class ZoomConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -473,18 +473,18 @@ class ZoomConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 12
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def create_meeting(self, topic: str, start_time: datetime, duration: int = 60) -> Dict:
         """Create a Zoom meeting."""
         # POST /users/me/meetings
         return {
-            "id": f"zoom_{datetime.utcnow().timestamp():.0f}",
+            "id": f"zoom_{datetime.now(timezone.utc).timestamp():.0f}",
             "topic": topic,
             "join_url": f"https://zoom.us/j/123456789",
             "start_time": start_time.isoformat(),
@@ -537,12 +537,12 @@ class DropboxConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=4),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=4),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=4)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=4)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -554,14 +554,14 @@ class DropboxConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[Dropbox] Syncing: job={job.job_id}")
         # POST /files/list_folder/continue with cursor
         await asyncio.sleep(0.05)
         job.records_synced = 18
-        job.delta_token = f"dbx_cursor_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"dbx_cursor_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 

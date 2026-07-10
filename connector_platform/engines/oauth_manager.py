@@ -20,7 +20,7 @@ import logging
 import os
 import secrets
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode, urlparse, parse_qs
 
@@ -132,13 +132,13 @@ class TokenStore:
     def is_expired(self, token: OAuthToken) -> bool:
         if not token.expires_at:
             return False
-        return datetime.utcnow() >= token.expires_at
+        return datetime.now(timezone.utc) >= token.expires_at
 
     def needs_refresh(self, token: OAuthToken, buffer_seconds: int = 300) -> bool:
         """Return True if token expires within buffer_seconds."""
         if not token.expires_at:
             return False
-        return datetime.utcnow() >= (token.expires_at - timedelta(seconds=buffer_seconds))
+        return datetime.now(timezone.utc) >= (token.expires_at - timedelta(seconds=buffer_seconds))
 
     def list_user_tokens(self, user_id: str) -> List[OAuthToken]:
         return [t for k, t in self._tokens.items() if k.startswith(f"{user_id}:")]
@@ -376,9 +376,9 @@ class OAuthManager:
             access_token=f"access_{secrets.token_urlsafe(32)}",
             refresh_token=f"refresh_{secrets.token_urlsafe(32)}",
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=config.scopes if config else [],
-            issued_at=datetime.utcnow(),
+            issued_at=datetime.now(timezone.utc),
         )
 
         self._token_store.save(token)
@@ -415,10 +415,10 @@ class OAuthManager:
             access_token=f"access_{secrets.token_urlsafe(32)}",
             refresh_token=token.refresh_token,  # Reuse or rotate
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=token.scopes,
             issued_at=token.issued_at,
-            last_refreshed=datetime.utcnow(),
+            last_refreshed=datetime.now(timezone.utc),
         )
 
         self._token_store.save(refreshed)

@@ -13,7 +13,7 @@ Supported formats per locale:
   - Timezone: convert and display in user's local timezone
 """
 
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from typing import Union, Optional
 import pytz
 
@@ -147,10 +147,12 @@ class LocaleFormatter:
         """
         Format a datetime as a relative time string.
         e.g. "2 hours ago", "há 2 horas", "vor 2 Stunden"
+        Handles both timezone-aware and timezone-naive datetimes.
         """
-        now = datetime.utcnow()
-        if value.tzinfo is not None:
-            now = pytz.utc.localize(now)
+        now = datetime.now(timezone.utc)
+        # Normalise: if value is naive, treat it as UTC
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=timezone.utc)
         diff = now - value
         seconds = int(diff.total_seconds())
 

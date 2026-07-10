@@ -5,7 +5,7 @@ Monitors for suspicious activities and anomalies.
 Implements automatic detection of login attempts, location changes, and behavioral shifts.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 
 class ThreatMonitor:
@@ -46,12 +46,12 @@ class ThreatMonitor:
 
     def _create_alert(self, user_id: str, type: str, message: str, severity: str) -> Dict[str, Any]:
         return {
-            "alert_id": f"ALRT-{datetime.utcnow().timestamp()}",
+            "alert_id": f"ALRT-{datetime.now(timezone.utc).timestamp()}",
             "user_id": user_id,
             "type": type,
             "message": message,
             "severity": severity,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "status": "ACTIVE"
         }
 

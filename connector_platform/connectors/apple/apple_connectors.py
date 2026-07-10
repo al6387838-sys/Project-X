@@ -11,7 +11,7 @@ Connectors:
 from __future__ import annotations
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.core.connector_engine import BaseConnector, CredentialVault
@@ -88,12 +88,12 @@ class AppleCalendarConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[AppleCalendar] Syncing via CalDAV: job={job.job_id}")
         await asyncio.sleep(0.05)
         job.records_synced = 14
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -155,12 +155,12 @@ class AppleHealthConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[AppleHealth] Syncing health data: job={job.job_id}")
         await asyncio.sleep(0.05)
         job.records_synced = 100
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -216,11 +216,11 @@ class AppleRemindersConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 8
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 

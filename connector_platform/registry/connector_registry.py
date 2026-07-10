@@ -13,7 +13,7 @@ Features:
 
 from __future__ import annotations
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Type
 
 from connector_platform.core.connector_engine import BaseConnector
@@ -45,7 +45,7 @@ class ConnectorRegistry:
         self._tags: Dict[str, List[str]] = {}
         self._version_history: Dict[str, List[str]] = {}
         self._registered_at: Dict[str, datetime] = {}
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[ConnectorRegistry] Initialized")
 
     # ── Registration ──────────────────────────
@@ -64,7 +64,7 @@ class ConnectorRegistry:
 
         self._connectors[connector_id] = connector_class
         self._manifests[connector_id] = manifest
-        self._registered_at[connector_id] = datetime.utcnow()
+        self._registered_at[connector_id] = datetime.now(timezone.utc)
 
         # Index by category
         cat = manifest.category

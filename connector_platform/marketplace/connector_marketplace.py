@@ -14,7 +14,7 @@ Features:
 
 from __future__ import annotations
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 from connector_platform.models.connector_models import (
@@ -52,7 +52,7 @@ class ConnectorBundle:
         self.connector_ids = connector_ids
         self.icon_url = icon_url
         self.tags = tags or []
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -71,12 +71,12 @@ class ConnectorBundle:
 
 class ConnectorReview:
     def __init__(self, user_id: str, connector_id: str, rating: int, comment: str):
-        self.review_id = f"review_{user_id}_{connector_id}_{datetime.utcnow().timestamp():.0f}"
+        self.review_id = f"review_{user_id}_{connector_id}_{datetime.now(timezone.utc).timestamp():.0f}"
         self.user_id = user_id
         self.connector_id = connector_id
         self.rating = max(1, min(5, rating))
         self.comment = comment
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
         self.helpful_count = 0
 
     def to_dict(self) -> Dict[str, Any]:
@@ -109,7 +109,7 @@ class ConnectorMarketplace:
         self._reviews: Dict[str, List[ConnectorReview]] = {}
         self._install_records: Dict[str, List[str]] = {}  # user_id → [connector_ids]
         self._featured: List[str] = []
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
 
         # Initialize marketplace entries from registry
         self._populate_from_registry()
@@ -125,8 +125,8 @@ class ConnectorMarketplace:
                 rating=0.0,
                 review_count=0,
                 featured=manifest.is_official,
-                published_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
+                published_at=datetime.now(timezone.utc),
+                updated_at=datetime.now(timezone.utc),
             )
             self._entries[manifest.connector_id] = entry
             if manifest.is_official:
@@ -359,7 +359,7 @@ class ConnectorMarketplace:
     def get_catalog(self) -> Dict[str, Any]:
         """Return full marketplace catalog for API responses."""
         return {
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "total_connectors": len(self._entries),
             "featured": [
                 {

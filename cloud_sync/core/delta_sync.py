@@ -8,7 +8,7 @@ improves performance.
 
 import hashlib
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 from .models import SyncEntity
 
@@ -45,6 +45,6 @@ class DeltaSyncEngine:
         """Applies a delta to a target entity and updates its version."""
         target_entity.data.update(delta)
         target_entity.version += 1
-        target_entity.last_modified = datetime.utcnow()
+        target_entity.last_modified = datetime.now(timezone.utc)
         target_entity.checksum = self.calculate_checksum(target_entity.data)
         return target_entity

@@ -17,7 +17,7 @@ import sys
 import os
 import uuid
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -378,13 +378,13 @@ class TestLocaleFormatter:
         assert now.tzinfo is not None
 
     def test_format_relative_just_now(self, pt_formatter):
-        dt = datetime.utcnow()
+        dt = datetime.now(timezone.utc)
         result = pt_formatter.format_relative(dt)
         assert "agora" in result.lower() or "now" in result.lower()
 
     def test_format_relative_minutes_ago(self, pt_formatter):
         from datetime import timedelta
-        dt = datetime.utcnow() - timedelta(minutes=5)
+        dt = datetime.now(timezone.utc) - timedelta(minutes=5)
         result = pt_formatter.format_relative(dt)
         assert "5" in result
 

@@ -8,7 +8,7 @@ Ensures phishing-resistant authentication for LifeOS.
 import uuid
 import json
 import base64
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 
 class PasskeyManager:
@@ -31,7 +31,7 @@ class PasskeyManager:
             "credential_id": credential_id,
             "device_name": device_name,
             "public_key": public_key,
-            "created_at": datetime.utcnow().isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "last_used": None,
             "sign_count": 0
         }
@@ -51,7 +51,7 @@ class PasskeyManager:
         
         for cred in self.credentials[user_id]:
             if cred["credential_id"] == credential_id:
-                cred["last_used"] = datetime.utcnow().isoformat()
+                cred["last_used"] = datetime.now(timezone.utc).isoformat()
                 cred["sign_count"] += 1
                 return True
         

@@ -5,7 +5,7 @@ Provides aggregated views and metrics for all active integrations.
 
 from __future__ import annotations
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.models.connector_models import (
@@ -39,7 +39,7 @@ class IntegrationDashboard:
 
         return {
             "user_id": user_id,
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "summary": dashboard_data["summary"],
             "integrations": dashboard_data["integrations"],
             "sync": {

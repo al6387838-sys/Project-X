@@ -13,7 +13,7 @@ Connectors:
 from __future__ import annotations
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from connector_platform.core.connector_engine import BaseConnector, CredentialVault
@@ -96,7 +96,7 @@ class GoogleCalendarConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
@@ -104,8 +104,8 @@ class GoogleCalendarConnector(BaseConnector):
         """Refresh Google access token."""
         logger.info("[GoogleCalendar] Refreshing token")
         token.access_token = f"refreshed_{token.access_token}"
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
-        token.last_refreshed = datetime.utcnow()
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+        token.last_refreshed = datetime.now(timezone.utc)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -122,7 +122,7 @@ class GoogleCalendarConnector(BaseConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         """Sync Google Calendar events."""
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[GoogleCalendar] Syncing: job={job.job_id} delta={job.delta_token}")
 
         # Delta sync using syncToken
@@ -134,9 +134,9 @@ class GoogleCalendarConnector(BaseConnector):
             events = await self._fetch_all_events()
 
         job.records_synced = len(events)
-        job.delta_token = f"gcal_sync_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"gcal_sync_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         logger.info(f"[GoogleCalendar] Sync complete: {job.records_synced} events")
         return job
 
@@ -144,7 +144,7 @@ class GoogleCalendarConnector(BaseConnector):
         """Fetch only changed events since last sync."""
         await asyncio.sleep(0.05)  # Simulate API call
         return [
-            {"id": f"event_{i}", "summary": f"Meeting {i}", "updated": datetime.utcnow().isoformat()}
+            {"id": f"event_{i}", "summary": f"Meeting {i}", "updated": datetime.now(timezone.utc).isoformat()}
             for i in range(5)
         ]
 
@@ -152,7 +152,7 @@ class GoogleCalendarConnector(BaseConnector):
         """Fetch all events (full sync)."""
         await asyncio.sleep(0.1)
         return [
-            {"id": f"event_{i}", "summary": f"Event {i}", "updated": datetime.utcnow().isoformat()}
+            {"id": f"event_{i}", "summary": f"Event {i}", "updated": datetime.now(timezone.utc).isoformat()}
             for i in range(20)
         ]
 
@@ -160,7 +160,7 @@ class GoogleCalendarConnector(BaseConnector):
         """Create a new calendar event."""
         # POST /calendars/{calendarId}/events
         logger.info(f"[GoogleCalendar] Creating event: {event_data.get('summary')}")
-        return {"id": f"new_event_{datetime.utcnow().timestamp():.0f}", **event_data}
+        return {"id": f"new_event_{datetime.now(timezone.utc).timestamp():.0f}", **event_data}
 
     async def update_event(self, calendar_id: str, event_id: str, updates: Dict[str, Any]) -> Dict:
         """Update an existing calendar event."""
@@ -178,9 +178,9 @@ class GoogleCalendarConnector(BaseConnector):
         """Register for real-time push notifications."""
         # POST /calendars/{calendarId}/events/watch
         return {
-            "id": f"channel_{datetime.utcnow().timestamp():.0f}",
+            "id": f"channel_{datetime.now(timezone.utc).timestamp():.0f}",
             "resourceId": f"resource_{calendar_id}",
-            "expiration": int((datetime.utcnow() + timedelta(days=7)).timestamp() * 1000),
+            "expiration": int((datetime.now(timezone.utc) + timedelta(days=7)).timestamp() * 1000),
         }
 
 
@@ -236,12 +236,12 @@ class GoogleDriveConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -252,14 +252,14 @@ class GoogleDriveConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[GoogleDrive] Syncing: job={job.job_id}")
         # GET /changes?pageToken={pageToken}
         await asyncio.sleep(0.05)
         job.records_synced = 15
-        job.delta_token = f"gdrive_page_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"gdrive_page_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def list_files(self, folder_id: Optional[str] = None, query: Optional[str] = None) -> List[Dict]:
@@ -270,7 +270,7 @@ class GoogleDriveConnector(BaseConnector):
     async def get_changes(self, page_token: str) -> Dict:
         """Get file changes since last sync."""
         # GET /changes?pageToken={page_token}
-        return {"changes": [], "newStartPageToken": f"token_{datetime.utcnow().timestamp():.0f}"}
+        return {"changes": [], "newStartPageToken": f"token_{datetime.now(timezone.utc).timestamp():.0f}"}
 
 
 # ─────────────────────────────────────────────
@@ -326,12 +326,12 @@ class GmailConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -342,21 +342,21 @@ class GmailConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         logger.info(f"[Gmail] Syncing: job={job.job_id}")
         # GET /messages?q=newer_than:1d&historyId={historyId}
         await asyncio.sleep(0.05)
         job.records_synced = 25
-        job.delta_token = f"gmail_history_{datetime.utcnow().timestamp():.0f}"
+        job.delta_token = f"gmail_history_{datetime.now(timezone.utc).timestamp():.0f}"
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def send_email(self, to: str, subject: str, body: str, html: bool = False) -> Dict:
         """Send an email via Gmail API."""
         # POST /messages/send
         logger.info(f"[Gmail] Sending email to: {to}")
-        return {"id": f"msg_{datetime.utcnow().timestamp():.0f}", "threadId": "thread_1"}
+        return {"id": f"msg_{datetime.now(timezone.utc).timestamp():.0f}", "threadId": "thread_1"}
 
 
 # ─────────────────────────────────────────────
@@ -404,12 +404,12 @@ class GoogleTasksConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -419,11 +419,11 @@ class GoogleTasksConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 12
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -468,12 +468,12 @@ class GoogleMeetConnector(BaseConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -483,17 +483,17 @@ class GoogleMeetConnector(BaseConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         await asyncio.sleep(0.05)
         job.records_synced = 8
         job.status = "completed"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def create_meeting(self, title: str, start: datetime, end: datetime, attendees: List[str]) -> Dict:
         """Create a Google Meet meeting via Calendar API."""
         return {
-            "id": f"meet_{datetime.utcnow().timestamp():.0f}",
+            "id": f"meet_{datetime.now(timezone.utc).timestamp():.0f}",
             "title": title,
             "meet_link": f"https://meet.google.com/abc-defg-hij",
             "start": start.isoformat(),

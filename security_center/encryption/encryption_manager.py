@@ -7,7 +7,7 @@ and cryptographic key management.
 
 import base64
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional
 
 class EncryptionManager:
@@ -22,7 +22,7 @@ class EncryptionManager:
             "K-initial": initial_key
         }
         self.key_history: List[Dict[str, Any]] = [
-            {"key_id": "K-initial", "created_at": datetime.utcnow().isoformat()}
+            {"key_id": "K-initial", "created_at": datetime.now(timezone.utc).isoformat()}
         ]
 
     def encrypt_at_rest(self, data: Dict[str, Any], key_id: str = "primary") -> str:
@@ -58,7 +58,7 @@ class EncryptionManager:
 
     def rotate_key(self) -> str:
         """Rotates the primary encryption key."""
-        new_key_id = f"K-{datetime.utcnow().timestamp()}"
+        new_key_id = f"K-{datetime.now(timezone.utc).timestamp()}"
         new_key = base64.b64encode(new_key_id.encode('utf-8')).decode('utf-8')
         
         self.keys[new_key_id] = new_key
@@ -66,6 +66,6 @@ class EncryptionManager:
         
         self.key_history.append({
             "key_id": new_key_id,
-            "created_at": datetime.utcnow().isoformat()
+            "created_at": datetime.now(timezone.utc).isoformat()
         })
         return new_key_id

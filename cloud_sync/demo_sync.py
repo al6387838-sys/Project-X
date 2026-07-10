@@ -12,7 +12,7 @@ Demonstrates a complete synchronization flow between two devices:
 """
 
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from cloud_sync import CloudSyncEngine, SyncManager, OfflineQueue, SyncEntity, SyncStatus, ResolutionStrategy
 
 def run_demo():
@@ -79,14 +79,14 @@ def run_demo():
     print("  > Device B updates mission to 'completed'")
     data_b = remote_data.copy()
     data_b["status"] = "completed"
-    entity_b = SyncEntity("mission_001", "mission", 1, data_b, last_modified=datetime.utcnow())
+    entity_b = SyncEntity("mission_001", "mission", 1, data_b, last_modified=datetime.now(timezone.utc))
     
     # Device A (meanwhile) updates title to 'Sprint 023 COMPLETED'
     print("  > Device A updates mission title to 'Sprint 023 COMPLETED'")
     data_a = mission_data.copy()
     data_a["title"] = "Sprint 023 COMPLETED"
     # Set Device A timestamp slightly earlier than Device B for LWW demo
-    entity_a = SyncEntity("mission_001", "mission", 1, data_a, last_modified=datetime.utcnow() - timedelta(seconds=5))
+    entity_a = SyncEntity("mission_001", "mission", 1, data_a, last_modified=datetime.now(timezone.utc) - timedelta(seconds=5))
 
     # Sync Device A first
     print("\n  > Syncing Device A...")

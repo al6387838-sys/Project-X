@@ -13,7 +13,7 @@ Features:
 
 from __future__ import annotations
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional, Set
 from collections import defaultdict
 
@@ -37,15 +37,15 @@ class ConsentRecord:
         consent_version: str = "1.0",
         expires_in_days: Optional[int] = None,
     ):
-        self.consent_id = f"consent_{user_id}_{connector_id}_{datetime.utcnow().timestamp():.0f}"
+        self.consent_id = f"consent_{user_id}_{connector_id}_{datetime.now(timezone.utc).timestamp():.0f}"
         self.user_id = user_id
         self.connector_id = connector_id
         self.scopes = scopes
         self.consent_text = consent_text
         self.consent_version = consent_version
-        self.granted_at = datetime.utcnow()
+        self.granted_at = datetime.now(timezone.utc)
         self.expires_at = (
-            datetime.utcnow() + timedelta(days=expires_in_days)
+            datetime.now(timezone.utc) + timedelta(days=expires_in_days)
             if expires_in_days else None
         )
         self.is_active = True
@@ -55,7 +55,7 @@ class ConsentRecord:
     def is_valid(self) -> bool:
         if not self.is_active:
             return False
-        if self.expires_at and datetime.utcnow() > self.expires_at:
+        if self.expires_at and datetime.now(timezone.utc) > self.expires_at:
             return False
         return True
 
@@ -114,7 +114,7 @@ class PermissionManager:
         self._consent_records: Dict[str, List[ConsentRecord]] = defaultdict(list)
         self._policies: Dict[str, PermissionPolicy] = {}
         self._audit_log: List[Dict[str, Any]] = []
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[PermissionManager] Initialized — Least Privilege + GDPR active")
 
     # ── Policy Management ─────────────────────
@@ -210,7 +210,7 @@ class PermissionManager:
             if record.is_active:
                 if scope is None or scope in record.scopes:
                     record.is_active = False
-                    record.revoked_at = datetime.utcnow()
+                    record.revoked_at = datetime.now(timezone.utc)
                     record.revocation_reason = reason
                     revoked = True
 
@@ -241,7 +241,7 @@ class PermissionManager:
         """Check if user has a specific permission."""
         key = f"{user_id}:{connector_id}"
         permissions = self._permissions.get(key, [])
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         for perm in permissions:
             if not perm.is_active:
@@ -270,7 +270,7 @@ class PermissionManager:
     ) -> List[ConnectorPermission]:
         """Get all active permissions for a user-connector pair."""
         key = f"{user_id}:{connector_id}"
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         return [
             p for p in self._permissions.get(key, [])
             if p.is_active and (not p.expires_at or now <= p.expires_at)
@@ -306,7 +306,7 @@ class PermissionManager:
         """
         return {
             "user_id": user_id,
-            "exported_at": datetime.utcnow().isoformat(),
+            "exported_at": datetime.now(timezone.utc).isoformat(),
             "consent_records": [
                 r.to_dict()
                 for r in self.get_consent_records(user_id)
@@ -348,7 +348,7 @@ class PermissionManager:
 
     def _audit(self, action: str, user_id: str, connector_id: str, details: Dict[str, Any]):
         self._audit_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": action,
             "user_id": user_id,
             "connector_id": connector_id,

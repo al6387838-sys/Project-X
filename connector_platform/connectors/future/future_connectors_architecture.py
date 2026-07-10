@@ -21,7 +21,7 @@ Design Principles:
 from __future__ import annotations
 import logging
 from abc import abstractmethod
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -166,12 +166,12 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(minutes=30),
+            expires_at=datetime.now(timezone.utc) + timedelta(minutes=30),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(minutes=30)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -181,10 +181,10 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         job.records_synced = 0
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -254,12 +254,12 @@ class OuraConnector(BaseWearableConnector):
             access_token=credentials.get("access_token", ""),
             refresh_token=credentials.get("refresh_token"),
             token_type="Bearer",
-            expires_at=datetime.utcnow() + timedelta(days=30),
+            expires_at=datetime.now(timezone.utc) + timedelta(days=30),
             scopes=self.manifest.required_scopes,
         )
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(days=30)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(days=30)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -269,10 +269,10 @@ class OuraConnector(BaseWearableConnector):
         return True
 
     async def sync(self, job: SyncJob) -> SyncJob:
-        job.started_at = datetime.utcnow()
+        job.started_at = datetime.now(timezone.utc)
         job.records_synced = 0
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def get_daily_summary(self, date: datetime) -> Dict[str, Any]:
@@ -334,7 +334,7 @@ class GarminConnector(BaseWearableConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def get_daily_summary(self, date: datetime) -> Dict[str, Any]:
@@ -382,11 +382,11 @@ class FitbitConnector(BaseWearableConnector):
     async def authenticate(self, credentials: Dict[str, Any]) -> OAuthToken:
         return OAuthToken(user_id=credentials.get("user_id", ""), connector_id="fitbit",
                          access_token=credentials.get("access_token", ""), refresh_token=credentials.get("refresh_token"),
-                         token_type="Bearer", expires_at=datetime.utcnow() + timedelta(hours=8),
+                         token_type="Bearer", expires_at=datetime.now(timezone.utc) + timedelta(hours=8),
                          scopes=self.manifest.required_scopes)
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=8)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=8)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -397,7 +397,7 @@ class FitbitConnector(BaseWearableConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def get_daily_summary(self, date: datetime) -> Dict[str, Any]:
@@ -444,11 +444,11 @@ class SamsungHealthConnector(BaseWearableConnector):
     async def authenticate(self, credentials: Dict[str, Any]) -> OAuthToken:
         return OAuthToken(user_id=credentials.get("user_id", ""), connector_id="samsung_health",
                          access_token=credentials.get("access_token", ""), refresh_token=None,
-                         token_type="Bearer", expires_at=datetime.utcnow() + timedelta(hours=2),
+                         token_type="Bearer", expires_at=datetime.now(timezone.utc) + timedelta(hours=2),
                          scopes=self.manifest.required_scopes)
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=2)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=2)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -459,7 +459,7 @@ class SamsungHealthConnector(BaseWearableConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def get_daily_summary(self, date: datetime) -> Dict[str, Any]:
@@ -525,11 +525,11 @@ class FHIRHealthcareConnector(BaseFutureConnector):
     async def authenticate(self, credentials: Dict[str, Any]) -> OAuthToken:
         return OAuthToken(user_id=credentials.get("user_id", ""), connector_id="fhir_healthcare",
                          access_token=credentials.get("access_token", ""), refresh_token=None,
-                         token_type="SMART-on-FHIR", expires_at=datetime.utcnow() + timedelta(hours=1),
+                         token_type="SMART-on-FHIR", expires_at=datetime.now(timezone.utc) + timedelta(hours=1),
                          scopes=self.manifest.required_scopes)
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=1)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -540,7 +540,7 @@ class FHIRHealthcareConnector(BaseFutureConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 
@@ -597,11 +597,11 @@ class SalesforceConnector(BaseCRMConnector):
     async def authenticate(self, credentials: Dict[str, Any]) -> OAuthToken:
         return OAuthToken(user_id=credentials.get("user_id", ""), connector_id="salesforce",
                          access_token=credentials.get("access_token", ""), refresh_token=credentials.get("refresh_token"),
-                         token_type="Bearer", expires_at=datetime.utcnow() + timedelta(hours=2),
+                         token_type="Bearer", expires_at=datetime.now(timezone.utc) + timedelta(hours=2),
                          scopes=self.manifest.required_scopes)
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=2)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=2)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -612,7 +612,7 @@ class SalesforceConnector(BaseCRMConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
     async def get_contacts(self, limit: int = 100) -> List[Dict]:
@@ -662,11 +662,11 @@ class TotvsConnector(BaseFutureConnector):
     async def authenticate(self, credentials: Dict[str, Any]) -> OAuthToken:
         return OAuthToken(user_id=credentials.get("user_id", ""), connector_id="totvs",
                          access_token=credentials.get("access_token", ""), refresh_token=None,
-                         token_type="Bearer", expires_at=datetime.utcnow() + timedelta(hours=8),
+                         token_type="Bearer", expires_at=datetime.now(timezone.utc) + timedelta(hours=8),
                          scopes=self.manifest.required_scopes)
 
     async def refresh_token(self, token: OAuthToken) -> OAuthToken:
-        token.expires_at = datetime.utcnow() + timedelta(hours=8)
+        token.expires_at = datetime.now(timezone.utc) + timedelta(hours=8)
         return token
 
     async def revoke_token(self, token: OAuthToken) -> bool:
@@ -677,7 +677,7 @@ class TotvsConnector(BaseFutureConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.status = "architecture_ready"
-        job.completed_at = datetime.utcnow()
+        job.completed_at = datetime.now(timezone.utc)
         return job
 
 

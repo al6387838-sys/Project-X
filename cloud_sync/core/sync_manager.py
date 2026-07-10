@@ -8,7 +8,7 @@ the Cloud Sync Engine, Offline Queue, and Conflict Resolver.
 
 import uuid
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 
 from .models import SyncStatus, SyncSession, SyncEntity, SyncOperation
@@ -41,7 +41,7 @@ class SyncManager:
         if not self.active_session:
             return
 
-        self.active_session.end_time = datetime.utcnow()
+        self.active_session.end_time = datetime.now(timezone.utc)
         self.active_session.status = status
         self.active_session.error_message = error
         

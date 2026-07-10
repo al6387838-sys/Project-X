@@ -11,7 +11,7 @@ import asyncio
 import sys
 import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -71,7 +71,7 @@ async def run_demo():
     header("LIFEOS — UNIVERSAL CONNECTOR PLATFORM DEMO")
     print("  Demonstrando fluxo completo: Google Calendar + Microsoft Outlook")
     print(f"  Usuário: {USER_ID}")
-    print(f"  Data/Hora: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+    print(f"  Data/Hora: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
     # ─────────────────────────────────────────
     # FASE 1: Inicialização da Plataforma
@@ -250,7 +250,7 @@ async def run_demo():
     data("    Microsoft Outlook — Delta Token", ms_result.delta_token[:20] + "...")
 
     step(11, "Criando evento em AMBOS os calendários simultaneamente")
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     event_payload = {
         "summary": "LifeOS Sprint 025 Review",
         "description": "Revisão da Universal Connector Platform",

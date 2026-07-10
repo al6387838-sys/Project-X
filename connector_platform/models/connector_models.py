@@ -5,7 +5,7 @@ Defines all data structures used across the Universal Connector Platform.
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 import uuid
@@ -163,7 +163,7 @@ class OAuthToken:
     token_type: str
     expires_at: Optional[datetime]
     scopes: List[str]
-    issued_at: datetime = field(default_factory=datetime.utcnow)
+    issued_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     last_refreshed: Optional[datetime] = None
     is_valid: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -178,7 +178,7 @@ class ConnectorPermission:
     scope: PermissionScope = PermissionScope.READ
     resource_type: str = ""          # e.g., "calendar", "email", "file"
     resource_filter: Optional[str] = None  # e.g., "work_calendar_only"
-    granted_at: datetime = field(default_factory=datetime.utcnow)
+    granted_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     expires_at: Optional[datetime] = None
     is_active: bool = True
     consent_version: str = "1.0"
@@ -196,7 +196,7 @@ class IntegrationConfig:
     sync_frequency: SyncFrequency = SyncFrequency.HOURLY
     permissions: List[ConnectorPermission] = field(default_factory=list)
     settings: Dict[str, Any] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     last_sync: Optional[datetime] = None
     next_sync: Optional[datetime] = None
     error_count: int = 0
@@ -235,7 +235,7 @@ class WebhookRegistration:
     secret: str = ""    # HMAC secret — encrypted
     events: List[WebhookEvent] = field(default_factory=list)
     is_active: bool = True
-    registered_at: datetime = field(default_factory=datetime.utcnow)
+    registered_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     last_delivery: Optional[datetime] = None
     delivery_count: int = 0
     failure_count: int = 0
@@ -248,7 +248,7 @@ class ConnectorHealthMetric:
     metric_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     integration_id: str = ""
     connector_id: str = ""
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     health: IntegrationHealth = IntegrationHealth.UNKNOWN
     latency_ms: Optional[float] = None
     success_rate: float = 0.0

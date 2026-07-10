@@ -5,7 +5,7 @@ Data structures for the LifeOS Cloud Sync system.
 """
 
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
@@ -28,7 +28,7 @@ class SyncEntity:
     entity_type: str
     version: int
     data: Dict[str, Any]
-    last_modified: datetime = field(default_factory=datetime.utcnow)
+    last_modified: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     checksum: Optional[str] = None
     is_deleted: bool = False
 
@@ -37,7 +37,7 @@ class SyncSession:
     """Represents a synchronization session."""
     session_id: str
     device_id: str
-    start_time: datetime = field(default_factory=datetime.utcnow)
+    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     end_time: Optional[datetime] = None
     status: SyncStatus = SyncStatus.PENDING
     entities_synced: List[str] = field(default_factory=list)
@@ -52,6 +52,6 @@ class SyncOperation:
     entity_type: str
     action: str  # 'create', 'update', 'delete'
     data: Dict[str, Any]
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     retry_count: int = 0
     max_retries: int = 3

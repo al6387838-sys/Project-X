@@ -6,7 +6,7 @@ Specifically tracks every access to the Life Graph.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict, Any
 
 class AuditManager:
@@ -25,8 +25,8 @@ class AuditManager:
                    metadata: Dict[str, Any]):
         """Logs an access attempt to a resource."""
         entry = {
-            "audit_id": f"AUD-{datetime.utcnow().timestamp()}",
-            "timestamp": datetime.utcnow().isoformat(),
+            "audit_id": f"AUD-{datetime.now(timezone.utc).timestamp()}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "user_id": user_id,
             "resource_id": resource_id,
             "action": action,

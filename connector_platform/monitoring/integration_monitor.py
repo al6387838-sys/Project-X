@@ -16,7 +16,7 @@ import asyncio
 import logging
 import time
 from collections import defaultdict, deque
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any, Callable, Deque, Dict, List, Optional, Tuple
 
@@ -52,7 +52,7 @@ class Metric:
         self.value = value
         self.metric_type = metric_type
         self.labels = labels or {}
-        self.timestamp = timestamp or datetime.utcnow()
+        self.timestamp = timestamp or datetime.now(timezone.utc)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -73,12 +73,12 @@ class Alert:
         self.message = message
         self.connector_id = connector_id
         self.integration_id = integration_id
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
         self.resolved_at: Optional[datetime] = None
         self.acknowledged = False
 
     def resolve(self):
-        self.resolved_at = datetime.utcnow()
+        self.resolved_at = datetime.now(timezone.utc)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -97,13 +97,13 @@ class Alert:
 class AuditEvent:
     def __init__(self, event_type: str, user_id: str, connector_id: str,
                  details: Dict[str, Any] = None, ip_address: str = None):
-        self.event_id = f"audit_{datetime.utcnow().timestamp():.6f}"
+        self.event_id = f"audit_{datetime.now(timezone.utc).timestamp():.6f}"
         self.event_type = event_type
         self.user_id = user_id
         self.connector_id = connector_id
         self.details = details or {}
         self.ip_address = ip_address
-        self.timestamp = datetime.utcnow()
+        self.timestamp = datetime.now(timezone.utc)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -159,7 +159,7 @@ class IntegrationMonitor:
             "min_uptime": 0.99,            # 99% uptime
             "max_sync_delay_minutes": 30,  # 30 minutes max delay
         }
-        self._initialized_at = datetime.utcnow()
+        self._initialized_at = datetime.now(timezone.utc)
         logger.info("[IntegrationMonitor] Initialized")
 
     # ── Metrics Recording ─────────────────────
@@ -167,7 +167,7 @@ class IntegrationMonitor:
     def record_sync(self, integration_id: str, connector_id: str,
                     success: bool, records: int, duration_ms: float):
         """Record a sync operation result."""
-        ts = datetime.utcnow()
+        ts = datetime.now(timezone.utc)
         labels = {"connector_id": connector_id, "integration_id": integration_id}
 
         self._metrics[integration_id].append(
@@ -244,7 +244,7 @@ class IntegrationMonitor:
         try:
             healthy = await connector.test_connection()
             duration_ms = (time.monotonic() - start) * 1000
-            self._health_checks[integration_id] = (healthy, datetime.utcnow())
+            self._health_checks[integration_id] = (healthy, datetime.now(timezone.utc))
             self.record_api_call(
                 connector.manifest.connector_id,
                 "/health_check",
@@ -253,7 +253,7 @@ class IntegrationMonitor:
             )
             return healthy
         except Exception as e:
-            self._health_checks[integration_id] = (False, datetime.utcnow())
+            self._health_checks[integration_id] = (False, datetime.now(timezone.utc))
             self._fire_alert(
                 severity=AlertSeverity.ERROR,
                 title=f"Health Check Failed: {integration_id}",
@@ -278,7 +278,7 @@ class IntegrationMonitor:
     def _fire_alert(self, severity: AlertSeverity, title: str, message: str,
                     connector_id: str = None, integration_id: str = None):
         """Fire an alert."""
-        alert_id = f"alert_{datetime.utcnow().timestamp():.6f}"
+        alert_id = f"alert_{datetime.now(timezone.utc).timestamp():.6f}"
         alert = Alert(alert_id, severity, title, message, connector_id, integration_id)
         self._alerts[alert_id] = alert
         self._active_alerts.append(alert_id)
@@ -408,7 +408,7 @@ class IntegrationMonitor:
             "critical_alerts": sum(1 for a in active_alerts if a.severity == AlertSeverity.CRITICAL),
             "error_alerts": sum(1 for a in active_alerts if a.severity == AlertSeverity.ERROR),
             "warning_alerts": sum(1 for a in active_alerts if a.severity == AlertSeverity.WARNING),
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
         }
 
     def get_global_stats(self) -> Dict[str, Any]:

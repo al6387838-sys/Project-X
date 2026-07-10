@@ -5,7 +5,7 @@ PROJECT-X | Phase 3 | Sprint 023
 """
 
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from cloud_sync.core.models import SyncEntity, SyncStatus
 from cloud_sync.core.conflict_resolver import ResolutionStrategy
 from cloud_sync.core.sync_manager import SyncManager
@@ -51,7 +51,7 @@ def test_e2ee_encryption():
 def test_conflict_resolution_lww():
     resolver = ConflictResolver(strategy=ResolutionStrategy.LAST_WRITE_WINS)
     
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     older = now - timedelta(minutes=10)
     
     local = SyncEntity("1", "type", 1, {"v": "local"}, last_modified=now)
