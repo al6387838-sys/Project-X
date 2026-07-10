@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifeOS — Memory Center | Design System v3.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @import url('../design_system/variables.css');
+    @import url('../design_system/components.css');
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="lifeos-sidebar">
+  <div class="lifeos-sidebar-header">
+    <div class="lifeos-sidebar-logo">
+      <span style="font-size:22px">&#9670;</span>
+      <span>LifeOS</span>
+    </div>
+  </div>
+  <nav class="lifeos-sidebar-nav">
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Principal</div>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9632;</span> Dashboard</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#127919;</span> Missões</a>
+    </div>
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Inteligência</div>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#128172;</span> Companion</a>
+      <a class="lifeos-sidebar-item active"><span class="lifeos-sidebar-item-icon">&#129504;</span> Memory Center<span class="lifeos-sidebar-item-badge">22</span></a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#128200;</span> Analytics</a>
+    </div>
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Sistema</div>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9881;</span> Configurações</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9733;</span> Design System</a>
+    </div>
+  </nav>
+</aside>
+
+<div style="margin-left:260px;min-height:100vh;background:var(--bg-base)">
+
+  <!-- TOP BAR -->
+  <header class="lifeos-topbar">
+    <div class="lifeos-topbar-breadcrumb">
+      <a href="#">Inteligência</a>
+      <span>&#8250;</span>
+      <span>Memory Center</span>
+    </div>
+    <div class="lifeos-topbar-actions">
+      <span class="lifeos-badge lifeos-badge-success">&#128737; Soberana</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="lifeos-avatar lifeos-avatar-md" style="background:var(--gradient-primary)">US</div>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding:32px">
+
+    <!-- PAGE HEADER -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px">
+      <div>
+        <h1 class="lifeos-heading-2">Memory Center</h1>
+        <p class="lifeos-body-sm" style="margin-top:4px">22 memórias ativas &bull; 230 relações &bull; Força média: 96.6%</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="lifeos-btn lifeos-btn-secondary lifeos-btn-sm">&#9881; Manutenção</button>
+        <button class="lifeos-btn lifeos-btn-primary lifeos-btn-sm">+ Nova Memória</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:32px">
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#128161;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">15</div>
+        <div class="lifeos-caption">Long-Term</div>
+      </div>
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#127917;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">0</div>
+        <div class="lifeos-caption">Short-Term</div>
+      </div>
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#128172;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">2</div>
+        <div class="lifeos-caption">Working</div>
+      </div>
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#127760;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">0</div>
+        <div class="lifeos-caption">Context</div>
+      </div>
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#128218;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">2</div>
+        <div class="lifeos-caption">Semantic</div>
+      </div>
+      <div class="lifeos-card lifeos-card-sm lifeos-card-interactive" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:4px">&#127916;</div>
+        <div class="lifeos-stat-value" style="font-size:var(--text-2xl)">3</div>
+        <div class="lifeos-caption">Episodic</div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="lifeos-input-group" style="max-width:600px;margin-bottom:24px">
+      <span class="input-icon">&#128269;</span>
+      <input class="lifeos-input" type="text" placeholder="Buscar memórias... (ex: Ana, projeto, exercício)" style="padding-left:36px" />
+    </div>
+
+    <!-- FILTERS -->
+    <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+      <button class="lifeos-btn lifeos-btn-secondary lifeos-btn-sm lifeos-btn-active-filter" style="background:var(--gradient-primary-soft);border-color:rgba(99,102,241,0.3);color:var(--color-primary-400)">Todas</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Preferências</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Objetivos</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Hábitos</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Pessoas</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Projetos</button>
+      <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-sm">Eventos</button>
+    </div>
+
+    <!-- MEMORY CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:32px">
+      <div class="lifeos-card lifeos-card-md lifeos-card-interactive">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#128161;</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-body" style="font-weight:600">Projeto: PROJECT-X</span>
+              <span class="lifeos-badge lifeos-badge-primary">Long-Term</span>
+            </div>
+            <p class="lifeos-body-sm" style="margin-bottom:8px">Plataforma LifeOS com Companion de IA soberana. Status: em desenvolvimento ativo.</p>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="lifeos-progress-bar" style="flex:1"><div class="lifeos-progress-fill" style="width:98%"></div></div>
+              <span class="lifeos-body-xs">98%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lifeos-card lifeos-card-md lifeos-card-interactive">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#128101;</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-body" style="font-weight:600">&#128274; Pessoa: Ana</span>
+              <span class="lifeos-badge lifeos-badge-success">Protegida</span>
+            </div>
+            <p class="lifeos-body-sm" style="margin-bottom:8px">Esposa. Aniversário em 15/08. Adora viagens. Pessoa mais importante.</p>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="lifeos-progress-bar" style="flex:1"><div class="lifeos-progress-fill" style="width:100%"></div></div>
+              <span class="lifeos-body-xs">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lifeos-card lifeos-card-md lifeos-card-interactive">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#128218;</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-body" style="font-weight:600">Conceito: Sovereign Memory</span>
+              <span class="lifeos-badge lifeos-badge-info">Semantic</span>
+            </div>
+            <p class="lifeos-body-sm" style="margin-bottom:8px">Sistema de memória com consentimento e controle total do usuário.</p>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="lifeos-progress-bar" style="flex:1"><div class="lifeos-progress-fill" style="width:91%"></div></div>
+              <span class="lifeos-body-xs">91%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lifeos-card lifeos-card-md lifeos-card-interactive">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#128170;</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-body" style="font-weight:600">Hábito: Exercício físico</span>
+              <span class="lifeos-badge lifeos-badge-primary">Long-Term</span>
+            </div>
+            <p class="lifeos-body-sm" style="margin-bottom:8px">Exercício físico. Frequência: 4x por semana. Consolidado.</p>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="lifeos-progress-bar" style="flex:1"><div class="lifeos-progress-fill" style="width:85%"></div></div>
+              <span class="lifeos-body-xs">85%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="lifeos-card lifeos-card-lg">
+      <div class="lifeos-card-header">
+        <div class="lifeos-card-title">Memory Timeline</div>
+        <div style="display:flex;gap:4px">
+          <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-xs">Dia</button>
+          <button class="lifeos-btn lifeos-btn-secondary lifeos-btn-xs" style="background:var(--surface-100)">Semana</button>
+          <button class="lifeos-btn lifeos-btn-ghost lifeos-btn-xs">Mês</button>
+        </div>
+      </div>
+      <div class="lifeos-timeline">
+        <div class="lifeos-timeline-item">
+          <div class="lifeos-timeline-dot"></div>
+          <div class="lifeos-timeline-date">10 Jul 2026 — 17:51</div>
+          <div class="lifeos-timeline-content">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-badge lifeos-badge-info">Semantic</span>
+              <span class="lifeos-body" style="font-weight:500">Conceito: Sovereign Memory</span>
+            </div>
+            <div class="lifeos-timeline-description">Memória semântica de alta confiança. Tag: soberania, memória.</div>
+          </div>
+        </div>
+        <div class="lifeos-timeline-item">
+          <div class="lifeos-timeline-dot"></div>
+          <div class="lifeos-timeline-date">10 Jul 2026 — 17:51</div>
+          <div class="lifeos-timeline-content">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-badge lifeos-badge-info">Semantic</span>
+              <span class="lifeos-body" style="font-weight:500">Conceito: LifeOS</span>
+            </div>
+            <div class="lifeos-timeline-description">LifeOS: Sistema operacional de vida pessoal com IA soberana.</div>
+          </div>
+        </div>
+        <div class="lifeos-timeline-item">
+          <div class="lifeos-timeline-dot"></div>
+          <div class="lifeos-timeline-date">10 Jul 2026 — 17:51</div>
+          <div class="lifeos-timeline-content">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-badge" style="background:rgba(236,72,153,0.1);color:#EC4899">Episodic</span>
+              <span class="lifeos-body" style="font-weight:500">Decisão: Python para o backend</span>
+            </div>
+            <div class="lifeos-timeline-description">Após análise técnica com Carlos, decidimos usar Python + FastAPI.</div>
+          </div>
+        </div>
+        <div class="lifeos-timeline-item">
+          <div class="lifeos-timeline-dot"></div>
+          <div class="lifeos-timeline-date">10 Jul 2026 — 17:51</div>
+          <div class="lifeos-timeline-content">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span class="lifeos-badge" style="background:rgba(236,72,153,0.1);color:#EC4899">Episodic</span>
+              <span class="lifeos-body" style="font-weight:500">Primeira demo do Companion</span>
+            </div>
+            <div class="lifeos-timeline-description">O usuário ficou impressionado com a resposta contextual do Companion.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

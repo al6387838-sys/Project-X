@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifeOS — Companion | Design System v3.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @import url('../design_system/variables.css');
+    @import url('../design_system/components.css');
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="lifeos-sidebar">
+  <div class="lifeos-sidebar-header">
+    <div class="lifeos-sidebar-logo">
+      <span style="font-size:22px">&#9670;</span>
+      <span>LifeOS</span>
+    </div>
+  </div>
+  <nav class="lifeos-sidebar-nav">
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Principal</div>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9632;</span> Dashboard</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#127919;</span> Missões</a>
+    </div>
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Inteligência</div>
+      <a class="lifeos-sidebar-item active"><span class="lifeos-sidebar-item-icon">&#128172;</span> Companion</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#129504;</span> Memory Center</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#128200;</span> Analytics</a>
+    </div>
+    <div class="lifeos-sidebar-section">
+      <div class="lifeos-sidebar-section-title">Sistema</div>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9881;</span> Configurações</a>
+      <a class="lifeos-sidebar-item"><span class="lifeos-sidebar-item-icon">&#9733;</span> Design System</a>
+    </div>
+  </nav>
+</aside>
+
+<div style="margin-left:260px;min-height:100vh;background:var(--bg-base)">
+
+  <!-- TOP BAR -->
+  <header class="lifeos-topbar">
+    <div class="lifeos-topbar-title">Companion</div>
+    <div class="lifeos-topbar-actions">
+      <span class="lifeos-badge lifeos-badge-success">&#128737; Online</span>
+      <button class="lifeos-btn lifeos-btn-icon" title="Histórico">&#128218;</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="lifeos-avatar lifeos-avatar-md" style="background:var(--gradient-primary)">US</div>
+      </div>
+    </div>
+  </header>
+
+  <div style="display:flex;height:calc(100vh - var(--topbar-height))">
+
+    <!-- CHAT AREA -->
+    <div style="flex:1;display:flex;flex-direction:column">
+      <!-- Messages -->
+      <div style="flex:1;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:20px">
+
+        <!-- User Message -->
+        <div style="display:flex;justify-content:flex-end;gap:12px;align-items:flex-start">
+          <div style="max-width:60%">
+            <div style="background:var(--gradient-primary);color:#FFF;border-radius:var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);padding:14px 18px">
+              <span class="lifeos-body" style="color:#FFF">O que estou fazendo? Me lembre dos meus projetos principais.</span>
+            </div>
+            <div class="lifeos-body-xs" style="text-align:right;margin-top:4px">17:48</div>
+          </div>
+          <div class="lifeos-avatar lifeos-avatar-sm" style="background:var(--gradient-primary)">US</div>
+        </div>
+
+        <!-- Companion Message -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gradient-aurora);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#128172;</div>
+          <div style="max-width:70%">
+            <div style="background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);padding:16px 18px">
+              <p class="lifeos-body-sm" style="margin-bottom:12px">Você está desenvolvendo o <strong>PROJECT-X</strong> &mdash; uma plataforma LifeOS com Companion de IA soberana. O projeto está na Sprint 029, atualmente implementando o Design System v3.0.0.</p>
+
+              <!-- Memory Source Cards -->
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+                  <div style="width:20px;height:20px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">&#128161;</div>
+                  <div style="flex:1">
+                    <div class="lifeos-body-xs" style="font-weight:600">Memória: Projeto: PROJECT-X</div>
+                    <div class="lifeos-body-xs">Tipo: Long-Term &bull; Acessada 25x &bull; Força: 98%</div>
+                  </div>
+                  <span class="lifeos-badge lifeos-badge-primary" style="font-size:10px">Long-Term</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+                  <div style="width:20px;height:20px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">&#128203;</div>
+                  <div style="flex:1">
+                    <div class="lifeos-body-xs" style="font-weight:600">Memória: Sprint 029 em andamento</div>
+                    <div class="lifeos-body-xs">Tipo: Context &bull; TTL: 7d &bull; Força: 72%</div>
+                  </div>
+                  <span class="lifeos-badge" style="background:rgba(59,130,246,0.1);color:var(--color-info-500);font-size:10px">Context</span>
+                </div>
+              </div>
+
+              <p class="lifeos-body-xs" style="margin-top:12px;color:var(--text-tertiary);font-style:italic">&#128172; Utilizei a memória de Long-Term (25 acessos) como entidade central do projeto e a memória Contextual atual para indicar a sprint em progresso.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Message 2 -->
+        <div style="display:flex;justify-content:flex-end;gap:12px;align-items:flex-start">
+          <div style="max-width:60%">
+            <div style="background:var(--gradient-primary);color:#FFF;border-radius:var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);padding:14px 18px">
+              <span class="lifeos-body" style="color:#FFF">Quem são as pessoas importantes na minha vida?</span>
+            </div>
+            <div class="lifeos-body-xs" style="text-align:right;margin-top:4px">17:49</div>
+          </div>
+          <div class="lifeos-avatar lifeos-avatar-sm" style="background:var(--gradient-primary)">US</div>
+        </div>
+
+        <!-- Companion Message 2 -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gradient-aurora);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#128172;</div>
+          <div style="max-width:70%">
+            <div style="background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);padding:16px 18px">
+              <p class="lifeos-body-sm" style="margin-bottom:12px">A pessoa mais importante registrada é a <strong>Ana</strong>, sua esposa. Ela possui memória <span class="lifeos-badge lifeos-badge-success" style="font-size:10px">Protegida</span>, ou seja, está imune a aging e não pode ser esquecida pelo sistema.</p>
+
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+                <div style="width:20px;height:20px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:10px;color:#FFF;flex-shrink:0">A</div>
+                <div style="flex:1">
+                  <div class="lifeos-body-xs" style="font-weight:600">Memória: Pessoa: Ana (esposa)</div>
+                  <div class="lifeos-body-xs">Tipo: Long-Term &bull; &#128274; Protegida &bull; Acessada 30x &bull; Força: 100%</div>
+                </div>
+              </div>
+
+              <p class="lifeos-body-xs" style="margin-top:12px;color:var(--text-tertiary);font-style:italic">&#128172; Utilizei a memória Long-Term protegida. Ana é a entidade com mais acessos (30x) e força máxima (100%). A proteção garante que esta memória nunca expirará.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Message 3 -->
+        <div style="display:flex;justify-content:flex-end;gap:12px;align-items:flex-start">
+          <div style="max-width:60%">
+            <div style="background:var(--gradient-primary);color:#FFF;border-radius:var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);padding:14px 18px">
+              <span class="lifeos-body" style="color:#FFF">Quais são meus objetivos e hábitos?</span>
+            </div>
+            <div class="lifeos-body-xs" style="text-align:right;margin-top:4px">17:50</div>
+          </div>
+          <div class="lifeos-avatar lifeos-avatar-sm" style="background:var(--gradient-primary)">US</div>
+        </div>
+
+        <!-- Companion Message 3 -->
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gradient-aurora);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">&#128172;</div>
+          <div style="max-width:70%">
+            <div style="background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);padding:16px 18px">
+              <p class="lifeos-body-sm" style="margin-bottom:12px">Aqui estão seus objetivos e hábitos consolidados:</p>
+
+              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+                  <div style="width:24px;height:24px;border-radius:var(--radius-sm);background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:12px;color:#FFF;flex-shrink:0">&#127919;</div>
+                  <div style="flex:1">
+                    <div class="lifeos-body-xs" style="font-weight:600">Objetivo: Lançar PROJECT-X em produção</div>
+                    <div class="lifeos-body-xs">Long-Term &bull; Prazo: 30 Set 2026</div>
+                  </div>
+                  <div class="lifeos-progress-bar" style="width:60px"><div class="lifeos-progress-fill" style="width:65%"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+                  <div style="width:24px;height:24px;border-radius:var(--radius-sm);background:var(--gradient-success);display:flex;align-items:center;justify-content:center;font-size:12px;color:#FFF;flex-shrink:0">&#128170;</div>
+                  <div style="flex:1">
+                    <div class="lifeos-body-xs" style="font-weight:600">Hábito: Exercício físico</div>
+                    <div class="lifeos-body-xs">Long-Term &bull; 4x/semana &bull; Consolidado</div>
+                  </div>
+                  <div class="lifeos-progress-bar" style="width:60px"><div class="lifeos-progress-fill" style="width:85%"></div></div>
+                </div>
+              </div>
+
+              <p class="lifeos-body-xs" style="color:var(--text-tertiary);font-style:italic">&#128172; Utilizei 3 memórias Long-Term consolidadas: Objetivo (força 92%), Hábito (força 85%, consolidado por repetição) e Projeto. Todas são de alta prioridade no seu perfil.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- INPUT -->
+      <div style="padding:20px 32px;border-top:1px solid var(--border-default)">
+        <div class="lifeos-input-group">
+          <span class="input-icon">&#128269;</span>
+          <input class="lifeos-input" type="text" placeholder="Converse com o Companion..." style="padding-left:36px;padding-right:120px" />
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="lifeos-body-xs" style="color:var(--text-tertiary)">&#128737; Memória Soberana ativa &bull; Consentimento requerido</div>
+          <button class="lifeos-btn lifeos-btn-primary lifeos-btn-sm">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div style="width:280px;border-left:1px solid var(--border-default);background:var(--bg-card);padding:24px;overflow-y:auto">
+      <div class="lifeos-caption" style="margin-bottom:16px">Contexto Ativo</div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="padding:12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div class="lifeos-body-xs" style="font-weight:600;margin-bottom:4px">Memória Ativa</div>
+          <div class="lifeos-body-xs">Projeto: PROJECT-X</div>
+        </div>
+
+        <div style="padding:12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div class="lifeos-body-xs" style="font-weight:600;margin-bottom:4px">Pessoas Relevantes</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <div class="lifeos-avatar lifeos-avatar-sm" style="background:var(--gradient-primary);font-size:10px">A</div>
+            <span class="lifeos-body-xs">Ana (esposa)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <div class="lifeos-avatar lifeos-avatar-sm" style="background:var(--gradient-accent);font-size:10px">C</div>
+            <span class="lifeos-body-xs">Carlos (co-fundador)</span>
+          </div>
+        </div>
+
+        <div style="padding:12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div class="lifeos-body-xs" style="font-weight:600;margin-bottom:4px">Hábitos</div>
+          <div class="lifeos-body-xs">Exercício 4x/semana</div>
+        </div>
+
+        <div style="padding:12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div class="lifeos-body-xs" style="font-weight:600;margin-bottom:4px">Objetivo</div>
+          <div class="lifeos-body-xs">Lançar PROJECT-X em 30/09/2026</div>
+        </div>
+
+        <div style="padding:12px;background:var(--surface-100);border-radius:var(--radius-sm);border:1px solid var(--border-subtle)">
+          <div class="lifeos-body-xs" style="font-weight:600;margin-bottom:4px">Estado</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--color-success-500)"></div>
+            <span class="lifeos-body-xs">Memória consolidada</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--color-info-500)"></div>
+            <span class="lifeos-body-xs">Grafo atualizado (230 relações)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
