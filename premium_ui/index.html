@@ -2702,7 +2702,7 @@
         <!-- Hero -->
         <div class="dashboard-hero animate-fade-in">
           <div class="dashboard-hero-left">
-            <h2 class="dashboard-greeting" id="dashboard-greeting">Bom dia <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3v0a3 3 0 0 0-3 3v4M14 9c0-1 .5-2 1.5-2h0c1 0 1.5 1 1.5 2M14 9v6m-4 0v6M10 9h4"/></svg></h2>
+            <h2 class="dashboard-greeting" id="dashboard-greeting">Bom dia</h2>
             <p class="dashboard-date" id="dashboard-date"></p>
             <div class="dashboard-summary">
               <div class="dashboard-summary-label">
@@ -3267,7 +3267,7 @@ const LifeOS = {
     let greeting = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
     const emoji = h < 12 ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : h < 18 ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 17a5.5 5.5 0 0 0-10.5-1h-1A3.5 3.5 0 0 0 2 12c0-1.42.519-2.742 1.464-3.822m21.866-1.38A9.5 9.5 0 0 0 8 2.5M8 13v5m4-9v.01M4 20h16"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
     const greetEl = document.getElementById('dashboard-greeting');
-    if (greetEl) greetEl.textContent = `${greeting}, ${this.state.user.name.split(' ')[0]} ${emoji}`;
+    if (greetEl) greetEl.innerHTML = `${greeting}, ${this.state.user.name.split(' ')[0]} ${emoji}`;
 
     const dateEl = document.getElementById('dashboard-date');
     if (dateEl) {
@@ -3954,7 +3954,7 @@ function initBriefing() {
 
   const periodLabel = document.getElementById('briefing-period-label');
   const headline = document.getElementById('briefing-headline');
-  if (periodLabel) periodLabel.textContent = isMorning ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Morning Briefing' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Evening Briefing';
+  if (periodLabel) periodLabel.innerHTML = isMorning ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Morning Briefing' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Evening Briefing';
   if (headline) headline.textContent = isMorning ? `Bom dia! Aqui está seu plano para hoje.` : `Boa noite! Aqui está seu resumo do dia.`;
 
   const sections = isMorning ? [
@@ -3964,7 +3964,7 @@ function initBriefing() {
     { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Insights do Companion', items: ['Produtividade 23% acima da média', 'Área de Saúde precisa de atenção', 'Sequência de 7 dias — recorde!', 'Score em alta: 87 pontos'], color: '#8B5CF6' },
   ] : [
     { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluído Hoje', items: ['Relatório Q3 finalizado', 'Daily Standup realizado', 'Meditação matinal', 'Leitura 20 min'], color: '#10B981' },
-    { title: '⏳ Pendente para Amanhã', items: ['Exercício físico', 'Revisão missão TypeScript', 'Responder e-mails pendentes'], color: '#F59E0B' },
+    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pendente para Amanhã', items: ['Exercício físico', 'Revisão missão TypeScript', 'Responder e-mails pendentes'], color: '#F59E0B' },
     { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> Métricas do Dia', items: ['Life Score: +1.2 pontos', 'Hábitos: 3/5 concluídos', 'Foco: 3h 20min', 'Sequência mantida: 7 dias'], color: '#6366F1' },
     { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Reflexão', items: ['O que funcionou bem hoje?', 'O que pode melhorar amanhã?', 'Gratidão: 3 coisas positivas', 'Planejamento de amanhã'], color: '#8B5CF6' },
   ];
