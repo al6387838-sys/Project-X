@@ -298,13 +298,18 @@ const BetaManager = (() => {
    */
   function getWaitlist() {
     return betaData.waitlist.sort((a, b) => {
-      // Ordenar por tier (VIP primeiro) e depois por data
       const tierOrder = { 'vip': 0, 'early-access': 1, 'standard': 2 };
       if (tierOrder[a.tier] !== tierOrder[b.tier]) {
         return tierOrder[a.tier] - tierOrder[b.tier];
       }
       return new Date(a.joinedAt) - new Date(b.joinedAt);
     });
+  }
+
+  function getInviteCodes() {
+    return betaData.inviteCodes
+      .map(invite => ({ ...invite }))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
   /**
@@ -365,6 +370,7 @@ const BetaManager = (() => {
     getStats,
     getBetaUsers,
     getWaitlist,
+    getInviteCodes,
     promoteFromWaitlist
   };
 })();

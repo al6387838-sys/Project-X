@@ -5,3 +5,6 @@ dist/
 deploy-*.zip
 netlify_tools_checkpoint.txt
 deploy_checkpoint_findings.md
+qa-artifacts/
+qa_visual_notes.md
+deno.lock

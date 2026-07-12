@@ -383,40 +383,40 @@
   <div class="container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <div class="logo">🧠 LifeOS Admin</div>
+      <div class="logo" aria-label="LifeOS Admin Center">LifeOS <span class="badge info">Admin</span></div>
 
       <div class="nav-section">
         <div class="nav-section-title">Dashboard</div>
-        <a class="nav-link active" onclick="switchSection('overview')">📊 Overview</a>
-        <a class="nav-link" onclick="switchSection('users')">👥 Usuários</a>
-        <a class="nav-link" onclick="switchSection('analytics')">📈 Analytics</a>
+        <a class="nav-link active" role="button" tabindex="0" aria-label="Abrir visão geral" onclick="switchSection('overview', this)">Visão geral</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir usuários" onclick="switchSection('users', this)">Usuários</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir analytics" onclick="switchSection('analytics', this)">Analytics</a>
       </div>
 
       <div class="nav-section">
         <div class="nav-section-title">Beta Program</div>
-        <a class="nav-link" onclick="switchSection('waitlist')">⏳ Lista de Espera</a>
-        <a class="nav-link" onclick="switchSection('invites')">🎟️ Convites</a>
-        <a class="nav-link" onclick="switchSection('beta-users')">🧪 Beta Testers</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir lista de espera" onclick="switchSection('waitlist', this)">Lista de espera</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir convites" onclick="switchSection('invites', this)">Convites</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir beta testers" onclick="switchSection('beta-users', this)">Beta testers</a>
       </div>
 
       <div class="nav-section">
         <div class="nav-section-title">Feedback</div>
-        <a class="nav-link" onclick="switchSection('bugs')">🐛 Bugs</a>
-        <a class="nav-link" onclick="switchSection('suggestions')">💡 Sugestões</a>
-        <a class="nav-link" onclick="switchSection('ratings')">⭐ Avaliações</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir bugs" onclick="switchSection('bugs', this)">Bugs</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir sugestões" onclick="switchSection('suggestions', this)">Sugestões</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir avaliações" onclick="switchSection('ratings', this)">Avaliações</a>
       </div>
 
       <div class="nav-section">
         <div class="nav-section-title">Técnico</div>
-        <a class="nav-link" onclick="switchSection('crashes')">💥 Crashes</a>
-        <a class="nav-link" onclick="switchSection('performance')">⚡ Performance</a>
-        <a class="nav-link" onclick="switchSection('heatmaps')">🔥 Heatmaps</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir crashes" onclick="switchSection('crashes', this)">Crashes</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir performance" onclick="switchSection('performance', this)">Performance</a>
+        <a class="nav-link" role="button" tabindex="0" aria-label="Abrir heatmaps" onclick="switchSection('heatmaps', this)">Heatmaps</a>
       </div>
     </div>
 
     <!-- MAIN CONTENT -->
     <div class="content">
-      <div class="admin-session-bar"><button class="admin-logout" type="button" onclick="adminLogout()">Encerrar sessão</button></div>
+      <div class="admin-session-bar"><button class="admin-logout" type="button" aria-label="Encerrar sessão administrativa" onclick="adminLogout()">Encerrar sessão</button></div>
       <!-- OVERVIEW -->
       <div id="overview" class="section active">
         <div class="header">
@@ -602,6 +602,7 @@
         <div class="header">
           <h1>🎟️ Códigos de Convite</h1>
           <p>Gerenciar códigos de convite gerados</p>
+          <button type="button" aria-label="Gerar novo convite" onclick="createInvite()">Gerar convite</button>
         </div>
 
         <div class="table-container">
@@ -810,17 +811,13 @@
     }
 
     // Função para trocar de seção
-    function switchSection(sectionId) {
-      // Desativar todas as seções
+    function switchSection(sectionId, source) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-
-      // Ativar seção selecionada
-      document.getElementById(sectionId).classList.add('active');
-      event.target.classList.add('active');
-
-      // Carregar dados da seção
+      document.getElementById(sectionId)?.classList.add('active');
+      source?.classList.add('active');
       loadSectionData(sectionId);
+      history.replaceState(null, '', `#${sectionId}`);
     }
 
     // Função para carregar dados de cada seção
@@ -905,7 +902,7 @@
           <td>Sim</td>
           <td>${u.sessionCount || 0}</td>
           <td>${u.feedbackCount || 0}</td>
-          <td><button onclick="alert('Ações do usuário')">⋮</button></td>
+          <td><button type="button" aria-label="Gerenciar ${u.email}" onclick="manageUser(decodeURIComponent('${encodeURIComponent(u.email)}'))">Gerenciar</button></td>
         </tr>
       `).join('');
 
@@ -941,7 +938,7 @@
           <td><span class="badge info">${w.tier}</span></td>
           <td>${new Date(w.joinedAt).toLocaleDateString('pt-BR')}</td>
           <td>#${i + 1}</td>
-          <td><button onclick="alert('Promover ${w.email}')">Promover</button></td>
+          <td><button type="button" aria-label="Promover ${w.email}" onclick="promoteWaitlist(decodeURIComponent('${encodeURIComponent(w.email)}'))">Promover</button></td>
         </tr>
       `).join('');
 
@@ -1061,25 +1058,57 @@
       document.getElementById('beta-testers-table').innerHTML = usersHtml || '<tr><td colspan="6" style="text-align: center;">Sem usuários</td></tr>';
     }
 
-    // Carregar dados de Convites
     function loadInvitesData() {
-      // Dados simulados
-      const invitesHtml = `
-        <tr>
-          <td>ABC123XYZ456</td>
-          <td>user@example.com</td>
-          <td><span class="badge info">standard</span></td>
-          <td>${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}</td>
-          <td><span class="badge success">Válido</span></td>
-        </tr>
-      `;
+      const invites = window.LifeOSBetaManager.getInviteCodes();
+      const now = new Date();
+      const invitesHtml = invites.map(invite => {
+        const expired = new Date(invite.expiresAt) < now;
+        const status = invite.used ? 'Utilizado' : expired ? 'Expirado' : 'Válido';
+        const badge = invite.used || expired ? 'warning' : 'success';
+        return `<tr>
+          <td><strong>${invite.code}</strong></td>
+          <td>${invite.email}</td>
+          <td><span class="badge info">${invite.tier}</span></td>
+          <td>${new Date(invite.expiresAt).toLocaleDateString('pt-BR')}</td>
+          <td><span class="badge ${badge}">${status}</span></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('invites-table').innerHTML = invitesHtml || '<tr><td colspan="5" style="text-align:center">Nenhum convite gerado</td></tr>';
+    }
 
-      document.getElementById('invites-table').innerHTML = invitesHtml;
+    function createInvite() {
+      const email = window.prompt('E-mail do usuário convidado');
+      if (!email || !/^\S+@\S+\.\S+$/.test(email.trim())) return;
+      const selectedTier = window.prompt('Tier: standard, early-access ou vip', 'standard') || 'standard';
+      const tier = ['standard', 'early-access', 'vip'].includes(selectedTier) ? selectedTier : 'standard';
+      const invite = window.LifeOSBetaManager.generateInviteCode(email.trim().toLowerCase(), tier);
+      loadInvitesData();
+      window.alert(`Convite ${invite.code} gerado com sucesso.`);
+    }
+
+    function promoteWaitlist(email) {
+      const result = window.LifeOSBetaManager.promoteFromWaitlist(email);
+      if (!result.success) return window.alert(result.message);
+      loadWaitlistData();
+      window.alert(`Convite ${result.inviteCode} gerado para ${email}.`);
+    }
+
+    function manageUser(email) {
+      const user = window.LifeOSBetaManager.getBetaUsers().find(item => item.email === email);
+      if (!user) return window.alert('Usuário não encontrado.');
+      window.alert(`${email}\nTier: ${user.tier}\nSessões: ${user.sessionCount || 0}\nFeedbacks: ${user.feedbackCount || 0}`);
     }
 
     // Inicializar dashboard
     window.addEventListener('load', () => {
-      loadOverviewData();
+      const initial = location.hash.slice(1);
+      const section = document.getElementById(initial);
+      const nav = [...document.querySelectorAll('.nav-link')].find(link => link.getAttribute('onclick')?.includes(`'${initial}'`));
+      if (section && nav) switchSection(initial, nav);
+      else loadOverviewData();
+      document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); link.click(); }
+      }));
     });
   </script>
   <script src="/black_diamond.js"></script>

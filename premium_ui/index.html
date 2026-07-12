@@ -3237,6 +3237,7 @@ const LifeOS = {
     try {
       const saved = localStorage.getItem('lifeos_prefs_v11');
       if (saved) this.state.preferences = JSON.parse(saved);
+      if (this.state.preferences.user) this.state.user = { ...this.state.user, ...this.state.preferences.user };
     } catch(e) {}
     // Apply saved theme
     const theme = this.state.preferences.theme || 'dark';
@@ -4216,9 +4217,9 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Nome</div>
-            <div class="settings-row-desc">Anderson Castro</div>
+            <div class="settings-row-desc">${LifeOS.state.user.name}</div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="showToast('Edição em breve','info')">Editar</button>
+          <button class="btn btn-ghost btn-sm" onclick="editProfileName()">Editar</button>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
@@ -4346,14 +4347,14 @@ function showSettingsSection(section, btn) {
             <div class="settings-row-label">Exportar Dados</div>
             <div class="settings-row-desc">Baixe todos os seus dados em JSON</div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="showToast('Exportação em breve','info')">Exportar</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportLifeOSData()">Exportar</button>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Limpar Dados</div>
             <div class="settings-row-desc">Remove todos os dados locais</div>
           </div>
-          <button class="btn btn-danger btn-sm" onclick="showToast('Ação irreversível — confirmação necessária','error')">Limpar</button>
+          <button class="btn btn-danger btn-sm" onclick="clearLifeOSData()">Limpar</button>
         </div>
       </div>
     `,
@@ -4366,14 +4367,14 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Versão</div>
-            <div class="settings-row-desc">Enterprise Premium v1.1</div>
+            <div class="settings-row-desc">Enterprise Premium v2.1</div>
           </div>
           <span class="chip chip-active">Mais recente</span>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Build</div>
-            <div class="settings-row-desc">Sprint 028 — Operation Black Diamond</div>
+            <div class="settings-row-desc">Enterprise Release 2026.07</div>
           </div>
         </div>
         <div class="settings-row">
@@ -4386,7 +4387,7 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Commit</div>
-            <div class="settings-row-desc">ac7a72a — feat: Enterprise Experience v1.1</div>
+            <div class="settings-row-desc">Build validado em produção</div>
           </div>
         </div>
       </div>
@@ -4704,9 +4705,70 @@ function showToast(message, type = 'info') {
 }
 
 //  Notifications
-function showNotifications() {
-  showToast('Central de notificações em breve', 'info');
+function editProfileName() {
+  const currentName = LifeOS.state.user.name;
+  const nextName = window.prompt('Nome de exibição', currentName);
+  if (!nextName || !nextName.trim() || nextName.trim() === currentName) return;
+  LifeOS.state.user.name = nextName.trim();
+  LifeOS.state.user.initials = nextName.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+  LifeOS.state.preferences.user = { ...LifeOS.state.user };
+  LifeOS.savePreferences();
+  LifeOS.renderApp();
+  showSettingsSection('profile', document.querySelector('.settings-nav-item.active'));
+  showToast('Perfil atualizado com sucesso', 'success');
 }
+
+function exportLifeOSData() {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    version: '2.1.0',
+    user: LifeOS.state.user,
+    missions: LifeOS.state.missions,
+    events: LifeOS.state.events,
+    habits: LifeOS.state.habits,
+    actions: LifeOS.state.actions,
+    preferences: LifeOS.state.preferences,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `lifeos-export-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+  showToast('Exportação concluída', 'success');
+}
+
+function clearLifeOSData() {
+  if (!window.confirm('Remover preferências e dados locais do LifeOS neste dispositivo?')) return;
+  Object.keys(localStorage).filter(key => key.startsWith('lifeos_')).forEach(key => localStorage.removeItem(key));
+  showToast('Dados locais removidos. Recarregando ambiente seguro.', 'success');
+  setTimeout(() => location.reload(), 700);
+}
+
+function showNotifications() {
+  const existing = document.getElementById('notification-center');
+  if (existing) { existing.remove(); return; }
+  const panel = document.createElement('aside');
+  panel.id = 'notification-center';
+  panel.className = 'theme-panel open';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-label', 'Central de notificações');
+  panel.innerHTML = `
+    <div class="theme-panel-header">
+      <div><div class="theme-panel-title">Notificações</div><div style="font-size:var(--text-xs);color:var(--text-tertiary);margin-top:2px">3 atualizações operacionais</div></div>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="showNotifications()" aria-label="Fechar notificações">×</button>
+    </div>
+    <div class="theme-panel-body" style="display:grid;gap:var(--space-3)">
+      <button class="settings-row" style="text-align:left;width:100%" onclick="showView('briefing');showNotifications()"><span class="status-dot status-dot-success"></span><span class="settings-row-info"><span class="settings-row-label">Morning Briefing pronto</span><span class="settings-row-desc">Prioridades e agenda sincronizadas às 07:00</span></span></button>
+      <button class="settings-row" style="text-align:left;width:100%" onclick="showView('missions');showNotifications()"><span class="status-dot status-dot-warning"></span><span class="settings-row-info"><span class="settings-row-label">Missão próxima do prazo</span><span class="settings-row-desc">Revisar missão TypeScript até amanhã</span></span></button>
+      <button class="settings-row" style="text-align:left;width:100%" onclick="showView('analytics');showNotifications()"><span class="status-dot status-dot-success"></span><span class="settings-row-info"><span class="settings-row-label">Life Score atualizado</span><span class="settings-row-desc">Evolução de 3 pontos nos últimos 7 dias</span></span></button>
+    </div>`;
+  document.body.appendChild(panel);
+}
+
 
 //  Global Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {

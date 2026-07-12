@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LifeOS Enterprise — Command Center</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%236366f1'/%3E%3Cpath d='M18 16h8v24h20v8H18z' fill='white'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
@@ -391,7 +392,8 @@ body {
 .alert-action { font-size:12px; font-weight:600; color:var(--brand-400); cursor:pointer; white-space:nowrap; }
 .alert-close { font-size:14px; color:var(--text-tertiary); cursor:pointer; margin-left:8px; }
 </style>
-<link rel="stylesheet" href="/premium_ui/black_diamond.css" />
+  <link rel="stylesheet" href="/black_diamond.css" />
+  <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
 </head>
 <body>
 <div class="shell">
@@ -411,32 +413,30 @@ body {
       </div>
     </div>
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label="Módulos Enterprise">
       <div class="nav-group">
         <div class="nav-group-label">Principal</div>
-        <a class="nav-link active"><span class="nav-ico">◈</span>Command Center<span class="nav-dot"></span></a>
-        <a class="nav-link"><span class="nav-ico">◎</span>Analytics</a>
-        <a class="nav-link"><span class="nav-ico">◇</span>Inteligência<span class="nav-count">7</span></a>
-        <a class="nav-link"><span class="nav-ico">◉</span>Decisões<span class="nav-count">3</span></a>
+        <a class="nav-link active" href="#command" data-view="command" data-title="Command Center"><span class="nav-ico">◈</span>Command Center<span class="nav-dot"></span></a>
+        <a class="nav-link" href="#analytics" data-view="analytics" data-title="Analytics executivo"><span class="nav-ico">◎</span>Analytics</a>
+        <a class="nav-link" href="#intelligence" data-view="intelligence" data-title="Business Intelligence"><span class="nav-ico">◇</span>Inteligência<span class="nav-count" data-intelligence-count>0</span></a>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">Negócio</div>
-        <a class="nav-link"><span class="nav-ico">⬡</span>Pipeline</a>
-        <a class="nav-link"><span class="nav-ico">⬢</span>Clientes</a>
-        <a class="nav-link"><span class="nav-ico">◬</span>Receita</a>
-        <a class="nav-link"><span class="nav-ico">◭</span>Produto</a>
+        <div class="nav-group-label">Organização</div>
+        <a class="nav-link" href="#organization" data-view="organization" data-title="Organização"><span class="nav-ico">⬡</span>Organização</a>
+        <a class="nav-link" href="#members" data-view="members" data-title="Membros e convites"><span class="nav-ico">◮</span>Membros</a>
+        <a class="nav-link" href="#roles" data-view="roles" data-title="Perfis e permissões"><span class="nav-ico">◱</span>Perfis e permissões</a>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">Equipe</div>
-        <a class="nav-link"><span class="nav-ico">◮</span>Membros</a>
-        <a class="nav-link"><span class="nav-ico">◱</span>Projetos</a>
-        <a class="nav-link"><span class="nav-ico">◲</span>Relatórios</a>
+        <div class="nav-group-label">Gestão</div>
+        <a class="nav-link" href="#billing" data-view="billing" data-title="Billing e planos"><span class="nav-ico">◬</span>Billing e planos</a>
+        <a class="nav-link" href="#compliance" data-view="compliance" data-title="Compliance e auditoria"><span class="nav-ico">◲</span>Compliance</a>
+        <a class="nav-link" href="#integrations" data-view="integrations" data-title="Integrações"><span class="nav-ico">◳</span>Integrações</a>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">Sistema</div>
-        <a class="nav-link"><span class="nav-ico">◳</span>Integrações</a>
-        <a class="nav-link"><span class="nav-ico">◴</span>Segurança</a>
-        <a class="nav-link"><span class="nav-ico">◵</span>Configurações</a>
+        <a class="nav-link" href="#security" data-view="security" data-title="Segurança"><span class="nav-ico">◴</span>Segurança</a>
+        <a class="nav-link" href="#admin" data-view="admin" data-title="Admin Center"><span class="nav-ico">◵</span>Admin Center</a>
+        <a class="nav-link" href="/dashboard"><span class="nav-ico">←</span>Workspace pessoal</a>
       </div>
     </nav>
 
@@ -453,22 +453,23 @@ body {
   </aside>
 
   <!-- MAIN -->
-  <main class="main">
+  <main class="main enterprise-page">
     <div class="topbar">
       <div>
         <span class="topbar-title">Command Center</span>
         <span class="topbar-subtitle">· 10 Jul 2026, 09:15</span>
       </div>
       <div class="topbar-spacer"></div>
-      <button class="topbar-btn">⌕ Buscar</button>
-      <button class="topbar-btn">↓ Exportar</button>
+      <div class="enterprise-search"><input class="enterprise-input" type="search" aria-label="Buscar membros" placeholder="Buscar membros" data-enterprise-search></div>
+      <button class="topbar-btn" type="button" data-enterprise-action="export">Exportar</button>
       <div class="topbar-divider"></div>
-      <button class="topbar-icon-btn notification-badge" type="button" aria-label="Abrir notificações" title="Notificações">🔔</button>
-      <button class="topbar-icon-btn" type="button" aria-label="Abrir configurações" title="Configurações">⚙</button>
-      <button class="topbar-btn primary">+ Nova Decisão</button>
+      <button class="topbar-icon-btn notification-badge" type="button" aria-label="Abrir inteligência" title="Inteligência" data-enterprise-action="notifications">◇</button>
+      <button class="topbar-icon-btn" type="button" aria-label="Abrir configurações" title="Configurações" data-enterprise-action="settings">◎</button>
+      <button class="topbar-btn primary" type="button" data-enterprise-action="new-decision">Nova decisão</button>
     </div>
 
     <div class="content">
+      <section id="enterprise-command" class="enterprise-shell-panel active" aria-label="Command Center">
 
       <!-- Alert -->
       <div class="alert-banner">
@@ -816,10 +817,14 @@ body {
         </div>
 
       </div>
-
+      </section>
+      <section id="enterprise-dynamic" class="enterprise-shell-panel" aria-live="polite"></section>
     </div>
   </main>
 </div>
-<script src="/premium_ui/black_diamond.js"></script>
+<div class="enterprise-toast-stack" aria-live="polite"></div>
+<div class="enterprise-modal-backdrop" role="dialog" aria-modal="true" aria-label="Formulário Enterprise"><div class="enterprise-modal"><div class="enterprise-modal-head"><h2>Enterprise</h2><button class="enterprise-close" type="button" aria-label="Fechar" data-close-modal>×</button></div><div class="enterprise-modal-body"></div></div></div>
+<script src="/black_diamond.js" defer></script>
+<script src="/enterprise/enterprise_app.js" defer></script>
 </body>
 </html>
