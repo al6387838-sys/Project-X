@@ -1,5 +1,9 @@
 {
-	"devDependencies": {
-		"playwright": "1.61.1"
-	}
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test:production": "node scripts/verify-production.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1"
+  }
 }

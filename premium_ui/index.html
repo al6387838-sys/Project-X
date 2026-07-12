@@ -3599,7 +3599,10 @@ const LifeOS = {
 };
 
 //  View Navigation
-function showView(viewId) {
+function showView(viewId, updateHistory = true) {
+  const requestedRoute = viewId;
+  if (viewId === 'analytics') viewId = 'metrics';
+  if (viewId === 'profile') viewId = 'settings';
   const views = document.querySelectorAll('.screen');
   views.forEach(v => {
     v.classList.remove('active');
@@ -3650,6 +3653,13 @@ function showView(viewId) {
   if (viewId === 'briefing') initBriefing();
   if (viewId === 'metrics') initMetrics();
   if (viewId === 'settings') initSettings();
+  if (requestedRoute === 'profile') showSettingsSection('profile', document.querySelector('.settings-nav-item'));
+
+  if (updateHistory) {
+    const routePaths = { dashboard:'/dashboard', companion:'/companion', missions:'/missions', timeline:'/timeline', lifegraph:'/lifegraph', briefing:'/briefing', metrics:'/analytics', analytics:'/analytics', settings:'/settings', profile:'/profile' };
+    const nextPath = routePaths[requestedRoute] || routePaths[viewId] || '/dashboard';
+    if (window.location.pathname !== nextPath) history.pushState({ view: requestedRoute }, '', nextPath);
+  }
 
   // Scroll to top
   const contentArea = document.getElementById('content-area');
@@ -4712,6 +4722,13 @@ document.addEventListener('keydown', (e) => {
 //  Init on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
   LifeOS.init();
+  const pathRoute = window.location.pathname.replace(/^\/+|\/+$/g, '') || 'dashboard';
+  const allowedRoutes = ['dashboard','companion','missions','timeline','lifegraph','briefing','analytics','profile','settings'];
+  showView(allowedRoutes.includes(pathRoute) ? pathRoute : 'dashboard', false);
+  window.addEventListener('popstate', () => {
+    const route = window.location.pathname.replace(/^\/+|\/+$/g, '') || 'dashboard';
+    showView(allowedRoutes.includes(route) ? route : 'dashboard', false);
+  });
   // Init missions grid
   setTimeout(() => {
     if (document.getElementById('missions-grid')) renderMissionsGrid();

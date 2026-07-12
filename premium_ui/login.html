@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Login — LifeOS Enterprise</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    :root{color-scheme:dark;--bg:#070912;--panel:#101421;--border:#242b3d;--text:#f4f7ff;--muted:#9da8bd;--accent:#7c5cff;--danger:#ff7085;--ok:#4dd6a4}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 20% 10%,rgba(124,92,255,.18),transparent 36%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--text);padding:24px}.shell{width:min(440px,100%)}.brand{display:flex;gap:12px;align-items:center;margin-bottom:22px}.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#8768ff,#4d8dff);box-shadow:0 12px 35px rgba(124,92,255,.28);font-weight:900}.brand h1{font-size:18px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}.card{background:rgba(16,20,33,.92);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:0 30px 90px rgba(0,0,0,.4);backdrop-filter:blur(18px)}h2{margin:0 0 7px;font-size:25px}p{color:var(--muted);line-height:1.55;margin:0 0 24px}.field{margin:16px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:7px;color:#cfd6e5}.field input{width:100%;border:1px solid var(--border);border-radius:11px;background:#090c14;color:var(--text);padding:13px 14px;font:inherit;outline:none}.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.14)}button{width:100%;border:0;border-radius:11px;padding:13px 16px;background:linear-gradient(135deg,#8565ff,#4f83ff);color:white;font:700 14px inherit;cursor:pointer;margin-top:10px}button:disabled{opacity:.6;cursor:wait}.status{min-height:22px;margin:15px 0 0;font-size:13px}.status.error{color:var(--danger)}.status.ok{color:var(--ok)}.footer{text-align:center;margin-top:18px;font-size:12px;color:var(--muted)}a{color:#b6a8ff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><div class="logo">L</div><div><h1>LifeOS Enterprise</h1><p>Production Administration</p></div></div>
+    <section class="card" aria-labelledby="login-title">
+      <h2 id="login-title">Acesso administrativo</h2>
+      <p>Entre com as credenciais protegidas do ambiente de produção.</p>
+      <form id="login-form">
+        <div class="field"><label for="username">Usuário</label><input id="username" name="username" autocomplete="username" required></div>
+        <div class="field"><label for="password">Senha</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+        <button id="submit" type="submit">Entrar no painel</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+    <div class="footer"><a href="/">Voltar ao LifeOS</a> · HTTPS e sessão segura</div>
+  </main>
+  <script>
+    const form=document.getElementById('login-form');const statusEl=document.getElementById('status');const submit=document.getElementById('submit');
+    (async()=>{const response=await fetch('/.netlify/functions/admin-session',{credentials:'same-origin'});if(response.ok)location.replace('/admin');})().catch(()=>{});
+    form.addEventListener('submit',async(event)=>{event.preventDefault();submit.disabled=true;statusEl.className='status';statusEl.textContent='Validando acesso…';try{const response=await fetch('/.netlify/functions/admin-login',{method:'POST',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:form.username.value,password:form.password.value})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não foi possível autenticar');statusEl.className='status ok';statusEl.textContent='Acesso autorizado. Abrindo painel…';location.replace('/admin');}catch(error){statusEl.className='status error';statusEl.textContent=error.message||'Falha de autenticação';submit.disabled=false;}});
+  </script>
+</body>
+</html>

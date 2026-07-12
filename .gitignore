@@ -1,3 +1,7 @@
 **/__pycache__/
-
 node_modules/
+dist/
+.netlify/
+deploy-*.zip
+netlify_tools_checkpoint.txt
+deploy_checkpoint_findings.md
