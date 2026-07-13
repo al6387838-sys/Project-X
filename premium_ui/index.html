@@ -4,7 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Enterprise Premium v4.0. Seu sistema operacional de vida empresarial." />
+  <meta name="description" content="LifeOS — Enterprise Premium v5.0. Seu sistema operacional de vida empresarial." />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="application-name" content="LifeOS Enterprise" />
+  <meta property="og:title" content="LifeOS Enterprise Premium" />
+  <meta property="og:description" content="Sistema operacional de vida empresarial — Enterprise Grade" />
+  <meta property="og:type" content="website" />
   <title>LifeOS — Enterprise Premium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,8 +19,7 @@
   <link rel="stylesheet" href="design_system/responsive.css" />
   <link rel="stylesheet" href="animations/animations.css" />
   <link rel="stylesheet" href="animations/premium_motion.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
   <style>
     /* ============================================================
        ENTERPRISE LAYOUT SHELL
@@ -2598,7 +2602,7 @@
       <div class="sidebar-logo-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
       <div style="overflow:hidden;">
         <div class="sidebar-logo-text">LifeOS</div>
-        <div class="sidebar-logo-version">v4.0 Enterprise</div>
+        <div class="sidebar-logo-version">v5.0 Enterprise</div>
       </div>
     </div>
 
@@ -2646,17 +2650,28 @@
           <span class="sidebar-item-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m2.12 2.12l4.24 4.24M1 12h6m6 0h6m-17.78 7.78l4.24-4.24m2.12-2.12l4.24-4.24"/></svg></span>
           <span>Configurações</span>
         </button>
+        <a class="sidebar-item" href="/enterprise" style="text-decoration:none;color:inherit;">
+          <span class="sidebar-item-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></span>
+          <span>Painel Enterprise</span>
+        </a>
+        <a class="sidebar-item" href="/admin" style="text-decoration:none;color:inherit;">
+          <span class="sidebar-item-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <span>Admin Center</span>
+        </a>
       </div>
     </nav>
 
-    <div class="sidebar-footer">
-      <div class="sidebar-user" onclick="showView('settings')" role="button" tabindex="0" aria-label="Perfil do usuário">
+    <div class="sidebar-footer" style="display:flex;align-items:center;gap:4px;">
+      <div class="sidebar-user" onclick="showView('settings')" role="button" tabindex="0" aria-label="Perfil do usuário" style="flex:1;">
         <div class="avatar avatar-sm" aria-hidden="true" id="sidebar-avatar">U</div>
         <div class="sidebar-user-info">
           <div class="sidebar-user-name" id="sidebar-user-name">Usuário</div>
           <div class="sidebar-user-role">Life Score: <span id="sidebar-score" class="gradient-text">--</span></div>
         </div>
       </div>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="lifeosLogout()" title="Encerrar sessão" aria-label="Encerrar sessão" style="flex-shrink:0;" onmouseover="this.style.color='var(--color-danger-400)'" onmouseout="this.style.color=''">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
   </aside>
 
@@ -3184,7 +3199,10 @@
             <button class="settings-nav-item" onclick="showSettingsSection('accessibility',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="5" r="2"/><path d="M8 7v8m0 0l6-6m-6 6l-6 6M14 15h4v4h-4z"/></svg> Acessibilidade</button>
             <button class="settings-nav-item" onclick="showSettingsSection('notifications',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notificações</button>
             <button class="settings-nav-item" onclick="showSettingsSection('privacy',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Privacidade</button>
+            <button class="settings-nav-item" onclick="showSettingsSection('security',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Segurança e MFA</button>
+            <button class="settings-nav-item" onclick="showSettingsSection('enterprise',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Enterprise</button>
             <button class="settings-nav-item" onclick="showSettingsSection('about',this)">ℹ Sobre</button>
+            <button class="settings-nav-item" onclick="lifeosLogout()" style="color:var(--color-danger-400);margin-top:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Encerrar Sessão</button>
           </nav>
           <div class="settings-content" id="settings-content-area">
             <!-- Rendered by JS -->
@@ -4388,14 +4406,14 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Versão</div>
-            <div class="settings-row-desc">Enterprise Premium v4.0</div>
+            <div class="settings-row-desc">Enterprise Premium v5.0</div>
           </div>
           <span class="chip chip-active">Mais recente</span>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Build</div>
-            <div class="settings-row-desc">Enterprise Release 2026.07 — Build v4.0.0</div>
+            <div class="settings-row-desc">Enterprise Release 2026.07 — Build v5.0.0</div>
           </div>
         </div>
         <div class="settings-row">
@@ -4410,6 +4428,106 @@ function showSettingsSection(section, btn) {
             <div class="settings-row-label">Commit</div>
             <div class="settings-row-desc">Build validado em produção</div>
           </div>
+        </div>
+      </div>
+    `,
+    security: `
+      <div class="settings-section">
+        <div class="settings-section-header">
+          <div class="settings-section-title">Segurança e MFA</div>
+          <div class="settings-section-desc">Proteção da sua conta e autenticação multifator</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Autenticação Multifator (MFA)</div>
+            <div class="settings-row-desc">Adiciona uma camada extra de segurança ao login</div>
+          </div>
+          <span class="chip chip-active"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Ativo</span>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">RBAC — Controle de Acesso</div>
+            <div class="settings-row-desc">Perfis e permissões gerenciados no Painel Enterprise</div>
+          </div>
+          <a href="/enterprise#roles" class="btn btn-ghost btn-sm" style="text-decoration:none;">Gerenciar</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Sessões Ativas</div>
+            <div class="settings-row-desc">Gerencie dispositivos e sessões abertas</div>
+          </div>
+          <a href="/enterprise#security" class="btn btn-ghost btn-sm" style="text-decoration:none;">Ver sessões</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Política de Senha</div>
+            <div class="settings-row-desc">Configurações de complexidade e expiração</div>
+          </div>
+          <a href="/enterprise#security" class="btn btn-ghost btn-sm" style="text-decoration:none;">Configurar</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Audit Logs</div>
+            <div class="settings-row-desc">Registro completo de eventos de segurança</div>
+          </div>
+          <a href="/enterprise#compliance" class="btn btn-ghost btn-sm" style="text-decoration:none;">Ver logs</a>
+        </div>
+        <div class="settings-row" style="border-top:1px solid var(--border-subtle);padding-top:16px;margin-top:8px;">
+          <div class="settings-row-info">
+            <div class="settings-row-label" style="color:var(--color-danger-400);">Encerrar Sessão</div>
+            <div class="settings-row-desc">Sair do LifeOS Enterprise com segurança</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="lifeosLogout()">Sair</button>
+        </div>
+      </div>
+    `,
+    enterprise: `
+      <div class="settings-section">
+        <div class="settings-section-header">
+          <div class="settings-section-title">Enterprise</div>
+          <div class="settings-section-desc">Acesso ao painel de governança organizacional</div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Command Center</div>
+            <div class="settings-row-desc">Visão executiva e KPIs da organização</div>
+          </div>
+          <a href="/enterprise" class="btn btn-ghost btn-sm" style="text-decoration:none;">Abrir</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Organização</div>
+            <div class="settings-row-desc">Dados, logo e configurações da empresa</div>
+          </div>
+          <a href="/enterprise#organization" class="btn btn-ghost btn-sm" style="text-decoration:none;">Gerenciar</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Membros e Workspaces</div>
+            <div class="settings-row-desc">Usuários, equipes e convites</div>
+          </div>
+          <a href="/enterprise#members" class="btn btn-ghost btn-sm" style="text-decoration:none;">Gerenciar</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Billing e Planos</div>
+            <div class="settings-row-desc">Assinatura, faturamento e uso</div>
+          </div>
+          <a href="/enterprise#billing" class="btn btn-ghost btn-sm" style="text-decoration:none;">Ver plano</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Compliance e Auditoria</div>
+            <div class="settings-row-desc">Logs, LGPD e relatórios de conformidade</div>
+          </div>
+          <a href="/enterprise#compliance" class="btn btn-ghost btn-sm" style="text-decoration:none;">Ver logs</a>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-label">Admin Center</div>
+            <div class="settings-row-desc">Painel administrativo master</div>
+          </div>
+          <a href="/admin" class="btn btn-ghost btn-sm" style="text-decoration:none;">Abrir</a>
         </div>
       </div>
     `,
@@ -4790,6 +4908,15 @@ function showNotifications() {
   document.body.appendChild(panel);
 }
 
+
+//  Logout
+async function lifeosLogout() {
+  if (!window.confirm('Encerrar sessão do LifeOS Enterprise?')) return;
+  try {
+    await fetch('/api/admin-logout', { method: 'POST', credentials: 'same-origin' });
+  } catch (_) { /* offline */ }
+  location.replace('/login');
+}
 
 //  Global Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
