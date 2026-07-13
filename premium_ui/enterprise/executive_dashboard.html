@@ -81,7 +81,7 @@
   </div>
   <script>
     (() => {
-      const API = '/.netlify/functions/enterprise-data';
+      const API = '/api/enterprise-data';
       const state = { data: null };
       const money = (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
 

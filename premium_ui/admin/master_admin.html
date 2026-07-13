@@ -111,7 +111,7 @@
   <script>
     // Integration with enterprise-data API
     (() => {
-      const API = '/.netlify/functions/enterprise-data';
+      const API = '/api/enterprise-data';
       const state = { data: null, view: 'overview' };
       const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
       const fmtDate = (v, t = false) => v ? new Intl.DateTimeFormat('pt-BR', t ? { dateStyle: 'short', timeStyle: 'short' } : { dateStyle: 'medium' }).format(new Date(v)) : '—';

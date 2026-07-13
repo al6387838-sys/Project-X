@@ -16,7 +16,7 @@
       <h2 id="login-title">Acesso administrativo</h2>
       <p>Entre com as credenciais protegidas do ambiente de produção.</p>
       <form id="login-form">
-        <div class="field"><label for="username">Usuário</label><input id="username" name="username" autocomplete="username" required></div>
+        <div class="field"><label for="username">E-mail</label><input id="username" name="username" type="email" autocomplete="email" placeholder="al6387838@gmail.com" required></div>
         <div class="field"><label for="password">Senha</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
         <button id="submit" type="submit">Entrar no painel</button>
         <div id="status" class="status" role="status" aria-live="polite"></div>
@@ -26,8 +26,8 @@
   </main>
   <script>
     const form=document.getElementById('login-form');const statusEl=document.getElementById('status');const submit=document.getElementById('submit');
-    (async()=>{const response=await fetch('/.netlify/functions/admin-session',{credentials:'same-origin'});if(response.ok)location.replace('/admin');})().catch(()=>{});
-    form.addEventListener('submit',async(event)=>{event.preventDefault();submit.disabled=true;statusEl.className='status';statusEl.textContent='Validando acesso…';try{const response=await fetch('/.netlify/functions/admin-login',{method:'POST',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:form.username.value,password:form.password.value})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não foi possível autenticar');statusEl.className='status ok';statusEl.textContent='Acesso autorizado. Abrindo painel…';location.replace('/admin');}catch(error){statusEl.className='status error';statusEl.textContent=error.message||'Falha de autenticação';submit.disabled=false;}});
+    (async()=>{const response=await fetch('/api/admin-session',{credentials:'same-origin'});if(response.ok)location.replace('/admin');})().catch(()=>{});
+    form.addEventListener('submit',async(event)=>{event.preventDefault();submit.disabled=true;statusEl.className='status';statusEl.textContent='Validando acesso…';try{const response=await fetch('/api/admin-login',{method:'POST',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:form.username.value,password:form.password.value})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não foi possível autenticar');statusEl.className='status ok';statusEl.textContent='Acesso autorizado. Abrindo painel…';location.replace('/admin');}catch(error){statusEl.className='status error';statusEl.textContent=error.message||'Falha de autenticação';submit.disabled=false;}});
   </script>
 </body>
 </html>

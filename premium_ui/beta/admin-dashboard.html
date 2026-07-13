@@ -376,7 +376,7 @@
   <link rel="stylesheet" href="/black_diamond.css" />
   <style>body{visibility:hidden}.admin-session-bar{display:flex;justify-content:flex-end;margin-bottom:14px}.admin-logout{border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);border-radius:8px;padding:8px 12px;cursor:pointer}</style>
   <script>
-    fetch('/.netlify/functions/admin-session',{credentials:'same-origin'}).then(response=>{if(!response.ok)throw new Error('unauthorized');return response.json();}).then(()=>{document.body.style.visibility='visible';}).catch(()=>{location.replace('/login');});
+    fetch('/api/admin-session',{credentials:'same-origin'}).then(response=>{if(!response.ok)throw new Error('unauthorized');return response.json();}).then(()=>{document.body.style.visibility='visible';}).catch(()=>{location.replace('/login');});
   </script>
 </head>
 <body>
@@ -806,7 +806,7 @@
 
   <script>
     async function adminLogout() {
-      await fetch('/.netlify/functions/admin-logout', { method: 'POST', credentials: 'same-origin' });
+      await fetch('/api/admin-logout', { method: 'POST', credentials: 'same-origin' });
       location.replace('/login');
     }
 

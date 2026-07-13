@@ -1,17 +1,20 @@
 {
   "name": "lifeos-enterprise",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "private": true,
   "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance e administração.",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "deploy": "bash scripts/deploy-cloudflare.sh",
+    "deploy:cf": "npx wrangler pages deploy dist --project-name lifeos-enterprise --branch main",
     "test:production": "node scripts/verify-production.mjs",
     "test:responsive": "node scripts/qa-enterprise-responsive.mjs",
     "test:functional": "node scripts/qa-enterprise-functional.mjs",
     "test:enterprise": "npm run build && npm run test:responsive && npm run test:functional"
   },
   "devDependencies": {
-    "playwright": "1.61.1"
+    "playwright": "1.61.1",
+    "wrangler": "^4.0.0"
   },
   "dependencies": {
     "@netlify/blobs": "^10.0.11"

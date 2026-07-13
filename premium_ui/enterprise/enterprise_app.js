@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const API = '/.netlify/functions/enterprise-data';
+  const API = '/api/enterprise-data';
   const state = { data: null, view: 'command', busy: false, query: '' };
   const permissions = [
     ['org.read', 'Ler organização'], ['org.update', 'Editar organização'], ['members.read', 'Ler membros'],

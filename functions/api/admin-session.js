@@ -1,0 +1,22 @@
+// LifeOS Enterprise — Admin Session Check
+// Cloudflare Pages Function: GET /api/admin-session
+
+import { getCookie, json, verifySession } from '../_auth.js';
+
+export async function onRequestGet({ request, env }) {
+  const secret = env.LIFEOS_SESSION_SECRET;
+  if (!secret) return json(503, { ok: false, error: 'Autenticação ainda não configurada' });
+
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
+  const session = await verifySession(token, secret);
+
+  if (!session) return json(401, { ok: false, error: 'Sessão inválida ou expirada' });
+
+  return json(200, { ok: true, user: { username: session.sub, role: session.role } });
+}
+
+export async function onRequest({ request, env }) {
+  if (request.method === 'GET') return onRequestGet({ request, env });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET' });
+}

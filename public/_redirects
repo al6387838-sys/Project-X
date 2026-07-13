@@ -1,0 +1,17 @@
+# LifeOS Enterprise — Cloudflare Pages Redirects
+# SPA Routes
+/login              /login/index.html   200
+/admin              /admin/index.html   200
+/enterprise         /enterprise/index.html  200
+/memory-center      /memory-center/index.html   200
+/dashboard          /index.html         200
+/companion          /index.html         200
+/missions           /index.html         200
+/timeline           /index.html         200
+/lifegraph          /index.html         200
+/briefing           /index.html         200
+/analytics          /index.html         200
+/profile            /index.html         200
+/settings           /index.html         200
+# SPA fallback
+/*                  /index.html         200
