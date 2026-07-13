@@ -1,0 +1,656 @@
+/**
+ * ╔══════════════════════════════════════════════════════════════════╗
+ * ║  LifeOS Enterprise Premium — Motion & Micro-Animations          ║
+ * ║  Version 5.0.0 | PHASE 005 — Experiência Premium               ║
+ * ║  Discreto, Natural, Profissional                                ║
+ * ╚══════════════════════════════════════════════════════════════════╝
+ */
+
+/* ============================================================
+   ENTRANCE ANIMATIONS — Suave e Profissional
+   ============================================================ */
+
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleInSmooth {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   HOVER ANIMATIONS — Interatividade Sutil
+   ============================================================ */
+
+@keyframes hoverLift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes hoverGlow {
+  from {
+    box-shadow: 0 0 0 0 rgba(91, 127, 255, 0);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(91, 127, 255, 0);
+  }
+}
+
+@keyframes hoverScale {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+/* ============================================================
+   LOADING ANIMATIONS — Elegantes e Discretas
+   ============================================================ */
+
+@keyframes spinSmooth {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmerWave {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulseGentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes dotFlashing {
+  0%, 20%, 50%, 80%, 100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.3;
+  }
+}
+
+/* ============================================================
+   TRANSITION ANIMATIONS — Suave Entre Estados
+   ============================================================ */
+
+@keyframes expandHeight {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+@keyframes collapseHeight {
+  from {
+    height: auto;
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInColor {
+  from {
+    color: var(--text-tertiary);
+  }
+  to {
+    color: var(--text-primary);
+  }
+}
+
+/* ============================================================
+   UTILITY CLASSES — Aplicação Rápida
+   ============================================================ */
+
+/* Entrance Animations */
+.animate-fade-in {
+  animation: fadeInSmooth var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleInSmooth var(--duration-normal) var(--ease-spring-smooth) forwards;
+}
+
+/* Delay Utilities */
+.delay-50   { animation-delay: 50ms; }
+.delay-100  { animation-delay: 100ms; }
+.delay-150  { animation-delay: 150ms; }
+.delay-200  { animation-delay: 200ms; }
+.delay-300  { animation-delay: 300ms; }
+.delay-400  { animation-delay: 400ms; }
+.delay-500  { animation-delay: 500ms; }
+
+/* Loading States */
+.animate-spin {
+  animation: spinSmooth 0.8s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulseGentle var(--duration-slow) ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmerWave 2s infinite;
+}
+
+/* ============================================================
+   INTERACTIVE ELEMENT ANIMATIONS
+   ============================================================ */
+
+/* Button Hover */
+.enterprise-btn:not(:disabled):hover {
+  animation: hoverLift var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* Card Hover */
+.enterprise-card:hover {
+  animation: hoverScale var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* Link Hover */
+a:hover {
+  animation: fadeInColor var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* ============================================================
+   FOCUS ANIMATIONS — Acessibilidade Premium
+   ============================================================ */
+
+.enterprise-btn:focus-visible,
+.enterprise-input:focus-visible,
+.enterprise-select:focus-visible {
+  animation: hoverGlow var(--duration-moderate) ease-out forwards;
+}
+
+/* ============================================================
+   NOTIFICATION ANIMATIONS
+   ============================================================ */
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) translateX(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) translateX(0);
+  }
+}
+
+.enterprise-toast {
+  animation: toastSlideIn var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.enterprise-toast.exit {
+  animation: toastSlideOut var(--duration-moderate) var(--ease-out) forwards;
+}
+
+/* ============================================================
+   MODAL ANIMATIONS
+   ============================================================ */
+
+@keyframes modalBackdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(var(--blur-sm));
+  }
+}
+
+@keyframes modalContentSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.enterprise-modal-overlay {
+  animation: modalBackdropFadeIn var(--duration-moderate) var(--ease-out) forwards;
+}
+
+.enterprise-modal {
+  animation: modalContentSlideUp var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+/* ============================================================
+   FORM ANIMATIONS
+   ============================================================ */
+
+@keyframes inputFocus {
+  from {
+    border-color: var(--border-default);
+    box-shadow: 0 0 0 0 rgba(91, 127, 255, 0.1);
+  }
+  to {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(91, 127, 255, 0.1);
+  }
+}
+
+.enterprise-input:focus,
+.enterprise-textarea:focus,
+.enterprise-select:focus {
+  animation: inputFocus var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* ============================================================
+   SKELETON ANIMATIONS
+   ============================================================ */
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.enterprise-skeleton {
+  animation: skeletonShimmer 2s infinite;
+}
+
+/* ============================================================
+   TABLE ROW ANIMATIONS
+   ============================================================ */
+
+@keyframes rowHoverHighlight {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--bg-surface-1);
+  }
+}
+
+.admin-table tbody tr:hover {
+  animation: rowHoverHighlight var(--duration-normal) var(--ease-out) forwards;
+}
+
+/* ============================================================
+   BADGE ANIMATIONS
+   ============================================================ */
+
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(91, 127, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(91, 127, 255, 0);
+  }
+}
+
+.enterprise-badge.pulse {
+  animation: badgePulse 2s infinite;
+}
+
+/* ============================================================
+   PROGRESS ANIMATIONS
+   ============================================================ */
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-value, 100%);
+  }
+}
+
+.progress-bar {
+  animation: progressFill var(--duration-slow) var(--ease-out) forwards;
+}
+
+/* ============================================================
+   COMMAND PALETTE ANIMATIONS
+   ============================================================ */
+
+@keyframes commandPaletteBackdrop {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(var(--blur-md));
+  }
+}
+
+@keyframes commandPaletteContent {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.command-palette-backdrop {
+  animation: commandPaletteBackdrop var(--duration-normal) var(--ease-out) forwards;
+}
+
+.command-palette-content {
+  animation: commandPaletteContent var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+/* ============================================================
+   DROPDOWN ANIMATIONS
+   ============================================================ */
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu {
+  animation: dropdownSlideDown var(--duration-normal) var(--ease-spring-smooth) forwards;
+}
+
+/* ============================================================
+   SIDEBAR ANIMATIONS
+   ============================================================ */
+
+@keyframes sidebarSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.app-sidebar,
+.admin-sidebar {
+  animation: sidebarSlideIn var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+/* ============================================================
+   TOPBAR ANIMATIONS
+   ============================================================ */
+
+@keyframes topbarSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-topbar,
+.admin-topbar,
+.executive-topbar {
+  animation: topbarSlideDown var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+/* ============================================================
+   STAGGER ANIMATIONS — Para Listas
+   ============================================================ */
+
+.stagger-item {
+  animation: slideInUp var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(n+6) { animation-delay: 250ms; }
+
+/* ============================================================
+   DISABLED ANIMATIONS — Respeitar Preferências
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================ */
+
+/* Use transform e opacity para melhor performance */
+.animate-slide-in-up,
+.animate-slide-in-down,
+.animate-slide-in-left,
+.animate-slide-in-right,
+.animate-scale-in {
+  will-change: transform, opacity;
+}
+
+/* Remove will-change após animação */
+.animate-slide-in-up,
+.animate-slide-in-down,
+.animate-slide-in-left,
+.animate-slide-in-right,
+.animate-scale-in {
+  animation-fill-mode: forwards;
+}
+
+/* ============================================================
+   TRANSITION DEFAULTS — Suavidade Global
+   ============================================================ */
+
+button,
+a,
+input,
+select,
+textarea,
+.enterprise-btn,
+.enterprise-card,
+.enterprise-input {
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* ============================================================
+   CUSTOM ANIMATION PROPERTIES
+   ============================================================ */
+
+/* Para animações customizadas */
+:root {
+  --animation-duration: var(--duration-moderate);
+  --animation-easing: var(--ease-spring-smooth);
+  --animation-delay: 0ms;
+}
+
+/* ============================================================
+   ACCESSIBILITY — Focus Visible Animations
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--border-focus-strong);
+  outline-offset: 2px;
+  animation: hoverGlow var(--duration-normal) ease-out forwards;
+}
+
+/* ============================================================
+   SMOOTH SCROLL
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================================
+   PAGE TRANSITION ANIMATIONS
+   ============================================================ */
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.page-enter {
+  animation: pageEnter var(--duration-moderate) var(--ease-spring-smooth) forwards;
+}
+
+.page-exit {
+  animation: pageExit var(--duration-moderate) var(--ease-out) forwards;
+}

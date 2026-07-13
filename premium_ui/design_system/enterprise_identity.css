@@ -1,0 +1,473 @@
+/**
+ * ╔══════════════════════════════════════════════════════════════════╗
+ * ║  LifeOS Enterprise Premium — Visual Identity System             ║
+ * ║  Version 5.0.0 | PHASE 001 — UX Enterprise                     ║
+ * ║  Professional, Refined, World-Class SaaS Enterprise             ║
+ * ╚══════════════════════════════════════════════════════════════════╝
+ *
+ * OBJETIVO:
+ * Remover aparência de MVP, template e geração por IA.
+ * Criar identidade visual própria, profissional e premium.
+ * Parecer software vendido por milhões.
+ */
+
+/* ============================================================
+   ROOT — ENTERPRISE DARK THEME (DEFAULT)
+   ============================================================ */
+:root,
+[data-theme="enterprise-dark"] {
+  /* ─────────────────────────────────────────────────────────
+     BRAND COLORS — Paleta Refinada e Premium
+     ───────────────────────────────────────────────────────── */
+  
+  /* Primary: Indigo Premium (não é roxo genérico) */
+  --brand-primary-50:   #F0F4FF;
+  --brand-primary-100:  #E0E9FF;
+  --brand-primary-200:  #C7D7FF;
+  --brand-primary-300:  #A8BFFF;
+  --brand-primary-400:  #7B9FFF;
+  --brand-primary-500:  #5B7FFF;
+  --brand-primary-600:  #4A6FFF;
+  --brand-primary-700:  #3B5FE5;
+  --brand-primary-800:  #2E4AB8;
+  --brand-primary-900:  #1F2E7A;
+  --brand-primary-950:  #141B47;
+
+  /* Accent: Teal Premium (sofisticado, não vibrante) */
+  --brand-accent-50:    #F0FFFE;
+  --brand-accent-100:   #CCFBF1;
+  --brand-accent-200:   #99F6E4;
+  --brand-accent-300:   #5EEAD4;
+  --brand-accent-400:   #2DD4BF;
+  --brand-accent-500:   #14B8A6;
+  --brand-accent-600:   #0D9488;
+  --brand-accent-700:   #0F766E;
+  --brand-accent-800:   #115E59;
+  --brand-accent-900:   #134E4A;
+
+  /* Status Colors — Refinados e Acessíveis */
+  --status-success-50:   #ECFDF5;
+  --status-success-100:  #D1FAE5;
+  --status-success-200:  #A7F3D0;
+  --status-success-500:  #10B981;
+  --status-success-600:  #059669;
+  --status-success-700:  #047857;
+
+  --status-warning-50:   #FFFBEB;
+  --status-warning-100:  #FEF3C7;
+  --status-warning-200:  #FDE68A;
+  --status-warning-500:  #F59E0B;
+  --status-warning-600:  #D97706;
+  --status-warning-700:  #B45309;
+
+  --status-danger-50:    #FEF2F2;
+  --status-danger-100:   #FEE2E2;
+  --status-danger-200:   #FECACA;
+  --status-danger-500:   #EF4444;
+  --status-danger-600:   #DC2626;
+  --status-danger-700:   #B91C1C;
+
+  --status-info-50:      #EFF6FF;
+  --status-info-100:     #DBEAFE;
+  --status-info-200:     #BFDBFE;
+  --status-info-500:     #3B82F6;
+  --status-info-600:     #2563EB;
+  --status-info-700:     #1D4ED8;
+
+  /* ─────────────────────────────────────────────────────────
+     BACKGROUNDS — Hierarquia Clara e Profissional
+     ───────────────────────────────────────────────────────── */
+  
+  /* Base: Profundo, não preto absoluto */
+  --bg-base:             #0A0E14;
+  --bg-base-rgb:         10, 14, 20;
+  
+  /* Elevated: Para modais, popovers */
+  --bg-elevated:         #0F131B;
+  
+  /* Card: Padrão para conteúdo */
+  --bg-card:             #131820;
+  --bg-card-hover:       #16192A;
+  
+  /* Surface: Camadas adicionais */
+  --bg-surface-1:        #1A1F2E;
+  --bg-surface-2:        #20262F;
+  --bg-surface-3:        #262D3A;
+  --bg-surface-4:        #2D3440;
+  
+  /* Glass: Para efeitos de blur */
+  --bg-glass:            rgba(10, 14, 20, 0.92);
+  --bg-glass-weak:       rgba(10, 14, 20, 0.75);
+
+  /* ─────────────────────────────────────────────────────────
+     BORDERS — Refinados e Sutis
+     ───────────────────────────────────────────────────────── */
+  
+  --border-subtle:       rgba(255, 255, 255, 0.04);
+  --border-default:      rgba(255, 255, 255, 0.08);
+  --border-strong:       rgba(255, 255, 255, 0.12);
+  --border-strong-2:     rgba(255, 255, 255, 0.16);
+  --border-focus:        rgba(91, 127, 255, 0.50);
+  --border-focus-strong: rgba(91, 127, 255, 0.70);
+
+  /* ─────────────────────────────────────────────────────────
+     TEXT — Hierarquia de Legibilidade
+     ───────────────────────────────────────────────────────── */
+  
+  --text-primary:        #F8FAFC;
+  --text-secondary:      #CBD5E1;
+  --text-tertiary:       #94A3B8;
+  --text-quaternary:     #64748B;
+  --text-disabled:       #475569;
+  --text-inverse:        #0A0E14;
+  --text-link:           #5B7FFF;
+  --text-link-hover:     #7B9FFF;
+  --text-link-visited:   #4A6FFF;
+
+  /* ─────────────────────────────────────────────────────────
+     GRADIENTS — Premium e Sofisticados
+     ───────────────────────────────────────────────────────── */
+  
+  --gradient-primary:           linear-gradient(135deg, #5B7FFF 0%, #3B5FE5 100%);
+  --gradient-primary-soft:      linear-gradient(135deg, rgba(91, 127, 255, 0.10) 0%, rgba(59, 95, 229, 0.10) 100%);
+  --gradient-primary-glow:      linear-gradient(135deg, rgba(91, 127, 255, 0.20) 0%, rgba(59, 95, 229, 0.20) 100%);
+  
+  --gradient-accent:            linear-gradient(135deg, #14B8A6 0%, #0F766E 100%);
+  --gradient-accent-soft:       linear-gradient(135deg, rgba(20, 184, 166, 0.10) 0%, rgba(15, 118, 110, 0.10) 100%);
+  
+  --gradient-success:           linear-gradient(135deg, #10B981 0%, #047857 100%);
+  --gradient-warning:           linear-gradient(135deg, #F59E0B 0%, #B45309 100%);
+  --gradient-danger:            linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
+  
+  --gradient-glass:             linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  --gradient-glass-strong:      linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+  
+  --gradient-subtle-bg:         linear-gradient(180deg, rgba(91, 127, 255, 0.03) 0%, transparent 100%);
+
+  /* ─────────────────────────────────────────────────────────
+     SHADOWS & ELEVATION — Profundidade Realista
+     ───────────────────────────────────────────────────────── */
+  
+  --shadow-xs:           0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-sm:           0 2px 4px rgba(0, 0, 0, 0.35), 0 1px 1px rgba(0, 0, 0, 0.20);
+  --shadow-md:           0 4px 8px rgba(0, 0, 0, 0.40), 0 2px 2px rgba(0, 0, 0, 0.25);
+  --shadow-lg:           0 8px 16px rgba(0, 0, 0, 0.45), 0 4px 4px rgba(0, 0, 0, 0.30);
+  --shadow-xl:           0 16px 32px rgba(0, 0, 0, 0.50), 0 8px 8px rgba(0, 0, 0, 0.35);
+  --shadow-2xl:          0 24px 48px rgba(0, 0, 0, 0.55), 0 12px 12px rgba(0, 0, 0, 0.40);
+  
+  --shadow-glow-primary: 0 0 0 1px rgba(91, 127, 255, 0.25), 0 4px 16px rgba(91, 127, 255, 0.20);
+  --shadow-glow-accent:  0 0 0 1px rgba(20, 184, 166, 0.25), 0 4px 16px rgba(20, 184, 166, 0.20);
+  --shadow-glow-success: 0 0 0 1px rgba(16, 185, 129, 0.25), 0 4px 16px rgba(16, 185, 129, 0.20);
+  --shadow-glow-danger:  0 0 0 1px rgba(239, 68, 68, 0.25), 0 4px 16px rgba(239, 68, 68, 0.20);
+  
+  --shadow-inset:        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-inset-strong: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  /* ─────────────────────────────────────────────────────────
+     BLUR & EFFECTS
+     ───────────────────────────────────────────────────────── */
+  
+  --blur-xs:    2px;
+  --blur-sm:    4px;
+  --blur-md:    8px;
+  --blur-lg:    12px;
+  --blur-xl:    16px;
+  --blur-2xl:   24px;
+  --blur-3xl:   40px;
+
+  /* ─────────────────────────────────────────────────────────
+     MOTION & ANIMATION — Premium e Natural
+     ───────────────────────────────────────────────────────── */
+  
+  --duration-instant:    50ms;
+  --duration-fast:       100ms;
+  --duration-normal:     150ms;
+  --duration-moderate:   250ms;
+  --duration-slow:       400ms;
+  --duration-slower:     600ms;
+  --duration-slowest:    800ms;
+  
+  --ease-linear:         linear;
+  --ease-in:             cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:            cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:         cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:         cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring-smooth:  cubic-bezier(0.25, 1.0, 0.5, 1);
+  --ease-bounce:         cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ─────────────────────────────────────────────────────────
+     TYPOGRAPHY — Profissional e Refinada
+     ───────────────────────────────────────────────────────── */
+  
+  --font-sans:           'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono:           'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-display:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Font Sizes — Escala Refinada */
+  --text-2xs:   0.625rem;  /* 10px */
+  --text-xs:    0.75rem;   /* 12px */
+  --text-sm:    0.875rem;  /* 14px */
+  --text-base:  1rem;      /* 16px */
+  --text-lg:    1.125rem;  /* 18px */
+  --text-xl:    1.25rem;   /* 20px */
+  --text-2xl:   1.5rem;    /* 24px */
+  --text-3xl:   1.875rem;  /* 30px */
+  --text-4xl:   2.25rem;   /* 36px */
+  --text-5xl:   3rem;      /* 48px */
+  --text-6xl:   3.75rem;   /* 60px */
+  
+  /* Font Weights */
+  --font-thin:       100;
+  --font-light:      300;
+  --font-normal:     400;
+  --font-medium:     500;
+  --font-semibold:   600;
+  --font-bold:       700;
+  --font-extrabold:  800;
+
+  /* Line Heights */
+  --line-none:   1;
+  --line-tight:  1.25;
+  --line-snug:   1.375;
+  --line-normal: 1.5;
+  --line-relaxed:1.625;
+  --line-loose:  2;
+
+  /* ─────────────────────────────────────────────────────────
+     SPACING — Grid 4px Refinado
+     ───────────────────────────────────────────────────────── */
+  
+  --space-0:    0;
+  --space-1:    4px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-7:    28px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-14:   56px;
+  --space-16:   64px;
+  --space-20:   80px;
+  --space-24:   96px;
+  --space-28:   112px;
+  --space-32:   128px;
+
+  /* ─────────────────────────────────────────────────────────
+     BORDER RADIUS — Consistente e Sofisticado
+     ───────────────────────────────────────────────────────── */
+  
+  --radius-none:  0;
+  --radius-xs:    2px;
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
+  --radius-xl:    12px;
+  --radius-2xl:   16px;
+  --radius-3xl:   20px;
+  --radius-4xl:   24px;
+  --radius-full:  9999px;
+
+  /* ─────────────────────────────────────────────────────────
+     Z-INDEX — Hierarquia Clara
+     ───────────────────────────────────────────────────────── */
+  
+  --z-base:      0;
+  --z-raised:    10;
+  --z-dropdown:  20;
+  --z-sticky:    30;
+  --z-overlay:   40;
+  --z-modal:     50;
+  --z-popover:   60;
+  --z-toast:     70;
+  --z-tooltip:   80;
+  --z-max:       9999;
+
+  /* ─────────────────────────────────────────────────────────
+     COMPONENT SIZING — Padrões Profissionais
+     ───────────────────────────────────────────────────────── */
+  
+  --btn-height-xs:  28px;
+  --btn-height-sm:  36px;
+  --btn-height-md:  44px;
+  --btn-height-lg:  52px;
+  --btn-height-xl:  60px;
+  
+  --input-height-sm:  36px;
+  --input-height-md:  44px;
+  --input-height-lg:  52px;
+  
+  --sidebar-width:           260px;
+  --sidebar-width-collapsed: 64px;
+  --topbar-height:           64px;
+  --topbar-height-mobile:    56px;
+  
+  --avatar-xs:  24px;
+  --avatar-sm:  32px;
+  --avatar-md:  40px;
+  --avatar-lg:  48px;
+  --avatar-xl:  56px;
+  --avatar-2xl: 72px;
+}
+
+/* ============================================================
+   LIGHT THEME — Enterprise Light
+   ============================================================ */
+[data-theme="enterprise-light"] {
+  --bg-base:             #FAFBFC;
+  --bg-elevated:         #FFFFFF;
+  --bg-card:             #FFFFFF;
+  --bg-card-hover:       #F8FAFC;
+  --bg-surface-1:        #F1F5F9;
+  --bg-surface-2:        #E2E8F0;
+  --bg-surface-3:        #CBD5E1;
+  --bg-surface-4:        #94A3B8;
+  --bg-glass:            rgba(255, 255, 255, 0.95);
+  
+  --border-subtle:       rgba(0, 0, 0, 0.04);
+  --border-default:      rgba(0, 0, 0, 0.08);
+  --border-strong:       rgba(0, 0, 0, 0.12);
+  --border-strong-2:     rgba(0, 0, 0, 0.16);
+  --border-focus:        rgba(91, 127, 255, 0.40);
+  --border-focus-strong: rgba(91, 127, 255, 0.60);
+  
+  --text-primary:        #0F172A;
+  --text-secondary:      #475569;
+  --text-tertiary:       #64748B;
+  --text-quaternary:     #94A3B8;
+  --text-disabled:       #CBD5E1;
+  --text-inverse:        #FFFFFF;
+  --text-link:           #3B5FE5;
+  --text-link-hover:     #5B7FFF;
+  --text-link-visited:   #2E4AB8;
+  
+  --shadow-xs:           0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm:           0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --shadow-md:           0 4px 8px rgba(0, 0, 0, 0.10), 0 2px 2px rgba(0, 0, 0, 0.06);
+  --shadow-lg:           0 8px 16px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.08);
+  --shadow-xl:           0 16px 32px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.10);
+  --shadow-2xl:          0 24px 48px rgba(0, 0, 0, 0.20), 0 12px 12px rgba(0, 0, 0, 0.12);
+  
+  --shadow-glow-primary: 0 0 0 1px rgba(91, 127, 255, 0.15), 0 4px 16px rgba(91, 127, 255, 0.10);
+  --shadow-glow-accent:  0 0 0 1px rgba(20, 184, 166, 0.15), 0 4px 16px rgba(20, 184, 166, 0.10);
+  --shadow-glow-success: 0 0 0 1px rgba(16, 185, 129, 0.15), 0 4px 16px rgba(16, 185, 129, 0.10);
+  --shadow-glow-danger:  0 0 0 1px rgba(239, 68, 68, 0.15), 0 4px 16px rgba(239, 68, 68, 0.10);
+  
+  --shadow-inset:        inset 0 1px 0 rgba(0, 0, 0, 0.04);
+  --shadow-inset-strong: inset 0 1px 0 rgba(0, 0, 0, 0.08);
+  
+  --gradient-glass:      linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.80) 100%);
+  --gradient-glass-strong: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.90) 100%);
+}
+
+/* ============================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   FOCUS VISIBLE — Acessibilidade Premium
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--border-focus-strong);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   SELECTION — Premium
+   ============================================================ */
+::selection {
+  background: rgba(91, 127, 255, 0.25);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   SCROLLBAR — Refinado
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  transition: background var(--duration-normal) var(--ease-out);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong-2);
+}
+
+/* ============================================================
+   BASE RESET — Profissional
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--line-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   UTILITY CLASSES — Uso Rápido
+   ============================================================ */
+
+/* Text Utilities */
+.text-primary   { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary  { color: var(--text-tertiary); }
+.text-disabled  { color: var(--text-disabled); }
+.text-link      { color: var(--text-link); }
+
+/* Background Utilities */
+.bg-base       { background-color: var(--bg-base); }
+.bg-card       { background-color: var(--bg-card); }
+.bg-surface-1  { background-color: var(--bg-surface-1); }
+.bg-surface-2  { background-color: var(--bg-surface-2); }
+
+/* Border Utilities */
+.border-default { border-color: var(--border-default); }
+.border-strong  { border-color: var(--border-strong); }
+
+/* Shadow Utilities */
+.shadow-sm  { box-shadow: var(--shadow-sm); }
+.shadow-md  { box-shadow: var(--shadow-md); }
+.shadow-lg  { box-shadow: var(--shadow-lg); }
+.shadow-xl  { box-shadow: var(--shadow-xl); }
+
+/* Gradient Utilities */
+.gradient-primary { background: var(--gradient-primary); }
+.gradient-accent  { background: var(--gradient-accent); }
+.gradient-success { background: var(--gradient-success); }

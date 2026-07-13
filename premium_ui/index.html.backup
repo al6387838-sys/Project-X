@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="enterprise-dark">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Enterprise Premium v2.1. Seu sistema operacional de vida empresarial." />
+  <meta name="theme-color" content="#080810" />
+  <meta name="description" content="LifeOS — Enterprise Premium v1.2. Seu sistema operacional de vida." />
   <title>LifeOS — Enterprise Premium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="design_system/enterprise_identity.css" />
-  <link rel="stylesheet" href="design_system/enterprise_components.css" />
-  <link rel="stylesheet" href="design_system/responsive.css" />
+  <link rel="stylesheet" href="design_system/variables.css" />
   <link rel="stylesheet" href="animations/animations.css" />
-  <link rel="stylesheet" href="animations/premium_motion.css" />
+  <link rel="stylesheet" href="components/components.css" />
+  <link rel="stylesheet" href="themes/themes.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
   <style>

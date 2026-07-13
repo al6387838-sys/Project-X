@@ -19,8 +19,13 @@ const productionAssets = [
   'black_diamond.css',
   'black_diamond.js',
   'design_system/variables.css',
+  'design_system/enterprise_identity.css',
+  'design_system/enterprise_components.css',
+  'design_system/component_catalog.md',
   'animations/animations.css',
+  'animations/premium_motion.css',
   'components/components.css',
+  'components/command_palette.js',
   'themes/themes.css',
   'beta/beta-manager.js',
   'beta/analytics-engine.js',
@@ -28,12 +33,16 @@ const productionAssets = [
   'beta/feature-flags.js',
   'enterprise/enterprise_app.css',
   'enterprise/enterprise_app.js',
+  'enterprise/executive_dashboard.html',
+  'admin/master_admin.html',
 ];
 
 await copy('index.html');
 await copy('login.html', 'login/index.html');
 await copy('beta/admin-dashboard.html', 'admin/index.html');
+await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
+await copy('enterprise/executive_dashboard.html', 'enterprise/executive.html');
 await copy('memory_center.html', 'memory-center/index.html');
 await Promise.all(productionAssets.map((asset) => copy(asset)));
 

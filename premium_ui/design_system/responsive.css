@@ -1,0 +1,828 @@
+/**
+ * ╔══════════════════════════════════════════════════════════════════╗
+ * ║  LifeOS Enterprise Premium — Responsive Design System           ║
+ * ║  Version 5.0.0 | PHASE 006 — Responsividade Total              ║
+ * ║  Mobile-First Approach | No Layout Breaks                       ║
+ * ╚══════════════════════════════════════════════════════════════════╝
+ */
+
+/* ============================================================
+   BREAKPOINTS — Mobile-First Approach
+   ============================================================ */
+
+:root {
+  --breakpoint-xs: 375px;   /* Mobile */
+  --breakpoint-sm: 390px;   /* Mobile */
+  --breakpoint-md: 768px;   /* Tablet */
+  --breakpoint-lg: 1024px;  /* Desktop */
+  --breakpoint-xl: 1280px;  /* Desktop */
+  --breakpoint-2xl: 1440px; /* Desktop */
+  --breakpoint-3xl: 1920px; /* Large Desktop */
+  --breakpoint-4xl: 2560px; /* Ultra Wide */
+}
+
+/* ============================================================
+   MOBILE FIRST — Base Styles (375px+)
+   ============================================================ */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Sidebar Mobile */
+.app-sidebar,
+.admin-sidebar,
+.executive-sidebar {
+  width: 100%;
+  height: auto;
+  border-right: none;
+  border-bottom: 1px solid var(--border-default);
+  flex-direction: row;
+  overflow-x: auto;
+}
+
+.app-sidebar-nav,
+.admin-sidebar-nav,
+.executive-sidebar-nav {
+  flex-direction: row;
+  flex: 1;
+  overflow-x: auto;
+}
+
+/* Main Content Mobile */
+.app-main,
+.admin-main,
+.executive-main {
+  flex-direction: column;
+}
+
+/* Content Padding Mobile */
+.app-content,
+.admin-content,
+.executive-content {
+  padding: var(--space-4);
+}
+
+/* Grid Mobile */
+.kpi-grid,
+.stats-grid,
+.dashboard-grid-2 {
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* Card Mobile */
+.enterprise-card,
+.kpi-card,
+.stat-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+/* Table Mobile */
+.admin-table {
+  font-size: var(--text-sm);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Modal Mobile */
+.command-palette-content {
+  width: 95%;
+  max-height: 80vh;
+}
+
+/* Buttons Mobile */
+.enterprise-btn {
+  width: 100%;
+  margin-bottom: var(--space-2);
+}
+
+/* Form Mobile */
+.enterprise-input,
+.enterprise-select,
+.enterprise-textarea {
+  width: 100%;
+  font-size: 16px; /* Prevent zoom on iOS */
+}
+
+/* Typography Mobile */
+.enterprise-display-2xl {
+  font-size: var(--text-2xl);
+}
+
+.enterprise-display-xl {
+  font-size: var(--text-xl);
+}
+
+.enterprise-heading-1 {
+  font-size: var(--text-lg);
+}
+
+/* Topbar Mobile */
+.app-topbar,
+.admin-topbar,
+.executive-topbar {
+  flex-direction: column;
+  height: auto;
+  padding: var(--space-3);
+  gap: var(--space-3);
+}
+
+.app-topbar-left,
+.admin-topbar-left,
+.executive-topbar-left {
+  width: 100%;
+  flex-direction: column;
+}
+
+.app-topbar-right,
+.admin-topbar-right,
+.executive-topbar-right {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Activity Feed Mobile */
+.activity-item {
+  padding: var(--space-3);
+}
+
+/* Section Headers Mobile */
+.admin-section-header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.admin-section-actions {
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+/* Touch Targets Mobile */
+button,
+a,
+.enterprise-btn-icon {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Spacing Mobile */
+.dashboard-section {
+  margin-bottom: var(--space-6);
+}
+
+/* ============================================================
+   SMALL MOBILE — 390px+
+   ============================================================ */
+
+@media (min-width: 390px) {
+  .enterprise-btn {
+    width: auto;
+  }
+
+  .admin-section-actions {
+    flex-direction: row;
+  }
+}
+
+/* ============================================================
+   TABLET — 768px+
+   ============================================================ */
+
+@media (min-width: 768px) {
+  /* Layout */
+  .app-shell,
+  .admin-shell,
+  .executive-shell {
+    flex-direction: row;
+  }
+
+  /* Sidebar Tablet */
+  .app-sidebar,
+  .admin-sidebar,
+  .executive-sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    border-right: 1px solid var(--border-default);
+    border-bottom: none;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .app-sidebar-nav,
+  .admin-sidebar-nav,
+  .executive-sidebar-nav {
+    flex-direction: column;
+    flex: 1;
+    overflow-x: visible;
+  }
+
+  /* Topbar Tablet */
+  .app-topbar,
+  .admin-topbar,
+  .executive-topbar {
+    flex-direction: row;
+    height: var(--topbar-height);
+    padding: 0 var(--space-6);
+  }
+
+  .app-topbar-left,
+  .admin-topbar-left,
+  .executive-topbar-left {
+    width: auto;
+    flex-direction: row;
+  }
+
+  .app-topbar-right,
+  .admin-topbar-right,
+  .executive-topbar-right {
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  /* Content Tablet */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    padding: var(--space-6);
+  }
+
+  /* Grid Tablet */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Table Tablet */
+  .admin-table {
+    font-size: var(--text-base);
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: var(--space-4);
+  }
+
+  /* Typography Tablet */
+  .enterprise-display-2xl {
+    font-size: var(--text-3xl);
+  }
+
+  .enterprise-display-xl {
+    font-size: var(--text-2xl);
+  }
+
+  .enterprise-heading-1 {
+    font-size: var(--text-xl);
+  }
+
+  /* Buttons Tablet */
+  .enterprise-btn {
+    width: auto;
+  }
+
+  /* Modal Tablet */
+  .command-palette-content {
+    width: 90%;
+    max-width: 600px;
+  }
+}
+
+/* ============================================================
+   IPAD — 1024px+
+   ============================================================ */
+
+@media (min-width: 1024px) {
+  /* Grid iPad */
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Content iPad */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    padding: var(--space-8);
+  }
+
+  /* Typography iPad */
+  .enterprise-display-2xl {
+    font-size: var(--text-4xl);
+  }
+
+  .enterprise-display-xl {
+    font-size: var(--text-3xl);
+  }
+
+  .enterprise-heading-1 {
+    font-size: var(--text-2xl);
+  }
+
+  /* Activity Feed iPad */
+  .activity-item {
+    padding: var(--space-4);
+  }
+
+  /* Section Headers iPad */
+  .admin-section-header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .admin-section-actions {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+/* ============================================================
+   DESKTOP — 1280px+
+   ============================================================ */
+
+@media (min-width: 1280px) {
+  /* Grid Desktop */
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .dashboard-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Content Desktop */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    padding: var(--space-8);
+  }
+
+  /* Table Desktop */
+  .admin-table-wrapper {
+    overflow-x: auto;
+  }
+
+  /* Typography Desktop */
+  .enterprise-display-2xl {
+    font-size: var(--text-5xl);
+  }
+
+  .enterprise-display-xl {
+    font-size: var(--text-4xl);
+  }
+
+  .enterprise-heading-1 {
+    font-size: var(--text-3xl);
+  }
+
+  /* Sidebar Desktop */
+  .app-sidebar,
+  .admin-sidebar,
+  .executive-sidebar {
+    width: 280px;
+  }
+
+  /* Topbar Desktop */
+  .app-topbar,
+  .admin-topbar,
+  .executive-topbar {
+    padding: 0 var(--space-6);
+  }
+}
+
+/* ============================================================
+   LARGE DESKTOP — 1440px+
+   ============================================================ */
+
+@media (min-width: 1440px) {
+  /* Content Large Desktop */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  /* Grid Large Desktop */
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Sidebar Large Desktop */
+  .app-sidebar,
+  .admin-sidebar,
+  .executive-sidebar {
+    width: 300px;
+  }
+
+  /* Typography Large Desktop */
+  .enterprise-display-2xl {
+    font-size: var(--text-6xl);
+  }
+
+  .enterprise-display-xl {
+    font-size: var(--text-5xl);
+  }
+
+  .enterprise-heading-1 {
+    font-size: var(--text-4xl);
+  }
+}
+
+/* ============================================================
+   ULTRA WIDE — 1920px+
+   ============================================================ */
+
+@media (min-width: 1920px) {
+  /* Content Ultra Wide */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    max-width: 2560px;
+    margin: 0 auto;
+  }
+
+  /* Grid Ultra Wide */
+  .kpi-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  /* Sidebar Ultra Wide */
+  .app-sidebar,
+  .admin-sidebar,
+  .executive-sidebar {
+    width: 320px;
+  }
+
+  /* Spacing Ultra Wide */
+  .app-content,
+  .admin-content,
+  .executive-content {
+    padding: var(--space-12);
+  }
+}
+
+/* ============================================================
+   LANDSCAPE ORIENTATION — Mobile Landscape
+   ============================================================ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce vertical spacing */
+  .app-topbar,
+  .admin-topbar,
+  .executive-topbar {
+    height: 50px;
+    padding: 0 var(--space-4);
+  }
+
+  .app-content,
+  .admin-content,
+  .executive-content {
+    padding: var(--space-3);
+  }
+
+  .dashboard-section {
+    margin-bottom: var(--space-4);
+  }
+
+  .kpi-card,
+  .stat-card {
+    padding: var(--space-3);
+  }
+}
+
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
+
+@media print {
+  /* Hide interactive elements */
+  .app-sidebar,
+  .admin-sidebar,
+  .executive-sidebar,
+  .app-topbar,
+  .admin-topbar,
+  .executive-topbar,
+  .enterprise-btn-icon,
+  button {
+    display: none;
+  }
+
+  /* Print-friendly colors */
+  body {
+    background: white;
+    color: black;
+  }
+
+  /* Page breaks */
+  .dashboard-section {
+    page-break-inside: avoid;
+  }
+
+  /* Print margins */
+  body {
+    margin: 0;
+    padding: 20px;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — High Contrast Mode
+   ============================================================ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-default: #000;
+    --border-strong: #000;
+    --text-primary: #000;
+    --text-secondary: #000;
+  }
+
+  .enterprise-btn {
+    border: 2px solid #000;
+  }
+
+  .enterprise-input,
+  .enterprise-select,
+  .enterprise-textarea {
+    border: 2px solid #000;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   DARK MODE — System Preference
+   ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme]) {
+    color-scheme: light;
+  }
+}
+
+/* ============================================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  button,
+  a,
+  .enterprise-btn-icon {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Remove hover states */
+  .enterprise-btn:hover {
+    animation: none;
+  }
+
+  .enterprise-card:hover {
+    animation: none;
+  }
+
+  /* Add active states */
+  .enterprise-btn:active {
+    opacity: 0.8;
+  }
+
+  .enterprise-card:active {
+    opacity: 0.9;
+  }
+}
+
+/* ============================================================
+   POINTER DEVICE OPTIMIZATIONS
+   ============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  /* Enable hover states */
+  .enterprise-btn:hover {
+    animation: hoverLift var(--duration-normal) var(--ease-out) forwards;
+  }
+
+  .enterprise-card:hover {
+    animation: hoverScale var(--duration-normal) var(--ease-out) forwards;
+  }
+
+  /* Cursor feedback */
+  button,
+  a,
+  .enterprise-btn-icon {
+    cursor: pointer;
+  }
+}
+
+/* ============================================================
+   VIEWPORT UNITS — Safe Areas
+   ============================================================ */
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================================
+   CONTAINER QUERIES — Future-Proof
+   ============================================================ */
+
+@supports (container-type: inline-size) {
+  .app-content,
+  .admin-content,
+  .executive-content {
+    container-type: inline-size;
+  }
+
+  @container (min-width: 700px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @container (min-width: 1000px) {
+    .kpi-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+/* ============================================================
+   UTILITY CLASSES — Responsive Helpers
+   ============================================================ */
+
+.hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hidden-mobile {
+    display: block;
+  }
+
+  .hidden-tablet {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hidden-tablet {
+    display: block;
+  }
+
+  .hidden-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hidden-desktop {
+    display: block;
+  }
+}
+
+/* ============================================================
+   LAYOUT HELPERS — Responsive Stacks
+   ============================================================ */
+
+.responsive-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .responsive-stack {
+    flex-direction: row;
+  }
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================================
+   PERFORMANCE — Optimize for Device
+   ============================================================ */
+
+@media (prefers-reduced-data: reduce) {
+  /* Disable heavy animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Disable background images */
+  body {
+    background-image: none !important;
+  }
+}
+
+/* ============================================================
+   TESTING HELPERS — Visual Breakpoint Indicators
+   ============================================================ */
+
+/* Uncomment para debugging */
+/*
+body::before {
+  content: 'xs';
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  padding: 5px 10px;
+  z-index: 9999;
+}
+
+@media (min-width: 390px) {
+  body::before { content: 'sm'; background: orange; }
+}
+
+@media (min-width: 768px) {
+  body::before { content: 'md'; background: yellow; }
+}
+
+@media (min-width: 1024px) {
+  body::before { content: 'lg'; background: green; }
+}
+
+@media (min-width: 1280px) {
+  body::before { content: 'xl'; background: blue; }
+}
+
+@media (min-width: 1440px) {
+  body::before { content: '2xl'; background: purple; }
+}
+
+@media (min-width: 1920px) {
+  body::before { content: '3xl'; background: indigo; }
+}
+
+@media (min-width: 2560px) {
+  body::before { content: '4xl'; background: brown; }
+}
+*/
