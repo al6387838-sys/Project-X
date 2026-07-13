@@ -7,7 +7,9 @@
   <title>Dashboard — LifeOS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -561,16 +563,179 @@
       letter-spacing: 1px;
     }
 
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.active { opacity: 1; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      transform: translateY(16px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .modal-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+    .modal-close:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .plan-current {
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.05) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .plan-name-big { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+    .plan-price-big { font-size: 20px; font-weight: 700; color: var(--accent-light); }
+    .plan-price-big span { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+    }
+    .profile-avatar-big {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .profile-name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .profile-email { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .profile-plan {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-light);
+      background: rgba(99,102,241,0.1);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(99,102,241,0.2);
+      margin-top: 6px;
+    }
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .page.active { animation: fadeIn 0.25s ease; }
+    .card { animation: fadeInUp 0.3s ease both; }
+    .nav-item { animation: slideInLeft 0.2s ease both; }
+    /* Skeleton loading */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-md);
+    }
+    /* Focus visible */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    /* Scrollbar global */
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+    /* Smooth page transitions */
+    .page { transition: opacity 0.15s ease; }
+    /* Button active state */
+    .btn:active { transform: scale(0.97); }
+    .btn-primary:active { box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+    /* Card hover glow */
+    .card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+    /* Notification badge pulse */
+    .nav-badge { animation: pulse 2s ease infinite; }
     /* ─── RESPONSIVE ─── */
     @media (max-width: 1024px) {
       .grid-4 { grid-template-columns: repeat(2, 1fr); }
       .grid-main { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
-      .sidebar { position: fixed; left: -100%; transition: left 0.3s; }
-      .sidebar.mobile-open { left: 0; }
+      .sidebar { position: fixed; left: -100%; transition: left 0.3s; z-index: 200; }
+      .sidebar.mobile-open { left: 0; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
       .grid-3 { grid-template-columns: 1fr; }
       .grid-2 { grid-template-columns: 1fr; }
+      .topbar-search { max-width: 200px; }
+      .content { padding: 16px; }
+      .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      .grid-4 { grid-template-columns: 1fr; }
+      .topbar-search { display: none; }
+    }
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
@@ -1181,6 +1346,57 @@
   </div>
 </div>
 
+<!-- ─── MODAL: ONBOARDING ─── -->
+<div class="modal-overlay" id="modal-onboarding">
+  <div class="modal-box">
+    <div id="onboarding-content"></div>
+  </div>
+</div>
+
+<!-- ─── MODAL: ALTERAR SENHA ─── -->
+<div class="modal-overlay" id="modal-change-password">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">🔑 Alterar Senha</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div id="pwd-status" style="display:none;padding:10px 14px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px"></div>
+    <div class="form-group">
+      <label class="form-label">Senha Atual</label>
+      <input type="password" class="form-input" id="pwd-current" placeholder="Digite sua senha atual" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nova Senha</label>
+      <input type="password" class="form-input" id="pwd-new" placeholder="Mínimo 8 caracteres" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirmar Nova Senha</label>
+      <input type="password" class="form-input" id="pwd-confirm" placeholder="Repita a nova senha" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="pwd-save-btn" onclick="submitPasswordChange()">Alterar Senha</button>
+  </div>
+</div>
+
+<!-- ─── MODAL: CONVIDAR MEMBRO ─── -->
+<div class="modal-overlay" id="modal-invite">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">✉️ Convidar Usuário</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div id="invite-status" style="display:none;padding:10px 14px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px"></div>
+    <div class="form-group">
+      <label class="form-label">Nome</label>
+      <input type="text" class="form-input" id="invite-name" placeholder="Nome do convidado" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">E-mail</label>
+      <input type="email" class="form-input" id="invite-email" placeholder="email@empresa.com" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitInvite()">Enviar Convite</button>
+  </div>
+</div>
+
 <script>
   'use strict';
   let currentUser = null;
@@ -1205,11 +1421,16 @@
     // Sidebar
     document.getElementById('sidebar-avatar').textContent = initials;
     document.getElementById('sidebar-name').textContent = name;
-    document.getElementById('sidebar-plan').textContent = 'Plano Pro';
+    document.getElementById('sidebar-plan').textContent = user.plan ? `Plano ${user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}` : 'Plano Pro';
     // Profile
     document.getElementById('profile-avatar').textContent = initials;
     document.getElementById('profile-name').textContent = name;
     document.getElementById('profile-email').textContent = user.username;
+    // Populate profile form
+    const profileInputs = document.querySelectorAll('#page-profile input');
+    if (profileInputs[0]) profileInputs[0].value = name;
+    if (profileInputs[1]) profileInputs[1].value = user.username;
+    if (profileInputs[2]) profileInputs[2].value = user.timezone || 'America/Sao_Paulo';
     // Greeting
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
@@ -1222,7 +1443,13 @@
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const page = document.getElementById('page-' + id);
-    if (page) page.classList.add('active');
+    if (page) {
+      page.classList.add('active');
+      // Reiniciar animação
+      page.style.animation = 'none';
+      page.offsetHeight; // reflow
+      page.style.animation = '';
+    }
     // Highlight nav
     document.querySelectorAll('.nav-item').forEach(n => {
       if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) {
@@ -1231,11 +1458,38 @@
     });
     // Scroll to top
     document.querySelector('.content').scrollTop = 0;
+    // Fechar sidebar no mobile
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+    }
+    // Atualizar URL hash
+    history.replaceState({}, '', `#${id}`);
   }
 
   // Sidebar toggle
   function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    const sidebar = document.getElementById('sidebar');
+    if (window.innerWidth <= 768) {
+      sidebar.classList.toggle('mobile-open');
+    } else {
+      sidebar.classList.toggle('collapsed');
+    }
+  }
+
+  // Fechar sidebar mobile ao clicar fora
+  document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    if (window.innerWidth <= 768 && sidebar.classList.contains('mobile-open')) {
+      if (!sidebar.contains(e.target) && !e.target.closest('.topbar-toggle')) {
+        sidebar.classList.remove('mobile-open');
+      }
+    }
+  });
+
+  // Restaurar página do hash na URL
+  const _hashPage = location.hash.slice(1);
+  if (_hashPage && document.getElementById('page-' + _hashPage)) {
+    showPage(_hashPage);
   }
 
   // Habit toggle
@@ -1279,14 +1533,192 @@
     location.replace('/login');
   }
 
-  // Global search shortcut
+  // Global search shortcut + Escape
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       showPage('search');
       setTimeout(() => document.getElementById('search-input').focus(), 100);
     }
+    if (e.key === 'Escape') closeModal();
   });
+
+  // ─── Toast system ─────────────────────────────────────────────
+  function showToast(msg, type = 'info') {
+    const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };
+    const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:#1E293B;border:1px solid ${colors[type]};border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeIn 0.3s ease;max-width:360px;font-size:14px;color:#F0F4FF;`;
+    toast.innerHTML = `<span style="width:20px;height:20px;border-radius:50%;background:${colors[type]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">${icons[type]}</span><span>${msg}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
+  }
+
+  // ─── Modal system ─────────────────────────────────────────────
+  function openModal(id) {
+    const m = document.getElementById(id);
+    if (m) { m.style.display = 'flex'; setTimeout(() => m.classList.add('active'), 10); }
+  }
+  function closeModal() {
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+      m.classList.remove('active');
+      setTimeout(() => { m.style.display = 'none'; }, 200);
+    });
+  }
+  // Close on backdrop click
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', (e) => { if (e.target === m) closeModal(); });
+  });
+
+  // ─── Profile Save ─────────────────────────────────────────────
+  document.querySelector('#page-profile .btn-primary')?.addEventListener('click', async () => {
+    const profileInputs = document.querySelectorAll('#page-profile input');
+    const name = profileInputs[0]?.value?.trim();
+    const timezone = profileInputs[2]?.value?.trim();
+    if (!name) { showToast('Nome é obrigatório', 'error'); return; }
+    try {
+      const r = await fetch('/api/profile-update', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'profile.update', name, timezone }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        showToast('Perfil atualizado com sucesso!', 'success');
+        document.getElementById('profile-name').textContent = name;
+        document.getElementById('sidebar-name').textContent = name;
+        const initials = name.slice(0,2).toUpperCase();
+        document.getElementById('profile-avatar').textContent = initials;
+        document.getElementById('sidebar-avatar').textContent = initials;
+      } else { showToast(d.error || 'Erro ao salvar', 'error'); }
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+  });
+
+  // ─── Settings buttons ─────────────────────────────────────────
+  document.querySelectorAll('#page-settings .btn-ghost').forEach(btn => {
+    const text = btn.textContent.trim();
+    if (text.includes('Alterar senha')) btn.onclick = () => openModal('modal-change-password');
+    else if (text.includes('Ativar MFA')) btn.onclick = () => showToast('MFA será configurado via e-mail. Verifique sua caixa de entrada.', 'info');
+    else if (text.includes('Ver sessões')) btn.onclick = () => showToast('Sessão atual: Chrome · ' + new Date().toLocaleDateString('pt-BR'), 'info');
+    else if (text.includes('Exportar dados')) btn.onclick = () => showToast('Exportação iniciada. Você receberá um e-mail em breve.', 'success');
+    else if (text.includes('Importar dados')) btn.onclick = () => showToast('Funcionalidade de importação em breve.', 'info');
+  });
+
+  // ─── Billing buttons ───────────────────────────────────────────
+  document.querySelector('#page-billing .btn-primary')?.addEventListener('click', () => {
+    showToast('Redirecionando para checkout Enterprise...', 'info');
+    setTimeout(() => showToast('Entre em contato: sales@lifeos.app', 'success'), 1500);
+  });
+  document.querySelector('#page-billing .btn-ghost')?.addEventListener('click', () => {
+    showToast('Gerenciamento de pagamento disponível em breve.', 'info');
+  });
+
+  // ─── Password change ─────────────────────────────────────────
+  async function submitPasswordChange() {
+    const current = document.getElementById('pwd-current')?.value;
+    const newPwd = document.getElementById('pwd-new')?.value;
+    const confirm = document.getElementById('pwd-confirm')?.value;
+    const statusEl = document.getElementById('pwd-status');
+    if (!current || !newPwd || !confirm) { showPwdStatus('Preencha todos os campos', 'error'); return; }
+    if (newPwd !== confirm) { showPwdStatus('As senhas não coincidem', 'error'); return; }
+    if (newPwd.length < 8) { showPwdStatus('Nova senha deve ter pelo menos 8 caracteres', 'error'); return; }
+    const btn = document.getElementById('pwd-save-btn');
+    btn.textContent = 'Alterando...';
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/profile-update', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'password.change', currentPassword: current, newPassword: newPwd }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        showPwdStatus('Senha alterada com sucesso!', 'success');
+        setTimeout(() => { closeModal(); document.getElementById('pwd-current').value = ''; document.getElementById('pwd-new').value = ''; document.getElementById('pwd-confirm').value = ''; }, 1500);
+      } else { showPwdStatus(d.error || 'Erro ao alterar senha', 'error'); }
+    } catch (_) { showPwdStatus('Erro de conexão', 'error'); }
+    finally { btn.textContent = 'Alterar Senha'; btn.disabled = false; }
+  }
+  function showPwdStatus(msg, type) {
+    const el = document.getElementById('pwd-status');
+    el.style.display = 'block';
+    el.style.background = type === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+    el.style.color = type === 'success' ? '#10B981' : '#EF4444';
+    el.style.border = `1px solid ${type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`;
+    el.textContent = msg;
+  }
+
+  // ─── Invite ─────────────────────────────────────────────────
+  async function submitInvite() {
+    const name = document.getElementById('invite-name')?.value?.trim();
+    const email = document.getElementById('invite-email')?.value?.trim();
+    const statusEl = document.getElementById('invite-status');
+    if (!name || !email) { showInviteStatus('Preencha nome e e-mail', 'error'); return; }
+    try {
+      const r = await fetch('/api/invite', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'invite.create', name, email, role: 'user' }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        showInviteStatus(`Convite enviado para ${email}!`, 'success');
+        setTimeout(() => { closeModal(); document.getElementById('invite-name').value = ''; document.getElementById('invite-email').value = ''; }, 1500);
+      } else { showInviteStatus(d.error || 'Erro ao enviar convite', 'error'); }
+    } catch (_) { showInviteStatus('Erro de conexão', 'error'); }
+  }
+  function showInviteStatus(msg, type) {
+    const el = document.getElementById('invite-status');
+    el.style.display = 'block';
+    el.style.background = type === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+    el.style.color = type === 'success' ? '#10B981' : '#EF4444';
+    el.style.border = `1px solid ${type === 'success' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`;
+    el.textContent = msg;
+  }
+
+  // ─── Onboarding ─────────────────────────────────────────────
+  let onboardingStep = 0;
+  const onboardingSteps = [
+    { title: 'Bem-vindo ao LifeOS! 🚀', desc: 'Sua plataforma de produtividade pessoal. Vamos configurar sua experiência em 3 passos rápidos.', icon: '🌟', action: 'Próximo' },
+    { title: 'Defina suas metas 🎯', desc: 'Quais são seus objetivos principais? Adicione e edite metas a qualquer momento na seção Metas.', icon: '🎯', action: 'Próximo' },
+    { title: 'Crie hábitos diários 🔄', desc: 'Hábitos consistentes são a base do sucesso. Comece com 2-3 hábitos simples.', icon: '🔄', action: 'Próximo' },
+    { title: 'Tudo pronto! ✨', desc: 'Seu LifeOS está configurado. Explore o dashboard e comece sua jornada!', icon: '✨', action: 'Começar' },
+  ];
+  function renderOnboardingStep() {
+    const step = onboardingSteps[onboardingStep];
+    const container = document.getElementById('onboarding-content');
+    if (!container || !step) return;
+    container.innerHTML = `
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:56px;margin-bottom:20px">${step.icon}</div>
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;color:#F0F4FF">${step.title}</h2>
+        <p style="font-size:14px;color:#8892A4;line-height:1.6;max-width:320px;margin:0 auto">${step.desc}</p>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:24px 0">
+        ${onboardingSteps.map((_,i) => `<div style="width:${i===onboardingStep?24:8}px;height:8px;border-radius:4px;background:${i===onboardingStep?'#6366F1':'rgba(255,255,255,0.1)'};transition:all 0.3s"></div>`).join('')}
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="nextOnboardingStep()">${step.action}</button>
+      ${onboardingStep > 0 ? '<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px" onclick="prevOnboardingStep()">Voltar</button>' : ''}
+    `;
+  }
+  async function nextOnboardingStep() {
+    if (onboardingStep < onboardingSteps.length - 1) {
+      onboardingStep++; renderOnboardingStep();
+    } else {
+      try {
+        await fetch('/api/onboarding', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ step: 'complete', data: {} }) });
+      } catch (_) {}
+      closeModal();
+      history.replaceState({}, '', '/app');
+      showToast('Bem-vindo ao LifeOS! Explore o dashboard.', 'success');
+    }
+  }
+  function prevOnboardingStep() { if (onboardingStep > 0) { onboardingStep--; renderOnboardingStep(); } }
+  // Check onboarding on load
+  const _urlParams = new URLSearchParams(location.search);
+  if (_urlParams.get('onboarding') === 'true') {
+    setTimeout(() => { openModal('modal-onboarding'); renderOnboardingStep(); }, 600);
+  }
 </script>
 </body>
 </html>

@@ -6,13 +6,22 @@
   <meta name="theme-color" content="#0A0E14" />
   <meta name="description" content="LifeOS Enterprise — O sistema operacional da sua vida. Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
   <meta name="robots" content="index,follow" />
+  <meta name="author" content="LifeOS Enterprise" />
+  <meta name="keywords" content="lifeos, sistema operacional de vida, hábitos, metas, produtividade, enterprise, IA" />
   <meta property="og:title" content="LifeOS Enterprise — Seu Sistema Operacional de Vida" />
   <meta property="og:description" content="Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lifeos-enterprise.pages.dev" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LifeOS Enterprise" />
+  <meta name="twitter:description" content="O sistema operacional da sua vida com IA enterprise." />
+  <link rel="canonical" href="https://lifeos-enterprise.pages.dev" />
   <title>LifeOS Enterprise — Seu Sistema Operacional de Vida</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1345,6 +1354,36 @@
       }
     } catch (_) {}
   })();
+
+  // IntersectionObserver para animações scroll-triggered
+  if ('IntersectionObserver' in window) {
+    const animateOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          animateOnScroll.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.feature-card, .pricing-card, .testimonial-card, .stat-item, .benefit-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      animateOnScroll.observe(el);
+    });
+  }
+
+  // Smooth scroll para links internos
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
 </script>
 </body>
 </html>

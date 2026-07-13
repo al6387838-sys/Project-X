@@ -1,20 +1,50 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 6.0.0
+// Version: 7.0.0 (com minificação HTML)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
+import { minify } from 'html-minifier-terser';
 
 const root = resolve(import.meta.dirname, '..');
 const source = resolve(root, 'premium_ui');
 const dist = resolve(root, 'dist');
 const publicDir = resolve(root, 'public');
 
+// Opções de minificação HTML
+const MINIFY_OPTIONS = {
+  collapseWhitespace: true,
+  removeComments: true,
+  removeRedundantAttributes: true,
+  removeScriptTypeAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  useShortDoctype: true,
+  minifyCSS: true,
+  minifyJS: true,
+  collapseBooleanAttributes: true,
+  decodeEntities: false,
+};
+
+// Copiar arquivo (sem minificação) para assets binários/CSS/JS
 const copy = async (from, to = from) => {
   const target = resolve(dist, to);
   await mkdir(dirname(target), { recursive: true });
   await cp(resolve(source, from), target, { recursive: true });
+};
+
+// Copiar e minificar HTML
+const copyHtml = async (from, to) => {
+  const target = resolve(dist, to);
+  await mkdir(dirname(target), { recursive: true });
+  const raw = await readFile(resolve(source, from), 'utf8');
+  try {
+    const minified = await minify(raw, MINIFY_OPTIONS);
+    await writeFile(target, minified);
+  } catch (_) {
+    // Fallback: copiar sem minificar
+    await writeFile(target, raw);
+  }
 };
 
 await rm(dist, { recursive: true, force: true });
@@ -43,26 +73,26 @@ const productionAssets = [
 ];
 
 // ─── Rotas principais v6 ───────────────────────────────────────────────────
-// Landing Page (/)
-await copy('landing.html', 'index.html');
+// Landing Page (/) — minificado
+await copyHtml('landing.html', 'index.html');
 
-// Login unificado (/login)
-await copy('login_new.html', 'login/index.html');
+// Login unificado (/login) — minificado
+await copyHtml('login_new.html', 'login/index.html');
 
-// Recuperação de senha (/forgot-password)
-await copy('forgot_password.html', 'forgot-password/index.html');
+// Recuperação de senha (/forgot-password) — minificado
+await copyHtml('forgot_password.html', 'forgot-password/index.html');
 
-// Dashboard do usuário (/app)
-await copy('app_dashboard.html', 'app/index.html');
+// Dashboard do usuário (/app) — minificado
+await copyHtml('app_dashboard.html', 'app/index.html');
 
-// Painel admin (/admin)
-await copy('admin_panel.html', 'admin/index.html');
+// Painel admin (/admin) — minificado
+await copyHtml('admin_panel.html', 'admin/index.html');
 
 // Rotas legadas (compatibilidade)
 await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
 await copy('enterprise/executive_dashboard.html', 'enterprise/executive.html');
-await copy('memory_center.html', 'memory-center/index.html');
+await copyHtml('memory_center.html', 'memory-center/index.html');
 
 // Assets de produção
 await Promise.all(productionAssets.map((asset) => copy(asset)));
@@ -74,7 +104,7 @@ try {
 
 // Gerar _redirects v6 com novas rotas
 const redirects = [
-  '# LifeOS Enterprise v6.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v7.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -124,7 +154,8 @@ const routes = [
 
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
-  version: '6.0.0',
+  service: 'lifeos-enterprise',
+  version: '7.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   architecture: 'multi-page-rbac',
@@ -136,7 +167,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '6.0.0',
+  version: '7.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -216,10 +247,10 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v6.0.0 — Build OK ✓         ║');
+console.log('║   LifeOS Enterprise v7.0.0 — Build OK ✓         ║');
 console.log('╚══════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 6.0.0`);
+console.log(`  Version       : 7.0.0`);
 console.log(`  Architecture  : Multi-Page RBAC (Landing + App + Admin)`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
