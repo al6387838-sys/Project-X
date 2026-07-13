@@ -1,18 +1,29 @@
-# LifeOS Enterprise — Cloudflare Pages Redirects
-# SPA Routes
-/login              /login/index.html   200
-/admin              /admin/index.html   200
-/admin/master       /admin/master.html  200
-/enterprise         /enterprise/index.html  200
+# LifeOS Enterprise v6.0.0 — Cloudflare Pages Redirects
+
+# Auth routes
+/login              /login/index.html           200
+/forgot-password    /forgot-password/index.html 200
+
+# App routes (autenticado — USER e ADMIN)
+/app                /app/index.html             200
+/app/*              /app/index.html             200
+
+# Admin routes (ADMIN only)
+/admin              /admin/index.html           200
+/admin/*            /admin/index.html           200
+
+# Legacy routes (compatibilidade)
+/enterprise         /enterprise/index.html      200
 /memory-center      /memory-center/index.html   200
-/dashboard          /index.html         200
-/companion          /index.html         200
-/missions           /index.html         200
-/timeline           /index.html         200
-/lifegraph          /index.html         200
-/briefing           /index.html         200
-/analytics          /index.html         200
-/profile            /index.html         200
-/settings           /index.html         200
-# SPA fallback
-/*                  /index.html         200
+/dashboard          /app/index.html             200
+/companion          /app/index.html             200
+/missions           /app/index.html             200
+/timeline           /app/index.html             200
+/lifegraph          /app/index.html             200
+/briefing           /app/index.html             200
+/analytics          /app/index.html             200
+/profile            /app/index.html             200
+/settings           /app/index.html             200
+
+# SPA fallback — Landing Page
+/*                  /index.html                 200

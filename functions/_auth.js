@@ -1,7 +1,7 @@
-// LifeOS Enterprise — Auth Module para Cloudflare Pages Functions
-// Compatível com Web Crypto API (sem node:crypto)
+// LifeOS Enterprise — Auth Module v6.0 — RBAC (ADMIN + USER)
+// Cloudflare Pages Functions — Web Crypto API
 
-const COOKIE_NAME = 'lifeos_admin_session';
+const COOKIE_NAME = 'lifeos_session';
 
 export function json(statusCode, body, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -55,8 +55,9 @@ async function hmacVerify(payload, suppliedSig, secret) {
   return safeEqual(suppliedSig, expected);
 }
 
-export async function createSession(username, secret) {
-  const payloadObj = { sub: username, role: 'admin', exp: Date.now() + 12 * 60 * 60 * 1000 };
+// role: 'admin' | 'user'
+export async function createSession(username, role, secret) {
+  const payloadObj = { sub: username, role: role || 'user', exp: Date.now() + 12 * 60 * 60 * 1000 };
   const payload = base64url(JSON.stringify(payloadObj));
   const sig = await hmacSign(payload, secret);
   return `${payload}.${sig}`;
@@ -73,7 +74,7 @@ export async function verifySession(token, secret) {
   try {
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
     const data = JSON.parse(decoded);
-    return data.role === 'admin' && data.exp > Date.now() ? data : null;
+    return data.exp > Date.now() ? data : null;
   } catch {
     return null;
   }

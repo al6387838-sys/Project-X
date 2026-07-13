@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # LifeOS Enterprise — Cloudflare Pages Deploy Script
-# Version: 3.0.0
+# Version: 6.0.0
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 PROJECT_NAME="lifeos-enterprise"
-VERSION="3.0.0"
+VERSION="6.0.0"
 
 echo ""
 echo "╔══════════════════════════════════════════════╗"

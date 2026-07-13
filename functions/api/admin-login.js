@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Admin Login
+// LifeOS Enterprise — Admin Login v6.0 (compat)
 // Cloudflare Pages Function: POST /api/admin-login
 
 import { createSession, json, passwordDigest, safeEqual, sessionCookie } from '../_auth.js';
@@ -26,8 +26,8 @@ export async function onRequestPost({ request, env }) {
   const valid = safeEqual(username, configuredUser) && safeEqual(inputHash, configuredHash);
   if (!valid) return json(401, { ok: false, error: 'Credenciais inválidas' });
 
-  const token = await createSession(configuredUser, sessionSecret);
-  return json(200, { ok: true, user: { username: configuredUser, role: 'admin' } }, {
+  const token = await createSession(configuredUser, 'admin', sessionSecret);
+  return json(200, { ok: true, user: { username: configuredUser, role: 'admin' }, redirect: '/admin' }, {
     'set-cookie': sessionCookie(token),
   });
 }
@@ -36,6 +36,8 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: { allow: 'POST, OPTIONS' } });
 }
 
-export async function onRequest() {
+export async function onRequest({ request, env }) {
+  if (request.method === 'POST') return onRequestPost({ request, env });
+  if (request.method === 'OPTIONS') return onRequestOptions();
   return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'POST' });
 }

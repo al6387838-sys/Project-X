@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 5.0.0
+// Version: 6.0.0
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -42,42 +42,92 @@ const productionAssets = [
   'admin/master_admin.html',
 ];
 
-await copy('index.html');
-await copy('login.html', 'login/index.html');
-await copy('beta/admin-dashboard.html', 'admin/index.html');
+// ─── Rotas principais v6 ───────────────────────────────────────────────────
+// Landing Page (/)
+await copy('landing.html', 'index.html');
+
+// Login unificado (/login)
+await copy('login_new.html', 'login/index.html');
+
+// Recuperação de senha (/forgot-password)
+await copy('forgot_password.html', 'forgot-password/index.html');
+
+// Dashboard do usuário (/app)
+await copy('app_dashboard.html', 'app/index.html');
+
+// Painel admin (/admin)
+await copy('admin_panel.html', 'admin/index.html');
+
+// Rotas legadas (compatibilidade)
 await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
 await copy('enterprise/executive_dashboard.html', 'enterprise/executive.html');
 await copy('memory_center.html', 'memory-center/index.html');
+
+// Assets de produção
 await Promise.all(productionAssets.map((asset) => copy(asset)));
 
-// Copiar _headers e _redirects do public/ para dist/
+// ─── _redirects e _headers ─────────────────────────────────────────────────
 try {
   await cp(resolve(publicDir, '_headers'), resolve(dist, '_headers'));
-  await cp(resolve(publicDir, '_redirects'), resolve(dist, '_redirects'));
-} catch {
-  const spaRoutes = ['dashboard', 'companion', 'missions', 'timeline', 'lifegraph', 'briefing', 'analytics', 'profile', 'settings'];
-  const redirects = [
-    '/login /login/index.html 200',
-    '/admin /admin/index.html 200',
-    '/enterprise /enterprise/index.html 200',
-    '/memory-center /memory-center/index.html 200',
-    ...spaRoutes.map((route) => `/${route} /index.html 200`),
-    '/* /index.html 200',
-  ].join('\n') + '\n';
-  await writeFile(resolve(dist, '_redirects'), redirects);
-}
+} catch { /* sem _headers customizado */ }
 
+// Gerar _redirects v6 com novas rotas
+const redirects = [
+  '# LifeOS Enterprise v6.0.0 — Cloudflare Pages Redirects',
+  '',
+  '# Auth routes',
+  '/login              /login/index.html           200',
+  '/forgot-password    /forgot-password/index.html 200',
+  '',
+  '# App routes (autenticado)',
+  '/app                /app/index.html             200',
+  '/app/*              /app/index.html             200',
+  '',
+  '# Admin routes (admin only)',
+  '/admin              /admin/index.html           200',
+  '/admin/*            /admin/index.html           200',
+  '',
+  '# Legacy routes (compatibilidade)',
+  '/enterprise         /enterprise/index.html      200',
+  '/memory-center      /memory-center/index.html   200',
+  '/dashboard          /app/index.html             200',
+  '/companion          /app/index.html             200',
+  '/missions           /app/index.html             200',
+  '/timeline           /app/index.html             200',
+  '/lifegraph          /app/index.html             200',
+  '/briefing           /app/index.html             200',
+  '/analytics          /app/index.html             200',
+  '/profile            /app/index.html             200',
+  '/settings           /app/index.html             200',
+  '',
+  '# SPA fallback — Landing Page',
+  '/*                  /index.html                 200',
+  '',
+].join('\n');
+
+await writeFile(resolve(dist, '_redirects'), redirects);
+
+// ─── Build metadata ────────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const spaRoutes = ['dashboard', 'companion', 'missions', 'timeline', 'lifegraph', 'briefing', 'analytics', 'profile', 'settings'];
-const routes = ['/', ...spaRoutes.map((route) => `/${route}`), '/login', '/admin', '/enterprise', '/memory-center'];
+
+const routes = [
+  '/',
+  '/login',
+  '/forgot-password',
+  '/app',
+  '/admin',
+  '/enterprise',
+  '/memory-center',
+];
 
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
-  version: '5.0.0',
+  version: '6.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
+  architecture: 'multi-page-rbac',
   commit,
   builtAt,
   routes,
@@ -86,30 +136,46 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '5.0.0',
+  version: '6.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
 }, null, 2) + '\n');
 
+// ─── Validação do build ────────────────────────────────────────────────────
 const required = [
   'index.html',
   'login/index.html',
+  'forgot-password/index.html',
+  'app/index.html',
   'admin/index.html',
-  'enterprise/index.html',
-  'memory-center/index.html',
-  ...productionAssets,
   '_redirects',
 ];
-for (const file of required) await stat(resolve(dist, file));
 
-const index = await readFile(resolve(dist, 'index.html'), 'utf8');
-if (!index.includes('LifeOS') || !index.includes('view-dashboard')) {
-  throw new Error('Build inválido: aplicação principal incompleta');
+for (const file of required) {
+  await stat(resolve(dist, file));
 }
 
-// Patch URLs de API: Netlify -> Cloudflare
+// Validar landing page
+const landing = await readFile(resolve(dist, 'index.html'), 'utf8');
+if (!landing.includes('LifeOS')) {
+  throw new Error('Build inválido: landing page incompleta');
+}
+
+// Validar app dashboard
+const appDash = await readFile(resolve(dist, 'app/index.html'), 'utf8');
+if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
+  throw new Error('Build inválido: app dashboard incompleto');
+}
+
+// Validar admin panel
+const adminPanel = await readFile(resolve(dist, 'admin/index.html'), 'utf8');
+if (!adminPanel.includes('Admin') || !adminPanel.includes('/api/session')) {
+  throw new Error('Build inválido: admin panel incompleto');
+}
+
+// ─── Patch URLs legadas ────────────────────────────────────────────────────
 async function patchApiUrls(filePath) {
   try {
     let content = await readFile(filePath, 'utf8');
@@ -125,21 +191,42 @@ async function patchApiUrls(filePath) {
   } catch { /* ignorar */ }
 }
 
-const htmlFiles = ['index.html', 'login/index.html', 'admin/index.html', 'admin/master.html', 'enterprise/index.html', 'enterprise/executive.html', 'memory-center/index.html'];
-const jsFiles = ['black_diamond.js', 'enterprise/enterprise_app.js', 'beta/beta-manager.js', 'beta/analytics-engine.js', 'beta/feedback-center.js', 'beta/feature-flags.js', 'components/command_palette.js'];
+const htmlFiles = [
+  'index.html',
+  'login/index.html',
+  'app/index.html',
+  'admin/index.html',
+  'admin/master.html',
+  'enterprise/index.html',
+  'enterprise/executive.html',
+  'memory-center/index.html',
+];
+const jsFiles = [
+  'black_diamond.js',
+  'enterprise/enterprise_app.js',
+  'beta/beta-manager.js',
+  'beta/analytics-engine.js',
+  'beta/feedback-center.js',
+  'beta/feature-flags.js',
+  'components/command_palette.js',
+];
 for (const file of [...htmlFiles, ...jsFiles]) {
   await patchApiUrls(resolve(dist, file));
 }
 
 console.log('');
-console.log('╔══════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise — Production Build OK   ║');
-console.log('╚══════════════════════════════════════════════╝');
-console.log(`  Platform : Cloudflare Pages`);
-console.log(`  Version  : 5.0.0`);
-console.log(`  Commit   : ${commit}`);
-console.log(`  Built at : ${builtAt}`);
-console.log(`  Routes   : ${routes.length}`);
-console.log(`  Assets   : ${required.length}`);
-console.log(`  Output   : ${dist}`);
+console.log('╔══════════════════════════════════════════════════╗');
+console.log('║   LifeOS Enterprise v6.0.0 — Build OK ✓         ║');
+console.log('╚══════════════════════════════════════════════════╝');
+console.log(`  Platform      : Cloudflare Pages`);
+console.log(`  Version       : 6.0.0`);
+console.log(`  Architecture  : Multi-Page RBAC (Landing + App + Admin)`);
+console.log(`  Commit        : ${commit}`);
+console.log(`  Built at      : ${builtAt}`);
+console.log(`  Routes        : ${routes.length}`);
+console.log(`  Assets        : ${required.length}`);
+console.log(`  Output        : ${dist}`);
+console.log('');
+console.log('  Routes:');
+routes.forEach(r => console.log(`    ${r}`));
 console.log('');

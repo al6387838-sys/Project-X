@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0A0E14" />
+  <meta name="description" content="LifeOS Enterprise — O sistema operacional da sua vida. Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:title" content="LifeOS Enterprise — Seu Sistema Operacional de Vida" />
+  <meta property="og:description" content="Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
+  <meta property="og:type" content="website" />
+  <title>LifeOS Enterprise — Seu Sistema Operacional de Vida</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14;
+      --bg-elevated: #0F1520;
+      --bg-card: #141B28;
+      --bg-card-hover: #1A2235;
+      --border: rgba(255,255,255,0.07);
+      --border-accent: rgba(99,102,241,0.3);
+      --text-primary: #F0F4FF;
+      --text-secondary: #8892A4;
+      --text-muted: #4A5568;
+      --accent: #6366F1;
+      --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.15);
+      --purple: #8B5CF6;
+      --cyan: #06B6D4;
+      --green: #10B981;
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --gradient-hero: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+      --gradient-card: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.05) 100%);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-glow: 0 0 40px rgba(99,102,241,0.15);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(10,14,20,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(10,14,20,0.97);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+    .nav-logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--gradient-hero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 20px rgba(99,102,241,0.4);
+    }
+    .nav-logo-text {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo-badge {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent-light);
+      background: rgba(99,102,241,0.15);
+      padding: 2px 7px;
+      border-radius: 20px;
+      border: 1px solid rgba(99,102,241,0.3);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04);
+    }
+    .btn-primary {
+      background: var(--gradient-hero);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(99,102,241,0.5);
+    }
+    .btn-lg {
+      padding: 14px 32px;
+      font-size: 16px;
+      border-radius: var(--radius-lg);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-accent);
+    }
+    .btn-outline:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 5% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 50%, rgba(139,92,246,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 30% at 20% 70%, rgba(6,182,212,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.25);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: 28px;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero-title {
+      font-size: clamp(40px, 7vw, 80px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+    .hero-title-gradient {
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+    .hero-social-proof {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s ease 0.4s both;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+    .hero-screenshot {
+      margin-top: 60px;
+      max-width: 900px;
+      width: 100%;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-glow), var(--shadow-card);
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease 0.5s both;
+      background: var(--bg-card);
+    }
+    .hero-screenshot-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-screenshot-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .hero-screenshot-content {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .hero-mock-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .hero-mock-card-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .hero-mock-card-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .hero-mock-card-sub {
+      font-size: 11px;
+      color: var(--green);
+      margin-top: 4px;
+    }
+    .hero-mock-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .hero-mock-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--gradient-hero);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 100px 5%; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-light);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 560px;
+    }
+    .section-header { margin-bottom: 64px; }
+    .section-header-center {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+    /* ─── FEATURES ─── */
+    .features { background: var(--bg-elevated); }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-hero);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── BENEFITS ─── */
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .benefit-item:last-child { border-bottom: none; }
+    .benefit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--accent-glow);
+      border: 1px solid var(--border-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .benefit-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .benefit-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── AI SECTION ─── */
+    .ai-section {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.05) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .ai-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .ai-visual {
+      flex-shrink: 0;
+      width: 200px;
+      height: 200px;
+      border-radius: var(--radius-xl);
+      background: var(--gradient-hero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      box-shadow: 0 0 60px rgba(99,102,241,0.3);
+    }
+    .ai-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .ai-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .ai-feature-item::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* ─── INTEGRATIONS ─── */
+    .integrations-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+    .integration-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .integration-badge:hover {
+      border-color: var(--border-accent);
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+    }
+    .integration-badge-icon { font-size: 20px; }
+
+    /* ─── PLANS ─── */
+    .plans { background: var(--bg-elevated); }
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .plan-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .plan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+    }
+    .plan-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 40px rgba(99,102,241,0.15);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gradient-hero);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .plan-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .plan-price {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin-bottom: 4px;
+    }
+    .plan-price span {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .plan-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .plan-features {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      padding: 6px 0;
+      color: var(--text-secondary);
+    }
+    .plan-features li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .plan-features li.disabled {
+      opacity: 0.4;
+    }
+    .plan-features li.disabled::before {
+      content: '×';
+      color: var(--text-muted);
+    }
+
+    /* ─── FAQ ─── */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--accent-light); }
+    .faq-toggle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .faq-item.open .faq-toggle {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding-bottom: 20px;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact { background: var(--bg-elevated); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .form-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+
+    /* ─── CTA FINAL ─── */
+    .cta-section {
+      text-align: center;
+      padding: 120px 5%;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.05) 100%);
+      border-top: 1px solid var(--border);
+    }
+    .cta-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+    .cta-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      padding: 60px 5% 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      max-width: 260px;
+      line-height: 1.6;
+    }
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .plans-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .ai-card { flex-direction: column; text-align: center; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-screenshot-content { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .hero-social-proof { flex-direction: column; gap: 16px; }
+      .hero-divider { display: none; }
+      .hero-screenshot-content { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <span class="nav-logo-text">LifeOS</span>
+    <span class="nav-logo-badge">Enterprise</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Funcionalidades</a></li>
+    <li><a href="#ai">IA</a></li>
+    <li><a href="#plans">Planos</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="/login" class="btn btn-ghost">Entrar</a>
+    <a href="/register" class="btn btn-primary">Começar agora</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Novo: LifeOS Enterprise v6.0 — Agora com IA Generativa
+  </div>
+  <h1 class="hero-title">
+    O Sistema Operacional<br />
+    <span class="hero-title-gradient">da Sua Vida</span>
+  </h1>
+  <p class="hero-subtitle">
+    Gerencie hábitos, metas, projetos e insights com IA de nível enterprise.
+    Tudo em um único lugar, com segurança e privacidade totais.
+  </p>
+  <div class="hero-actions">
+    <a href="/register" class="btn btn-primary btn-lg">
+      ⚡ Começar gratuitamente
+    </a>
+    <a href="/login" class="btn btn-outline btn-lg">
+      Já tenho conta
+    </a>
+  </div>
+  <div class="hero-social-proof">
+    <div class="hero-stat">
+      <div class="hero-stat-value">12.4K+</div>
+      <div class="hero-stat-label">Usuários ativos</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">98.7%</div>
+      <div class="hero-stat-label">Uptime garantido</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">4.9★</div>
+      <div class="hero-stat-label">Avaliação média</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-value">SOC 2</div>
+      <div class="hero-stat-label">Certificado</div>
+    </div>
+  </div>
+
+  <!-- Dashboard Preview -->
+  <div class="hero-screenshot">
+    <div class="hero-screenshot-bar">
+      <div class="hero-screenshot-dot" style="background:#EF4444"></div>
+      <div class="hero-screenshot-dot" style="background:#F59E0B"></div>
+      <div class="hero-screenshot-dot" style="background:#10B981"></div>
+      <span style="margin-left:8px;font-size:12px;color:var(--text-muted)">app.lifeos.io — Dashboard</span>
+    </div>
+    <div class="hero-screenshot-content">
+      <div class="hero-mock-card">
+        <div class="hero-mock-card-label">Life Score</div>
+        <div class="hero-mock-card-value">87</div>
+        <div class="hero-mock-card-sub">+3 esta semana</div>
+        <div class="hero-mock-bar"><div class="hero-mock-bar-fill" style="width:87%"></div></div>
+      </div>
+      <div class="hero-mock-card">
+        <div class="hero-mock-card-label">Hábitos Hoje</div>
+        <div class="hero-mock-card-value">4/6</div>
+        <div class="hero-mock-card-sub">67% completo</div>
+        <div class="hero-mock-bar"><div class="hero-mock-bar-fill" style="width:67%"></div></div>
+      </div>
+      <div class="hero-mock-card">
+        <div class="hero-mock-card-label">Metas Ativas</div>
+        <div class="hero-mock-card-value">3</div>
+        <div class="hero-mock-card-sub">68% progresso</div>
+        <div class="hero-mock-bar"><div class="hero-mock-bar-fill" style="width:68%"></div></div>
+      </div>
+      <div class="hero-mock-card">
+        <div class="hero-mock-card-label">Streak</div>
+        <div class="hero-mock-card-value">14d</div>
+        <div class="hero-mock-card-sub">Recorde pessoal!</div>
+        <div class="hero-mock-bar"><div class="hero-mock-bar-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section class="features" id="features">
+  <div class="section-header section-header-center">
+    <div class="section-label">Funcionalidades</div>
+    <h2 class="section-title">Tudo que você precisa para<br /><span class="hero-title-gradient">evoluir de verdade</span></h2>
+    <p class="section-subtitle">Uma plataforma completa com todas as ferramentas para gerenciar sua vida pessoal e profissional.</p>
+  </div>
+  <div class="grid-3">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(99,102,241,0.15)">🎯</div>
+      <div class="feature-title">Metas & OKRs</div>
+      <div class="feature-desc">Defina objetivos claros com métricas mensuráveis. Acompanhe o progresso em tempo real com insights de IA.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(16,185,129,0.15)">🔄</div>
+      <div class="feature-title">Gestão de Hábitos</div>
+      <div class="feature-desc">Construa rotinas poderosas com rastreamento diário, streaks e análise de padrões comportamentais.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(245,158,11,0.15)">📅</div>
+      <div class="feature-title">Agenda Inteligente</div>
+      <div class="feature-desc">Planejamento diário, semanal e mensal com blocos de tempo, prioridades e sincronização de calendário.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">🧠</div>
+      <div class="feature-title">Memory Center</div>
+      <div class="feature-desc">Capture e organize conhecimento, notas e memórias com busca semântica e conexões automáticas.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(6,182,212,0.15)">📊</div>
+      <div class="feature-title">Life Score</div>
+      <div class="feature-desc">Métricas holísticas da sua vida: saúde, produtividade, relacionamentos, finanças e bem-estar em um único score.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(239,68,68,0.15)">🚀</div>
+      <div class="feature-title">Projetos & Tarefas</div>
+      <div class="feature-desc">Gerencie projetos complexos com kanban, timeline, dependências e colaboração em equipe.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BENEFITS ─── -->
+<section id="benefits">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+    <div>
+      <div class="section-label">Benefícios</div>
+      <h2 class="section-title">Por que o LifeOS é diferente?</h2>
+      <p class="section-subtitle" style="margin-bottom:32px">Construído para quem leva a vida a sério. Não é mais um app de produtividade — é uma plataforma de transformação.</p>
+      <div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🔒</div>
+          <div>
+            <div class="benefit-title">Privacidade Total</div>
+            <div class="benefit-desc">Seus dados são seus. Criptografia end-to-end, sem rastreamento, sem venda de dados.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">⚡</div>
+          <div>
+            <div class="benefit-title">Performance Enterprise</div>
+            <div class="benefit-desc">Infraestrutura Cloudflare global com latência &lt;50ms em qualquer lugar do mundo.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🤖</div>
+          <div>
+            <div class="benefit-title">IA Personalizada</div>
+            <div class="benefit-desc">Insights gerados especificamente para você, aprendendo com seus padrões únicos.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🌐</div>
+          <div>
+            <div class="benefit-title">Acesso Universal</div>
+            <div class="benefit-desc">Web, iOS, Android e desktop. Sincronização em tempo real em todos os dispositivos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Comparativo</div>
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:10px 0;color:var(--text-muted);font-weight:600">Recurso</th>
+            <th style="text-align:center;padding:10px 0;color:var(--accent-light);font-weight:700">LifeOS</th>
+            <th style="text-align:center;padding:10px 0;color:var(--text-muted);font-weight:600">Outros</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">IA Generativa</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--text-muted)">Parcial</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">Life Score Holístico</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--red)">✗</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">RBAC Enterprise</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--red)">✗</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">Sem anúncios</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--red)">✗</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">Criptografia E2E</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--text-muted)">Parcial</td>
+          </tr>
+          <tr style="border-top:1px solid var(--border)">
+            <td style="padding:12px 0;color:var(--text-secondary)">Offline-first</td>
+            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--red)">✗</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AI SECTION ─── -->
+<section class="ai-section" id="ai">
+  <div class="section-header section-header-center">
+    <div class="section-label">Inteligência Artificial</div>
+    <h2 class="section-title">IA que realmente<br /><span class="hero-title-gradient">entende você</span></h2>
+    <p class="section-subtitle">Não é IA genérica. É um sistema que aprende seus padrões e gera insights personalizados para sua evolução.</p>
+  </div>
+  <div class="ai-card">
+    <div class="ai-visual">🤖</div>
+    <div style="flex:1">
+      <h3 style="font-size:24px;font-weight:800;margin-bottom:12px">LifeOS AI — Seu Coach Pessoal</h3>
+      <p style="color:var(--text-secondary);font-size:15px;line-height:1.7;margin-bottom:20px">
+        Análise comportamental avançada, predição de riscos, recomendações contextuais e geração de planos de ação personalizados. A IA do LifeOS processa seus dados localmente, garantindo privacidade total.
+      </p>
+      <div class="ai-features">
+        <div class="ai-feature-item">Análise de padrões comportamentais</div>
+        <div class="ai-feature-item">Predição de riscos e oportunidades</div>
+        <div class="ai-feature-item">Recomendações de hábitos</div>
+        <div class="ai-feature-item">Resumo diário automático</div>
+        <div class="ai-feature-item">Insights de produtividade</div>
+        <div class="ai-feature-item">Coaching de metas</div>
+        <div class="ai-feature-item">Análise de humor e energia</div>
+        <div class="ai-feature-item">Planos de ação personalizados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INTEGRATIONS ─── -->
+<section id="integrations">
+  <div class="section-header section-header-center">
+    <div class="section-label">Integrações</div>
+    <h2 class="section-title">Conecte com suas<br /><span class="hero-title-gradient">ferramentas favoritas</span></h2>
+    <p class="section-subtitle">Mais de 50 integrações nativas. Sincronize dados de qualquer lugar.</p>
+  </div>
+  <div class="integrations-grid">
+    <div class="integration-badge"><span class="integration-badge-icon">📅</span> Google Calendar</div>
+    <div class="integration-badge"><span class="integration-badge-icon">📧</span> Gmail</div>
+    <div class="integration-badge"><span class="integration-badge-icon">💼</span> Notion</div>
+    <div class="integration-badge"><span class="integration-badge-icon">✅</span> Todoist</div>
+    <div class="integration-badge"><span class="integration-badge-icon">💬</span> Slack</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🔷</span> Microsoft 365</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🍎</span> Apple Health</div>
+    <div class="integration-badge"><span class="integration-badge-icon">⌚</span> Fitbit</div>
+    <div class="integration-badge"><span class="integration-badge-icon">💰</span> Stripe</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🐙</span> GitHub</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🎯</span> Asana</div>
+    <div class="integration-badge"><span class="integration-badge-icon">📊</span> Airtable</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🔗</span> Zapier</div>
+    <div class="integration-badge"><span class="integration-badge-icon">🌐</span> Webhooks</div>
+    <div class="integration-badge"><span class="integration-badge-icon">⚡</span> API REST</div>
+  </div>
+</section>
+
+<!-- ─── PLANS ─── -->
+<section class="plans" id="plans">
+  <div class="section-header section-header-center">
+    <div class="section-label">Planos</div>
+    <h2 class="section-title">Escolha o plano<br /><span class="hero-title-gradient">ideal para você</span></h2>
+    <p class="section-subtitle">Comece gratuitamente. Upgrade quando precisar de mais poder.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">R$0 <span>/mês</span></div>
+      <div class="plan-desc">Para começar sua jornada</div>
+      <ul class="plan-features">
+        <li>3 metas ativas</li>
+        <li>5 hábitos</li>
+        <li>Agenda básica</li>
+        <li>Life Score</li>
+        <li class="disabled">IA Insights</li>
+        <li class="disabled">Memory Center</li>
+        <li class="disabled">Integrações</li>
+        <li class="disabled">Organizações</li>
+      </ul>
+      <a href="/register" class="btn btn-outline" style="width:100%;justify-content:center">Começar grátis</a>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-badge">Mais popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">R$49 <span>/mês</span></div>
+      <div class="plan-desc">Para quem leva a sério</div>
+      <ul class="plan-features">
+        <li>Metas ilimitadas</li>
+        <li>Hábitos ilimitados</li>
+        <li>Agenda avançada</li>
+        <li>Life Score avançado</li>
+        <li>IA Insights completa</li>
+        <li>Memory Center</li>
+        <li>50+ integrações</li>
+        <li class="disabled">Organizações</li>
+      </ul>
+      <a href="/register" class="btn btn-primary" style="width:100%;justify-content:center">Começar Pro</a>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price">R$199 <span>/mês</span></div>
+      <div class="plan-desc">Para equipes e empresas</div>
+      <ul class="plan-features">
+        <li>Tudo do Pro</li>
+        <li>Organizações</li>
+        <li>Workspaces</li>
+        <li>RBAC avançado</li>
+        <li>SSO (Google/Microsoft)</li>
+        <li>Auditoria completa</li>
+        <li>SLA 99.9%</li>
+        <li>Suporte dedicado</li>
+      </ul>
+      <a href="/register" class="btn btn-outline" style="width:100%;justify-content:center">Falar com vendas</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="section-header section-header-center">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Perguntas frequentes</h2>
+  </div>
+  <div style="max-width:720px;margin:0 auto">
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        O LifeOS é seguro? Como meus dados são protegidos?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Sim. Utilizamos criptografia AES-256 para dados em repouso e TLS 1.3 para dados em trânsito. Somos certificados SOC 2 Type II e seguimos as diretrizes da LGPD. Seus dados nunca são vendidos ou compartilhados com terceiros.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Posso cancelar a qualquer momento?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Sim, sem fidelidade. Você pode cancelar sua assinatura a qualquer momento diretamente no painel de configurações. Seus dados ficam disponíveis por 30 dias após o cancelamento para exportação.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        A IA do LifeOS usa meus dados para treinar modelos?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Não. Seus dados pessoais nunca são usados para treinar modelos de IA. Os insights são gerados de forma isolada para cada usuário, sem compartilhamento de informações entre contas.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Funciona offline?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Sim. O LifeOS é construído com arquitetura offline-first. Você pode registrar hábitos, tarefas e notas sem conexão. Quando a internet voltar, tudo sincroniza automaticamente.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Existe versão mobile?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        Sim. O LifeOS está disponível para iOS e Android, com experiência nativa completa. Também funciona como PWA (Progressive Web App) em qualquer navegador mobile.
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Como funciona o plano Enterprise para equipes?
+        <div class="faq-toggle">+</div>
+      </div>
+      <div class="faq-answer">
+        O plano Enterprise permite criar organizações com múltiplos workspaces, RBAC granular, SSO corporativo e auditoria completa. Ideal para empresas que querem implementar uma cultura de alta performance.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div>
+      <div class="section-label">Contato</div>
+      <h2 class="section-title">Fale com a gente</h2>
+      <p style="color:var(--text-secondary);font-size:15px;line-height:1.7;margin-bottom:32px">
+        Tem dúvidas sobre o LifeOS? Quer uma demonstração personalizada para sua empresa? Nossa equipe está pronta para ajudar.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
+          <span style="font-size:20px">📧</span> contato@lifeos.io
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
+          <span style="font-size:20px">💬</span> Chat ao vivo (seg–sex, 9h–18h)
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
+          <span style="font-size:20px">📚</span> Central de ajuda: docs.lifeos.io
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="submitContact(event)">
+      <div class="form-group">
+        <label class="form-label">Nome</label>
+        <input type="text" class="form-input" placeholder="Seu nome completo" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input type="email" class="form-input" placeholder="seu@email.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mensagem</label>
+        <textarea class="form-input" placeholder="Como podemos ajudar?" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+        Enviar mensagem
+      </button>
+      <div id="contact-status" style="font-size:13px;text-align:center;display:none"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ─── CTA FINAL ─── -->
+<section class="cta-section">
+  <h2 class="cta-title">Pronto para transformar<br /><span class="hero-title-gradient">sua vida?</span></h2>
+  <p class="cta-subtitle">Junte-se a mais de 12.000 pessoas que já usam o LifeOS para viver com mais intenção.</p>
+  <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
+    <a href="/register" class="btn btn-primary btn-lg">⚡ Começar gratuitamente</a>
+    <a href="/login" class="btn btn-outline btn-lg">Já tenho conta</a>
+  </div>
+  <p style="margin-top:20px;font-size:13px;color:var(--text-muted)">Sem cartão de crédito · Cancele quando quiser · Dados protegidos</p>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="nav-logo" style="margin-bottom:12px;display:inline-flex">
+        <div class="nav-logo-icon">⚡</div>
+        <span class="nav-logo-text">LifeOS</span>
+        <span class="nav-logo-badge">Enterprise</span>
+      </a>
+      <p>O sistema operacional da sua vida. Gerencie hábitos, metas e projetos com IA de nível enterprise.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Produto</div>
+      <ul class="footer-links">
+        <li><a href="#features">Funcionalidades</a></li>
+        <li><a href="#plans">Planos</a></li>
+        <li><a href="#ai">IA</a></li>
+        <li><a href="#integrations">Integrações</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="#">Sobre nós</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Carreiras</a></li>
+        <li><a href="#contact">Contato</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <ul class="footer-links">
+        <li><a href="#">Privacidade</a></li>
+        <li><a href="#">Termos de uso</a></li>
+        <li><a href="#">LGPD</a></li>
+        <li><a href="#">Segurança</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 LifeOS Enterprise. Todos os direitos reservados.</span>
+    <span>Feito com ⚡ no Brasil</span>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // FAQ toggle
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Contact form
+  function submitContact(e) {
+    e.preventDefault();
+    const status = document.getElementById('contact-status');
+    status.style.display = 'block';
+    status.style.color = 'var(--green)';
+    status.textContent = '✓ Mensagem enviada! Responderemos em até 24h.';
+    e.target.reset();
+  }
+
+  // Check session — redirect if already logged in
+  (async () => {
+    try {
+      const r = await fetch('/api/session', { credentials: 'same-origin' });
+      if (r.ok) {
+        const data = await r.json();
+        if (data.ok && data.redirect) {
+          location.replace(data.redirect);
+        }
+      }
+    } catch (_) {}
+  })();
+</script>
+</body>
+</html>

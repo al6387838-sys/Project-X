@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Dashboard — LifeOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14;
+      --bg-elevated: #0F1520;
+      --bg-card: #141B28;
+      --bg-card-hover: #1A2235;
+      --bg-sidebar: #0D1219;
+      --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25);
+      --text-primary: #F0F4FF;
+      --text-secondary: #8892A4;
+      --text-muted: #4A5568;
+      --accent: #6366F1;
+      --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12);
+      --purple: #8B5CF6;
+      --cyan: #06B6D4;
+      --green: #10B981;
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --pink: #EC4899;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-hero: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+      --sidebar-w: 240px;
+      --sidebar-collapsed: 64px;
+      --topbar-h: 60px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    /* ─── LAYOUT ─── */
+    .app-shell { display: flex; height: 100vh; overflow: hidden; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: width 0.3s ease;
+      z-index: 50;
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      min-height: var(--topbar-h);
+    }
+    .sidebar-logo {
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(99,102,241,0.3);
+    }
+    .sidebar-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .sidebar-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent-light);
+      background: rgba(99,102,241,0.15);
+      padding: 2px 6px;
+      border-radius: 10px;
+      border: 1px solid rgba(99,102,241,0.25);
+      white-space: nowrap;
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 8px;
+    }
+    .sidebar-nav::-webkit-scrollbar { width: 4px; }
+    .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      padding: 12px 8px 4px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .collapsed .nav-section-label { opacity: 0; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+    .nav-item:hover { background: var(--bg-card); color: var(--text-primary); }
+    .nav-item.active {
+      background: var(--accent-glow);
+      color: var(--accent-light);
+      border: 1px solid var(--border-accent);
+    }
+    .nav-icon {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--red);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .user-card:hover { background: var(--bg-card); }
+    .user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .user-info { overflow: hidden; flex: 1; }
+    .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-plan { font-size: 11px; color: var(--text-muted); }
+
+    /* ─── MAIN ─── */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--bg-base);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .topbar-toggle {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 16px;
+      transition: all 0.15s;
+    }
+    .topbar-toggle:hover { background: var(--bg-card); color: var(--text-primary); }
+    .topbar-search {
+      flex: 1;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      cursor: text;
+      transition: border-color 0.2s;
+    }
+    .topbar-search:focus-within { border-color: var(--accent); }
+    .topbar-search input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: inherit;
+      width: 100%;
+    }
+    .topbar-search input::placeholder { color: var(--text-muted); }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .topbar-btn {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 16px;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .topbar-btn:hover { background: var(--bg-card); color: var(--text-primary); }
+    .topbar-notif-dot {
+      position: absolute;
+      top: 6px; right: 6px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 2px solid var(--bg-base);
+    }
+
+    /* ─── CONTENT ─── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ─── PAGE VIEWS ─── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── CARDS ─── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(255,255,255,0.1); }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .card-value {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    .card-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+    .trend-up { background: rgba(16,185,129,0.1); color: var(--green); }
+    .trend-down { background: rgba(239,68,68,0.1); color: var(--red); }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--gradient-primary);
+      transition: width 0.6s ease;
+    }
+
+    /* ─── GRIDS ─── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-main { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .page-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .page-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(99,102,241,0.35); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--bg-card); color: var(--text-primary); }
+
+    /* ─── HABIT ITEMS ─── */
+    .habit-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .habit-item:hover { background: var(--bg-card-hover); border-color: rgba(255,255,255,0.1); }
+    .habit-check {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .habit-item.done .habit-check {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    .habit-name { font-size: 14px; font-weight: 500; flex: 1; }
+    .habit-streak {
+      font-size: 11px;
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    /* ─── GOAL ITEMS ─── */
+    .goal-item {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      transition: all 0.15s;
+    }
+    .goal-item:hover { background: var(--bg-card-hover); }
+    .goal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .goal-name { font-size: 14px; font-weight: 600; }
+    .goal-pct { font-size: 13px; font-weight: 700; color: var(--accent-light); }
+    .goal-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+
+    /* ─── TIMELINE ─── */
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .timeline-content { flex: 1; }
+    .timeline-title { font-size: 13px; font-weight: 600; }
+    .timeline-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ─── AI INSIGHT ─── */
+    .ai-insight {
+      background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.05) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .ai-insight-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .ai-insight-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .ai-insight-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-light); }
+    .ai-insight-text { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ─── NOTIFICATION ITEM ─── */
+    .notif-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      transition: all 0.15s;
+    }
+    .notif-item:hover { background: var(--bg-card-hover); }
+    .notif-item.unread { border-color: var(--border-accent); background: var(--accent-glow); }
+    .notif-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .notif-title { font-size: 13px; font-weight: 600; }
+    .notif-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .notif-time { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── BILLING ─── */
+    .plan-current {
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.05) 100%);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .plan-name-big { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+    .plan-price-big { font-size: 40px; font-weight: 900; letter-spacing: -2px; margin: 8px 0; }
+    .plan-price-big span { font-size: 16px; font-weight: 500; color: var(--text-secondary); }
+
+    /* ─── PROFILE ─── */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      margin-bottom: 20px;
+    }
+    .profile-avatar-big {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      box-shadow: 0 0 24px rgba(99,102,241,0.3);
+    }
+    .profile-name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .profile-email { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .profile-plan {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-light);
+      background: rgba(99,102,241,0.1);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(99,102,241,0.2);
+    }
+
+    /* ─── SCORE RING ─── */
+    .score-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 16px;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-value {
+      position: absolute;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .score-ring-label {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-main { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { position: fixed; left: -100%; transition: left 0.3s; }
+      .sidebar.mobile-open { left: 0; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">⚡</div>
+      <span class="sidebar-title">LifeOS</span>
+      <span class="sidebar-badge">Pro</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <div class="nav-icon">🏠</div><span>Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="showPage('agenda')">
+        <div class="nav-icon">📅</div><span>Agenda</span>
+      </div>
+      <div class="nav-item" onclick="showPage('habits')">
+        <div class="nav-icon">🔄</div><span>Hábitos</span>
+      </div>
+      <div class="nav-item" onclick="showPage('goals')">
+        <div class="nav-icon">🎯</div><span>Metas</span>
+      </div>
+      <div class="nav-item" onclick="showPage('projects')">
+        <div class="nav-icon">🚀</div><span>Projetos</span>
+      </div>
+
+      <div class="nav-section-label">Inteligência</div>
+      <div class="nav-item" onclick="showPage('ai')">
+        <div class="nav-icon">🤖</div><span>IA Insights</span>
+      </div>
+      <div class="nav-item" onclick="showPage('lifescore')">
+        <div class="nav-icon">📊</div><span>Life Score</span>
+      </div>
+      <div class="nav-item" onclick="showPage('timeline')">
+        <div class="nav-icon">⏱</div><span>Timeline</span>
+      </div>
+      <div class="nav-item" onclick="showPage('memory')">
+        <div class="nav-icon">🧠</div><span>Memory Center</span>
+      </div>
+
+      <div class="nav-section-label">Conta</div>
+      <div class="nav-item" onclick="showPage('notifications')">
+        <div class="nav-icon">🔔</div><span>Notificações</span>
+        <span class="nav-badge" id="notif-count">3</span>
+      </div>
+      <div class="nav-item" onclick="showPage('search')">
+        <div class="nav-icon">🔍</div><span>Busca Global</span>
+      </div>
+      <div class="nav-item" onclick="showPage('profile')">
+        <div class="nav-icon">👤</div><span>Perfil</span>
+      </div>
+      <div class="nav-item" onclick="showPage('settings')">
+        <div class="nav-icon">⚙️</div><span>Configurações</span>
+      </div>
+      <div class="nav-item" onclick="showPage('billing')">
+        <div class="nav-icon">💳</div><span>Assinatura</span>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card" onclick="showPage('profile')">
+        <div class="user-avatar" id="sidebar-avatar">U</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">Carregando...</div>
+          <div class="user-plan" id="sidebar-plan">Plano Pro</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <div class="main-area">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="topbar-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <div class="topbar-search">
+        <span style="color:var(--text-muted)">🔍</span>
+        <input type="text" placeholder="Buscar em tudo..." id="global-search" />
+        <span style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace">⌘K</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" onclick="showPage('notifications')" aria-label="Notificações">
+          🔔
+          <span class="topbar-notif-dot" id="notif-dot"></span>
+        </button>
+        <button class="topbar-btn" onclick="doLogout()" aria-label="Sair" title="Sair">🚪</button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- ─── DASHBOARD ─── -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="dash-greeting">Bom dia!</div>
+            <div class="page-subtitle" id="dash-date">Carregando...</div>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('agenda')">+ Adicionar tarefa</button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="grid-4" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-title">Life Score</div>
+            <div class="card-value" style="background:var(--gradient-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="kpi-score">87</div>
+            <div class="card-trend trend-up">↑ +3 esta semana</div>
+            <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:87%"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Hábitos Hoje</div>
+            <div class="card-value" id="kpi-habits">4/6</div>
+            <div class="card-sub">67% completo</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:67%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Metas Ativas</div>
+            <div class="card-value" id="kpi-goals">3</div>
+            <div class="card-sub">68% progresso médio</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Streak</div>
+            <div class="card-value" id="kpi-streak">14d</div>
+            <div class="card-trend trend-up">🔥 Recorde pessoal!</div>
+          </div>
+        </div>
+
+        <!-- Main grid -->
+        <div class="grid-main">
+          <div>
+            <!-- AI Insight -->
+            <div class="ai-insight">
+              <div class="ai-insight-header">
+                <div class="ai-insight-icon">🤖</div>
+                <div>
+                  <div class="ai-insight-label">IA Insight do Dia</div>
+                </div>
+              </div>
+              <div class="ai-insight-text" id="ai-daily-insight">
+                Seu padrão de produtividade mostra pico entre 9h–11h. Você completou 87% das tarefas agendadas nesse horário. Considere reservar suas atividades mais importantes para esse período.
+              </div>
+            </div>
+
+            <!-- Hábitos de hoje -->
+            <div class="card" style="margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <div class="card-title" style="margin:0">Hábitos de Hoje</div>
+                <button class="btn btn-ghost" onclick="showPage('habits')" style="font-size:12px;padding:5px 10px">Ver todos</button>
+              </div>
+              <div id="habits-today">
+                <div class="habit-item done" onclick="toggleHabit(this)">
+                  <div class="habit-check">✓</div>
+                  <span class="habit-name">Meditação 10min</span>
+                  <span class="habit-streak">🔥 14d</span>
+                </div>
+                <div class="habit-item done" onclick="toggleHabit(this)">
+                  <div class="habit-check">✓</div>
+                  <span class="habit-name">Exercício físico</span>
+                  <span class="habit-streak">🔥 7d</span>
+                </div>
+                <div class="habit-item done" onclick="toggleHabit(this)">
+                  <div class="habit-check">✓</div>
+                  <span class="habit-name">Leitura 30min</span>
+                  <span class="habit-streak">🔥 21d</span>
+                </div>
+                <div class="habit-item done" onclick="toggleHabit(this)">
+                  <div class="habit-check">✓</div>
+                  <span class="habit-name">Journaling</span>
+                  <span class="habit-streak">🔥 5d</span>
+                </div>
+                <div class="habit-item" onclick="toggleHabit(this)">
+                  <div class="habit-check"></div>
+                  <span class="habit-name">Hidratação 2L</span>
+                  <span class="habit-streak">🔥 3d</span>
+                </div>
+                <div class="habit-item" onclick="toggleHabit(this)">
+                  <div class="habit-check"></div>
+                  <span class="habit-name">Sono 8h</span>
+                  <span class="habit-streak">🔥 2d</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <!-- Metas -->
+            <div class="card" style="margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <div class="card-title" style="margin:0">Metas Ativas</div>
+                <button class="btn btn-ghost" onclick="showPage('goals')" style="font-size:12px;padding:5px 10px">Ver todas</button>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span class="goal-name">🏃 Correr 100km</span>
+                  <span class="goal-pct">72%</span>
+                </div>
+                <div class="goal-desc">72km de 100km completados</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span class="goal-name">📚 Ler 24 livros</span>
+                  <span class="goal-pct">58%</span>
+                </div>
+                <div class="goal-desc">14 de 24 livros lidos</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span class="goal-name">💰 Economizar R$10k</span>
+                  <span class="goal-pct">45%</span>
+                </div>
+                <div class="goal-desc">R$4.500 de R$10.000</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
+              </div>
+            </div>
+
+            <!-- Timeline recente -->
+            <div class="card">
+              <div class="card-title">Timeline Recente</div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--green)"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Hábito completado: Meditação</div>
+                  <div class="timeline-time">Hoje, 07:30</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent)"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Meta atualizada: Correr 100km</div>
+                  <div class="timeline-time">Hoje, 06:45</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--amber)"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Nota adicionada ao Memory Center</div>
+                  <div class="timeline-time">Ontem, 22:15</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--purple)"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Life Score aumentou para 87</div>
+                  <div class="timeline-time">Ontem, 20:00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── AGENDA ─── -->
+      <div class="page" id="page-agenda">
+        <div class="page-header">
+          <div><div class="page-title">Agenda</div><div class="page-subtitle">Planejamento diário e semanal</div></div>
+          <button class="btn btn-primary">+ Novo evento</button>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Hoje</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">09:00</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Reunião de planejamento</div>
+                  <div style="font-size:11px;color:var(--text-secondary)">1h · Zoom</div>
+                </div>
+                <div style="width:4px;height:36px;border-radius:2px;background:var(--accent)"></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">11:00</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Deep work — Projeto Alpha</div>
+                  <div style="font-size:11px;color:var(--text-secondary)">2h · Foco</div>
+                </div>
+                <div style="width:4px;height:36px;border-radius:2px;background:var(--green)"></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">14:00</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:600">Review semanal</div>
+                  <div style="font-size:11px;color:var(--text-secondary)">30min · Pessoal</div>
+                </div>
+                <div style="width:4px;height:36px;border-radius:2px;background:var(--amber)"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Tarefas do Dia</div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md);transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
+                <input type="checkbox" checked style="accent-color:var(--accent)" />
+                <span style="font-size:13px;text-decoration:line-through;color:var(--text-muted)">Revisar relatório Q3</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
+                <input type="checkbox" style="accent-color:var(--accent)" />
+                <span style="font-size:13px">Responder e-mails pendentes</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
+                <input type="checkbox" style="accent-color:var(--accent)" />
+                <span style="font-size:13px">Atualizar metas mensais</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
+                <input type="checkbox" style="accent-color:var(--accent)" />
+                <span style="font-size:13px">Preparar apresentação</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── HÁBITOS ─── -->
+      <div class="page" id="page-habits">
+        <div class="page-header">
+          <div><div class="page-title">Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
+          <button class="btn btn-primary">+ Novo hábito</button>
+        </div>
+        <div class="grid-4" style="margin-bottom:20px">
+          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value">14d</div><div class="card-trend trend-up">🔥 Recorde!</div></div>
+          <div class="card"><div class="card-title">Taxa Hoje</div><div class="card-value">67%</div><div class="card-sub">4 de 6 completos</div></div>
+          <div class="card"><div class="card-title">Esta Semana</div><div class="card-value">89%</div><div class="card-trend trend-up">↑ +5% vs semana anterior</div></div>
+          <div class="card"><div class="card-title">Total Hábitos</div><div class="card-value">6</div><div class="card-sub">Todos ativos</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Todos os Hábitos</div>
+          <div style="margin-top:12px">
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">🧘 Meditação 10min</span><span class="habit-streak">🔥 14d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">🏃 Exercício físico</span><span class="habit-streak">🔥 7d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">📚 Leitura 30min</span><span class="habit-streak">🔥 21d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">✍️ Journaling</span><span class="habit-streak">🔥 5d</span></div>
+            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name">💧 Hidratação 2L</span><span class="habit-streak">🔥 3d</span></div>
+            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name">😴 Sono 8h</span><span class="habit-streak">🔥 2d</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── METAS ─── -->
+      <div class="page" id="page-goals">
+        <div class="page-header">
+          <div><div class="page-title">Metas</div><div class="page-subtitle">Objetivos e OKRs</div></div>
+          <button class="btn btn-primary">+ Nova meta</button>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div style="font-size:24px;margin-bottom:12px">🏃</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Correr 100km</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">72km completados · Prazo: Dez 2025</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>72%</span><span>28km restantes</span></div>
+          </div>
+          <div class="card">
+            <div style="font-size:24px;margin-bottom:12px">📚</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Ler 24 livros</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">14 lidos · Prazo: Dez 2025</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>58%</span><span>10 restantes</span></div>
+          </div>
+          <div class="card">
+            <div style="font-size:24px;margin-bottom:12px">💰</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Economizar R$10k</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">R$4.500 guardados · Prazo: Jun 2026</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>45%</span><span>R$5.500 restantes</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PROJETOS ─── -->
+      <div class="page" id="page-projects">
+        <div class="page-header">
+          <div><div class="page-title">Projetos</div><div class="page-subtitle">Gerencie seus projetos</div></div>
+          <button class="btn btn-primary">+ Novo projeto</button>
+        </div>
+        <div class="grid-3">
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">💼</div><div><div style="font-size:14px;font-weight:700">Projeto Alpha</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">8 tarefas · 3 pendentes</div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">🌱</div><div><div style="font-size:14px;font-weight:700">Saúde & Bem-estar</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">12 tarefas · 2 pendentes</div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">📈</div><div><div style="font-size:14px;font-weight:700">Finanças Pessoais</div><div style="font-size:11px;color:var(--text-muted)">Planejamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">5 tarefas · 4 pendentes</div></div>
+        </div>
+      </div>
+
+      <!-- ─── AI INSIGHTS ─── -->
+      <div class="page" id="page-ai">
+        <div class="page-header">
+          <div><div class="page-title">IA Insights</div><div class="page-subtitle">Análises personalizadas para você</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="ai-insight">
+            <div class="ai-insight-header"><div class="ai-insight-icon">📊</div><div><div class="ai-insight-label">Produtividade</div></div></div>
+            <div class="ai-insight-text">Seu pico de produtividade é entre 9h–11h. Você completa 87% das tarefas nesse período. Recomendo agendar suas atividades mais importantes nesse horário e protegê-lo de reuniões.</div>
+          </div>
+          <div class="ai-insight">
+            <div class="ai-insight-header"><div class="ai-insight-icon">🔄</div><div><div class="ai-insight-label">Hábitos</div></div></div>
+            <div class="ai-insight-text">Você mantém uma taxa de 89% nos hábitos esta semana. O hábito de "Sono 8h" tem a menor consistência (2 dias). Dormir bem impacta diretamente seu Life Score — considere criar um ritual noturno.</div>
+          </div>
+          <div class="ai-insight">
+            <div class="ai-insight-header"><div class="ai-insight-icon">🎯</div><div><div class="ai-insight-label">Metas</div></div></div>
+            <div class="ai-insight-text">Sua meta de "Correr 100km" está 3km atrás do ritmo ideal para o prazo. Adicionar uma corrida de 5km esta semana te colocará de volta no cronograma. Você consegue!</div>
+          </div>
+          <div class="ai-insight">
+            <div class="ai-insight-header"><div class="ai-insight-icon">⚡</div><div><div class="ai-insight-label">Life Score</div></div></div>
+            <div class="ai-insight-text">Seu Life Score de 87 está no top 15% dos usuários LifeOS. Para chegar a 90+, foque em melhorar a consistência do sono e adicionar um hábito de gratidão diária.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── LIFE SCORE ─── -->
+      <div class="page" id="page-lifescore">
+        <div class="page-header">
+          <div><div class="page-title">Life Score</div><div class="page-subtitle">Métricas holísticas da sua vida</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card" style="text-align:center">
+            <div class="score-ring">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="8"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="40" stroke-linecap="round"/>
+                <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#6366F1"/><stop offset="100%" style="stop-color:#06B6D4"/></linearGradient></defs>
+              </svg>
+              <div class="score-ring-value">87</div>
+            </div>
+            <div class="score-ring-label">Life Score Global</div>
+            <div class="card-trend trend-up" style="justify-content:center;margin-top:12px">↑ +3 esta semana</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Dimensões</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🏃 Saúde</span><span style="font-weight:700">92</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>💼 Produtividade</span><span style="font-weight:700">88</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>💰 Finanças</span><span style="font-weight:700">75</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>❤️ Relacionamentos</span><span style="font-weight:700">85</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%;background:linear-gradient(90deg,var(--pink),#F9A8D4)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🧠 Mente</span><span style="font-weight:700">90</span></div><div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,var(--purple),#C4B5FD)"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── TIMELINE ─── -->
+      <div class="page" id="page-timeline">
+        <div class="page-header">
+          <div><div class="page-title">Timeline</div><div class="page-subtitle">Histórico da sua jornada</div></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;flex-direction:column">
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title">✅ Hábito completado: Meditação 10min</div><div class="timeline-time">Hoje, 07:30</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title">✅ Hábito completado: Exercício físico</div><div class="timeline-time">Hoje, 06:45</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent)"></div><div class="timeline-content"><div class="timeline-title">🎯 Meta atualizada: Correr 100km (72km)</div><div class="timeline-time">Hoje, 06:50</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--amber)"></div><div class="timeline-content"><div class="timeline-title">📝 Nota adicionada: "Ideias para projeto"</div><div class="timeline-time">Ontem, 22:15</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--purple)"></div><div class="timeline-content"><div class="timeline-title">⚡ Life Score aumentou: 84 → 87</div><div class="timeline-time">Ontem, 20:00</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--cyan)"></div><div class="timeline-content"><div class="timeline-title">🔔 Streak de 14 dias alcançado!</div><div class="timeline-time">Ontem, 23:59</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── MEMORY CENTER ─── -->
+      <div class="page" id="page-memory">
+        <div class="page-header">
+          <div><div class="page-title">Memory Center</div><div class="page-subtitle">Capture e organize seu conhecimento</div></div>
+          <button class="btn btn-primary">+ Nova nota</button>
+        </div>
+        <div class="grid-3">
+          <div class="card"><div style="font-size:18px;margin-bottom:10px">💡</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Ideias para projeto</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Automatizar relatórios semanais com IA. Integrar com Google Sheets para exportar dados...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">Ontem, 22:15</div></div>
+          <div class="card"><div style="font-size:18px;margin-bottom:10px">📖</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Resumo: Atomic Habits</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Hábitos são compostos de: deixa, rotina, recompensa. A regra dos 2 minutos: se leva menos de 2 minutos, faça agora...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">3 dias atrás</div></div>
+          <div class="card"><div style="font-size:18px;margin-bottom:10px">🎯</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Planejamento Q4</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Objetivos principais: finalizar projeto Alpha, atingir 90 no Life Score, economizar R$3k adicionais...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">1 semana atrás</div></div>
+        </div>
+      </div>
+
+      <!-- ─── NOTIFICAÇÕES ─── -->
+      <div class="page" id="page-notifications">
+        <div class="page-header">
+          <div><div class="page-title">Notificações</div><div class="page-subtitle">3 não lidas</div></div>
+          <button class="btn btn-ghost" onclick="markAllRead()">Marcar todas como lidas</button>
+        </div>
+        <div class="card">
+          <div id="notif-list">
+            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(16,185,129,0.15)">🔥</div><div><div class="notif-title">Streak de 14 dias!</div><div class="notif-desc">Parabéns! Você manteve seus hábitos por 14 dias consecutivos.</div><div class="notif-time">Hoje, 00:01</div></div></div>
+            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(99,102,241,0.15)">⚡</div><div><div class="notif-title">Life Score aumentou</div><div class="notif-desc">Seu Life Score subiu de 84 para 87. Continue assim!</div><div class="notif-time">Ontem, 20:00</div></div></div>
+            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(245,158,11,0.15)">🎯</div><div><div class="notif-title">Meta próxima do prazo</div><div class="notif-desc">"Ler 24 livros" vence em 30 dias. Você está 58% completo.</div><div class="notif-time">Ontem, 09:00</div></div></div>
+            <div class="notif-item"><div class="notif-icon" style="background:rgba(139,92,246,0.15)">🤖</div><div><div class="notif-title">Novo insight de IA disponível</div><div class="notif-desc">A IA identificou um padrão interessante na sua produtividade.</div><div class="notif-time">2 dias atrás</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── BUSCA ─── -->
+      <div class="page" id="page-search">
+        <div class="page-header">
+          <div><div class="page-title">Busca Global</div><div class="page-subtitle">Encontre qualquer coisa no LifeOS</div></div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <input type="text" class="form-input" placeholder="Buscar hábitos, metas, notas, projetos..." id="search-input" oninput="doSearch(this.value)" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;font-size:15px;color:var(--text-primary);font-family:inherit;outline:none" />
+        </div>
+        <div id="search-results" class="card" style="display:none">
+          <div class="card-title">Resultados</div>
+          <div id="search-list"></div>
+        </div>
+      </div>
+
+      <!-- ─── PERFIL ─── -->
+      <div class="page" id="page-profile">
+        <div class="page-header">
+          <div><div class="page-title">Perfil</div><div class="page-subtitle">Suas informações pessoais</div></div>
+          <button class="btn btn-primary">Salvar alterações</button>
+        </div>
+        <div class="profile-header">
+          <div class="profile-avatar-big" id="profile-avatar">U</div>
+          <div>
+            <div class="profile-name" id="profile-name">Usuário</div>
+            <div class="profile-email" id="profile-email">usuario@email.com</div>
+            <div class="profile-plan">⚡ Plano Pro</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Informações Pessoais</div>
+            <div style="display:flex;flex-direction:column;gap:14px;margin-top:12px">
+              <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Nome</label><input type="text" value="Usuário LifeOS" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none" /></div>
+              <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">E-mail</label><input type="email" value="usuario@email.com" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none" /></div>
+              <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Fuso horário</label><input type="text" value="America/Sao_Paulo" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none" /></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Estatísticas</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Membro desde</span><span style="font-weight:600">Jan 2025</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Hábitos criados</span><span style="font-weight:600">6</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Metas concluídas</span><span style="font-weight:600">12</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Notas criadas</span><span style="font-weight:600">47</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Streak máximo</span><span style="font-weight:600">21 dias</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CONFIGURAÇÕES ─── -->
+      <div class="page" id="page-settings">
+        <div class="page-header">
+          <div><div class="page-title">Configurações</div><div class="page-subtitle">Personalize sua experiência</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Aparência</div>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">Tema escuro</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" checked style="opacity:0;width:0;height:0" /><span style="position:absolute;inset:0;background:var(--accent);border-radius:12px;cursor:pointer"></span></label></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">Animações</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" checked style="opacity:0;width:0;height:0" /><span style="position:absolute;inset:0;background:var(--accent);border-radius:12px;cursor:pointer"></span></label></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Notificações</div>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">Lembretes de hábitos</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" checked style="opacity:0;width:0;height:0" /><span style="position:absolute;inset:0;background:var(--accent);border-radius:12px;cursor:pointer"></span></label></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">Insights de IA</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" checked style="opacity:0;width:0;height:0" /><span style="position:absolute;inset:0;background:var(--accent);border-radius:12px;cursor:pointer"></span></label></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">Atualizações do sistema</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" style="opacity:0;width:0;height:0" /><span style="position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer"></span></label></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Segurança</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+              <button class="btn btn-ghost" style="justify-content:flex-start">🔑 Alterar senha</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start">📱 Ativar MFA</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start">📋 Ver sessões ativas</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Dados</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+              <button class="btn btn-ghost" style="justify-content:flex-start">📤 Exportar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start">🔄 Importar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()">🚪 Sair da conta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── BILLING ─── -->
+      <div class="page" id="page-billing">
+        <div class="page-header">
+          <div><div class="page-title">Assinatura</div><div class="page-subtitle">Gerencie seu plano</div></div>
+        </div>
+        <div class="plan-current">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <div>
+              <div style="font-size:12px;color:var(--accent-light);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Plano Atual</div>
+              <div class="plan-name-big">Pro</div>
+              <div class="plan-price-big">R$49 <span>/mês</span></div>
+              <div style="font-size:13px;color:var(--text-secondary)">Próxima cobrança: 13 de Agosto, 2025</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button class="btn btn-primary">Fazer upgrade para Enterprise</button>
+              <button class="btn btn-ghost">Gerenciar pagamento</button>
+            </div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="card"><div class="card-title">Uso do Mês</div><div style="display:flex;flex-direction:column;gap:10px;margin-top:8px"><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Hábitos</span><span>6 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Metas</span><span>3 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Notas</span><span>47 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div></div></div>
+          <div class="card"><div class="card-title">Histórico</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jul 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jun 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Mai 2025</span><span>R$49,00</span></div></div></div>
+          <div class="card"><div class="card-title">Método de Pagamento</div><div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md)"><div style="font-size:24px">💳</div><div><div style="font-size:13px;font-weight:600">•••• •••• •••• 4242</div><div style="font-size:11px;color:var(--text-muted)">Expira 12/2027</div></div></div></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  'use strict';
+  let currentUser = null;
+
+  // Auth check
+  (async () => {
+    try {
+      const r = await fetch('/api/session', { credentials: 'same-origin' });
+      if (!r.ok) { location.replace('/login'); return; }
+      const data = await r.json();
+      if (!data.ok) { location.replace('/login'); return; }
+      currentUser = data.user;
+      initDashboard(data.user);
+    } catch (_) {
+      location.replace('/login');
+    }
+  })();
+
+  function initDashboard(user) {
+    const name = user.name || user.username.split('@')[0];
+    const initials = name.slice(0, 2).toUpperCase();
+    // Sidebar
+    document.getElementById('sidebar-avatar').textContent = initials;
+    document.getElementById('sidebar-name').textContent = name;
+    document.getElementById('sidebar-plan').textContent = 'Plano Pro';
+    // Profile
+    document.getElementById('profile-avatar').textContent = initials;
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('profile-email').textContent = user.username;
+    // Greeting
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+    document.getElementById('dash-greeting').textContent = `${greeting}, ${name.split(' ')[0]}! 👋`;
+    document.getElementById('dash-date').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  // Navigation
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const page = document.getElementById('page-' + id);
+    if (page) page.classList.add('active');
+    // Highlight nav
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) {
+        n.classList.add('active');
+      }
+    });
+    // Scroll to top
+    document.querySelector('.content').scrollTop = 0;
+  }
+
+  // Sidebar toggle
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  }
+
+  // Habit toggle
+  function toggleHabit(el) {
+    el.classList.toggle('done');
+    const check = el.querySelector('.habit-check');
+    check.textContent = el.classList.contains('done') ? '✓' : '';
+  }
+
+  // Notifications
+  function markAllRead() {
+    document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+    document.getElementById('notif-count').style.display = 'none';
+    document.getElementById('notif-dot').style.display = 'none';
+    document.querySelector('#page-notifications .page-subtitle').textContent = 'Nenhuma não lida';
+  }
+
+  // Search
+  const searchData = [
+    { type: 'Hábito', icon: '🔄', title: 'Meditação 10min', desc: 'Streak de 14 dias' },
+    { type: 'Meta', icon: '🎯', title: 'Correr 100km', desc: '72% completo' },
+    { type: 'Nota', icon: '📝', title: 'Ideias para projeto', desc: 'Ontem, 22:15' },
+    { type: 'Projeto', icon: '🚀', title: 'Projeto Alpha', desc: '65% completo' },
+    { type: 'Insight', icon: '🤖', title: 'Pico de produtividade 9h-11h', desc: 'IA Insight' },
+  ];
+  function doSearch(q) {
+    const results = document.getElementById('search-results');
+    const list = document.getElementById('search-list');
+    if (!q.trim()) { results.style.display = 'none'; return; }
+    const filtered = searchData.filter(d => d.title.toLowerCase().includes(q.toLowerCase()) || d.desc.toLowerCase().includes(q.toLowerCase()));
+    if (!filtered.length) { results.style.display = 'none'; return; }
+    list.innerHTML = filtered.map(d => `<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-md);cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''"><span style="font-size:20px">${d.icon}</span><div><div style="font-size:13px;font-weight:600">${d.title}</div><div style="font-size:11px;color:var(--text-muted)">${d.type} · ${d.desc}</div></div></div>`).join('');
+    results.style.display = 'block';
+  }
+
+  // Logout
+  async function doLogout() {
+    try {
+      await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (_) {}
+    location.replace('/login');
+  }
+
+  // Global search shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      showPage('search');
+      setTimeout(() => document.getElementById('search-input').focus(), 100);
+    }
+  });
+</script>
+</body>
+</html>

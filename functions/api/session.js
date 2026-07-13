@@ -1,11 +1,11 @@
-// LifeOS Enterprise — Admin Session Check
-// Cloudflare Pages Function: GET /api/admin-session
-
+// LifeOS Enterprise — Session Check v6.0
+// Cloudflare Pages Function: GET /api/session
+// Retorna dados da sessão atual (admin ou user)
 import { getCookie, json, verifySession } from '../_auth.js';
 
 export async function onRequestGet({ request, env }) {
   const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Autenticação ainda não configurada' });
+  if (!secret) return json(503, { ok: false, error: 'Autenticação não configurada' });
 
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
@@ -15,7 +15,10 @@ export async function onRequestGet({ request, env }) {
 
   return json(200, {
     ok: true,
-    user: { username: session.sub, role: session.role },
+    user: {
+      username: session.sub,
+      role: session.role,
+    },
     redirect: session.role === 'admin' ? '/admin' : '/app',
   });
 }
