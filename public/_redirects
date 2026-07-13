@@ -2,6 +2,7 @@
 # SPA Routes
 /login              /login/index.html   200
 /admin              /admin/index.html   200
+/admin/master       /admin/master.html  200
 /enterprise         /enterprise/index.html  200
 /memory-center      /memory-center/index.html   200
 /dashboard          /index.html         200

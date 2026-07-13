@@ -1,33 +1,247 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Admin Login — LifeOS Enterprise</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — LifeOS Enterprise</title>
   <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Acesso seguro ao LifeOS Enterprise">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%236366f1'/%3E%3Cpath d='M18 16h8v24h20v8H18z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{color-scheme:dark;--bg:#070912;--panel:#101421;--border:#242b3d;--text:#f4f7ff;--muted:#9da8bd;--accent:#7c5cff;--danger:#ff7085;--ok:#4dd6a4}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 20% 10%,rgba(124,92,255,.18),transparent 36%),var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--text);padding:24px}.shell{width:min(440px,100%)}.brand{display:flex;gap:12px;align-items:center;margin-bottom:22px}.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#8768ff,#4d8dff);box-shadow:0 12px 35px rgba(124,92,255,.28);font-weight:900}.brand h1{font-size:18px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}.card{background:rgba(16,20,33,.92);border:1px solid var(--border);border-radius:20px;padding:30px;box-shadow:0 30px 90px rgba(0,0,0,.4);backdrop-filter:blur(18px)}h2{margin:0 0 7px;font-size:25px}p{color:var(--muted);line-height:1.55;margin:0 0 24px}.field{margin:16px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:7px;color:#cfd6e5}.field input{width:100%;border:1px solid var(--border);border-radius:11px;background:#090c14;color:var(--text);padding:13px 14px;font:inherit;outline:none}.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.14)}button{width:100%;border:0;border-radius:11px;padding:13px 16px;background:linear-gradient(135deg,#8565ff,#4f83ff);color:white;font:700 14px inherit;cursor:pointer;margin-top:10px}button:disabled{opacity:.6;cursor:wait}.status{min-height:22px;margin:15px 0 0;font-size:13px}.status.error{color:var(--danger)}.status.ok{color:var(--ok)}.footer{text-align:center;margin-top:18px;font-size:12px;color:var(--muted)}a{color:#b6a8ff;text-decoration:none}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      color-scheme: dark;
+      --brand-400: #818CF8; --brand-500: #6366F1; --brand-600: #4F46E5;
+      --accent-500: #8B5CF6; --success-500: #10B981; --danger-500: #F43F5E;
+      --bg-base: #07070F; --bg-card: #111120;
+      --surface-100: rgba(255,255,255,0.04); --surface-200: rgba(255,255,255,0.06);
+      --border-default: rgba(255,255,255,0.09); --border-focus: rgba(99,102,241,0.55);
+      --text-primary: #F1F5F9; --text-secondary: #94A3B8; --text-tertiary: #64748B;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-aurora: linear-gradient(135deg, #6366F1 0%, #8B5CF6 40%, #EC4899 100%);
+      --shadow-brand: 0 4px 20px rgba(99,102,241,0.35);
+      --shadow-brand-lg: 0 8px 40px rgba(99,102,241,0.40);
+    }
+    html, body { height: 100%; font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    body {
+      background: var(--bg-base); color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 24px; position: relative; overflow: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; top: -30%; left: -20%; width: 70%; height: 70%;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 65%); pointer-events: none;
+    }
+    body::after {
+      content: ''; position: fixed; bottom: -20%; right: -10%; width: 50%; height: 50%;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 65%); pointer-events: none;
+    }
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
+
+    .login-shell { position: relative; z-index: 1; width: 100%; max-width: 440px; animation: fadeIn 0.4s ease; }
+    .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; justify-content: center; }
+    .brand-icon {
+      width: 44px; height: 44px; border-radius: 14px; background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: #fff; box-shadow: var(--shadow-brand); flex-shrink: 0;
+    }
+    .brand-text h1 {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.04em;
+      background: var(--gradient-aurora); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2;
+    }
+    .brand-text p { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; font-weight: 500; }
+    .login-card {
+      background: rgba(13,13,26,0.80); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.08); border-top: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; padding: 36px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(99,102,241,0.08);
+    }
+    .card-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 6px; }
+    .card-subtitle { font-size: 13px; color: var(--text-tertiary); line-height: 1.55; margin-bottom: 28px; }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.06em; margin-bottom: 7px; text-transform: uppercase; }
+    .input-wrap { position: relative; }
+    .input-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 15px; color: var(--text-tertiary); pointer-events: none; }
+    .form-input {
+      width: 100%; height: 44px; padding: 0 14px 0 40px;
+      border-radius: 12px; border: 1px solid var(--border-default);
+      background: rgba(255,255,255,0.04); color: var(--text-primary);
+      font-size: 14px; font-family: inherit; outline: none; transition: all 0.15s ease;
+    }
+    .form-input::placeholder { color: var(--text-tertiary); }
+    .form-input:hover { border-color: rgba(255,255,255,0.14); }
+    .form-input:focus { border-color: var(--border-focus); background: rgba(99,102,241,0.07); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+    .form-input.error { border-color: rgba(244,63,94,0.60); animation: shake 0.4s ease; }
+    .input-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 15px; padding: 4px; border-radius: 6px; transition: color 0.12s; }
+    .input-toggle:hover { color: var(--text-secondary); }
+    .form-options { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .remember-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--text-secondary); user-select: none; }
+    .remember-label input[type="checkbox"] { width: 15px; height: 15px; border-radius: 4px; accent-color: var(--brand-500); cursor: pointer; }
+    .forgot-link { font-size: 13px; font-weight: 500; color: var(--brand-400); text-decoration: none; transition: color 0.12s; }
+    .forgot-link:hover { color: #A5B4FC; }
+    .btn-submit {
+      width: 100%; height: 46px; border-radius: 12px; border: none;
+      background: var(--gradient-primary); color: #fff; font-size: 14px; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: all 0.15s ease;
+      box-shadow: var(--shadow-brand); display: flex; align-items: center; justify-content: center; gap: 8px; position: relative; overflow: hidden;
+    }
+    .btn-submit:hover { box-shadow: var(--shadow-brand-lg); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-submit .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading .btn-text { display: none; }
+    .status-msg { margin-top: 16px; padding: 11px 14px; border-radius: 10px; font-size: 13px; font-weight: 500; display: none; align-items: center; gap: 8px; }
+    .status-msg.show { display: flex; }
+    .status-msg.error { background: rgba(244,63,94,0.10); border: 1px solid rgba(244,63,94,0.20); color: #FB7185; }
+    .status-msg.success { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.20); color: #34D399; }
+    .status-msg.info { background: rgba(99,102,241,0.10); border: 1px solid rgba(99,102,241,0.20); color: #818CF8; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; color: var(--text-tertiary); font-size: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+    .sso-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .sso-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 40px; border-radius: 10px; border: 1px solid var(--border-default); background: var(--surface-100); color: var(--text-secondary); font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.12s ease; }
+    .sso-btn:hover { background: var(--surface-200); color: var(--text-primary); border-color: rgba(255,255,255,0.14); }
+    .login-footer { text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-tertiary); }
+    .login-footer a { color: var(--brand-400); text-decoration: none; font-weight: 500; transition: color 0.12s; }
+    .login-footer a:hover { color: #A5B4FC; }
+    .security-badge { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; font-size: 11px; color: var(--text-tertiary); }
+    @media (max-width: 480px) { .login-card { padding: 28px 22px; border-radius: 20px; } .sso-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <div class="brand"><div class="logo">L</div><div><h1>LifeOS Enterprise</h1><p>Production Administration</p></div></div>
-    <section class="card" aria-labelledby="login-title">
-      <h2 id="login-title">Acesso administrativo</h2>
-      <p>Entre com as credenciais protegidas do ambiente de produção.</p>
-      <form id="login-form">
-        <div class="field"><label for="username">E-mail</label><input id="username" name="username" type="email" autocomplete="email" placeholder="al6387838@gmail.com" required></div>
-        <div class="field"><label for="password">Senha</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
-        <button id="submit" type="submit">Entrar no painel</button>
-        <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <main class="login-shell" role="main">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">L</div>
+      <div class="brand-text">
+        <h1>LifeOS Enterprise</h1>
+        <p>Plataforma de Gestão Empresarial</p>
+      </div>
+    </div>
+    <div class="login-card" role="region" aria-label="Formulário de login">
+      <h2 class="card-title">Bem-vindo de volta</h2>
+      <p class="card-subtitle">Entre com suas credenciais para acessar o painel administrativo.</p>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="username">E-mail corporativo</label>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">✉</span>
+            <input id="username" name="username" type="email" class="form-input" placeholder="seu@empresa.com" autocomplete="email" required aria-required="true">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Senha</label>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">🔒</span>
+            <input id="password" name="password" type="password" class="form-input" placeholder="••••••••••••" autocomplete="current-password" required aria-required="true">
+            <button type="button" class="input-toggle" id="pwd-toggle" aria-label="Mostrar senha">👁</button>
+          </div>
+        </div>
+        <div class="form-options">
+          <label class="remember-label"><input type="checkbox" id="remember" name="remember"> Lembrar-me</label>
+          <a href="#" class="forgot-link" id="forgot-link">Esqueceu a senha?</a>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span class="btn-text">Entrar no painel</span>
+          <div class="spinner" aria-hidden="true"></div>
+        </button>
+        <div id="status-msg" class="status-msg" role="alert" aria-live="assertive"></div>
       </form>
-    </section>
-    <div class="footer"><a href="/">Voltar ao LifeOS</a> · HTTPS e sessão segura</div>
+      <div class="divider">ou continue com</div>
+      <div class="sso-grid">
+        <button type="button" class="sso-btn" id="sso-google" aria-label="Entrar com Google">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google SSO
+        </button>
+        <button type="button" class="sso-btn" id="sso-ms" aria-label="Entrar com Microsoft">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11 11H2V2h9v9z" fill="#F25022"/><path d="M22 11h-9V2h9v9z" fill="#7FBA00"/><path d="M11 22H2v-9h9v9z" fill="#00A4EF"/><path d="M22 22h-9v-9h9v9z" fill="#FFB900"/></svg>
+          Microsoft SSO
+        </button>
+      </div>
+    </div>
+    <div class="login-footer">
+      <a href="/">← Voltar ao LifeOS</a> &nbsp;·&nbsp; <a href="/enterprise">Dashboard Enterprise</a>
+    </div>
+    <div class="security-badge">
+      🔒 Conexão segura HTTPS · Sessão criptografada · SOC 2 Type II
+    </div>
   </main>
   <script>
-    const form=document.getElementById('login-form');const statusEl=document.getElementById('status');const submit=document.getElementById('submit');
-    (async()=>{const response=await fetch('/api/admin-session',{credentials:'same-origin'});if(response.ok)location.replace('/admin');})().catch(()=>{});
-    form.addEventListener('submit',async(event)=>{event.preventDefault();submit.disabled=true;statusEl.className='status';statusEl.textContent='Validando acesso…';try{const response=await fetch('/api/admin-login',{method:'POST',headers:{'content-type':'application/json'},credentials:'same-origin',body:JSON.stringify({username:form.username.value,password:form.password.value})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não foi possível autenticar');statusEl.className='status ok';statusEl.textContent='Acesso autorizado. Abrindo painel…';location.replace('/admin');}catch(error){statusEl.className='status error';statusEl.textContent=error.message||'Falha de autenticação';submit.disabled=false;}});
+    (function () {
+      'use strict';
+      const form = document.getElementById('login-form');
+      const statusEl = document.getElementById('status-msg');
+      const submitBtn = document.getElementById('submit-btn');
+      const pwdInput = document.getElementById('password');
+      const pwdToggle = document.getElementById('pwd-toggle');
+      const emailInput = document.getElementById('username');
+
+      (async () => {
+        try { const r = await fetch('/api/admin-session', { credentials: 'same-origin' }); if (r.ok) location.replace('/admin'); } catch (_) {}
+      })();
+
+      pwdToggle.addEventListener('click', () => {
+        const isText = pwdInput.type === 'text';
+        pwdInput.type = isText ? 'password' : 'text';
+        pwdToggle.textContent = isText ? '👁' : '🙈';
+        pwdToggle.setAttribute('aria-label', isText ? 'Mostrar senha' : 'Ocultar senha');
+      });
+
+      document.getElementById('forgot-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        showStatus('info', 'Contate o administrador do sistema para redefinir sua senha.');
+      });
+      document.getElementById('sso-google').addEventListener('click', () => {
+        showStatus('info', 'SSO Google disponível no plano Enterprise+. Contate seu administrador.');
+      });
+      document.getElementById('sso-ms').addEventListener('click', () => {
+        showStatus('info', 'SSO Microsoft disponível no plano Enterprise+. Contate seu administrador.');
+      });
+
+      function setLoading(v) { submitBtn.disabled = v; submitBtn.classList.toggle('loading', v); }
+
+      function showStatus(type, msg) {
+        statusEl.className = 'status-msg show ' + type;
+        statusEl.textContent = msg;
+      }
+      function clearStatus() { statusEl.className = 'status-msg'; statusEl.textContent = ''; }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearStatus();
+        const email = emailInput.value.trim();
+        const password = pwdInput.value;
+        if (!email) { emailInput.classList.add('error'); showStatus('error', 'Informe seu e-mail corporativo.'); emailInput.focus(); return; }
+        if (!password) { pwdInput.classList.add('error'); showStatus('error', 'Informe sua senha.'); pwdInput.focus(); return; }
+        emailInput.classList.remove('error'); pwdInput.classList.remove('error');
+        setLoading(true);
+        try {
+          const res = await fetch('/api/admin-login', {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            credentials: 'same-origin', body: JSON.stringify({ username: email, password }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Credenciais inválidas. Verifique e tente novamente.');
+          showStatus('success', '✓ Autenticado com sucesso. Redirecionando...');
+          setTimeout(() => location.replace('/admin'), 900);
+        } catch (err) {
+          pwdInput.classList.add('error');
+          showStatus('error', err.message || 'Falha na autenticação. Tente novamente.');
+          setLoading(false);
+        }
+      });
+      [emailInput, pwdInput].forEach(el => el.addEventListener('input', () => el.classList.remove('error')));
+    })();
   </script>
 </body>
 </html>

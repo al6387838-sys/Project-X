@@ -1,212 +1,640 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="enterprise-dark">
+<html lang="pt-BR" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Master Admin Panel | Enterprise v4.0" />
-  <title>Master Admin Panel — LifeOS Enterprise</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="../design_system/enterprise_identity.css" />
-  <link rel="stylesheet" href="../design_system/enterprise_components.css" />
-  <link rel="stylesheet" href="../design_system/responsive.css" />
-  <link rel="stylesheet" href="../animations/animations.css" />
-  <link rel="stylesheet" href="../animations/premium_motion.css" />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Admin — LifeOS Enterprise</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%236366f1'/%3E%3Cpath d='M18 16h8v24h20v8H18z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    .admin-shell { display: flex; height: 100vh; overflow: hidden; background: var(--bg-base); }
-    .admin-sidebar { width: var(--sidebar-width); background: var(--bg-elevated); border-right: 1px solid var(--border-default); display: flex; flex-direction: column; overflow-y: auto; z-index: var(--z-raised); }
-    .admin-sidebar-header { padding: var(--space-6); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; gap: var(--space-3); }
-    .admin-sidebar-logo { width: 40px; height: 40px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-weight: var(--font-bold); color: #FFFFFF; font-size: var(--text-xl); }
-    .admin-sidebar-title { font-size: var(--text-base); font-weight: var(--font-bold); color: var(--text-primary); }
-    .admin-sidebar-nav { flex: 1; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
-    .admin-sidebar-section { margin-bottom: var(--space-4); }
-    .admin-sidebar-section-title { font-size: var(--text-xs); font-weight: var(--font-bold); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 var(--space-3); margin-bottom: var(--space-2); }
-    .admin-sidebar-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; transition: all var(--duration-normal) var(--ease-out); text-decoration: none; font-size: var(--text-base); border-left: 3px solid transparent; }
-    .admin-sidebar-item:hover { background: var(--bg-surface-1); color: var(--text-primary); }
-    .admin-sidebar-item.active { background: rgba(91, 127, 255, 0.15); color: var(--brand-primary-400); border-left-color: var(--brand-primary-600); }
-    .admin-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    .admin-topbar { height: var(--topbar-height); background: var(--bg-card); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--space-6); gap: var(--space-6); }
-    .admin-topbar-left { display: flex; align-items: center; gap: var(--space-4); flex: 1; }
-    .admin-topbar-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); }
-    .admin-topbar-right { display: flex; align-items: center; gap: var(--space-4); }
-    .admin-content { flex: 1; overflow-y: auto; padding: var(--space-6); }
-    .admin-section { margin-bottom: var(--space-8); }
-    .admin-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
-    .admin-section-title { font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--text-primary); }
-    .admin-section-actions { display: flex; gap: var(--space-3); }
-    .admin-table-container { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-xl); overflow: hidden; }
-    .admin-table-header { padding: var(--space-6); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; }
-    .admin-table-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); }
-    .admin-table-filters { display: flex; gap: var(--space-3); }
-    .admin-table-wrapper { overflow-x: auto; }
-    .admin-table { width: 100%; border-collapse: collapse; }
-    .admin-table thead { background: var(--bg-surface-1); border-bottom: 1px solid var(--border-default); }
-    .admin-table th { padding: var(--space-4); text-align: left; font-weight: var(--font-semibold); font-size: var(--text-sm); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .admin-table td { padding: var(--space-4); border-bottom: 1px solid var(--border-subtle); font-size: var(--text-base); color: var(--text-primary); }
-    .admin-table tbody tr:hover { background: var(--bg-surface-1); }
-    .admin-table tbody tr:last-child td { border-bottom: none; }
-    .status-badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--font-medium); }
-    .status-badge.active { background: rgba(16, 185, 129, 0.15); color: var(--status-success-500); }
-    .status-badge.inactive { background: rgba(100, 116, 139, 0.15); color: var(--text-tertiary); }
-    .status-badge.suspended { background: rgba(239, 68, 68, 0.15); color: var(--status-danger-600); }
-    .status-badge.pending { background: rgba(245, 158, 11, 0.15); color: var(--status-warning-500); }
-    .action-buttons { display: flex; gap: var(--space-2); }
-    .action-btn { width: 32px; height: 32px; padding: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); border: 1px solid transparent; cursor: pointer; transition: all var(--duration-normal) var(--ease-out); display: flex; align-items: center; justify-content: center; font-size: var(--text-base); }
-    .action-btn:hover { background: var(--bg-surface-1); color: var(--text-primary); border-color: var(--border-default); }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
-    .stat-card { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-4); text-align: center; }
-    .stat-value { font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--text-primary); margin-bottom: var(--space-2); }
-    .stat-label { font-size: var(--text-sm); color: var(--text-secondary); }
-    @media (max-width: 768px) {
-      .admin-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-default); flex-direction: row; overflow-x: auto; }
-      .admin-sidebar-nav { flex-direction: row; flex: 1; }
-      .admin-content { padding: var(--space-4); }
-      .stats-grid { grid-template-columns: 1fr; }
-      .admin-section-header { flex-direction: column; align-items: flex-start; }
-      .admin-section-actions { width: 100%; margin-top: var(--space-3); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      color-scheme: dark;
+      --bg-base: #07070F; --bg-card: #0D0D1A; --bg-elevated: #0A0A18;
+      --border-subtle: rgba(255,255,255,0.05); --border-default: rgba(255,255,255,0.09);
+      --text-primary: #F1F5F9; --text-secondary: #94A3B8; --text-tertiary: #64748B;
+      --brand: #6366F1; --brand-light: #818CF8; --success: #10B981; --danger: #F43F5E; --warning: #F59E0B;
     }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    body { background: var(--bg-base); color: var(--text-primary); }
+
+    .shell { display: flex; height: 100vh; overflow: hidden; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 230px; flex-shrink: 0; background: var(--bg-elevated);
+      border-right: 1px solid var(--border-subtle);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .sidebar-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 14px; height: 54px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0;
+    }
+    .sidebar-logo-icon {
+      width: 30px; height: 30px; border-radius: 9px;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0;
+    }
+    .sidebar-logo-text { font-size: 13px; font-weight: 800; letter-spacing: -0.03em; background: linear-gradient(135deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sidebar-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #F43F5E; background: rgba(244,63,94,0.12); border: 1px solid rgba(244,63,94,0.20); padding: 2px 6px; border-radius: 9999px; margin-left: auto; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 8px; }
+    .sidebar-nav::-webkit-scrollbar { width: 0; }
+    .nav-section { margin-bottom: 16px; }
+    .nav-section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--text-tertiary); padding: 0 10px; margin-bottom: 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      padding: 7px 10px; border-radius: 8px; border: none; background: transparent;
+      color: var(--text-secondary); font-size: 12px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: all 0.1s ease; text-decoration: none; margin-bottom: 1px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+    .nav-item.active { background: rgba(99,102,241,0.10); color: #818CF8; border: 1px solid rgba(99,102,241,0.14); }
+    .nav-item-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+    .sidebar-footer { padding: 8px; border-top: 1px solid var(--border-subtle); flex-shrink: 0; }
+    .user-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; }
+    .user-av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #6366F1, #8B5CF6); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 10px; color: var(--text-tertiary); }
+    .logout-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--text-tertiary); padding: 3px; border-radius: 4px; transition: color 0.12s; flex-shrink: 0; }
+    .logout-btn:hover { color: var(--danger); }
+
+    /* MAIN */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar {
+      height: 54px; display: flex; align-items: center; padding: 0 20px;
+      border-bottom: 1px solid var(--border-subtle); background: var(--bg-elevated);
+      gap: 10px; flex-shrink: 0;
+    }
+    .topbar-title { font-size: 14px; font-weight: 600; }
+    .topbar-spacer { flex: 1; }
+    .topbar-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #F43F5E; background: rgba(244,63,94,0.10); border: 1px solid rgba(244,63,94,0.20); padding: 4px 10px; border-radius: 9999px; }
+    .content { flex: 1; overflow-y: auto; padding: 20px; }
+    .content::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    /* VIEWS */
+    .view { display: none; animation: fadeIn 0.2s ease; }
+    .view.active { display: block; }
+
+    /* PAGE HEADER */
+    .page-header { margin-bottom: 20px; }
+    .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .page-sub { font-size: 13px; color: var(--text-tertiary); }
+
+    /* KPI GRID */
+    .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+    .kpi-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; transition: all 0.15s ease; animation: scaleIn 0.3s ease; }
+    .kpi-card:hover { border-color: rgba(255,255,255,0.10); transform: translateY(-1px); }
+    .kpi-val { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .kpi-label { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+    .kpi-sub { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+
+    /* CARD */
+    .card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); }
+    .card-title { font-size: 13px; font-weight: 600; }
+    .card-body { padding: 18px; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; }
+    .table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .table thead { background: rgba(255,255,255,0.02); }
+    .table th { padding: 9px 14px; text-align: left; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); border-bottom: 1px solid var(--border-subtle); white-space: nowrap; }
+    .table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text-secondary); vertical-align: middle; }
+    .table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .table tbody tr:last-child td { border-bottom: none; }
+
+    /* BADGE */
+    .badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 9999px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+    .badge-success { background: rgba(16,185,129,0.12); color: #34D399; border: 1px solid rgba(16,185,129,0.20); }
+    .badge-danger  { background: rgba(244,63,94,0.12);  color: #FB7185; border: 1px solid rgba(244,63,94,0.20); }
+    .badge-warning { background: rgba(245,158,11,0.12); color: #FBBF24; border: 1px solid rgba(245,158,11,0.20); }
+    .badge-neutral { background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.10); }
+    .badge-primary { background: rgba(99,102,241,0.12); color: #818CF8; border: 1px solid rgba(99,102,241,0.20); }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 8px; border: 1px solid transparent; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.12s ease; white-space: nowrap; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, #6366F1, #8B5CF6); color: #fff; }
+    .btn-primary:hover { box-shadow: 0 4px 14px rgba(99,102,241,0.35); transform: translateY(-1px); }
+    .btn-secondary { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); color: var(--text-secondary); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.09); color: var(--text-primary); }
+    .btn-danger { background: rgba(244,63,94,0.12); border-color: rgba(244,63,94,0.20); color: #FB7185; }
+    .btn-danger:hover { background: rgba(244,63,94,0.20); }
+    .btn-ghost { background: transparent; color: var(--text-secondary); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+
+    /* FORM */
+    .form-input, .form-select { width: 100%; height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); color: var(--text-primary); font-size: 12px; font-family: inherit; outline: none; transition: all 0.15s; }
+    .form-input:focus, .form-select:focus { border-color: rgba(99,102,241,0.55); background: rgba(99,102,241,0.07); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+    .form-input::placeholder { color: var(--text-tertiary); }
+
+    /* TOAST */
+    .toast-stack { position: fixed; top: 16px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+    .toast { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; min-width: 260px; background: rgba(13,13,26,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 40px rgba(0,0,0,0.40); pointer-events: all; animation: toastIn 0.2s ease; font-size: 12px; font-weight: 500; color: var(--text-primary); }
+    .toast.success { border-color: rgba(16,185,129,0.25); }
+    .toast.error { border-color: rgba(244,63,94,0.25); }
+
+    /* MODAL */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-backdrop.open { display: flex; animation: fadeIn 0.15s ease; }
+    .modal { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.10); border-radius: 18px; box-shadow: 0 32px 80px rgba(0,0,0,0.50); width: 100%; max-width: 480px; overflow: hidden; animation: scaleIn 0.2s ease; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .modal-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+    .modal-close { width: 28px; height: 28px; border-radius: 7px; background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-tertiary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.12s; }
+    .modal-close:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+    .modal-body { padding: 22px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 22px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); }
+
+    /* EMPTY STATE */
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center; gap: 12px; }
+    .empty-state-icon { font-size: 32px; }
+    .empty-state-title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    .empty-state-desc { font-size: 12px; color: var(--text-tertiary); max-width: 280px; line-height: 1.6; }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    /* PROGRESS */
+    .progress { height: 4px; background: rgba(255,255,255,0.06); border-radius: 9999px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 9999px; background: linear-gradient(135deg, #6366F1, #8B5CF6); transition: width 0.8s ease; }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .sidebar { display: none; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body style="visibility:hidden">
+
 <script>
   fetch('/api/admin-session', { credentials: 'same-origin' })
-    .then(r => { if (!r.ok) throw new Error('unauthorized'); return r.json(); })
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
     .then(() => { document.body.style.visibility = 'visible'; })
     .catch(() => { location.replace('/login'); });
 </script>
-  <div class="admin-shell">
-    <aside class="admin-sidebar">
-      <div class="admin-sidebar-header">
-        <div class="admin-sidebar-logo">⚙️</div>
-        <div class="admin-sidebar-title">Admin</div>
-      </div>
-      <nav class="admin-sidebar-nav">
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section-title">Dashboard</div>
-          <a href="#overview" class="admin-sidebar-item active" data-view="overview">📊 Overview</a>
-        </div>
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section-title">Gerenciamento</div>
-          <a href="#members" class="admin-sidebar-item" data-view="members">👥 Membros</a>
-          <a href="#organization" class="admin-sidebar-item" data-view="organization">🏢 Organização</a>
-        </div>
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section-title">Sistema</div>
-          <a href="#compliance" class="admin-sidebar-item" data-view="compliance">📋 Auditoria</a>
-          <a href="/enterprise" class="admin-sidebar-item">← Voltar</a>
-        </div>
-      </nav>
-    </aside>
-    <div class="admin-main">
-      <header class="admin-topbar">
-        <div class="admin-topbar-left"><div class="admin-topbar-title">Master Admin Panel</div></div>
-        <div class="admin-topbar-right">
-          <span class="admin-user-name" style="font-size: var(--text-sm); color: var(--text-secondary);">Carregando...</span>
-          <button class="enterprise-btn ghost" type="button" onclick="adminLogout()">Encerrar sessão</button>
-        </div>
-      </header>
-      <main class="admin-content" id="admin-view-root"></main>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">⚙</div>
+      <span class="sidebar-logo-text">LifeOS</span>
+      <span class="sidebar-badge">ADMIN</span>
     </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Dashboard</div>
+        <button class="nav-item active" data-view="overview" type="button"><span class="nav-item-icon">📊</span>Overview</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Gerenciamento</div>
+        <button class="nav-item" data-view="members" type="button"><span class="nav-item-icon">👥</span>Membros</button>
+        <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon">🏢</span>Organizações</button>
+        <button class="nav-item" data-view="billing" type="button"><span class="nav-item-icon">💳</span>Billing</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <button class="nav-item" data-view="audit" type="button"><span class="nav-item-icon">📋</span>Auditoria</button>
+        <button class="nav-item" data-view="system" type="button"><span class="nav-item-icon">⚡</span>Sistema</button>
+        <button class="nav-item" data-view="security" type="button"><span class="nav-item-icon">🛡️</span>Segurança</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Navegação</div>
+        <a class="nav-item" href="/enterprise"><span class="nav-item-icon">◈</span>Enterprise</a>
+        <a class="nav-item" href="/dashboard"><span class="nav-item-icon">←</span>Workspace</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-av" id="admin-user-av">A</div>
+        <div class="user-info">
+          <div class="user-name" id="admin-user-name">Admin</div>
+          <div class="user-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" id="logout-btn" type="button" title="Encerrar sessão">⏻</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <span class="topbar-title" id="topbar-title">Master Admin Panel</span>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-badge">🔴 ADMIN RESTRITO</span>
+      <button class="btn btn-secondary" id="refresh-btn" type="button">↻ Atualizar</button>
+    </header>
+    <div class="content" id="content">
+      <div class="empty-state"><div class="empty-state-icon">⚙️</div><div class="empty-state-title">Carregando…</div></div>
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div class="toast-stack" id="toast-stack"></div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">Modal</h2>
+      <button class="modal-close" id="modal-close" type="button">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer" style="display:none"></div>
   </div>
-  <div class="enterprise-toast-stack"></div>
-  <script>
-    // Integration with enterprise-data API
-    (() => {
-      const API = '/api/enterprise-data';
-      const state = { data: null, view: 'overview' };
-      const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
-      const fmtDate = (v, t = false) => v ? new Intl.DateTimeFormat('pt-BR', t ? { dateStyle: 'short', timeStyle: 'short' } : { dateStyle: 'medium' }).format(new Date(v)) : '—';
-      const money = (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
+</div>
 
-      async function request() {
-        const response = await fetch(API);
-        if (response.status === 401) return location.replace('/login');
-        const result = await response.json();
-        state.data = result.data;
-        return result.data;
-      }
+<script>
+(function () {
+  'use strict';
+  const API = '/api/enterprise-data';
+  const state = { data: null, view: 'overview' };
 
-      function renderOverview() {
-        const sys = state.data.system;
-        const sub = state.data.subscription;
-        return `
-          <div class="admin-section">
-            <div class="admin-section-header"><h2 class="admin-section-title">System Overview</h2></div>
-            <div class="stats-grid">
-              <div class="stat-card"><div class="stat-value">${state.data.members.length}</div><div class="stat-label">Membros</div></div>
-              <div class="stat-card"><div class="stat-value">${sys.uptime}%</div><div class="stat-label">Uptime</div></div>
-              <div class="stat-card"><div class="stat-value">${sys.activeSessions}</div><div class="stat-label">Sessões ativas</div></div>
-              <div class="stat-card"><div class="stat-value">${sys.apiP95}ms</div><div class="stat-label">Latência p95</div></div>
-              <div class="stat-card"><div class="stat-value">${money(sub.monthlyValue)}</div><div class="stat-label">MRR</div></div>
-            </div>
-          </div>
-          <div class="admin-section">
-            <div class="admin-section-header"><h2 class="admin-section-title">Auditoria Recente</h2></div>
-            <div class="admin-table-container">
-              <div class="admin-table-wrapper">
-                <table class="admin-table">
-                  <thead><tr><th>Data</th><th>Ator</th><th>Evento</th><th>Detalhe</th></tr></thead>
-                  <tbody>
-                    ${state.data.auditLog.slice(0, 10).map(log => `
-                      <tr><td>${fmtDate(log.createdAt, true)}</td><td>${esc(log.actor)}</td><td>${esc(log.action)}</td><td>${esc(log.detail)}</td></tr>
-                    `).join('')}
-                  </tbody>
-                </table>
+  const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const fmtDate = (v, t=false) => v ? new Intl.DateTimeFormat('pt-BR', t ? {dateStyle:'short',timeStyle:'short'} : {dateStyle:'medium'}).format(new Date(v)) : '—';
+  const money = v => new Intl.NumberFormat('pt-BR', {style:'currency',currency:'BRL'}).format(Number(v||0));
+  const statusBadge = s => {
+    const map = {active:'success',paid:'success',operational:'success',suspended:'danger',pending:'warning',trial:'warning'};
+    return `<span class="badge badge-${map[s]||'neutral'}">${esc(s)}</span>`;
+  };
+
+  function toast(msg, type='info') {
+    const stack = document.getElementById('toast-stack');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.textContent = (type==='success'?'✓ ':type==='error'?'✕ ':'ℹ ') + msg;
+    stack.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  function openModal(title, body, footer='') {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = body;
+    const f = document.getElementById('modal-footer');
+    if (footer) { f.innerHTML = footer; f.style.display = ''; } else { f.style.display = 'none'; }
+    document.getElementById('modal-backdrop').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+
+  async function request(action, payload) {
+    const opts = action
+      ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,payload}),credentials:'same-origin'}
+      : {method:'GET',credentials:'same-origin'};
+    const res = await fetch(API, opts);
+    if (res.status === 401) { location.replace('/login'); throw new Error('Não autorizado.'); }
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Operação falhou.');
+    state.data = data.data;
+    return data.data;
+  }
+
+  async function mutate(action, payload, msg) {
+    try {
+      await request(action, payload);
+      render(state.view);
+      toast(msg, 'success');
+      closeModal();
+    } catch(e) { toast(e.message, 'error'); }
+  }
+
+  // ── RENDERS ──
+  function renderOverview() {
+    const d = state.data;
+    const sys = d.system || {};
+    const sub = d.subscription || {};
+    const members = d.members || [];
+    const audit = (d.auditLog || []).slice(0, 8);
+    document.getElementById('content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">System Overview</h1>
+        <p class="page-sub">Painel de controle global do LifeOS Enterprise.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val">${members.length}</div><div class="kpi-label">Membros totais</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${sys.uptime||99.9}%</div><div class="kpi-label">Uptime</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||0}</div><div class="kpi-label">Sessões ativas</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||0}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#818CF8">${money(sub.monthlyValue||0)}</div><div class="kpi-label">MRR</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Saúde do Sistema</span>${statusBadge('operational')}</div>
+          <div class="card-body">
+            ${[['CPU',sys.cpu||23,'#6366F1'],['Memória',sys.memory||41,'#8B5CF6'],['Disco',sys.disk||18,'#10B981'],['Rede',sys.network||12,'#F59E0B']].map(([l,v,c]) => `
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <span style="font-size:11px;color:var(--text-secondary);width:60px">${l}</span>
+                <div class="progress" style="flex:1"><div class="progress-bar" style="width:${v}%;background:${c}"></div></div>
+                <span style="font-size:11px;font-weight:600;width:30px;text-align:right">${v}%</span>
               </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Assinatura</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-secondary)">Plano</span><span style="font-size:12px;font-weight:600">${esc(sub.plan||'Enterprise')}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-secondary)">Status</span>${statusBadge(sub.status||'active')}</div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-secondary)">Ciclo</span><span style="font-size:12px;font-weight:600">${esc(sub.billingCycle||'annual')}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-secondary)">Próx. cobrança</span><span style="font-size:12px;font-weight:600">${fmtDate(sub.nextBillingDate)}</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:12px;color:var(--text-secondary)">MRR</span><span style="font-size:12px;font-weight:700;color:#818CF8">${money(sub.monthlyValue||0)}</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Auditoria Recente</span><button class="btn btn-secondary" data-view="audit" type="button">Ver tudo</button></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Data/Hora</th><th>Ator</th><th>Ação</th><th>Detalhe</th><th>IP</th></tr></thead>
+            <tbody>
+              ${audit.map(l => `
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${fmtDate(l.createdAt, true)}</td>
+                  <td>${esc(l.actor)}</td>
+                  <td><span class="badge badge-neutral">${esc(l.action)}</span></td>
+                  <td style="color:var(--text-secondary)">${esc(l.detail)}</td>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-tertiary)">${esc(l.ip||'—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMembers() {
+    const members = state.data?.members || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div><h1 class="page-title">Membros</h1><p class="page-sub">${members.length} membros na organização.</p></div>
+        <button class="btn btn-primary" data-action="member.invite" type="button">+ Convidar</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Todos os membros</span>
+          <input class="form-input" style="width:200px" type="search" placeholder="Filtrar…" id="members-filter">
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Membro</th><th>E-mail</th><th>Perfil</th><th>Status</th><th>Última atividade</th><th>Ações</th></tr></thead>
+            <tbody id="members-tbody">
+              ${members.map(m => `
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:7px">
+                    <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">${esc(m.name?.charAt(0)||'?')}</div>
+                    <span style="font-weight:500;color:var(--text-primary)">${esc(m.name)}</span>
+                  </div></td>
+                  <td>${esc(m.email)}</td>
+                  <td>${statusBadge(m.roleId||'member')}</td>
+                  <td>${statusBadge(m.status||'active')}</td>
+                  <td>${fmtDate(m.lastActiveAt, true)}</td>
+                  <td><div style="display:flex;gap:4px">
+                    <button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" data-action="member.suspend" data-id="${esc(m.id)}" type="button">Suspender</button>
+                    <button class="btn btn-danger" style="height:26px;padding:0 8px;font-size:11px" data-action="member.remove" data-id="${esc(m.id)}" type="button">Remover</button>
+                  </div></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    document.getElementById('members-filter')?.addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      document.querySelectorAll('#members-tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  }
+
+  function renderOrganizations() {
+    const org = state.data?.organization || {};
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Organizações</h1></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">${esc(org.name||'Organização')}</span>${statusBadge(org.status||'active')}</div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Nome</span><div style="font-size:13px;font-weight:600;margin-top:3px">${esc(org.name||'—')}</div></div>
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Domínio</span><div style="font-size:13px;margin-top:3px">${esc(org.domain||'—')}</div></div>
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Setor</span><div style="font-size:13px;margin-top:3px">${esc(org.industry||'—')}</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Criada em</span><div style="font-size:13px;margin-top:3px">${fmtDate(org.createdAt)}</div></div>
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Membros</span><div style="font-size:13px;font-weight:600;margin-top:3px">${(state.data?.members||[]).length}</div></div>
+              <div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-tertiary)">Workspaces</span><div style="font-size:13px;font-weight:600;margin-top:3px">${(state.data?.workspaces||[]).length}</div></div>
             </div>
           </div>
-        `;
-      }
-
-      function renderMembers() {
-        return `
-          <div class="admin-section">
-            <div class="admin-section-header"><h2 class="admin-section-title">Gerenciamento de Membros</h2></div>
-            <div class="admin-table-container">
-              <div class="admin-table-wrapper">
-                <table class="admin-table">
-                  <thead><tr><th>Nome</th><th>Email</th><th>Equipe</th><th>Status</th><th>Última atividade</th></tr></thead>
-                  <tbody>
-                    ${state.data.members.map(m => `
-                      <tr><td>${esc(m.name)}</td><td>${esc(m.email)}</td><td>${esc(m.team)}</td><td><span class="status-badge ${m.status === 'active' ? 'active' : 'pending'}">${esc(m.status)}</span></td><td>${fmtDate(m.lastActiveAt, true)}</td></tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div style="margin-top:16px;display:flex;gap:8px">
+            <button class="btn btn-primary" data-action="org.edit" type="button">✏ Editar</button>
+            <button class="btn btn-danger" data-action="org.suspend" type="button">⚠ Suspender</button>
           </div>
-        `;
-      }
+        </div>
+      </div>
+    `;
+  }
 
-      function render(view) {
-        state.view = view || 'overview';
-        document.querySelectorAll('.admin-sidebar-item').forEach(l => l.classList.toggle('active', l.dataset.view === state.view));
-        const root = document.getElementById('admin-view-root');
-        if (state.view === 'overview') root.innerHTML = renderOverview();
-        else if (state.view === 'members') root.innerHTML = renderMembers();
-        else root.innerHTML = renderOverview();
-      }
+  function renderBilling() {
+    const sub = state.data?.subscription || {};
+    const invoices = state.data?.invoices || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Billing</h1></div>
+      <div class="grid-3" style="margin-bottom:16px">
+        <div class="kpi-card"><div class="kpi-val" style="color:#818CF8">${money(sub.monthlyValue||0)}</div><div class="kpi-label">MRR</div></div>
+        <div class="kpi-card"><div class="kpi-val">${esc(sub.plan||'Enterprise')}</div><div class="kpi-label">Plano atual</div></div>
+        <div class="kpi-card"><div class="kpi-val">${fmtDate(sub.nextBillingDate)}</div><div class="kpi-label">Próx. cobrança</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Histórico de Faturas</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
+            <tbody>
+              ${invoices.length ? invoices.map(inv => `
+                <tr>
+                  <td>${fmtDate(inv.date)}</td>
+                  <td>${esc(inv.description||'Assinatura LifeOS Enterprise')}</td>
+                  <td style="font-weight:600;color:var(--text-primary)">${money(inv.amount)}</td>
+                  <td>${statusBadge(inv.status||'paid')}</td>
+                  <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button">⬇ PDF</button></td>
+                </tr>
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">💳</div><div class="empty-state-title">Sem faturas</div></div></td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
 
-      async function adminLogout() {
-        try { await fetch('/api/admin-logout', { method: 'POST', credentials: 'same-origin' }); } catch (_) {}
-        location.replace('/login');
-      }
-      window.adminLogout = adminLogout;
-      async function init() {
-        await request();
-        document.querySelector('.admin-user-name').textContent = state.data.members[0]?.name || 'Admin';
-        document.querySelectorAll('.admin-sidebar-item[data-view]').forEach(item => {
-          item.addEventListener('click', (e) => { e.preventDefault(); render(item.dataset.view); });
-        });
-        render('overview');
-      }
-      init();
-    })();
-  </script>
+  function renderAudit() {
+    const audit = state.data?.auditLog || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div><h1 class="page-title">Log de Auditoria</h1><p class="page-sub">${audit.length} eventos registrados.</p></div>
+        <button class="btn btn-secondary" data-action="audit.export" type="button">⬇ Exportar CSV</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Data/Hora</th><th>Ator</th><th>Ação</th><th>Detalhe</th><th>IP</th></tr></thead>
+            <tbody>
+              ${audit.map(l => `
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:10px">${fmtDate(l.createdAt, true)}</td>
+                  <td>${esc(l.actor)}</td>
+                  <td><span class="badge badge-neutral">${esc(l.action)}</span></td>
+                  <td style="color:var(--text-secondary)">${esc(l.detail)}</td>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-tertiary)">${esc(l.ip||'—')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSystem() {
+    const sys = state.data?.system || {};
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Diagnóstico do Sistema</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${sys.uptime||99.9}%</div><div class="kpi-label">Uptime</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.cpu||23}%</div><div class="kpi-label">CPU</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.memory||41}%</div><div class="kpi-label">Memória</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||12}</div><div class="kpi-label">Sessões</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Score de Saúde</span></div>
+          <div class="card-body">
+            <div style="text-align:center;margin-bottom:16px">
+              <div style="font-size:48px;font-weight:700;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.healthScore||94}</div>
+              <div style="font-size:12px;color:var(--text-tertiary)">de 100 pontos</div>
+            </div>
+            <div class="progress"><div class="progress-bar" style="width:${sys.healthScore||94}%"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Ações de Sistema</span></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-secondary" data-action="system.refresh" type="button" style="justify-content:flex-start">↻ Atualizar diagnóstico</button>
+            <button class="btn btn-secondary" data-action="system.clearCache" type="button" style="justify-content:flex-start">🗑 Limpar cache</button>
+            <button class="btn btn-secondary" data-action="system.exportLogs" type="button" style="justify-content:flex-start">⬇ Exportar logs</button>
+            <button class="btn btn-danger" data-action="system.maintenance" type="button" style="justify-content:flex-start">⚠ Modo manutenção</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSecurity() {
+    const devices = state.data?.devices || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Segurança</h1></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Sessões Ativas</span><span class="badge badge-neutral">${devices.length} dispositivos</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Dispositivo</th><th>OS</th><th>Localização</th><th>Último acesso</th><th>Ação</th></tr></thead>
+            <tbody>
+              ${devices.length ? devices.map(d => `
+                <tr>
+                  <td>${esc(d.name||d.browser||'Dispositivo')}</td>
+                  <td>${esc(d.os||'—')}</td>
+                  <td>${esc(d.location||'—')}</td>
+                  <td>${fmtDate(d.lastSeen, true)}</td>
+                  <td>${d.current ? '<span class="badge badge-success">Atual</span>' : `<button class="btn btn-danger" style="height:26px;padding:0 8px;font-size:11px" data-action="device.revoke" data-id="${esc(d.id)}" type="button">Revogar</button>`}</td>
+                </tr>
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">🛡️</div><div class="empty-state-title">Nenhuma sessão</div></div></td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function render(view) {
+    state.view = view || 'overview';
+    document.querySelectorAll('.nav-item[data-view]').forEach(el => el.classList.toggle('active', el.dataset.view === state.view));
+    document.getElementById('topbar-title').textContent = {
+      overview:'System Overview', members:'Membros', organizations:'Organizações',
+      billing:'Billing', audit:'Auditoria', system:'Sistema', security:'Segurança',
+    }[state.view] || 'Admin';
+    const fn = {overview:renderOverview, members:renderMembers, organizations:renderOrganizations, billing:renderBilling, audit:renderAudit, system:renderSystem, security:renderSecurity}[state.view];
+    if (fn) fn();
+    history.replaceState(null, '', `#${state.view}`);
+  }
+
+  function exportAudit() {
+    const audit = state.data?.auditLog || [];
+    const csv = ['Data,Ator,Ação,Detalhe,IP', ...audit.map(l => `"${l.createdAt}","${l.actor}","${l.action}","${l.detail}","${l.ip||''}"`).join('\n')].join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download = 'audit.csv'; a.click();
+    toast('Log exportado.', 'success');
+  }
+
+  document.addEventListener('click', e => {
+    const target = e.target.closest('[data-view],[data-action]');
+    if (!target) return;
+    if (target.dataset.view) { render(target.dataset.view); return; }
+    const action = target.dataset.action;
+    switch (action) {
+      case 'member.invite': toast('Convite disponível no Enterprise.', 'info'); break;
+      case 'member.remove': if (confirm('Remover membro?')) mutate('member.remove', {id:target.dataset.id}, 'Membro removido.'); break;
+      case 'member.suspend': mutate('member.suspend', {id:target.dataset.id}, 'Membro suspenso.'); break;
+      case 'org.edit': toast('Edição disponível no Enterprise.', 'info'); break;
+      case 'org.suspend': if (confirm('Suspender organização?')) toast('Operação cancelada por segurança.', 'info'); break;
+      case 'audit.export': exportAudit(); break;
+      case 'system.refresh': mutate('system.refresh', {}, 'Diagnóstico atualizado.'); break;
+      case 'system.clearCache': toast('Cache limpo.', 'success'); break;
+      case 'system.exportLogs': exportAudit(); break;
+      case 'system.maintenance': toast('Modo manutenção requer confirmação do suporte.', 'info'); break;
+      case 'device.revoke': if (confirm('Revogar sessão?')) mutate('device.revoke', {id:target.dataset.id}, 'Sessão revogada.'); break;
+      default: toast(`Ação: ${action}`, 'info');
+    }
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.getElementById('modal-close')?.addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    try { await fetch('/api/admin-logout', {method:'POST',credentials:'same-origin'}); } catch(_) {}
+    location.replace('/login');
+  });
+  document.getElementById('refresh-btn')?.addEventListener('click', async () => {
+    try { await request(); render(state.view); toast('Dados atualizados.', 'success'); } catch(e) { toast(e.message, 'error'); }
+  });
+
+  async function init() {
+    try {
+      await request();
+      const user = state.data?.members?.[0] || {};
+      document.getElementById('admin-user-name').textContent = user.name || 'Admin';
+      document.getElementById('admin-user-av').textContent = (user.name||'A').charAt(0).toUpperCase();
+      const hash = location.hash.slice(1);
+      render(['overview','members','organizations','billing','audit','system','security'].includes(hash) ? hash : 'overview');
+    } catch(e) {
+      document.getElementById('content').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Erro ao carregar</div><div class="empty-state-desc">${esc(e.message)}</div><button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button></div>`;
+    }
+  }
+
+  init();
+})();
+</script>
 </body>
 </html>

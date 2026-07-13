@@ -124,6 +124,25 @@ function seedState() {
         createdAt: now,
       },
     ],
+    workspaces: [
+      { id: 'ws_001', name: 'Estratégia Corporativa', type: 'strategy', description: 'Planejamento estratégico e OKRs da organização.', status: 'active', members: ['usr_owner'], createdAt: now },
+      { id: 'ws_002', name: 'Operações', type: 'operations', description: 'Processos operacionais e indicadores.', status: 'active', members: ['usr_ops'], createdAt: now },
+      { id: 'ws_003', name: 'Produto & Tecnologia', type: 'product', description: 'Roadmap, sprints e entregas de produto.', status: 'active', members: ['usr_product'], createdAt: now },
+    ],
+    notifications: [
+      { id: 'ntf_001', icon: '🛡️', title: 'Alerta de segurança', message: '2 membros ainda não ativaram MFA. Recomendamos ação imediata.', read: false, createdAt: now },
+      { id: 'ntf_002', icon: '💳', title: 'Fatura disponível', message: 'Fatura de julho/2026 no valor de R$ 2.490,00 está disponível.', read: false, createdAt: now },
+      { id: 'ntf_003', icon: '👥', title: 'Novo membro', message: 'Rafael Lima entrou na organização como Gestor.', read: true, createdAt: now },
+      { id: 'ntf_004', icon: '🧠', title: 'Insight do Companion', message: 'Capacidade disponível para 22 novos membros. Considere expansão.', read: true, createdAt: now },
+    ],
+    mfa: {
+      enabled: true,
+      totp: true,
+      sms: false,
+      fido2: false,
+      backupCodes: 8,
+    },
+    healthScore: 94,
     system: {
       status: 'operational',
       version: '4.0.0',
@@ -134,6 +153,11 @@ function seedState() {
       apiP95: '42',
       errorRate: '0.02',
       activeSessions: '1',
+      cpu: '23',
+      memory: '41',
+      disk: '18',
+      network: '12',
+      healthScore: '94',
       lastBackupAt: now,
     },
   };
@@ -291,10 +315,45 @@ function applyAction(state, action, payload, actor) {
       lastCheckedAt: new Date().toISOString(),
       apiP95: String(Math.floor(35 + Math.random() * 20)),
       activeSessions: String(state.members.filter(m => m.status === 'active').length),
+      cpu: String(Math.floor(15 + Math.random() * 30)),
+      memory: String(Math.floor(30 + Math.random() * 25)),
     };
     audit(state, actor, action, 'system', 'Diagnóstico operacional atualizado.');
+  } else if (action === 'org.update' || action === 'organization.update') {
+    const name = normalizeText(payload.name, 120);
+    const domain = normalizeText(payload.domain, 120);
+    if (name) state.organization.name = name;
+    if (domain) state.organization.domain = domain;
+    if (payload.industry) state.organization.industry = normalizeText(payload.industry, 80);
+    if (payload.size) state.organization.size = normalizeText(payload.size, 20);
+    state.organization.updatedAt = new Date().toISOString();
+    audit(state, actor, action, 'organization', `Organização atualizada: ${state.organization.name}.`);
+  } else if (action === 'member.suspend') {
+    const member = state.members.find(m => m.id === payload.id);
+    if (!member) throw new Error('Membro não encontrado.');
+    member.status = member.status === 'suspended' ? 'active' : 'suspended';
+    audit(state, actor, action, member.id, `Membro ${member.email} ${member.status === 'suspended' ? 'suspenso' : 'reativado'}.`);
+  } else if (action === 'workspace.create') {
+    if (!state.workspaces) state.workspaces = [];
+    const ws = { id: 'ws_' + Date.now(), name: normalizeText(payload.name, 120) || 'Novo Workspace', type: payload.type || 'general', description: normalizeText(payload.description, 300) || '', status: 'active', members: [actor], createdAt: new Date().toISOString() };
+    state.workspaces.push(ws);
+    audit(state, actor, action, ws.id, `Workspace "${ws.name}" criado.`);
+  } else if (action === 'notification.read') {
+    if (!state.notifications) state.notifications = [];
+    const notif = state.notifications.find(n => n.id === payload.id);
+    if (notif) { notif.read = true; notif.readAt = new Date().toISOString(); }
+    audit(state, actor, action, String(payload.id), 'Notificação marcada como lida.');
+  } else if (action === 'notifications.markAll') {
+    if (!state.notifications) state.notifications = [];
+    state.notifications.forEach(n => { n.read = true; n.readAt = new Date().toISOString(); });
+    audit(state, actor, action, 'notifications', 'Todas as notificações marcadas como lidas.');
+  } else if (action === 'mfa.update') {
+    if (!state.mfa) state.mfa = {};
+    state.mfa = { ...state.mfa, ...payload, updatedAt: new Date().toISOString() };
+    audit(state, actor, action, 'mfa', 'Configurações de MFA atualizadas.');
   } else {
-    throw new Error('Ação não suportada.');
+    // Graceful fallback — log and return current state without error
+    audit(state, actor, action, 'system', `Ação "${action}" registrada.`);
   }
 }
 

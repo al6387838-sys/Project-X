@@ -1,497 +1,2117 @@
 <!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LifeOS Enterprise — Command Center</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%236366f1'/%3E%3Cpath d='M18 16h8v24h20v8H18z' fill='white'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   LIFEOS ENTERPRISE PREMIUM INTERFACE v4.0.0
-   Program Alpha | Stripe Quality | Linear Quality
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS Enterprise — Command Center</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%236366f1'/%3E%3Cpath d='M18 16h8v24h20v8H18z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/design_system/enterprise_v4.css">
+  <link rel="stylesheet" href="/enterprise/enterprise_app.css">
+  <style>
+    /* ============================================================
+       ENTERPRISE COMMAND CENTER — SHELL LAYOUT
+       ============================================================ */
+    html, body { height: 100%; overflow: hidden; }
 
-:root {
-  --brand-500:#6366F1; --brand-600:#4F46E5; --brand-400:#818CF8; --brand-300:#A5B4FC;
-  --accent-500:#8B5CF6; --teal-500:#14B8A6; --success-500:#10B981; --success-600:#059669;
-  --warning-500:#F59E0B; --danger-500:#F43F5E; --info-500:#3B82F6;
-  --bg-base:#080810; --bg-elevated:#0F0F1A; --bg-card:#13131F; --bg-card2:#1A1A2E;
-  --surface-100:#1E1E32; --surface-200:#252540; --surface-300:#2D2D4E;
-  --border-subtle:rgba(255,255,255,0.06); --border-default:rgba(255,255,255,0.10);
-  --border-strong:rgba(255,255,255,0.18); --border-focus:rgba(99,102,241,0.60);
-  --text-primary:#F1F5F9; --text-secondary:#94A3B8; --text-tertiary:#64748B;
-  --text-disabled:#334155; --text-link:#818CF8;
-  --gradient-primary:linear-gradient(135deg,#6366F1 0%,#8B5CF6 100%);
-  --gradient-aurora:linear-gradient(135deg,#6366F1 0%,#8B5CF6 40%,#EC4899 100%);
-  --gradient-success:linear-gradient(135deg,#10B981 0%,#059669 100%);
-  --gradient-warning:linear-gradient(135deg,#F59E0B 0%,#D97706 100%);
-  --gradient-danger:linear-gradient(135deg,#F43F5E 0%,#E11D48 100%);
-  --radius-sm:4px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px; --radius-2xl:20px;
-  --ease-spring:cubic-bezier(0.34,1.56,0.64,1); --ease-out:cubic-bezier(0,0,0.2,1);
-}
+    .app-shell { display: flex; height: 100vh; overflow: hidden; background: var(--bg-base); }
 
-@keyframes fadeIn    { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-@keyframes scaleIn   { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
-@keyframes shimmer   { 0%{background-position:-400% 0} 100%{background-position:400% 0} }
-@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:0.5} }
-@keyframes countUp   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes glowPulse { 0%,100%{box-shadow:0 0 20px rgba(99,102,241,0.20)} 50%{box-shadow:0 0 40px rgba(99,102,241,0.45)} }
-@keyframes breathe   { 0%,100%{transform:scale(1);opacity:0.8} 50%{transform:scale(1.04);opacity:1} }
-@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-@keyframes sparkle   { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+    /* ── Ambient glows ── */
+    .app-shell::before {
+      content: ''; position: fixed; top: -20%; left: -5%; width: 50%; height: 50%;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.035) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    .app-shell::after {
+      content: ''; position: fixed; bottom: -15%; right: -5%; width: 40%; height: 40%;
+      background: radial-gradient(ellipse, rgba(139,92,246,0.025) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
 
-html, body { height:100%; overflow:hidden; }
-body {
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  background:var(--bg-base); color:var(--text-primary);
-  font-size:14px; line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-}
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px; height: 100vh; background: var(--bg-elevated);
+      border-right: 1px solid var(--border-subtle);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      overflow: hidden; transition: width 0.2s ease; z-index: 200; position: relative;
+    }
 
-/* ── SHELL ── */
-.shell { display:flex; height:100vh; overflow:hidden; }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 16px; height: 56px; border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0; cursor: pointer; overflow: hidden;
+    }
+    .sidebar-logo-icon {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 900; color: #fff; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+      transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .sidebar-logo:hover .sidebar-logo-icon { transform: scale(1.08) rotate(-3deg); }
+    .sidebar-logo-text {
+      font-size: 15px; font-weight: 800; letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6 40%, #EC4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      white-space: nowrap; overflow: hidden;
+    }
+    .sidebar-logo-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #818CF8; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.20);
+      padding: 2px 7px; border-radius: 9999px; white-space: nowrap; flex-shrink: 0;
+    }
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width:220px; flex-shrink:0;
-  background:var(--bg-elevated);
-  border-right:1px solid var(--border-subtle);
-  display:flex; flex-direction:column;
-}
+    .sidebar-org {
+      padding: 10px 12px; border-bottom: 1px solid var(--border-subtle);
+    }
+    .org-selector {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+      border-radius: 10px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06); cursor: pointer;
+      transition: all 0.12s ease;
+    }
+    .org-selector:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); }
+    .org-avatar {
+      width: 24px; height: 24px; border-radius: 7px;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6 40%, #EC4899);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .org-info { flex: 1; min-width: 0; overflow: hidden; }
+    .org-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .org-plan { font-size: 10px; color: var(--text-tertiary); }
+    .org-chevron { font-size: 10px; color: var(--text-tertiary); flex-shrink: 0; }
 
-.sidebar-brand {
-  padding:20px 16px 16px;
-  border-bottom:1px solid var(--border-subtle);
-}
-.brand-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.brand-mark {
-  width:30px; height:30px; border-radius:9px;
-  background:var(--gradient-primary);
-  display:flex; align-items:center; justify-content:center;
-  font-size:15px; font-weight:700; color:#fff;
-  box-shadow:0 4px 12px rgba(99,102,241,0.40);
-}
-.brand-name { font-size:14px; font-weight:600; letter-spacing:-0.02em; }
-.brand-tier {
-  font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--brand-400); background:rgba(99,102,241,0.12);
-  border:1px solid rgba(99,102,241,0.20); padding:2px 6px; border-radius:4px;
-  margin-left:auto;
-}
-.org-selector {
-  display:flex; align-items:center; gap:8px;
-  padding:7px 10px; border-radius:8px;
-  background:var(--surface-100); border:1px solid var(--border-subtle);
-  cursor:pointer; transition:all 0.15s;
-}
-.org-selector:hover { border-color:var(--border-default); }
-.org-avatar {
-  width:22px; height:22px; border-radius:6px;
-  background:var(--gradient-aurora); display:flex; align-items:center; justify-content:center;
-  font-size:10px; font-weight:700; color:#fff;
-}
-.org-name { font-size:12px; font-weight:500; flex:1; }
-.org-chevron { font-size:10px; color:var(--text-tertiary); }
+    .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 8px; }
+    .sidebar-nav::-webkit-scrollbar { width: 0; }
 
-.sidebar-nav { flex:1; overflow-y:auto; padding:8px; }
-.sidebar-nav::-webkit-scrollbar { width:0; }
+    .nav-section { margin-bottom: 18px; }
+    .nav-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--text-tertiary); padding: 0 10px; margin-bottom: 4px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 9px; width: 100%;
+      padding: 7px 10px; border-radius: 9px; border: none; background: transparent;
+      color: var(--text-secondary); font-size: 13px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: all 0.1s ease; text-decoration: none;
+      position: relative; white-space: nowrap; overflow: hidden; margin-bottom: 1px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+    .nav-item.active {
+      background: rgba(99,102,241,0.10); color: #818CF8;
+      border: 1px solid rgba(99,102,241,0.14);
+    }
+    .nav-item.active::before {
+      content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+      width: 3px; height: 14px; border-radius: 0 2px 2px 0; background: #6366F1;
+    }
+    .nav-item-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+    .nav-item-label { flex: 1; }
+    .nav-item-badge {
+      min-width: 18px; height: 18px; padding: 0 5px;
+      background: #6366F1; color: #fff; font-size: 9px; font-weight: 700;
+      border-radius: 9999px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-item-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #10B981;
+      animation: pulse 2s ease-in-out infinite;
+    }
 
-.nav-group { margin-bottom:16px; }
-.nav-group-label {
-  font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--text-tertiary); padding:0 8px; margin-bottom:3px;
-}
-.nav-link {
-  display:flex; align-items:center; gap:9px;
-  padding:7px 9px; border-radius:7px;
-  font-size:13px; font-weight:500; color:var(--text-secondary);
-  cursor:pointer; transition:all 0.12s; margin-bottom:1px;
-  text-decoration:none; position:relative;
-}
-.nav-link:hover { background:var(--surface-100); color:var(--text-primary); }
-.nav-link.active {
-  background:rgba(99,102,241,0.10); color:var(--brand-400);
-  border:1px solid rgba(99,102,241,0.15);
-}
-.nav-link.active::before {
-  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
-  width:3px; height:14px; border-radius:0 2px 2px 0; background:var(--brand-500);
-}
-.nav-ico { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
-.nav-count {
-  margin-left:auto; min-width:16px; height:16px; padding:0 4px;
-  background:var(--brand-500); color:#fff;
-  font-size:9px; font-weight:700; border-radius:8px;
-  display:flex; align-items:center; justify-content:center;
-}
-.nav-dot {
-  margin-left:auto; width:6px; height:6px; border-radius:50%;
-  background:var(--success-500); animation:pulse 2s ease-in-out infinite;
-}
+    .sidebar-footer {
+      padding: 8px; border-top: 1px solid var(--border-subtle); flex-shrink: 0;
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 9px; padding: 8px 10px;
+      border-radius: 9px; cursor: pointer; transition: background 0.1s;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.04); }
+    .user-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+      border: 2px solid rgba(99,102,241,0.30);
+    }
+    .user-info { flex: 1; min-width: 0; overflow: hidden; }
+    .user-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 10px; color: var(--text-tertiary); }
+    .user-logout {
+      background: none; border: none; cursor: pointer; font-size: 14px;
+      color: var(--text-tertiary); padding: 4px; border-radius: 5px;
+      transition: color 0.12s; flex-shrink: 0;
+    }
+    .user-logout:hover { color: #F43F5E; }
 
-.sidebar-footer {
-  padding:10px 8px; border-top:1px solid var(--border-subtle);
-}
-.user-row {
-  display:flex; align-items:center; gap:9px;
-  padding:7px 9px; border-radius:8px; cursor:pointer; transition:background 0.12s;
-}
-.user-row:hover { background:var(--surface-100); }
-.user-av {
-  width:28px; height:28px; border-radius:50%;
-  background:var(--gradient-primary);
-  display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:600; color:#fff;
-}
-.user-info { flex:1; }
-.user-n { font-size:12px; font-weight:600; }
-.user-r { font-size:10px; color:var(--text-tertiary); }
-.user-more { font-size:14px; color:var(--text-tertiary); }
+    /* ── MAIN AREA ── */
+    .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 1; }
 
-/* ── MAIN ── */
-.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    /* ── TOPBAR ── */
+    .topbar {
+      height: 56px; display: flex; align-items: center; padding: 0 24px;
+      border-bottom: 1px solid var(--border-subtle); background: var(--bg-elevated);
+      gap: 10px; flex-shrink: 0;
+    }
+    .topbar-breadcrumb { display: flex; align-items: center; gap: 8px; }
+    .topbar-page-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); }
+    .topbar-page-sub { font-size: 12px; color: var(--text-tertiary); }
+    .topbar-spacer { flex: 1; }
+    .topbar-search {
+      display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 34px;
+      border-radius: 10px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07); cursor: text;
+      transition: all 0.15s ease; min-width: 220px;
+    }
+    .topbar-search:hover { border-color: rgba(255,255,255,0.12); }
+    .topbar-search:focus-within { border-color: rgba(99,102,241,0.50); background: rgba(99,102,241,0.06); box-shadow: 0 0 0 3px rgba(99,102,241,0.10); }
+    .topbar-search-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-size: 13px; color: var(--text-primary); font-family: inherit;
+    }
+    .topbar-search-input::placeholder { color: var(--text-tertiary); }
+    .topbar-search-icon { font-size: 13px; color: var(--text-tertiary); flex-shrink: 0; }
+    .topbar-search-kbd {
+      font-size: 10px; font-weight: 600; color: var(--text-tertiary);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+      padding: 1px 5px; border-radius: 4px; font-family: inherit;
+    }
+    .topbar-divider { width: 1px; height: 20px; background: var(--border-subtle); flex-shrink: 0; }
+    .topbar-icon-btn {
+      width: 34px; height: 34px; border-radius: 9px; background: transparent;
+      border: 1px solid rgba(255,255,255,0.07); color: var(--text-secondary);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 15px; transition: all 0.12s ease; position: relative; flex-shrink: 0;
+    }
+    .topbar-icon-btn:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); border-color: rgba(255,255,255,0.12); }
+    .topbar-icon-btn .notif-dot {
+      position: absolute; top: 5px; right: 5px; width: 7px; height: 7px;
+      border-radius: 50%; background: #F43F5E; border: 2px solid var(--bg-elevated);
+    }
+    .topbar-btn {
+      display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px;
+      border-radius: 9px; border: 1px solid rgba(255,255,255,0.10); background: transparent;
+      color: var(--text-secondary); font-size: 13px; font-weight: 500; font-family: inherit;
+      cursor: pointer; transition: all 0.12s ease; white-space: nowrap;
+    }
+    .topbar-btn:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+    .topbar-btn.primary {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6); border-color: transparent;
+      color: #fff; box-shadow: 0 4px 16px rgba(99,102,241,0.30);
+    }
+    .topbar-btn.primary:hover { box-shadow: 0 6px 24px rgba(99,102,241,0.45); transform: translateY(-1px); }
 
-/* ── TOPBAR ── */
-.topbar {
-  height:56px; display:flex; align-items:center;
-  padding:0 24px; border-bottom:1px solid var(--border-subtle);
-  background:var(--bg-elevated); gap:12px; flex-shrink:0;
-}
-.topbar-title { font-size:16px; font-weight:600; letter-spacing:-0.01em; }
-.topbar-subtitle { font-size:12px; color:var(--text-tertiary); margin-left:4px; }
-.topbar-spacer { flex:1; }
-.topbar-btn {
-  height:32px; padding:0 12px; border-radius:7px;
-  background:transparent; border:1px solid var(--border-default);
-  color:var(--text-secondary); cursor:pointer; font-size:12px; font-weight:500;
-  display:flex; align-items:center; gap:6px; transition:all 0.15s;
-  font-family:inherit;
-}
-.topbar-btn:hover { background:var(--surface-100); color:var(--text-primary); }
-.topbar-btn.primary {
-  background:var(--gradient-primary); border-color:transparent; color:#fff;
-  box-shadow:0 4px 12px rgba(99,102,241,0.30);
-}
-.topbar-btn.primary:hover { box-shadow:0 6px 16px rgba(99,102,241,0.45); }
-.topbar-divider { width:1px; height:20px; background:var(--border-subtle); }
-.topbar-icon-btn {
-  width:32px; height:32px; border-radius:7px;
-  background:transparent; border:1px solid var(--border-subtle);
-  color:var(--text-secondary); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; transition:all 0.15s;
-}
-.topbar-icon-btn:hover { background:var(--surface-100); color:var(--text-primary); }
-.notification-badge {
-  position:relative;
-}
-.notification-badge::after {
-  content:''; position:absolute; top:4px; right:4px;
-  width:7px; height:7px; border-radius:50%;
-  background:var(--danger-500); border:2px solid var(--bg-elevated);
-}
+    /* ── CONTENT ── */
+    .content-area {
+      flex: 1; overflow-y: auto; overflow-x: hidden; padding: 24px;
+    }
+    .content-area::-webkit-scrollbar { width: 4px; }
+    .content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
 
-/* ── CONTENT ── */
-.content { flex:1; overflow-y:auto; padding:24px; }
-.content::-webkit-scrollbar { width:4px; }
-.content::-webkit-scrollbar-thumb { background:var(--surface-200); border-radius:2px; }
+    /* ── VIEWS ── */
+    .view { display: none; animation: fadeIn 0.25s ease; }
+    .view.active { display: block; }
 
-/* ── SECTION HEADER ── */
-.section-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:16px;
-}
-.section-title { font-size:13px; font-weight:600; letter-spacing:-0.01em; }
-.section-action { font-size:12px; color:var(--brand-400); cursor:pointer; font-weight:500; }
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom: 24px; }
+    .page-kicker {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase;
+      color: #818CF8; margin-bottom: 6px;
+    }
+    .page-title { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 4px; }
+    .page-subtitle { font-size: 13px; color: var(--text-tertiary); line-height: 1.55; }
+    .page-actions { display: flex; gap: 10px; align-items: center; margin-top: 16px; }
 
-/* ── KPI GRID ── */
-.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    /* ── KPI GRID ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 20px; cursor: pointer;
+      transition: all 0.2s ease; position: relative; overflow: hidden;
+      animation: scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .kpi-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6); opacity: 0; transition: opacity 0.2s;
+    }
+    .kpi-card:hover { border-color: rgba(255,255,255,0.10); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+    .kpi-card:hover::before { opacity: 1; }
+    .kpi-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .kpi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .kpi-trend { display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 9999px; }
+    .kpi-trend.up   { color: #10B981; background: rgba(16,185,129,0.10); }
+    .kpi-trend.down { color: #F43F5E; background: rgba(244,63,94,0.10); }
+    .kpi-trend.flat { color: var(--text-tertiary); background: rgba(255,255,255,0.06); }
+    .kpi-value { font-size: 30px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin-bottom: 5px; animation: countUp 0.5s ease; }
+    .kpi-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .kpi-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
 
-.kpi-card {
-  background:var(--bg-card);
-  border:1px solid var(--border-subtle);
-  border-radius:14px; padding:18px;
-  cursor:pointer; transition:all 0.2s var(--ease-out);
-  animation:scaleIn 0.3s var(--ease-spring);
-  position:relative; overflow:hidden;
-}
-.kpi-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--gradient-primary); opacity:0; transition:opacity 0.2s;
-}
-.kpi-card:hover { border-color:var(--border-default); transform:translateY(-1px); }
-.kpi-card:hover::before { opacity:1; }
+    /* ── GRID LAYOUTS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .grid-main-side { display: grid; grid-template-columns: 1fr 360px; gap: 16px; }
 
-.kpi-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; }
-.kpi-icon {
-  width:32px; height:32px; border-radius:9px;
-  display:flex; align-items:center; justify-content:center; font-size:15px;
-}
-.kpi-trend {
-  display:flex; align-items:center; gap:3px;
-  font-size:11px; font-weight:600; padding:2px 7px; border-radius:5px;
-}
-.kpi-trend.up   { color:var(--success-500); background:rgba(16,185,129,0.10); }
-.kpi-trend.down { color:var(--danger-500);  background:rgba(244,63,94,0.10); }
-.kpi-trend.flat { color:var(--text-tertiary); background:var(--surface-100); }
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; overflow: hidden;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .card-subtitle { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+    .card-body { padding: 20px; }
+    .card-footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+    .card-action { font-size: 12px; font-weight: 500; color: #818CF8; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .card-action:hover { color: #A5B4FC; }
 
-.kpi-value {
-  font-size:28px; font-weight:700; letter-spacing:-0.03em; line-height:1;
-  margin-bottom:4px; animation:countUp 0.5s var(--ease-out);
-}
-.kpi-label { font-size:12px; color:var(--text-secondary); }
-.kpi-sub { font-size:11px; color:var(--text-tertiary); margin-top:2px; }
+    /* ── CHART AREA ── */
+    .chart-area { position: relative; height: 180px; }
+    .chart-svg { width: 100%; height: 100%; }
+    .chart-label { fill: var(--text-tertiary); font-size: 10px; font-family: Inter, sans-serif; }
+    .chart-grid-line { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
 
-/* ── MAIN GRID ── */
-.main-grid { display:grid; grid-template-columns:1fr 380px; gap:16px; margin-bottom:24px; }
+    /* ── ACTIVITY LIST ── */
+    .activity-list { }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.1s; cursor: pointer;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: rgba(255,255,255,0.02); }
+    .activity-icon {
+      width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .activity-body { flex: 1; min-width: 0; }
+    .activity-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+    .activity-desc { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .activity-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .activity-time { font-size: 11px; color: var(--text-tertiary); }
+    .activity-tag {
+      font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
 
-/* ── CHART CARD ── */
-.chart-card {
-  background:var(--bg-card); border:1px solid var(--border-subtle);
-  border-radius:14px; padding:20px; overflow:hidden;
-}
-.chart-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-.chart-title { font-size:14px; font-weight:600; }
-.chart-legend { display:flex; gap:12px; }
-.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-secondary); }
-.legend-dot { width:8px; height:8px; border-radius:50%; }
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 9999px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap;
+    }
+    .badge-primary { background: rgba(99,102,241,0.15); color: #818CF8; border: 1px solid rgba(99,102,241,0.20); }
+    .badge-success { background: rgba(16,185,129,0.12); color: #34D399; border: 1px solid rgba(16,185,129,0.20); }
+    .badge-warning { background: rgba(245,158,11,0.12); color: #FBBF24; border: 1px solid rgba(245,158,11,0.20); }
+    .badge-danger  { background: rgba(244,63,94,0.12);  color: #FB7185; border: 1px solid rgba(244,63,94,0.20); }
+    .badge-neutral { background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.10); }
 
-/* SVG Chart */
-.chart-area { position:relative; height:180px; }
-.chart-svg { width:100%; height:100%; }
-.chart-grid-line { stroke:var(--border-subtle); stroke-width:1; }
-.chart-area-fill { fill:url(#areaGrad); }
-.chart-line { fill:none; stroke:url(#lineGrad); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
-.chart-line-2 { fill:none; stroke:var(--teal-500); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:4 3; opacity:0.6; }
-.chart-dot { fill:var(--brand-500); stroke:var(--bg-card); stroke-width:2; }
-.chart-label { fill:var(--text-tertiary); font-size:10px; font-family:Inter,sans-serif; }
+    /* ── PROGRESS ── */
+    .progress { height: 5px; background: rgba(255,255,255,0.06); border-radius: 9999px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 9999px; background: linear-gradient(135deg, #6366F1, #8B5CF6); transition: width 0.8s ease; }
+    .progress-success .progress-bar { background: linear-gradient(135deg, #10B981, #059669); }
+    .progress-warning .progress-bar { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    .progress-danger  .progress-bar { background: linear-gradient(135deg, #F43F5E, #E11D48); }
 
-/* ── ACTIVITY FEED ── */
-.activity-card {
-  background:var(--bg-card); border:1px solid var(--border-subtle);
-  border-radius:14px; overflow:hidden;
-}
-.activity-header {
-  padding:16px 16px 12px;
-  border-bottom:1px solid var(--border-subtle);
-  display:flex; align-items:center; justify-content:space-between;
-}
-.activity-title { font-size:13px; font-weight:600; }
-.activity-filter {
-  display:flex; gap:4px;
-}
-.filter-chip {
-  font-size:11px; font-weight:500; padding:3px 8px; border-radius:5px;
-  cursor:pointer; transition:all 0.12s; color:var(--text-tertiary);
-  background:transparent; border:none; font-family:inherit;
-}
-.filter-chip.active { background:rgba(99,102,241,0.12); color:var(--brand-400); }
-.filter-chip:hover { color:var(--text-primary); }
+    /* ── METRIC ROW ── */
+    .metric-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .metric-label { font-size: 12px; color: var(--text-secondary); width: 110px; flex-shrink: 0; }
+    .metric-track { flex: 1; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .metric-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+    .metric-val { font-size: 12px; font-weight: 600; width: 36px; text-align: right; flex-shrink: 0; }
 
-.activity-list { max-height:320px; overflow-y:auto; }
-.activity-list::-webkit-scrollbar { width:0; }
+    /* ── SECTION HEADER ── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .section-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .section-action { font-size: 12px; font-weight: 500; color: #818CF8; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.12s; }
+    .section-action:hover { color: #A5B4FC; }
 
-.activity-item {
-  display:flex; align-items:flex-start; gap:12px;
-  padding:12px 16px;
-  border-bottom:1px solid var(--border-subtle);
-  transition:background 0.12s; cursor:pointer;
-}
-.activity-item:last-child { border-bottom:none; }
-.activity-item:hover { background:var(--surface-100); }
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid transparent;
+      font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+      transition: all 0.12s ease; white-space: nowrap; text-decoration: none;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: 7px; }
+    .btn-lg { height: 42px; padding: 0 20px; font-size: 14px; border-radius: 11px; }
+    .btn-primary { background: linear-gradient(135deg, #6366F1, #8B5CF6); color: #fff; box-shadow: 0 4px 14px rgba(99,102,241,0.30); }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(99,102,241,0.45); transform: translateY(-1px); }
+    .btn-secondary { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); color: var(--text-secondary); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.09); color: var(--text-primary); }
+    .btn-ghost { background: transparent; color: var(--text-secondary); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+    .btn-danger { background: linear-gradient(135deg, #F43F5E, #E11D48); color: #fff; }
+    .btn-danger:hover { box-shadow: 0 4px 14px rgba(244,63,94,0.35); transform: translateY(-1px); }
+    .btn-icon { width: 34px; padding: 0; }
+    .btn-icon.btn-sm { width: 28px; }
 
-.activity-icon {
-  width:32px; height:32px; border-radius:9px; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; font-size:14px;
-}
-.activity-body { flex:1; min-width:0; }
-.activity-title-text { font-size:13px; font-weight:500; margin-bottom:2px; }
-.activity-desc { font-size:12px; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.activity-meta { display:flex; align-items:center; gap:6px; margin-top:4px; }
-.activity-time { font-size:11px; color:var(--text-tertiary); }
-.activity-tag {
-  font-size:10px; font-weight:600; padding:1px 5px; border-radius:4px;
-  text-transform:uppercase; letter-spacing:0.04em;
-}
+    /* ── FORM ── */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; height: 38px; padding: 0 12px;
+      border-radius: 9px; border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04); color: var(--text-primary);
+      font-size: 13px; font-family: inherit; outline: none; transition: all 0.15s ease;
+    }
+    .form-textarea { height: auto; min-height: 80px; padding: 10px 12px; resize: vertical; }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-tertiary); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(99,102,241,0.55); background: rgba(99,102,241,0.07);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; cursor: pointer; }
 
-/* ── BOTTOM GRID ── */
-.bottom-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    .table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table thead { background: rgba(255,255,255,0.02); }
+    .table th { padding: 10px 16px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; }
+    .table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-secondary); vertical-align: middle; }
+    .table tbody tr { transition: background 0.1s; }
+    .table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .table tbody tr:last-child td { border-bottom: none; }
 
-/* ── HEALTH CARD ── */
-.health-card {
-  background:var(--bg-card); border:1px solid var(--border-subtle);
-  border-radius:14px; padding:18px;
-}
-.health-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-.health-title { font-size:13px; font-weight:600; }
-.health-score {
-  font-size:28px; font-weight:700; letter-spacing:-0.03em;
-  background:var(--gradient-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
+    /* ── MEMBER ROW ── */
+    .member-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .member-row:last-child { border-bottom: none; }
+    .member-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .member-role { font-size: 11px; color: var(--text-tertiary); }
+    .member-status { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-tertiary); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
 
-.metric-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.metric-label { font-size:12px; color:var(--text-secondary); width:100px; flex-shrink:0; }
-.metric-track { flex:1; height:4px; background:var(--surface-200); border-radius:2px; overflow:hidden; }
-.metric-fill { height:100%; border-radius:2px; transition:width 0.8s var(--ease-out); }
-.metric-val { font-size:12px; font-weight:600; width:32px; text-align:right; flex-shrink:0; }
+    /* ── ALERT BANNER ── */
+    .alert-banner {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px;
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.18);
+      margin-bottom: 20px; animation: fadeIn 0.3s ease;
+    }
+    .alert-icon { font-size: 16px; flex-shrink: 0; }
+    .alert-text { flex: 1; font-size: 13px; color: var(--text-secondary); }
+    .alert-text strong { color: var(--text-primary); }
+    .alert-action { font-size: 12px; font-weight: 600; color: #818CF8; cursor: pointer; white-space: nowrap; background: none; border: none; font-family: inherit; }
+    .alert-close { font-size: 14px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; padding: 2px; }
 
-/* ── PIPELINE CARD ── */
-.pipeline-card {
-  background:var(--bg-card); border:1px solid var(--border-subtle);
-  border-radius:14px; padding:18px;
-}
-.pipeline-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.pipeline-title { font-size:13px; font-weight:600; }
+    /* ── TOAST ── */
+    .toast-stack {
+      position: fixed; top: 20px; right: 20px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+    }
+    .toast {
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px;
+      border-radius: 14px; min-width: 300px; max-width: 400px;
+      background: rgba(13,13,26,0.95); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.40);
+      pointer-events: all; animation: toastIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .toast.removing { animation: toastOut 0.2s ease forwards; }
+    .toast-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .toast-body { flex: 1; }
+    .toast-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .toast-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .toast.success { border-color: rgba(16,185,129,0.20); }
+    .toast.error   { border-color: rgba(244,63,94,0.20); }
+    .toast.info    { border-color: rgba(99,102,241,0.20); }
+    .toast.warning { border-color: rgba(245,158,11,0.20); }
 
-.stage-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-.stage-label { font-size:12px; color:var(--text-secondary); width:80px; flex-shrink:0; }
-.stage-bar { flex:1; height:6px; background:var(--surface-200); border-radius:3px; overflow:hidden; }
-.stage-fill { height:100%; border-radius:3px; }
-.stage-count { font-size:12px; font-weight:600; width:24px; text-align:right; flex-shrink:0; }
-.stage-value { font-size:11px; color:var(--text-tertiary); width:48px; text-align:right; flex-shrink:0; }
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px); z-index: 400;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; animation: fadeIn 0.15s ease; }
+    .modal {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 20px; box-shadow: 0 32px 80px rgba(0,0,0,0.50);
+      width: 100%; max-width: 520px; max-height: 90vh; overflow: hidden;
+      display: flex; flex-direction: column; animation: scaleIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0; }
+    .modal-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .modal-close { width: 30px; height: 30px; border-radius: 8px; background: transparent; border: 1px solid rgba(255,255,255,0.08); color: var(--text-tertiary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.12s; }
+    .modal-close:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+    .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+    .modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); flex-shrink: 0; }
 
-/* ── TEAM CARD ── */
-.team-card {
-  background:var(--bg-card); border:1px solid var(--border-subtle);
-  border-radius:14px; padding:18px;
-}
-.team-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.team-title { font-size:13px; font-weight:600; }
+    /* ── COMMAND PALETTE ── */
+    .cmd-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px); z-index: 500;
+      display: none; align-items: flex-start; justify-content: center; padding-top: 15vh;
+    }
+    .cmd-overlay.open { display: flex; animation: fadeIn 0.15s ease; }
+    .cmd-palette {
+      width: 100%; max-width: 580px; background: rgba(13,13,26,0.95);
+      backdrop-filter: blur(32px); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+      overflow: hidden; animation: slideDown 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .cmd-input-wrap { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .cmd-search-icon { font-size: 16px; color: var(--text-tertiary); flex-shrink: 0; }
+    .cmd-input { flex: 1; background: transparent; border: none; outline: none; font-size: 16px; color: var(--text-primary); font-family: inherit; }
+    .cmd-input::placeholder { color: var(--text-tertiary); }
+    .cmd-esc { font-size: 11px; color: var(--text-tertiary); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+    .cmd-results { max-height: 380px; overflow-y: auto; padding: 8px; }
+    .cmd-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: 8px 12px 4px; }
+    .cmd-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; cursor: pointer; transition: background 0.1s; }
+    .cmd-item:hover, .cmd-item.selected { background: rgba(255,255,255,0.06); }
+    .cmd-item-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+    .cmd-item-label { font-size: 13px; font-weight: 500; color: var(--text-primary); flex: 1; }
+    .cmd-item-desc { font-size: 11px; color: var(--text-tertiary); }
+    .cmd-item-kbd { font-size: 10px; color: var(--text-tertiary); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); padding: 1px 5px; border-radius: 4px; }
+    .cmd-footer { display: flex; align-items: center; gap: 16px; padding: 10px 20px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); }
+    .cmd-hint { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-tertiary); }
+    .cmd-kbd { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 3px; padding: 1px 5px; font-size: 10px; font-weight: 600; }
 
-.member-row {
-  display:flex; align-items:center; gap:10px;
-  padding:6px 0; border-bottom:1px solid var(--border-subtle);
-}
-.member-row:last-child { border-bottom:none; }
-.member-av {
-  width:28px; height:28px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:700; color:#fff; flex-shrink:0;
-}
-.member-info { flex:1; }
-.member-name { font-size:12px; font-weight:500; }
-.member-role { font-size:11px; color:var(--text-tertiary); }
-.member-status {
-  display:flex; align-items:center; gap:4px;
-  font-size:11px; color:var(--text-tertiary);
-}
-.status-dot { width:6px; height:6px; border-radius:50%; }
+    /* ── EMPTY STATE ── */
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 64px 32px; text-align: center; gap: 14px; }
+    .empty-state-icon { width: 60px; height: 60px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .empty-state-title { font-size: 18px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.02em; }
+    .empty-state-desc { font-size: 13px; color: var(--text-tertiary); max-width: 320px; line-height: 1.6; }
 
-/* ── ALERT BANNER ── */
-.alert-banner {
-  display:flex; align-items:center; gap:12px;
-  padding:12px 16px; border-radius:10px;
-  background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.20);
-  margin-bottom:16px; animation:fadeIn 0.4s var(--ease-out);
-}
-.alert-icon { font-size:16px; flex-shrink:0; }
-.alert-text { flex:1; font-size:13px; color:var(--text-secondary); }
-.alert-text strong { color:var(--text-primary); }
-.alert-action { font-size:12px; font-weight:600; color:var(--brand-400); cursor:pointer; white-space:nowrap; }
-.alert-close { font-size:14px; color:var(--text-tertiary); cursor:pointer; margin-left:8px; }
-</style>
-  <link rel="stylesheet" href="/black_diamond.css" />
-  <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
+    /* ── SKELETON ── */
+    .skeleton { background: rgba(255,255,255,0.06); border-radius: 8px; position: relative; overflow: hidden; }
+    .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); background-size: 200% 100%; animation: skeletonWave 1.5s ease-in-out infinite; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 2px; background: rgba(255,255,255,0.04); border-radius: 12px; padding: 3px; }
+    .tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 9px; border: none; background: transparent; color: var(--text-tertiary); font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.12s ease; white-space: nowrap; }
+    .tab:hover { color: var(--text-secondary); }
+    .tab.active { background: var(--bg-card); color: var(--text-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+
+    /* ── FILTER CHIPS ── */
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-chip { display: flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.10); background: transparent; color: var(--text-tertiary); font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.12s; }
+    .filter-chip:hover { border-color: rgba(255,255,255,0.18); color: var(--text-secondary); }
+    .filter-chip.active { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.25); color: #818CF8; }
+
+    /* ── INSIGHT CARD ── */
+    .insight-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s ease; }
+    .insight-card:hover { border-color: rgba(255,255,255,0.10); transform: translateX(2px); }
+    .insight-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
+    .insight-title { font-size: 13px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .insight-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 10px; }
+    .insight-meta { display: flex; align-items: center; gap: 8px; }
+
+    /* ── BILLING PLAN ── */
+    .plan-card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; }
+    .plan-card.current { border-color: rgba(99,102,241,0.30); }
+    .plan-card.current::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+    .plan-name { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .plan-price { font-size: 30px; font-weight: 700; letter-spacing: -0.03em; color: var(--text-primary); }
+    .plan-price span { font-size: 14px; font-weight: 400; color: var(--text-tertiary); }
+    .plan-features { margin: 16px 0; display: flex; flex-direction: column; gap: 8px; }
+    .plan-feature { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+    .plan-feature-icon { color: #10B981; font-size: 12px; flex-shrink: 0; }
+
+    /* ── INTEGRATION CARD ── */
+    .integration-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .integration-item:last-child { border-bottom: none; }
+    .integration-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .integration-info { flex: 1; }
+    .integration-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .integration-desc { font-size: 12px; color: var(--text-tertiary); }
+    .toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track { position: absolute; inset: 0; border-radius: 10px; background: rgba(255,255,255,0.12); cursor: pointer; transition: background 0.15s; }
+    .toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--text-tertiary); transition: all 0.15s cubic-bezier(0.34,1.56,0.64,1); }
+    .toggle-switch input:checked + .toggle-track { background: #6366F1; }
+    .toggle-switch input:checked + .toggle-track::after { left: 18px; background: #fff; }
+
+    /* ── SECURITY DEVICE ── */
+    .device-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .device-item:last-child { border-bottom: none; }
+    .device-icon { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .device-info { flex: 1; }
+    .device-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .device-meta { font-size: 11px; color: var(--text-tertiary); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes skeletonWave { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(100%) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateX(0) scale(1); } to { opacity: 0; transform: translateX(100%) scale(0.95); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1200px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .grid-main-side { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) { .sidebar { width: 220px; } }
+    @media (max-width: 768px) {
+      .sidebar { position: fixed; left: 0; top: 0; bottom: 0; z-index: 300; transform: translateX(-100%); transition: transform 0.2s ease; width: 260px !important; }
+      .sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 0 100vw rgba(0,0,0,0.5); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .content-area { padding: 16px; }
+      .topbar { padding: 0 16px; }
+      .topbar-search { display: none; }
+    }
+    @media (max-width: 480px) { .kpi-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body style="visibility:hidden">
+
+<!-- Auth check -->
 <script>
   fetch('/api/enterprise-data', { credentials: 'same-origin' })
-    .then(r => { if (!r.ok) throw new Error('unauthorized'); return r.json(); })
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
     .then(() => { document.body.style.visibility = 'visible'; })
     .catch(() => { location.replace('/login?next=' + encodeURIComponent('/enterprise')); });
 </script>
-<div class="shell">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-row">
-        <div class="brand-mark">✦</div>
-        <span class="brand-name">LifeOS</span>
-        <span class="brand-tier">Enterprise</span>
-      </div>
-      <div class="org-selector">
-        <div class="org-avatar org-avatar">L</div>
-        <span class="org-name">Carregando…</span>
-        <span class="org-chevron">⌄</span>
+<div class="app-shell">
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+
+    <!-- Logo -->
+    <div class="sidebar-logo" id="sidebar-logo-btn">
+      <div class="sidebar-logo-icon" aria-hidden="true">L</div>
+      <span class="sidebar-logo-text">LifeOS</span>
+      <span class="sidebar-logo-badge">Enterprise</span>
+    </div>
+
+    <!-- Org Selector -->
+    <div class="sidebar-org">
+      <div class="org-selector" id="org-selector" role="button" tabindex="0" aria-label="Selecionar organização">
+        <div class="org-avatar" id="sidebar-org-avatar">L</div>
+        <div class="org-info">
+          <div class="org-name" id="sidebar-org-name">Carregando…</div>
+          <div class="org-plan" id="sidebar-org-plan">Enterprise</div>
+        </div>
+        <span class="org-chevron" aria-hidden="true">⌄</span>
       </div>
     </div>
 
-    <nav class="sidebar-nav" aria-label="Módulos Enterprise">
-      <div class="nav-group">
-        <div class="nav-group-label">Principal</div>
-        <a class="nav-link active" href="#command" data-view="command" data-title="Command Center"><span class="nav-ico">◈</span>Command Center<span class="nav-dot"></span></a>
-        <a class="nav-link" href="#analytics" data-view="analytics" data-title="Analytics executivo"><span class="nav-ico">◎</span>Analytics</a>
-        <a class="nav-link" href="#intelligence" data-view="intelligence" data-title="Business Intelligence"><span class="nav-ico">◇</span>Inteligência<span class="nav-count" data-intelligence-count>0</span></a>
+    <!-- Nav -->
+    <nav class="sidebar-nav" aria-label="Módulos">
+
+      <div class="nav-section">
+        <div class="nav-section-label">Principal</div>
+        <button class="nav-item active" data-view="command" type="button">
+          <span class="nav-item-icon" aria-hidden="true">◈</span>
+          <span class="nav-item-label">Command Center</span>
+          <span class="nav-item-dot" aria-hidden="true"></span>
+        </button>
+        <button class="nav-item" data-view="analytics" type="button">
+          <span class="nav-item-icon" aria-hidden="true">📊</span>
+          <span class="nav-item-label">Analytics</span>
+        </button>
+        <button class="nav-item" data-view="intelligence" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🧠</span>
+          <span class="nav-item-label">Inteligência</span>
+          <span class="nav-item-badge" id="nav-intelligence-count" style="display:none">0</span>
+        </button>
       </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Organização</div>
-        <a class="nav-link" href="#organization" data-view="organization" data-title="Organização"><span class="nav-ico">⬡</span>Organização</a>
-        <a class="nav-link" href="#members" data-view="members" data-title="Membros e convites"><span class="nav-ico">◮</span>Membros</a>
-        <a class="nav-link" href="#roles" data-view="roles" data-title="Perfis e permissões"><span class="nav-ico">◱</span>Perfis e permissões</a>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Organização</div>
+        <button class="nav-item" data-view="organization" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🏢</span>
+          <span class="nav-item-label">Organização</span>
+        </button>
+        <button class="nav-item" data-view="members" type="button">
+          <span class="nav-item-icon" aria-hidden="true">👥</span>
+          <span class="nav-item-label">Membros</span>
+        </button>
+        <button class="nav-item" data-view="roles" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🔐</span>
+          <span class="nav-item-label">Perfis &amp; RBAC</span>
+        </button>
+        <button class="nav-item" data-view="workspaces" type="button">
+          <span class="nav-item-icon" aria-hidden="true">📁</span>
+          <span class="nav-item-label">Workspaces</span>
+        </button>
       </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Gestão</div>
-        <a class="nav-link" href="#billing" data-view="billing" data-title="Billing e planos"><span class="nav-ico">◬</span>Billing e planos</a>
-        <a class="nav-link" href="#compliance" data-view="compliance" data-title="Compliance e auditoria"><span class="nav-ico">◲</span>Compliance</a>
-        <a class="nav-link" href="#integrations" data-view="integrations" data-title="Integrações"><span class="nav-ico">◳</span>Integrações</a>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Gestão</div>
+        <button class="nav-item" data-view="billing" type="button">
+          <span class="nav-item-icon" aria-hidden="true">💳</span>
+          <span class="nav-item-label">Billing</span>
+        </button>
+        <button class="nav-item" data-view="compliance" type="button">
+          <span class="nav-item-icon" aria-hidden="true">📋</span>
+          <span class="nav-item-label">Auditoria</span>
+        </button>
+        <button class="nav-item" data-view="integrations" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🔌</span>
+          <span class="nav-item-label">Integrações</span>
+        </button>
       </div>
-      <div class="nav-group">
-        <div class="nav-group-label">Sistema</div>
-        <a class="nav-link" href="#security" data-view="security" data-title="Segurança"><span class="nav-ico">◴</span>Segurança</a>
-        <a class="nav-link" href="#admin" data-view="admin" data-title="Admin Center"><span class="nav-ico">◵</span>Admin Center</a>
-        <a class="nav-link" href="/dashboard"><span class="nav-ico">←</span>Workspace pessoal</a>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Sistema</div>
+        <button class="nav-item" data-view="security" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🛡️</span>
+          <span class="nav-item-label">Segurança &amp; MFA</span>
+        </button>
+        <button class="nav-item" data-view="notifications" type="button">
+          <span class="nav-item-icon" aria-hidden="true">🔔</span>
+          <span class="nav-item-label">Notificações</span>
+        </button>
+        <button class="nav-item" data-view="profile" type="button">
+          <span class="nav-item-icon" aria-hidden="true">👤</span>
+          <span class="nav-item-label">Perfil</span>
+        </button>
+        <button class="nav-item" data-view="settings" type="button">
+          <span class="nav-item-icon" aria-hidden="true">⚙️</span>
+          <span class="nav-item-label">Configurações</span>
+        </button>
+        <a class="nav-item" href="/dashboard">
+          <span class="nav-item-icon" aria-hidden="true">←</span>
+          <span class="nav-item-label">Workspace pessoal</span>
+        </a>
       </div>
+
     </nav>
 
+    <!-- User Footer -->
     <div class="sidebar-footer">
-      <div class="user-row">
-        <div class="user-av org-avatar">L</div>
+      <div class="sidebar-user" id="sidebar-user-btn" role="button" tabindex="0">
+        <div class="user-avatar" id="sidebar-user-avatar">A</div>
         <div class="user-info">
-          <div class="user-n">Carregando…</div>
-          <div class="user-r">Administrador</div>
+          <div class="user-name" id="sidebar-user-name">Carregando…</div>
+          <div class="user-role" id="sidebar-user-role">Administrador</div>
         </div>
-        <button class="user-more" type="button" aria-label="Encerrar sessão" title="Encerrar sessão" data-logout style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-tertiary);padding:4px;border-radius:4px;transition:color 0.12s;" onmouseover="this.style.color='var(--danger-500)'" onmouseout="this.style.color='var(--text-tertiary)'">⏻</button>
+        <button class="user-logout" id="logout-btn" type="button" aria-label="Encerrar sessão" title="Encerrar sessão">⏻</button>
       </div>
     </div>
+
   </aside>
 
-  <!-- MAIN -->
-  <main class="main enterprise-page">
-    <div class="topbar">
-      <div>
-        <span class="topbar-title">Command Center</span>
-        <span class="topbar-subtitle" id="enterprise-topbar-date">· Carregando…</span>
+  <!-- ════════════ MAIN AREA ════════════ -->
+  <main class="main-area" role="main">
+
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <button class="topbar-icon-btn" id="mobile-menu-btn" type="button" aria-label="Menu" style="display:none">☰</button>
+      <div class="topbar-breadcrumb">
+        <span class="topbar-page-title" id="topbar-title">Command Center</span>
+        <span class="topbar-page-sub" id="topbar-date"></span>
       </div>
       <div class="topbar-spacer"></div>
-      <div class="enterprise-search"><input class="enterprise-input" type="search" aria-label="Buscar membros" placeholder="Buscar membros" data-enterprise-search></div>
-      <button class="topbar-btn" type="button" data-enterprise-action="export">Exportar</button>
-      <div class="topbar-divider"></div>
-      <button class="topbar-icon-btn notification-badge" type="button" aria-label="Abrir inteligência" title="Inteligência" data-enterprise-action="notifications">◇</button>
-      <button class="topbar-icon-btn" type="button" aria-label="Abrir configurações" title="Configurações" data-enterprise-action="settings">◎</button>
-      <button class="topbar-btn primary" type="button" data-enterprise-action="new-decision">Nova decisão</button>
-    </div>
+      <div class="topbar-search" id="topbar-search-btn" role="search" aria-label="Busca global">
+        <span class="topbar-search-icon" aria-hidden="true">🔍</span>
+        <input class="topbar-search-input" id="global-search" type="search" placeholder="Buscar…" aria-label="Busca global">
+        <span class="topbar-search-kbd" aria-hidden="true">⌘K</span>
+      </div>
+      <div class="topbar-divider" aria-hidden="true"></div>
+      <button class="topbar-icon-btn" id="notif-btn" type="button" aria-label="Notificações">
+        🔔<span class="notif-dot" id="notif-dot" style="display:none" aria-hidden="true"></span>
+      </button>
+      <button class="topbar-btn" type="button" id="export-btn">⬇ Exportar</button>
+      <button class="topbar-btn primary" type="button" id="new-action-btn">+ Nova ação</button>
+    </header>
 
-    <div class="content">
-      <section id="enterprise-command" class="enterprise-shell-panel active" aria-label="Command Center">
+    <!-- Content -->
+    <div class="content-area" id="content-area">
 
-      <!-- Alert -->
-      <div class="alert-banner" id="enterprise-alert-banner" style="display:none">
-        <span class="alert-icon">◈</span>
-        <span class="alert-text" id="enterprise-alert-text"><strong>Companion:</strong> Ambiente operacional estável.</span>
-        <span class="alert-action" onclick="window.enterpriseApp?.render('intelligence')">Revisar insights →</span>
-        <span class="alert-close" onclick="document.getElementById('enterprise-alert-banner').style.display='none'">✕</span>
-
+      <!-- ── VIEW: COMMAND CENTER ── -->
+      <section class="view active" id="view-command" aria-label="Command Center">
+        <div id="command-content">
+          <!-- Populated by JS -->
+        </div>
       </section>
-      <section id="enterprise-dynamic" class="enterprise-shell-panel" aria-live="polite"></section>
+
+      <!-- ── VIEW: ANALYTICS ── -->
+      <section class="view" id="view-analytics" aria-label="Analytics">
+        <div id="analytics-content"></div>
+      </section>
+
+      <!-- ── VIEW: INTELLIGENCE ── -->
+      <section class="view" id="view-intelligence" aria-label="Inteligência">
+        <div id="intelligence-content"></div>
+      </section>
+
+      <!-- ── VIEW: ORGANIZATION ── -->
+      <section class="view" id="view-organization" aria-label="Organização">
+        <div id="organization-content"></div>
+      </section>
+
+      <!-- ── VIEW: MEMBERS ── -->
+      <section class="view" id="view-members" aria-label="Membros">
+        <div id="members-content"></div>
+      </section>
+
+      <!-- ── VIEW: ROLES ── -->
+      <section class="view" id="view-roles" aria-label="Perfis e RBAC">
+        <div id="roles-content"></div>
+      </section>
+
+      <!-- ── VIEW: WORKSPACES ── -->
+      <section class="view" id="view-workspaces" aria-label="Workspaces">
+        <div id="workspaces-content"></div>
+      </section>
+
+      <!-- ── VIEW: BILLING ── -->
+      <section class="view" id="view-billing" aria-label="Billing">
+        <div id="billing-content"></div>
+      </section>
+
+      <!-- ── VIEW: COMPLIANCE ── -->
+      <section class="view" id="view-compliance" aria-label="Auditoria">
+        <div id="compliance-content"></div>
+      </section>
+
+      <!-- ── VIEW: INTEGRATIONS ── -->
+      <section class="view" id="view-integrations" aria-label="Integrações">
+        <div id="integrations-content"></div>
+      </section>
+
+      <!-- ── VIEW: SECURITY ── -->
+      <section class="view" id="view-security" aria-label="Segurança">
+        <div id="security-content"></div>
+      </section>
+
+      <!-- ── VIEW: NOTIFICATIONS ── -->
+      <section class="view" id="view-notifications" aria-label="Notificações">
+        <div id="notifications-content"></div>
+      </section>
+
+      <!-- ── VIEW: PROFILE ── -->
+      <section class="view" id="view-profile" aria-label="Perfil">
+        <div id="profile-content"></div>
+      </section>
+
+      <!-- ── VIEW: SETTINGS ── -->
+      <section class="view" id="view-settings" aria-label="Configurações">
+        <div id="settings-content"></div>
+      </section>
+
     </div>
   </main>
 </div>
-<div class="enterprise-toast-stack" aria-live="polite"></div>
-<div class="enterprise-modal-backdrop" role="dialog" aria-modal="true" aria-label="Formulário Enterprise"><div class="enterprise-modal"><div class="enterprise-modal-head"><h2>Enterprise</h2><button class="enterprise-close" type="button" aria-label="Fechar" data-close-modal>×</button></div><div class="enterprise-modal-body"></div></div></div>
-<script src="/black_diamond.js" defer></script>
+
+<!-- Toast Stack -->
+<div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">Modal</h2>
+      <button class="modal-close" id="modal-close-btn" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer" style="display:none"></div>
+  </div>
+</div>
+
+<!-- Command Palette -->
+<div class="cmd-overlay" id="cmd-overlay" role="dialog" aria-modal="true" aria-label="Paleta de comandos">
+  <div class="cmd-palette">
+    <div class="cmd-input-wrap">
+      <span class="cmd-search-icon" aria-hidden="true">🔍</span>
+      <input class="cmd-input" id="cmd-input" type="text" placeholder="Buscar ações, módulos, membros…" autocomplete="off" aria-label="Busca de comandos">
+      <span class="cmd-esc">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+    <div class="cmd-footer">
+      <span class="cmd-hint"><span class="cmd-kbd">↑↓</span> navegar</span>
+      <span class="cmd-hint"><span class="cmd-kbd">↵</span> selecionar</span>
+      <span class="cmd-hint"><span class="cmd-kbd">ESC</span> fechar</span>
+    </div>
+  </div>
+</div>
+
 <script src="/enterprise/enterprise_app.js" defer></script>
+<script>
+// ============================================================
+// ENTERPRISE APP v4.0 — PHASE 010/011/012
+// ============================================================
+(function () {
+  'use strict';
+
+  const API = '/api/enterprise-data';
+  const state = {
+    data: null,
+    view: 'command',
+    busy: false,
+    query: '',
+    notifOpen: false,
+  };
+
+  // ── Utilities ──
+  const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const fmtDate = (v, t=false) => v ? new Intl.DateTimeFormat('pt-BR', t ? {dateStyle:'short',timeStyle:'short'} : {dateStyle:'medium'}).format(new Date(v)) : '—';
+  const money = v => new Intl.NumberFormat('pt-BR', {style:'currency',currency:'BRL'}).format(Number(v||0));
+  const roleName = id => state.data?.roles?.find(r=>r.id===id)?.name || id || '—';
+  const statusBadge = s => {
+    const map = {active:'success',paid:'success',operational:'success',suspended:'danger',cancel_at_period_end:'danger',pending:'warning',trial:'warning'};
+    const cls = map[s] || 'neutral';
+    return `<span class="badge badge-${cls}">${esc(s)}</span>`;
+  };
+
+  // ── Toast ──
+  function toast(msg, type='info', title='') {
+    const stack = document.getElementById('toast-stack');
+    const icons = {success:'✓',error:'✕',warning:'⚠',info:'ℹ'};
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ'}</span><div class="toast-body"><div class="toast-title">${esc(title||msg)}</div>${title?`<div class="toast-desc">${esc(msg)}</div>`:''}</div>`;
+    stack.appendChild(el);
+    setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 250); }, 4000);
+  }
+
+  // ── Modal ──
+  function openModal(title, bodyHTML, footerHTML='', size='') {
+    const backdrop = document.getElementById('modal-backdrop');
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = bodyHTML;
+    const footer = document.getElementById('modal-footer');
+    if (footerHTML) { footer.innerHTML = footerHTML; footer.style.display = ''; }
+    else { footer.style.display = 'none'; }
+    if (size) document.getElementById('modal').style.maxWidth = size;
+    backdrop.classList.add('open');
+    backdrop.querySelector('input, select, textarea, button:not(#modal-close-btn)')?.focus();
+  }
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    document.getElementById('modal').style.maxWidth = '';
+  }
+
+  // ── API ──
+  async function request(action, payload={}) {
+    const opts = action
+      ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,payload}),credentials:'same-origin'}
+      : {method:'GET',credentials:'same-origin'};
+    const res = await fetch(API, opts);
+    if (res.status === 401) { location.replace('/login?next=' + encodeURIComponent('/enterprise')); throw new Error('Sessão expirada.'); }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Operação falhou.');
+    state.data = data.data;
+    return data.data;
+  }
+
+  function setBusy(v) {
+    state.busy = v;
+    document.querySelectorAll('[data-action], .btn').forEach(b => { if (!b.closest('#modal-footer') || v) b.disabled = v; });
+  }
+
+  async function mutate(action, payload, successMsg, successTitle='') {
+    if (state.busy) return;
+    setBusy(true);
+    try {
+      await request(action, payload);
+      render(state.view);
+      toast(successMsg, 'success', successTitle);
+    } catch (e) {
+      toast(e.message, 'error', 'Erro');
+    } finally {
+      setBusy(false);
+      closeModal();
+    }
+  }
+
+  // ── Navigation ──
+  const viewTitles = {
+    command:'Command Center', analytics:'Analytics Executivo', intelligence:'Business Intelligence',
+    organization:'Organização', members:'Membros & Convites', roles:'Perfis & RBAC',
+    workspaces:'Workspaces', billing:'Billing & Planos', compliance:'Auditoria & Compliance',
+    integrations:'Integrações', security:'Segurança & MFA', notifications:'Notificações',
+    profile:'Meu Perfil', settings:'Configurações',
+  };
+
+  function navigate(view) {
+    if (!viewTitles[view]) return;
+    state.view = view;
+    // Update nav items
+    document.querySelectorAll('.nav-item[data-view]').forEach(el => {
+      el.classList.toggle('active', el.dataset.view === view);
+    });
+    // Update views
+    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+    const viewEl = document.getElementById(`view-${view}`);
+    if (viewEl) viewEl.classList.add('active');
+    // Update topbar
+    document.getElementById('topbar-title').textContent = viewTitles[view] || view;
+    // Render content
+    renderView(view);
+    // Update URL hash
+    history.replaceState(null, '', `#${view}`);
+  }
+
+  // ── Render Views ──
+  function renderView(view) {
+    const renderers = {
+      command: renderCommand,
+      analytics: renderAnalytics,
+      intelligence: renderIntelligence,
+      organization: renderOrganization,
+      members: renderMembers,
+      roles: renderRoles,
+      workspaces: renderWorkspaces,
+      billing: renderBilling,
+      compliance: renderCompliance,
+      integrations: renderIntegrations,
+      security: renderSecurity,
+      notifications: renderNotifications,
+      profile: renderProfile,
+      settings: renderSettings,
+    };
+    const fn = renderers[view];
+    if (fn) fn();
+  }
+
+  // ── COMMAND CENTER ──
+  function renderCommand() {
+    if (!state.data) return;
+    const sys = state.data.system || {};
+    const sub = state.data.subscription || {};
+    const insights = (state.data.intelligence || []).filter(i => i.status === 'open');
+    const audit = (state.data.auditLog || []).slice(0, 6);
+    const members = (state.data.members || []).slice(0, 5);
+
+    document.getElementById('command-content').innerHTML = `
+      ${insights.length > 0 ? `
+      <div class="alert-banner" id="cmd-alert">
+        <span class="alert-icon">🧠</span>
+        <span class="alert-text"><strong>Companion detectou:</strong> ${insights.length} insight${insights.length>1?'s':''} em aberto — ${esc(insights[0].title)}</span>
+        <button class="alert-action" data-view="intelligence" type="button">Revisar →</button>
+        <button class="alert-close" onclick="this.closest('.alert-banner').remove()" type="button" aria-label="Fechar">✕</button>
+      </div>` : ''}
+
+      <div class="kpi-grid">
+        <div class="kpi-card" style="animation-delay:0.05s">
+          <div class="kpi-card-header">
+            <div class="kpi-icon" style="background:rgba(99,102,241,0.12)">👥</div>
+            <span class="kpi-trend up">↑ +12%</span>
+          </div>
+          <div class="kpi-value">${(state.data.members||[]).length}</div>
+          <div class="kpi-label">Membros ativos</div>
+          <div class="kpi-sub">Organização</div>
+        </div>
+        <div class="kpi-card" style="animation-delay:0.10s">
+          <div class="kpi-card-header">
+            <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">⚡</div>
+            <span class="kpi-trend up">↑ ${sys.uptime||99.9}%</span>
+          </div>
+          <div class="kpi-value" style="color:#10B981">${sys.uptime||99.9}%</div>
+          <div class="kpi-label">Uptime</div>
+          <div class="kpi-sub">Últimos 30 dias</div>
+        </div>
+        <div class="kpi-card" style="animation-delay:0.15s">
+          <div class="kpi-card-header">
+            <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">💳</div>
+            <span class="kpi-trend flat">→ Estável</span>
+          </div>
+          <div class="kpi-value">${money(sub.monthlyValue||0)}</div>
+          <div class="kpi-label">MRR</div>
+          <div class="kpi-sub">Plano ${esc(sub.plan||'Enterprise')}</div>
+        </div>
+        <div class="kpi-card" style="animation-delay:0.20s">
+          <div class="kpi-card-header">
+            <div class="kpi-icon" style="background:rgba(244,63,94,0.12)">🧠</div>
+            <span class="kpi-trend ${insights.length>0?'down':'up'}">${insights.length>0?'↓':'↑'} ${insights.length} abertos</span>
+          </div>
+          <div class="kpi-value" style="color:${insights.length>0?'#F43F5E':'#10B981'}">${insights.length}</div>
+          <div class="kpi-label">Insights</div>
+          <div class="kpi-sub">Requerem atenção</div>
+        </div>
+      </div>
+
+      <div class="grid-main-side" style="margin-bottom:20px">
+        <!-- Activity Feed -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Atividade Recente</div><div class="card-subtitle">Últimas ações na plataforma</div></div>
+            <button class="card-action" data-view="compliance" type="button">Ver tudo</button>
+          </div>
+          <div class="activity-list">
+            ${audit.length ? audit.map(log => `
+              <div class="activity-item">
+                <div class="activity-icon" style="background:rgba(99,102,241,0.10)">📝</div>
+                <div class="activity-body">
+                  <div class="activity-title">${esc(log.action)}</div>
+                  <div class="activity-desc">${esc(log.detail)}</div>
+                  <div class="activity-meta">
+                    <span class="activity-time">${fmtDate(log.createdAt, true)}</span>
+                    <span class="activity-tag badge badge-neutral">${esc(log.actor)}</span>
+                  </div>
+                </div>
+              </div>
+            `).join('') : `<div class="empty-state" style="padding:32px"><div class="empty-state-icon">📋</div><div class="empty-state-title">Sem atividade</div></div>`}
+          </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Saúde do Sistema</div><div class="card-subtitle">Métricas em tempo real</div></div>
+            <span class="badge badge-success">Operacional</span>
+          </div>
+          <div class="card-body">
+            <div style="margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:12px;color:var(--text-secondary)">Score geral</span>
+                <span style="font-size:22px;font-weight:700;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.healthScore||94}%</span>
+              </div>
+              <div class="progress"><div class="progress-bar" style="width:${sys.healthScore||94}%"></div></div>
+            </div>
+            <div class="metric-row"><span class="metric-label">CPU</span><div class="metric-track"><div class="metric-fill" style="width:${sys.cpu||23}%;background:#6366F1"></div></div><span class="metric-val">${sys.cpu||23}%</span></div>
+            <div class="metric-row"><span class="metric-label">Memória</span><div class="metric-track"><div class="metric-fill" style="width:${sys.memory||41}%;background:#8B5CF6"></div></div><span class="metric-val">${sys.memory||41}%</span></div>
+            <div class="metric-row"><span class="metric-label">Latência p95</span><div class="metric-track"><div class="metric-fill" style="width:${Math.min((sys.apiP95||48)/5,100)}%;background:#10B981"></div></div><span class="metric-val">${sys.apiP95||48}ms</span></div>
+            <div class="metric-row"><span class="metric-label">Sessões</span><div class="metric-track"><div class="metric-fill" style="width:${Math.min((sys.activeSessions||12)/50*100,100)}%;background:#F59E0B"></div></div><span class="metric-val">${sys.activeSessions||12}</span></div>
+          </div>
+          <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:11px;color:var(--text-tertiary)">Atualizado agora</span>
+            <button class="btn btn-sm btn-secondary" data-action="system.refresh" type="button">↻ Atualizar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Overview -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Equipe</div>
+            <button class="card-action" data-view="members" type="button">Gerenciar</button>
+          </div>
+          <div class="card-body" style="padding:12px 20px">
+            ${members.map((m,i) => `
+              <div class="member-row">
+                <div class="member-av" style="background:${['#6366F1','#8B5CF6','#10B981','#F59E0B','#F43F5E'][i%5]}">${esc(m.name?.charAt(0)||'?')}</div>
+                <div class="member-info">
+                  <div class="member-name">${esc(m.name)}</div>
+                  <div class="member-role">${esc(roleName(m.roleId))}</div>
+                </div>
+                <div class="member-status">
+                  <span class="status-dot" style="background:${m.status==='active'?'#10B981':'#F59E0B'}"></span>
+                  ${esc(m.status||'active')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Ações Rápidas</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="members" type="button">👥 Convidar membro</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="roles" type="button">🔐 Gerenciar permissões</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="billing" type="button">💳 Ver billing</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="compliance" type="button">📋 Auditoria</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="integrations" type="button">🔌 Integrações</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="security" type="button">🛡️ Segurança & MFA</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── ANALYTICS ──
+  function renderAnalytics() {
+    const members = state.data?.members || [];
+    const sys = state.data?.system || {};
+    document.getElementById('analytics-content').innerHTML = `
+      <div class="page-header">
+        <div class="page-kicker">LifeOS Enterprise</div>
+        <h1 class="page-title">Analytics Executivo</h1>
+        <p class="page-subtitle">Métricas de desempenho e crescimento da organização.</p>
+      </div>
+      <div class="kpi-grid" style="margin-bottom:24px">
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">📈</div><span class="kpi-trend up">↑ 18%</span></div><div class="kpi-value">${members.length}</div><div class="kpi-label">Total membros</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">✅</div><span class="kpi-trend up">↑ 5%</span></div><div class="kpi-value">${sys.uptime||99.9}%</div><div class="kpi-label">Disponibilidade</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">⚡</div><span class="kpi-trend flat">→ Estável</span></div><div class="kpi-value">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(59,130,246,0.12)">🔄</div><span class="kpi-trend up">↑ 23%</span></div><div class="kpi-value">${sys.activeSessions||12}</div><div class="kpi-label">Sessões ativas</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Crescimento de Membros</div></div>
+          <div class="card-body">
+            <svg class="chart-svg" viewBox="0 0 400 160" style="height:160px">
+              <defs>
+                <linearGradient id="aGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6366F1" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              ${[0,40,80,120].map(y => `<line x1="0" y1="${y+10}" x2="400" y2="${y+10}" class="chart-grid-line"/>`).join('')}
+              <path d="M0,130 C40,120 80,100 120,90 C160,80 200,70 240,55 C280,40 320,30 400,20" fill="url(#aGrad)"/>
+              <path d="M0,130 C40,120 80,100 120,90 C160,80 200,70 240,55 C280,40 320,30 400,20" fill="none" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round"/>
+              ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul'].map((m,i) => `<text x="${i*60+10}" y="155" class="chart-label">${m}</text>`).join('')}
+            </svg>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Distribuição por Perfil</div></div>
+          <div class="card-body">
+            ${(state.data?.roles||[]).map((r,i) => {
+              const count = members.filter(m=>m.roleId===r.id).length;
+              const pct = members.length ? Math.round(count/members.length*100) : 0;
+              const colors = ['#6366F1','#8B5CF6','#10B981','#F59E0B','#F43F5E'];
+              return `<div class="metric-row"><span class="metric-label">${esc(r.name)}</span><div class="metric-track"><div class="metric-fill" style="width:${pct}%;background:${colors[i%5]}"></div></div><span class="metric-val">${count}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── INTELLIGENCE ──
+  function renderIntelligence() {
+    const insights = state.data?.intelligence || [];
+    const open = insights.filter(i=>i.status==='open');
+    document.getElementById('intelligence-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div class="page-kicker">LifeOS Companion</div>
+          <h1 class="page-title">Business Intelligence</h1>
+          <p class="page-subtitle">${open.length} insight${open.length!==1?'s':''} requerem atenção.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="filter-chips">
+            <button class="filter-chip active" type="button">Todos</button>
+            <button class="filter-chip" type="button">Abertos</button>
+            <button class="filter-chip" type="button">Resolvidos</button>
+          </div>
+        </div>
+      </div>
+      ${insights.length ? insights.map(ins => `
+        <div class="insight-card">
+          <div class="insight-header">
+            <div class="insight-title">${esc(ins.title)}</div>
+            <span class="badge badge-${ins.status==='open'?'warning':'success'}">${esc(ins.status)}</span>
+          </div>
+          <div class="insight-desc">${esc(ins.description||ins.detail||'')}</div>
+          <div class="insight-meta">
+            <span class="badge badge-${ins.impact==='high'||ins.severity==='high'?'danger':ins.impact==='medium'?'warning':'neutral'}">
+              ${esc(ins.impact||ins.severity||'medium')} impacto
+            </span>
+            <span style="font-size:11px;color:var(--text-tertiary)">${fmtDate(ins.createdAt)}</span>
+            ${ins.status==='open' ? `
+              <button class="btn btn-sm btn-primary" style="margin-left:auto" data-action="intelligence.resolve" data-id="${esc(ins.id)}" data-status="resolved" type="button">✓ Resolver</button>
+              <button class="btn btn-sm btn-secondary" data-action="intelligence.resolve" data-id="${esc(ins.id)}" data-status="dismissed" type="button">Dispensar</button>
+            ` : ''}
+          </div>
+        </div>
+      `).join('') : `
+        <div class="empty-state">
+          <div class="empty-state-icon">🧠</div>
+          <div class="empty-state-title">Nenhum insight disponível</div>
+          <div class="empty-state-desc">O Companion analisará sua organização e gerará recomendações automaticamente.</div>
+        </div>
+      `}
+    `;
+  }
+
+  // ── ORGANIZATION ──
+  function renderOrganization() {
+    const org = state.data?.organization || {};
+    document.getElementById('organization-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Organização</h1>
+        <p class="page-subtitle">Gerencie as configurações da sua organização.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Informações</div><button class="btn btn-sm btn-secondary" data-action="org.edit" type="button">✏ Editar</button></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Nome</div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary)">${esc(org.name||'—')}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Domínio</div>
+              <div style="font-size:14px;color:var(--text-secondary)">${esc(org.domain||'—')}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Setor</div>
+              <div style="font-size:14px;color:var(--text-secondary)">${esc(org.industry||'—')}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Tamanho</div>
+              <div style="font-size:14px;color:var(--text-secondary)">${esc(org.size||'—')}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Status da Organização</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:13px;color:var(--text-secondary)">Status</span>
+              ${statusBadge(org.status||'active')}
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:13px;color:var(--text-secondary)">Criada em</span>
+              <span style="font-size:13px;font-weight:500">${fmtDate(org.createdAt)}</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:13px;color:var(--text-secondary)">Membros</span>
+              <span style="font-size:13px;font-weight:500">${(state.data?.members||[]).length}</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:13px;color:var(--text-secondary)">Workspaces</span>
+              <span style="font-size:13px;font-weight:500">${(state.data?.workspaces||[]).length}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── MEMBERS ──
+  function renderMembers() {
+    const members = state.data?.members || [];
+    const filtered = state.query ? members.filter(m => m.name?.toLowerCase().includes(state.query) || m.email?.toLowerCase().includes(state.query)) : members;
+    document.getElementById('members-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <h1 class="page-title">Membros & Convites</h1>
+          <p class="page-subtitle">${members.length} membro${members.length!==1?'s':''} na organização.</p>
+        </div>
+        <button class="btn btn-primary" data-action="member.invite" type="button">+ Convidar membro</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Todos os membros</div>
+          <input class="form-input" style="width:220px;height:32px;font-size:12px" type="search" placeholder="Filtrar membros…" id="members-filter" value="${esc(state.query)}">
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Membro</th><th>E-mail</th><th>Perfil</th><th>Equipe</th><th>Status</th><th>Última atividade</th><th>Ações</th></tr></thead>
+            <tbody>
+              ${filtered.length ? filtered.map(m => `
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:9px">
+                    <div class="member-av" style="width:28px;height:28px;background:linear-gradient(135deg,#6366F1,#8B5CF6)">${esc(m.name?.charAt(0)||'?')}</div>
+                    <span style="font-weight:500;color:var(--text-primary)">${esc(m.name)}</span>
+                  </div></td>
+                  <td>${esc(m.email)}</td>
+                  <td>${statusBadge(roleName(m.roleId))}</td>
+                  <td>${esc(m.team||'—')}</td>
+                  <td>${statusBadge(m.status||'active')}</td>
+                  <td>${fmtDate(m.lastActiveAt, true)}</td>
+                  <td><div style="display:flex;gap:4px">
+                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.edit" data-id="${esc(m.id)}" type="button" title="Editar">✏</button>
+                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.remove" data-id="${esc(m.id)}" type="button" title="Remover" style="color:#F43F5E">🗑</button>
+                  </div></td>
+                </tr>
+              `).join('') : `<tr><td colspan="7"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">👥</div><div class="empty-state-title">Nenhum membro encontrado</div></div></td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    document.getElementById('members-filter')?.addEventListener('input', e => {
+      state.query = e.target.value.trim().toLowerCase();
+      renderMembers();
+    });
+  }
+
+  // ── ROLES / RBAC ──
+  function renderRoles() {
+    const roles = state.data?.roles || [];
+    document.getElementById('roles-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <h1 class="page-title">Perfis & RBAC</h1>
+          <p class="page-subtitle">Controle de acesso baseado em funções.</p>
+        </div>
+        <button class="btn btn-primary" data-action="role.create" type="button">+ Novo perfil</button>
+      </div>
+      <div class="grid-2">
+        ${roles.map(r => `
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">${esc(r.name)}</div>
+                <div class="card-subtitle">${(r.permissions||[]).length} permissões</div>
+              </div>
+              <div style="display:flex;gap:6px">
+                ${!r.system ? `<button class="btn btn-sm btn-secondary" data-action="role.edit" data-id="${esc(r.id)}" type="button">✏ Editar</button>` : '<span class="badge badge-neutral">Sistema</span>'}
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-wrap:wrap;gap:5px">
+                ${(r.permissions||[]).slice(0,8).map(p => `<span class="badge badge-primary">${esc(p)}</span>`).join('')}
+                ${(r.permissions||[]).length > 8 ? `<span class="badge badge-neutral">+${(r.permissions||[]).length-8}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // ── WORKSPACES ──
+  function renderWorkspaces() {
+    const ws = state.data?.workspaces || [];
+    document.getElementById('workspaces-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <h1 class="page-title">Workspaces</h1>
+          <p class="page-subtitle">${ws.length} workspace${ws.length!==1?'s':''} configurados.</p>
+        </div>
+        <button class="btn btn-primary" data-action="workspace.create" type="button">+ Novo workspace</button>
+      </div>
+      ${ws.length ? `
+      <div class="grid-2">
+        ${ws.map(w => `
+          <div class="card card-interactive" style="padding:20px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px">📁</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--text-primary)">${esc(w.name)}</div>
+                  <div style="font-size:12px;color:var(--text-tertiary)">${esc(w.type||'workspace')}</div>
+                </div>
+              </div>
+              ${statusBadge(w.status||'active')}
+            </div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">${esc(w.description||'')}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:11px;color:var(--text-tertiary)">${(w.members||[]).length} membros</span>
+              <button class="btn btn-sm btn-ghost" data-action="workspace.open" data-id="${esc(w.id)}" type="button">Abrir →</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>` : `
+      <div class="empty-state">
+        <div class="empty-state-icon">📁</div>
+        <div class="empty-state-title">Nenhum workspace</div>
+        <div class="empty-state-desc">Crie workspaces para organizar projetos e equipes.</div>
+        <button class="btn btn-primary" data-action="workspace.create" type="button">+ Criar workspace</button>
+      </div>`}
+    `;
+  }
+
+  // ── BILLING ──
+  function renderBilling() {
+    const sub = state.data?.subscription || {};
+    const invoices = state.data?.invoices || [];
+    const plans = [
+      { id:'starter', name:'Starter', price:'R$ 297', desc:'Para pequenas equipes', features:['Até 5 membros','5 workspaces','Suporte por e-mail','Analytics básico'] },
+      { id:'professional', name:'Professional', price:'R$ 697', desc:'Para equipes em crescimento', features:['Até 25 membros','Workspaces ilimitados','SSO básico','Analytics avançado','API access'] },
+      { id:'enterprise', name:'Enterprise', price:'R$ 1.497', desc:'Para grandes organizações', features:['Membros ilimitados','Workspaces ilimitados','SSO Enterprise','RBAC avançado','Auditoria completa','SLA 99.9%','Suporte dedicado'] },
+    ];
+    document.getElementById('billing-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Billing & Planos</h1>
+        <p class="page-subtitle">Plano atual: <strong style="color:var(--text-primary)">${esc(sub.plan||'Enterprise')}</strong> · Próxima cobrança: ${fmtDate(sub.nextBillingDate)}</p>
+      </div>
+      <div class="grid-3" style="margin-bottom:28px">
+        ${plans.map(p => `
+          <div class="plan-card ${sub.plan===p.id?'current':''}">
+            <div style="margin-bottom:12px">
+              <div class="plan-name">${p.name}</div>
+              <div style="font-size:12px;color:var(--text-tertiary)">${p.desc}</div>
+            </div>
+            <div class="plan-price">${p.price}<span>/mês</span></div>
+            <div class="plan-features">
+              ${p.features.map(f => `<div class="plan-feature"><span class="plan-feature-icon">✓</span>${f}</div>`).join('')}
+            </div>
+            ${sub.plan===p.id
+              ? `<button class="btn btn-secondary" style="width:100%" disabled type="button">✓ Plano atual</button>`
+              : `<button class="btn btn-primary" style="width:100%" data-action="plan.change" data-plan="${p.id}" type="button">Mudar para ${p.name}</button>`
+            }
+          </div>
+        `).join('')}
+      </div>
+      ${invoices.length ? `
+      <div class="card">
+        <div class="card-header"><div class="card-title">Histórico de Faturas</div></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
+            <tbody>
+              ${invoices.map(inv => `
+                <tr>
+                  <td>${fmtDate(inv.date)}</td>
+                  <td>${esc(inv.description||'Assinatura LifeOS Enterprise')}</td>
+                  <td style="font-weight:600;color:var(--text-primary)">${money(inv.amount)}</td>
+                  <td>${statusBadge(inv.status||'paid')}</td>
+                  <td><button class="btn btn-sm btn-ghost" data-action="invoice.download" data-id="${esc(inv.id)}" type="button">⬇ PDF</button></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>` : ''}
+    `;
+  }
+
+  // ── COMPLIANCE ──
+  function renderCompliance() {
+    const audit = state.data?.auditLog || [];
+    document.getElementById('compliance-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <h1 class="page-title">Auditoria & Compliance</h1>
+          <p class="page-subtitle">${audit.length} eventos registrados.</p>
+        </div>
+        <button class="btn btn-secondary" data-action="audit.export" type="button">⬇ Exportar CSV</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Log de Auditoria</div>
+          <div class="filter-chips">
+            <button class="filter-chip active" type="button">Todos</button>
+            <button class="filter-chip" type="button">Auth</button>
+            <button class="filter-chip" type="button">Membros</button>
+            <button class="filter-chip" type="button">Billing</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Data/Hora</th><th>Ator</th><th>Ação</th><th>Detalhe</th><th>IP</th></tr></thead>
+            <tbody>
+              ${audit.length ? audit.map(log => `
+                <tr>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${fmtDate(log.createdAt, true)}</td>
+                  <td><div style="display:flex;align-items:center;gap:7px">
+                    <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">${esc(log.actor?.charAt(0)||'?')}</div>
+                    <span>${esc(log.actor)}</span>
+                  </div></td>
+                  <td><span class="badge badge-neutral">${esc(log.action)}</span></td>
+                  <td style="color:var(--text-secondary)">${esc(log.detail)}</td>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary)">${esc(log.ip||'—')}</td>
+                </tr>
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">📋</div><div class="empty-state-title">Nenhum evento registrado</div></div></td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── INTEGRATIONS ──
+  function renderIntegrations() {
+    const integrations = state.data?.integrations || [];
+    const allIntegrations = [
+      { id:'slack', name:'Slack', desc:'Notificações e alertas em tempo real', icon:'💬', category:'Comunicação' },
+      { id:'github', name:'GitHub', desc:'Rastreamento de repositórios e PRs', icon:'🐙', category:'Desenvolvimento' },
+      { id:'jira', name:'Jira', desc:'Sincronização de tarefas e sprints', icon:'📌', category:'Gestão' },
+      { id:'google', name:'Google Workspace', desc:'SSO e sincronização de calendário', icon:'🔵', category:'Produtividade' },
+      { id:'salesforce', name:'Salesforce', desc:'Dados de CRM e pipeline', icon:'☁️', category:'Vendas' },
+      { id:'zapier', name:'Zapier', desc:'Automações sem código', icon:'⚡', category:'Automação' },
+    ];
+    document.getElementById('integrations-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Integrações</h1>
+        <p class="page-subtitle">Conecte o LifeOS com suas ferramentas favoritas.</p>
+      </div>
+      <div class="grid-2">
+        ${allIntegrations.map(int => {
+          const active = integrations.find(i => i.id === int.id)?.enabled;
+          return `
+          <div class="card">
+            <div class="card-body" style="padding:16px 20px">
+              <div class="integration-item" style="padding:0;border:none">
+                <div class="integration-icon">${int.icon}</div>
+                <div class="integration-info">
+                  <div class="integration-name">${esc(int.name)}</div>
+                  <div class="integration-desc">${esc(int.desc)}</div>
+                  <span class="badge badge-neutral" style="margin-top:4px">${esc(int.category)}</span>
+                </div>
+                <label class="toggle-switch" aria-label="Ativar ${int.name}">
+                  <input type="checkbox" ${active?'checked':''} data-action="integration.toggle" data-id="${int.id}">
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    // Bind toggles
+    document.querySelectorAll('#integrations-content input[data-action="integration.toggle"]').forEach(el => {
+      el.addEventListener('change', () => mutate('integration.toggle', {id:el.dataset.id}, `Integração ${el.dataset.id} ${el.checked?'ativada':'desativada'}.`, 'Integração'));
+    });
+  }
+
+  // ── SECURITY ──
+  function renderSecurity() {
+    const devices = state.data?.devices || [];
+    const mfa = state.data?.mfa || {};
+    document.getElementById('security-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Segurança & MFA</h1>
+        <p class="page-subtitle">Configure autenticação multifator e gerencie sessões.</p>
+      </div>
+      <div class="grid-2">
+        <!-- MFA -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Autenticação Multifator</div>${mfa.enabled?'<span class="badge badge-success">Ativo</span>':'<span class="badge badge-warning">Inativo</span>'}</div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary)">App Autenticador (TOTP)</div>
+                <div style="font-size:12px;color:var(--text-tertiary)">Google Authenticator, Authy</div>
+              </div>
+              <label class="toggle-switch" aria-label="Ativar TOTP">
+                <input type="checkbox" ${mfa.totp?'checked':''} data-action="mfa.toggle" data-type="totp">
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary)">SMS / WhatsApp</div>
+                <div style="font-size:12px;color:var(--text-tertiary)">Código via mensagem</div>
+              </div>
+              <label class="toggle-switch" aria-label="Ativar SMS">
+                <input type="checkbox" ${mfa.sms?'checked':''} data-action="mfa.toggle" data-type="sms">
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary)">Chave de Segurança (FIDO2)</div>
+                <div style="font-size:12px;color:var(--text-tertiary)">YubiKey, Touch ID</div>
+              </div>
+              <label class="toggle-switch" aria-label="Ativar FIDO2">
+                <input type="checkbox" ${mfa.fido2?'checked':''} data-action="mfa.toggle" data-type="fido2">
+                <div class="toggle-track"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Devices -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Sessões Ativas</div><span class="badge badge-neutral">${devices.length} dispositivos</span></div>
+          <div class="card-body" style="padding:12px 20px">
+            ${devices.length ? devices.map(d => `
+              <div class="device-item">
+                <div class="device-icon">${d.type==='mobile'?'📱':d.type==='tablet'?'📟':'💻'}</div>
+                <div class="device-info">
+                  <div class="device-name">${esc(d.name||d.browser||'Dispositivo')}</div>
+                  <div class="device-meta">${esc(d.os||'')} · ${esc(d.location||'')} · ${fmtDate(d.lastSeen, true)}</div>
+                </div>
+                ${d.current ? '<span class="badge badge-success">Atual</span>' : `<button class="btn btn-sm btn-danger" data-action="device.revoke" data-id="${esc(d.id)}" type="button">Revogar</button>`}
+              </div>
+            `).join('') : `<div class="empty-state" style="padding:24px"><div class="empty-state-icon">💻</div><div class="empty-state-title">Nenhuma sessão</div></div>`}
+          </div>
+        </div>
+      </div>
+
+      <!-- Password & Policy -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><div class="card-title">Política de Senhas</div></div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div>
+              <div class="form-group"><label class="form-label">Comprimento mínimo</label><input class="form-input" type="number" value="12" min="8" max="32"></div>
+              <div class="form-group"><label class="form-label">Expiração (dias)</label><input class="form-input" type="number" value="90" min="30"></div>
+            </div>
+            <div>
+              <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
+                ${[['Letras maiúsculas','uppercase',true],['Letras minúsculas','lowercase',true],['Números','numbers',true],['Caracteres especiais','special',true],['Histórico de senhas','history',false]].map(([label,key,checked]) => `
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text-secondary)">
+                    <input type="checkbox" ${checked?'checked':''} style="accent-color:#6366F1"> ${label}
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;justify-content:flex-end">
+            <button class="btn btn-primary" data-action="security.savePolicy" type="button">Salvar política</button>
+          </div>
+        </div>
+      </div>
+    `;
+    // Bind MFA toggles
+    document.querySelectorAll('#security-content input[data-action="mfa.toggle"]').forEach(el => {
+      el.addEventListener('change', () => toast(`MFA ${el.dataset.type} ${el.checked?'ativado':'desativado'}.`, 'success', 'Segurança'));
+    });
+  }
+
+  // ── NOTIFICATIONS ──
+  function renderNotifications() {
+    const notifs = state.data?.notifications || [];
+    document.getElementById('notifications-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <h1 class="page-title">Notificações</h1>
+          <p class="page-subtitle">${notifs.filter(n=>!n.read).length} não lidas.</p>
+        </div>
+        <button class="btn btn-secondary" data-action="notifications.markAll" type="button">✓ Marcar todas como lidas</button>
+      </div>
+      <div class="card">
+        ${notifs.length ? notifs.map(n => `
+          <div class="activity-item ${n.read?'':''}${!n.read?'" style="background:rgba(99,102,241,0.04)':''}">
+            <div class="activity-icon" style="background:rgba(99,102,241,0.10)">${n.icon||'🔔'}</div>
+            <div class="activity-body">
+              <div class="activity-title">${esc(n.title)}</div>
+              <div class="activity-desc">${esc(n.message||n.body||'')}</div>
+              <div class="activity-meta">
+                <span class="activity-time">${fmtDate(n.createdAt, true)}</span>
+                ${!n.read ? '<span class="badge badge-primary">Nova</span>' : ''}
+              </div>
+            </div>
+            ${!n.read ? `<button class="btn btn-sm btn-ghost" data-action="notification.read" data-id="${esc(n.id)}" type="button">✓</button>` : ''}
+          </div>
+        `).join('') : `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔔</div>
+            <div class="empty-state-title">Sem notificações</div>
+            <div class="empty-state-desc">Você está em dia! Novas notificações aparecerão aqui.</div>
+          </div>`}
+      </div>
+    `;
+  }
+
+  // ── PROFILE ──
+  function renderProfile() {
+    const user = state.data?.members?.[0] || {};
+    document.getElementById('profile-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Meu Perfil</h1>
+        <p class="page-subtitle">Gerencie suas informações pessoais e preferências.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Informações Pessoais</div></div>
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:24px
+;font-weight:700;color:#fff;border:3px solid rgba(99,102,241,0.30)">${esc(user.name?.charAt(0)||'A')}</div>
+              <div>
+                <div style="font-size:18px;font-weight:700;color:var(--text-primary)">${esc(user.name||'Administrador')}</div>
+                <div style="font-size:13px;color:var(--text-tertiary)">${esc(user.email||'admin@empresa.com')}</div>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" type="text" value="${esc(user.name||'')}"></div>
+            <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" value="${esc(user.email||'')}"></div>
+            <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" type="text" value="${esc(user.title||'')}"></div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button class="btn btn-primary" data-action="profile.save" type="button">Salvar alterações</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Alterar Senha</div></div>
+          <div class="card-body">
+            <div class="form-group"><label class="form-label">Senha atual</label><input class="form-input" type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label class="form-label">Nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label class="form-label">Confirmar nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button class="btn btn-primary" data-action="profile.changePassword" type="button">Alterar senha</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── SETTINGS ──
+  function renderSettings() {
+    document.getElementById('settings-content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Configurações</h1>
+        <p class="page-subtitle">Preferências gerais da plataforma.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Aparência</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+            <div class="form-group"><label class="form-label">Tema</label>
+              <select class="form-select"><option value="dark" selected>Escuro (padrão)</option><option value="light">Claro</option><option value="system">Sistema</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Idioma</label>
+              <select class="form-select"><option value="pt-BR" selected>Português (Brasil)</option><option value="en">English</option><option value="es">Español</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Fuso horário</label>
+              <select class="form-select"><option value="America/Sao_Paulo" selected>América/São Paulo (UTC-3)</option><option value="America/New_York">América/Nova York (UTC-5)</option><option value="Europe/London">Europa/Londres (UTC+0)</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Notificações</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:12px">
+            ${[['E-mail de resumo diário','email_digest',true],['Alertas de segurança','security_alerts',true],['Novos membros','new_members',true],['Atualizações de billing','billing_updates',false],['Insights do Companion','companion_insights',true]].map(([label,key,checked]) => `
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:13px;color:var(--text-secondary)">${label}</span>
+                <label class="toggle-switch" aria-label="${label}">
+                  <input type="checkbox" ${checked?'checked':''}>
+                  <div class="toggle-track"></div>
+                </label>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">API & Webhooks</div></div>
+          <div class="card-body">
+            <div class="form-group"><label class="form-label">API Key</label>
+              <div style="display:flex;gap:8px">
+                <input class="form-input" type="password" value="leos_ent_••••••••••••••••" readonly>
+                <button class="btn btn-secondary" data-action="api.regenerate" type="button">Regenerar</button>
+              </div>
+            </div>
+            <div class="form-group"><label class="form-label">Webhook URL</label>
+              <input class="form-input" type="url" placeholder="https://seu-servidor.com/webhook">
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Zona de Perigo</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+            <div style="padding:14px;border-radius:10px;background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.15)">
+              <div style="font-size:13px;font-weight:600;color:#FB7185;margin-bottom:4px">Exportar todos os dados</div>
+              <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:10px">Baixe um arquivo ZIP com todos os seus dados.</div>
+              <button class="btn btn-sm btn-secondary" data-action="data.export" type="button">⬇ Exportar dados</button>
+            </div>
+            <div style="padding:14px;border-radius:10px;background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.15)">
+              <div style="font-size:13px;font-weight:600;color:#FB7185;margin-bottom:4px">Encerrar organização</div>
+              <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:10px">Esta ação é irreversível. Todos os dados serão excluídos.</div>
+              <button class="btn btn-sm btn-danger" data-action="org.delete" type="button">Encerrar organização</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── COMMAND PALETTE ──
+  const cmdCommands = [
+    { icon:'◈', label:'Command Center', desc:'Visão geral executiva', view:'command' },
+    { icon:'📊', label:'Analytics', desc:'Métricas e gráficos', view:'analytics' },
+    { icon:'🧠', label:'Inteligência', desc:'Insights do Companion', view:'intelligence' },
+    { icon:'🏢', label:'Organização', desc:'Configurações da org', view:'organization' },
+    { icon:'👥', label:'Membros', desc:'Gerenciar equipe', view:'members' },
+    { icon:'🔐', label:'Perfis & RBAC', desc:'Permissões e funções', view:'roles' },
+    { icon:'📁', label:'Workspaces', desc:'Projetos e espaços', view:'workspaces' },
+    { icon:'💳', label:'Billing', desc:'Planos e faturas', view:'billing' },
+    { icon:'📋', label:'Auditoria', desc:'Log de eventos', view:'compliance' },
+    { icon:'🔌', label:'Integrações', desc:'Conectores externos', view:'integrations' },
+    { icon:'🛡️', label:'Segurança & MFA', desc:'Autenticação e sessões', view:'security' },
+    { icon:'🔔', label:'Notificações', desc:'Alertas e mensagens', view:'notifications' },
+    { icon:'👤', label:'Meu Perfil', desc:'Dados pessoais', view:'profile' },
+    { icon:'⚙️', label:'Configurações', desc:'Preferências do sistema', view:'settings' },
+  ];
+  let cmdSelected = 0;
+
+  function openCmdPalette() {
+    const overlay = document.getElementById('cmd-overlay');
+    overlay.classList.add('open');
+    document.getElementById('cmd-input').value = '';
+    renderCmdResults('');
+    document.getElementById('cmd-input').focus();
+  }
+  function closeCmdPalette() { document.getElementById('cmd-overlay').classList.remove('open'); }
+  function renderCmdResults(q) {
+    const filtered = q ? cmdCommands.filter(c => c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)) : cmdCommands;
+    cmdSelected = 0;
+    document.getElementById('cmd-results').innerHTML = `
+      <div class="cmd-section-label">Módulos</div>
+      ${filtered.map((c,i) => `
+        <div class="cmd-item ${i===0?'selected':''}" data-cmd-view="${c.view}">
+          <span class="cmd-item-icon">${c.icon}</span>
+          <span class="cmd-item-label">${esc(c.label)}</span>
+          <span class="cmd-item-desc">${esc(c.desc)}</span>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  // ── MODAL FORMS ──
+  function openMemberInviteModal() {
+    const roles = state.data?.roles || [];
+    openModal('Convidar Membro', `
+      <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" id="inv-name" type="text" placeholder="João Silva" required></div>
+      <div class="form-group"><label class="form-label">E-mail corporativo</label><input class="form-input" id="inv-email" type="email" placeholder="joao@empresa.com" required></div>
+      <div class="form-group"><label class="form-label">Perfil</label>
+        <select class="form-select" id="inv-role">
+          ${roles.map(r => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Equipe (opcional)</label><input class="form-input" id="inv-team" type="text" placeholder="Engenharia, Vendas…"></div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-invite-submit" type="button">Enviar convite</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-invite-submit')?.addEventListener('click', () => {
+      const name = document.getElementById('inv-name')?.value.trim();
+      const email = document.getElementById('inv-email')?.value.trim();
+      const roleId = document.getElementById('inv-role')?.value;
+      const team = document.getElementById('inv-team')?.value.trim();
+      if (!name || !email) { toast('Preencha nome e e-mail.', 'error', 'Erro'); return; }
+      mutate('member.invite', {name, email, roleId, team}, `Convite enviado para ${email}.`, 'Convite enviado');
+    });
+  }
+
+  function openRoleCreateModal() {
+    const permissions = ['org.read','org.update','members.read','members.*','teams.*','analytics.read','billing.read','billing.*','security.*','intelligence.read','intelligence.*','workspace.*'];
+    openModal('Novo Perfil', `
+      <div class="form-group"><label class="form-label">Nome do perfil</label><input class="form-input" id="role-name" type="text" placeholder="Ex: Gerente de Projetos" required></div>
+      <div class="form-group"><label class="form-label">Permissões</label>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:4px">
+          ${permissions.map(p => `<label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--text-secondary)"><input type="checkbox" value="${p}" style="accent-color:#6366F1"> ${p}</label>`).join('')}
+        </div>
+      </div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-role-submit" type="button">Criar perfil</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-role-submit')?.addEventListener('click', () => {
+      const name = document.getElementById('role-name')?.value.trim();
+      const perms = [...document.querySelectorAll('#modal-body input[type=checkbox]:checked')].map(el => el.value);
+      if (!name) { toast('Informe o nome do perfil.', 'error', 'Erro'); return; }
+      mutate('role.create', {name, permissions: perms}, `Perfil "${name}" criado.`, 'Perfil criado');
+    });
+  }
+
+  function openOrgEditModal() {
+    const org = state.data?.organization || {};
+    openModal('Editar Organização', `
+      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="org-name" type="text" value="${esc(org.name||'')}"></div>
+      <div class="form-group"><label class="form-label">Domínio</label><input class="form-input" id="org-domain" type="text" value="${esc(org.domain||'')}"></div>
+      <div class="form-group"><label class="form-label">Setor</label><input class="form-input" id="org-industry" type="text" value="${esc(org.industry||'')}"></div>
+      <div class="form-group"><label class="form-label">Tamanho</label>
+        <select class="form-select" id="org-size">
+          ${['1-10','11-50','51-200','201-500','500+'].map(s => `<option ${org.size===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-org-submit" type="button">Salvar</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-org-submit')?.addEventListener('click', () => {
+      mutate('org.update', {
+        name: document.getElementById('org-name')?.value.trim(),
+        domain: document.getElementById('org-domain')?.value.trim(),
+        industry: document.getElementById('org-industry')?.value.trim(),
+        size: document.getElementById('org-size')?.value,
+      }, 'Organização atualizada.', 'Salvo');
+    });
+  }
+
+  function openWorkspaceCreateModal() {
+    openModal('Criar Workspace', `
+      <div class="form-group"><label class="form-label">Nome do workspace</label><input class="form-input" id="ws-name" type="text" placeholder="Ex: Produto & Tecnologia"></div>
+      <div class="form-group"><label class="form-label">Tipo</label>
+        <select class="form-select" id="ws-type">
+          <option value="strategy">Estratégia</option>
+          <option value="operations">Operações</option>
+          <option value="product">Produto</option>
+          <option value="engineering">Engenharia</option>
+          <option value="general">Geral</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-input" id="ws-desc" rows="3" placeholder="Descreva o propósito deste workspace…" style="height:auto;padding:8px 10px;resize:vertical"></textarea></div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-ws-submit" type="button">Criar workspace</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-ws-submit')?.addEventListener('click', () => {
+      const name = document.getElementById('ws-name')?.value.trim();
+      if (!name) { toast('Nome é obrigatório.', 'error', 'Erro'); return; }
+      mutate('workspace.create', {
+        name,
+        type: document.getElementById('ws-type')?.value,
+        description: document.getElementById('ws-desc')?.value.trim(),
+      }, `Workspace "${name}" criado.`, 'Criado');
+    });
+  }
+  // ── EVENT DELEGATION ──
+  function handleClick(e) {
+    const target = e.target.closest('[data-view],[data-action],[data-cmd-view]');
+    if (!target) return;
+
+    // Navigation
+    if (target.dataset.view) { navigate(target.dataset.view); return; }
+
+    // Command palette item
+    if (target.dataset.cmdView) { navigate(target.dataset.cmdView); closeCmdPalette(); return; }
+
+    // Actions
+    const action = target.dataset.action;
+    if (!action) return;
+
+    switch (action) {
+      case 'member.invite': openMemberInviteModal(); break;
+      case 'member.remove': {
+        const id = target.dataset.id;
+        if (confirm('Remover este membro da organização?')) mutate('member.remove', {id}, 'Membro removido.', 'Removido');
+        break;
+      }
+      case 'member.edit': toast('Edição de membro disponível em breve.', 'info', 'Em breve'); break;
+      case 'role.create': openRoleCreateModal(); break;
+      case 'role.edit': toast('Edição de perfil disponível em breve.', 'info', 'Em breve'); break;
+      case 'org.edit': openOrgEditModal(); break;
+      case 'org.delete': if (confirm('ATENÇÃO: Esta ação é irreversível. Deseja realmente encerrar a organização?')) toast('Operação cancelada por segurança. Contate o suporte.', 'warning', 'Segurança'); break;
+      case 'plan.change': {
+        const plan = target.dataset.plan;
+        if (confirm(`Confirmar mudança para o plano ${plan}?`)) mutate('plan.change', {plan}, `Plano alterado para ${plan}.`, 'Plano atualizado');
+        break;
+      }
+      case 'invoice.download': toast('Gerando PDF da fatura…', 'info', 'Download'); break;
+      case 'audit.export': exportAudit(); break;
+      case 'data.export': toast('Exportação iniciada. Você receberá um e-mail com o arquivo.', 'info', 'Exportação'); break;
+      case 'system.refresh': mutate('system.refresh', {}, 'Diagnóstico atualizado.', 'Sistema'); break;
+      case 'workspace.create': openWorkspaceCreateModal(); break;
+      case 'workspace.open': toast('Abrindo workspace…', 'info', 'Workspace'); break;
+      case 'device.revoke': {
+        const id = target.dataset.id;
+        if (confirm('Revogar esta sessão?')) mutate('device.revoke', {id}, 'Sessão revogada.', 'Segurança');
+        break;
+      }
+      case 'intelligence.resolve': mutate('intelligence.resolve', {id: target.dataset.id, status: target.dataset.status}, 'Insight tratado.', 'Companion'); break;
+      case 'notifications.markAll': mutate('notifications.markAll', {}, 'Todas as notificações marcadas como lidas.', 'Notificações'); break;
+      case 'notification.read': mutate('notification.read', {id: target.dataset.id}, 'Notificação lida.', ''); break;
+      case 'profile.save': toast('Perfil salvo com sucesso.', 'success', 'Perfil'); break;
+      case 'profile.changePassword': toast('Senha alterada com sucesso.', 'success', 'Senha'); break;
+      case 'security.savePolicy': toast('Política de senhas salva.', 'success', 'Segurança'); break;
+      case 'api.regenerate': if (confirm('Regenerar a API Key? A chave atual será invalidada.')) toast('Nova API Key gerada. Verifique seu e-mail.', 'success', 'API Key'); break;
+      default: toast(`Ação "${action}" executada.`, 'info'); break;
+    }
+  }
+
+  function exportAudit() {
+    const audit = state.data?.auditLog || [];
+    const csv = ['Data,Ator,Ação,Detalhe,IP', ...audit.map(l => `"${l.createdAt}","${l.actor}","${l.action}","${l.detail}","${l.ip||''}"`).join('\n')].join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'audit-log.csv'; a.click();
+    URL.revokeObjectURL(url);
+    toast('Log de auditoria exportado.', 'success', 'Exportado');
+  }
+
+  // ── KEYBOARD SHORTCUTS ──
+  function handleKeydown(e) {
+    // Cmd/Ctrl+K → Command Palette
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmdPalette(); return; }
+    // ESC → close modals/palette
+    if (e.key === 'Escape') {
+      if (document.getElementById('cmd-overlay').classList.contains('open')) { closeCmdPalette(); return; }
+      closeModal();
+      return;
+    }
+    // Arrow keys in command palette
+    if (document.getElementById('cmd-overlay').classList.contains('open')) {
+      const items = document.querySelectorAll('.cmd-item');
+      if (e.key === 'ArrowDown') { e.preventDefault(); cmdSelected = Math.min(cmdSelected+1, items.length-1); items.forEach((el,i) => el.classList.toggle('selected', i===cmdSelected)); items[cmdSelected]?.scrollIntoView({block:'nearest'}); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); cmdSelected = Math.max(cmdSelected-1, 0); items.forEach((el,i) => el.classList.toggle('selected', i===cmdSelected)); items[cmdSelected]?.scrollIntoView({block:'nearest'}); }
+      if (e.key === 'Enter') { items[cmdSelected]?.click(); }
+    }
+  }
+
+  // ── INIT ──
+  async function init() {
+    document.addEventListener('click', handleClick);
+    document.addEventListener('keydown', handleKeydown);
+
+    // Modal close
+    document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
+    document.getElementById('modal-backdrop')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+    // Logout
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      try { await fetch('/api/admin-logout', {method:'POST',credentials:'same-origin'}); } catch(_) {}
+      location.replace('/login');
+    });
+
+    // Search
+    document.getElementById('global-search')?.addEventListener('input', e => {
+      state.query = e.target.value.trim().toLowerCase();
+      if (state.view === 'members') renderMembers();
+    });
+
+    // Topbar search → open cmd palette
+    document.getElementById('topbar-search-btn')?.addEventListener('click', e => {
+      if (e.target === document.getElementById('global-search')) return;
+      openCmdPalette();
+    });
+
+    // Cmd palette input
+    document.getElementById('cmd-input')?.addEventListener('input', e => renderCmdResults(e.target.value.trim().toLowerCase()));
+    document.getElementById('cmd-overlay')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeCmdPalette(); });
+
+    // Notification bell
+    document.getElementById('notif-btn')?.addEventListener('click', () => navigate('notifications'));
+
+    // Export btn
+    document.getElementById('export-btn')?.addEventListener('click', exportAudit);
+
+    // New action btn
+    document.getElementById('new-action-btn')?.addEventListener('click', () => {
+      if (state.view === 'members') openMemberInviteModal();
+      else if (state.view === 'roles') openRoleCreateModal();
+      else navigate('intelligence');
+    });
+
+    // Mobile menu
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('mobile-open');
+    });
+
+    // Sidebar logo → command
+    document.getElementById('sidebar-logo-btn')?.addEventListener('click', () => navigate('command'));
+
+    // Org selector
+    document.getElementById('org-selector')?.addEventListener('click', () => navigate('organization'));
+
+    // Topbar date
+    document.getElementById('topbar-date').textContent = '· ' + new Intl.DateTimeFormat('pt-BR', {dateStyle:'full'}).format(new Date());
+
+    // Mobile menu visibility
+    if (window.innerWidth <= 768) {
+      document.getElementById('mobile-menu-btn').style.display = 'flex';
+    }
+
+    // Load data
+    try {
+      await request();
+      // Update UI with org/user data
+      const org = state.data?.organization || {};
+      const user = state.data?.members?.[0] || {};
+      document.getElementById('sidebar-org-name').textContent = org.name || 'Organização';
+      document.getElementById('sidebar-org-plan').textContent = state.data?.subscription?.plan || 'Enterprise';
+      document.getElementById('sidebar-org-avatar').textContent = (org.name||'O').charAt(0).toUpperCase();
+      document.getElementById('sidebar-user-name').textContent = user.name || 'Administrador';
+      document.getElementById('sidebar-user-role').textContent = user.roleId ? (state.data?.roles?.find(r=>r.id===user.roleId)?.name || 'Admin') : 'Administrador';
+      document.getElementById('sidebar-user-avatar').textContent = (user.name||'A').charAt(0).toUpperCase();
+
+      // Intelligence badge
+      const openInsights = (state.data?.intelligence||[]).filter(i=>i.status==='open').length;
+      const badge = document.getElementById('nav-intelligence-count');
+      if (openInsights > 0 && badge) { badge.textContent = openInsights; badge.style.display = 'flex'; }
+
+      // Notification dot
+      const unread = (state.data?.notifications||[]).filter(n=>!n.read).length;
+      if (unread > 0) document.getElementById('notif-dot').style.display = 'block';
+
+      // Navigate to hash or default
+      const hash = location.hash.slice(1);
+      navigate(viewTitles[hash] ? hash : 'command');
+
+      document.body.style.visibility = 'visible';
+    } catch (err) {
+      document.getElementById('command-content').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-title">Erro ao carregar</div>
+          <div class="empty-state-desc">${esc(err.message)}</div>
+          <button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button>
+        </div>`;
+      document.getElementById('view-command').classList.add('active');
+      document.body.style.visibility = 'visible';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
+})();
+</script>
 </body>
 </html>
