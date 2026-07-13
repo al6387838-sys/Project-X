@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Master Admin Panel | Enterprise Premium v2.1" />
+  <meta name="description" content="LifeOS — Master Admin Panel | Enterprise Premium v3.0" />
   <title>Master Admin Panel — LifeOS Enterprise</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,691 +18,183 @@
   <link rel="stylesheet" href="../animations/premium_motion.css" />
   
   <style>
-    /* ============================================================
-       ADMIN LAYOUT
-    ============================================================ */
-    .admin-shell {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      background: var(--bg-base);
-    }
-
-    .admin-sidebar {
-      width: var(--sidebar-width);
-      background: var(--bg-elevated);
-      border-right: 1px solid var(--border-default);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: var(--z-raised);
-    }
-
-    .admin-sidebar-header {
-      padding: var(--space-6);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .admin-sidebar-logo {
-      width: 40px;
-      height: 40px;
-      background: var(--gradient-primary);
-      border-radius: var(--radius-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: var(--font-bold);
-      color: #FFFFFF;
-      font-size: var(--text-xl);
-    }
-
-    .admin-sidebar-title {
-      font-size: var(--text-base);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-    }
-
-    .admin-sidebar-nav {
-      flex: 1;
-      padding: var(--space-4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-
-    .admin-sidebar-section {
-      margin-bottom: var(--space-4);
-    }
-
-    .admin-sidebar-section-title {
-      font-size: var(--text-xs);
-      font-weight: var(--font-bold);
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0 var(--space-3);
-      margin-bottom: var(--space-2);
-    }
-
-    .admin-sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-4);
-      border-radius: var(--radius-md);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
-      text-decoration: none;
-      font-size: var(--text-base);
-      border-left: 3px solid transparent;
-    }
-
-    .admin-sidebar-item:hover {
-      background: var(--bg-surface-1);
-      color: var(--text-primary);
-    }
-
-    .admin-sidebar-item.active {
-      background: rgba(91, 127, 255, 0.15);
-      color: var(--brand-primary-400);
-      border-left-color: var(--brand-primary-600);
-    }
-
-    .admin-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .admin-topbar {
-      height: var(--topbar-height);
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--space-6);
-      gap: var(--space-6);
-    }
-
-    .admin-topbar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      flex: 1;
-    }
-
-    .admin-topbar-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-    }
-
-    .admin-topbar-right {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-    }
-
-    .admin-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: var(--space-6);
-    }
-
-    /* ============================================================
-       ADMIN SECTIONS
-    ============================================================ */
-
-    .admin-section {
-      margin-bottom: var(--space-8);
-    }
-
-    .admin-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-4);
-    }
-
-    .admin-section-title {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-    }
-
-    .admin-section-actions {
-      display: flex;
-      gap: var(--space-3);
-    }
-
-    /* Admin Table */
-    .admin-table-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-    }
-
-    .admin-table-header {
-      padding: var(--space-6);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .admin-table-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-    }
-
-    .admin-table-filters {
-      display: flex;
-      gap: var(--space-3);
-    }
-
-    .admin-table-wrapper {
-      overflow-x: auto;
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .admin-table thead {
-      background: var(--bg-surface-1);
-      border-bottom: 1px solid var(--border-default);
-    }
-
-    .admin-table th {
-      padding: var(--space-4);
-      text-align: left;
-      font-weight: var(--font-semibold);
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .admin-table td {
-      padding: var(--space-4);
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: var(--text-base);
-      color: var(--text-primary);
-    }
-
-    .admin-table tbody tr:hover {
-      background: var(--bg-surface-1);
-    }
-
-    .admin-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    /* Status Badge */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: var(--font-medium);
-    }
-
-    .status-badge.active {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--status-success-500);
-    }
-
-    .status-badge.inactive {
-      background: rgba(100, 116, 139, 0.15);
-      color: var(--text-tertiary);
-    }
-
-    .status-badge.suspended {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--status-danger-600);
-    }
-
-    .status-badge.pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--status-warning-500);
-    }
-
-    /* Action Buttons */
-    .action-buttons {
-      display: flex;
-      gap: var(--space-2);
-    }
-
-    .action-btn {
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      border-radius: var(--radius-sm);
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: var(--text-base);
-    }
-
-    .action-btn:hover {
-      background: var(--bg-surface-1);
-      color: var(--text-primary);
-      border-color: var(--border-default);
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-4);
-      margin-bottom: var(--space-6);
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4);
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-    }
-
-    .stat-label {
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-    }
-
-    /* Responsive */
+    .admin-shell { display: flex; height: 100vh; overflow: hidden; background: var(--bg-base); }
+    .admin-sidebar { width: var(--sidebar-width); background: var(--bg-elevated); border-right: 1px solid var(--border-default); display: flex; flex-direction: column; overflow-y: auto; z-index: var(--z-raised); }
+    .admin-sidebar-header { padding: var(--space-6); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; gap: var(--space-3); }
+    .admin-sidebar-logo { width: 40px; height: 40px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-weight: var(--font-bold); color: #FFFFFF; font-size: var(--text-xl); }
+    .admin-sidebar-title { font-size: var(--text-base); font-weight: var(--font-bold); color: var(--text-primary); }
+    .admin-sidebar-nav { flex: 1; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+    .admin-sidebar-section { margin-bottom: var(--space-4); }
+    .admin-sidebar-section-title { font-size: var(--text-xs); font-weight: var(--font-bold); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 var(--space-3); margin-bottom: var(--space-2); }
+    .admin-sidebar-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; transition: all var(--duration-normal) var(--ease-out); text-decoration: none; font-size: var(--text-base); border-left: 3px solid transparent; }
+    .admin-sidebar-item:hover { background: var(--bg-surface-1); color: var(--text-primary); }
+    .admin-sidebar-item.active { background: rgba(91, 127, 255, 0.15); color: var(--brand-primary-400); border-left-color: var(--brand-primary-600); }
+    .admin-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .admin-topbar { height: var(--topbar-height); background: var(--bg-card); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--space-6); gap: var(--space-6); }
+    .admin-topbar-left { display: flex; align-items: center; gap: var(--space-4); flex: 1; }
+    .admin-topbar-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); }
+    .admin-topbar-right { display: flex; align-items: center; gap: var(--space-4); }
+    .admin-content { flex: 1; overflow-y: auto; padding: var(--space-6); }
+    .admin-section { margin-bottom: var(--space-8); }
+    .admin-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+    .admin-section-title { font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--text-primary); }
+    .admin-section-actions { display: flex; gap: var(--space-3); }
+    .admin-table-container { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-xl); overflow: hidden; }
+    .admin-table-header { padding: var(--space-6); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; }
+    .admin-table-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); }
+    .admin-table-filters { display: flex; gap: var(--space-3); }
+    .admin-table-wrapper { overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table thead { background: var(--bg-surface-1); border-bottom: 1px solid var(--border-default); }
+    .admin-table th { padding: var(--space-4); text-align: left; font-weight: var(--font-semibold); font-size: var(--text-sm); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .admin-table td { padding: var(--space-4); border-bottom: 1px solid var(--border-subtle); font-size: var(--text-base); color: var(--text-primary); }
+    .admin-table tbody tr:hover { background: var(--bg-surface-1); }
+    .admin-table tbody tr:last-child td { border-bottom: none; }
+    .status-badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--font-medium); }
+    .status-badge.active { background: rgba(16, 185, 129, 0.15); color: var(--status-success-500); }
+    .status-badge.inactive { background: rgba(100, 116, 139, 0.15); color: var(--text-tertiary); }
+    .status-badge.suspended { background: rgba(239, 68, 68, 0.15); color: var(--status-danger-600); }
+    .status-badge.pending { background: rgba(245, 158, 11, 0.15); color: var(--status-warning-500); }
+    .action-buttons { display: flex; gap: var(--space-2); }
+    .action-btn { width: 32px; height: 32px; padding: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-secondary); border: 1px solid transparent; cursor: pointer; transition: all var(--duration-normal) var(--ease-out); display: flex; align-items: center; justify-content: center; font-size: var(--text-base); }
+    .action-btn:hover { background: var(--bg-surface-1); color: var(--text-primary); border-color: var(--border-default); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: var(--space-4); text-align: center; }
+    .stat-value { font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--text-primary); margin-bottom: var(--space-2); }
+    .stat-label { font-size: var(--text-sm); color: var(--text-secondary); }
     @media (max-width: 768px) {
-      .admin-sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-default);
-        flex-direction: row;
-        overflow-x: auto;
-      }
-
-      .admin-sidebar-nav {
-        flex-direction: row;
-        flex: 1;
-      }
-
-      .admin-content {
-        padding: var(--space-4);
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-section-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .admin-section-actions {
-        width: 100%;
-        margin-top: var(--space-3);
-      }
+      .admin-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-default); flex-direction: row; overflow-x: auto; }
+      .admin-sidebar-nav { flex-direction: row; flex: 1; }
+      .admin-content { padding: var(--space-4); }
+      .stats-grid { grid-template-columns: 1fr; }
+      .admin-section-header { flex-direction: column; align-items: flex-start; }
+      .admin-section-actions { width: 100%; margin-top: var(--space-3); }
     }
   </style>
 </head>
 <body>
   <div class="admin-shell">
-    <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="admin-sidebar-header">
         <div class="admin-sidebar-logo">⚙️</div>
         <div class="admin-sidebar-title">Admin</div>
       </div>
-
       <nav class="admin-sidebar-nav">
-        <!-- Dashboard -->
         <div class="admin-sidebar-section">
           <div class="admin-sidebar-section-title">Dashboard</div>
-          <a href="#" class="admin-sidebar-item active">📊 Overview</a>
-          <a href="#" class="admin-sidebar-item">📈 Analytics</a>
+          <a href="#overview" class="admin-sidebar-item active" data-view="overview">📊 Overview</a>
         </div>
-
-        <!-- Management -->
         <div class="admin-sidebar-section">
           <div class="admin-sidebar-section-title">Gerenciamento</div>
-          <a href="#" class="admin-sidebar-item">👥 Usuários</a>
-          <a href="#" class="admin-sidebar-item">🏢 Organizações</a>
-          <a href="#" class="admin-sidebar-item">👔 Workspaces</a>
-          <a href="#" class="admin-sidebar-item">🔐 Permissões</a>
+          <a href="#members" class="admin-sidebar-item" data-view="members">👥 Membros</a>
+          <a href="#organization" class="admin-sidebar-item" data-view="organization">🏢 Organização</a>
         </div>
-
-        <!-- Billing & Finance -->
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section-title">Faturamento</div>
-          <a href="#" class="admin-sidebar-item">💰 Billing</a>
-          <a href="#" class="admin-sidebar-item">📄 Invoices</a>
-          <a href="#" class="admin-sidebar-item">💳 Planos</a>
-        </div>
-
-        <!-- Security & Compliance -->
-        <div class="admin-sidebar-section">
-          <div class="admin-sidebar-section-title">Segurança</div>
-          <a href="#" class="admin-sidebar-item">🔒 Segurança</a>
-          <a href="#" class="admin-sidebar-item">📋 Auditoria</a>
-          <a href="#" class="admin-sidebar-item">🔑 API Keys</a>
-          <a href="#" class="admin-sidebar-item">⚡ Feature Flags</a>
-        </div>
-
-        <!-- System -->
         <div class="admin-sidebar-section">
           <div class="admin-sidebar-section-title">Sistema</div>
-          <a href="#" class="admin-sidebar-item">📦 Deployments</a>
-          <a href="#" class="admin-sidebar-item">📊 Logs</a>
-          <a href="#" class="admin-sidebar-item">🔌 Integrações</a>
-          <a href="#" class="admin-sidebar-item">⚙️ Configurações</a>
+          <a href="#compliance" class="admin-sidebar-item" data-view="compliance">📋 Auditoria</a>
+          <a href="/enterprise" class="admin-sidebar-item">← Voltar</a>
         </div>
       </nav>
     </aside>
-
-    <!-- Main Content -->
     <div class="admin-main">
-      <!-- Topbar -->
       <header class="admin-topbar">
-        <div class="admin-topbar-left">
-          <div class="admin-topbar-title">Master Admin Panel</div>
-        </div>
+        <div class="admin-topbar-left"><div class="admin-topbar-title">Master Admin Panel</div></div>
         <div class="admin-topbar-right">
-          <button class="enterprise-btn-icon">🔔</button>
-          <button class="enterprise-btn-icon">👤</button>
+          <span class="admin-user-name" style="font-size: var(--text-sm); color: var(--text-secondary);">Carregando...</span>
+          <button class="enterprise-btn ghost" onclick="location.replace('/enterprise')">Sair</button>
         </div>
       </header>
-
-      <!-- Content -->
-      <main class="admin-content">
-        <!-- Stats Overview -->
-        <div class="admin-section">
-          <div class="admin-section-header">
-            <h2 class="admin-section-title">System Overview</h2>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-value">2.847</div>
-              <div class="stat-label">Usuários Ativos</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">156</div>
-              <div class="stat-label">Organizações</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">94/100</div>
-              <div class="stat-label">Health Score</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value">99.98%</div>
-              <div class="stat-label">Uptime</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Users Management -->
-        <div class="admin-section">
-          <div class="admin-section-header">
-            <h2 class="admin-section-title">Gerenciamento de Usuários</h2>
-            <div class="admin-section-actions">
-              <button class="enterprise-btn enterprise-btn-primary enterprise-btn-sm">
-                + Novo Usuário
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-container">
-            <div class="admin-table-header">
-              <div class="admin-table-title">Usuários Registrados</div>
-              <div class="admin-table-filters">
-                <input class="enterprise-input enterprise-input-sm" type="search" placeholder="Buscar..." />
-              </div>
-            </div>
-
-            <div class="admin-table-wrapper">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Organização</th>
-                    <th>Plano</th>
-                    <th>Status</th>
-                    <th>Criado em</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>João Silva</td>
-                    <td>joao@techcorp.com</td>
-                    <td>TechCorp Inc.</td>
-                    <td>Enterprise</td>
-                    <td><span class="status-badge active">● Ativo</span></td>
-                    <td>2026-01-15</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Maria Santos</td>
-                    <td>maria@innovate.com</td>
-                    <td>Innovate Labs</td>
-                    <td>Professional</td>
-                    <td><span class="status-badge active">● Ativo</span></td>
-                    <td>2026-02-20</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Carlos Oliveira</td>
-                    <td>carlos@startup.io</td>
-                    <td>StartUp XYZ</td>
-                    <td>Starter</td>
-                    <td><span class="status-badge pending">● Pendente</span></td>
-                    <td>2026-03-10</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Organizations Management -->
-        <div class="admin-section">
-          <div class="admin-section-header">
-            <h2 class="admin-section-title">Gerenciamento de Organizações</h2>
-            <div class="admin-section-actions">
-              <button class="enterprise-btn enterprise-btn-primary enterprise-btn-sm">
-                + Nova Organização
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-container">
-            <div class="admin-table-header">
-              <div class="admin-table-title">Organizações Ativas</div>
-              <div class="admin-table-filters">
-                <input class="enterprise-input enterprise-input-sm" type="search" placeholder="Buscar..." />
-              </div>
-            </div>
-
-            <div class="admin-table-wrapper">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Membros</th>
-                    <th>Plano</th>
-                    <th>MRR</th>
-                    <th>Status</th>
-                    <th>Criado em</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>TechCorp Inc.</td>
-                    <td>45</td>
-                    <td>Enterprise</td>
-                    <td>R$ 5.000</td>
-                    <td><span class="status-badge active">● Ativo</span></td>
-                    <td>2026-01-15</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Innovate Labs</td>
-                    <td>28</td>
-                    <td>Professional</td>
-                    <td>R$ 1.500</td>
-                    <td><span class="status-badge active">● Ativo</span></td>
-                    <td>2026-02-20</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>StartUp XYZ</td>
-                    <td>8</td>
-                    <td>Starter</td>
-                    <td>R$ 0</td>
-                    <td><span class="status-badge suspended">● Suspenso</span></td>
-                    <td>2026-03-10</td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">✏️</button>
-                        <button class="action-btn">🔍</button>
-                        <button class="action-btn">🗑️</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Billing Management -->
-        <div class="admin-section">
-          <div class="admin-section-header">
-            <h2 class="admin-section-title">Gerenciamento de Faturamento</h2>
-          </div>
-
-          <div class="admin-table-container">
-            <div class="admin-table-header">
-              <div class="admin-table-title">Invoices Recentes</div>
-              <div class="admin-table-filters">
-                <select class="enterprise-select" style="width: 150px;">
-                  <option>Todos os Status</option>
-                  <option>Pago</option>
-                  <option>Pendente</option>
-                  <option>Vencido</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="admin-table-wrapper">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Invoice</th>
-                    <th>Organização</th>
-                    <th>Valor</th>
-                    <th>Data</th>
-                    <th>Vencimento</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>#INV-2026-0847</td>
-                    <td>TechCorp Inc.</td>
-                    <td>R$ 5.000</td>
-                    <td>2026-07-01</td>
-                    <td>2026-07-31</td>
-                    <td><span class="status-badge active">● Pago</span></td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">📄</button>
-                        <button class="action-btn">🔍</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#INV-2026-0846</td>
-                    <td>Innovate Labs</td>
-                    <td>R$ 1.500</td>
-                    <td>2026-07-05</td>
-                    <td>2026-08-05</td>
-                    <td><span class="status-badge pending">● Pendente</span></td>
-                    <td>
-                      <div class="action-buttons">
-                        <button class="action-btn">📄</button>
-                        <button class="action-btn">🔍</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </main>
+      <main class="admin-content" id="admin-view-root"></main>
     </div>
   </div>
-
-  <!-- Toast Stack -->
   <div class="enterprise-toast-stack"></div>
+  <script>
+    // Integration with enterprise-data API
+    (() => {
+      const API = '/.netlify/functions/enterprise-data';
+      const state = { data: null, view: 'overview' };
+      const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+      const fmtDate = (v, t = false) => v ? new Intl.DateTimeFormat('pt-BR', t ? { dateStyle: 'short', timeStyle: 'short' } : { dateStyle: 'medium' }).format(new Date(v)) : '—';
+      const money = (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
+
+      async function request() {
+        const response = await fetch(API);
+        if (response.status === 401) return location.replace('/login');
+        const result = await response.json();
+        state.data = result.data;
+        return result.data;
+      }
+
+      function renderOverview() {
+        const sys = state.data.system;
+        const sub = state.data.subscription;
+        return `
+          <div class="admin-section">
+            <div class="admin-section-header"><h2 class="admin-section-title">System Overview</h2></div>
+            <div class="stats-grid">
+              <div class="stat-card"><div class="stat-value">${state.data.members.length}</div><div class="stat-label">Membros</div></div>
+              <div class="stat-card"><div class="stat-value">${sys.uptime}%</div><div class="stat-label">Uptime</div></div>
+              <div class="stat-card"><div class="stat-value">${sys.apiP95}ms</div><div class="stat-label">Latência p95</div></div>
+              <div class="stat-card"><div class="stat-value">${money(sub.monthlyValue)}</div><div class="stat-label">MRR</div></div>
+            </div>
+          </div>
+          <div class="admin-section">
+            <div class="admin-section-header"><h2 class="admin-section-title">Auditoria Recente</h2></div>
+            <div class="admin-table-container">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead><tr><th>Data</th><th>Ator</th><th>Evento</th><th>Detalhe</th></tr></thead>
+                  <tbody>
+                    ${state.data.auditLog.slice(0, 10).map(log => `
+                      <tr><td>${fmtDate(log.createdAt, true)}</td><td>${esc(log.actor)}</td><td>${esc(log.action)}</td><td>${esc(log.detail)}</td></tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderMembers() {
+        return `
+          <div class="admin-section">
+            <div class="admin-section-header"><h2 class="admin-section-title">Gerenciamento de Membros</h2></div>
+            <div class="admin-table-container">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead><tr><th>Nome</th><th>Email</th><th>Equipe</th><th>Status</th><th>Última atividade</th></tr></thead>
+                  <tbody>
+                    ${state.data.members.map(m => `
+                      <tr><td>${esc(m.name)}</td><td>${esc(m.email)}</td><td>${esc(m.team)}</td><td><span class="status-badge ${m.status === 'active' ? 'active' : 'pending'}">${esc(m.status)}</span></td><td>${fmtDate(m.lastActiveAt, true)}</td></tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function render(view) {
+        state.view = view || 'overview';
+        document.querySelectorAll('.admin-sidebar-item').forEach(l => l.classList.toggle('active', l.dataset.view === state.view));
+        const root = document.getElementById('admin-view-root');
+        if (state.view === 'overview') root.innerHTML = renderOverview();
+        else if (state.view === 'members') root.innerHTML = renderMembers();
+        else root.innerHTML = renderOverview();
+      }
+
+      async function init() {
+        await request();
+        document.querySelector('.admin-user-name').textContent = state.data.members[0]?.name || 'Admin';
+        document.querySelectorAll('.admin-sidebar-item[data-view]').forEach(item => {
+          item.addEventListener('click', (e) => { e.preventDefault(); render(item.dataset.view); });
+        });
+        render('overview');
+      }
+      init();
+    })();
+  </script>
 </body>
 </html>

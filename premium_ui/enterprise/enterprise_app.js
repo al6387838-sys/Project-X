@@ -58,16 +58,61 @@
     }
   }
 
-  function cards(items) {
-    return `<div class="enterprise-grid">${items.join('')}</div>`;
-  }
+  function cards(items) { return `<div class="enterprise-grid">${items.join('')}</div>`; }
+  function card(title, content, className = '') { return `<article class="enterprise-card ${className}"><h3>${title}</h3>${content}</article>`; }
+  function toolbar(title, subtitle = '', actions = '') { return `<div class="enterprise-toolbar"><div><div class="enterprise-kicker">LifeOS Enterprise v3.0</div><h2>${title}</h2>${subtitle ? `<p class="enterprise-secondary">${subtitle}</p>` : ''}</div><div class="enterprise-actions">${actions}</div></div>`; }
 
-  function card(title, content, className = '') {
-    return `<article class="enterprise-card ${className}"><h3>${title}</h3>${content}</article>`;
-  }
+  function renderCommand() {
+    const sys = state.data.system;
+    const sub = state.data.subscription;
+    const insights = state.data.intelligence.filter(i => i.status === 'open');
+    const recentAudit = state.data.auditLog.slice(0, 5);
 
-  function toolbar(title, subtitle = '', actions = '') {
-    return `<div class="enterprise-toolbar"><div><div class="enterprise-kicker">LifeOS Enterprise v2.1</div><h2>${title}</h2>${subtitle ? `<p class="enterprise-secondary">${subtitle}</p>` : ''}</div><div class="enterprise-actions">${actions}</div></div>`;
+    return `
+      <div class="alert-banner animate-slide-in-down">
+        <span class="alert-icon">◈</span>
+        <span class="alert-text"><strong>Companion:</strong> ${insights.length > 0 ? `${insights[0].title}. Impacto: ${insights[0].impact.toUpperCase()}.` : 'Ambiente operacional estável e seguro.'}</span>
+        <span class="alert-action" onclick="window.enterpriseApp.render('intelligence')">Revisar insights →</span>
+      </div>
+      <div class="section-header"><span class="section-title">Métricas Executivas</span><span class="section-action">Dados em tempo real</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card animate-fade-in" style="animation-delay: 0.1s">
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">◈</div><div class="kpi-trend up">↑ ${sys.uptime}%</div></div>
+          <div class="kpi-value" style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.uptime}%</div>
+          <div class="kpi-label">Uptime do Sistema</div>
+          <div class="kpi-sub">Região: ${sys.region}</div>
+        </div>
+        <div class="kpi-card animate-fade-in" style="animation-delay: 0.2s">
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">◎</div><div class="kpi-trend up">Estável</div></div>
+          <div class="kpi-value" style="color:var(--success-500)">${sys.apiP95}ms</div>
+          <div class="kpi-label">Latência p95</div>
+          <div class="kpi-sub">Taxa de erro: ${sys.errorRate}%</div>
+        </div>
+        <div class="kpi-card animate-fade-in" style="animation-delay: 0.3s">
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">◇</div><div class="kpi-trend">${sub.plan}</div></div>
+          <div class="kpi-value" style="color:var(--warning-500)">${state.data.members.length}</div>
+          <div class="kpi-label">Membros Ativos</div>
+          <div class="kpi-sub">Limite: ${sub.seats} assentos</div>
+        </div>
+        <div class="kpi-card animate-fade-in" style="animation-delay: 0.4s">
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(236,72,153,0.12)">◬</div><div class="kpi-trend">BRL</div></div>
+          <div class="kpi-value" style="color:var(--danger-400)">${money(sub.monthlyValue)}</div>
+          <div class="kpi-label">MRR Consolidado</div>
+          <div class="kpi-sub">Renovação: ${fmtDate(sub.renewalAt)}</div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="enterprise-card full animate-fade-in" style="animation-delay: 0.5s">
+          <h3>Atividade Recente</h3>
+          <div class="enterprise-table-wrap">
+            <table class="enterprise-table enterprise-audit">
+              <thead><tr><th>Data</th><th>Ator</th><th>Evento</th><th>Detalhe</th></tr></thead>
+              <tbody>${recentAudit.map(log => `<tr><td>${fmtDate(log.createdAt, true)}</td><td><strong>${esc(log.actor)}</strong></td><td>${esc(log.action)}</td><td>${esc(log.detail)}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   function renderOrganization() {
@@ -144,10 +189,9 @@
 
   function renderAdmin() {
     const sys = state.data.system;
-    return toolbar('Admin Center', 'Saúde da plataforma, uso, usuários e operação.', '<a class="enterprise-btn" href="/beta/admin">Abrir console beta</a><button class="enterprise-btn primary" data-refresh-system>Atualizar diagnóstico</button>') + cards([
+    return toolbar('Admin Center', 'Saúde da plataforma, uso, usuários e operação.', '<button class="enterprise-btn primary" data-refresh-system>Atualizar diagnóstico</button>') + cards([
       card('Status', `<div class="enterprise-stat">${esc(sys.uptime)}%</div><p>disponibilidade consolidada</p><div class="enterprise-divider"></div>${statusBadge(sys.status)}`),
       card('API p95', `<div class="enterprise-stat">${esc(sys.apiP95)}ms</div><p>latência de resposta</p><div class="enterprise-divider"></div><p>Taxa de erro: <strong>${esc(sys.errorRate)}%</strong></p>`),
-      card('Armazenamento', `<div class="enterprise-stat">${esc(sys.storageGb)} GB</div><p>de ${esc(sys.storageLimitGb)} GB</p><div class="enterprise-progress"><span style="width:${Number(sys.storageGb) / Number(sys.storageLimitGb) * 100}%"></span></div>`),
       card('Identidades', `<div class="enterprise-stat">${state.data.members.length}</div><p>membros provisionados</p><div class="enterprise-divider"></div><p>Sessões ativas: <strong>${esc(sys.activeSessions)}</strong></p>`),
       card('Continuidade', `<div class="enterprise-stat">${esc(sys.region)}</div><p>região operacional</p><div class="enterprise-divider"></div><p>Último backup: <strong>${fmtDate(sys.lastBackupAt, true)}</strong></p>`, 'wide'),
     ]);
@@ -166,22 +210,17 @@
     ]);
   }
 
-  const renderers = { organization: renderOrganization, members: renderMembers, roles: renderRoles, billing: renderBilling, intelligence: renderIntelligence, compliance: renderCompliance, integrations: renderIntegrations, security: renderSecurity, admin: renderAdmin, analytics: renderAnalytics };
+  const renderers = { command: renderCommand, organization: renderOrganization, members: renderMembers, roles: renderRoles, billing: renderBilling, intelligence: renderIntelligence, compliance: renderCompliance, integrations: renderIntegrations, security: renderSecurity, admin: renderAdmin, analytics: renderAnalytics };
 
   function render(view) {
     state.view = view || 'command';
-    const command = document.getElementById('enterprise-command');
     const dynamic = document.getElementById('enterprise-dynamic');
+    const command = document.getElementById('enterprise-command');
     document.querySelectorAll('.sidebar-nav [data-view]').forEach(link => link.classList.toggle('active', link.dataset.view === state.view));
     document.querySelector('.topbar-title').textContent = document.querySelector(`.sidebar-nav [data-view="${state.view}"]`)?.dataset.title || 'Command Center';
-    if (state.view === 'command') {
-      command.classList.add('active');
-      dynamic.classList.remove('active');
-    } else {
-      command.classList.remove('active');
-      dynamic.classList.add('active');
-      dynamic.innerHTML = renderers[state.view] ? renderers[state.view]() : renderAdmin();
-    }
+    command.style.display = 'none';
+    dynamic.classList.add('active');
+    dynamic.innerHTML = renderers[state.view] ? renderers[state.view]() : renderCommand();
     history.replaceState(null, '', `#${state.view}`);
   }
 
@@ -201,33 +240,11 @@
     modal.classList.add('open');
   }
 
-  function closeModal() {
-    document.querySelector('.enterprise-modal-backdrop').classList.remove('open');
-  }
-
-  function download(name, content, type = 'text/csv;charset=utf-8') {
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(new Blob([content], { type }));
-    link.download = name;
-    link.click();
-    URL.revokeObjectURL(link.href);
-  }
-
-  function exportAudit() {
-    const lines = [['data', 'ator', 'evento', 'alvo', 'detalhe'], ...state.data.auditLog.map(log => [log.createdAt, log.actor, log.action, log.target, log.detail])];
-    download('lifeos-auditoria-v2.1.csv', lines.map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\n'));
-  }
-
-  function exportSnapshot() {
-    download('lifeos-enterprise-snapshot-v2.1.json', JSON.stringify(state.data, null, 2), 'application/json');
-  }
-
-  function downloadInvoice(id) {
-    const invoice = state.data.invoices.find(item => item.id === id);
-    if (!invoice) return;
-    download(`${id}.txt`, `LifeOS Enterprise\nFatura: ${id}\nData: ${fmtDate(invoice.date)}\nValor: ${money(invoice.amount)}\nStatus: ${invoice.status}\n` , 'text/plain;charset=utf-8');
-    toast('Documento financeiro gerado.');
-  }
+  function closeModal() { document.querySelector('.enterprise-modal-backdrop').classList.remove('open'); }
+  function download(name, content, type = 'text/csv;charset=utf-8') { const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([content], { type })); link.download = name; link.click(); URL.revokeObjectURL(link.href); }
+  function exportAudit() { const lines = [['data', 'ator', 'evento', 'alvo', 'detalhe'], ...state.data.auditLog.map(log => [log.createdAt, log.actor, log.action, log.target, log.detail])]; download('lifeos-auditoria-v3.0.csv', lines.map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\n')); }
+  function exportSnapshot() { download('lifeos-enterprise-snapshot-v3.0.json', JSON.stringify(state.data, null, 2), 'application/json'); }
+  function downloadInvoice(id) { const invoice = state.data.invoices.find(item => item.id === id); if (!invoice) return; download(`${id}.txt`, `LifeOS Enterprise\nFatura: ${id}\nData: ${fmtDate(invoice.date)}\nValor: ${money(invoice.amount)}\nStatus: ${invoice.status}\n` , 'text/plain;charset=utf-8'); toast('Documento financeiro gerado.'); }
 
   async function submitForm(event) {
     const form = event.target.closest('form[data-form]');
@@ -283,7 +300,7 @@
     const search = document.querySelector('[data-enterprise-search]');
     search?.addEventListener('input', event => {
       state.query = event.target.value.trim().toLowerCase();
-      if (state.view !== 'members') render('members'); else render('members');
+      render(state.view === 'members' ? 'members' : state.view);
     });
   }
 
@@ -295,18 +312,20 @@
     try {
       await request();
       const view = location.hash.slice(1);
-      render(view && (view === 'command' || renderers[view]) ? view : 'command');
-      document.querySelector('.org-name').textContent = state.data.organization.name;
-      document.querySelector('.org-avatar').textContent = state.data.organization.name.slice(0, 1).toUpperCase();
-      document.querySelector('.user-n').textContent = state.data.members[0]?.name || 'Administrador';
-      document.querySelector('.user-r').textContent = roleName(state.data.members[0]?.roleId);
-      document.querySelector('.topbar-subtitle').textContent = `· ${fmtDate(new Date().toISOString(), true)}`;
+      render(view && renderers[view] ? view : 'command');
+      document.querySelectorAll('.org-name').forEach(node => node.textContent = state.data.organization.name);
+      document.querySelectorAll('.org-avatar').forEach(node => node.textContent = state.data.organization.name.slice(0, 1).toUpperCase());
+      document.querySelectorAll('.user-n').forEach(node => node.textContent = state.data.members[0]?.name || 'Administrador');
+      document.querySelectorAll('.user-r').forEach(node => node.textContent = roleName(state.data.members[0]?.roleId));
+      document.querySelectorAll('.topbar-subtitle').forEach(node => node.textContent = `· ${fmtDate(new Date().toISOString(), true)}`);
       const count = state.data.intelligence.filter(item => item.status === 'open').length;
       document.querySelectorAll('[data-intelligence-count]').forEach(node => node.textContent = count);
     } catch (error) {
-      document.getElementById('enterprise-command').innerHTML = `<div class="enterprise-error"><strong>Não foi possível carregar o ambiente Enterprise.</strong><br>${esc(error.message)}</div>`;
+      document.getElementById('enterprise-dynamic').innerHTML = `<div class="enterprise-error"><strong>Não foi possível carregar o ambiente Enterprise.</strong><br>${esc(error.message)}</div>`;
+      document.getElementById('enterprise-dynamic').classList.add('active');
     }
   }
 
+  window.enterpriseApp = { render };
   window.addEventListener('DOMContentLoaded', init);
 })();

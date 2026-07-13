@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Executive Dashboard | Enterprise Premium v2.1" />
+  <meta name="description" content="LifeOS — Executive Dashboard | Enterprise Premium v3.0" />
   <title>Executive Dashboard — LifeOS Enterprise</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,655 +18,143 @@
   <link rel="stylesheet" href="../animations/premium_motion.css" />
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
   
   <style>
-    /* ============================================================
-       EXECUTIVE DASHBOARD LAYOUT
-    ============================================================ */
-    .executive-shell {
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      background: var(--bg-base);
-    }
-
-    .executive-sidebar {
-      width: var(--sidebar-width);
-      background: var(--bg-elevated);
-      border-right: 1px solid var(--border-default);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: var(--z-raised);
-    }
-
-    .executive-sidebar-header {
-      padding: var(--space-6);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .executive-sidebar-logo {
-      width: 40px;
-      height: 40px;
-      background: var(--gradient-primary);
-      border-radius: var(--radius-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: var(--font-bold);
-      color: #FFFFFF;
-      font-size: var(--text-xl);
-    }
-
-    .executive-sidebar-title {
-      font-size: var(--text-base);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-    }
-
-    .executive-sidebar-nav {
-      flex: 1;
-      padding: var(--space-4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-
-    .executive-sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-4);
-      border-radius: var(--radius-md);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all var(--duration-normal) var(--ease-out);
-      text-decoration: none;
-      font-size: var(--text-base);
-      border-left: 3px solid transparent;
-    }
-
-    .executive-sidebar-item:hover {
-      background: var(--bg-surface-1);
-      color: var(--text-primary);
-    }
-
-    .executive-sidebar-item.active {
-      background: rgba(91, 127, 255, 0.15);
-      color: var(--brand-primary-400);
-      border-left-color: var(--brand-primary-600);
-    }
-
-    .executive-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .executive-topbar {
-      height: var(--topbar-height);
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--space-6);
-      gap: var(--space-6);
-    }
-
-    .executive-topbar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      flex: 1;
-    }
-
-    .executive-topbar-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-    }
-
-    .executive-topbar-right {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-    }
-
-    .executive-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: var(--space-6);
-    }
-
-    /* ============================================================
-       DASHBOARD SECTIONS
-    ============================================================ */
-
-    .dashboard-section {
-      margin-bottom: var(--space-8);
-    }
-
-    .dashboard-section-title {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-      margin-bottom: var(--space-4);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    /* KPI Grid */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--space-5);
-      margin-bottom: var(--space-6);
-    }
-
-    .kpi-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-xl);
-      padding: var(--space-6);
-      transition: all var(--duration-normal) var(--ease-out);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .kpi-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-primary);
-      opacity: 0;
-      transition: opacity var(--duration-normal) var(--ease-out);
-    }
-
-    .kpi-card:hover {
-      border-color: var(--border-strong);
-      box-shadow: var(--shadow-md);
-    }
-
-    .kpi-card:hover::before {
-      opacity: 1;
-    }
-
-    .kpi-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--space-4);
-    }
-
-    .kpi-label {
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .kpi-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-1);
-      padding: var(--space-1) var(--space-3);
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--status-success-500);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: var(--font-medium);
-    }
-
-    .kpi-badge.negative {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--status-danger-600);
-    }
-
-    .kpi-value {
-      font-size: var(--text-4xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-      margin-bottom: var(--space-2);
-      letter-spacing: -0.02em;
-    }
-
-    .kpi-change {
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-    }
-
-    /* Chart Container */
-    .chart-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-xl);
-      padding: var(--space-6);
-      margin-bottom: var(--space-6);
-    }
-
-    .chart-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-      margin-bottom: var(--space-4);
-    }
-
-    .chart-wrapper {
-      position: relative;
-      height: 300px;
-    }
-
-    /* Table Container */
-    .table-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-    }
-
-    .table-header {
-      padding: var(--space-6);
-      border-bottom: 1px solid var(--border-default);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .table-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    /* Grid Layout */
-    .dashboard-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
-      margin-bottom: var(--space-6);
-    }
-
-    @media (max-width: 1200px) {
-      .dashboard-grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Activity Feed */
-    .activity-feed {
-      background: var(--bg-card);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-xl);
-      padding: var(--space-6);
-    }
-
-    .activity-item {
-      display: flex;
-      gap: var(--space-4);
-      padding: var(--space-4);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-
-    .activity-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-lg);
-      background: var(--bg-surface-1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: var(--text-lg);
-    }
-
-    .activity-content {
-      flex: 1;
-    }
-
-    .activity-title {
-      font-size: var(--text-base);
-      font-weight: var(--font-medium);
-      color: var(--text-primary);
-      margin-bottom: var(--space-1);
-    }
-
-    .activity-description {
-      font-size: var(--text-sm);
-      color: var(--text-secondary);
-      margin-bottom: var(--space-1);
-    }
-
-    .activity-time {
-      font-size: var(--text-xs);
-      color: var(--text-tertiary);
-    }
-
-    /* Responsive */
+    .executive-shell { display: flex; height: 100vh; overflow: hidden; background: var(--bg-base); }
+    .executive-sidebar { width: var(--sidebar-width); background: var(--bg-elevated); border-right: 1px solid var(--border-default); display: flex; flex-direction: column; overflow-y: auto; z-index: var(--z-raised); }
+    .executive-sidebar-header { padding: var(--space-6); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; gap: var(--space-3); }
+    .executive-sidebar-logo { width: 40px; height: 40px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-weight: var(--font-bold); color: #FFFFFF; font-size: var(--text-xl); }
+    .executive-sidebar-title { font-size: var(--text-base); font-weight: var(--font-bold); color: var(--text-primary); }
+    .executive-sidebar-nav { flex: 1; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+    .executive-sidebar-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; transition: all var(--duration-normal) var(--ease-out); text-decoration: none; font-size: var(--text-base); border-left: 3px solid transparent; }
+    .executive-sidebar-item:hover { background: var(--bg-surface-1); color: var(--text-primary); }
+    .executive-sidebar-item.active { background: rgba(91, 127, 255, 0.15); color: var(--brand-primary-400); border-left-color: var(--brand-primary-600); }
+    .executive-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .executive-topbar { height: var(--topbar-height); background: var(--bg-card); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--space-6); gap: var(--space-6); }
+    .executive-topbar-left { display: flex; align-items: center; gap: var(--space-4); flex: 1; }
+    .executive-topbar-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); }
+    .executive-topbar-right { display: flex; align-items: center; gap: var(--space-4); }
+    .executive-content { flex: 1; overflow-y: auto; padding: var(--space-6); }
+    .dashboard-section { margin-bottom: var(--space-8); }
+    .dashboard-section-title { font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--text-primary); margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-3); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); margin-bottom: var(--space-6); }
+    .kpi-card { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-xl); padding: var(--space-6); transition: all var(--duration-normal) var(--ease-out); position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient-primary); opacity: 0; transition: opacity var(--duration-normal) var(--ease-out); }
+    .kpi-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); }
+    .kpi-card:hover::before { opacity: 1; }
+    .kpi-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+    .kpi-label { font-size: var(--text-sm); font-weight: var(--font-medium); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi-badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); background: rgba(16, 185, 129, 0.15); color: var(--status-success-500); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--font-medium); }
+    .kpi-value { font-size: var(--text-4xl); font-weight: var(--font-bold); color: var(--text-primary); margin-bottom: var(--space-2); letter-spacing: -0.02em; }
+    .kpi-change { font-size: var(--text-sm); color: var(--text-secondary); }
+    .chart-container { background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-xl); padding: var(--space-6); margin-bottom: var(--space-6); }
+    .chart-title { font-size: var(--text-lg); font-weight: var(--font-semibold); color: var(--text-primary); margin-bottom: var(--space-4); }
+    .chart-wrapper { position: relative; height: 300px; }
     @media (max-width: 768px) {
-      .executive-sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-default);
-        flex-direction: row;
-        overflow-x: auto;
-      }
-
-      .executive-sidebar-nav {
-        flex-direction: row;
-        flex: 1;
-      }
-
-      .executive-content {
-        padding: var(--space-4);
-      }
-
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .dashboard-grid-2 {
-        grid-template-columns: 1fr;
-      }
+      .executive-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-default); flex-direction: row; overflow-x: auto; }
+      .executive-sidebar-nav { flex-direction: row; flex: 1; }
+      .executive-content { padding: var(--space-4); }
+      .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="executive-shell">
-    <!-- Sidebar -->
     <aside class="executive-sidebar">
-      <div class="executive-sidebar-header">
-        <div class="executive-sidebar-logo">L</div>
-        <div class="executive-sidebar-title">LifeOS</div>
-      </div>
-
+      <div class="executive-sidebar-header"><div class="executive-sidebar-logo">L</div><div class="executive-sidebar-title">LifeOS</div></div>
       <nav class="executive-sidebar-nav">
-        <a href="#" class="executive-sidebar-item active">📊 Dashboard</a>
-        <a href="#" class="executive-sidebar-item">📈 Analytics</a>
-        <a href="#" class="executive-sidebar-item">👥 Usuários</a>
-        <a href="#" class="executive-sidebar-item">🏢 Organizações</a>
-        <a href="#" class="executive-sidebar-item">💰 Billing</a>
-        <a href="#" class="executive-sidebar-item">⚙️ Configurações</a>
+        <a href="#dashboard" class="executive-sidebar-item active" data-view="dashboard">📊 Dashboard</a>
+        <a href="#analytics" class="executive-sidebar-item" data-view="analytics">📈 Analytics</a>
+        <a href="/enterprise" class="executive-sidebar-item">← Voltar</a>
       </nav>
     </aside>
-
-    <!-- Main Content -->
     <div class="executive-main">
-      <!-- Topbar -->
       <header class="executive-topbar">
-        <div class="executive-topbar-left">
-          <div class="executive-topbar-title">Executive Dashboard</div>
-        </div>
+        <div class="executive-topbar-left"><div class="executive-topbar-title">Executive Dashboard</div></div>
         <div class="executive-topbar-right">
-          <button class="enterprise-btn-icon">🔔</button>
-          <button class="enterprise-btn-icon">👤</button>
+          <span class="exec-user-name" style="font-size: var(--text-sm); color: var(--text-secondary);">Carregando...</span>
+          <button class="enterprise-btn ghost" onclick="location.replace('/enterprise')">Sair</button>
         </div>
       </header>
-
-      <!-- Content -->
-      <main class="executive-content">
-        <!-- Revenue Section -->
-        <div class="dashboard-section">
-          <div class="dashboard-section-title">💰 Receita & Faturamento</div>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Receita Total</span>
-                <span class="kpi-badge">+12.5%</span>
-              </div>
-              <div class="kpi-value">R$ 125.430</div>
-              <div class="kpi-change">Comparado ao mês anterior</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">MRR (Receita Recorrente)</span>
-                <span class="kpi-badge">+8.3%</span>
-              </div>
-              <div class="kpi-value">R$ 42.150</div>
-              <div class="kpi-change">Crescimento mensal</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">ARR (Receita Anual)</span>
-                <span class="kpi-badge">+23%</span>
-              </div>
-              <div class="kpi-value">R$ 505.800</div>
-              <div class="kpi-change">Projeção anualizada</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Users & Growth Section -->
-        <div class="dashboard-section">
-          <div class="dashboard-section-title">📊 Usuários & Crescimento</div>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Usuários Ativos</span>
-                <span class="kpi-badge">+8.3%</span>
-              </div>
-              <div class="kpi-value">2.847</div>
-              <div class="kpi-change">Últimos 30 dias</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Organizações</span>
-                <span class="kpi-badge">+5.2%</span>
-              </div>
-              <div class="kpi-value">156</div>
-              <div class="kpi-change">Clientes ativos</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Taxa de Crescimento</span>
-                <span class="kpi-badge">+23%</span>
-              </div>
-              <div class="kpi-value">23%</div>
-              <div class="kpi-change">Crescimento YoY</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- System Health Section -->
-        <div class="dashboard-section">
-          <div class="dashboard-section-title">🏥 Saúde do Sistema</div>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Health Score</span>
-                <span class="kpi-badge">Excelente</span>
-              </div>
-              <div class="kpi-value">94/100</div>
-              <div class="kpi-change">Sistema operacional</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">Uptime</span>
-                <span class="kpi-badge">99.98%</span>
-              </div>
-              <div class="kpi-value">99.98%</div>
-              <div class="kpi-change">Últimos 30 dias</div>
-            </div>
-
-            <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-label">API Latency</span>
-                <span class="kpi-badge">45ms</span>
-              </div>
-              <div class="kpi-value">45ms</div>
-              <div class="kpi-change">Tempo médio de resposta</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="dashboard-section">
-          <div class="dashboard-section-title">📈 Análises</div>
-          <div class="dashboard-grid-2">
-            <div class="chart-container">
-              <h3 class="chart-title">Receita Mensal</h3>
-              <div class="chart-wrapper">
-                <canvas id="revenueChart"></canvas>
-              </div>
-            </div>
-
-            <div class="chart-container">
-              <h3 class="chart-title">Usuários Ativos</h3>
-              <div class="chart-wrapper">
-                <canvas id="usersChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Activity Feed -->
-        <div class="dashboard-section">
-          <div class="dashboard-section-title">📋 Atividade Recente</div>
-          <div class="activity-feed">
-            <div class="activity-item">
-              <div class="activity-icon">✓</div>
-              <div class="activity-content">
-                <div class="activity-title">Nova organização criada</div>
-                <div class="activity-description">TechCorp Inc. se registrou na plataforma</div>
-                <div class="activity-time">há 2 horas</div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">💳</div>
-              <div class="activity-content">
-                <div class="activity-title">Pagamento processado</div>
-                <div class="activity-description">Fatura #INV-2026-0847 paga com sucesso</div>
-                <div class="activity-time">há 4 horas</div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">👤</div>
-              <div class="activity-content">
-                <div class="activity-title">Novo usuário premium</div>
-                <div class="activity-description">João Silva atualizou para plano Enterprise</div>
-                <div class="activity-time">há 6 horas</div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">🔧</div>
-              <div class="activity-content">
-                <div class="activity-title">Manutenção concluída</div>
-                <div class="activity-description">Atualização de segurança v2.1.5 aplicada</div>
-                <div class="activity-time">há 1 dia</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+      <main class="executive-content" id="exec-view-root"></main>
     </div>
   </div>
-
-  <!-- Toast Stack -->
-  <div class="enterprise-toast-stack"></div>
-
   <script>
-    // Revenue Chart
-    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-    new Chart(revenueCtx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-        datasets: [{
-          label: 'Receita (R$)',
-          data: [85000, 92000, 105000, 98000, 115000, 125430],
-          borderColor: 'rgb(91, 127, 255)',
-          backgroundColor: 'rgba(91, 127, 255, 0.1)',
-          borderWidth: 2,
-          tension: 0.4,
-          fill: true,
-          pointBackgroundColor: 'rgb(91, 127, 255)',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { color: 'var(--text-secondary)' },
-            grid: { color: 'var(--border-subtle)' }
-          },
-          x: {
-            ticks: { color: 'var(--text-secondary)' },
-            grid: { display: false }
-          }
-        }
-      }
-    });
+    (() => {
+      const API = '/.netlify/functions/enterprise-data';
+      const state = { data: null };
+      const money = (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(v || 0));
 
-    // Users Chart
-    const usersCtx = document.getElementById('usersChart').getContext('2d');
-    new Chart(usersCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-        datasets: [{
-          label: 'Usuários Ativos',
-          data: [1200, 1450, 1680, 1920, 2350, 2847],
-          backgroundColor: 'rgba(20, 184, 166, 0.8)',
-          borderColor: 'rgb(20, 184, 166)',
-          borderWidth: 1,
-          borderRadius: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { color: 'var(--text-secondary)' },
-            grid: { color: 'var(--border-subtle)' }
-          },
-          x: {
-            ticks: { color: 'var(--text-secondary)' },
-            grid: { display: false }
-          }
-        }
+      async function request() {
+        const response = await fetch(API);
+        if (response.status === 401) return location.replace('/login');
+        const result = await response.json();
+        state.data = result.data;
+        return result.data;
       }
-    });
+
+      function renderDashboard() {
+        const sub = state.data.subscription;
+        const sys = state.data.system;
+        return `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">💰 Receita & Faturamento</div>
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-header"><span class="kpi-label">MRR</span><span class="kpi-badge">Estável</span></div>
+                <div class="kpi-value">${money(sub.monthlyValue)}</div>
+                <div class="kpi-change">Plano ${esc(sub.plan)}</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-header"><span class="kpi-label">ARR</span><span class="kpi-badge">Projeção</span></div>
+                <div class="kpi-value">${money(sub.monthlyValue * 12)}</div>
+                <div class="kpi-change">Base anualizada</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-header"><span class="kpi-label">Status</span><span class="kpi-badge">Ativo</span></div>
+                <div class="kpi-value">${esc(sub.status)}</div>
+                <div class="kpi-change">Pagamento: ${esc(sub.paymentMethod)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title">Crescimento de Membros (Últimos 6 meses)</div>
+            <div class="chart-wrapper"><canvas id="growthChart"></canvas></div>
+          </div>
+        `;
+      }
+
+      const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+
+      async function init() {
+        await request();
+        document.querySelector('.exec-user-name').textContent = state.data.members[0]?.name || 'Executivo';
+        document.getElementById('exec-view-root').innerHTML = renderDashboard();
+        
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            datasets: [{
+              label: 'Membros Ativos',
+              data: [state.data.members.length - 5, state.data.members.length - 3, state.data.members.length - 2, state.data.members.length - 1, state.data.members.length, state.data.members.length],
+              borderColor: '#5B7FFF',
+              backgroundColor: 'rgba(91, 127, 255, 0.1)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } }, x: { grid: { display: false } } }
+          }
+        });
+      }
+      init();
+    })();
   </script>
 </body>
 </html>
