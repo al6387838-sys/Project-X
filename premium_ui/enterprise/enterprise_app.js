@@ -60,7 +60,7 @@
 
   function cards(items) { return `<div class="enterprise-grid">${items.join('')}</div>`; }
   function card(title, content, className = '') { return `<article class="enterprise-card ${className}"><h3>${title}</h3>${content}</article>`; }
-  function toolbar(title, subtitle = '', actions = '') { return `<div class="enterprise-toolbar"><div><div class="enterprise-kicker">LifeOS Enterprise v3.0</div><h2>${title}</h2>${subtitle ? `<p class="enterprise-secondary">${subtitle}</p>` : ''}</div><div class="enterprise-actions">${actions}</div></div>`; }
+  function toolbar(title, subtitle = '', actions = '') { return `<div class="enterprise-toolbar"><div><div class="enterprise-kicker">LifeOS Enterprise v4.0</div><h2>${title}</h2>${subtitle ? `<p class="enterprise-secondary">${subtitle}</p>` : ''}</div><div class="enterprise-actions">${actions}</div></div>`; }
 
   function renderCommand() {
     const sys = state.data.system;
@@ -71,7 +71,7 @@
     return `
       <div class="alert-banner animate-slide-in-down">
         <span class="alert-icon">◈</span>
-        <span class="alert-text"><strong>Companion:</strong> ${insights.length > 0 ? `${insights[0].title}. Impacto: ${insights[0].impact.toUpperCase()}.` : 'Ambiente operacional estável e seguro.'}</span>
+        <span class="alert-text"><strong>Companion:</strong> ${insights.length > 0 ? `${insights[0].title}. Impacto: ${String(insights[0].impact || insights[0].severity || 'medium').toUpperCase()}.` : 'Ambiente operacional estável e seguro.'}</span>
         <span class="alert-action" onclick="window.enterpriseApp.render('intelligence')">Revisar insights →</span>
       </div>
       <div class="section-header"><span class="section-title">Métricas Executivas</span><span class="section-action">Dados em tempo real</span></div>
@@ -217,8 +217,10 @@
     const dynamic = document.getElementById('enterprise-dynamic');
     const command = document.getElementById('enterprise-command');
     document.querySelectorAll('.sidebar-nav [data-view]').forEach(link => link.classList.toggle('active', link.dataset.view === state.view));
-    document.querySelector('.topbar-title').textContent = document.querySelector(`.sidebar-nav [data-view="${state.view}"]`)?.dataset.title || 'Command Center';
-    command.style.display = 'none';
+    const titleEl = document.querySelector('.topbar-title');
+    if (titleEl) titleEl.textContent = document.querySelector(`.sidebar-nav [data-view="${state.view}"]`)?.dataset.title || 'Command Center';
+    // Always render into dynamic panel; hide static command panel
+    if (command) command.style.display = 'none';
     dynamic.classList.add('active');
     dynamic.innerHTML = renderers[state.view] ? renderers[state.view]() : renderCommand();
     history.replaceState(null, '', `#${state.view}`);
@@ -242,8 +244,8 @@
 
   function closeModal() { document.querySelector('.enterprise-modal-backdrop').classList.remove('open'); }
   function download(name, content, type = 'text/csv;charset=utf-8') { const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([content], { type })); link.download = name; link.click(); URL.revokeObjectURL(link.href); }
-  function exportAudit() { const lines = [['data', 'ator', 'evento', 'alvo', 'detalhe'], ...state.data.auditLog.map(log => [log.createdAt, log.actor, log.action, log.target, log.detail])]; download('lifeos-auditoria-v3.0.csv', lines.map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\n')); }
-  function exportSnapshot() { download('lifeos-enterprise-snapshot-v3.0.json', JSON.stringify(state.data, null, 2), 'application/json'); }
+  function exportAudit() { const lines = [['data', 'ator', 'evento', 'recurso', 'detalhe'], ...state.data.auditLog.map(log => [log.createdAt, log.actor, log.action, log.resourceId, log.detail])]; download('lifeos-auditoria-v4.0.csv', lines.map(row => row.map(value => `"${String(value ?? '').replaceAll('"', '""')}"`).join(',')).join('\n')); }
+  function exportSnapshot() { download('lifeos-enterprise-snapshot-v4.0.json', JSON.stringify(state.data, null, 2), 'application/json'); }
   function downloadInvoice(id) { const invoice = state.data.invoices.find(item => item.id === id); if (!invoice) return; download(`${id}.txt`, `LifeOS Enterprise\nFatura: ${id}\nData: ${fmtDate(invoice.date)}\nValor: ${money(invoice.amount)}\nStatus: ${invoice.status}\n` , 'text/plain;charset=utf-8'); toast('Documento financeiro gerado.'); }
 
   async function submitForm(event) {
@@ -257,8 +259,8 @@
       await mutate('policy.update', payload, 'Políticas aplicadas.');
     }
     if (form.dataset.form === 'member') {
-      const action = data.id ? 'member.update' : 'member.create';
-      await mutate(action, data, data.id ? 'Membro atualizado.' : 'Convite registrado.');
+      const action = data.id ? 'member.update' : 'member.invite';
+      await mutate(action, data, data.id ? 'Membro atualizado.' : 'Convite enviado.');
       closeModal();
     }
     if (form.dataset.form === 'role') {
@@ -304,11 +306,20 @@
     });
   }
 
+  async function logout() {
+    try {
+      await fetch('/api/admin-logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (_) { /* ignore */ }
+    location.replace('/login');
+  }
+
   async function init() {
     document.addEventListener('click', click);
     document.addEventListener('submit', submitForm);
     document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
     bindSearch();
+    // Bind logout buttons
+    document.querySelectorAll('[data-logout]').forEach(btn => btn.addEventListener('click', logout));
     try {
       await request();
       const view = location.hash.slice(1);
@@ -317,7 +328,15 @@
       document.querySelectorAll('.org-avatar').forEach(node => node.textContent = state.data.organization.name.slice(0, 1).toUpperCase());
       document.querySelectorAll('.user-n').forEach(node => node.textContent = state.data.members[0]?.name || 'Administrador');
       document.querySelectorAll('.user-r').forEach(node => node.textContent = roleName(state.data.members[0]?.roleId));
-      document.querySelectorAll('.topbar-subtitle').forEach(node => node.textContent = `· ${fmtDate(new Date().toISOString(), true)}`);
+      document.querySelectorAll('.topbar-subtitle, #enterprise-topbar-date').forEach(node => node.textContent = `· ${fmtDate(new Date().toISOString(), true)}`);
+      // Mostrar alerta dinamicamente se houver insights abertos
+      const openInsights = state.data.intelligence.filter(i => i.status === 'open');
+      const alertBanner = document.getElementById('enterprise-alert-banner');
+      const alertText = document.getElementById('enterprise-alert-text');
+      if (alertBanner && openInsights.length > 0) {
+        alertBanner.style.display = '';
+        if (alertText) alertText.innerHTML = `<strong>Companion detectou:</strong> ${openInsights.length} insight${openInsights.length > 1 ? 's' : ''} em aberto. ${esc(openInsights[0].title)} — impacto ${esc(String(openInsights[0].impact || 'medium').toUpperCase())}.`;
+      }
       const count = state.data.intelligence.filter(item => item.status === 'open').length;
       document.querySelectorAll('[data-intelligence-count]').forEach(node => node.textContent = count);
     } catch (error) {

@@ -395,7 +395,13 @@ body {
   <link rel="stylesheet" href="/black_diamond.css" />
   <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
 </head>
-<body>
+<body style="visibility:hidden">
+<script>
+  fetch('/api/enterprise-data', { credentials: 'same-origin' })
+    .then(r => { if (!r.ok) throw new Error('unauthorized'); return r.json(); })
+    .then(() => { document.body.style.visibility = 'visible'; })
+    .catch(() => { location.replace('/login?next=' + encodeURIComponent('/enterprise')); });
+</script>
 <div class="shell">
 
   <!-- SIDEBAR -->
@@ -407,8 +413,8 @@ body {
         <span class="brand-tier">Enterprise</span>
       </div>
       <div class="org-selector">
-        <div class="org-avatar">P</div>
-        <span class="org-name">PROJECT-X</span>
+        <div class="org-avatar org-avatar">L</div>
+        <span class="org-name">Carregando…</span>
         <span class="org-chevron">⌄</span>
       </div>
     </div>
@@ -442,12 +448,12 @@ body {
 
     <div class="sidebar-footer">
       <div class="user-row">
-        <div class="user-av">A</div>
+        <div class="user-av org-avatar">L</div>
         <div class="user-info">
-          <div class="user-n">Alexandre</div>
-          <div class="user-r">CEO · Fundador</div>
+          <div class="user-n">Carregando…</div>
+          <div class="user-r">Administrador</div>
         </div>
-        <div class="user-more">⋯</div>
+        <button class="user-more" type="button" aria-label="Encerrar sessão" title="Encerrar sessão" data-logout style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--text-tertiary);padding:4px;border-radius:4px;transition:color 0.12s;" onmouseover="this.style.color='var(--danger-500)'" onmouseout="this.style.color='var(--text-tertiary)'">⏻</button>
       </div>
     </div>
   </aside>
@@ -457,7 +463,7 @@ body {
     <div class="topbar">
       <div>
         <span class="topbar-title">Command Center</span>
-        <span class="topbar-subtitle">· 10 Jul 2026, 09:15</span>
+        <span class="topbar-subtitle" id="enterprise-topbar-date">· Carregando…</span>
       </div>
       <div class="topbar-spacer"></div>
       <div class="enterprise-search"><input class="enterprise-input" type="search" aria-label="Buscar membros" placeholder="Buscar membros" data-enterprise-search></div>
@@ -472,351 +478,12 @@ body {
       <section id="enterprise-command" class="enterprise-shell-panel active" aria-label="Command Center">
 
       <!-- Alert -->
-      <div class="alert-banner">
+      <div class="alert-banner" id="enterprise-alert-banner" style="display:none">
         <span class="alert-icon">◈</span>
-        <span class="alert-text"><strong>Companion detectou:</strong> 3 decisões críticas requerem atenção antes da reunião de investidores às 14h. Probabilidade de impacto alto: 94%.</span>
-        <span class="alert-action">Revisar agora →</span>
-        <span class="alert-close">✕</span>
-      </div>
+        <span class="alert-text" id="enterprise-alert-text"><strong>Companion:</strong> Ambiente operacional estável.</span>
+        <span class="alert-action" onclick="window.enterpriseApp?.render('intelligence')">Revisar insights →</span>
+        <span class="alert-close" onclick="document.getElementById('enterprise-alert-banner').style.display='none'">✕</span>
 
-      <!-- KPIs -->
-      <div class="section-header">
-        <span class="section-title">Métricas Executivas</span>
-        <span class="section-action">Últimos 30 dias ▾</span>
-      </div>
-      <div class="kpi-grid">
-
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <div class="kpi-icon" style="background:rgba(99,102,241,0.12)">◈</div>
-            <div class="kpi-trend up">↑ 23%</div>
-          </div>
-          <div class="kpi-value" style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">87%</div>
-          <div class="kpi-label">Progresso Geral</div>
-          <div class="kpi-sub">Sprint 030 · Program Alpha</div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">◎</div>
-            <div class="kpi-trend up">↑ 12%</div>
-          </div>
-          <div class="kpi-value" style="color:var(--success-500)">R$2.4M</div>
-          <div class="kpi-label">ARR Projetado</div>
-          <div class="kpi-sub">+R$260K vs mês anterior</div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <div class="kpi-icon" style="background:rgba(139,92,246,0.12)">◇</div>
-            <div class="kpi-trend up">↑ 8%</div>
-          </div>
-          <div class="kpi-value" style="color:var(--accent-500)">1,247</div>
-          <div class="kpi-label">Usuários Beta</div>
-          <div class="kpi-sub">NPS: 72 · Retenção: 89%</div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-header">
-            <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">◉</div>
-            <div class="kpi-trend flat">→ 0%</div>
-          </div>
-          <div class="kpi-value" style="color:var(--warning-500)">82</div>
-          <div class="kpi-label">Health Score</div>
-          <div class="kpi-sub">3 alertas ativos</div>
-        </div>
-
-      </div>
-
-      <!-- Main Grid: Chart + Activity -->
-      <div class="main-grid">
-
-        <!-- Revenue Chart -->
-        <div class="chart-card">
-          <div class="chart-header">
-            <div>
-              <div class="chart-title">Crescimento de Receita</div>
-              <div style="font-size:12px;color:var(--text-tertiary);margin-top:2px">MRR vs Projeção · Jan–Jul 2026</div>
-            </div>
-            <div class="chart-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:var(--brand-500)"></div>MRR Real</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--teal-500)"></div>Projeção</div>
-            </div>
-          </div>
-          <div class="chart-area">
-            <svg class="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#6366F1" stop-opacity="0.20"/>
-                  <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#6366F1"/>
-                  <stop offset="100%" stop-color="#8B5CF6"/>
-                </linearGradient>
-              </defs>
-              <!-- Grid lines -->
-              <line x1="0" y1="40"  x2="600" y2="40"  class="chart-grid-line"/>
-              <line x1="0" y1="80"  x2="600" y2="80"  class="chart-grid-line"/>
-              <line x1="0" y1="120" x2="600" y2="120" class="chart-grid-line"/>
-              <line x1="0" y1="160" x2="600" y2="160" class="chart-grid-line"/>
-              <!-- Area fill -->
-              <path class="chart-area-fill" d="M0,155 L80,140 L160,125 L240,105 L320,85 L400,65 L480,45 L560,30 L600,25 L600,180 L0,180 Z"/>
-              <!-- Main line -->
-              <path class="chart-line" d="M0,155 L80,140 L160,125 L240,105 L320,85 L400,65 L480,45 L560,30 L600,25"/>
-              <!-- Projection line -->
-              <path class="chart-line-2" d="M0,158 L80,145 L160,130 L240,115 L320,95 L400,75 L480,55 L560,38 L600,32"/>
-              <!-- Dots -->
-              <circle cx="0"   cy="155" r="4" class="chart-dot"/>
-              <circle cx="80"  cy="140" r="4" class="chart-dot"/>
-              <circle cx="160" cy="125" r="4" class="chart-dot"/>
-              <circle cx="240" cy="105" r="4" class="chart-dot"/>
-              <circle cx="320" cy="85"  r="4" class="chart-dot"/>
-              <circle cx="400" cy="65"  r="4" class="chart-dot"/>
-              <circle cx="480" cy="45"  r="4" class="chart-dot"/>
-              <circle cx="560" cy="30"  r="5" class="chart-dot" style="fill:#8B5CF6"/>
-              <!-- Labels -->
-              <text x="0"   y="175" class="chart-label">Jan</text>
-              <text x="76"  y="175" class="chart-label">Fev</text>
-              <text x="156" y="175" class="chart-label">Mar</text>
-              <text x="236" y="175" class="chart-label">Abr</text>
-              <text x="316" y="175" class="chart-label">Mai</text>
-              <text x="396" y="175" class="chart-label">Jun</text>
-              <text x="476" y="175" class="chart-label">Jul</text>
-            </svg>
-          </div>
-        </div>
-
-        <!-- Activity Feed -->
-        <div class="activity-card">
-          <div class="activity-header">
-            <span class="activity-title">Atividade Recente</span>
-            <div class="activity-filter">
-              <button class="filter-chip active">Tudo</button>
-              <button class="filter-chip">IA</button>
-              <button class="filter-chip">Equipe</button>
-            </div>
-          </div>
-          <div class="activity-list">
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(99,102,241,0.12)">◈</div>
-              <div class="activity-body">
-                <div class="activity-title-text">Companion gerou análise de risco</div>
-                <div class="activity-desc">Decisão de arquitetura mobile — 3 cenários avaliados</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 2 min</span>
-                  <span class="activity-tag" style="background:rgba(99,102,241,0.12);color:var(--brand-400)">IA</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(16,185,129,0.12)">◎</div>
-              <div class="activity-body">
-                <div class="activity-title-text">Sprint 030 — 87% concluído</div>
-                <div class="activity-desc">Program Alpha · 13 tarefas restantes</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 15 min</span>
-                  <span class="activity-tag" style="background:rgba(16,185,129,0.12);color:var(--success-500)">Sprint</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(245,158,11,0.12)">⚡</div>
-              <div class="activity-body">
-                <div class="activity-title-text">Alerta: Deadline em 82 dias</div>
-                <div class="activity-desc">Lançamento PROJECT-X · 30 Set 2026</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 1h</span>
-                  <span class="activity-tag" style="background:rgba(245,158,11,0.12);color:var(--warning-500)">Alerta</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(139,92,246,0.12)">⬡</div>
-              <div class="activity-body">
-                <div class="activity-title-text">Memória consolidada — 230 nós</div>
-                <div class="activity-desc">Grafo atualizado · 47 memórias long-term</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 2h</span>
-                  <span class="activity-tag" style="background:rgba(139,92,246,0.12);color:var(--accent-500)">Memória</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(20,184,166,0.12)">◉</div>
-              <div class="activity-body">
-                <div class="activity-title-text">1,247 usuários beta ativos</div>
-                <div class="activity-desc">NPS 72 · Retenção 89% · +47 esta semana</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 3h</span>
-                  <span class="activity-tag" style="background:rgba(20,184,166,0.12);color:var(--teal-500)">Growth</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon" style="background:rgba(244,63,94,0.12)">◬</div>
-              <div class="activity-body">
-                <div class="activity-title-text">Decisão crítica pendente</div>
-                <div class="activity-desc">Estratégia mobile — prazo: hoje 17h</div>
-                <div class="activity-meta">
-                  <span class="activity-time">há 4h</span>
-                  <span class="activity-tag" style="background:rgba(244,63,94,0.12);color:var(--danger-500)">Urgente</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Grid -->
-      <div class="section-header">
-        <span class="section-title">Saúde Operacional</span>
-        <span class="section-action">Ver detalhes</span>
-      </div>
-      <div class="bottom-grid">
-
-        <!-- Health Score -->
-        <div class="health-card">
-          <div class="health-header">
-            <span class="health-title">Health Score</span>
-            <span class="health-score">82</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Produto</span>
-            <div class="metric-track"><div class="metric-fill" style="width:91%;background:var(--gradient-primary)"></div></div>
-            <span class="metric-val" style="color:var(--brand-400)">91</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Crescimento</span>
-            <div class="metric-track"><div class="metric-fill" style="width:78%;background:var(--gradient-success)"></div></div>
-            <span class="metric-val" style="color:var(--success-500)">78</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Equipe</span>
-            <div class="metric-track"><div class="metric-fill" style="width:85%;background:linear-gradient(90deg,#8B5CF6,#6366F1)"></div></div>
-            <span class="metric-val" style="color:var(--accent-500)">85</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Financeiro</span>
-            <div class="metric-track"><div class="metric-fill" style="width:72%;background:var(--gradient-warning)"></div></div>
-            <span class="metric-val" style="color:var(--warning-500)">72</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Segurança</span>
-            <div class="metric-track"><div class="metric-fill" style="width:96%;background:var(--gradient-success)"></div></div>
-            <span class="metric-val" style="color:var(--success-500)">96</span>
-          </div>
-        </div>
-
-        <!-- Pipeline -->
-        <div class="pipeline-card">
-          <div class="pipeline-header">
-            <span class="pipeline-title">Pipeline de Vendas</span>
-            <span style="font-size:12px;color:var(--success-500);font-weight:600">R$2.4M</span>
-          </div>
-          <div class="stage-row">
-            <span class="stage-label">Prospecção</span>
-            <div class="stage-bar"><div class="stage-fill" style="width:100%;background:var(--gradient-primary)"></div></div>
-            <span class="stage-count" style="color:var(--brand-400)">48</span>
-            <span class="stage-value">R$480K</span>
-          </div>
-          <div class="stage-row">
-            <span class="stage-label">Qualificação</span>
-            <div class="stage-bar"><div class="stage-fill" style="width:75%;background:linear-gradient(90deg,#8B5CF6,#6366F1)"></div></div>
-            <span class="stage-count" style="color:var(--accent-500)">36</span>
-            <span class="stage-value">R$720K</span>
-          </div>
-          <div class="stage-row">
-            <span class="stage-label">Proposta</span>
-            <div class="stage-bar"><div class="stage-fill" style="width:50%;background:var(--gradient-warning)"></div></div>
-            <span class="stage-count" style="color:var(--warning-500)">24</span>
-            <span class="stage-value">R$600K</span>
-          </div>
-          <div class="stage-row">
-            <span class="stage-label">Negociação</span>
-            <div class="stage-bar"><div class="stage-fill" style="width:30%;background:linear-gradient(90deg,#14B8A6,#0D9488)"></div></div>
-            <span class="stage-count" style="color:var(--teal-500)">14</span>
-            <span class="stage-value">R$420K</span>
-          </div>
-          <div class="stage-row">
-            <span class="stage-label">Fechamento</span>
-            <div class="stage-bar"><div class="stage-fill" style="width:15%;background:var(--gradient-success)"></div></div>
-            <span class="stage-count" style="color:var(--success-500)">7</span>
-            <span class="stage-value">R$180K</span>
-          </div>
-        </div>
-
-        <!-- Team -->
-        <div class="team-card">
-          <div class="team-header">
-            <span class="team-title">Equipe Core</span>
-            <span style="font-size:12px;color:var(--brand-400);cursor:pointer;font-weight:500">Ver todos</span>
-          </div>
-          <div class="member-row">
-            <div class="member-av" style="background:var(--gradient-primary)">A</div>
-            <div class="member-info">
-              <div class="member-name">Alexandre</div>
-              <div class="member-role">CEO · Fundador</div>
-            </div>
-            <div class="member-status">
-              <div class="status-dot" style="background:var(--success-500)"></div>
-              Ativo
-            </div>
-          </div>
-          <div class="member-row">
-            <div class="member-av" style="background:linear-gradient(135deg,#14B8A6,#0D9488)">C</div>
-            <div class="member-info">
-              <div class="member-name">Carlos</div>
-              <div class="member-role">CTO · Co-fundador</div>
-            </div>
-            <div class="member-status">
-              <div class="status-dot" style="background:var(--success-500)"></div>
-              Ativo
-            </div>
-          </div>
-          <div class="member-row">
-            <div class="member-av" style="background:linear-gradient(135deg,#F59E0B,#D97706)">M</div>
-            <div class="member-info">
-              <div class="member-name">Marina</div>
-              <div class="member-role">Head of Growth</div>
-            </div>
-            <div class="member-status">
-              <div class="status-dot" style="background:var(--warning-500)"></div>
-              Reunião
-            </div>
-          </div>
-          <div class="member-row">
-            <div class="member-av" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">R</div>
-            <div class="member-info">
-              <div class="member-name">Rafael</div>
-              <div class="member-role">Lead Engineer</div>
-            </div>
-            <div class="member-status">
-              <div class="status-dot" style="background:var(--success-500)"></div>
-              Ativo
-            </div>
-          </div>
-          <div class="member-row">
-            <div class="member-av" style="background:linear-gradient(135deg,#EC4899,#BE185D)">L</div>
-            <div class="member-info">
-              <div class="member-name">Luísa</div>
-              <div class="member-role">Head of Design</div>
-            </div>
-            <div class="member-status">
-              <div class="status-dot" style="background:var(--text-tertiary)"></div>
-              Offline
-            </div>
-          </div>
-        </div>
-
-      </div>
       </section>
       <section id="enterprise-dynamic" class="enterprise-shell-panel" aria-live="polite"></section>
     </div>

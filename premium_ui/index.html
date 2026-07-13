@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0A0E14" />
-  <meta name="description" content="LifeOS — Enterprise Premium v2.1. Seu sistema operacional de vida empresarial." />
+  <meta name="description" content="LifeOS — Enterprise Premium v4.0. Seu sistema operacional de vida empresarial." />
   <title>LifeOS — Enterprise Premium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2598,7 +2598,7 @@
       <div class="sidebar-logo-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
       <div style="overflow:hidden;">
         <div class="sidebar-logo-text">LifeOS</div>
-        <div class="sidebar-logo-version">v1.2 Enterprise Polish</div>
+        <div class="sidebar-logo-version">v4.0 Enterprise</div>
       </div>
     </div>
 
@@ -3218,7 +3218,7 @@ function memoize(fn, key) {
 const LifeOS = {
   state: {
     currentView: 'dashboard',
-    user: { name: 'Anderson Castro', initials: 'AC', score: 87 },
+    user: { name: 'Carregando…', initials: '?', score: 0, email: '' },
     missions: [],
     events: [],
     habits: [],
@@ -3227,11 +3227,25 @@ const LifeOS = {
     commandIndex: -1,
   },
 
-  init() {
+  async init() {
     this.loadPreferences();
+    await this.loadUser();
     this.renderApp();
     this.startClock();
     this.hideSplash();
+  },
+  async loadUser() {
+    try {
+      const r = await fetch('/api/admin-session', { credentials: 'same-origin' });
+      if (r.status === 401) { location.replace('/login'); return; }
+      const data = await r.json();
+      if (data.ok && data.user) {
+        const u = data.user;
+        const displayName = u.username ? u.username.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Admin';
+        const initials = displayName.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase();
+        this.state.user = { name: displayName, initials, score: 87, email: u.username + '@lifeos.app', role: u.role };
+      }
+    } catch(e) { /* offline ou erro de rede — mantém estado padrão */ }
   },
 
   loadPreferences() {
@@ -3368,9 +3382,10 @@ const LifeOS = {
   },
 
   renderKPIs() {
-    document.getElementById('kpi-missions').textContent = this.state.missions.filter(m => m.status === 'active').length || 5;
-    document.getElementById('kpi-streak').textContent = 7;
-    document.getElementById('kpi-insights').textContent = 12;
+    document.getElementById('kpi-missions').textContent = this.state.missions.filter(m => m.status === 'active').length;
+    const streak = this.state.habits.reduce((max, h) => Math.max(max, h.streak || 0), 0);
+    document.getElementById('kpi-streak').textContent = streak;
+    document.getElementById('kpi-insights').textContent = this.state.actions.length || 0;
   },
 
   renderSparklines() {
@@ -3578,10 +3593,13 @@ const LifeOS = {
 
   renderAISummary() {
     const h = new Date().getHours();
+    const score = this.state.user.score || 0;
+    const activeMissions = this.state.missions.filter(m => m.status === 'active').length;
+    const activeHabits = this.state.habits.filter(hb => hb.streak > 0).length;
     const summaries = [
-      'Você tem 4 prioridades hoje. Sua sequência de 7 dias está em risco — não esqueça os hábitos. Life Score em alta: 87 pontos.',
-      'Tarde produtiva à frente. 2 reuniões e 1 sessão de foco programadas. Missão "TypeScript" precisa de atenção.',
-      'Boa noite! Você completou 3 de 5 prioridades hoje. Sequência mantida. Amanhã: revisão de metas mensais.',
+      `Bom dia! Você tem ${activeMissions} missões ativas hoje. Life Score atual: ${score} pontos. Mantenha o foco nos hábitos para continuar evoluindo.`,
+      `Tarde produtiva à frente. ${activeMissions} missões ativas e ${activeHabits} hábitos em andamento. Revise suas prioridades antes do fim do dia.`,
+      `Boa noite! Revise seu progresso do dia. Life Score: ${score} pontos. Amanhã é uma nova oportunidade para avançar nas suas metas.`,
     ];
     const idx = h < 12 ? 0 : h < 18 ? 1 : 2;
     const el = document.getElementById('ai-summary');
@@ -3788,10 +3806,12 @@ function sendCompanionMessage() {
       if (response) break;
     }
     if (!response) {
+      const score = LifeOS.state.user.score || 0;
+      const activeMissions = LifeOS.state.missions.filter(m => m.status === 'active').length;
       const fallbacks = [
-        `Entendi! Baseado no seu contexto atual e Life Score de **87 pontos**, aqui está minha análise:\n\nSua pergunta sobre "${text}" está alinhada com seus objetivos de carreira e aprendizado. Recomendo abordar isso como uma **missão de curto prazo** para maximizar o impacto no seu score.`,
+        `Entendi! Baseado no seu contexto atual e Life Score de **${score} pontos**, aqui está minha análise:\n\nSua pergunta sobre "${text}" está alinhada com seus objetivos. Recomendo abordar isso como uma **missão de curto prazo** para maximizar o impacto no seu score.`,
         `Ótima pergunta! Analisando seu histórico e padrões de comportamento, vejo que "${text}" pode ser um catalisador importante para sua área de maior potencial.\n\nQuer que eu crie um plano de ação estruturado?`,
-        `Com base na sua jornada até agora, posso ajudar com isso. Seu perfil indica alta capacidade de execução — você tem **7 dias de sequência** e **5 missões ativas**.\n\nVamos transformar "${text}" em uma ação concreta?`,
+        `Com base na sua jornada até agora, posso ajudar com isso. Seu perfil indica alta capacidade de execução — você tem **${activeMissions} missões ativas**.\n\nVamos transformar "${text}" em uma ação concreta?`,
       ];
       response = fallbacks[Math.floor(Math.random() * fallbacks.length)];
     }
@@ -4225,13 +4245,13 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">E-mail</div>
-            <div class="settings-row-desc">al6387838@gmail.com</div>
+            <div class="settings-row-desc">${LifeOS.state.user.email || 'admin@lifeos.app'}</div>
           </div>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Life Score</div>
-            <div class="settings-row-desc">87 pontos — Top 20%</div>
+            <div class="settings-row-desc">${LifeOS.state.user.score} pontos</div>
           </div>
         </div>
         <div class="settings-row">
@@ -4368,14 +4388,14 @@ function showSettingsSection(section, btn) {
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Versão</div>
-            <div class="settings-row-desc">Enterprise Premium v2.1</div>
+            <div class="settings-row-desc">Enterprise Premium v4.0</div>
           </div>
           <span class="chip chip-active">Mais recente</span>
         </div>
         <div class="settings-row">
           <div class="settings-row-info">
             <div class="settings-row-label">Build</div>
-            <div class="settings-row-desc">Enterprise Release 2026.07</div>
+            <div class="settings-row-desc">Enterprise Release 2026.07 — Build v4.0.0</div>
           </div>
         </div>
         <div class="settings-row">
@@ -4437,7 +4457,7 @@ function saveMission() {
   document.getElementById('mission-desc-input').value = '';
   showToast(`Missão "${title}" criada!`, 'success');
   renderMissionsGrid();
-  document.getElementById('kpi-missions').textContent = LifeOS.state.missions.filter(m => m.status === 'active').length + 5;
+  document.getElementById('kpi-missions').textContent = LifeOS.state.missions.filter(m => m.status === 'active').length;
 }
 
 function renderMissionsGrid() {

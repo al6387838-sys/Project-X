@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 3.0.0
+// Version: 4.0.0
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -74,7 +74,7 @@ const routes = ['/', ...spaRoutes.map((route) => `/${route}`), '/login', '/admin
 
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
-  version: '3.0.0',
+  version: '4.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -85,7 +85,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '3.0.0',
+  version: '4.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -135,7 +135,7 @@ console.log('╔═════════════════════�
 console.log('║   LifeOS Enterprise — Production Build OK   ║');
 console.log('╚══════════════════════════════════════════════╝');
 console.log(`  Platform : Cloudflare Pages`);
-console.log(`  Version  : 3.0.0`);
+console.log(`  Version  : 4.0.0`);
 console.log(`  Commit   : ${commit}`);
 console.log(`  Built at : ${builtAt}`);
 console.log(`  Routes   : ${routes.length}`);
