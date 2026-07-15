@@ -1,16 +1,24 @@
 """
-Action Engine — PROJECT-X SPRINT 005
-====================================
-Motor de execução inteligente e seguro do PROJECT-X.
-Transforma decisões aprovadas em ações executáveis.
+LIFEOS Enterprise Action Engine
+===============================
+Motor governado de ações, automações, gatilhos e workflows.
 """
 
 from .models import Action, ActionGroup
-from .engines import ActionEngine, ActionPlanner, ExecutionManager, AutomationEngine
+from .engines import (
+    ActionEngine,
+    ActionPlanner,
+    AutomationEngine,
+    AutomationRule,
+    ExecutionManager,
+    WorkflowDefinition,
+    WorkflowRun,
+    WorkflowStep,
+)
 from .managers import ApprovalManager, RollbackManager
 
-__version__ = "1.0.0"
-__sprint__ = "005"
+__version__ = "2.0.0"
+__sprint__ = "064"
 
 __all__ = [
     "Action",
@@ -19,6 +27,10 @@ __all__ = [
     "ActionPlanner",
     "ExecutionManager",
     "AutomationEngine",
+    "AutomationRule",
+    "WorkflowDefinition",
+    "WorkflowRun",
+    "WorkflowStep",
     "ApprovalManager",
-    "RollbackManager"
+    "RollbackManager",
 ]

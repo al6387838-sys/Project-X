@@ -37,7 +37,8 @@ class ActionPlanner:
             origin="DecisionEngine",
             objective=f"Executar {action_type}",
             action_type=action_type,
-            parameters=decision.get("metadata", {})
+            parameters=decision.get("parameters", decision.get("metadata", {})),
+            metadata=decision.get("metadata", {})
         )
         
         actions.append(action)
