@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 10.0.0-rc.1 (Phases 093-100 — Command Center, Universal Search, Integrations, Companion AI, Enterprise Admin, Hardening and Release)
+// Version: 10.1.0 (Phases 101-108 — Product Polish, Life Hub, Integration Marketplace, AI Copilot, Enterprise Admin, QA, Build, Release)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -58,6 +58,7 @@ const productionAssets = [
   'design_system/enterprise_components.css',
   'design_system/enterprise_v4.css',
   'design_system/enterprise_v9_5.css',
+  'design_system/enterprise_v10_1.css',
   'design_system/responsive.css',
   'animations/animations.css',
   'animations/premium_motion.css',
@@ -96,7 +97,13 @@ await copy('modules/smart-search.html', 'modules/smart-search.html');
 await copy('modules/notification-center.html', 'modules/notification-center.html');
 await copy('modules/integration-center.html', 'modules/integration-center.html');
 
-// ─── Rotas principais v10 ────────────────────────────────────────────────────
+// ─── Copiar módulos HTML v10.1 (Phases 101-108) ─────────────────────────────
+await copy('modules/life-hub.html', 'modules/life-hub.html');
+await copy('modules/integration-marketplace.html', 'modules/integration-marketplace.html');
+await copy('modules/ai-copilot.html', 'modules/ai-copilot.html');
+await copy('modules/enterprise-admin.html', 'modules/enterprise-admin.html');
+
+// ─── Rotas principais v10.1 ──────────────────────────────────────────────────
 // Landing Page (/) — minificado
 await copyHtml('landing.html', 'index.html');
 
@@ -134,9 +141,9 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
   } catch { /* arquivo público opcional */ }
 }
 
-// Gerar _redirects v10 com rotas preservadas
+// Gerar _redirects v10.1 com rotas preservadas
 const redirects = [
-  '# LifeOS Enterprise v10.0.0-rc.1 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v10.1.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -150,6 +157,11 @@ const redirects = [
   '# Admin routes (admin only)',
   '/admin              /admin/index.html           200',
   '/admin/*            /admin/index.html           200',
+  '',
+  '# v10.1 module routes',
+  '/life-hub           /app/index.html             200',
+  '/ai-copilot         /app/index.html             200',
+  '/marketplace        /app/index.html             200',
   '',
   '# Legacy routes (compatibilidade)',
   '/enterprise         /enterprise/index.html      200',
@@ -171,10 +183,10 @@ const redirects = [
 
 await writeFile(resolve(dist, '_redirects'), redirects);
 
-// ─── Build metadata v10 ───────────────────────────────────────────────────────
+// ─── Build metadata v10.1 ────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v10.0.0-rc.1-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v10.1.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -185,6 +197,9 @@ const routes = [
   '/admin',
   '/enterprise',
   '/memory-center',
+  '/life-hub',
+  '/ai-copilot',
+  '/marketplace',
   '/dashboard',
   '/companion',
   '/missions',
@@ -199,17 +214,23 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '10.0.0-rc.1',
+  version: '10.1.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
-  architecture: 'multi-page-rbac-modules-command-center-universal-search-integrations-companion-ai',
-  phases: ['093-CommandCenter','094-UniversalSearch','095-IntegrationCenter','096-CompanionAI','097-EnterpriseAdmin','098-Hardening','099-ReleaseCandidate','100-ProductionRelease'],
+  architecture: 'multi-page-rbac-modules-command-center-universal-search-integrations-ai-copilot-life-hub-marketplace',
+  phases: [
+    '093-CommandCenter','094-UniversalSearch','095-IntegrationCenter','096-CompanionAI',
+    '097-EnterpriseAdmin','098-Hardening','099-ReleaseCandidate','100-ProductionRelease',
+    '101-ProductPolish','102-LifeHub','103-IntegrationMarketplace','104-AICopilot',
+    '105-EnterpriseAdmin','106-QA','107-Build','108-Release',
+  ],
   modules: [
     'finance','communication','email','calendar','ai-center',
     'documents','productivity','marketplace',
     'app-ecosystem','personal-hub','enterprise-settings','observability',
-    'dashboard-v2','smart-search','notification-center','integration-center'
+    'dashboard-v2','smart-search','notification-center','integration-center',
+    'life-hub','integration-marketplace','ai-copilot','enterprise-admin',
   ],
   commit,
   builtAt,
@@ -219,7 +240,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '10.0.0-rc.1',
+  version: '10.1.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -284,6 +305,17 @@ for (const mod of v10Modules) {
   await stat(resolve(dist, mod));
 }
 
+// Validar módulos v10.1 (Phases 101-108)
+const v101Modules = [
+  'app/modules/life-hub.html',
+  'app/modules/integration-marketplace.html',
+  'app/modules/ai-copilot.html',
+  'app/modules/enterprise-admin.html',
+];
+for (const mod of v101Modules) {
+  await stat(resolve(dist, mod));
+}
+
 // ─── Patch URLs legadas ────────────────────────────────────────────────────────
 async function patchApiUrls(filePath) {
   try {
@@ -326,14 +358,14 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v10.0.0-rc.1 — Build OK ✓          ║');
+console.log('║   LifeOS Enterprise v10.1.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 10.0.0-rc.1`);
+console.log(`  Version       : 10.1.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Architecture  : Multi-Page RBAC + Command Center + Universal Search + Integrations + Companion AI`);
-console.log(`  Phases        : 093 CommandCenter | 094 Search | 095 Integrations | 096 CompanionAI | 097 Admin | 098-100 Release`);
-console.log(`  Modules       : 16 total (8 legacy + 4 v9.5 + 4 v10)`);
+console.log(`  Architecture  : Multi-Page RBAC + Life Hub + AI Copilot + Integration Marketplace + Enterprise Admin`);
+console.log(`  Phases        : 101 ProductPolish | 102 LifeHub | 103 Marketplace | 104 AICopilot | 105 EnterpriseAdmin | 106-108 QA/Build/Release`);
+console.log(`  Modules       : 20 total (8 legacy + 4 v9.5 + 4 v10 + 4 v10.1)`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);
