@@ -1,5 +1,6 @@
 import pytest
 import uuid
+from pathlib import Path
 from lifeos_sdk.lifeos_sdk import LifeOSSDK
 from lifeos_sdk.core.models import PluginManifest
 
@@ -50,7 +51,7 @@ class TestLifeOSSDK:
             plugin_id="finance_plugin_001",
             name="Plugin Financeiro",
             required_permissions=["life_graph.read", "future_engine.read", "companion.send_notification"],
-            entry_point="/home/ubuntu/Project-X/lifeos_sdk/plugins/plugin_financeiro.py"
+            entry_point=str(Path(__file__).resolve().parents[1] / "plugins" / "plugin_financeiro.py")
         )
         
         plugin_id = self.sdk.register_and_load_plugin(manifest)

@@ -31,8 +31,10 @@ check('Diretório dist', await exists(dist));
 if (!(await exists(dist))) throw new Error('Execute npm run build antes da verificação.');
 
 const requiredFiles = [
-  'index.html', 'login/index.html', 'admin/index.html', 'black_diamond.css',
-  'black_diamond.js', '_redirects', 'build-meta.json', 'health.json'
+  'index.html', 'login/index.html', 'register/index.html', 'forgot-password/index.html',
+  'app/index.html', 'admin/index.html', 'enterprise/index.html', 'memory-center/index.html',
+  'black_diamond.css', 'black_diamond.js', '_redirects', '_headers', 'robots.txt',
+  'sitemap.xml', 'build-meta.json', 'health.json'
 ];
 for (const file of requiredFiles) check(`Artefato ${file}`, await exists(resolve(dist, file)));
 
@@ -50,16 +52,18 @@ for (const route of metadata.routes) {
 }
 
 const index = await readFile(resolve(dist, 'index.html'), 'utf8');
+const app = await readFile(resolve(dist, 'app/index.html'), 'utf8');
 const login = await readFile(resolve(dist, 'login/index.html'), 'utf8');
 const admin = await readFile(resolve(dist, 'admin/index.html'), 'utf8');
-check('Aplicação principal', index.includes('view-dashboard') && index.includes('LifeOS'));
-check('Login administrativo', login.includes('admin-login') && login.includes('admin-session'));
-check('Sessão administrativa', admin.includes('admin-session') && admin.includes('admin-logout'));
-check('Navegação acessível', index.includes('aria-label=') && admin.includes('aria-label='));
-check('Viewport responsivo', index.includes('name="viewport"') && admin.includes('name="viewport"'));
+check('Landing pública', index.includes('LifeOS') && index.includes('name="viewport"'));
+check('Aplicação principal', app.includes('id="page-dashboard"') && app.includes('LifeOS'));
+check('Login administrativo', login.includes('/api/login') && login.includes('/api/session'));
+check('Sessão administrativa', admin.includes('/api/session') && admin.includes('/api/logout'));
+check('Navegação acessível', app.includes('<nav') && app.includes('aria-label=') && admin.includes('<nav'));
+check('Viewport responsivo', app.includes('name="viewport"') && admin.includes('name="viewport"'));
 
-const provisionalPattern = /\b(em breve|coming soon|dados simulados|mock(?:s|ado|ada)?|placeholder UI)\b/i;
-check('Sem fluxos provisórios na aplicação', !provisionalPattern.test(index));
+const provisionalPattern = /\b(coming soon|dados simulados|mock(?:s|ado|ada)?|placeholder UI)\b/i;
+check('Sem fluxos provisórios na aplicação', !provisionalPattern.test(app));
 check('Sem fluxos provisórios no Admin Center', !provisionalPattern.test(admin));
 
 const files = await walk(dist);

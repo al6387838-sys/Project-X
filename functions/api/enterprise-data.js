@@ -120,7 +120,7 @@ function seedState() {
         actor: 'admin@lifeos.app',
         action: 'system.init',
         resourceId: 'system',
-        detail: 'Sistema inicializado em produção — v7.0.0.',
+        detail: 'Sistema inicializado em produção — v9.1.0.',
         createdAt: now,
       },
     ],
@@ -145,7 +145,7 @@ function seedState() {
     healthScore: 94,
     system: {
       status: 'operational',
-      version: '7.0.0',
+      version: '9.1.0',
       environment: 'production',
       lastCheckedAt: now,
       uptime: '99.98',
