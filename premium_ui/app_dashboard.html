@@ -974,6 +974,88 @@
     .nav-item.active { background: rgba(99,102,241,0.12); border-left: 3px solid var(--accent); padding-left: calc(16px - 3px); }
     /* Loading skeleton */
     .skeleton { background: linear-gradient(90deg, var(--bg-elevated) 25%, rgba(99,102,241,0.08) 50%, var(--bg-elevated) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+
+    /* ═══ ENTERPRISE ONBOARDING v11.1 — Phase 119 ═══ */
+    #modal-onboarding { z-index: 1200; }
+    #modal-onboarding .modal-box { max-width: 760px; max-height: calc(100vh - 40px); overflow: auto; padding: 0; }
+    .onboarding-shell { min-height: 520px; display: flex; flex-direction: column; }
+    .onboarding-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; border-bottom: 1px solid var(--border); }
+    .onboarding-brand { display: flex; align-items: center; gap: 12px; }
+    .onboarding-brand-mark { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--gradient-primary); box-shadow: 0 0 24px rgba(99,102,241,.28); }
+    .onboarding-brand strong { display: block; font-size: 14px; }
+    .onboarding-brand span { display: block; margin-top: 2px; color: var(--text-muted); font-size: 11px; }
+    .onboarding-step-label { color: var(--text-secondary); font-size: 12px; font-weight: 700; }
+    .onboarding-progress { height: 4px; background: var(--bg-elevated); }
+    .onboarding-progress > span { display: block; height: 100%; background: var(--gradient-hero); transition: width .3s ease; }
+    .onboarding-body { flex: 1; padding: 30px 34px 24px; }
+    .onboarding-kicker { margin-bottom: 8px; color: var(--accent-light); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .onboarding-title { margin: 0 0 10px; font-size: 28px; line-height: 1.18; letter-spacing: -.04em; }
+    .onboarding-copy { max-width: 620px; color: var(--text-secondary); font-size: 14px; line-height: 1.65; }
+    .onboarding-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-top: 24px; }
+    .onboarding-field { display: grid; gap: 7px; }
+    .onboarding-field.full { grid-column: 1 / -1; }
+    .onboarding-field label { color: var(--text-secondary); font-size: 11px; font-weight: 700; }
+    .onboarding-input, .onboarding-select, .onboarding-textarea { width: 100%; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elevated); color: var(--text-primary); padding: 11px 13px; font: 500 13px/1.4 inherit; }
+    .onboarding-textarea { min-height: 88px; resize: vertical; }
+    .onboarding-choice-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin-top: 22px; }
+    .onboarding-choice { position: relative; display: flex; align-items: flex-start; gap: 10px; min-height: 78px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-elevated); cursor: pointer; transition: .18s ease; }
+    .onboarding-choice:hover { border-color: rgba(99,102,241,.45); transform: translateY(-1px); }
+    .onboarding-choice:has(input:checked) { border-color: var(--accent); background: rgba(99,102,241,.1); box-shadow: 0 0 0 3px rgba(99,102,241,.08); }
+    .onboarding-choice input { margin-top: 2px; accent-color: var(--accent); }
+    .onboarding-choice strong { display: block; font-size: 12px; }
+    .onboarding-choice small { display: block; margin-top: 5px; color: var(--text-muted); font-size: 10px; line-height: 1.45; }
+    .onboarding-error { display: none; margin-top: 16px; padding: 10px 12px; border: 1px solid rgba(239,68,68,.3); border-radius: 9px; background: rgba(239,68,68,.08); color: #FCA5A5; font-size: 12px; }
+    .onboarding-error.visible { display: block; }
+    .onboarding-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 22px; }
+    .onboarding-summary-card { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-elevated); }
+    .onboarding-summary-card span { display: block; color: var(--text-muted); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .onboarding-summary-card strong { display: block; margin-top: 7px; font-size: 13px; line-height: 1.45; }
+    .onboarding-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 26px 24px; border-top: 1px solid var(--border); }
+    .onboarding-actions-right { display: flex; gap: 10px; }
+    .onboarding-skip { border: 0; background: transparent; color: var(--text-muted); font: 600 12px/1 inherit; cursor: pointer; }
+    .onboarding-skip:hover { color: var(--text-primary); }
+    .onboarding-primary[disabled] { opacity: .55; cursor: progress; transform: none; }
+    .guided-tour-overlay { position: fixed; inset: 0; z-index: 1300; pointer-events: none; background: rgba(2,6,23,.62); opacity: 0; transition: opacity .2s; }
+    .guided-tour-overlay.active { opacity: 1; }
+    .guided-tour-highlight { position: fixed; z-index: 1301; border: 2px solid var(--accent-light); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(2,6,23,.68), 0 0 28px rgba(99,102,241,.45); pointer-events: none; transition: all .25s ease; }
+    .guided-tour-card { position: fixed; z-index: 1302; width: min(360px, calc(100vw - 32px)); padding: 18px; border: 1px solid rgba(129,140,248,.38); border-radius: 14px; background: #141B28; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+    .guided-tour-card h3 { margin: 8px 0; font-size: 17px; }
+    .guided-tour-card p { color: var(--text-secondary); font-size: 12px; line-height: 1.55; }
+    .guided-tour-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 16px; }
+    .guided-tour-count { color: var(--text-muted); font-size: 10px; font-weight: 700; }
+    .first-steps { position: fixed; right: 24px; bottom: 24px; z-index: 900; width: min(340px, calc(100vw - 32px)); border: 1px solid var(--border-accent); border-radius: 16px; background: rgba(20,27,40,.98); box-shadow: 0 22px 60px rgba(0,0,0,.5); overflow: hidden; transform: translateY(18px); opacity: 0; pointer-events: none; transition: .25s ease; }
+    .first-steps.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    .first-steps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px; border-bottom: 1px solid var(--border); }
+    .first-steps-head h3 { margin: 0; font-size: 14px; }
+    .first-steps-head p { margin-top: 4px; color: var(--text-muted); font-size: 10px; }
+    .first-steps-list { display: grid; gap: 8px; padding: 14px; }
+    .first-step-item { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-elevated); cursor: pointer; }
+    .first-step-item input { accent-color: var(--green); }
+    .first-step-item span { font-size: 11px; }
+    .first-step-item:has(input:checked) span { color: var(--text-muted); text-decoration: line-through; }
+    .first-steps-progress { height: 4px; background: var(--bg-elevated); }
+    .first-steps-progress span { display: block; height: 100%; background: var(--gradient-primary); transition: width .25s; }
+    @media (max-width: 720px) {
+      #modal-onboarding { padding: 8px; align-items: flex-end; }
+      #modal-onboarding .modal-box { max-height: 92vh; border-radius: 18px 18px 8px 8px; }
+      .onboarding-top, .onboarding-actions { padding-left: 18px; padding-right: 18px; }
+      .onboarding-body { padding: 24px 20px; }
+      .onboarding-title { font-size: 23px; }
+      .onboarding-grid, .onboarding-summary { grid-template-columns: 1fr; }
+      .onboarding-field.full { grid-column: 1; }
+      .onboarding-choice-grid { grid-template-columns: 1fr; }
+      .onboarding-choice { min-height: 0; }
+      .onboarding-actions { align-items: stretch; flex-direction: column-reverse; gap: 8px; }
+      .onboarding-actions-right { width: 100%; }
+      .onboarding-actions-right .btn { flex: 1; justify-content: center; }
+      .onboarding-actions > .onboarding-skip { min-height: 38px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); }
+      .guided-tour-highlight { display: none; }
+      .guided-tour-card { left: 16px !important; right: 16px !important; bottom: 16px !important; top: auto !important; width: auto; }
+      .first-steps { right: 16px; bottom: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .onboarding-progress > span, .guided-tour-highlight, .guided-tour-overlay, .first-steps { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -1551,12 +1633,23 @@
   </div>
 </div>
 
-<!-- ─── MODAL: ONBOARDING ─── -->
-<div class="modal-overlay" id="modal-onboarding">
+<!-- ─── MODAL: ONBOARDING EMPRESARIAL — Phase 119 ─── -->
+<div class="modal-overlay" id="modal-onboarding" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
   <div class="modal-box">
-    <div id="onboarding-content"></div>
+    <div id="onboarding-content" aria-live="polite"></div>
   </div>
 </div>
+
+<!-- ─── TOUR GUIADO E PRIMEIROS PASSOS — Phase 119 ─── -->
+<div id="guided-tour-root" hidden></div>
+<aside class="first-steps" id="first-steps" aria-labelledby="first-steps-title" aria-hidden="true">
+  <div class="first-steps-progress"><span id="first-steps-progress" style="width:0%"></span></div>
+  <div class="first-steps-head">
+    <div><h3 id="first-steps-title">Primeiros passos</h3><p id="first-steps-subtitle">0 de 4 concluídos</p></div>
+    <button class="modal-close" type="button" onclick="closeFirstSteps()" aria-label="Fechar checklist">&#x2715;</button>
+  </div>
+  <div class="first-steps-list" id="first-steps-list"></div>
+</aside>
 
 <!-- ─── MODAL: ALTERAR SENHA ─── -->
 <div class="modal-overlay" id="modal-change-password">
@@ -1613,8 +1706,16 @@
       if (!r.ok) { location.replace('/login'); return; }
       const data = await r.json();
       if (!data.ok) { location.replace('/login'); return; }
-      currentUser = data.user;
-      initDashboard(data.user);
+      let user = data.user;
+      try {
+        const profileResponse = await fetch('/api/user-data', { credentials: 'same-origin' });
+        if (profileResponse.ok) {
+          const profileData = await profileResponse.json();
+          if (profileData?.user) user = { ...user, ...profileData.user };
+        }
+      } catch (_) { /* sessão básica continua funcional */ }
+      currentUser = user;
+      initDashboard(user);
     } catch (_) {
       location.replace('/login');
     }
@@ -1638,6 +1739,7 @@
     if (profileInputs[2]) profileInputs[2].value = user.timezone || 'America/Sao_Paulo';
     // Load Life Dashboard 2.0 (Phase 088)
     loadDashboardV2(name);
+    initializeEnterpriseOnboarding(user);
   }
 
   // ── Notification Center Loader (Phase 090) ─────────────────────────────
@@ -1977,48 +2079,337 @@
     el.textContent = msg;
   }
 
-  // ─── Onboarding ─────────────────────────────────────────────
-  let onboardingStep = 0;
-  const onboardingSteps = [
-    { title: 'Bem-vindo ao LifeOS! 🚀', desc: 'Sua plataforma de produtividade pessoal. Vamos configurar sua experiência em 3 passos rápidos.', icon: '🌟', action: 'Próximo' },
-    { title: 'Defina suas metas 🎯', desc: 'Quais são seus objetivos principais? Adicione e edite metas a qualquer momento na seção Metas.', icon: '🎯', action: 'Próximo' },
-    { title: 'Crie hábitos diários 🔄', desc: 'Hábitos consistentes são a base do sucesso. Comece com 2-3 hábitos simples.', icon: '🔄', action: 'Próximo' },
-    { title: 'Tudo pronto! ✨', desc: 'Seu LifeOS está configurado. Explore o dashboard e comece sua jornada!', icon: '✨', action: 'Começar' },
+  // ─── Enterprise Onboarding v11.1 — Phase 119 ─────────────────────────
+  const ONBOARDING_STORAGE_KEY = 'lifeos_enterprise_onboarding_v1';
+  const ONBOARDING_STEPS = [
+    { id: 'welcome', kicker: 'Configuração inicial', title: 'Bem-vindo ao seu LifeOS', copy: 'Em poucos minutos, vamos adaptar o ambiente ao seu perfil, às suas prioridades e ao seu modo de trabalhar.' },
+    { id: 'profile', kicker: 'Perfil e contexto', title: 'Como você trabalha?', copy: 'Essas informações personalizam o Command Center, os resumos e as recomendações operacionais.' },
+    { id: 'goals', kicker: 'Objetivos', title: 'Quais resultados importam agora?', copy: 'Selecione uma ou mais prioridades. Você poderá refiná-las e acompanhar o progresso no módulo de Metas.' },
+    { id: 'integrations', kicker: 'Integrações', title: 'Conecte seu fluxo de trabalho', copy: 'Escolha os serviços que deseja preparar. Nenhuma conexão externa será feita sem sua autorização.' },
+    { id: 'notifications', kicker: 'Preferências', title: 'Defina o que merece sua atenção', copy: 'Ajuste os alertas iniciais para manter foco sem perder eventos importantes.' },
+    { id: 'review', kicker: 'Revisão', title: 'Seu espaço está pronto', copy: 'Revise a configuração. Depois, faremos um tour rápido pelos principais pontos do LifeOS.' },
   ];
+  const ONBOARDING_GOALS = [
+    ['productivity', 'Produtividade', 'Planejar e executar com mais foco'],
+    ['leadership', 'Liderança', 'Acompanhar equipe e decisões'],
+    ['finance', 'Finanças', 'Organizar metas e indicadores'],
+    ['health', 'Bem-estar', 'Criar rotinas sustentáveis'],
+    ['knowledge', 'Conhecimento', 'Centralizar notas e documentos'],
+    ['automation', 'Automação', 'Eliminar trabalho repetitivo'],
+  ];
+  const ONBOARDING_INTEGRATIONS = [
+    ['google', 'Google Workspace', 'Agenda, Drive e Gmail'],
+    ['microsoft', 'Microsoft 365', 'Outlook, OneDrive e Teams'],
+    ['slack', 'Slack', 'Canais e notificações'],
+    ['notion', 'Notion', 'Páginas e bases de conhecimento'],
+    ['github', 'GitHub', 'Projetos, issues e atividade'],
+    ['finance', 'Open Finance', 'Contas e movimentações'],
+  ];
+  let onboardingStep = 0;
+  let onboardingBusy = false;
+  let onboardingState = loadOnboardingState();
+  let guidedTourIndex = 0;
+
+  function defaultOnboardingState() {
+    return {
+      version: 1,
+      currentStep: 0,
+      profile: { name: '', role: '', company: '', timezone: 'America/Sao_Paulo' },
+      goals: [],
+      customGoal: '',
+      integrations: [],
+      notifications: { dailyBriefing: true, goalAlerts: true, integrationAlerts: true, weeklyDigest: true },
+      completed: false,
+      tourCompleted: false,
+      checklist: { profile: false, goal: false, integration: false, commandCenter: false },
+    };
+  }
+
+  function loadOnboardingState() {
+    const fallback = defaultOnboardingState();
+    try {
+      const saved = JSON.parse(localStorage.getItem(ONBOARDING_STORAGE_KEY) || '{}');
+      return {
+        ...fallback,
+        ...saved,
+        profile: { ...fallback.profile, ...(saved.profile || {}) },
+        notifications: { ...fallback.notifications, ...(saved.notifications || {}) },
+        checklist: { ...fallback.checklist, ...(saved.checklist || {}) },
+      };
+    } catch (_) { return fallback; }
+  }
+
+  function persistOnboardingState() {
+    onboardingState.currentStep = onboardingStep;
+    localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(onboardingState));
+  }
+
+  function onboardingEscape(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[char]);
+  }
+
+  function onboardingChoice(name, value, title, description, checked, type = 'checkbox') {
+    return `<label class="onboarding-choice"><input type="${type}" name="${name}" value="${onboardingEscape(value)}" ${checked ? 'checked' : ''}><span><strong>${onboardingEscape(title)}</strong><small>${onboardingEscape(description)}</small></span></label>`;
+  }
+
+  function onboardingStepContent(step) {
+    const profile = onboardingState.profile;
+    if (step.id === 'welcome') {
+      return `<div class="onboarding-summary">
+        <div class="onboarding-summary-card"><span>Command Center</span><strong>Agenda, metas, projetos e decisões em uma única visão.</strong></div>
+        <div class="onboarding-summary-card"><span>Automação</span><strong>Fluxos preparados para reduzir tarefas repetitivas.</strong></div>
+        <div class="onboarding-summary-card"><span>Integrações</span><strong>Conexões centralizadas, seguras e sob seu controle.</strong></div>
+        <div class="onboarding-summary-card"><span>Inteligência</span><strong>Resumos e insights alinhados às suas prioridades.</strong></div>
+      </div>`;
+    }
+    if (step.id === 'profile') {
+      const roles = ['Fundador(a) / Executivo(a)', 'Gestor(a) / Líder', 'Especialista / Consultor(a)', 'Profissional autônomo(a)', 'Estudante / Pesquisador(a)', 'Outro'];
+      return `<div class="onboarding-grid">
+        <div class="onboarding-field"><label for="ob-name">Nome completo *</label><input class="onboarding-input" id="ob-name" maxlength="80" autocomplete="name" value="${onboardingEscape(profile.name)}" placeholder="Como devemos chamar você?"></div>
+        <div class="onboarding-field"><label for="ob-role">Função principal *</label><select class="onboarding-select" id="ob-role"><option value="">Selecione</option>${roles.map(role => `<option value="${onboardingEscape(role)}" ${profile.role === role ? 'selected' : ''}>${onboardingEscape(role)}</option>`).join('')}</select></div>
+        <div class="onboarding-field"><label for="ob-company">Empresa ou projeto</label><input class="onboarding-input" id="ob-company" maxlength="100" value="${onboardingEscape(profile.company)}" placeholder="Ex.: Acme Tecnologia"></div>
+        <div class="onboarding-field"><label for="ob-timezone">Fuso horário</label><select class="onboarding-select" id="ob-timezone"><option value="America/Sao_Paulo" ${profile.timezone === 'America/Sao_Paulo' ? 'selected' : ''}>Brasília (GMT-3)</option><option value="America/Manaus" ${profile.timezone === 'America/Manaus' ? 'selected' : ''}>Manaus (GMT-4)</option><option value="America/Rio_Branco" ${profile.timezone === 'America/Rio_Branco' ? 'selected' : ''}>Rio Branco (GMT-5)</option><option value="Europe/Lisbon" ${profile.timezone === 'Europe/Lisbon' ? 'selected' : ''}>Lisboa</option><option value="UTC" ${profile.timezone === 'UTC' ? 'selected' : ''}>UTC</option></select></div>
+      </div>`;
+    }
+    if (step.id === 'goals') {
+      return `<div class="onboarding-choice-grid">${ONBOARDING_GOALS.map(([value,title,desc]) => onboardingChoice('ob-goals', value, title, desc, onboardingState.goals.includes(value))).join('')}</div>
+        <div class="onboarding-field full" style="margin-top:14px"><label for="ob-custom-goal">Objetivo específico (opcional)</label><textarea class="onboarding-textarea" id="ob-custom-goal" maxlength="240" placeholder="Ex.: lançar uma nova operação até o fim do trimestre">${onboardingEscape(onboardingState.customGoal)}</textarea></div>`;
+    }
+    if (step.id === 'integrations') {
+      return `<div class="onboarding-choice-grid">${ONBOARDING_INTEGRATIONS.map(([value,title,desc]) => onboardingChoice('ob-integrations', value, title, desc, onboardingState.integrations.includes(value))).join('')}</div><p class="onboarding-copy" style="margin-top:16px;font-size:11px">As escolhas apenas preparam seu catálogo. Credenciais e permissões serão solicitadas individualmente na Central de Integrações.</p>`;
+    }
+    if (step.id === 'notifications') {
+      const options = [
+        ['dailyBriefing', 'Resumo diário', 'Prioridades, agenda e alertas no início do dia'],
+        ['goalAlerts', 'Alertas de objetivos', 'Mudanças de prazo, risco e progresso relevante'],
+        ['integrationAlerts', 'Saúde das integrações', 'Falhas de sincronização e permissões expiradas'],
+        ['weeklyDigest', 'Síntese semanal', 'Resultados, tendências e próximos passos'],
+      ];
+      return `<div class="onboarding-choice-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">${options.map(([value,title,desc]) => onboardingChoice('ob-notifications', value, title, desc, onboardingState.notifications[value])).join('')}</div>`;
+    }
+    const goalNames = ONBOARDING_GOALS.filter(([value]) => onboardingState.goals.includes(value)).map(([,title]) => title);
+    const integrationNames = ONBOARDING_INTEGRATIONS.filter(([value]) => onboardingState.integrations.includes(value)).map(([,title]) => title);
+    const enabledNotifications = Object.values(onboardingState.notifications).filter(Boolean).length;
+    return `<div class="onboarding-summary">
+      <div class="onboarding-summary-card"><span>Perfil</span><strong>${onboardingEscape(profile.name || 'Não informado')} · ${onboardingEscape(profile.role || 'Função não informada')}</strong></div>
+      <div class="onboarding-summary-card"><span>Contexto</span><strong>${onboardingEscape(profile.company || 'Uso pessoal')} · ${onboardingEscape(profile.timezone)}</strong></div>
+      <div class="onboarding-summary-card"><span>Prioridades</span><strong>${onboardingEscape(goalNames.join(', ') || 'Nenhuma selecionada')}</strong></div>
+      <div class="onboarding-summary-card"><span>Integrações preparadas</span><strong>${onboardingEscape(integrationNames.join(', ') || 'Configurar depois')}</strong></div>
+      <div class="onboarding-summary-card"><span>Notificações</span><strong>${enabledNotifications} de 4 categorias ativas</strong></div>
+      <div class="onboarding-summary-card"><span>Próximo passo</span><strong>Tour guiado e checklist de ativação.</strong></div>
+    </div>`;
+  }
+
   function renderOnboardingStep() {
-    const step = onboardingSteps[onboardingStep];
+    const step = ONBOARDING_STEPS[onboardingStep];
     const container = document.getElementById('onboarding-content');
     if (!container || !step) return;
-    container.innerHTML = `
-      <div style="text-align:center;padding:20px 0">
-        <div style="font-size:56px;margin-bottom:20px">${step.icon}</div>
-        <h2 style="font-size:22px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;color:#F0F4FF">${step.title}</h2>
-        <p style="font-size:14px;color:#8892A4;line-height:1.6;max-width:320px;margin:0 auto">${step.desc}</p>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin:24px 0">
-        ${onboardingSteps.map((_,i) => `<div style="width:${i===onboardingStep?24:8}px;height:8px;border-radius:4px;background:${i===onboardingStep?'#6366F1':'rgba(255,255,255,0.1)'};transition:all 0.3s"></div>`).join('')}
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="nextOnboardingStep()">${step.action}</button>
-      ${onboardingStep > 0 ? '<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px" onclick="prevOnboardingStep()">Voltar</button>' : ''}
-    `;
+    const progress = Math.round(((onboardingStep + 1) / ONBOARDING_STEPS.length) * 100);
+    container.innerHTML = `<div class="onboarding-shell">
+      <div class="onboarding-top"><div class="onboarding-brand"><div class="onboarding-brand-mark">⚡</div><div><strong>LifeOS Enterprise</strong><span>Configuração personalizada</span></div></div><div class="onboarding-step-label">Etapa ${onboardingStep + 1} de ${ONBOARDING_STEPS.length}</div></div>
+      <div class="onboarding-progress"><span style="width:${progress}%"></span></div>
+      <div class="onboarding-body"><div class="onboarding-kicker">${step.kicker}</div><h2 class="onboarding-title" id="onboarding-title">${step.title}</h2><p class="onboarding-copy">${step.copy}</p>${onboardingStepContent(step)}<div class="onboarding-error" id="onboarding-error" role="alert"></div></div>
+      <div class="onboarding-actions"><button class="onboarding-skip" type="button" onclick="pauseEnterpriseOnboarding()">Fazer depois</button><div class="onboarding-actions-right">${onboardingStep > 0 ? '<button class="btn btn-ghost" type="button" onclick="prevOnboardingStep()">Voltar</button>' : ''}<button class="btn btn-primary onboarding-primary" id="onboarding-next" type="button" onclick="nextOnboardingStep()">${step.id === 'review' ? 'Concluir e iniciar tour' : 'Continuar'}</button></div></div>
+    </div>`;
+    queueMicrotask(() => container.querySelector('input,select,textarea,button')?.focus({ preventScroll: true }));
   }
+
+  function showOnboardingError(message) {
+    const error = document.getElementById('onboarding-error');
+    if (!error) return;
+    error.textContent = message;
+    error.classList.add('visible');
+  }
+
+  function collectOnboardingStep() {
+    const step = ONBOARDING_STEPS[onboardingStep];
+    if (step.id === 'profile') {
+      const name = document.getElementById('ob-name')?.value.trim() || '';
+      const role = document.getElementById('ob-role')?.value || '';
+      if (name.length < 2) { showOnboardingError('Informe seu nome para personalizar o ambiente.'); return false; }
+      if (!role) { showOnboardingError('Selecione sua função principal.'); return false; }
+      onboardingState.profile = { name, role, company: document.getElementById('ob-company')?.value.trim() || '', timezone: document.getElementById('ob-timezone')?.value || 'America/Sao_Paulo' };
+    }
+    if (step.id === 'goals') {
+      onboardingState.goals = [...document.querySelectorAll('input[name="ob-goals"]:checked')].map(input => input.value);
+      onboardingState.customGoal = document.getElementById('ob-custom-goal')?.value.trim() || '';
+      if (!onboardingState.goals.length && !onboardingState.customGoal) { showOnboardingError('Selecione ao menos uma prioridade ou descreva um objetivo específico.'); return false; }
+    }
+    if (step.id === 'integrations') onboardingState.integrations = [...document.querySelectorAll('input[name="ob-integrations"]:checked')].map(input => input.value);
+    if (step.id === 'notifications') {
+      const enabled = new Set([...document.querySelectorAll('input[name="ob-notifications"]:checked')].map(input => input.value));
+      Object.keys(onboardingState.notifications).forEach(key => { onboardingState.notifications[key] = enabled.has(key); });
+    }
+    persistOnboardingState();
+    return true;
+  }
+
+  async function saveOnboardingStep(step, data) {
+    try {
+      const response = await fetch('/api/onboarding', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ step, data }) });
+      return response.ok;
+    } catch (_) { return false; }
+  }
+
   async function nextOnboardingStep() {
-    if (onboardingStep < onboardingSteps.length - 1) {
-      onboardingStep++; renderOnboardingStep();
-    } else {
-      try {
-        await fetch('/api/onboarding', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ step: 'complete', data: {} }) });
-      } catch (_) {}
-      closeModal();
-      history.replaceState({}, '', '/app');
-      showToast('Bem-vindo ao LifeOS! Explore o dashboard.', 'success');
+    if (onboardingBusy || !collectOnboardingStep()) return;
+    onboardingBusy = true;
+    const button = document.getElementById('onboarding-next');
+    if (button) { button.disabled = true; button.textContent = 'Salvando...'; }
+    const step = ONBOARDING_STEPS[onboardingStep];
+    if (step.id !== 'review') {
+      const payload = step.id === 'welcome' ? { started: true } : step.id === 'profile' ? onboardingState.profile : step.id === 'goals' ? { goals: onboardingState.goals, customGoal: onboardingState.customGoal } : step.id === 'integrations' ? { integrations: onboardingState.integrations } : onboardingState.notifications;
+      await saveOnboardingStep(step.id, payload);
+      onboardingStep += 1;
+      onboardingBusy = false;
+      persistOnboardingState();
+      renderOnboardingStep();
+      return;
+    }
+    await saveOnboardingStep('complete', { profile: onboardingState.profile, goals: onboardingState.goals, customGoal: onboardingState.customGoal, integrations: onboardingState.integrations, notifications: onboardingState.notifications });
+    onboardingState.completed = true;
+    onboardingState.checklist.profile = true;
+    onboardingState.checklist.goal = onboardingState.goals.length > 0 || Boolean(onboardingState.customGoal);
+    onboardingState.checklist.integration = onboardingState.integrations.length > 0;
+    persistOnboardingState();
+    onboardingBusy = false;
+    closeModal();
+    history.replaceState({}, '', '/app');
+    if (onboardingState.profile.name) {
+      document.getElementById('sidebar-name').textContent = onboardingState.profile.name;
+      document.getElementById('profile-name').textContent = onboardingState.profile.name;
+    }
+    showToast('Configuração salva. Vamos conhecer seu LifeOS.', 'success');
+    setTimeout(startGuidedTour, 450);
+  }
+
+  function prevOnboardingStep() {
+    if (onboardingBusy || onboardingStep <= 0) return;
+    collectOnboardingStep();
+    onboardingStep -= 1;
+    persistOnboardingState();
+    renderOnboardingStep();
+  }
+
+  function pauseEnterpriseOnboarding() {
+    collectOnboardingStep();
+    persistOnboardingState();
+    closeModal();
+    history.replaceState({}, '', '/app');
+    showToast('Progresso salvo. Você poderá continuar na próxima entrada.', 'info');
+  }
+
+  async function initializeEnterpriseOnboarding(user) {
+    onboardingState.profile.name ||= user?.name || user?.username?.split('@')[0] || '';
+    onboardingState.profile.timezone ||= user?.timezone || 'America/Sao_Paulo';
+    let remote = null;
+    try {
+      const response = await fetch('/api/onboarding', { credentials: 'same-origin' });
+      if (response.ok) remote = (await response.json()).onboarding;
+    } catch (_) {}
+    if (remote?.completedAt) onboardingState.completed = true;
+    if (remote?.profile) onboardingState.profile = { ...onboardingState.profile, ...remote.profile };
+    if (remote?.goals) {
+      onboardingState.goals = remote.goals.goals || onboardingState.goals;
+      onboardingState.customGoal = remote.goals.customGoal || onboardingState.customGoal;
+    }
+    if (remote?.integrations) onboardingState.integrations = remote.integrations.integrations || onboardingState.integrations;
+    if (remote?.notifications) onboardingState.notifications = { ...onboardingState.notifications, ...remote.notifications };
+    const requested = new URLSearchParams(location.search).get('onboarding') === 'true';
+    const remoteInProgress = Boolean(remote?.startedAt && !remote?.completedAt);
+    onboardingStep = Math.min(Number(onboardingState.currentStep) || 0, ONBOARDING_STEPS.length - 1);
+    persistOnboardingState();
+    if (!onboardingState.completed && (requested || remoteInProgress)) {
+      setTimeout(() => { openModal('modal-onboarding'); renderOnboardingStep(); }, 450);
+    } else if (onboardingState.completed && !onboardingState.tourCompleted && requested) {
+      setTimeout(startGuidedTour, 500);
     }
   }
-  function prevOnboardingStep() { if (onboardingStep > 0) { onboardingStep--; renderOnboardingStep(); } }
-  // Check onboarding on load
-  const _urlParams = new URLSearchParams(location.search);
-  if (_urlParams.get('onboarding') === 'true') {
-    setTimeout(() => { openModal('modal-onboarding'); renderOnboardingStep(); }, 600);
+
+  const GUIDED_TOUR_STEPS = [
+    { selector: '.nav-item[onclick*="dashboard"]', title: 'Command Center', copy: 'Sua visão operacional reúne prioridades, agenda, indicadores e atalhos para decisões rápidas.' },
+    { selector: '.topbar-search', title: 'Busca universal', copy: 'Encontre módulos, registros e ações sem interromper o contexto atual.' },
+    { selector: '.nav-item[onclick*="integration-center"]', title: 'Central de Integrações', copy: 'Gerencie conexões, permissões, status e histórico em um único lugar.' },
+    { selector: '.nav-item[onclick*="automation"]', title: 'Automação', copy: 'Crie fluxos e acompanhe execuções para reduzir trabalho manual.' },
+    { selector: '.user-card', title: 'Perfil e preferências', copy: 'Atualize seu perfil profissional, segurança e configurações quando precisar.' },
+  ];
+
+  function startGuidedTour() {
+    guidedTourIndex = 0;
+    const root = document.getElementById('guided-tour-root');
+    if (!root) return;
+    root.hidden = false;
+    renderGuidedTourStep();
+  }
+
+  function renderGuidedTourStep() {
+    const root = document.getElementById('guided-tour-root');
+    const step = GUIDED_TOUR_STEPS[guidedTourIndex];
+    const target = document.querySelector(step.selector);
+    if (!root || !step || !target) { finishGuidedTour(); return; }
+    target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    const rect = target.getBoundingClientRect();
+    const cardWidth = Math.min(360, window.innerWidth - 32);
+    let left = rect.right + 16;
+    if (left + cardWidth > window.innerWidth - 16) left = Math.max(16, rect.left - cardWidth - 16);
+    let top = Math.max(16, Math.min(rect.top, window.innerHeight - 230));
+    root.innerHTML = `<div class="guided-tour-overlay active"></div><div class="guided-tour-highlight" style="left:${Math.max(4,rect.left-6)}px;top:${Math.max(4,rect.top-6)}px;width:${rect.width+12}px;height:${rect.height+12}px"></div><section class="guided-tour-card" role="dialog" aria-modal="true" aria-labelledby="guided-tour-title" style="left:${left}px;top:${top}px"><div class="onboarding-kicker">Tour guiado</div><h3 id="guided-tour-title">${step.title}</h3><p>${step.copy}</p><div class="guided-tour-actions"><button class="onboarding-skip" type="button" onclick="finishGuidedTour()">Pular tour</button><div style="display:flex;align-items:center;gap:10px"><span class="guided-tour-count">${guidedTourIndex + 1}/${GUIDED_TOUR_STEPS.length}</span><button class="btn btn-primary" type="button" onclick="nextGuidedTourStep()">${guidedTourIndex === GUIDED_TOUR_STEPS.length - 1 ? 'Concluir' : 'Próximo'}</button></div></div></section>`;
+    root.querySelector('.guided-tour-card button:last-child')?.focus();
+  }
+
+  function nextGuidedTourStep() {
+    if (guidedTourIndex < GUIDED_TOUR_STEPS.length - 1) { guidedTourIndex += 1; renderGuidedTourStep(); }
+    else finishGuidedTour();
+  }
+
+  async function finishGuidedTour() {
+    const root = document.getElementById('guided-tour-root');
+    if (root) { root.innerHTML = ''; root.hidden = true; }
+    onboardingState.tourCompleted = true;
+    persistOnboardingState();
+    await saveOnboardingStep('tour', { completed: true });
+    openFirstSteps();
+  }
+
+  const FIRST_STEPS = [
+    ['profile', 'Revisar seu perfil profissional'],
+    ['goal', 'Criar ou revisar seu primeiro objetivo'],
+    ['integration', 'Preparar uma integração prioritária'],
+    ['commandCenter', 'Explorar o Command Center'],
+  ];
+
+  function renderFirstSteps() {
+    const list = document.getElementById('first-steps-list');
+    if (!list) return;
+    list.innerHTML = FIRST_STEPS.map(([id,label]) => `<label class="first-step-item"><input type="checkbox" data-first-step="${id}" ${onboardingState.checklist[id] ? 'checked' : ''} onchange="updateFirstStep('${id}', this.checked)"><span>${label}</span></label>`).join('');
+    const completed = FIRST_STEPS.filter(([id]) => onboardingState.checklist[id]).length;
+    document.getElementById('first-steps-subtitle').textContent = `${completed} de ${FIRST_STEPS.length} concluídos`;
+    document.getElementById('first-steps-progress').style.width = `${(completed / FIRST_STEPS.length) * 100}%`;
+  }
+
+  function openFirstSteps() {
+    renderFirstSteps();
+    const panel = document.getElementById('first-steps');
+    panel?.classList.add('open');
+    panel?.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeFirstSteps() {
+    const panel = document.getElementById('first-steps');
+    panel?.classList.remove('open');
+    panel?.setAttribute('aria-hidden', 'true');
+  }
+
+  async function updateFirstStep(id, checked) {
+    if (!(id in onboardingState.checklist)) return;
+    onboardingState.checklist[id] = Boolean(checked);
+    persistOnboardingState();
+    renderFirstSteps();
+    await saveOnboardingStep('checklist', onboardingState.checklist);
+    if (Object.values(onboardingState.checklist).every(Boolean)) {
+      showToast('Checklist inicial concluído. Seu LifeOS está pronto.', 'success');
+      setTimeout(closeFirstSteps, 900);
+    }
   }
 
   // ═══ MÓDULOS v8.0 — Carregamento Dinâmico ═══

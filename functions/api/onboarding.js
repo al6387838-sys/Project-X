@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Onboarding API v7.0
+// LifeOS Enterprise — Onboarding API v11.1
 // Cloudflare Pages Function: POST /api/onboarding
 // Gerencia o fluxo de onboarding de novos usuários
 import { getCookie, json, verifySession } from '../_auth.js';
@@ -18,7 +18,18 @@ export async function onRequestPost({ request, env }) {
   const step = String(input.step || '');
   const data = input.data || {};
 
-  const validSteps = ['welcome', 'goals', 'habits', 'workspace', 'complete'];
+  const validSteps = [
+    'welcome',
+    'profile',
+    'goals',
+    'habits',
+    'workspace',
+    'integrations',
+    'notifications',
+    'tour',
+    'checklist',
+    'complete',
+  ];
   if (!validSteps.includes(step)) {
     return json(400, { ok: false, error: 'Etapa de onboarding inválida' });
   }
@@ -40,8 +51,27 @@ export async function onRequestPost({ request, env }) {
         const userRaw = await env.LIFEOS_KV.get(`user:${session.sub}`);
         if (userRaw) {
           const userData = JSON.parse(userRaw);
+          const cleanText = (value, max = 160) => String(value || '').trim().slice(0, max);
+          const cleanList = (value, max = 12) => Array.isArray(value)
+            ? value.map(item => cleanText(item, 80)).filter(Boolean).slice(0, max)
+            : [];
+          const profile = data.profile && typeof data.profile === 'object' ? data.profile : {};
+          const notifications = data.notifications && typeof data.notifications === 'object' ? data.notifications : {};
+          userData.name = cleanText(profile.name, 100) || userData.name;
+          userData.timezone = cleanText(profile.timezone, 80) || userData.timezone;
+          userData.professionalRole = cleanText(profile.role, 100);
+          userData.company = cleanText(profile.company, 120);
+          userData.onboardingGoals = cleanList(data.goals, 8);
+          userData.customGoal = cleanText(data.customGoal, 240);
+          userData.preparedIntegrations = cleanList(data.integrations, 12);
+          userData.notificationPreferences = {
+            dailyBriefing: notifications.dailyBriefing !== false,
+            smartAlerts: notifications.smartAlerts !== false,
+            weeklyDigest: notifications.weeklyDigest !== false,
+          };
           userData.onboarded = true;
           userData.onboardedAt = new Date().toISOString();
+          userData.updatedAt = new Date().toISOString();
           await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(userData));
         }
       }
@@ -50,7 +80,18 @@ export async function onRequestPost({ request, env }) {
     } catch (_) { /* KV error — continuar */ }
   }
 
-  const nextStepMap = { welcome: 'goals', goals: 'habits', habits: 'workspace', workspace: 'complete', complete: null };
+  const nextStepMap = {
+    welcome: 'profile',
+    profile: 'goals',
+    goals: 'integrations',
+    integrations: 'notifications',
+    notifications: 'complete',
+    habits: 'workspace',
+    workspace: 'complete',
+    tour: 'checklist',
+    checklist: null,
+    complete: null,
+  };
   return json(200, {
     ok: true,
     step,
