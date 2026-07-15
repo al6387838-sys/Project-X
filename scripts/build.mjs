@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 9.1.0 (com módulos independentes)
+// Version: 9.2.0 (com módulos independentes)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -122,7 +122,7 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
 
 // Gerar _redirects v8 com novas rotas
 const redirects = [
-  '# LifeOS Enterprise v9.1.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v9.2.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -160,6 +160,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 // ─── Build metadata ────────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
+const buildId = `lifeos-v9.2.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -184,7 +185,8 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '9.1.0',
+  version: '9.2.0',
+  buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   architecture: 'multi-page-rbac-modules',
@@ -197,7 +199,8 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '9.1.0',
+  version: '9.2.0',
+  buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -281,10 +284,11 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v9.1.0 — Build OK ✓         ║');
+console.log('║   LifeOS Enterprise v9.2.0 — Build OK ✓         ║');
 console.log('╚══════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 9.1.0`);
+console.log(`  Version       : 9.2.0`);
+console.log(`  Build ID      : ${buildId}`);
 console.log(`  Architecture  : Multi-Page RBAC + Finance Hub + Comm Hub + AI Platform`);
 console.log(`  Modules       : Finance Hub | Communication Hub | AI Platform | Email | Calendar | Docs | Prod | Market`);
 console.log(`  Commit        : ${commit}`);
