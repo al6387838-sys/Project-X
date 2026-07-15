@@ -1,0 +1,277 @@
+<!-- LifeOS Enterprise — Módulo Email v8.0 -->
+<div id="module-email" style="display:none">
+
+<!-- ─── INBOX UNIFICADA ─── -->
+<div class="page" id="page-email">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📧 Email</div>
+      <div class="page-subtitle">Inbox unificada — todos os seus emails em um lugar</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('email-integrations')">Contas</button>
+      <button class="btn btn-primary" onclick="openModal('modal-compose-email')">✏️ Novo Email</button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:220px 1fr;gap:0;height:calc(100vh - 160px);background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
+    <!-- Sidebar email -->
+    <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
+      <!-- Contas -->
+      <div style="padding:12px;border-bottom:1px solid var(--border)">
+        <select class="form-input" style="width:100%;font-size:12px" onchange="emailSwitchAccount(this.value)">
+          <option value="all">📥 Todas as contas</option>
+          <option value="gmail">📧 Gmail — usuario@gmail.com</option>
+          <option value="outlook">📨 Outlook — user@outlook.com</option>
+          <option value="work">🏢 Work — user@empresa.com</option>
+        </select>
+      </div>
+      <!-- Pastas -->
+      <div style="flex:1;overflow-y:auto;padding:8px">
+        <div class="email-folder active" onclick="emailFolder('inbox',this)">
+          <span>📥</span><span style="flex:1">Caixa de Entrada</span><span class="email-count">24</span>
+        </div>
+        <div class="email-folder" onclick="emailFolder('starred',this)">
+          <span>⭐</span><span style="flex:1">Favoritos</span><span class="email-count">8</span>
+        </div>
+        <div class="email-folder" onclick="emailFolder('sent',this)">
+          <span>📤</span><span style="flex:1">Enviados</span>
+        </div>
+        <div class="email-folder" onclick="emailFolder('drafts',this)">
+          <span>📝</span><span style="flex:1">Rascunhos</span><span class="email-count">3</span>
+        </div>
+        <div class="email-folder" onclick="emailFolder('spam',this)">
+          <span>🚫</span><span style="flex:1">Spam</span><span class="email-count">12</span>
+        </div>
+        <div class="email-folder" onclick="emailFolder('trash',this)">
+          <span>🗑️</span><span style="flex:1">Lixeira</span>
+        </div>
+        <div style="margin-top:12px;padding:8px 0;border-top:1px solid var(--border)">
+          <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;padding:0 8px">Labels</div>
+          <div class="email-folder" onclick="emailFolder('work',this)"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span><span style="flex:1;margin-left:8px">Trabalho</span></div>
+          <div class="email-folder" onclick="emailFolder('personal',this)"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span><span style="flex:1;margin-left:8px">Pessoal</span></div>
+          <div class="email-folder" onclick="emailFolder('finance',this)"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span><span style="flex:1;margin-left:8px">Financeiro</span></div>
+          <div class="email-folder" onclick="emailFolder('newsletter',this)"><span style="width:8px;height:8px;border-radius:50%;background:var(--purple);display:inline-block"></span><span style="flex:1;margin-left:8px">Newsletter</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista + Visualizador -->
+    <div style="display:grid;grid-template-columns:380px 1fr">
+      <!-- Lista de emails -->
+      <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
+        <div style="padding:10px;border-bottom:1px solid var(--border);display:flex;gap:8px">
+          <input type="text" class="form-input" placeholder="🔍 Buscar emails..." style="flex:1;font-size:12px" />
+          <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()">↻</button>
+        </div>
+        <div style="flex:1;overflow-y:auto" id="email-list">
+          <div class="email-item unread active" onclick="emailOpen(this,0)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#EA4335,#FBBC04)">G</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Google Workspace</span>
+                <span class="email-item-time">09:45</span>
+              </div>
+              <div class="email-item-subject">Atualização de segurança da conta</div>
+              <div class="email-item-preview">Uma nova atualização de segurança foi aplicada à sua conta Google...</div>
+            </div>
+            <div class="email-item-badge" style="background:#EA4335">Gmail</div>
+          </div>
+          <div class="email-item unread" onclick="emailOpen(this,1)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#0078D4,#00B4FF)">M</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Microsoft</span>
+                <span class="email-item-time">08:30</span>
+              </div>
+              <div class="email-item-subject">Sua assinatura Microsoft 365 foi renovada</div>
+              <div class="email-item-preview">Obrigado por continuar com o Microsoft 365. Sua assinatura...</div>
+            </div>
+            <div class="email-item-badge" style="background:#0078D4">Outlook</div>
+          </div>
+          <div class="email-item" onclick="emailOpen(this,2)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">E</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Equipe Financeiro</span>
+                <span class="email-item-time">Ontem</span>
+              </div>
+              <div class="email-item-subject">Relatório Financeiro Q2 2026</div>
+              <div class="email-item-preview">Segue em anexo o relatório financeiro do segundo trimestre...</div>
+            </div>
+            <div class="email-item-badge" style="background:#6366F1">Work</div>
+          </div>
+          <div class="email-item" onclick="emailOpen(this,3)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">N</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Nubank</span>
+                <span class="email-item-time">Ontem</span>
+              </div>
+              <div class="email-item-subject">Sua fatura de julho está disponível</div>
+              <div class="email-item-preview">Olá! Sua fatura de julho no valor de R$ 2.840,00 está disponível...</div>
+            </div>
+            <div class="email-item-badge" style="background:#F59E0B">Gmail</div>
+          </div>
+          <div class="email-item unread" onclick="emailOpen(this,4)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">A</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Ana Costa</span>
+                <span class="email-item-time">Ter</span>
+              </div>
+              <div class="email-item-subject">Re: Proposta de parceria</div>
+              <div class="email-item-preview">Oi! Adorei a proposta. Podemos marcar uma call para discutir...</div>
+            </div>
+            <div class="email-item-badge" style="background:#10B981">Gmail</div>
+          </div>
+          <div class="email-item" onclick="emailOpen(this,5)">
+            <div class="email-item-avatar" style="background:linear-gradient(135deg,#EC4899,#BE185D)">P</div>
+            <div class="email-item-content">
+              <div class="email-item-header">
+                <span class="email-item-from">Product Hunt</span>
+                <span class="email-item-time">Seg</span>
+              </div>
+              <div class="email-item-subject">🚀 Top produtos da semana</div>
+              <div class="email-item-preview">Confira os produtos mais votados desta semana no Product Hunt...</div>
+            </div>
+            <div class="email-item-badge" style="background:#EC4899">Gmail</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualizador de email -->
+      <div style="display:flex;flex-direction:column;overflow-y:auto" id="email-viewer">
+        <div style="padding:20px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
+            <div style="flex:1">
+              <div style="font-size:20px;font-weight:700;margin-bottom:8px" id="email-view-subject">Atualização de segurança da conta</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#EA4335,#FBBC04);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">G</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600" id="email-view-from">Google Workspace &lt;noreply@google.com&gt;</div>
+                  <div style="font-size:11px;color:var(--text-muted)">Para: usuario@gmail.com · 14 Jul 2026, 09:45</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0">
+              <button class="btn btn-ghost" style="padding:8px" title="Responder" onclick="openModal('modal-compose-email')">↩️</button>
+              <button class="btn btn-ghost" style="padding:8px" title="Encaminhar" onclick="openModal('modal-compose-email')">↪️</button>
+              <button class="btn btn-ghost" style="padding:8px" title="Favoritar" onclick="showToast('Email marcado como favorito','success')">⭐</button>
+              <button class="btn btn-ghost" style="padding:8px" title="Arquivar" onclick="showToast('Email arquivado','info')">📦</button>
+              <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="showToast('Email excluído','warning')">🗑️</button>
+            </div>
+          </div>
+          <div style="background:var(--bg-elevated);border-radius:var(--radius-md);padding:20px;line-height:1.7;font-size:14px;color:var(--text-secondary)" id="email-view-body">
+            <p>Olá,</p>
+            <br>
+            <p>Uma nova atualização de segurança foi aplicada à sua conta Google. Esta atualização melhora a proteção da sua conta e inclui melhorias na autenticação de dois fatores.</p>
+            <br>
+            <p><strong>O que mudou:</strong></p>
+            <ul style="margin-left:20px;margin-top:8px">
+              <li>Verificação aprimorada em dois fatores</li>
+              <li>Detecção de atividade suspeita melhorada</li>
+              <li>Novas opções de recuperação de conta</li>
+            </ul>
+            <br>
+            <p>Se você não reconhece esta atividade, acesse as configurações de segurança da sua conta imediatamente.</p>
+            <br>
+            <p>Atenciosamente,<br>Equipe de Segurança do Google</p>
+          </div>
+          <!-- Ações de IA -->
+          <div style="margin-top:16px;padding:12px;background:rgba(99,102,241,0.08);border-radius:var(--radius-md);border:1px solid rgba(99,102,241,0.2)">
+            <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">🤖 IA — Sugestões</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resumo: Atualização de segurança aplicada na conta Google','info')">📝 Resumir</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Tarefa criada: Verificar configurações de segurança','success')">✅ Criar Tarefa</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Email categorizado como: Segurança','info')">🏷️ Categorizar</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resposta sugerida gerada','info')">✍️ Sugerir Resposta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── INTEGRAÇÕES DE EMAIL ─── -->
+<div class="page" id="page-email-integrations">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📧 Contas de Email</div>
+      <div class="page-subtitle">Gerencie suas contas de email</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('email')">← Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-email-account')">+ Adicionar Conta</button>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="integration-card" style="border-color:rgba(234,67,53,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="integration-icon" style="background:linear-gradient(135deg,#EA4335,#FBBC04);width:48px;height:48px">G</div>
+        <div>
+          <div class="integration-name">Gmail</div>
+          <div style="font-size:12px;color:var(--text-muted)">usuario@gmail.com</div>
+        </div>
+        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">24</div><div style="font-size:10px;color:var(--text-muted)">Não lidos</div></div>
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">1.2k</div><div style="font-size:10px;color:var(--text-muted)">Total</div></div>
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">12</div><div style="font-size:10px;color:var(--text-muted)">Spam</div></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Gmail...','info')">↻ Sincronizar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Gmail','info')">⚙️ Configurar</button>
+      </div>
+    </div>
+    <div class="integration-card" style="border-color:rgba(0,120,212,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="integration-icon" style="background:linear-gradient(135deg,#0078D4,#00B4FF);width:48px;height:48px">O</div>
+        <div>
+          <div class="integration-name">Outlook</div>
+          <div style="font-size:12px;color:var(--text-muted)">user@outlook.com</div>
+        </div>
+        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">8</div><div style="font-size:10px;color:var(--text-muted)">Não lidos</div></div>
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">456</div><div style="font-size:10px;color:var(--text-muted)">Total</div></div>
+        <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">3</div><div style="font-size:10px;color:var(--text-muted)">Rascunhos</div></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Outlook...','info')">↻ Sincronizar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Outlook','info')">⚙️ Configurar</button>
+      </div>
+    </div>
+    <div class="integration-card" style="border-color:rgba(99,102,241,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="integration-icon" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);width:48px;height:48px">E</div>
+        <div>
+          <div class="integration-name">Email Corporativo</div>
+          <div style="font-size:12px;color:var(--text-muted)">user@empresa.com · Exchange</div>
+        </div>
+        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Exchange...','info')">↻ Sincronizar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Exchange','info')">⚙️ Configurar</button>
+      </div>
+    </div>
+    <div class="integration-card" style="border-color:rgba(255,255,255,0.1);opacity:0.7">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="integration-icon" style="background:var(--bg-elevated);width:48px;height:48px;font-size:20px">📨</div>
+        <div>
+          <div class="integration-name">IMAP Personalizado</div>
+          <div style="font-size:12px;color:var(--text-muted)">Qualquer servidor IMAP/SMTP</div>
+        </div>
+        <div class="integration-status pending" style="margin-left:auto">○ Configurar</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;font-size:12px" onclick="openModal('modal-add-email-account')">+ Adicionar Conta IMAP</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END module-email -->

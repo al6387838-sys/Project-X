@@ -1,0 +1,302 @@
+<!-- LifeOS Enterprise — Módulo Produtividade v8.0 -->
+<div id="module-productivity" style="display:none">
+
+<!-- ─── KANBAN ─── -->
+<div class="page" id="page-kanban">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📋 Kanban</div>
+      <div class="page-subtitle">Gerencie suas tarefas visualmente</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <select class="form-input" style="width:auto;font-size:13px">
+        <option>Projeto Alpha</option>
+        <option>Projeto Beta</option>
+        <option>Pessoal</option>
+        <option>Trabalho</option>
+      </select>
+      <button class="btn btn-ghost" onclick="showPage('gantt')">Gantt</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-task')">+ Tarefa</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 180px);overflow-x:auto">
+    <!-- Coluna: Backlog -->
+    <div class="kanban-col">
+      <div class="kanban-col-header" style="border-top-color:var(--text-muted)">
+        <span>📥 Backlog</span><span class="kanban-count">5</span>
+      </div>
+      <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'backlog')">
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k1">
+          <div class="kanban-card-title">Pesquisar concorrentes</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Pesquisa</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Sem prazo</span><span style="font-size:11px">👤 Eu</span></div>
+        </div>
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k2">
+          <div class="kanban-card-title">Configurar CI/CD pipeline</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">Dev</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">20 Jul</span><span style="font-size:11px">👤 Carlos</span></div>
+        </div>
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k3">
+          <div class="kanban-card-title">Documentar API v2</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(245,158,11,0.15);color:var(--amber)">Docs</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">25 Jul</span><span style="font-size:11px">👤 Ana</span></div>
+        </div>
+      </div>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+    </div>
+    <!-- Coluna: Em Progresso -->
+    <div class="kanban-col">
+      <div class="kanban-col-header" style="border-top-color:var(--accent)">
+        <span>🔄 Em Progresso</span><span class="kanban-count">3</span>
+      </div>
+      <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')">
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k4">
+          <div class="kanban-card-title">Implementar módulo Finance</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Dev</span><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Urgente</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">15 Jul</span><span style="font-size:11px">👤 Eu</span></div>
+          <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:65%"></div></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:3px">65% concluído</div>
+        </div>
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k5">
+          <div class="kanban-card-title">Design da landing page v2</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(236,72,153,0.15);color:var(--pink)">Design</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">18 Jul</span><span style="font-size:11px">👤 Maria</span></div>
+          <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,var(--pink),#F472B6)"></div></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:3px">40% concluído</div>
+        </div>
+      </div>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+    </div>
+    <!-- Coluna: Revisão -->
+    <div class="kanban-col">
+      <div class="kanban-col-header" style="border-top-color:var(--amber)">
+        <span>👁️ Revisão</span><span class="kanban-count">2</span>
+      </div>
+      <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')">
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k6">
+          <div class="kanban-card-title">Testes de integração</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">QA</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">14 Jul</span><span style="font-size:11px">👤 Carlos</span></div>
+        </div>
+        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k7">
+          <div class="kanban-card-title">Revisão de segurança</div>
+          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Segurança</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">16 Jul</span><span style="font-size:11px">👤 Eu</span></div>
+        </div>
+      </div>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+    </div>
+    <!-- Coluna: Concluído -->
+    <div class="kanban-col">
+      <div class="kanban-col-header" style="border-top-color:var(--green)">
+        <span>✅ Concluído</span><span class="kanban-count">8</span>
+      </div>
+      <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')">
+        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k8">
+          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Setup do ambiente</div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 10 Jul</span></div>
+        </div>
+        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k9">
+          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Autenticação JWT</div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 12 Jul</span></div>
+        </div>
+        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k10">
+          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Deploy inicial</div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 13 Jul</span></div>
+        </div>
+      </div>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── GANTT ─── -->
+<div class="page" id="page-gantt">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📊 Gantt</div>
+      <div class="page-subtitle">Cronograma visual do projeto</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('kanban')">Kanban</button>
+      <select class="form-input" style="width:auto;font-size:13px">
+        <option>Projeto Alpha</option>
+        <option>Projeto Beta</option>
+      </select>
+      <button class="btn btn-primary" onclick="openModal('modal-new-task')">+ Tarefa</button>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <div style="min-width:900px">
+      <!-- Cabeçalho de datas -->
+      <div style="display:grid;grid-template-columns:200px repeat(14,1fr);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted)">Tarefa</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">07/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">08/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">09/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">10/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">11/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">12/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">13/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center;font-weight:700;color:var(--accent)">14/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">15/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">16/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">17/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">18/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">19/07</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center">20/07</div>
+      </div>
+      <!-- Tarefas -->
+      <div style="display:flex;flex-direction:column;gap:6px" id="gantt-rows">
+        <div class="gantt-row"><div class="gantt-task-name">Setup do ambiente</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:1/3;background:var(--green);opacity:0.7"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Autenticação JWT</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:2/5;background:var(--green);opacity:0.7"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Módulo Finance</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:4/9;background:var(--accent)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Design Landing v2</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:5/11;background:var(--pink)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Testes de integração</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:7/10;background:var(--amber)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Revisão de segurança</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:8/11;background:var(--red)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Deploy produção</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:10/13;background:var(--purple)"></div></div></div>
+        <div class="gantt-row"><div class="gantt-task-name">Documentar API v2</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:11/15;background:var(--cyan)"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CRM ─── -->
+<div class="page" id="page-crm">
+  <div class="page-header">
+    <div>
+      <div class="page-title">👥 CRM</div>
+      <div class="page-subtitle">Gestão de relacionamentos e pipeline</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('crm-pipeline')">Pipeline</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-contact')">+ Contato</button>
+    </div>
+  </div>
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)">👥</div><div class="kpi-value">142</div><div class="kpi-label">Contatos</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">💼</div><div class="kpi-value">28</div><div class="kpi-label">Oportunidades</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)">💰</div><div class="kpi-value">R$ 480k</div><div class="kpi-label">Pipeline Total</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">🏆</div><div class="kpi-value">R$ 120k</div><div class="kpi-label">Fechado no Mês</div></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <input type="text" class="form-input" placeholder="🔍 Buscar contatos..." style="flex:1" />
+      <select class="form-input" style="width:auto">
+        <option>Todos os status</option>
+        <option>Lead</option>
+        <option>Prospect</option>
+        <option>Cliente</option>
+        <option>Inativo</option>
+      </select>
+    </div>
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Nome</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Empresa</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Status</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Valor</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Último Contato</th><th style="padding:8px"></th></tr></thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
+          <td style="padding:10px 8px"><div style="font-weight:600">Ana Costa</div><div style="font-size:11px;color:var(--text-muted)">ana@empresa.com</div></td>
+          <td style="padding:10px 8px;font-size:13px">Empresa ABC</td>
+          <td style="padding:10px 8px"><span style="background:rgba(16,185,129,0.15);color:var(--green);padding:3px 8px;border-radius:4px;font-size:11px">Cliente</span></td>
+          <td style="padding:10px 8px;font-weight:600;color:var(--green)">R$ 45.000</td>
+          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">Hoje</td>
+          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
+          <td style="padding:10px 8px"><div style="font-weight:600">Carlos Mendes</div><div style="font-size:11px;color:var(--text-muted)">carlos@startup.io</div></td>
+          <td style="padding:10px 8px;font-size:13px">Startup XYZ</td>
+          <td style="padding:10px 8px"><span style="background:rgba(245,158,11,0.15);color:var(--amber);padding:3px 8px;border-radius:4px;font-size:11px">Prospect</span></td>
+          <td style="padding:10px 8px;font-weight:600;color:var(--amber)">R$ 28.000</td>
+          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">Ontem</td>
+          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
+          <td style="padding:10px 8px"><div style="font-weight:600">João Silva</div><div style="font-size:11px;color:var(--text-muted)">joao@corp.com.br</div></td>
+          <td style="padding:10px 8px;font-size:13px">Corp Brasil</td>
+          <td style="padding:10px 8px"><span style="background:rgba(99,102,241,0.15);color:var(--accent);padding:3px 8px;border-radius:4px;font-size:11px">Lead</span></td>
+          <td style="padding:10px 8px;font-weight:600;color:var(--accent)">R$ 80.000</td>
+          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">3 dias</td>
+          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── PIPELINE ─── -->
+<div class="page" id="page-crm-pipeline">
+  <div class="page-header">
+    <div>
+      <div class="page-title">💼 Pipeline de Vendas</div>
+      <div class="page-subtitle">Acompanhe suas oportunidades</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('crm')">← CRM</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-opportunity')">+ Oportunidade</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;height:calc(100vh - 180px);overflow-x:auto">
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#6366F1"><span>🎯 Lead</span><span class="kanban-count">8</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Corp Brasil — Sistema ERP</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 80.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">João Silva</span><span style="font-size:11px;color:var(--text-muted)">20%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#F59E0B"><span>📞 Contato</span><span class="kanban-count">5</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Startup XYZ — App Mobile</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 28.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Carlos Mendes</span><span style="font-size:11px;color:var(--text-muted)">40%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#06B6D4"><span>📋 Proposta</span><span class="kanban-count">7</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Tech Corp — Consultoria</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 55.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Maria Santos</span><span style="font-size:11px;color:var(--text-muted)">60%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span>🤝 Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Ana Costa</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#10B981"><span>🏆 Fechado</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card done"><div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Global Inc — Plataforma</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 120.000</div></div></div></div>
+  </div>
+</div>
+
+<!-- ─── WIKI / BASE DE CONHECIMENTO ─── -->
+<div class="page" id="page-wiki">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📚 Wiki</div>
+      <div class="page-subtitle">Base de conhecimento pessoal e corporativa</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="openModal('modal-new-wiki-page')">+ Nova Página</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-wiki-page')">✏️ Editar</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:16px;height:calc(100vh - 160px)">
+    <!-- Sidebar Wiki -->
+    <div class="card" style="overflow-y:auto;padding:12px">
+      <input type="text" class="form-input" placeholder="🔍 Buscar..." style="width:100%;margin-bottom:12px;font-size:12px" />
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Espaços</div>
+      <div class="wiki-nav-item active" onclick="wikiOpen('home')">🏠 Início</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('work')">💼 Trabalho</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('personal')">👤 Pessoal</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('projects')">🚀 Projetos</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin:12px 0 8px">Páginas Recentes</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('setup')">📄 Setup do Ambiente</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('api')">📄 Documentação API</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('onboarding')">📄 Onboarding</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('processes')">📄 Processos</div>
+    </div>
+    <!-- Conteúdo Wiki -->
+    <div class="card" style="overflow-y:auto" id="wiki-content">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div>
+          <div style="font-size:24px;font-weight:800;margin-bottom:4px">🏠 Início — Wiki LifeOS</div>
+          <div style="font-size:12px;color:var(--text-muted)">Atualizado: 14 Jul 2026 · por Você</div>
+        </div>
+        <button class="btn btn-ghost" onclick="showToast('Modo de edição ativado','info')">✏️ Editar</button>
+      </div>
+      <div style="line-height:1.8;color:var(--text-secondary)">
+        <p>Bem-vindo à sua base de conhecimento pessoal. Aqui você pode documentar processos, ideias, referências e qualquer informação importante.</p>
+        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px">📌 Páginas em Destaque</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+          <div class="wiki-page-card" onclick="wikiOpen('setup')"><div style="font-size:20px;margin-bottom:6px">⚙️</div><div style="font-weight:600;font-size:13px">Setup do Ambiente</div><div style="font-size:11px;color:var(--text-muted)">Configuração completa do ambiente de desenvolvimento</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('api')"><div style="font-size:20px;margin-bottom:6px">🔌</div><div style="font-weight:600;font-size:13px">Documentação API</div><div style="font-size:11px;color:var(--text-muted)">Endpoints, autenticação e exemplos de uso</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('onboarding')"><div style="font-size:20px;margin-bottom:6px">🚀</div><div style="font-weight:600;font-size:13px">Onboarding</div><div style="font-size:11px;color:var(--text-muted)">Guia de integração para novos membros</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('processes')"><div style="font-size:20px;margin-bottom:6px">📋</div><div style="font-weight:600;font-size:13px">Processos</div><div style="font-size:11px;color:var(--text-muted)">Fluxos e procedimentos operacionais</div></div>
+        </div>
+        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px">📅 Atividade Recente</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span>📝</span><div><div style="font-size:13px;font-weight:600">Documentação API atualizada</div><div style="font-size:11px;color:var(--text-muted)">Hoje, 10:30</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span>➕</span><div><div style="font-size:13px;font-weight:600">Nova página: Processos de Deploy</div><div style="font-size:11px;color:var(--text-muted)">Ontem, 15:20</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END module-productivity -->

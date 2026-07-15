@@ -1,0 +1,189 @@
+<!-- LifeOS Enterprise — Módulo Documentos v8.0 -->
+<div id="module-documents" style="display:none">
+
+<!-- ─── DOCUMENTOS ─── -->
+<div class="page" id="page-documents">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📁 Documentos</div>
+      <div class="page-subtitle">Armazenamento, OCR e assinatura digital</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="docsView('grid')" id="docs-btn-grid">⊞</button>
+      <button class="btn btn-ghost" onclick="docsView('list')" id="docs-btn-list">☰</button>
+      <button class="btn btn-ghost" onclick="openModal('modal-new-folder')">📁 Nova Pasta</button>
+      <button class="btn btn-primary" onclick="docsUpload()">⬆️ Upload</button>
+    </div>
+  </div>
+
+  <!-- Barra de busca e filtros -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <input type="text" class="form-input" placeholder="🔍 Buscar documentos, conteúdo (OCR)..." style="flex:1;min-width:200px" />
+    <select class="form-input" style="width:auto">
+      <option>Todos os tipos</option>
+      <option>PDF</option>
+      <option>Imagem</option>
+      <option>Word/Docs</option>
+      <option>Excel/Sheets</option>
+      <option>Apresentação</option>
+    </select>
+    <select class="form-input" style="width:auto">
+      <option>Qualquer data</option>
+      <option>Hoje</option>
+      <option>Esta semana</option>
+      <option>Este mês</option>
+    </select>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px">
+    <span style="color:var(--accent);cursor:pointer" onclick="docsGoRoot()">📁 Meus Documentos</span>
+    <span style="color:var(--text-muted)">/</span>
+    <span id="docs-breadcrumb-current" style="color:var(--text-secondary)">Raiz</span>
+  </div>
+
+  <!-- KPIs de armazenamento -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)">💾</div>
+      <div class="kpi-value">2.4 GB</div>
+      <div class="kpi-label">Usado de 10 GB</div>
+      <div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:24%"></div></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)">📄</div>
+      <div class="kpi-value">247</div>
+      <div class="kpi-label">Documentos</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">🔍</div>
+      <div class="kpi-value">183</div>
+      <div class="kpi-label">Com OCR</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)">✍️</div>
+      <div class="kpi-value">12</div>
+      <div class="kpi-label">Assinados</div>
+    </div>
+  </div>
+
+  <!-- Grade de documentos -->
+  <div id="docs-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+    <!-- Pastas -->
+    <div class="doc-folder-card" onclick="docsOpenFolder('Contratos')">
+      <div class="doc-folder-icon">📁</div>
+      <div class="doc-folder-name">Contratos</div>
+      <div class="doc-folder-count">8 arquivos</div>
+    </div>
+    <div class="doc-folder-card" onclick="docsOpenFolder('Financeiro')">
+      <div class="doc-folder-icon">📁</div>
+      <div class="doc-folder-name">Financeiro</div>
+      <div class="doc-folder-count">24 arquivos</div>
+    </div>
+    <div class="doc-folder-card" onclick="docsOpenFolder('Pessoal')">
+      <div class="doc-folder-icon">📁</div>
+      <div class="doc-folder-name">Pessoal</div>
+      <div class="doc-folder-count">15 arquivos</div>
+    </div>
+    <div class="doc-folder-card" onclick="docsOpenFolder('Trabalho')">
+      <div class="doc-folder-icon">📁</div>
+      <div class="doc-folder-name">Trabalho</div>
+      <div class="doc-folder-count">42 arquivos</div>
+    </div>
+    <!-- Arquivos -->
+    <div class="doc-file-card" onclick="docsOpenFile('Contrato de Locação')">
+      <div class="doc-file-icon" style="background:rgba(239,68,68,0.15);color:var(--red)">PDF</div>
+      <div class="doc-file-name">Contrato de Locação</div>
+      <div class="doc-file-meta">2.1 MB · 14 Jul</div>
+      <div class="doc-file-tags"><span class="doc-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">OCR</span><span class="doc-tag" style="background:rgba(245,158,11,0.15);color:var(--amber)">Assinado</span></div>
+    </div>
+    <div class="doc-file-card" onclick="docsOpenFile('RG - Frente')">
+      <div class="doc-file-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)">IMG</div>
+      <div class="doc-file-name">RG - Frente</div>
+      <div class="doc-file-meta">450 KB · 10 Jul</div>
+      <div class="doc-file-tags"><span class="doc-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">OCR</span></div>
+    </div>
+    <div class="doc-file-card" onclick="docsOpenFile('Extrato Bancário Jul')">
+      <div class="doc-file-icon" style="background:rgba(239,68,68,0.15);color:var(--red)">PDF</div>
+      <div class="doc-file-name">Extrato Bancário Jul</div>
+      <div class="doc-file-meta">180 KB · 05 Jul</div>
+      <div class="doc-file-tags"><span class="doc-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">OCR</span></div>
+    </div>
+    <div class="doc-file-card" onclick="docsOpenFile('Proposta Comercial')">
+      <div class="doc-file-icon" style="background:rgba(0,120,212,0.15);color:#0078D4">DOC</div>
+      <div class="doc-file-name">Proposta Comercial</div>
+      <div class="doc-file-meta">320 KB · 02 Jul</div>
+      <div class="doc-file-tags"><span class="doc-tag" style="background:rgba(245,158,11,0.15);color:var(--amber)">Pendente</span></div>
+    </div>
+    <div class="doc-file-card" onclick="docsOpenFile('Planilha de Gastos')">
+      <div class="doc-file-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">XLS</div>
+      <div class="doc-file-name">Planilha de Gastos</div>
+      <div class="doc-file-meta">95 KB · 01 Jul</div>
+      <div class="doc-file-tags"></div>
+    </div>
+    <!-- Upload card -->
+    <div class="doc-upload-card" onclick="docsUpload()" id="docs-upload-zone">
+      <div style="font-size:32px;margin-bottom:8px">⬆️</div>
+      <div style="font-size:13px;font-weight:600">Upload</div>
+      <div style="font-size:11px;color:var(--text-muted)">Arraste ou clique</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── VISUALIZADOR DE DOCUMENTO ─── -->
+<div class="page" id="page-document-viewer">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="doc-viewer-title">Contrato de Locação.pdf</div>
+      <div class="page-subtitle">PDF · 2.1 MB · OCR disponível</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('documents')">← Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Download iniciado','info')">⬇️ Baixar</button>
+      <button class="btn btn-ghost" onclick="showToast('Compartilhamento em breve','info')">🔗 Compartilhar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-sign-doc')">✍️ Assinar</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:16px">
+    <!-- Preview do documento -->
+    <div class="card" style="min-height:500px;display:flex;align-items:center;justify-content:center;background:var(--bg-elevated)">
+      <div style="text-align:center;padding:40px">
+        <div style="font-size:64px;margin-bottom:16px">📄</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px">Contrato de Locação</div>
+        <div style="font-size:13px;color:var(--text-secondary);max-width:400px;line-height:1.6">Visualizador de PDF integrado. O documento está disponível para leitura, anotação e assinatura digital.</div>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="showToast('Abrindo visualizador de PDF...','info')">Abrir Visualizador</button>
+      </div>
+    </div>
+    <!-- Painel lateral -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="card-title">Informações</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tipo</span><span>PDF</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tamanho</span><span>2.1 MB</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Páginas</span><span>8</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Criado</span><span>14 Jul 2026</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">OCR</span><span style="color:var(--green)">✓ Disponível</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Assinatura</span><span style="color:var(--amber)">Pendente</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">OCR — Texto Extraído</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;max-height:200px;overflow-y:auto;background:var(--bg-elevated);padding:10px;border-radius:8px">
+          CONTRATO DE LOCAÇÃO RESIDENCIAL<br><br>
+          Pelo presente instrumento particular, de um lado LOCADOR: João da Silva, CPF 000.000.000-00, e de outro lado LOCATÁRIO: Maria Santos, CPF 111.111.111-11...<br><br>
+          CLÁUSULA 1ª - DO OBJETO: O LOCADOR cede ao LOCATÁRIO, para fins residenciais, o imóvel situado à Rua das Flores, nº 100...
+        </div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:8px;font-size:12px" onclick="showToast('Texto copiado para área de transferência','success')">Copiar Texto</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Assinatura Digital</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Assine digitalmente com validade jurídica via ICP-Brasil</div>
+        <button class="btn btn-primary" style="width:100%" onclick="openModal('modal-sign-doc')">✍️ Assinar Documento</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END module-documents -->

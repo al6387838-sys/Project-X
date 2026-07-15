@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 7.0.0 (com minificação HTML)
+// Version: 8.0.0 (com módulos independentes)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -72,7 +72,7 @@ const productionAssets = [
   'admin/master_admin.html',
 ];
 
-// ─── Rotas principais v6 ───────────────────────────────────────────────────
+// ─── Rotas principais v8 ───────────────────────────────────────────────────
 // Landing Page (/) — minificado
 await copyHtml('landing.html', 'index.html');
 
@@ -97,14 +97,17 @@ await copyHtml('memory_center.html', 'memory-center/index.html');
 // Assets de produção
 await Promise.all(productionAssets.map((asset) => copy(asset)));
 
+// ─── Módulos v8.0 — carregados dinamicamente pelo app dashboard ───────────
+await cp(resolve(source, 'modules'), resolve(dist, 'app/modules'), { recursive: true });
+
 // ─── _redirects e _headers ─────────────────────────────────────────────────
 try {
   await cp(resolve(publicDir, '_headers'), resolve(dist, '_headers'));
 } catch { /* sem _headers customizado */ }
 
-// Gerar _redirects v6 com novas rotas
+// Gerar _redirects v8 com novas rotas
 const redirects = [
-  '# LifeOS Enterprise v7.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v8.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -155,10 +158,11 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '7.0.0',
+  version: '8.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
-  architecture: 'multi-page-rbac',
+  architecture: 'multi-page-rbac-modules',
+  modules: ['finance','communication','email','calendar','ai-center','documents','productivity','marketplace'],
   commit,
   builtAt,
   routes,
@@ -167,7 +171,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '7.0.0',
+  version: '8.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -247,11 +251,12 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v7.0.0 — Build OK ✓         ║');
+console.log('║   LifeOS Enterprise v8.0.0 — Build OK ✓         ║');
 console.log('╚══════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 7.0.0`);
-console.log(`  Architecture  : Multi-Page RBAC (Landing + App + Admin)`);
+console.log(`  Version       : 8.0.0`);
+console.log(`  Architecture  : Multi-Page RBAC + 8 Módulos`);
+console.log(`  Modules       : Finance | Comm | Email | Calendar | AI | Docs | Prod | Market`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);
