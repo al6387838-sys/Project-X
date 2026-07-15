@@ -1,8 +1,8 @@
 {
   "name": "lifeos-enterprise",
-  "version": "10.0.0-rc.1",
+  "version": "11.0.0",
   "private": true,
-  "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance e administração.",
+  "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance, integrações OAuth 2.0 e automação.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "deploy": "bash scripts/deploy-cloudflare.sh",
@@ -10,8 +10,8 @@
     "test:production": "node scripts/verify-production.mjs",
     "test:responsive": "node scripts/qa-enterprise-responsive.mjs",
     "test:functional": "node scripts/qa-enterprise-functional.mjs",
-    "test:v10": "node scripts/qa-v10.mjs",
-    "test:enterprise": "npm run build && npm run test:responsive && npm run test:functional && npm run test:v10"
+    "test:v11": "node scripts/qa-v11.mjs",
+    "test:enterprise": "npm run build && npm run test:responsive && npm run test:functional && npm run test:v11"
   },
   "devDependencies": {
     "html-minifier-terser": "^7.2.0",

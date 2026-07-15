@@ -985,7 +985,7 @@
       <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)">⚡</div>
       <div style="flex:1;min-width:0">
         <div class="sidebar-title">LifeOS</div>
-        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v10.0 RC</div>
+        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v11.0</div>
       </div>
     </div>
     <nav class="sidebar-nav">
@@ -1094,6 +1094,24 @@
         <div class="nav-icon">📊</div><span>Observability</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
+      <!-- ═══ ENTERPRISE v11 ═══ -->
+      <div class="nav-section-label">Enterprise v11</div>
+      <div class="nav-item" onclick="showPage('command-center')">
+        <div class="nav-icon">⚡</div><span>Command Center</span>
+        <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
+      </div>
+      <div class="nav-item" onclick="showPage('identity')">
+        <div class="nav-icon">🔐</div><span>Identidade Digital</span>
+      </div>
+      <div class="nav-item" onclick="showPage('file-center')">
+        <div class="nav-icon">📁</div><span>File Center</span>
+      </div>
+      <div class="nav-item" onclick="showPage('automation')">
+        <div class="nav-icon">🤖</div><span>Automation Studio</span>
+      </div>
+      <div class="nav-item" onclick="showPage('analytics')">
+        <div class="nav-icon">📊</div><span>Analytics Center</span>
+      </div>
       <div class="nav-section-label">Conta</div>
       <div class="nav-item" onclick="showPage('notifications')">
         <div class="nav-icon">🔔</div><span>Notificações</span>
@@ -1117,7 +1135,7 @@
         <div class="user-avatar" id="sidebar-avatar" style="background:var(--gradient-primary);box-shadow:0 0 10px rgba(99,102,241,0.3)">U</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Carregando...</div>
-          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v10.0 RC</div>
+          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v11.0</div>
         </div>
         <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);flex-shrink:0"></div>
       </div>
@@ -1518,8 +1536,17 @@
       <!-- ═══ MÓDULO ENTERPRISE SETTINGS (Phase 083) ═══ -->
       <div id="module-enterprise-settings-container"></div>
       <!-- ═══ MÓDULO OBSERVABILITY (Phase 084) ═══ -->
-      <div id="module-observability-container"></div>
-
+            <div id="module-observability-container"></div>
+      <!-- ═══ MÓDULO COMMAND CENTER v11 (Phase 111) ═══ -->
+      <div id="module-command-center-container"></div>
+      <!-- ═══ MÓDULO IDENTITY v11 (Phase 112) ═══ -->
+      <div id="module-identity-container"></div>
+      <!-- ═══ MÓDULO FILE CENTER v11 (Phase 113) ═══ -->
+      <div id="module-file-center-container"></div>
+      <!-- ═══ MÓDULO AUTOMATION v11 (Phase 114) ═══ -->
+      <div id="module-automation-container"></div>
+      <!-- ═══ MÓDULO ANALYTICS v11 (Phase 115) ═══ -->
+      <div id="module-analytics-container"></div>
     </main>
   </div>
 </div>
@@ -2075,6 +2102,28 @@
     'obs-logs': 'module-observability-container',
     'obs-alerts': 'module-observability-container',
     'obs-performance': 'module-observability-container',
+    // v11 Modules
+    'command-center': 'module-command-center-container',
+    'identity': 'module-identity-container',
+    'identity-profiles': 'module-identity-container',
+    'identity-sessions': 'module-identity-container',
+    'identity-devices': 'module-identity-container',
+    'identity-mfa': 'module-identity-container',
+    'identity-audit': 'module-identity-container',
+    'file-center': 'module-file-center-container',
+    'file-browse': 'module-file-center-container',
+    'file-search': 'module-file-center-container',
+    'file-shared': 'module-file-center-container',
+    'file-versions': 'module-file-center-container',
+    'automation': 'module-automation-container',
+    'automation-flows': 'module-automation-container',
+    'automation-scheduler': 'module-automation-container',
+    'automation-templates': 'module-automation-container',
+    'analytics': 'module-analytics-container',
+    'analytics-productivity': 'module-analytics-container',
+    'analytics-habits': 'module-analytics-container',
+    'analytics-finance': 'module-analytics-container',
+    'analytics-goals': 'module-analytics-container',
   };
   const _moduleFiles = {
     'module-finance-container': 'modules/finance',
@@ -2090,6 +2139,11 @@
     'module-personal-hub-container': 'modules/personal-hub',
     'module-enterprise-settings-container': 'modules/enterprise-settings',
     'module-observability-container': 'modules/observability',
+    'module-command-center-container': 'modules/dashboard-v11',
+    'module-identity-container': 'modules/identity',
+    'module-file-center-container': 'modules/file-center',
+    'module-automation-container': 'modules/automation',
+    'module-analytics-container': 'modules/analytics',
   };
   const _loadedModules = new Set();
   async function _loadModule(containerId) {

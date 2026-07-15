@@ -1,0 +1,280 @@
+<!-- LifeOS Enterprise v11.0 — Enterprise File Center (Phase 113) -->
+<div id="module-file-center" style="display:none">
+
+<!-- ─── FILE CENTER ─── -->
+<div class="page" id="page-file-center">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📁 Enterprise File Center</div>
+      <div class="page-subtitle">Armazenamento, organização, versão e compartilhamento</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="fcView('grid')" id="fc-btn-grid">⊞</button>
+      <button class="btn btn-ghost" onclick="fcView('list')" id="fc-btn-list">☰</button>
+      <button class="btn btn-ghost" onclick="fcNewFolder()">📁 Nova Pasta</button>
+      <button class="btn btn-primary" onclick="fcUpload()">⬆️ Upload</button>
+    </div>
+  </div>
+
+  <!-- Barra de busca e filtros -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <input type="text" class="form-input" placeholder="🔍 Buscar arquivos, conteúdo, tags..." style="flex:1;min-width:200px" id="fc-search" />
+    <select class="form-input" style="width:auto" id="fc-type-filter">
+      <option>Todos os tipos</option>
+      <option>Documentos</option>
+      <option>Imagens</option>
+      <option>Vídeos</option>
+      <option>Planilhas</option>
+      <option>Código</option>
+    </select>
+    <select class="form-input" style="width:auto" id="fc-tag-filter">
+      <option>Todas as tags</option>
+      <option>Importante</option>
+      <option>Trabalho</option>
+      <option>Pessoal</option>
+      <option>Financeiro</option>
+      <option>Legal</option>
+    </select>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px">
+    <span style="cursor:pointer;color:var(--accent-light)" onclick="fcNavigate('/')">🏠 Home</span>
+    <span style="color:var(--text-muted)">/</span>
+    <span style="cursor:pointer;color:var(--accent-light)" onclick="fcNavigate('/trabalho')">Trabalho</span>
+    <span style="color:var(--text-muted)">/</span>
+    <span style="color:var(--text-secondary)">Projetos</span>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+    <div style="padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px">
+      <span style="color:var(--text-muted)">Arquivos:</span> <strong>142</strong>
+    </div>
+    <div style="padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px">
+      <span style="color:var(--text-muted)">Pastas:</span> <strong>18</strong>
+    </div>
+    <div style="padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px">
+      <span style="color:var(--text-muted)">Uso:</span> <strong>4.2 GB</strong> / 50 GB
+    </div>
+    <div style="padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px">
+      <span style="color:var(--text-muted)">Compartilhados:</span> <strong>23</strong>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:16px">
+    <!-- File Grid -->
+    <div>
+      <!-- Pastas -->
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Pastas</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/projetos')">
+          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:12px;font-weight:600">Projetos</div>
+          <div style="font-size:10px;color:var(--text-muted)">12 arquivos</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/contratos')">
+          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:12px;font-weight:600">Contratos</div>
+          <div style="font-size:10px;color:var(--text-muted)">8 arquivos</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/financeiro')">
+          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:12px;font-weight:600">Financeiro</div>
+          <div style="font-size:10px;color:var(--text-muted)">15 arquivos</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/docs')">
+          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:12px;font-weight:600">Documentos</div>
+          <div style="font-size:10px;color:var(--text-muted)">6 arquivos</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/backup')">
+          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:12px;font-weight:600">Backup</div>
+          <div style="font-size:10px;color:var(--text-muted)">22 arquivos</div>
+        </div>
+      </div>
+
+      <!-- Arquivos -->
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Arquivos Recentes</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Deploy Checklist')">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">PDF</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Deploy Checklist v11.pdf</div><div style="font-size:11px;color:var(--text-muted)">1.2 MB · Modificado hoje 09:15</div></div>
+          <div style="display:flex;gap:4px">
+            <span style="font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:4px;font-weight:600">Importante</span>
+            <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Trabalho</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Deploy Checklist')">🔗</button>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Contrato Locação')">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">PDF</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Contrato de Locação.pdf</div><div style="font-size:11px;color:var(--text-muted)">2.1 MB · Modificado 14 Jul</div></div>
+          <div style="display:flex;gap:4px">
+            <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Legal</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Contrato Locação')">🔗</button>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Planilha Gastos')">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green)">XLS</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Planilha de Gastos Jul.xlsx</div><div style="font-size:11px;color:var(--text-muted)">95 KB · Modificado 01 Jul</div></div>
+          <div style="display:flex;gap:4px">
+            <span style="font-size:10px;padding:2px 6px;background:rgba(99,102,241,0.15);color:var(--accent-light);border-radius:4px;font-weight:600">Financeiro</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Planilha Gastos')">🔗</button>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Notas Reunião')">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--cyan)">MD</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">Notas Reunião 15 Jul.md</div><div style="font-size:11px;color:var(--text-muted)">4 KB · Modificado hoje 10:00</div></div>
+          <div style="display:flex;gap:4px">
+            <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Trabalho</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Notas Reunião')">🔗</button>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Backup Config')">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--amber)">ZIP</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">backup-config-v10.6.0.zip</div><div style="font-size:11px;color:var(--text-muted)">12 MB · Modificado ontem</div></div>
+          <div style="display:flex;gap:4px">
+            <span style="font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:4px;font-weight:600">Importante</span>
+          </div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Backup Config')">🔗</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel Lateral: Versionamento -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">📋 Versionamento</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md);border-left:3px solid var(--green)">
+            <div style="font-size:11px;font-weight:700;color:var(--green)">v3 — Atual</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Hoje 09:15 · Deploy Checklist</div>
+          </div>
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md);border-left:3px solid var(--accent)">
+            <div style="font-size:11px;font-weight:700;color:var(--accent-light)">v2</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Ontem 16:30 · Adição de seções</div>
+          </div>
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md);border-left:3px solid var(--text-muted)">
+            <div style="font-size:11px;font-weight:700;color:var(--text-secondary)">v1</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">12 Jul · Criação inicial</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">🔗 Compartilhados</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div style="font-size:12px;font-weight:600">Deploy Checklist</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Carlos Andrade · Editar</div>
+          </div>
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div style="font-size:12px;font-weight:600">Contrato Locação</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Maria Santos · Visualizar</div>
+          </div>
+          <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div style="font-size:12px;font-weight:600">Planilha Gastos</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">João Dias · Editar</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:11px" onclick="fcManageShares()">Gerenciar</button>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">🏷️ Tags</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:20px;cursor:pointer;border:1px solid rgba(245,158,11,0.3)">Importante (3)</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;cursor:pointer;border:1px solid rgba(16,185,129,0.3)">Trabalho (8)</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(99,102,241,0.15);color:var(--accent-light);border-radius:20px;cursor:pointer;border:1px solid rgba(99,102,241,0.3)">Financeiro (5)</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(6,182,212,0.15);color:var(--cyan);border-radius:20px;cursor:pointer;border:1px solid rgba(6,182,212,0.3)">Pessoal (12)</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(139,92,246,0.15);color:var(--purple);border-radius:20px;cursor:pointer;border:1px solid rgba(139,92,246,0.3)">Legal (2)</span>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">💾 Uso de Armazenamento</div>
+        <div class="progress-bar" style="height:8px;margin-bottom:8px"><div class="progress-fill" style="width:8.4%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+          <span>4.2 GB usados</span><span>50 GB total</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FILE VIEWER -->
+<div class="page" id="page-file-viewer" style="display:none">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="fc-viewer-title">Deploy Checklist v11.pdf</div>
+      <div class="page-subtitle">PDF · 1.2 MB · v3 (atual)</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('file-center')">← Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Download iniciado','info')">⬇️ Baixar</button>
+      <button class="btn btn-ghost" onclick="fcShare('Deploy Checklist')">🔗 Compartilhar</button>
+      <button class="btn btn-primary" onclick="fcOpenVersions()">📋 Versões</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:16px">
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;min-height:500px;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center">
+        <div style="font-size:64px;margin-bottom:16px">📄</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px">Deploy Checklist v11</div>
+        <div style="font-size:13px;color:var(--text-secondary);max-width:400px;line-height:1.6">Visualizador de documentos integrado. O arquivo está disponível para leitura, anotação e download.</div>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="showToast('Abrindo visualizador...','info')">Abrir Visualizador</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">Informações</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tipo</span><span>PDF</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tamanho</span><span>1.2 MB</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Versão</span><span>v3 (atual)</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Criado</span><span>12 Jul 2026</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Modificado</span><span>15 Jul 09:15</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Owner</span><span>Você</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">Tags</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="font-size:11px;padding:3px 8px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:4px">Importante</span>
+          <span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px">Trabalho</span>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">Compartilhamento</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">Carlos Andrade — Editor</div>
+        <button class="btn btn-ghost" style="width:100%;font-size:11px" onclick="fcShare('Deploy Checklist')">+ Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  window.fcView=function(v){
+    var g=document.getElementById('fc-btn-grid'),l=document.getElementById('fc-btn-list');
+    if(g)g.classList.toggle('btn-ghost',v!=='grid');
+    if(l)l.classList.toggle('btn-ghost',v!=='list');
+    showToast('Visualização: '+v,'info');
+  };
+  window.fcNewFolder=function(){ showToast('Nova pasta criada','success'); };
+  window.fcUpload=function(){ showToast('Upload iniciado','info'); };
+  window.fcNavigate=function(path){ showToast('Navegando: '+path,'info'); };
+  window.fcOpenFile=function(name){ document.getElementById('page-file-center').style.display='none'; document.getElementById('page-file-viewer').style.display='block'; var t=document.getElementById('fc-viewer-title'); if(t) t.textContent=name; };
+  window.fcOpenVersions=function(){ showToast('Abertura de versões','info'); };
+  window.fcShare=function(name){ showToast('Compartilhamento: '+name,'info'); };
+  window.fcManageShares=function(){ showToast('Gerenciar compartilhamentos','info'); };
+})();
+</script>
+</div>
+<!-- END module-file-center -->
