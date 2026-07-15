@@ -147,12 +147,12 @@
     <button class="btn btn-ghost" onclick="showPage('messages')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
   </div>
   <div class="grid-3">
-    <div class="integration-card" style="border-color:rgba(37,211,102,0.3)">
+    <div class="integration-card" id="card-whatsapp" style="border-color:rgba(37,211,102,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
       <div class="integration-name">WhatsApp Business</div>
-      <div class="integration-desc">Mensagens pessoais e empresariais via WhatsApp Business API</div>
-      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-whatsapp')">Configurar</button>
+      <div class="integration-desc">Mensagens empresariais via WhatsApp Business API oficial</div>
+      <div class="integration-status pending" id="status-whatsapp"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Verificando...</div>
+      <button class="btn btn-primary" id="btn-whatsapp" style="width:100%;margin-top:8px" onclick="connectCommunication('whatsapp')">Conectar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(0,136,204,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#0088CC,#229ED9)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
@@ -459,5 +459,122 @@
     <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Avaliações</div><div style="font-size:28px;font-weight:800;color:var(--amber)">⭐ 4.8</div></div>
   </div>
 </div>
+
+<!-- ─── GMAIL CONNECTOR PAGE ─── -->
+<div class="page" id="page-comm-gmail">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#EA4335,#FBBC05);display:flex;align-items:center;justify-content:center"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div> Gmail</div>
+      <div class="page-subtitle">E-mail via Gmail API oficial</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" id="gmail-status-card">
+    <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+    <div id="gmail-status-content" style="padding:16px;background:rgba(234,67,53,0.08);border-radius:10px;border:1px solid rgba(234,67,53,0.2)">
+      <div style="font-weight:600;margin-bottom:8px">Gmail não conectado</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Conecte sua conta Gmail para ler e enviar e-mails diretamente do LifeOS.</div>
+      <button class="btn btn-primary" onclick="connectCommunication('gmail')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar Gmail</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OUTLOOK CONNECTOR PAGE ─── -->
+<div class="page" id="page-comm-outlook">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0078D4,#106EBE);display:flex;align-items:center;justify-content:center"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div> Microsoft Outlook</div>
+      <div class="page-subtitle">E-mail via Microsoft Graph API oficial</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" id="outlook-status-card">
+    <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+    <div id="outlook-status-content" style="padding:16px;background:rgba(0,120,212,0.08);border-radius:10px;border:1px solid rgba(0,120,212,0.2)">
+      <div style="font-weight:600;margin-bottom:8px">Outlook não conectado</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Conecte sua conta Microsoft para ler e enviar e-mails via Outlook.</div>
+      <button class="btn btn-primary" onclick="connectCommunication('outlook')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar Outlook</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Phase 133 — Communication Connectors — Real API
+async function loadCommunicationConnectors() {
+  try {
+    const res = await fetch('/api/connectors/communication', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+    for (const connector of data.connectors) {
+      const statusEl = document.getElementById(`status-${connector.id}`);
+      const btnEl = document.getElementById(`btn-${connector.id}`);
+      if (statusEl) {
+        if (connector.connected) {
+          statusEl.className = 'integration-status connected';
+          statusEl.innerHTML = '<i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado';
+          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Configurar'; btnEl.onclick = () => showPage(`comm-${connector.id}`); }
+        } else if (connector.setupRequired) {
+          statusEl.className = 'integration-status pending';
+          statusEl.innerHTML = '<i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Requer configuração';
+          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Ver instruções'; btnEl.onclick = () => showConnectorSetup(connector); }
+        } else {
+          statusEl.className = 'integration-status pending';
+          statusEl.innerHTML = '<i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Não conectado';
+          if (btnEl) { btnEl.className = 'btn btn-primary'; btnEl.textContent = 'Conectar'; }
+        }
+      }
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (_) { /* ignorar */ }
+}
+
+function showConnectorSetup(connector) {
+  const msg = connector.setupInstructions || 'Configure as credenciais nas variáveis de ambiente do Cloudflare Pages.';
+  alert(`${connector.name} — Configuração necessária:\n\n${msg}`);
+}
+
+async function connectCommunication(provider) {
+  try {
+    const res = await fetch('/api/connectors/communication', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ action: 'connect', provider }),
+    });
+    const data = await res.json();
+    if (data.setup_required) {
+      showConnectorSetup({ name: provider, setupInstructions: data.instructions });
+      return;
+    }
+    if (data.authUrl) {
+      window.location.href = data.authUrl;
+    } else {
+      if (typeof showToast === 'function') showToast('Erro ao iniciar conexão', 'error');
+    }
+  } catch (err) {
+    if (typeof showToast === 'function') showToast('Erro de conexão', 'error');
+  }
+}
+
+// Verificar resultado de callback OAuth
+const urlParams = new URLSearchParams(window.location.search);
+const connSuccess = urlParams.get('connector_success');
+const connError = urlParams.get('connector_error');
+if (connSuccess && typeof showToast === 'function') {
+  showToast(`${connSuccess} conectado com sucesso!`, 'success');
+  loadCommunicationConnectors();
+}
+if (connError && typeof showToast === 'function') {
+  showToast(`Erro ao conectar: ${connError}`, 'error');
+}
+
+// Carregar status ao inicializar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadCommunicationConnectors);
+} else {
+  loadCommunicationConnectors();
+}
+</script>
 
 <!-- END module-communication -->

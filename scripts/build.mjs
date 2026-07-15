@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 11.2.0 (Phases 101-119 — Enterprise Core e Onboarding)
+// Version: 13.0.0 (Phases 131-138 — Real Data, Auth, Connectors, Open Finance, Enterprise)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -138,6 +138,9 @@ await copyHtml('app_dashboard.html', 'app/index.html');
 // Painel admin (/admin) — minificado
 await copyHtml('admin_panel.html', 'admin/index.html');
 
+// Novas rotas Phase 132-135
+await copyHtml('reset_password.html', 'reset-password/index.html');
+await copyHtml('accept_invite.html', 'accept-invite/index.html');
 // Rotas legadas (compatibilidade)
 await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
@@ -159,12 +162,16 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
 
 // Gerar _redirects v10.6 com rotas preservadas
 const redirects = [
-  '# LifeOS Enterprise v11.2.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v13.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
   '/register           /register/index.html        200',
   '/forgot-password    /forgot-password/index.html 200',
+  '/reset-password     /reset-password/index.html  200',
+  '/accept-invite      /accept-invite/index.html   200',
+  '/api/auth/google    /api/auth/google            200',
+  '/api/auth/apple     /api/auth/apple             200',
   '',
   '# App routes (autenticado)',
   '/app                /app/index.html             200',
@@ -213,7 +220,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 // ─── Build metadata v10.6 ────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v11.2.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v13.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -237,21 +244,25 @@ const routes = [
   '/analytics',
   '/profile',
   '/settings',
+  '/reset-password',
+  '/accept-invite',
 ];
 
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '11.2.0',
+  version: '13.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
-  architecture: 'multi-page-rbac-modules-oauth2-integration-ready',
+  architecture: 'multi-page-rbac-modules-oauth2-openfinance-enterprise',
   phases: [
     '093-CommandCenter','094-UniversalSearch','095-IntegrationCenter','096-CompanionAI',
     '097-EnterpriseAdmin','098-Hardening','099-ReleaseCandidate','100-ProductionRelease',
     '101-ProductPolish','102-LifeHub','103-IntegrationMarketplace','104-AICopilot',
-    '105-EnterpriseAdmin','106-QA','107-Build','108-Release','109-IntegrationReadiness','111-UniversalCommandCenter','112-DigitalIdentity','113-EnterpriseFileCenter','114-AutomationStudio','115-AnalyticsCenter','119-EnterpriseOnboarding'
+    '105-EnterpriseAdmin','106-QA','107-Build','108-Release','109-IntegrationReadiness',
+    '111-UniversalCommandCenter','112-DigitalIdentity','113-EnterpriseFileCenter','114-AutomationStudio','115-AnalyticsCenter','119-EnterpriseOnboarding',
+    '131-RealDataFoundation','132-RealAuthentication','133-CommunicationConnectors','134-OpenFinanceFoundation','135-EnterpriseUserManagement','136-ProductionHardening','137-BuildRelease','138-CloudflareProduction'
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -269,7 +280,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '11.2.0',
+  version: '13.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -397,13 +408,13 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v11.2.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v13.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 11.2.0`);
+console.log(`  Version       : 13.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Architecture  : Multi-Page RBAC + OAuth 2.0 + Integration Ready`);
-console.log(`  Phases        : 101-109 Enterprise Foundation | 111-115 v11 Core | 119 Enterprise Onboarding`);
+console.log(`  Architecture  : Multi-Page RBAC + OAuth 2.0 + Open Finance + Enterprise`);
+console.log(`  Phases        : 131-138 Real Data | Auth | Connectors | Open Finance | Enterprise`);
 console.log(`  Modules       : 26 total (8 legacy + 4 v9.5 + 4 v10 + 4 v10.1 + 1 v10.6 + 5 v11)`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);

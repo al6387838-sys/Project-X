@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aceitar Convite — LifeOS Enterprise</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/precision_graphite.css?v=13.0.0" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-base, #0a0a0a);
+      color: var(--text-primary, #fff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .invite-card {
+      background: var(--bg-elevated, #111);
+      border: 1px solid var(--border, #222);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+    }
+    .invite-logo { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 24px; }
+    .invite-logo span { color: var(--accent, #3B82F6); }
+    .invite-org-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 24px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent, #3B82F6);
+      margin-bottom: 20px;
+    }
+    .invite-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .invite-subtitle { font-size: 14px; color: var(--text-secondary, #888); margin-bottom: 28px; line-height: 1.6; }
+    .invite-meta {
+      background: var(--bg-base, #0a0a0a);
+      border: 1px solid var(--border, #222);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .invite-meta-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
+    .invite-meta-label { color: var(--text-secondary, #888); }
+    .invite-meta-value { font-weight: 600; }
+    .role-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .role-admin { background: rgba(239,68,68,0.15); color: #EF4444; }
+    .role-manager { background: rgba(245,158,11,0.15); color: #F59E0B; }
+    .role-member { background: rgba(59,130,246,0.15); color: #3B82F6; }
+    .role-viewer { background: rgba(107,114,128,0.15); color: #6B7280; }
+    .btn-accept {
+      width: 100%;
+      background: var(--accent, #3B82F6);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 10px;
+    }
+    .btn-accept:hover { opacity: 0.9; }
+    .btn-accept:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-decline {
+      width: 100%;
+      background: transparent;
+      color: var(--text-secondary, #888);
+      border: 1px solid var(--border, #222);
+      border-radius: 8px;
+      padding: 11px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-decline:hover { border-color: #EF4444; color: #EF4444; }
+    .status-msg {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .status-msg.show { display: block; }
+    .status-msg.success { background: rgba(16,185,129,0.1); color: #10B981; border: 1px solid rgba(16,185,129,0.2); }
+    .status-msg.error { background: rgba(239,68,68,0.1); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); }
+    .status-msg.info { background: rgba(59,130,246,0.1); color: #3B82F6; border: 1px solid rgba(59,130,246,0.2); }
+    .loading-state { color: var(--text-secondary, #888); font-size: 14px; padding: 20px 0; }
+    .expired-state { color: #EF4444; font-size: 14px; padding: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="invite-card">
+    <div class="invite-logo">Life<span>OS</span></div>
+    <div id="loading-view" class="loading-state">Verificando convite...</div>
+    <div id="invite-view" style="display:none">
+      <div class="invite-org-badge" id="org-badge">🏢 <span id="org-name">Organização</span></div>
+      <div class="invite-title">Você foi convidado!</div>
+      <div class="invite-subtitle" id="invite-desc">Alguém convidou você para colaborar no LifeOS Enterprise.</div>
+      <div class="invite-meta">
+        <div class="invite-meta-row">
+          <span class="invite-meta-label">Convidado por</span>
+          <span class="invite-meta-value" id="inviter-name">—</span>
+        </div>
+        <div class="invite-meta-row">
+          <span class="invite-meta-label">Organização</span>
+          <span class="invite-meta-value" id="invite-org">—</span>
+        </div>
+        <div class="invite-meta-row">
+          <span class="invite-meta-label">Papel</span>
+          <span class="invite-meta-value"><span class="role-badge" id="invite-role">member</span></span>
+        </div>
+        <div class="invite-meta-row">
+          <span class="invite-meta-label">Expira em</span>
+          <span class="invite-meta-value" id="invite-expires">—</span>
+        </div>
+      </div>
+      <div class="status-msg" id="invite-status"></div>
+      <button class="btn-accept" id="accept-btn" onclick="acceptInvite()">Aceitar Convite</button>
+      <button class="btn-decline" onclick="declineInvite()">Recusar</button>
+    </div>
+    <div id="error-view" style="display:none">
+      <div class="expired-state" id="error-msg">Convite inválido ou expirado.</div>
+      <a href="/login" style="color:var(--accent,#3B82F6);font-size:13px;text-decoration:none">← Ir para o login</a>
+    </div>
+  </div>
+  <script>
+    'use strict';
+    const params = new URLSearchParams(location.search);
+    const inviteToken = params.get('token');
+
+    function showStatus(type, msg) {
+      const el = document.getElementById('invite-status');
+      el.className = `status-msg show ${type}`;
+      el.textContent = msg;
+    }
+
+    function formatDate(iso) {
+      try {
+        return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+      } catch { return iso; }
+    }
+
+    function getRoleLabel(role) {
+      const labels = { admin: 'Administrador', manager: 'Gerente', member: 'Membro', viewer: 'Visualizador' };
+      return labels[role] || role;
+    }
+
+    async function loadInvite() {
+      if (!inviteToken) {
+        document.getElementById('loading-view').style.display = 'none';
+        document.getElementById('error-view').style.display = 'block';
+        document.getElementById('error-msg').textContent = 'Token de convite não encontrado.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/enterprise/invite?token=${encodeURIComponent(inviteToken)}`, { credentials: 'same-origin' });
+        const data = await res.json();
+
+        document.getElementById('loading-view').style.display = 'none';
+
+        if (!data.ok) {
+          document.getElementById('error-view').style.display = 'block';
+          document.getElementById('error-msg').textContent = data.error || 'Convite inválido ou expirado.';
+          return;
+        }
+
+        const invite = data.invite;
+        document.getElementById('org-name').textContent = invite.orgName || 'LifeOS Enterprise';
+        document.getElementById('inviter-name').textContent = invite.inviterName || invite.invitedBy;
+        document.getElementById('invite-org').textContent = invite.orgName || 'LifeOS Enterprise';
+        document.getElementById('invite-desc').textContent = `${invite.inviterName || invite.invitedBy} convidou você para colaborar em ${invite.orgName || 'LifeOS Enterprise'}.`;
+        document.getElementById('invite-expires').textContent = formatDate(invite.expiresAt);
+
+        const roleEl = document.getElementById('invite-role');
+        roleEl.textContent = getRoleLabel(invite.role);
+        roleEl.className = `role-badge role-${invite.role}`;
+
+        document.getElementById('invite-view').style.display = 'block';
+      } catch {
+        document.getElementById('loading-view').style.display = 'none';
+        document.getElementById('error-view').style.display = 'block';
+        document.getElementById('error-msg').textContent = 'Erro ao carregar convite. Tente novamente.';
+      }
+    }
+
+    async function acceptInvite() {
+      const btn = document.getElementById('accept-btn');
+      btn.disabled = true;
+      btn.textContent = 'Aceitando...';
+
+      try {
+        const res = await fetch('/api/enterprise/invite', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ action: 'accept', token: inviteToken }),
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          // Se não autenticado, redirecionar para login com redirect de volta
+          if (res.status === 401) {
+            location.replace(`/login?redirect=${encodeURIComponent(location.href)}`);
+            return;
+          }
+          throw new Error(data.error || 'Erro ao aceitar convite');
+        }
+
+        showStatus('success', '✓ Convite aceito! Redirecionando...');
+        setTimeout(() => location.replace('/app'), 1500);
+      } catch (err) {
+        showStatus('error', err.message);
+        btn.disabled = false;
+        btn.textContent = 'Aceitar Convite';
+      }
+    }
+
+    function declineInvite() {
+      if (confirm('Tem certeza que deseja recusar este convite?')) {
+        location.replace('/login');
+      }
+    }
+
+    loadInvite();
+  </script>
+  <script src="/precision_graphite.js?v=13.0.0" defer data-visual-system="precision-graphite"></script>
+</body>
+</html>
