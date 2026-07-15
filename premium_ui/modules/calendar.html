@@ -5,7 +5,7 @@
 <div class="page" id="page-calendar">
   <div class="page-header">
     <div>
-      <div class="page-title">📅 Calendário</div>
+      <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Calendário</div>
       <div class="page-subtitle">Google Calendar · Outlook · Apple Calendar</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -13,7 +13,7 @@
       <button class="btn btn-ghost" onclick="calView('week')" id="cal-btn-week">Semana</button>
       <button class="btn btn-ghost" onclick="calView('day')" id="cal-btn-day">Dia</button>
       <button class="btn btn-ghost" onclick="showPage('calendar-integrations')">Calendários</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-event')">+ Evento</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-event')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Evento</button>
     </div>
   </div>
 
@@ -121,40 +121,40 @@
 <div class="page" id="page-calendar-integrations">
   <div class="page-header">
     <div>
-      <div class="page-title">📅 Calendários Conectados</div>
+      <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Calendários Conectados</div>
       <div class="page-subtitle">Sincronização bidirecional</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('calendar')">← Voltar</button>
-      <button class="btn btn-primary" onclick="showToast('Adicionar calendário em breve','info')">+ Adicionar</button>
+      <button class="btn btn-ghost" onclick="showPage('calendar')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="showToast('Adicionar calendário em breve','info')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
   </div>
   <div class="grid-3">
     <div class="integration-card" style="border-color:rgba(234,67,53,0.3)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#EA4335,#FBBC04)">📅</div>
+      <div class="integration-icon" style="background:linear-gradient(135deg,#EA4335,#FBBC04)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
       <div class="integration-name">Google Calendar</div>
       <div class="integration-desc">Sincronização bidirecional em tempo real com todos os seus calendários Google</div>
-      <div class="integration-status connected">● Conectado · Sync: há 2 min</div>
+      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado · Sync: há 2 min</div>
       <div style="display:flex;gap:8px;margin-top:12px">
         <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Google Calendar...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')">⚙️</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="integration-card" style="border-color:rgba(0,120,212,0.3)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#0078D4,#00B4FF)">📆</div>
+      <div class="integration-icon" style="background:linear-gradient(135deg,#0078D4,#00B4FF)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
       <div class="integration-name">Outlook Calendar</div>
       <div class="integration-desc">Integração com Microsoft 365 e Exchange para calendários corporativos</div>
-      <div class="integration-status connected">● Conectado · Sync: há 5 min</div>
+      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado · Sync: há 5 min</div>
       <div style="display:flex;gap:8px;margin-top:12px">
         <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Outlook...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')">⚙️</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="integration-card" style="border-color:rgba(255,255,255,0.1)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#555,#333)">🍎</div>
+      <div class="integration-icon" style="background:linear-gradient(135deg,#555,#333)"><i data-lucide="heart-pulse" class="pg-icon" aria-hidden="true"></i></div>
       <div class="integration-name">Apple Calendar</div>
       <div class="integration-desc">Sincronização com iCloud Calendar via CalDAV</div>
-      <div class="integration-status pending">○ Configurar</div>
+      <div class="integration-status pending"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
       <button class="btn btn-primary" style="width:100%;margin-top:12px;font-size:12px" onclick="showToast('Conectando Apple Calendar via CalDAV...','info')">Conectar</button>
     </div>
   </div>

@@ -522,7 +522,7 @@
       color: var(--text-secondary);
     }
     .ai-feature-item::before {
-      content: '✓';
+      content: '\u{2713}';
       color: var(--green);
       font-weight: 700;
     }
@@ -630,7 +630,7 @@
       color: var(--text-secondary);
     }
     .plan-features li::before {
-      content: '✓';
+      content: '\u{2713}';
       color: var(--green);
       font-weight: 700;
       flex-shrink: 0;
@@ -639,7 +639,7 @@
       color: var(--text-muted);
     }
     .plan-features li.disabled::before {
-      content: '×';
+      content: '\u{D7}';
       color: var(--text-muted);
     }
 
@@ -818,13 +818,14 @@
       .hero-screenshot-content { grid-template-columns: 1fr 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body>
 
 <!-- ─── NAVBAR ─── -->
 <nav class="navbar" id="navbar">
   <a href="/" class="nav-logo">
-    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
     <span class="nav-logo-text">LifeOS</span>
     <span class="nav-logo-badge">Enterprise</span>
   </a>
@@ -858,7 +859,7 @@
   </p>
   <div class="hero-actions">
     <a href="/register" class="btn btn-primary btn-lg">
-      ⚡ Começar gratuitamente
+      <i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Começar gratuitamente
     </a>
     <a href="/login" class="btn btn-outline btn-lg">
       Já tenho conta
@@ -876,7 +877,7 @@
     </div>
     <div class="hero-divider"></div>
     <div class="hero-stat">
-      <div class="hero-stat-value">4.9★</div>
+      <div class="hero-stat-value">4.9<i data-lucide="star" class="pg-icon" aria-hidden="true"></i></div>
       <div class="hero-stat-label">Avaliação média</div>
     </div>
     <div class="hero-divider"></div>
@@ -932,32 +933,32 @@
   </div>
   <div class="grid-3">
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(99,102,241,0.15)">🎯</div>
+      <div class="feature-icon" style="background:rgba(99,102,241,0.15)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Metas & OKRs</div>
       <div class="feature-desc">Defina objetivos claros com métricas mensuráveis. Acompanhe o progresso em tempo real com insights de IA.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(16,185,129,0.15)">🔄</div>
+      <div class="feature-icon" style="background:rgba(16,185,129,0.15)"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Gestão de Hábitos</div>
       <div class="feature-desc">Construa rotinas poderosas com rastreamento diário, streaks e análise de padrões comportamentais.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(245,158,11,0.15)">📅</div>
+      <div class="feature-icon" style="background:rgba(245,158,11,0.15)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Agenda Inteligente</div>
       <div class="feature-desc">Planejamento diário, semanal e mensal com blocos de tempo, prioridades e sincronização de calendário.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">🧠</div>
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Memory Center</div>
       <div class="feature-desc">Capture e organize conhecimento, notas e memórias com busca semântica e conexões automáticas.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(6,182,212,0.15)">📊</div>
+      <div class="feature-icon" style="background:rgba(6,182,212,0.15)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Life Score</div>
       <div class="feature-desc">Métricas holísticas da sua vida: saúde, produtividade, relacionamentos, finanças e bem-estar em um único score.</div>
     </div>
     <div class="feature-card">
-      <div class="feature-icon" style="background:rgba(239,68,68,0.15)">🚀</div>
+      <div class="feature-icon" style="background:rgba(239,68,68,0.15)"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div>
       <div class="feature-title">Projetos & Tarefas</div>
       <div class="feature-desc">Gerencie projetos complexos com kanban, timeline, dependências e colaboração em equipe.</div>
     </div>
@@ -973,28 +974,28 @@
       <p class="section-subtitle" style="margin-bottom:32px">Construído para quem leva a vida a sério. Não é mais um app de produtividade — é uma plataforma de transformação.</p>
       <div>
         <div class="benefit-item">
-          <div class="benefit-icon">🔒</div>
+          <div class="benefit-icon"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></div>
           <div>
             <div class="benefit-title">Privacidade Total</div>
             <div class="benefit-desc">Seus dados são seus. Criptografia end-to-end, sem rastreamento, sem venda de dados.</div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">⚡</div>
+          <div class="benefit-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
           <div>
             <div class="benefit-title">Performance Enterprise</div>
             <div class="benefit-desc">Infraestrutura Cloudflare global com latência &lt;50ms em qualquer lugar do mundo.</div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🤖</div>
+          <div class="benefit-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
           <div>
             <div class="benefit-title">IA Personalizada</div>
             <div class="benefit-desc">Insights gerados especificamente para você, aprendendo com seus padrões únicos.</div>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🌐</div>
+          <div class="benefit-icon"><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></div>
           <div>
             <div class="benefit-title">Acesso Universal</div>
             <div class="benefit-desc">Web, iOS, Android e desktop. Sincronização em tempo real em todos os dispositivos.</div>
@@ -1015,33 +1016,33 @@
         <tbody>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">IA Generativa</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
             <td style="text-align:center;color:var(--text-muted)">Parcial</td>
           </tr>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">Life Score Holístico</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
-            <td style="text-align:center;color:var(--red)">✗</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
+            <td style="text-align:center;color:var(--red)"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></td>
           </tr>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">RBAC Enterprise</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
-            <td style="text-align:center;color:var(--red)">✗</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
+            <td style="text-align:center;color:var(--red)"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></td>
           </tr>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">Sem anúncios</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
-            <td style="text-align:center;color:var(--red)">✗</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
+            <td style="text-align:center;color:var(--red)"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></td>
           </tr>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">Criptografia E2E</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
             <td style="text-align:center;color:var(--text-muted)">Parcial</td>
           </tr>
           <tr style="border-top:1px solid var(--border)">
             <td style="padding:12px 0;color:var(--text-secondary)">Offline-first</td>
-            <td style="text-align:center;color:var(--green)">✓</td>
-            <td style="text-align:center;color:var(--red)">✗</td>
+            <td style="text-align:center;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></td>
+            <td style="text-align:center;color:var(--red)"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></td>
           </tr>
         </tbody>
       </table>
@@ -1057,7 +1058,7 @@
     <p class="section-subtitle">Não é IA genérica. É um sistema que aprende seus padrões e gera insights personalizados para sua evolução.</p>
   </div>
   <div class="ai-card">
-    <div class="ai-visual">🤖</div>
+    <div class="ai-visual"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
     <div style="flex:1">
       <h3 style="font-size:24px;font-weight:800;margin-bottom:12px">LifeOS AI — Seu Coach Pessoal</h3>
       <p style="color:var(--text-secondary);font-size:15px;line-height:1.7;margin-bottom:20px">
@@ -1085,21 +1086,21 @@
     <p class="section-subtitle">Mais de 50 integrações nativas. Sincronize dados de qualquer lugar.</p>
   </div>
   <div class="integrations-grid">
-    <div class="integration-badge"><span class="integration-badge-icon">📅</span> Google Calendar</div>
-    <div class="integration-badge"><span class="integration-badge-icon">📧</span> Gmail</div>
-    <div class="integration-badge"><span class="integration-badge-icon">💼</span> Notion</div>
-    <div class="integration-badge"><span class="integration-badge-icon">✅</span> Todoist</div>
-    <div class="integration-badge"><span class="integration-badge-icon">💬</span> Slack</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🔷</span> Microsoft 365</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🍎</span> Apple Health</div>
-    <div class="integration-badge"><span class="integration-badge-icon">⌚</span> Fitbit</div>
-    <div class="integration-badge"><span class="integration-badge-icon">💰</span> Stripe</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🐙</span> GitHub</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🎯</span> Asana</div>
-    <div class="integration-badge"><span class="integration-badge-icon">📊</span> Airtable</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🔗</span> Zapier</div>
-    <div class="integration-badge"><span class="integration-badge-icon">🌐</span> Webhooks</div>
-    <div class="integration-badge"><span class="integration-badge-icon">⚡</span> API REST</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span> Google Calendar</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span> Gmail</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></span> Notion</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></span> Todoist</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></span> Slack</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="diamond" class="pg-icon" aria-hidden="true"></i></span> Microsoft 365</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="heart-pulse" class="pg-icon" aria-hidden="true"></i></span> Apple Health</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="watch" class="pg-icon" aria-hidden="true"></i></span> Fitbit</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></span> Stripe</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="github" class="pg-icon" aria-hidden="true"></i></span> GitHub</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></span> Asana</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></span> Airtable</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span> Zapier</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></span> Webhooks</div>
+    <div class="integration-badge"><span class="integration-badge-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></span> API REST</div>
   </div>
 </section>
 
@@ -1173,7 +1174,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         O LifeOS é seguro? Como meus dados são protegidos?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         Sim. Utilizamos criptografia AES-256 para dados em repouso e TLS 1.3 para dados em trânsito. Somos certificados SOC 2 Type II e seguimos as diretrizes da LGPD. Seus dados nunca são vendidos ou compartilhados com terceiros.
@@ -1182,7 +1183,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         Posso cancelar a qualquer momento?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         Sim, sem fidelidade. Você pode cancelar sua assinatura a qualquer momento diretamente no painel de configurações. Seus dados ficam disponíveis por 30 dias após o cancelamento para exportação.
@@ -1191,7 +1192,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         A IA do LifeOS usa meus dados para treinar modelos?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         Não. Seus dados pessoais nunca são usados para treinar modelos de IA. Os insights são gerados de forma isolada para cada usuário, sem compartilhamento de informações entre contas.
@@ -1200,7 +1201,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         Funciona offline?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         Sim. O LifeOS é construído com arquitetura offline-first. Você pode registrar hábitos, tarefas e notas sem conexão. Quando a internet voltar, tudo sincroniza automaticamente.
@@ -1209,7 +1210,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         Existe versão mobile?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         Sim. O LifeOS está disponível para iOS e Android, com experiência nativa completa. Também funciona como PWA (Progressive Web App) em qualquer navegador mobile.
@@ -1218,7 +1219,7 @@
     <div class="faq-item">
       <div class="faq-question" onclick="toggleFaq(this)">
         Como funciona o plano Enterprise para equipes?
-        <div class="faq-toggle">+</div>
+        <div class="faq-toggle"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       </div>
       <div class="faq-answer">
         O plano Enterprise permite criar organizações com múltiplos workspaces, RBAC granular, SSO corporativo e auditoria completa. Ideal para empresas que querem implementar uma cultura de alta performance.
@@ -1238,13 +1239,13 @@
       </p>
       <div style="display:flex;flex-direction:column;gap:16px">
         <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
-          <span style="font-size:20px">📧</span> contato@lifeos.io
+          <span style="font-size:20px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span> contato@lifeos.io
         </div>
         <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
-          <span style="font-size:20px">💬</span> Chat ao vivo (seg–sex, 9h–18h)
+          <span style="font-size:20px"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></span> Chat ao vivo (seg–sex, 9h–18h)
         </div>
         <div style="display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary)">
-          <span style="font-size:20px">📚</span> Central de ajuda: docs.lifeos.io
+          <span style="font-size:20px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Central de ajuda: docs.lifeos.io
         </div>
       </div>
     </div>
@@ -1274,7 +1275,7 @@
   <h2 class="cta-title">Pronto para transformar<br /><span class="hero-title-gradient">sua vida?</span></h2>
   <p class="cta-subtitle">Junte-se a mais de 12.000 pessoas que já usam o LifeOS para viver com mais intenção.</p>
   <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap">
-    <a href="/register" class="btn btn-primary btn-lg">⚡ Começar gratuitamente</a>
+    <a href="/register" class="btn btn-primary btn-lg"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Começar gratuitamente</a>
     <a href="/login" class="btn btn-outline btn-lg">Já tenho conta</a>
   </div>
   <p style="margin-top:20px;font-size:13px;color:var(--text-muted)">Sem cartão de crédito · Cancele quando quiser · Dados protegidos</p>
@@ -1285,7 +1286,7 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <a href="/" class="nav-logo" style="margin-bottom:12px;display:inline-flex">
-        <div class="nav-logo-icon">⚡</div>
+        <div class="nav-logo-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
         <span class="nav-logo-text">LifeOS</span>
         <span class="nav-logo-badge">Enterprise</span>
       </a>
@@ -1321,7 +1322,7 @@
   </div>
   <div class="footer-bottom">
     <span>© 2026 LifeOS Enterprise. Todos os direitos reservados.</span>
-    <span>Feito com ⚡ no Brasil</span>
+    <span>Feito com <i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> no Brasil</span>
   </div>
 </footer>
 
@@ -1344,7 +1345,7 @@
     const status = document.getElementById('contact-status');
     status.style.display = 'block';
     status.style.color = 'var(--green)';
-    status.textContent = '✓ Mensagem enviada! Responderemos em até 24h.';
+    status.textContent = '\u{2713} Mensagem enviada! Responderemos em até 24h.';
     e.target.reset();
   }
 
@@ -1391,5 +1392,6 @@
     });
   });
 </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

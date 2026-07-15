@@ -311,11 +311,12 @@
     .panel { display: none; }
     .panel.active { display: block; }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body>
   <div class="auth-container">
     <a href="/" class="auth-logo">
-      <div class="auth-logo-icon">⚡</div>
+      <div class="auth-logo-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
       <span class="auth-logo-text">LifeOS</span>
       <span class="auth-logo-badge">Enterprise</span>
     </a>
@@ -343,7 +344,7 @@
             <label class="form-label" for="login-password">Senha</label>
             <div class="form-input-wrap">
               <input type="password" id="login-password" class="form-input" placeholder="••••••••" autocomplete="current-password" required />
-              <button type="button" class="form-input-icon" id="login-pwd-toggle" aria-label="Mostrar senha">👁</button>
+              <button type="button" class="form-input-icon" id="login-pwd-toggle" aria-label="Mostrar senha"><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i></button>
             </div>
           </div>
           <div class="form-row">
@@ -388,7 +389,7 @@
             <label class="form-label" for="reg-password">Senha</label>
             <div class="form-input-wrap">
               <input type="password" id="reg-password" class="form-input" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required />
-              <button type="button" class="form-input-icon" id="reg-pwd-toggle" aria-label="Mostrar senha">👁</button>
+              <button type="button" class="form-input-icon" id="reg-pwd-toggle" aria-label="Mostrar senha"><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i></button>
             </div>
           </div>
           <div class="form-group" style="margin-bottom:20px">
@@ -403,10 +404,10 @@
     </div>
 
     <div class="auth-footer">
-      <a href="/">← Voltar ao LifeOS</a>
+      <a href="/"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar ao LifeOS</a>
     </div>
     <div class="security-badge">
-      🔒 Conexão segura HTTPS · Sessão criptografada · SOC 2 Type II
+      <i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Conexão segura HTTPS · Sessão criptografada · SOC 2 Type II
     </div>
   </div>
 
@@ -442,7 +443,7 @@
       btn.addEventListener('click', () => {
         const isText = input.type === 'text';
         input.type = isText ? 'password' : 'text';
-        btn.textContent = isText ? '👁' : '🙈';
+        btn.textContent = isText ? '\u{1F441}' : '\u{1F648}';
       });
     }
     setupPwdToggle('login-password', 'login-pwd-toggle');
@@ -488,7 +489,7 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Credenciais inválidas.');
-        showStatus('login-status', 'success', '✓ Autenticado! Redirecionando...');
+        showStatus('login-status', 'success', '\u{2713} Autenticado! Redirecionando...');
         setTimeout(() => location.replace(data.redirect || '/app'), 800);
       } catch (err) {
         showStatus('login-status', 'error', err.message);
@@ -518,7 +519,7 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Erro ao criar conta.');
-        showStatus('register-status', 'success', '✓ Conta criada! Redirecionando...');
+        showStatus('register-status', 'success', '\u{2713} Conta criada! Redirecionando...');
         setTimeout(() => location.replace(data.redirect || '/app'), 800);
       } catch (err) {
         showStatus('register-status', 'error', err.message);
@@ -531,5 +532,6 @@
       el.addEventListener('input', () => el.classList.remove('error'));
     });
   </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

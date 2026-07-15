@@ -328,7 +328,7 @@
 <body style="background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%); color: #fff; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;">
 
   <div class="integrations-header">
-    <h1 class="integrations-title">🔗 Gerenciador de Integrações</h1>
+    <h1 class="integrations-title"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Gerenciador de Integrações</h1>
     <p class="integrations-subtitle">Conecte seus serviços favoritos ao LifeOS. Infraestrutura OAuth 2.0 segura com renovação automática de credenciais.</p>
   </div>
 
@@ -364,7 +364,7 @@
           </ol>
         </div>
         <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
-          🔒 Seus tokens são criptografados com AES-256 e nunca são compartilhados.
+          <i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Seus tokens são criptografados com AES-256 e nunca são compartilhados.
         </p>
       </div>
       <div class="modal-actions">
@@ -379,7 +379,7 @@
       {
         id: 'whatsapp',
         name: 'WhatsApp',
-        icon: '💬',
+        icon: '\u{1F4AC}',
         description: 'Sincronize mensagens e contatos do WhatsApp Business',
         status: 'disconnected',
         provider: 'Meta',
@@ -391,7 +391,7 @@
       {
         id: 'instagram',
         name: 'Instagram',
-        icon: '📷',
+        icon: '\u{1F4F7}',
         description: 'Conecte sua conta Instagram para análise de conteúdo',
         status: 'disconnected',
         provider: 'Meta',
@@ -403,7 +403,7 @@
       {
         id: 'google',
         name: 'Google',
-        icon: '🔍',
+        icon: '\u{1F50D}',
         description: 'Sincronize Gmail, Google Calendar e Google Drive',
         status: 'disconnected',
         provider: 'Google',
@@ -415,7 +415,7 @@
       {
         id: 'outlook',
         name: 'Microsoft Outlook',
-        icon: '📧',
+        icon: '\u{1F4E7}',
         description: 'Conecte Outlook, Teams e OneDrive',
         status: 'disconnected',
         provider: 'Microsoft',
@@ -427,7 +427,7 @@
       {
         id: 'openfinance',
         name: 'Open Finance',
-        icon: '💰',
+        icon: '\u{1F4B0}',
         description: 'Agregue dados de suas contas bancárias (Brasil)',
         status: 'disconnected',
         provider: 'Open Banking Brasil',
@@ -439,7 +439,7 @@
       {
         id: 'stripe',
         name: 'Stripe',
-        icon: '💳',
+        icon: '\u{1F4B3}',
         description: 'Gerencie pagamentos e faturas',
         status: 'disconnected',
         provider: 'Stripe',
@@ -451,7 +451,7 @@
       {
         id: 'mercadopago',
         name: 'Mercado Pago',
-        icon: '🛒',
+        icon: '\u{1F6D2}',
         description: 'Integre pagamentos e vendas do Mercado Pago',
         status: 'disconnected',
         provider: 'Mercado Pago',
@@ -490,7 +490,7 @@
             <div>Provider: <strong>${integration.provider}</strong></div>
             <div style="margin-top: 0.5rem;">Scopes: ${integration.scopes.length}</div>
             ${integration.lastSync ? `<div>Última sincronização: ${integration.lastSync}</div>` : ''}
-            <div class="oauth-flow-badge">🔐 OAuth 2.0</div>
+            <div class="oauth-flow-badge">\u{1F510} OAuth 2.0</div>
           </div>
         </div>
       `).join('');
@@ -541,7 +541,7 @@
         updateStats();
         
         // Mostrar notificação
-        alert(`✅ ${selectedIntegration.name} conectado com sucesso!\n\nToken armazenado de forma criptografada.`);
+        alert(`\u{2705} ${selectedIntegration.name} conectado com sucesso!\n\nToken armazenado de forma criptografada.`);
       }, 2000);
     }
 
@@ -563,7 +563,7 @@
       if (!integration) return;
 
       const tokenData = JSON.parse(localStorage.getItem(`integration_${integrationId}`) || '{}');
-      alert(`${integration.name} - Detalhes da Conexão\n\nStatus: ${integration.status}\nÚltima sincronização: ${integration.lastSync}\nScopes: ${integration.scopes.join(', ')}\n\nToken: ${tokenData.accessToken ? '✅ Armazenado' : '❌ Não encontrado'}`);
+      alert(`${integration.name} - Detalhes da Conexão\n\nStatus: ${integration.status}\nÚltima sincronização: ${integration.lastSync}\nScopes: ${integration.scopes.join(', ')}\n\nToken: ${tokenData.accessToken ? '\u{2705} Armazenado' : '\u{274C} Não encontrado'}`);
     }
 
     function updateStats() {

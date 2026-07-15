@@ -281,10 +281,10 @@
       <div class="dash2-date" id="d2-date">Visão operacional unificada · Carregando...</div>
     </div>
     <div class="dash2-header-actions">
-      <span class="edit-mode-badge" id="edit-badge">✏️ Modo Edição</span>
+      <span class="edit-mode-badge" id="edit-badge"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Modo Edição</span>
       <button class="btn-dash btn-dash-secondary" onclick="openWidgetCatalog()">＋ Adicionar Widget</button>
-      <button class="btn-dash btn-dash-secondary" id="edit-btn" onclick="toggleEditMode()">⚙ Personalizar</button>
-      <button class="btn-dash btn-dash-primary" onclick="saveLayout()">💾 Salvar Layout</button>
+      <button class="btn-dash btn-dash-secondary" id="edit-btn" onclick="toggleEditMode()"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Personalizar</button>
+      <button class="btn-dash btn-dash-primary" onclick="saveLayout()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Salvar Layout</button>
     </div>
   </div>
 
@@ -302,10 +302,10 @@
     <!-- W1: Resumo do Dia -->
     <div class="widget w-12" id="widget-day-summary" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-day-summary')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-day-summary')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Resumo do Dia</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver agenda →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver agenda <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="day-summary-grid">
         <div class="day-summary-item">
@@ -334,10 +334,10 @@
     <!-- W2: Life Score -->
     <div class="widget w-4" id="widget-lifescore" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-lifescore')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-lifescore')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Life Score</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('lifescore')">Detalhes →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('lifescore')">Detalhes <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="score-ring-container">
         <div class="score-ring">
@@ -387,7 +387,7 @@
         </div>
       </div>
       <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
-        <span class="trend-up">↑ +3 esta semana</span>
+        <span class="trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 esta semana</span>
         <span style="font-size:11px;color:var(--text-muted)">· Recorde: 91</span>
       </div>
     </div>
@@ -395,10 +395,10 @@
     <!-- W3: Agenda -->
     <div class="widget w-4" id="widget-agenda" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-agenda')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-agenda')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Agenda de Hoje</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver tudo →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="agenda-item">
         <div class="agenda-time">09:00</div>
@@ -450,13 +450,13 @@
     <!-- W4: Próximos Compromissos -->
     <div class="widget w-4" id="widget-upcoming" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-upcoming')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-upcoming')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Próximos Compromissos</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('calendar')">Calendário →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('calendar')">Calendário <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="upcoming-item">
-        <div class="upcoming-icon" style="background:rgba(99,102,241,0.15)">📋</div>
+        <div class="upcoming-icon" style="background:rgba(99,102,241,0.15)"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div>
         <div class="upcoming-info">
           <div class="upcoming-title">Revisão Q3 2026</div>
           <div class="upcoming-when">Amanhã · 10:00 · 2h</div>
@@ -464,7 +464,7 @@
         <span class="upcoming-countdown" style="background:rgba(99,102,241,0.12);color:var(--accent-light)">1d</span>
       </div>
       <div class="upcoming-item">
-        <div class="upcoming-icon" style="background:rgba(6,182,212,0.12)">🎂</div>
+        <div class="upcoming-icon" style="background:rgba(6,182,212,0.12)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="upcoming-info">
           <div class="upcoming-title">Aniversário — Ana</div>
           <div class="upcoming-when">Quinta-feira · Todo o dia</div>
@@ -472,7 +472,7 @@
         <span class="upcoming-countdown" style="background:rgba(6,182,212,0.1);color:var(--cyan)">3d</span>
       </div>
       <div class="upcoming-item">
-        <div class="upcoming-icon" style="background:rgba(16,185,129,0.12)">✈️</div>
+        <div class="upcoming-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="upcoming-info">
           <div class="upcoming-title">Viagem — São Paulo</div>
           <div class="upcoming-when">Próxima semana · 3 dias</div>
@@ -484,18 +484,18 @@
     <!-- W5: Hábitos -->
     <div class="widget w-4" id="widget-habits" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-habits')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-habits')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Hábitos de Hoje</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('habits')">Ver todos →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('habits')">Ver todos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div id="d2-habits-list">
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Meditação 10min</span><span class="habit-streak-badge">🔥 14d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Exercício físico</span><span class="habit-streak-badge">🔥 7d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Leitura 30min</span><span class="habit-streak-badge">🔥 21d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Journaling</span><span class="habit-streak-badge">🔥 5d</span></div>
-        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Hidratação 2L</span><span class="habit-streak-badge">🔥 3d</span></div>
-        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Sono 8h</span><span class="habit-streak-badge">🔥 2d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Meditação 10min</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Exercício físico</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 7d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Leitura 30min</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Journaling</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 5d</span></div>
+        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Hidratação 2L</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3d</span></div>
+        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Sono 8h</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 2d</span></div>
       </div>
       <div class="habits-progress">
         <div class="habits-progress-label"><span>Progresso</span><span id="d2-habit-pct">67%</span></div>
@@ -506,25 +506,25 @@
     <!-- W6: Metas -->
     <div class="widget w-4" id="widget-goals" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-goals')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-goals')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Metas Ativas</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('goals')">Ver todas →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('goals')">Ver todas <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name">🏃 Correr 100km</span><span class="goal-row-pct" style="color:var(--accent)">72%</span></div>
+        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Correr 100km</span><span class="goal-row-pct" style="color:var(--accent)">72%</span></div>
         <div class="goal-row-bar"><div class="goal-row-fill" style="width:72%;background:var(--gradient-primary)"></div></div>
       </div>
       <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name">📚 Ler 24 livros</span><span class="goal-row-pct" style="color:var(--amber)">58%</span></div>
+        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ler 24 livros</span><span class="goal-row-pct" style="color:var(--amber)">58%</span></div>
         <div class="goal-row-bar"><div class="goal-row-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
       </div>
       <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name">💰 Economizar R$10k</span><span class="goal-row-pct" style="color:var(--green)">45%</span></div>
+        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Economizar R$10k</span><span class="goal-row-pct" style="color:var(--green)">45%</span></div>
         <div class="goal-row-bar"><div class="goal-row-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
       </div>
       <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name">🧘 Meditação 30d</span><span class="goal-row-pct" style="color:var(--purple)">93%</span></div>
+        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Meditação 30d</span><span class="goal-row-pct" style="color:var(--purple)">93%</span></div>
         <div class="goal-row-bar"><div class="goal-row-fill" style="width:93%;background:linear-gradient(90deg,var(--purple),var(--accent))"></div></div>
       </div>
     </div>
@@ -532,10 +532,10 @@
     <!-- W7: Finance Hub Resumo -->
     <div class="widget w-4" id="widget-finance" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-finance')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-finance')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Finance Hub</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('finance')">Abrir →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('finance')">Abrir <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="finance-summary-row">
         <span class="finance-summary-label">Saldo total</span>
@@ -559,10 +559,10 @@
     <!-- W8: Comunicação Resumo -->
     <div class="widget w-4" id="widget-comm" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-comm')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-comm')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Comunicação</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('messages')">Inbox →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('messages')">Inbox <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="comm-item">
         <div class="comm-avatar" style="background:var(--gradient-primary)">AM</div>
@@ -588,14 +588,14 @@
     <!-- W9: IA Companion -->
     <div class="widget w-6" id="widget-ai" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-ai')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-ai')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">IA Companion</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('ai')">IA Center →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('ai')">IA Center <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="ai-companion-msg">
         <div class="ai-companion-header">
-          <div class="ai-companion-avatar">🤖</div>
+          <div class="ai-companion-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="ai-companion-name">LifeOS AI · Insight do Dia</div>
         </div>
         <div class="ai-companion-text">
@@ -604,20 +604,20 @@
       </div>
       <div class="ai-companion-input">
         <input class="ai-companion-field" id="d2-ai-input" placeholder="Pergunte algo à IA..." onkeydown="if(event.key==='Enter')sendD2AI()" />
-        <button class="ai-companion-send" onclick="sendD2AI()">→</button>
+        <button class="ai-companion-send" onclick="sendD2AI()"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
 
     <!-- W10: Atividades Recentes -->
     <div class="widget w-6" id="widget-activities" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-activities')" title="Remover">✕</button>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-activities')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       <div class="widget-header">
         <div class="widget-title">Atividades Recentes</div>
-        <button class="widget-action" onclick="window.parent?.showPage?.('timeline')">Timeline →</button>
+        <button class="widget-action" onclick="window.parent?.showPage?.('timeline')">Timeline <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Hábito concluído: Meditação 10min</div><div class="activity-time">Hoje, 07:30</div></div></div>
-      <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-content"><div class="activity-title">Meta atualizada: Correr 100km → 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-content"><div class="activity-title">Meta atualizada: Correr 100km <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Transação registrada: R$2.847,00 recebido</div><div class="activity-time">Hoje, 06:00</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--amber)"></div><div class="activity-content"><div class="activity-title">Nota adicionada ao Memory Center</div><div class="activity-time">Ontem, 22:15</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--purple)"></div><div class="activity-content"><div class="activity-title">Life Score aumentou para 87 (+3)</div><div class="activity-time">Ontem, 20:00</div></div></div>
@@ -628,8 +628,8 @@
     <!-- W11: Produtividade -->
     <div class="widget w-6" id="widget-productivity" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-productivity')" title="Remover">✕</button>
-      <div class="widget-header"><div class="widget-title">Produtividade</div><button class="widget-action" onclick="window.parent?.showPage?.('kanban')">Workspace →</button></div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-productivity')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      <div class="widget-header"><div class="widget-title">Produtividade</div><button class="widget-action" onclick="window.parent?.showPage?.('kanban')">Workspace <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button></div>
       <div class="productivity-kpis">
         <div class="productivity-kpi"><span class="day-summary-label">Conclusão</span><strong style="color:var(--green)">78%</strong><span class="day-summary-sub">+9% na semana</span></div>
         <div class="productivity-kpi"><span class="day-summary-label">Foco</span><strong style="color:var(--purple)">2h40</strong><span class="day-summary-sub">Meta 4h</span></div>
@@ -641,12 +641,12 @@
     <!-- W12: Saúde do Sistema -->
     <div class="widget w-6" id="widget-system-health" draggable="true">
       <div class="widget-drag-handle" title="Arrastar">⠿</div>
-      <button class="widget-remove-btn" onclick="removeWidget('widget-system-health')" title="Remover">✕</button>
-      <div class="widget-header"><div class="widget-title">Saúde do Sistema</div><button class="widget-action" onclick="window.parent?.showPage?.('observability')">Observabilidade →</button></div>
-      <div class="health-service"><span>Cloudflare Pages</span><b>● OPERACIONAL</b></div>
-      <div class="health-service"><span>Pages Functions</span><b>● OPERACIONAL</b></div>
-      <div class="health-service"><span>KV / Estado Enterprise</span><b>● SINCRONIZADO</b></div>
-      <div class="health-service"><span>Autenticação e sessão</span><b>● SAUDÁVEL</b></div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-system-health')" title="Remover"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      <div class="widget-header"><div class="widget-title">Saúde do Sistema</div><button class="widget-action" onclick="window.parent?.showPage?.('observability')">Observabilidade <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button></div>
+      <div class="health-service"><span>Cloudflare Pages</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> OPERACIONAL</b></div>
+      <div class="health-service"><span>Pages Functions</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> OPERACIONAL</b></div>
+      <div class="health-service"><span>KV / Estado Enterprise</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> SINCRONIZADO</b></div>
+      <div class="health-service"><span>Autenticação e sessão</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> SAUDÁVEL</b></div>
     </div>
 
   </div>
@@ -656,7 +656,7 @@
     <div class="widget-catalog">
       <div class="catalog-header">
         <div class="catalog-title">Adicionar Widget</div>
-        <button class="catalog-close" onclick="closeWidgetCatalog()">✕</button>
+        <button class="catalog-close" onclick="closeWidgetCatalog()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="catalog-grid" id="catalogGrid">
         <!-- Populated by JS -->
@@ -691,7 +691,7 @@
     // ── Habit toggle ──
     function toggleD2Habit(btn) {
       btn.classList.toggle('done');
-      btn.textContent = btn.classList.contains('done') ? '✓' : '';
+      btn.textContent = btn.classList.contains('done') ? '\u{2713}' : '';
       updateHabitProgress();
     }
     function updateHabitProgress() {
@@ -728,7 +728,7 @@
       const btn = document.getElementById('edit-btn');
       grid.classList.toggle('edit-mode', editMode);
       badge.classList.toggle('visible', editMode);
-      btn.textContent = editMode ? '✓ Concluir' : '⚙ Personalizar';
+      btn.textContent = editMode ? '\u{2713} Concluir' : '\u{2699} Personalizar';
       if (!editMode) saveLayout();
     }
 
@@ -787,18 +787,18 @@
 
     // ── Widget Catalog ──
     const WIDGET_CATALOG = [
-      { id: 'widget-day-summary', icon: '📅', name: 'Resumo do Dia', desc: 'Visão geral do seu dia' },
+      { id: 'widget-day-summary', icon: '\u{1F4C5}', name: 'Resumo do Dia', desc: 'Visão geral do seu dia' },
       { id: 'widget-lifescore', icon: '⭐', name: 'Life Score', desc: 'Pontuação de vida com breakdown' },
-      { id: 'widget-agenda', icon: '🗓️', name: 'Agenda', desc: 'Compromissos de hoje' },
-      { id: 'widget-upcoming', icon: '⏰', name: 'Próximos Compromissos', desc: 'Eventos futuros' },
-      { id: 'widget-habits', icon: '🔄', name: 'Hábitos', desc: 'Hábitos diários e progresso' },
-      { id: 'widget-goals', icon: '🎯', name: 'Metas', desc: 'Metas ativas com progresso' },
-      { id: 'widget-finance', icon: '💰', name: 'Finance Hub', desc: 'Resumo financeiro' },
-      { id: 'widget-comm', icon: '💬', name: 'Comunicação', desc: 'Mensagens recentes' },
-      { id: 'widget-ai', icon: '🤖', name: 'IA Companion', desc: 'Insights e chat com IA' },
-      { id: 'widget-activities', icon: '📋', name: 'Atividades Recentes', desc: 'Timeline de ações' },
-      { id: 'widget-productivity', icon: '⚡', name: 'Produtividade', desc: 'Foco, entregas e capacidade' },
-      { id: 'widget-system-health', icon: '🛡', name: 'Saúde do Sistema', desc: 'Disponibilidade dos serviços' },
+      { id: 'widget-agenda', icon: '\u{1F5D3}\u{FE0F}', name: 'Agenda', desc: 'Compromissos de hoje' },
+      { id: 'widget-upcoming', icon: '\u{23F0}', name: 'Próximos Compromissos', desc: 'Eventos futuros' },
+      { id: 'widget-habits', icon: '\u{1F504}', name: 'Hábitos', desc: 'Hábitos diários e progresso' },
+      { id: 'widget-goals', icon: '\u{1F3AF}', name: 'Metas', desc: 'Metas ativas com progresso' },
+      { id: 'widget-finance', icon: '\u{1F4B0}', name: 'Finance Hub', desc: 'Resumo financeiro' },
+      { id: 'widget-comm', icon: '\u{1F4AC}', name: 'Comunicação', desc: 'Mensagens recentes' },
+      { id: 'widget-ai', icon: '\u{1F916}', name: 'IA Companion', desc: 'Insights e chat com IA' },
+      { id: 'widget-activities', icon: '\u{1F4CB}', name: 'Atividades Recentes', desc: 'Timeline de ações' },
+      { id: 'widget-productivity', icon: '\u{26A1}', name: 'Produtividade', desc: 'Foco, entregas e capacidade' },
+      { id: 'widget-system-health', icon: '\u{1F6E1}', name: 'Saúde do Sistema', desc: 'Disponibilidade dos serviços' },
     ];
     function openWidgetCatalog() {
       const grid = document.getElementById('catalogGrid');
@@ -809,7 +809,7 @@
           <div class="catalog-item-icon">${w.icon}</div>
           <div class="catalog-item-name">${w.name}</div>
           <div class="catalog-item-desc">${w.desc}</div>
-          <span class="catalog-item-status ${isVisible ? 'active' : 'inactive'}">${isVisible ? '✓ Ativo' : '+ Adicionar'}</span>
+          <span class="catalog-item-status ${isVisible ? 'active' : 'inactive'}">${isVisible ? '\u{2713} Ativo' : '+ Adicionar'}</span>
         </div>`;
       }).join('');
       document.getElementById('widgetCatalog').classList.add('open');
@@ -827,7 +827,7 @@
         widget.offsetHeight;
         widget.style.animation = 'fadeIn 0.3s ease';
         el.classList.add('added');
-        el.querySelector('.catalog-item-status').textContent = '✓ Ativo';
+        el.querySelector('.catalog-item-status').textContent = '\u{2713} Ativo';
         el.querySelector('.catalog-item-status').className = 'catalog-item-status active';
         showToastD2('Widget adicionado!', 'success');
       } else {

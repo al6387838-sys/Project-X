@@ -12,29 +12,29 @@ class CommandPalette {
     this.selectedIndex = 0;
     this.commands = [
       // Dashboard
-      { id: 'dashboard', label: 'Dashboard', category: 'Navigation', icon: '📊', action: () => this.navigate('/dashboard') },
-      { id: 'analytics', label: 'Analytics', category: 'Navigation', icon: '📈', action: () => this.navigate('/analytics') },
-      { id: 'users', label: 'Usuários', category: 'Navigation', icon: '👥', action: () => this.navigate('/users') },
-      { id: 'organizations', label: 'Organizações', category: 'Navigation', icon: '🏢', action: () => this.navigate('/organizations') },
-      { id: 'billing', label: 'Faturamento', category: 'Navigation', icon: '💰', action: () => this.navigate('/billing') },
-      { id: 'settings', label: 'Configurações', category: 'Navigation', icon: '⚙️', action: () => this.navigate('/settings') },
+      { id: 'dashboard', label: 'Dashboard', category: 'Navigation', icon: '\u{1F4CA}', action: () => this.navigate('/dashboard') },
+      { id: 'analytics', label: 'Analytics', category: 'Navigation', icon: '\u{1F4C8}', action: () => this.navigate('/analytics') },
+      { id: 'users', label: 'Usuários', category: 'Navigation', icon: '\u{1F465}', action: () => this.navigate('/users') },
+      { id: 'organizations', label: 'Organizações', category: 'Navigation', icon: '\u{1F3E2}', action: () => this.navigate('/organizations') },
+      { id: 'billing', label: 'Faturamento', category: 'Navigation', icon: '\u{1F4B0}', action: () => this.navigate('/billing') },
+      { id: 'settings', label: 'Configurações', category: 'Navigation', icon: '\u{2699}\u{FE0F}', action: () => this.navigate('/settings') },
       
       // Actions
-      { id: 'new-user', label: 'Novo Usuário', category: 'Actions', icon: '➕', action: () => this.action('new-user') },
-      { id: 'new-org', label: 'Nova Organização', category: 'Actions', icon: '➕', action: () => this.action('new-org') },
-      { id: 'export-data', label: 'Exportar Dados', category: 'Actions', icon: '📥', action: () => this.action('export-data') },
-      { id: 'import-data', label: 'Importar Dados', category: 'Actions', icon: '📤', action: () => this.action('import-data') },
+      { id: 'new-user', label: 'Novo Usuário', category: 'Actions', icon: '\u{2795}', action: () => this.action('new-user') },
+      { id: 'new-org', label: 'Nova Organização', category: 'Actions', icon: '\u{2795}', action: () => this.action('new-org') },
+      { id: 'export-data', label: 'Exportar Dados', category: 'Actions', icon: '\u{1F4E5}', action: () => this.action('export-data') },
+      { id: 'import-data', label: 'Importar Dados', category: 'Actions', icon: '\u{1F4E4}', action: () => this.action('import-data') },
       
       // Theme
-      { id: 'theme-dark', label: 'Tema Escuro', category: 'Theme', icon: '🌙', action: () => this.setTheme('enterprise-dark') },
-      { id: 'theme-light', label: 'Tema Claro', category: 'Theme', icon: '☀️', action: () => this.setTheme('enterprise-light') },
-      { id: 'theme-auto', label: 'Tema Automático', category: 'Theme', icon: '🔄', action: () => this.setTheme('auto') },
+      { id: 'theme-dark', label: 'Tema Escuro', category: 'Theme', icon: '\u{1F319}', action: () => this.setTheme('enterprise-dark') },
+      { id: 'theme-light', label: 'Tema Claro', category: 'Theme', icon: '\u{2600}\u{FE0F}', action: () => this.setTheme('enterprise-light') },
+      { id: 'theme-auto', label: 'Tema Automático', category: 'Theme', icon: '\u{1F504}', action: () => this.setTheme('auto') },
       
       // Help
-      { id: 'help', label: 'Ajuda', category: 'Help', icon: '❓', action: () => this.action('help') },
-      { id: 'docs', label: 'Documentação', category: 'Help', icon: '📖', action: () => this.action('docs') },
-      { id: 'shortcuts', label: 'Atalhos de Teclado', category: 'Help', icon: '⌨️', action: () => this.action('shortcuts') },
-      { id: 'about', label: 'Sobre', category: 'Help', icon: 'ℹ️', action: () => this.action('about') },
+      { id: 'help', label: 'Ajuda', category: 'Help', icon: '\u{2753}', action: () => this.action('help') },
+      { id: 'docs', label: 'Documentação', category: 'Help', icon: '\u{1F4D6}', action: () => this.action('docs') },
+      { id: 'shortcuts', label: 'Atalhos de Teclado', category: 'Help', icon: '\u{2328}️', action: () => this.action('shortcuts') },
+      { id: 'about', label: 'Sobre', category: 'Help', icon: '\u{2139}️', action: () => this.action('about') },
     ];
 
     this.filteredCommands = [...this.commands];

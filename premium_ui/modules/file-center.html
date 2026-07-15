@@ -5,20 +5,20 @@
 <div class="page" id="page-file-center">
   <div class="page-header">
     <div>
-      <div class="page-title">📁 Enterprise File Center</div>
+      <div class="page-title"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Enterprise File Center</div>
       <div class="page-subtitle">Armazenamento, organização, versão e compartilhamento</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="fcView('grid')" id="fc-btn-grid">⊞</button>
-      <button class="btn btn-ghost" onclick="fcView('list')" id="fc-btn-list">☰</button>
-      <button class="btn btn-ghost" onclick="fcNewFolder()">📁 Nova Pasta</button>
+      <button class="btn btn-ghost" onclick="fcView('grid')" id="fc-btn-grid"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" onclick="fcView('list')" id="fc-btn-list"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" onclick="fcNewFolder()"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Nova Pasta</button>
       <button class="btn btn-primary" onclick="fcUpload()">⬆️ Upload</button>
     </div>
   </div>
 
   <!-- Barra de busca e filtros -->
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-    <input type="text" class="form-input" placeholder="🔍 Buscar arquivos, conteúdo, tags..." style="flex:1;min-width:200px" id="fc-search" />
+    <input type="text" class="form-input" placeholder=" Buscar arquivos, conteúdo, tags..." style="flex:1;min-width:200px" id="fc-search" />
     <select class="form-input" style="width:auto" id="fc-type-filter">
       <option>Todos os tipos</option>
       <option>Documentos</option>
@@ -39,7 +39,7 @@
 
   <!-- Breadcrumb -->
   <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px">
-    <span style="cursor:pointer;color:var(--accent-light)" onclick="fcNavigate('/')">🏠 Home</span>
+    <span style="cursor:pointer;color:var(--accent-light)" onclick="fcNavigate('/')"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Home</span>
     <span style="color:var(--text-muted)">/</span>
     <span style="cursor:pointer;color:var(--accent-light)" onclick="fcNavigate('/trabalho')">Trabalho</span>
     <span style="color:var(--text-muted)">/</span>
@@ -70,27 +70,27 @@
       <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Pastas</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px">
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/projetos')">
-          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:28px;margin-bottom:6px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:12px;font-weight:600">Projetos</div>
           <div style="font-size:10px;color:var(--text-muted)">12 arquivos</div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/contratos')">
-          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:28px;margin-bottom:6px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:12px;font-weight:600">Contratos</div>
           <div style="font-size:10px;color:var(--text-muted)">8 arquivos</div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/financeiro')">
-          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:28px;margin-bottom:6px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:12px;font-weight:600">Financeiro</div>
           <div style="font-size:10px;color:var(--text-muted)">15 arquivos</div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/docs')">
-          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:28px;margin-bottom:6px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:12px;font-weight:600">Documentos</div>
           <div style="font-size:10px;color:var(--text-muted)">6 arquivos</div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer" onclick="fcNavigate('/trabalho/backup')">
-          <div style="font-size:28px;margin-bottom:6px">📁</div>
+          <div style="font-size:28px;margin-bottom:6px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:12px;font-weight:600">Backup</div>
           <div style="font-size:10px;color:var(--text-muted)">22 arquivos</div>
         </div>
@@ -106,7 +106,7 @@
             <span style="font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:4px;font-weight:600">Importante</span>
             <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Trabalho</span>
           </div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Deploy Checklist')">🔗</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Deploy Checklist')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
         </div>
 
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Contrato Locação')">
@@ -115,7 +115,7 @@
           <div style="display:flex;gap:4px">
             <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Legal</span>
           </div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Contrato Locação')">🔗</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Contrato Locação')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
         </div>
 
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Planilha Gastos')">
@@ -124,7 +124,7 @@
           <div style="display:flex;gap:4px">
             <span style="font-size:10px;padding:2px 6px;background:rgba(99,102,241,0.15);color:var(--accent-light);border-radius:4px;font-weight:600">Financeiro</span>
           </div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Planilha Gastos')">🔗</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Planilha Gastos')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
         </div>
 
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Notas Reunião')">
@@ -133,7 +133,7 @@
           <div style="display:flex;gap:4px">
             <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:600">Trabalho</span>
           </div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Notas Reunião')">🔗</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Notas Reunião')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
         </div>
 
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('Backup Config')">
@@ -142,7 +142,7 @@
           <div style="display:flex;gap:4px">
             <span style="font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:4px;font-weight:600">Importante</span>
           </div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Backup Config')">🔗</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="fcShare('Backup Config')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
         </div>
       </div>
     </div>
@@ -150,7 +150,7 @@
     <!-- Painel Lateral: Versionamento -->
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px">📋 Versionamento</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Versionamento</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md);border-left:3px solid var(--green)">
             <div style="font-size:11px;font-weight:700;color:var(--green)">v3 — Atual</div>
@@ -168,7 +168,7 @@
       </div>
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px">🔗 Compartilhados</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Compartilhados</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md)">
             <div style="font-size:12px;font-weight:600">Deploy Checklist</div>
@@ -187,7 +187,7 @@
       </div>
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px">🏷️ Tags</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="tag" class="pg-icon" aria-hidden="true"></i> Tags</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px">
           <span style="font-size:11px;padding:4px 10px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:20px;cursor:pointer;border:1px solid rgba(245,158,11,0.3)">Importante (3)</span>
           <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;cursor:pointer;border:1px solid rgba(16,185,129,0.3)">Trabalho (8)</span>
@@ -198,7 +198,7 @@
       </div>
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:12px">💾 Uso de Armazenamento</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Uso de Armazenamento</div>
         <div class="progress-bar" style="height:8px;margin-bottom:8px"><div class="progress-fill" style="width:8.4%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
           <span>4.2 GB usados</span><span>50 GB total</span>
@@ -216,16 +216,16 @@
       <div class="page-subtitle">PDF · 1.2 MB · v3 (atual)</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('file-center')">← Voltar</button>
+      <button class="btn btn-ghost" onclick="showPage('file-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
       <button class="btn btn-ghost" onclick="showToast('Download iniciado','info')">⬇️ Baixar</button>
-      <button class="btn btn-ghost" onclick="fcShare('Deploy Checklist')">🔗 Compartilhar</button>
-      <button class="btn btn-primary" onclick="fcOpenVersions()">📋 Versões</button>
+      <button class="btn btn-ghost" onclick="fcShare('Deploy Checklist')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+      <button class="btn btn-primary" onclick="fcOpenVersions()"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Versões</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 280px;gap:16px">
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;min-height:500px;display:flex;align-items:center;justify-content:center">
       <div style="text-align:center">
-        <div style="font-size:64px;margin-bottom:16px">📄</div>
+        <div style="font-size:64px;margin-bottom:16px"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:18px;font-weight:700;margin-bottom:8px">Deploy Checklist v11</div>
         <div style="font-size:13px;color:var(--text-secondary);max-width:400px;line-height:1.6">Visualizador de documentos integrado. O arquivo está disponível para leitura, anotação e download.</div>
         <button class="btn btn-primary" style="margin-top:16px" onclick="showToast('Abrindo visualizador...','info')">Abrir Visualizador</button>
@@ -253,7 +253,7 @@
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
         <div style="font-size:13px;font-weight:700;margin-bottom:12px">Compartilhamento</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">Carlos Andrade — Editor</div>
-        <button class="btn btn-ghost" style="width:100%;font-size:11px" onclick="fcShare('Deploy Checklist')">+ Adicionar</button>
+        <button class="btn btn-ghost" style="width:100%;font-size:11px" onclick="fcShare('Deploy Checklist')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
       </div>
     </div>
   </div>

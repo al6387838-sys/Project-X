@@ -5,12 +5,12 @@
 <div class="page" id="page-email">
   <div class="page-header">
     <div>
-      <div class="page-title">📧 Email</div>
+      <div class="page-title"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email</div>
       <div class="page-subtitle">Inbox unificada — todos os seus emails em um lugar</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('email-integrations')">Contas</button>
-      <button class="btn btn-primary" onclick="openModal('modal-compose-email')">✏️ Novo Email</button>
+      <button class="btn btn-primary" onclick="openModal('modal-compose-email')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Novo Email</button>
     </div>
   </div>
 
@@ -20,31 +20,31 @@
       <!-- Contas -->
       <div style="padding:12px;border-bottom:1px solid var(--border)">
         <select class="form-input" style="width:100%;font-size:12px" onchange="emailSwitchAccount(this.value)">
-          <option value="all">📥 Todas as contas</option>
-          <option value="gmail">📧 Gmail — usuario@gmail.com</option>
-          <option value="outlook">📨 Outlook — user@outlook.com</option>
-          <option value="work">🏢 Work — user@empresa.com</option>
+          <option value="all"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Todas as contas</option>
+          <option value="gmail"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Gmail — usuario@gmail.com</option>
+          <option value="outlook"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Outlook — user@outlook.com</option>
+          <option value="work"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Work — user@empresa.com</option>
         </select>
       </div>
       <!-- Pastas -->
       <div style="flex:1;overflow-y:auto;padding:8px">
         <div class="email-folder active" onclick="emailFolder('inbox',this)">
-          <span>📥</span><span style="flex:1">Caixa de Entrada</span><span class="email-count">24</span>
+          <span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1">Caixa de Entrada</span><span class="email-count">24</span>
         </div>
         <div class="email-folder" onclick="emailFolder('starred',this)">
           <span>⭐</span><span style="flex:1">Favoritos</span><span class="email-count">8</span>
         </div>
         <div class="email-folder" onclick="emailFolder('sent',this)">
-          <span>📤</span><span style="flex:1">Enviados</span>
+          <span><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1">Enviados</span>
         </div>
         <div class="email-folder" onclick="emailFolder('drafts',this)">
-          <span>📝</span><span style="flex:1">Rascunhos</span><span class="email-count">3</span>
+          <span><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1">Rascunhos</span><span class="email-count">3</span>
         </div>
         <div class="email-folder" onclick="emailFolder('spam',this)">
-          <span>🚫</span><span style="flex:1">Spam</span><span class="email-count">12</span>
+          <span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1">Spam</span><span class="email-count">12</span>
         </div>
         <div class="email-folder" onclick="emailFolder('trash',this)">
-          <span>🗑️</span><span style="flex:1">Lixeira</span>
+          <span><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1">Lixeira</span>
         </div>
         <div style="margin-top:12px;padding:8px 0;border-top:1px solid var(--border)">
           <div style="font-size:10px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;padding:0 8px">Labels</div>
@@ -61,7 +61,7 @@
       <!-- Lista de emails -->
       <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
         <div style="padding:10px;border-bottom:1px solid var(--border);display:flex;gap:8px">
-          <input type="text" class="form-input" placeholder="🔍 Buscar emails..." style="flex:1;font-size:12px" />
+          <input type="text" class="form-input" placeholder=" Buscar emails..." style="flex:1;font-size:12px" />
           <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()">↻</button>
         </div>
         <div style="flex:1;overflow-y:auto" id="email-list">
@@ -132,7 +132,7 @@
                 <span class="email-item-from">Product Hunt</span>
                 <span class="email-item-time">Seg</span>
               </div>
-              <div class="email-item-subject">🚀 Top produtos da semana</div>
+              <div class="email-item-subject"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i> Top produtos da semana</div>
               <div class="email-item-preview">Confira os produtos mais votados desta semana no Product Hunt...</div>
             </div>
             <div class="email-item-badge" style="background:#EC4899">Gmail</div>
@@ -158,8 +158,8 @@
               <button class="btn btn-ghost" style="padding:8px" title="Responder" onclick="openModal('modal-compose-email')">↩️</button>
               <button class="btn btn-ghost" style="padding:8px" title="Encaminhar" onclick="openModal('modal-compose-email')">↪️</button>
               <button class="btn btn-ghost" style="padding:8px" title="Favoritar" onclick="showToast('Email marcado como favorito','success')">⭐</button>
-              <button class="btn btn-ghost" style="padding:8px" title="Arquivar" onclick="showToast('Email arquivado','info')">📦</button>
-              <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="showToast('Email excluído','warning')">🗑️</button>
+              <button class="btn btn-ghost" style="padding:8px" title="Arquivar" onclick="showToast('Email arquivado','info')"><i data-lucide="package" class="pg-icon" aria-hidden="true"></i></button>
+              <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="showToast('Email excluído','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
             </div>
           </div>
           <div style="background:var(--bg-elevated);border-radius:var(--radius-md);padding:20px;line-height:1.7;font-size:14px;color:var(--text-secondary)" id="email-view-body">
@@ -180,12 +180,12 @@
           </div>
           <!-- Ações de IA -->
           <div style="margin-top:16px;padding:12px;background:rgba(99,102,241,0.08);border-radius:var(--radius-md);border:1px solid rgba(99,102,241,0.2)">
-            <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">🤖 IA — Sugestões</div>
+            <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> IA — Sugestões</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resumo: Atualização de segurança aplicada na conta Google','info')">📝 Resumir</button>
-              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Tarefa criada: Verificar configurações de segurança','success')">✅ Criar Tarefa</button>
-              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Email categorizado como: Segurança','info')">🏷️ Categorizar</button>
-              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resposta sugerida gerada','info')">✍️ Sugerir Resposta</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resumo: Atualização de segurança aplicada na conta Google','info')"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Resumir</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Tarefa criada: Verificar configurações de segurança','success')"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Criar Tarefa</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Email categorizado como: Segurança','info')"><i data-lucide="tag" class="pg-icon" aria-hidden="true"></i> Categorizar</button>
+              <button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Resposta sugerida gerada','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Sugerir Resposta</button>
             </div>
           </div>
         </div>
@@ -198,12 +198,12 @@
 <div class="page" id="page-email-integrations">
   <div class="page-header">
     <div>
-      <div class="page-title">📧 Contas de Email</div>
+      <div class="page-title"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Contas de Email</div>
       <div class="page-subtitle">Gerencie suas contas de email</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('email')">← Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-email-account')">+ Adicionar Conta</button>
+      <button class="btn btn-ghost" onclick="showPage('email')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-email-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Conta</button>
     </div>
   </div>
   <div class="grid-2">
@@ -214,7 +214,7 @@
           <div class="integration-name">Gmail</div>
           <div style="font-size:12px;color:var(--text-muted)">usuario@gmail.com</div>
         </div>
-        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+        <div class="integration-status connected" style="margin-left:auto"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
         <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">24</div><div style="font-size:10px;color:var(--text-muted)">Não lidos</div></div>
@@ -223,7 +223,7 @@
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Gmail...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Gmail','info')">⚙️ Configurar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Gmail','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurar</button>
       </div>
     </div>
     <div class="integration-card" style="border-color:rgba(0,120,212,0.3)">
@@ -233,7 +233,7 @@
           <div class="integration-name">Outlook</div>
           <div style="font-size:12px;color:var(--text-muted)">user@outlook.com</div>
         </div>
-        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+        <div class="integration-status connected" style="margin-left:auto"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
         <div style="text-align:center;padding:8px;background:var(--bg-elevated);border-radius:8px"><div style="font-size:18px;font-weight:700">8</div><div style="font-size:10px;color:var(--text-muted)">Não lidos</div></div>
@@ -242,7 +242,7 @@
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Outlook...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Outlook','info')">⚙️ Configurar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Outlook','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurar</button>
       </div>
     </div>
     <div class="integration-card" style="border-color:rgba(99,102,241,0.3)">
@@ -252,23 +252,23 @@
           <div class="integration-name">Email Corporativo</div>
           <div style="font-size:12px;color:var(--text-muted)">user@empresa.com · Exchange</div>
         </div>
-        <div class="integration-status connected" style="margin-left:auto">● Conectado</div>
+        <div class="integration-status connected" style="margin-left:auto"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Exchange...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Exchange','info')">⚙️ Configurar</button>
+        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações do Exchange','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurar</button>
       </div>
     </div>
     <div class="integration-card" style="border-color:rgba(255,255,255,0.1);opacity:0.7">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-        <div class="integration-icon" style="background:var(--bg-elevated);width:48px;height:48px;font-size:20px">📨</div>
+        <div class="integration-icon" style="background:var(--bg-elevated);width:48px;height:48px;font-size:20px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div>
           <div class="integration-name">IMAP Personalizado</div>
           <div style="font-size:12px;color:var(--text-muted)">Qualquer servidor IMAP/SMTP</div>
         </div>
-        <div class="integration-status pending" style="margin-left:auto">○ Configurar</div>
+        <div class="integration-status pending" style="margin-left:auto"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
       </div>
-      <button class="btn btn-primary" style="width:100%;font-size:12px" onclick="openModal('modal-add-email-account')">+ Adicionar Conta IMAP</button>
+      <button class="btn btn-primary" style="width:100%;font-size:12px" onclick="openModal('modal-add-email-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Conta IMAP</button>
     </div>
   </div>
 </div>

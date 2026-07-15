@@ -141,33 +141,33 @@
 <!-- HEADER -->
 <div class="ea-header">
   <div>
-    <div class="ea-eyebrow">⚡ Super Admin</div>
+    <div class="ea-eyebrow"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Super Admin</div>
     <h1 class="ea-title"><span>Enterprise</span> Admin</h1>
     <p class="ea-subtitle">Gestão completa de tenants, usuários, billing e sistema</p>
   </div>
   <div style="display:flex;gap:8px">
     <button class="btn btn-ghost" onclick="eaExport()">⬇ Exportar</button>
-    <button class="btn btn-danger" onclick="eaEmergency()">🚨 Emergência</button>
+    <button class="btn btn-danger" onclick="eaEmergency()"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Emergência</button>
   </div>
 </div>
 
 <!-- ALERT -->
 <div class="ea-alert">
-  <span class="ea-alert-icon">⚠️</span>
+  <span class="ea-alert-icon"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></span>
   <div class="ea-alert-text"><strong>2 alertas ativos:</strong> Tenant "StartupXYZ" com uso acima de 90% do plano · Fatura vencida há 3 dias</div>
-  <span class="ea-alert-action" onclick="eaViewAlerts()">Ver alertas →</span>
+  <span class="ea-alert-action" onclick="eaViewAlerts()">Ver alertas <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></span>
 </div>
 
 <!-- TABS -->
 <div class="ea-tabs">
-  <button class="ea-tab active" onclick="eaTab('overview',this)">📊 Visão Geral</button>
-  <button class="ea-tab" onclick="eaTab('tenants',this)">🏢 Tenants</button>
-  <button class="ea-tab" onclick="eaTab('users',this)">👥 Usuários</button>
-  <button class="ea-tab" onclick="eaTab('billing',this)">💳 Billing</button>
-  <button class="ea-tab" onclick="eaTab('security',this)">🔒 Segurança</button>
-  <button class="ea-tab" onclick="eaTab('system',this)">⚙️ Sistema</button>
-  <button class="ea-tab" onclick="eaTab('audit',this)">📋 Auditoria</button>
-  <button class="ea-tab" onclick="eaTab('features',this)">🧪 Feature Flags</button>
+  <button class="ea-tab active" onclick="eaTab('overview',this)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Visão Geral</button>
+  <button class="ea-tab" onclick="eaTab('tenants',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Tenants</button>
+  <button class="ea-tab" onclick="eaTab('users',this)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Usuários</button>
+  <button class="ea-tab" onclick="eaTab('billing',this)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Billing</button>
+  <button class="ea-tab" onclick="eaTab('security',this)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Segurança</button>
+  <button class="ea-tab" onclick="eaTab('system',this)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Sistema</button>
+  <button class="ea-tab" onclick="eaTab('audit',this)"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
+  <button class="ea-tab" onclick="eaTab('features',this)"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Feature Flags</button>
 </div>
 
 <div class="ea-content">
@@ -178,22 +178,22 @@
       <div class="card">
         <div class="kpi-label">MRR</div>
         <div class="kpi-value" style="color:#10B981">R$ 42.150</div>
-        <div class="kpi-delta delta-up">↑ +8.3% vs mês anterior</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
       </div>
       <div class="card">
         <div class="kpi-label">Tenants Ativos</div>
         <div class="kpi-value" style="color:#818CF8">156</div>
-        <div class="kpi-delta delta-up">↑ +5.2% este mês</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +5.2% este mês</div>
       </div>
       <div class="card">
         <div class="kpi-label">Usuários Totais</div>
         <div class="kpi-value" style="color:#06B6D4">2.847</div>
-        <div class="kpi-delta delta-up">↑ +8.3% este mês</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% este mês</div>
       </div>
       <div class="card">
         <div class="kpi-label">Uptime (30d)</div>
         <div class="kpi-value" style="color:#F59E0B">99.98%</div>
-        <div class="kpi-delta delta-flat">→ SLA: 99.9%</div>
+        <div class="kpi-delta delta-flat"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> SLA: 99.9%</div>
       </div>
     </div>
 
@@ -201,7 +201,7 @@
       <!-- System Health -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🏥 Saúde do Sistema</div>
+          <div class="card-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Saúde do Sistema</div>
           <span class="badge badge-green">Operacional</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -235,11 +235,11 @@
       <!-- Recent Activity -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📋 Atividade Recente</div>
+          <div class="card-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Atividade Recente</div>
           <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTab('audit',document.querySelector('.ea-tab:nth-child(7)'))">Ver tudo</button>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(16,185,129,0.1)">✅</div>
+          <div class="log-icon" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Novo tenant criado: <strong>FinTech Pro</strong></div>
             <div class="log-meta">Plano Enterprise · 50 licenças</div>
@@ -247,7 +247,7 @@
           <div class="log-time">09:32</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(245,158,11,0.1)">⚠️</div>
+          <div class="log-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Limite de uso atingido: <strong>StartupXYZ</strong></div>
             <div class="log-meta">90% do plano Pro utilizado</div>
@@ -255,7 +255,7 @@
           <div class="log-time">08:15</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(99,102,241,0.1)">💳</div>
+          <div class="log-icon" style="background:rgba(99,102,241,0.1)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Pagamento recebido: <strong>TechCorp Brasil</strong></div>
             <div class="log-meta">R$ 2.490,00 · Enterprise anual</div>
@@ -263,7 +263,7 @@
           <div class="log-time">07:44</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(239,68,68,0.1)">🔒</div>
+          <div class="log-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Tentativa de acesso bloqueada</div>
             <div class="log-meta">IP: 185.220.101.x · Brute force detectado</div>
@@ -271,7 +271,7 @@
           <div class="log-time">06:20</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(6,182,212,0.1)">🚀</div>
+          <div class="log-icon" style="background:rgba(6,182,212,0.1)"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Deploy concluído: <strong>v10.1.0</strong></div>
             <div class="log-meta">Cloudflare Pages · 0 erros · 2.1s</div>
@@ -286,10 +286,10 @@
   <div class="ea-panel" id="ea-tenants">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🏢 Gestão de Tenants</div>
+        <div class="card-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Gestão de Tenants</div>
         <div style="display:flex;gap:8px">
-          <input type="text" class="form-input" placeholder="🔍 Buscar tenant..." style="width:200px;padding:7px 12px" />
-          <button class="btn btn-primary" onclick="eaNewTenant()">+ Novo Tenant</button>
+          <input type="text" class="form-input" placeholder=" Buscar tenant..." style="width:200px;padding:7px 12px" />
+          <button class="btn btn-primary" onclick="eaNewTenant()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Tenant</button>
         </div>
       </div>
       <table class="ea-table">
@@ -314,7 +314,7 @@
             <td>18 / 20</td>
             <td style="color:var(--green)">R$ 490</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:90%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div><span style="font-size:11px;color:var(--amber)">90%</span></div></td>
-            <td><span class="badge badge-amber">⚠ Limite</span></td>
+            <td><span class="badge badge-amber"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Limite</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('StartupXYZ')">Detalhes</button><button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="eaUpgrade('StartupXYZ')">Upgrade</button></div></td>
           </tr>
           <tr>
@@ -332,7 +332,7 @@
             <td>2 / 50</td>
             <td style="color:var(--green)">R$ 2.490</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:4%"></div></div><span style="font-size:11px">4%</span></div></td>
-            <td><span class="badge badge-cyan">🆕 Novo</span></td>
+            <td><span class="badge badge-cyan"><i data-lucide="badge-plus" class="pg-icon" aria-hidden="true"></i> Novo</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('FinTech')">Detalhes</button></div></td>
           </tr>
           <tr>
@@ -353,10 +353,10 @@
   <div class="ea-panel" id="ea-users">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">👥 Usuários do Sistema</div>
+        <div class="card-title"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Usuários do Sistema</div>
         <div style="display:flex;gap:8px">
-          <input type="text" class="form-input" placeholder="🔍 Buscar usuário..." style="width:200px;padding:7px 12px" />
-          <button class="btn btn-primary" onclick="eaNewUser()">+ Novo Usuário</button>
+          <input type="text" class="form-input" placeholder=" Buscar usuário..." style="width:200px;padding:7px 12px" />
+          <button class="btn btn-primary" onclick="eaNewUser()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Usuário</button>
         </div>
       </div>
       <table class="ea-table">
@@ -376,22 +376,22 @@
       <div class="card">
         <div class="kpi-label">MRR Total</div>
         <div class="kpi-value" style="color:#10B981">R$ 42.150</div>
-        <div class="kpi-delta delta-up">↑ +8.3% vs mês anterior</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
       </div>
       <div class="card">
         <div class="kpi-label">ARR Projetado</div>
         <div class="kpi-value" style="color:#818CF8">R$ 505.800</div>
-        <div class="kpi-delta delta-up">↑ +23% YoY</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +23% YoY</div>
       </div>
       <div class="card">
         <div class="kpi-label">Churn Rate</div>
         <div class="kpi-value" style="color:#F59E0B">2.1%</div>
-        <div class="kpi-delta delta-down">↓ Meta: &lt;2%</div>
+        <div class="kpi-delta delta-down"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> Meta: &lt;2%</div>
       </div>
     </div>
     <div class="card">
       <div class="card-header">
-        <div class="card-title">💳 Transações Recentes</div>
+        <div class="card-title"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Transações Recentes</div>
         <span class="badge badge-green">Stripe conectado</span>
       </div>
       <table class="ea-table">
@@ -412,7 +412,7 @@
     <div class="grid grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🔒 Políticas de Segurança</div>
+          <div class="card-title"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Políticas de Segurança</div>
         </div>
         <div class="toggle-wrap">
           <div class="toggle-info">
@@ -459,11 +459,11 @@
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🚨 Alertas de Segurança</div>
+          <div class="card-title"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Alertas de Segurança</div>
           <span class="badge badge-amber">2 ativos</span>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(239,68,68,0.1)">🚫</div>
+          <div class="log-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Brute force detectado</div>
             <div class="log-meta">IP: 185.220.101.45 · 47 tentativas · Bloqueado</div>
@@ -471,7 +471,7 @@
           <div class="log-time">06:20</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(245,158,11,0.1)">⚠️</div>
+          <div class="log-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Login de localização incomum</div>
             <div class="log-meta">Usuário: admin@techcorp.com · País: Rússia</div>
@@ -479,7 +479,7 @@
           <div class="log-time">Ontem</div>
         </div>
         <div class="log-item">
-          <div class="log-icon" style="background:rgba(16,185,129,0.1)">✅</div>
+          <div class="log-icon" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Pentest mensal concluído</div>
             <div class="log-meta">15/15 vulnerabilidades corrigidas · Score: A+</div>
@@ -504,7 +504,7 @@
     <div class="grid grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">⚙️ Configurações do Sistema</div>
+          <div class="card-title"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurações do Sistema</div>
         </div>
         <div class="form-group">
           <label class="form-label">Ambiente</label>
@@ -524,12 +524,12 @@
         </div>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button class="btn btn-ghost" onclick="eaRestartService()">↻ Reiniciar Serviços</button>
-          <button class="btn btn-danger" onclick="eaMaintenanceMode()">🔧 Modo Manutenção</button>
+          <button class="btn btn-danger" onclick="eaMaintenanceMode()"><i data-lucide="wrench" class="pg-icon" aria-hidden="true"></i> Modo Manutenção</button>
         </div>
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📈 Métricas de Sistema</div>
+          <div class="card-title"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Métricas de Sistema</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div>
@@ -561,7 +561,7 @@
   <div class="ea-panel" id="ea-audit">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📋 Log de Auditoria</div>
+        <div class="card-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Log de Auditoria</div>
         <div style="display:flex;gap:8px">
           <select class="form-input form-select" style="width:140px;padding:6px 12px;font-size:12px">
             <option>Todos os eventos</option><option>Autenticação</option><option>Admin</option><option>Billing</option><option>Segurança</option>
@@ -582,8 +582,8 @@
   <div class="ea-panel" id="ea-features">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🧪 Feature Flags</div>
-        <button class="btn btn-primary" onclick="eaNewFlag()">+ Nova Flag</button>
+        <div class="card-title"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Feature Flags</div>
+        <button class="btn btn-primary" onclick="eaNewFlag()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Flag</button>
       </div>
       <div id="ea-flags-list">
         <!-- Rendered by JS -->

@@ -106,10 +106,10 @@
   <div class="nc-filter-bar" id="nc-filter-bar">
     <div class="nc-filter-group">
       <button class="nc-filter-btn active" onclick="ncFilterPriority('all', this)">Todas prioridades</button>
-      <button class="nc-filter-btn" onclick="ncFilterPriority('critical', this)">🔴 Crítica</button>
-      <button class="nc-filter-btn" onclick="ncFilterPriority('high', this)">🟠 Alta</button>
-      <button class="nc-filter-btn" onclick="ncFilterPriority('medium', this)">🔵 Média</button>
-      <button class="nc-filter-btn" onclick="ncFilterPriority('low', this)">🟢 Baixa</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('critical', this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Crítica</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('high', this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Alta</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('medium', this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Média</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('low', this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Baixa</button>
     </div>
     <div class="nc-filter-group">
       <button class="nc-filter-btn" onclick="ncFilterCategory('all', this)">Todas categorias</button>
@@ -134,7 +134,7 @@
 
   <!-- Empty state -->
   <div id="nc-empty" class="nc-empty" style="display:none">
-    <div class="nc-empty-icon">🔔</div>
+    <div class="nc-empty-icon"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></div>
     <div class="nc-empty-title">Nenhuma notificação</div>
     <div class="nc-empty-desc">Você está em dia! Nenhuma notificação pendente.</div>
   </div>
@@ -142,21 +142,21 @@
   <script>
     // ── DATA ──
     const NOTIFICATIONS = [
-      { id: 'n01', title: 'AI Engine timeout detectado', desc: 'Timeout de 30s no endpoint /api/ai/analyze. Retry automático agendado.', time: 'Hoje, 14:31', priority: 'critical', category: 'system', icon: '🔴', iconBg: 'rgba(239,68,68,0.12)', read: false },
-      { id: 'n02', title: 'Backup automático concluído', desc: 'Backup completo do banco de dados realizado com sucesso. 2.4 GB comprimido.', time: 'Hoje, 03:00', priority: 'low', category: 'system', icon: '✅', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n03', title: 'Streak de 14 dias!', desc: 'Parabéns! Você manteve seus hábitos por 14 dias consecutivos. Seu recorde anterior era 21 dias.', time: 'Hoje, 00:01', priority: 'medium', category: 'productivity', icon: '🔥', iconBg: 'rgba(245,158,11,0.12)', read: false },
+      { id: 'n01', title: 'AI Engine timeout detectado', desc: 'Timeout de 30s no endpoint /api/ai/analyze. Retry automático agendado.', time: 'Hoje, 14:31', priority: 'critical', category: 'system', icon: '\u{1F534}', iconBg: 'rgba(239,68,68,0.12)', read: false },
+      { id: 'n02', title: 'Backup automático concluído', desc: 'Backup completo do banco de dados realizado com sucesso. 2.4 GB comprimido.', time: 'Hoje, 03:00', priority: 'low', category: 'system', icon: '\u{2705}', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n03', title: 'Streak de 14 dias!', desc: 'Parabéns! Você manteve seus hábitos por 14 dias consecutivos. Seu recorde anterior era 21 dias.', time: 'Hoje, 00:01', priority: 'medium', category: 'productivity', icon: '\u{1F525}', iconBg: 'rgba(245,158,11,0.12)', read: false },
       { id: 'n04', title: 'Life Score aumentou para 87', desc: 'Seu Life Score subiu de 84 para 87. Hábitos e metas estão no caminho certo.', time: 'Ontem, 20:00', priority: 'medium', category: 'productivity', icon: '⭐', iconBg: 'rgba(139,92,246,0.12)', read: false },
-      { id: 'n05', title: 'Meta próxima do prazo', desc: '"Ler 24 livros" vence em 30 dias. Você está 58% completo (14/24). Considere acelerar.', time: 'Ontem, 09:00', priority: 'high', category: 'productivity', icon: '⏰', iconBg: 'rgba(245,158,11,0.12)', read: false },
-      { id: 'n06', title: 'Transação: R$2.847,00 recebido', desc: 'Depósito recebido na conta principal. Saldo atualizado: R$24.847,00.', time: 'Hoje, 06:00', priority: 'high', category: 'finance', icon: '💰', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n07', title: 'Fatura processada com sucesso', desc: 'Pagamento de R$1.290,00 processado. Próxima fatura em 30 dias.', time: 'Ontem, 18:00', priority: 'low', category: 'finance', icon: '🧾', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n08', title: 'Novo insight de IA disponível', desc: 'A IA identificou um padrão interessante na sua produtividade. Pico entre 9h–11h.', time: 'Ontem, 14:31', priority: 'medium', category: 'system', icon: '🤖', iconBg: 'rgba(99,102,241,0.12)', read: true },
-      { id: 'n09', title: 'Membro adicionado ao workspace', desc: 'Carlos Pereira foi adicionado ao Workspace Alpha como Editor.', time: 'Ontem, 11:20', priority: 'low', category: 'social', icon: '👤', iconBg: 'rgba(6,182,212,0.12)', read: true },
-      { id: 'n10', title: 'Alerta de segurança: novo dispositivo', desc: 'Login detectado em Chrome · Windows · São Paulo, SP. Se não foi você, revogue a sessão.', time: '2 dias atrás', priority: 'critical', category: 'security', icon: '🔐', iconBg: 'rgba(239,68,68,0.12)', read: true },
-      { id: 'n11', title: 'API Key rotacionada com sucesso', desc: 'A chave API principal foi rotacionada. A chave antiga expira em 24h.', time: '2 dias atrás', priority: 'high', category: 'security', icon: '🔑', iconBg: 'rgba(245,158,11,0.12)', read: true },
-      { id: 'n12', title: 'Novo insight de IA disponível', desc: 'A IA identificou que você pode economizar R$420/mês ajustando assinaturas.', time: '3 dias atrás', priority: 'medium', category: 'system', icon: '🤖', iconBg: 'rgba(99,102,241,0.12)', read: true },
-      { id: 'n13', title: 'Meta concluída: Meditação 30d', desc: 'Parabéns! Você completou a meta de 30 dias de meditação consecutiva.', time: '3 dias atrás', priority: 'medium', category: 'productivity', icon: '🧘', iconBg: 'rgba(16,185,129,0.12)', read: true },
-      { id: 'n14', title: 'Webhook delivery falhou', desc: 'Webhook #3 falhou na entrega para https://api.example.com/hook. Retry em 5min.', time: '3 dias atrás', priority: 'high', category: 'system', icon: '⚠️', iconBg: 'rgba(245,158,11,0.12)', read: true },
-      { id: 'n15', title: 'Relatório semanal pronto', desc: 'Seu relatório de produtividade semanal está disponível. Clique para ver.', time: '5 dias atrás', priority: 'low', category: 'productivity', icon: '📊', iconBg: 'rgba(99,102,241,0.12)', read: true },
+      { id: 'n05', title: 'Meta próxima do prazo', desc: '"Ler 24 livros" vence em 30 dias. Você está 58% completo (14/24). Considere acelerar.', time: 'Ontem, 09:00', priority: 'high', category: 'productivity', icon: '\u{23F0}', iconBg: 'rgba(245,158,11,0.12)', read: false },
+      { id: 'n06', title: 'Transação: R$2.847,00 recebido', desc: 'Depósito recebido na conta principal. Saldo atualizado: R$24.847,00.', time: 'Hoje, 06:00', priority: 'high', category: 'finance', icon: '\u{1F4B0}', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n07', title: 'Fatura processada com sucesso', desc: 'Pagamento de R$1.290,00 processado. Próxima fatura em 30 dias.', time: 'Ontem, 18:00', priority: 'low', category: 'finance', icon: '\u{1F9FE}', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n08', title: 'Novo insight de IA disponível', desc: 'A IA identificou um padrão interessante na sua produtividade. Pico entre 9h–11h.', time: 'Ontem, 14:31', priority: 'medium', category: 'system', icon: '\u{1F916}', iconBg: 'rgba(99,102,241,0.12)', read: true },
+      { id: 'n09', title: 'Membro adicionado ao workspace', desc: 'Carlos Pereira foi adicionado ao Workspace Alpha como Editor.', time: 'Ontem, 11:20', priority: 'low', category: 'social', icon: '\u{1F464}', iconBg: 'rgba(6,182,212,0.12)', read: true },
+      { id: 'n10', title: 'Alerta de segurança: novo dispositivo', desc: 'Login detectado em Chrome · Windows · São Paulo, SP. Se não foi você, revogue a sessão.', time: '2 dias atrás', priority: 'critical', category: 'security', icon: '\u{1F510}', iconBg: 'rgba(239,68,68,0.12)', read: true },
+      { id: 'n11', title: 'API Key rotacionada com sucesso', desc: 'A chave API principal foi rotacionada. A chave antiga expira em 24h.', time: '2 dias atrás', priority: 'high', category: 'security', icon: '\u{1F511}', iconBg: 'rgba(245,158,11,0.12)', read: true },
+      { id: 'n12', title: 'Novo insight de IA disponível', desc: 'A IA identificou que você pode economizar R$420/mês ajustando assinaturas.', time: '3 dias atrás', priority: 'medium', category: 'system', icon: '\u{1F916}', iconBg: 'rgba(99,102,241,0.12)', read: true },
+      { id: 'n13', title: 'Meta concluída: Meditação 30d', desc: 'Parabéns! Você completou a meta de 30 dias de meditação consecutiva.', time: '3 dias atrás', priority: 'medium', category: 'productivity', icon: '\u{1F9D8}', iconBg: 'rgba(16,185,129,0.12)', read: true },
+      { id: 'n14', title: 'Webhook delivery falhou', desc: 'Webhook #3 falhou na entrega para https://api.example.com/hook. Retry em 5min.', time: '3 dias atrás', priority: 'high', category: 'system', icon: '\u{26A0}\u{FE0F}', iconBg: 'rgba(245,158,11,0.12)', read: true },
+      { id: 'n15', title: 'Relatório semanal pronto', desc: 'Seu relatório de produtividade semanal está disponível. Clique para ver.', time: '5 dias atrás', priority: 'low', category: 'productivity', icon: '\u{1F4CA}', iconBg: 'rgba(99,102,241,0.12)', read: true },
     ];
 
     let currentTab = 'all';
@@ -208,11 +208,11 @@
       if (currentTab === 'categories') {
         const groups = {};
         list.forEach(n => { if (!groups[n.category]) groups[n.category] = []; groups[n.category].push(n); });
-        const catIcons = { system: '⚙️', productivity: '📈', finance: '💰', social: '👥', security: '🔐' };
+        const catIcons = { system: '\u{2699}\u{FE0F}', productivity: '\u{1F4C8}', finance: '\u{1F4B0}', social: '\u{1F465}', security: '\u{1F510}' };
         const catLabels = { system: 'Sistema', productivity: 'Produtividade', finance: 'Financeiro', social: 'Social', security: 'Segurança' };
         let html = '';
         Object.entries(groups).forEach(([cat, items]) => {
-          html += `<div class="nc-cat-group"><div class="nc-cat-header"><span class="nc-cat-icon">${catIcons[cat] || '📌'}</span>${catLabels[cat] || cat} <span class="nc-cat-count">${items.length}</span></div>`;
+          html += `<div class="nc-cat-group"><div class="nc-cat-header"><span class="nc-cat-icon">${catIcons[cat] || '\u{1F4CC}'}</span>${catLabels[cat] || cat} <span class="nc-cat-count">${items.length}</span></div>`;
           items.forEach(n => html += renderItem(n));
           html += `</div>`;
         });
@@ -239,8 +239,8 @@
           </div>
         </div>
         <div class="nc-item-actions">
-          ${!n.read ? `<button class="nc-action-btn" onclick="event.stopPropagation();ncToggleRead('${n.id}')" title="Marcar como lida">✓</button>` : ''}
-          <button class="nc-action-btn" onclick="event.stopPropagation();ncDelete('${n.id}')" title="Remover">🗑</button>
+          ${!n.read ? `<button class="nc-action-btn" onclick="event.stopPropagation();ncToggleRead('${n.id}')" title="Marcar como lida">\u{2713}</button>` : ''}
+          <button class="nc-action-btn" onclick="event.stopPropagation();ncDelete('${n.id}')" title="Remover">\u{1F5D1}</button>
         </div>
         ${!n.read ? `<div class="nc-unread-dot"></div>` : ''}
       </div>`;
@@ -309,7 +309,7 @@
         time: 'Agora',
         priority: 'medium',
         category: 'system',
-        icon: '🔔',
+        icon: '\u{1F514}',
         iconBg: 'rgba(99,102,241,0.12)',
         read: false
       };
@@ -318,7 +318,7 @@
       // Show toast
       const badge = document.createElement('div');
       badge.className = 'nc-toast-badge';
-      badge.innerHTML = `<span class="nc-toast-icon">🔔</span><div><div class="nc-toast-text">Nova notificação</div><div class="nc-toast-time">Agora · ${newNotif.title}</div></div>`;
+      badge.innerHTML = `<span class="nc-toast-icon">\u{1F514}</span><div><div class="nc-toast-text">Nova notificação</div><div class="nc-toast-time">Agora · ${newNotif.title}</div></div>`;
       badge.onclick = () => { badge.remove(); };
       document.body.appendChild(badge);
       setTimeout(() => { if (badge.parentNode) badge.remove(); }, 5000);

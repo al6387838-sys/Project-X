@@ -114,18 +114,18 @@
 <body>
   <div class="settings-sidebar">
     <div class="settings-sidebar-title">Configurações</div>
-    <div class="settings-nav-item active" onclick="switchSettings('preferences')"><span class="nav-icon">⚙️</span>Preferências</div>
-    <div class="settings-nav-item" onclick="switchSettings('language')"><span class="nav-icon">🌐</span>Idioma</div>
-    <div class="settings-nav-item" onclick="switchSettings('theme')"><span class="nav-icon">🎨</span>Tema</div>
+    <div class="settings-nav-item active" onclick="switchSettings('preferences')"><span class="nav-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></span>Preferências</div>
+    <div class="settings-nav-item" onclick="switchSettings('language')"><span class="nav-icon"><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></span>Idioma</div>
+    <div class="settings-nav-item" onclick="switchSettings('theme')"><span class="nav-icon"><i data-lucide="palette" class="pg-icon" aria-hidden="true"></i></span>Tema</div>
     <div class="settings-nav-sep"></div>
-    <div class="settings-nav-item" onclick="switchSettings('integrations')"><span class="nav-icon">🔗</span>Integrações</div>
-    <div class="settings-nav-item" onclick="switchSettings('security')"><span class="nav-icon">🔐</span>Segurança</div>
+    <div class="settings-nav-item" onclick="switchSettings('integrations')"><span class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span>Integrações</div>
+    <div class="settings-nav-item" onclick="switchSettings('security')"><span class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</div>
     <div class="settings-nav-sep"></div>
-    <div class="settings-nav-item" onclick="switchSettings('sessions')"><span class="nav-icon">📱</span>Sessões</div>
-    <div class="settings-nav-item" onclick="switchSettings('devices')"><span class="nav-icon">💻</span>Dispositivos</div>
+    <div class="settings-nav-item" onclick="switchSettings('sessions')"><span class="nav-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span>Sessões</div>
+    <div class="settings-nav-item" onclick="switchSettings('devices')"><span class="nav-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span>Dispositivos</div>
     <div class="settings-nav-sep"></div>
-    <div class="settings-nav-item" onclick="switchSettings('apikeys')"><span class="nav-icon">🔑</span>API Keys</div>
-    <div class="settings-nav-item" onclick="switchSettings('webhooks')"><span class="nav-icon">🪝</span>Webhooks</div>
+    <div class="settings-nav-item" onclick="switchSettings('apikeys')"><span class="nav-icon"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></span>API Keys</div>
+    <div class="settings-nav-item" onclick="switchSettings('webhooks')"><span class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>Webhooks</div>
   </div>
 
   <div class="settings-content">
@@ -137,7 +137,7 @@
         <div class="settings-desc">Personalize sua experiência no LifeOS Enterprise</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>👤</span> Perfil</div>
+        <div class="settings-section-title"><span><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></span> Perfil</div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" value="Alexandre Lima" /></div>
           <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" value="al6387838@gmail.com" /></div>
@@ -149,7 +149,7 @@
         <div class="form-actions"><button class="btn-primary">Salvar Alterações</button></div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🔔</span> Notificações</div>
+        <div class="settings-section-title"><span><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></span> Notificações</div>
         <div class="toggle-row">
           <div class="toggle-info"><div class="toggle-label">Notificações por e-mail</div><div class="toggle-desc">Receber resumos diários e alertas importantes</div></div>
           <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
@@ -168,7 +168,7 @@
         </div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🖥️</span> Interface</div>
+        <div class="settings-section-title"><span><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></span> Interface</div>
         <div class="toggle-row">
           <div class="toggle-info"><div class="toggle-label">Sidebar compacta</div><div class="toggle-desc">Exibir sidebar recolhida por padrão</div></div>
           <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
@@ -191,18 +191,18 @@
         <div class="settings-desc">Selecione o idioma da interface do LifeOS</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🌐</span> Idioma da Interface</div>
+        <div class="settings-section-title"><span><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></span> Idioma da Interface</div>
         <div class="lang-grid">
-          <div class="lang-option active"><div class="lang-flag">🇧🇷</div><div><div class="lang-name">Português</div><div class="lang-native">Português do Brasil</div></div></div>
-          <div class="lang-option"><div class="lang-flag">🇺🇸</div><div><div class="lang-name">English</div><div class="lang-native">English (US)</div></div></div>
-          <div class="lang-option"><div class="lang-flag">🇪🇸</div><div><div class="lang-name">Español</div><div class="lang-native">Español (Latinoamérica)</div></div></div>
-          <div class="lang-option"><div class="lang-flag">🇫🇷</div><div><div class="lang-name">Français</div><div class="lang-native">Français</div></div></div>
-          <div class="lang-option"><div class="lang-flag">🇩🇪</div><div><div class="lang-name">Deutsch</div><div class="lang-native">Deutsch</div></div></div>
-          <div class="lang-option"><div class="lang-flag">🇯🇵</div><div><div class="lang-name">日本語</div><div class="lang-native">Japanese</div></div></div>
+          <div class="lang-option active"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Português</div><div class="lang-native">Português do Brasil</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">English</div><div class="lang-native">English (US)</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Español</div><div class="lang-native">Español (Latinoamérica)</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Français</div><div class="lang-native">Français</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Deutsch</div><div class="lang-native">Deutsch</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">日本語</div><div class="lang-native">Japanese</div></div></div>
         </div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>📅</span> Formatos Regionais</div>
+        <div class="settings-section-title"><span><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span> Formatos Regionais</div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Formato de data</label>
             <select class="form-select"><option selected>DD/MM/AAAA</option><option>MM/DD/AAAA</option><option>AAAA-MM-DD</option></select>
@@ -230,7 +230,7 @@
         <div class="settings-desc">Personalize a aparência visual da plataforma</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🎨</span> Tema da Interface</div>
+        <div class="settings-section-title"><span><i data-lucide="palette" class="pg-icon" aria-hidden="true"></i></span> Tema da Interface</div>
         <div class="theme-grid">
           <div class="theme-option active">
             <div class="theme-preview" style="background:linear-gradient(135deg,#0A0E14,#141B28)"></div>
@@ -251,7 +251,7 @@
         </div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>✨</span> Cor de Destaque</div>
+        <div class="settings-section-title"><span><i data-lucide="sparkles" class="pg-icon" aria-hidden="true"></i></span> Cor de Destaque</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);cursor:pointer;border:3px solid white;box-shadow:0 0 12px rgba(99,102,241,0.5)"></div>
           <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#06B6D4,#0891B2);cursor:pointer;border:3px solid transparent"></div>
@@ -270,7 +270,7 @@
         <div class="settings-desc">Gerencie conexões com serviços externos</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🔗</span> Serviços Conectados</div>
+        <div class="settings-section-title"><span><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span> Serviços Conectados</div>
         <div class="toggle-row">
           <div class="toggle-info"><div class="toggle-label">Google Workspace</div><div class="toggle-desc">Gmail, Calendar, Drive e Meet</div></div>
           <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
@@ -305,38 +305,38 @@
         <div class="settings-desc">Gerencie autenticação e controles de acesso</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>🔐</span> Autenticação</div>
+        <div class="settings-section-title"><span><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span> Autenticação</div>
         <div class="security-item">
           <div class="security-info">
-            <div class="security-icon" style="background:rgba(16,185,129,0.12)">🔑</div>
+            <div class="security-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div>
             <div><div class="security-name">Senha</div><div class="security-desc">Última alteração há 30 dias</div></div>
           </div>
           <span class="security-status enabled">Ativo</span>
         </div>
         <div class="security-item">
           <div class="security-info">
-            <div class="security-icon" style="background:rgba(99,102,241,0.12)">📱</div>
+            <div class="security-icon" style="background:rgba(99,102,241,0.12)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
             <div><div class="security-name">Autenticação 2FA</div><div class="security-desc">Verificação em dois fatores via app</div></div>
           </div>
           <span class="security-status enabled">Ativo</span>
         </div>
         <div class="security-item">
           <div class="security-info">
-            <div class="security-icon" style="background:rgba(245,158,11,0.12)">🔒</div>
+            <div class="security-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></div>
             <div><div class="security-name">SSO Enterprise</div><div class="security-desc">Login único via SAML/OAuth</div></div>
           </div>
           <span class="security-status warning">Configurar</span>
         </div>
         <div class="security-item">
           <div class="security-info">
-            <div class="security-icon" style="background:rgba(239,68,68,0.1)">🛡️</div>
+            <div class="security-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
             <div><div class="security-name">Passkey / WebAuthn</div><div class="security-desc">Login sem senha via biometria</div></div>
           </div>
           <span class="security-status disabled">Inativo</span>
         </div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>📋</span> Políticas de Acesso</div>
+        <div class="settings-section-title"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span> Políticas de Acesso</div>
         <div class="toggle-row">
           <div class="toggle-info"><div class="toggle-label">Bloqueio automático</div><div class="toggle-desc">Bloquear sessão após 30 min de inatividade</div></div>
           <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
@@ -359,10 +359,10 @@
         <div class="settings-desc">Gerencie todos os dispositivos com sessão ativa</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>📱</span> Sessões</div>
+        <div class="settings-section-title"><span><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span> Sessões</div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">💻</div>
+            <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">Chrome — macOS <span class="session-current">SESSÃO ATUAL</span></div>
               <div class="session-meta">São Paulo, BR · IP 189.28.xx.xx · Agora</div>
@@ -371,7 +371,7 @@
         </div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">📱</div>
+            <div class="session-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">Safari — iPhone 15 Pro</div>
               <div class="session-meta">São Paulo, BR · IP 177.92.xx.xx · 2h atrás</div>
@@ -381,7 +381,7 @@
         </div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">🖥️</div>
+            <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">Firefox — Windows 11</div>
               <div class="session-meta">Campinas, BR · IP 200.175.xx.xx · 1 dia atrás</div>
@@ -402,10 +402,10 @@
         <div class="settings-desc">Dispositivos autorizados para acesso à conta</div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>💻</span> Dispositivos</div>
+        <div class="settings-section-title"><span><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span> Dispositivos</div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">💻</div>
+            <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">MacBook Pro 16" <span class="session-current">PRINCIPAL</span></div>
               <div class="session-meta">macOS Sequoia · Adicionado em Jan 2026</div>
@@ -415,7 +415,7 @@
         </div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">📱</div>
+            <div class="session-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">iPhone 15 Pro</div>
               <div class="session-meta">iOS 18 · Adicionado em Mar 2026</div>
@@ -425,7 +425,7 @@
         </div>
         <div class="session-item">
           <div class="session-device">
-            <div class="session-icon">🖥️</div>
+            <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
             <div>
               <div class="session-name">Desktop Office</div>
               <div class="session-meta">Windows 11 · Adicionado em Mai 2026</div>
@@ -444,8 +444,8 @@
       </div>
       <div class="settings-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div class="settings-section-title" style="margin-bottom:0"><span>🔑</span> Chaves de API</div>
-          <button class="btn-primary">+ Gerar Nova Chave</button>
+          <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></span> Chaves de API</div>
+          <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Gerar Nova Chave</button>
         </div>
         <div class="api-key-item">
           <div class="api-key-info">
@@ -491,8 +491,8 @@
       </div>
       <div class="settings-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div class="settings-section-title" style="margin-bottom:0"><span>🪝</span> Endpoints Configurados</div>
-          <button class="btn-primary">+ Adicionar Webhook</button>
+          <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Endpoints Configurados</div>
+          <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Webhook</button>
         </div>
         <div class="webhook-item">
           <div style="flex:1">
@@ -525,7 +525,7 @@
         </div>
       </div>
       <div class="settings-section">
-        <div class="settings-section-title"><span>📋</span> Eventos Disponíveis</div>
+        <div class="settings-section-title"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span> Eventos Disponíveis</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.created</div>
           <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.updated</div>

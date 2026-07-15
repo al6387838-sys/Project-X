@@ -286,6 +286,7 @@
       .content { padding: 16px; }
     }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body>
 <div class="app-shell">
@@ -293,56 +294,56 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-logo">🛡</div>
+      <div class="sidebar-logo"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
       <span class="sidebar-title">Admin</span>
       <span class="sidebar-badge">ADMIN</span>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-label">Visão Geral</div>
       <div class="nav-item active" onclick="showPage('overview')">
-        <div class="nav-icon">📊</div><span>Dashboard</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Dashboard</span>
       </div>
       <div class="nav-item" onclick="showPage('metrics')">
-        <div class="nav-icon">📈</div><span>Métricas</span>
+        <div class="nav-icon"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div><span>Métricas</span>
       </div>
       <div class="nav-item" onclick="showPage('health')">
-        <div class="nav-icon">💚</div><span>Health</span>
+        <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Health</span>
       </div>
 
       <div class="nav-section-label">Gestão</div>
       <div class="nav-item" onclick="showPage('users')">
-        <div class="nav-icon">👥</div><span>Usuários</span>
+        <div class="nav-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div><span>Usuários</span>
       </div>
       <div class="nav-item" onclick="showPage('organizations')">
-        <div class="nav-icon">🏢</div><span>Tenants</span>
+        <div class="nav-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div><span>Tenants</span>
       </div>
       <div class="nav-item" onclick="showPage('billing')">
-        <div class="nav-icon">💰</div><span>Billing</span>
+        <div class="nav-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div><span>Billing</span>
       </div>
       <div class="nav-item" onclick="showPage('plans')">
-        <div class="nav-icon">📋</div><span>Planos</span>
+        <div class="nav-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><span>Planos</span>
       </div>
 
       <div class="nav-section-label">Segurança</div>
       <div class="nav-item" onclick="showPage('audit')">
-        <div class="nav-icon">📋</div><span>Auditoria</span>
+        <div class="nav-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><span>Auditoria</span>
       </div>
       <div class="nav-item" onclick="showPage('permissions')">
-        <div class="nav-icon">🔐</div><span>Permissões</span>
+        <div class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div><span>Permissões</span>
       </div>
       <div class="nav-item" onclick="showPage('logs')">
-        <div class="nav-icon">📄</div><span>Logs</span>
+        <div class="nav-icon"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i></div><span>Logs</span>
       </div>
 
       <div class="nav-section-label">Sistema</div>
       <div class="nav-item" onclick="showPage('features')">
-        <div class="nav-icon">🚩</div><span>Feature Flags</span>
+        <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Feature Flags</span>
       </div>
       <div class="nav-item" onclick="showPage('deploys')">
-        <div class="nav-icon">🚀</div><span>Deploys</span>
+        <div class="nav-icon"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><span>Deploys</span>
       </div>
       <div class="nav-item" onclick="showPage('system')">
-        <div class="nav-icon">⚙️</div><span>Sistema</span>
+        <div class="nav-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><span>Sistema</span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -364,8 +365,8 @@
         Painel Administrativo
       </div>
       <div class="topbar-right">
-        <a href="/app" class="topbar-btn">👤 Ver como usuário</a>
-        <button class="topbar-btn danger" onclick="doLogout()">🚪 Sair</button>
+        <a href="/app" class="topbar-btn"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Ver como usuário</a>
+        <button class="topbar-btn danger" onclick="doLogout()"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i> Sair</button>
       </div>
     </header>
 
@@ -386,7 +387,7 @@
           <div class="card">
             <div class="card-title">Total de Usuários</div>
             <div class="card-value">1.247</div>
-            <div class="card-trend trend-up">↑ +34 hoje</div>
+            <div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +34 hoje</div>
           </div>
           <div class="card">
             <div class="card-title">Usuários Ativos</div>
@@ -397,12 +398,12 @@
           <div class="card">
             <div class="card-title">MRR</div>
             <div class="card-value" style="font-size:24px">R$12.450</div>
-            <div class="card-trend trend-up">↑ +8.3% vs mês anterior</div>
+            <div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
           </div>
           <div class="card">
             <div class="card-title">Churn Rate</div>
             <div class="card-value" style="color:var(--green)">2.3%</div>
-            <div class="card-trend trend-up">↓ -0.5% vs mês anterior</div>
+            <div class="card-trend trend-up"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> -0.5% vs mês anterior</div>
           </div>
         </div>
 
@@ -451,7 +452,7 @@
               </div>
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></div>
-                <div style="flex:1;font-size:13px">Upgrade: <strong>pro@example.com</strong> → Enterprise</div>
+                <div style="flex:1;font-size:13px">Upgrade: <strong>pro@example.com</strong> <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Enterprise</div>
                 <div style="font-size:11px;color:var(--text-muted)">12min</div>
               </div>
               <div style="display:flex;align-items:center;gap:10px">
@@ -475,9 +476,9 @@
           <div><div class="page-title">Métricas</div><div class="page-subtitle">Análise detalhada do produto</div></div>
         </div>
         <div class="grid-4" style="margin-bottom:20px">
-          <div class="card"><div class="card-title">ARR</div><div class="card-value" style="font-size:22px">R$149.400</div><div class="card-trend trend-up">↑ +12% YoY</div></div>
-          <div class="card"><div class="card-title">LTV Médio</div><div class="card-value" style="font-size:22px">R$892</div><div class="card-trend trend-up">↑ +5%</div></div>
-          <div class="card"><div class="card-title">CAC</div><div class="card-value" style="font-size:22px">R$47</div><div class="card-trend trend-up">↓ -8% (melhor)</div></div>
+          <div class="card"><div class="card-title">ARR</div><div class="card-value" style="font-size:22px">R$149.400</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +12% YoY</div></div>
+          <div class="card"><div class="card-title">LTV Médio</div><div class="card-value" style="font-size:22px">R$892</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +5%</div></div>
+          <div class="card"><div class="card-title">CAC</div><div class="card-value" style="font-size:22px">R$47</div><div class="card-trend trend-up"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> -8% (melhor)</div></div>
           <div class="card"><div class="card-title">NPS</div><div class="card-value" style="color:var(--green)">72</div><div class="card-sub">Excelente</div></div>
         </div>
         <div class="card">
@@ -543,7 +544,7 @@
       <div class="page" id="page-users">
         <div class="page-header">
           <div><div class="page-title">Usuários</div><div class="page-subtitle">1.247 usuários cadastrados</div></div>
-          <button class="btn btn-primary" onclick="adminInviteUser()">+ Convidar usuário</button>
+          <button class="btn btn-primary" onclick="adminInviteUser()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Convidar usuário</button>
         </div>
         <div class="card">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
@@ -608,12 +609,12 @@
       <div class="page" id="page-organizations">
         <div class="page-header">
           <div><div class="page-title">Gestão de Tenants</div><div class="page-subtitle">Planos, usuários, atividade e postura operacional por tenant</div></div>
-          <button class="btn btn-primary" onclick="adminCreateTenant()">+ Novo tenant</button>
+          <button class="btn btn-primary" onclick="adminCreateTenant()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo tenant</button>
         </div>
         <div class="grid-3">
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">🏢</div><div><div style="font-size:14px;font-weight:700">TechCorp Brasil</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 45 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">🌱</div><div><div style="font-size:14px;font-weight:700">StartupXYZ</div><div style="font-size:11px;color:var(--text-muted)">Pro · 12 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-blue">Pro</span><span class="badge badge-green">Ativo</span></div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">📊</div><div><div style="font-size:14px;font-weight:700">Consultoria Alpha</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 28 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">TechCorp Brasil</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 45 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="sprout" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">StartupXYZ</div><div style="font-size:11px;color:var(--text-muted)">Pro · 12 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-blue">Pro</span><span class="badge badge-green">Ativo</span></div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Consultoria Alpha</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 28 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
         </div>
         <div class="grid-4" style="margin:20px 0"><div class="card"><div class="card-title">Tenants ativos</div><div class="card-value">87</div></div><div class="card"><div class="card-title">Usuários gerenciados</div><div class="card-value">1.247</div></div><div class="card"><div class="card-title">Eventos em 24h</div><div class="card-value">18,4k</div></div><div class="card"><div class="card-title">Risco operacional</div><div class="card-value" style="color:var(--green)">Baixo</div></div></div>
         <div class="card"><div class="card-title" style="margin-bottom:12px">Atividade e ações de tenants</div><table class="data-table"><thead><tr><th>Tenant</th><th>Plano</th><th>Usuários</th><th>Atividade 24h</th><th>Status</th><th>Ações rápidas</th></tr></thead><tbody><tr><td><strong>TechCorp Brasil</strong><div style="font-size:11px;color:var(--text-muted)">techcorp.lifeos.app</div></td><td><span class="badge badge-purple">Enterprise</span></td><td>45 / 75</td><td>8.742 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr><tr><td><strong>StartupXYZ</strong><div style="font-size:11px;color:var(--text-muted)">startupxyz.lifeos.app</div></td><td><span class="badge badge-blue">Pro</span></td><td>12 / 20</td><td>3.126 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr><tr><td><strong>Consultoria Alpha</strong><div style="font-size:11px;color:var(--text-muted)">alpha.lifeos.app</div></td><td><span class="badge badge-purple">Enterprise</span></td><td>28 / 50</td><td>6.584 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr></tbody></table></div>
@@ -625,10 +626,10 @@
           <div><div class="page-title">Billing</div><div class="page-subtitle">Receita e assinaturas</div></div>
         </div>
         <div class="grid-4" style="margin-bottom:20px">
-          <div class="card"><div class="card-title">MRR</div><div class="card-value" style="font-size:22px">R$12.450</div><div class="card-trend trend-up">↑ +8.3%</div></div>
-          <div class="card"><div class="card-title">ARR</div><div class="card-value" style="font-size:22px">R$149.400</div><div class="card-trend trend-up">↑ +12% YoY</div></div>
+          <div class="card"><div class="card-title">MRR</div><div class="card-value" style="font-size:22px">R$12.450</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3%</div></div>
+          <div class="card"><div class="card-title">ARR</div><div class="card-value" style="font-size:22px">R$149.400</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +12% YoY</div></div>
           <div class="card"><div class="card-title">Receita Total</div><div class="card-value" style="font-size:22px">R$48.920</div><div class="card-sub">Acumulado 2025</div></div>
-          <div class="card"><div class="card-title">Inadimplência</div><div class="card-value" style="color:var(--green)">0.8%</div><div class="card-trend trend-up">↓ Baixo risco</div></div>
+          <div class="card"><div class="card-title">Inadimplência</div><div class="card-value" style="color:var(--green)">0.8%</div><div class="card-trend trend-up"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> Baixo risco</div></div>
         </div>
         <div class="card">
           <div class="card-title">Últimas Transações</div>
@@ -647,7 +648,7 @@
       <div class="page" id="page-plans">
         <div class="page-header">
           <div><div class="page-title">Planos</div><div class="page-subtitle">Configuração de planos e preços</div></div>
-          <button class="btn btn-primary">+ Novo plano</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo plano</button>
         </div>
         <div class="grid-3">
           <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-size:16px;font-weight:800">Free</div><span class="badge badge-green">Ativo</span></div><div style="font-size:28px;font-weight:900;margin-bottom:4px">R$0</div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px">623 usuários ativos</div><button class="btn btn-ghost" style="width:100%;justify-content:center">Editar</button></div>
@@ -660,15 +661,15 @@
       <div class="page" id="page-audit">
         <div class="page-header">
           <div><div class="page-title">Auditoria</div><div class="page-subtitle">Log completo de ações</div></div>
-          <button class="btn btn-ghost">📤 Exportar</button>
+          <button class="btn btn-ghost"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Exportar</button>
         </div>
         <div class="card">
           <div id="audit-log">
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(16,185,129,0.15)">🔑</div><div><div class="audit-action">Login bem-sucedido</div><div class="audit-detail">admin@lifeos.io · IP: 177.x.x.x · Chrome/Windows</div><div class="audit-time">Hoje, 18:52</div></div></div>
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(99,102,241,0.15)">👤</div><div><div class="audit-action">Novo usuário cadastrado</div><div class="audit-detail">user@example.com · Plano Free</div><div class="audit-time">Hoje, 18:30</div></div></div>
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(245,158,11,0.15)">💳</div><div><div class="audit-action">Upgrade de plano</div><div class="audit-detail">pro@example.com · Free → Pro · R$49,00</div><div class="audit-time">Hoje, 17:45</div></div></div>
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(239,68,68,0.15)">🚪</div><div><div class="audit-action">Logout</div><div class="audit-detail">user2@example.com · Sessão encerrada</div><div class="audit-time">Hoje, 16:20</div></div></div>
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(6,182,212,0.15)">🚀</div><div><div class="audit-action">Deploy realizado</div><div class="audit-detail">v10.0.0-rc.1 · Cloudflare Pages · Branch: main</div><div class="audit-time">Hoje, 15:00</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(16,185,129,0.15)"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div><div><div class="audit-action">Login bem-sucedido</div><div class="audit-detail">admin@lifeos.io · IP: 177.x.x.x · Chrome/Windows</div><div class="audit-time">Hoje, 18:52</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(99,102,241,0.15)"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div><div><div class="audit-action">Novo usuário cadastrado</div><div class="audit-detail">user@example.com · Plano Free</div><div class="audit-time">Hoje, 18:30</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(245,158,11,0.15)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><div><div class="audit-action">Upgrade de plano</div><div class="audit-detail">pro@example.com · Free <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Pro · R$49,00</div><div class="audit-time">Hoje, 17:45</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(239,68,68,0.15)"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i></div><div><div class="audit-action">Logout</div><div class="audit-detail">user2@example.com · Sessão encerrada</div><div class="audit-time">Hoje, 16:20</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(6,182,212,0.15)"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><div><div class="audit-action">Deploy realizado</div><div class="audit-detail">v10.0.0-rc.1 · Cloudflare Pages · Branch: main</div><div class="audit-time">Hoje, 15:00</div></div></div>
           </div>
         </div>
       </div>
@@ -691,11 +692,11 @@
             <table class="data-table" style="margin-top:8px">
               <thead><tr><th>Recurso</th><th>ADMIN</th><th>USER</th></tr></thead>
               <tbody>
-                <tr><td>/admin</td><td><span class="badge badge-green">✓</span></td><td><span class="badge badge-red">✗</span></td></tr>
-                <tr><td>/app</td><td><span class="badge badge-green">✓</span></td><td><span class="badge badge-green">✓</span></td></tr>
-                <tr><td>/api/admin-data</td><td><span class="badge badge-green">✓</span></td><td><span class="badge badge-red">✗</span></td></tr>
-                <tr><td>/api/user-data</td><td><span class="badge badge-green">✓</span></td><td><span class="badge badge-green">✓</span></td></tr>
-                <tr><td>Gerenciar usuários</td><td><span class="badge badge-green">✓</span></td><td><span class="badge badge-red">✗</span></td></tr>
+                <tr><td>/admin</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td><td><span class="badge badge-red"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></span></td></tr>
+                <tr><td>/app</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td></tr>
+                <tr><td>/api/admin-data</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td><td><span class="badge badge-red"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></span></td></tr>
+                <tr><td>/api/user-data</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td></tr>
+                <tr><td>Gerenciar usuários</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></span></td><td><span class="badge badge-red"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></span></td></tr>
               </tbody>
             </table>
           </div>
@@ -706,7 +707,7 @@
       <div class="page" id="page-logs">
         <div class="page-header">
           <div><div class="page-title">Logs do Sistema</div><div class="page-subtitle">Logs de aplicação em tempo real</div></div>
-          <button class="btn btn-ghost">🔄 Atualizar</button>
+          <button class="btn btn-ghost"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
         </div>
         <div class="card">
           <div style="background:var(--bg-base);border-radius:var(--radius-md);padding:16px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;max-height:400px;overflow-y:auto">
@@ -715,7 +716,7 @@
             <div style="color:var(--accent-light)">[2026-07-15 18:50:12] INFO  Login: admin@lifeos.io (role: admin)</div>
             <div style="color:var(--text-secondary)">[2026-07-15 18:30:05] INFO  Novo usuário: user@example.com</div>
             <div style="color:var(--amber)">[2026-07-15 18:15:33] WARN  Tentativa de login falhou: unknown@test.com</div>
-            <div style="color:var(--text-secondary)">[2026-07-15 17:45:22] INFO  Upgrade: pro@example.com → Enterprise</div>
+            <div style="color:var(--text-secondary)">[2026-07-15 17:45:22] INFO  Upgrade: pro@example.com <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Enterprise</div>
             <div style="color:var(--text-secondary)">[2026-07-15 17:30:11] INFO  API /api/session: 200 OK (42ms)</div>
             <div style="color:var(--text-secondary)">[2026-07-15 17:00:00] INFO  Health check: todos os serviços operacionais</div>
             <div style="color:var(--green)">[2026-07-15 16:00:00] INFO  Backup automático concluído</div>
@@ -758,15 +759,15 @@
       <div class="page" id="page-deploys">
         <div class="page-header">
           <div><div class="page-title">Deploys</div><div class="page-subtitle">Histórico de deployments</div></div>
-          <button class="btn btn-primary" onclick="triggerDeploy()">🚀 Novo deploy</button>
+          <button class="btn btn-primary" onclick="triggerDeploy()"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i> Novo deploy</button>
         </div>
         <div class="card">
           <table class="data-table">
             <thead><tr><th>Versão</th><th>Branch</th><th>Status</th><th>Commit</th><th>Data</th><th>Duração</th></tr></thead>
             <tbody>
-              <tr><td><strong>v10.0.0-rc.1</strong></td><td>main</td><td><span class="badge badge-green">✓ Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)" id="deploy-commit">pending</td><td style="color:var(--text-secondary)">Hoje</td><td style="color:var(--text-secondary)">—</td></tr>
-              <tr><td>v5.0.0</td><td>main</td><td><span class="badge badge-green">✓ Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">97392e9</td><td style="color:var(--text-secondary)">3 dias atrás</td><td style="color:var(--text-secondary)">1m 18s</td></tr>
-              <tr><td>v4.9.0</td><td>main</td><td><span class="badge badge-red">✗ Falhou</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">da71460</td><td style="color:var(--text-secondary)">5 dias atrás</td><td style="color:var(--text-secondary)">0m 45s</td></tr>
+              <tr><td><strong>v10.0.0-rc.1</strong></td><td>main</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)" id="deploy-commit">pending</td><td style="color:var(--text-secondary)">Hoje</td><td style="color:var(--text-secondary)">—</td></tr>
+              <tr><td>v5.0.0</td><td>main</td><td><span class="badge badge-green"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">97392e9</td><td style="color:var(--text-secondary)">3 dias atrás</td><td style="color:var(--text-secondary)">1m 18s</td></tr>
+              <tr><td>v4.9.0</td><td>main</td><td><span class="badge badge-red"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i> Falhou</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">da71460</td><td style="color:var(--text-secondary)">5 dias atrás</td><td style="color:var(--text-secondary)">0m 45s</td></tr>
             </tbody>
           </table>
         </div>
@@ -792,9 +793,9 @@
             <div class="card-title">Ações do Sistema</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
               <button class="btn btn-ghost" style="justify-content:flex-start" onclick="refreshData(this)">↻ Atualizar dados</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start">📤 Exportar backup</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start">🔄 Limpar cache</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()">🚪 Encerrar sessão admin</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Exportar backup</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Limpar cache</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i> Encerrar sessão admin</button>
             </div>
           </div>
         </div>
@@ -882,5 +883,6 @@
     location.replace('/login');
   }
 </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

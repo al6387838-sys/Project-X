@@ -5,7 +5,7 @@
 <div class="page" id="page-analytics">
   <div class="page-header">
     <div>
-      <div class="page-title">📊 Analytics Center</div>
+      <div class="page-title"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analytics Center</div>
       <div class="page-subtitle">Dashboards de produtividade, hábitos, financeiro e metas</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -17,11 +17,11 @@
 
   <!-- Tabs -->
   <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border)">
-    <button class="dv11-tab active" onclick="analyticsTab('productivity')">⚡ Produtividade</button>
-    <button class="dv11-tab" onclick="analyticsTab('habits')">🔄 Hábitos</button>
-    <button class="dv11-tab" onclick="analyticsTab('finance')">💰 Financeiro</button>
-    <button class="dv11-tab" onclick="analyticsTab('goals')">🎯 Metas</button>
-    <button class="dv11-tab" onclick="analyticsTab('summary')">📋 Resumo</button>
+    <button class="dv11-tab active" onclick="analyticsTab('productivity')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Produtividade</button>
+    <button class="dv11-tab" onclick="analyticsTab('habits')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Hábitos</button>
+    <button class="dv11-tab" onclick="analyticsTab('finance')"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Financeiro</button>
+    <button class="dv11-tab" onclick="analyticsTab('goals')"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Metas</button>
+    <button class="dv11-tab" onclick="analyticsTab('summary')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Resumo</button>
   </div>
 
   <!-- KPI ROW -->
@@ -29,7 +29,7 @@
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
       <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Life Score</div>
       <div style="font-size:28px;font-weight:900;color:var(--accent)">87</div>
-      <div style="font-size:11px;color:var(--green);margin-top:4px">↑ +3 esta semana</div>
+      <div style="font-size:11px;color:var(--green);margin-top:4px"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 esta semana</div>
     </div>
     <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
       <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Tarefas completas</div>
@@ -57,7 +57,7 @@
   <div id="analytics-productivity-tab">
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">📈 Produtividade Semanal</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Produtividade Semanal</div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:flex-end;height:200px">
           <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
             <div style="font-size:10px;color:var(--text-muted)">Seg</div>
@@ -103,7 +103,7 @@
 
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:12px">🏆 Top Áreas</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Top Áreas</div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Desenvolvimento</span><span style="color:var(--accent-light)">42%</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%"></div></div></div>
             <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Projetos</span><span style="color:var(--green)">28%</span></div><div class="progress-bar"><div class="progress-fill" style="width:28%;background:var(--green)"></div></div></div>
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:12px">📊 Métricas</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Métricas</div>
           <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
             <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tarefas/mês</span><span style="font-weight:600">142</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Taxa de conclusão</span><span style="font-weight:600;color:var(--green)">85%</span></div>
@@ -128,38 +128,38 @@
   <div id="analytics-habits-tab" style="display:none">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">🔄 Streaks Ativos</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Streaks Ativos</div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-            <div style="font-size:24px">🧘</div>
+            <div style="font-size:24px"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Meditação</div><div style="font-size:10px;color:var(--text-muted)">Diário · 10min</div></div>
-            <div style="font-size:18px;font-weight:800;color:var(--amber)">14🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--amber)">14<i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-            <div style="font-size:24px">🏃</div>
+            <div style="font-size:24px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Exercício</div><div style="font-size:10px;color:var(--text-muted)">Diário · 45min</div></div>
-            <div style="font-size:18px;font-weight:800;color:var(--green)">11🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--green)">11<i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-            <div style="font-size:24px">📖</div>
+            <div style="font-size:24px"><i data-lucide="book-open" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Leitura</div><div style="font-size:10px;color:var(--text-muted)">Diário · 30min</div></div>
-            <div style="font-size:18px;font-weight:800;color:var(--accent)">8🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--accent)">8<i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-            <div style="font-size:24px">✍️</div>
+            <div style="font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Jornal</div><div style="font-size:10px;color:var(--text-muted)">Diário · 15min</div></div>
-            <div style="font-size:18px;font-weight:800;color:var(--cyan)">6🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--cyan)">6<i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-            <div style="font-size:24px">💧</div>
+            <div style="font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Água 2L</div><div style="font-size:10px;color:var(--text-muted)">Diário</div></div>
-            <div style="font-size:18px;font-weight:800;color:var(--purple)">3🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--purple)">3<i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
           </div>
         </div>
       </div>
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">📊 Taxa por Hábito (7 dias)</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Taxa por Hábito (7 dias)</div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div>
             <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Meditação</span><span style="color:var(--green)">100%</span></div>
@@ -189,7 +189,7 @@
       </div>
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">📅 Histórico (30 dias)</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Histórico (30 dias)</div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
           <div style="width:100%;aspect-ratio:1;border-radius:3px;background:var(--green)"></div>
           <div style="width:100%;aspect-ratio:1;border-radius:3px;background:var(--green)"></div>
@@ -241,7 +241,7 @@
   <div id="analytics-finance-tab" style="display:none">
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">💰 Fluxo Financeiro Mensal</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Fluxo Financeiro Mensal</div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:flex-end;height:180px">
           <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
             <div style="font-size:10px;color:var(--text-muted)">Jan</div>
@@ -282,7 +282,7 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:12px">📊 Categorias de Gastos</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Categorias de Gastos</div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Moradia</span><span style="color:var(--accent-light)">32%</span></div><div class="progress-bar"><div class="progress-fill" style="width:32%"></div></div></div>
             <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Alimentação</span><span style="color:var(--green)">22%</span></div><div class="progress-bar"><div class="progress-fill" style="width:22%;background:var(--green)"></div></div></div>
@@ -292,7 +292,7 @@
           </div>
         </div>
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:12px">💎 Resumo</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px"><i data-lucide="gem" class="pg-icon" aria-hidden="true"></i> Resumo</div>
           <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
             <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Receita total</span><span style="font-weight:600;color:var(--green)">R$ 12.8k</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Gasto total</span><span style="font-weight:600;color:var(--red)">R$ 8.6k</span></div>
@@ -317,7 +317,7 @@
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-secondary)">
           <div style="display:flex;justify-content:space-between"><span>ETA</span><span>25 Jul 2026</span></div>
           <div style="display:flex;justify-content:space-between"><span>Progresso</span><span>12/16 tasks</span></div>
-          <div style="display:flex;justify-content:space-between"><span>Trend</span><span style="color:var(--green)">↑ No ritmo</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Trend</span><span style="color:var(--green)"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> No ritmo</span></div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
@@ -376,7 +376,7 @@
         <div class="progress-bar" style="height:8px;margin-bottom:12px"><div class="progress-fill" style="width:97%;background:linear-gradient(90deg,var(--amber),var(--green))"></div></div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-secondary)">
           <div style="display:flex;justify-content:space-between"><span>Atual</span><span>87/90</span></div>
-          <div style="display:flex;justify-content:space-between"><span>Trend</span><span style="color:var(--green)">↑ +3/semana</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Trend</span><span style="color:var(--green)"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3/semana</span></div>
           <div style="display:flex;justify-content:space-between"><span>ETA</span><span>22 Jul 2026</span></div>
         </div>
       </div>
@@ -387,52 +387,52 @@
   <div id="analytics-summary-tab" style="display:none">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">📋 Resumo Geral — Julho 2026</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Resumo Geral — Julho 2026</div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
-            <div style="font-size:20px">🎯</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600">Life Score</div><div style="font-size:11px;color:var(--text-muted)">87 → 90 previsto em 5 dias</div></div>
+            <div style="font-size:20px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600">Life Score</div><div style="font-size:11px;color:var(--text-muted)">87 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 90 previsto em 5 dias</div></div>
             <span style="font-size:13px;font-weight:700;color:var(--green)">No caminho</span>
           </div>
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
-            <div style="font-size:20px">✅</div>
+            <div style="font-size:20px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Produtividade</div><div style="font-size:11px;color:var(--text-muted)">85% tarefas completas · 18h foco</div></div>
             <span style="font-size:13px;font-weight:700;color:var(--green)">Excelente</span>
           </div>
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
-            <div style="font-size:20px">💰</div>
+            <div style="font-size:20px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Financeiro</div><div style="font-size:11px;color:var(--text-muted)">33% economia · R$ 4.2k poupados</div></div>
             <span style="font-size:13px;font-weight:700;color:var(--green)">Saudável</span>
           </div>
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
-            <div style="font-size:20px">🔄</div>
+            <div style="font-size:20px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Hábitos</div><div style="font-size:11px;color:var(--text-muted)">5/6 ativos · 85% taxa média</div></div>
             <span style="font-size:13px;font-weight:700;color:var(--amber)">Bom</span>
           </div>
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:12px">
-            <div style="font-size:20px">📁</div>
+            <div style="font-size:20px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Metas</div><div style="font-size:11px;color:var(--text-muted)">5/6 no ritmo · 1 atrasada</div></div>
             <span style="font-size:13px;font-weight:700;color:var(--green)">No ritmo</span>
           </div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:16px">🤖 Insights da IA</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Insights da IA</div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div style="padding:12px;background:rgba(99,102,241,0.08);border:1px solid var(--border-accent);border-radius:var(--radius-md)">
-            <div style="font-size:12px;font-weight:700;color:var(--accent-light);margin-bottom:4px">📈 Padrão detectado</div>
+            <div style="font-size:12px;font-weight:700;color:var(--accent-light);margin-bottom:4px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Padrão detectado</div>
             <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Seu pico de produtividade está entre 9h-11h. Bloquear esse horário para deep work aumenta entregas em 40%.</div>
           </div>
           <div style="padding:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-md)">
-            <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">⚠️ Atenção</div>
+            <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Atenção</div>
             <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">O hábito "Água 2L" tem taxa de 57%. Considere configurar um lembrete às 14h para completar.</div>
           </div>
           <div style="padding:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-md)">
-            <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px">✅ Recomendação</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Recomendação</div>
             <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Sua economia de 33% está acima da meta de 25%. Considere investir o excedente de R$ 1k em ações ou Renda Fixa.</div>
           </div>
           <div style="padding:12px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:var(--radius-md)">
-            <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:4px">🎯 Oportunidade</div>
+            <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:4px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Oportunidade</div>
             <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">A certificação AWS está em 45%. Com 2h/dia de estudo, você pode concluir até 15/Agosto como planejado.</div>
           </div>
         </div>

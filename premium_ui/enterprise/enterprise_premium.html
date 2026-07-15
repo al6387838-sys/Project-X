@@ -562,6 +562,7 @@
     }
     @media (max-width: 480px) { .kpi-grid { grid-template-columns: 1fr; } }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body style="visibility:hidden">
 
@@ -603,16 +604,16 @@
       <div class="nav-section">
         <div class="nav-section-label">Principal</div>
         <button class="nav-item active" data-view="command" type="button">
-          <span class="nav-item-icon" aria-hidden="true">◈</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Command Center</span>
           <span class="nav-item-dot" aria-hidden="true"></span>
         </button>
         <button class="nav-item" data-view="analytics" type="button">
-          <span class="nav-item-icon" aria-hidden="true">📊</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Analytics</span>
         </button>
         <button class="nav-item" data-view="intelligence" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🧠</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Inteligência</span>
           <span class="nav-item-badge" id="nav-intelligence-count" style="display:none">0</span>
         </button>
@@ -621,19 +622,19 @@
       <div class="nav-section">
         <div class="nav-section-label">Organização</div>
         <button class="nav-item" data-view="organization" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🏢</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Organização</span>
         </button>
         <button class="nav-item" data-view="members" type="button">
-          <span class="nav-item-icon" aria-hidden="true">👥</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Membros</span>
         </button>
         <button class="nav-item" data-view="roles" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🔐</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Perfis &amp; RBAC</span>
         </button>
         <button class="nav-item" data-view="workspaces" type="button">
-          <span class="nav-item-icon" aria-hidden="true">📁</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Workspaces</span>
         </button>
       </div>
@@ -641,15 +642,15 @@
       <div class="nav-section">
         <div class="nav-section-label">Gestão</div>
         <button class="nav-item" data-view="billing" type="button">
-          <span class="nav-item-icon" aria-hidden="true">💳</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Billing</span>
         </button>
         <button class="nav-item" data-view="compliance" type="button">
-          <span class="nav-item-icon" aria-hidden="true">📋</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Auditoria</span>
         </button>
         <button class="nav-item" data-view="integrations" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🔌</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Integrações</span>
         </button>
       </div>
@@ -657,23 +658,23 @@
       <div class="nav-section">
         <div class="nav-section-label">Sistema</div>
         <button class="nav-item" data-view="security" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🛡️</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Segurança &amp; MFA</span>
         </button>
         <button class="nav-item" data-view="notifications" type="button">
-          <span class="nav-item-icon" aria-hidden="true">🔔</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Notificações</span>
         </button>
         <button class="nav-item" data-view="profile" type="button">
-          <span class="nav-item-icon" aria-hidden="true">👤</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Perfil</span>
         </button>
         <button class="nav-item" data-view="settings" type="button">
-          <span class="nav-item-icon" aria-hidden="true">⚙️</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Configurações</span>
         </button>
         <a class="nav-item" href="/dashboard">
-          <span class="nav-item-icon" aria-hidden="true">←</span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Workspace pessoal</span>
         </a>
       </div>
@@ -699,23 +700,23 @@
 
     <!-- Topbar -->
     <header class="topbar" role="banner">
-      <button class="topbar-icon-btn" id="mobile-menu-btn" type="button" aria-label="Menu" style="display:none">☰</button>
+      <button class="topbar-icon-btn" id="mobile-menu-btn" type="button" aria-label="Menu" style="display:none"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
       <div class="topbar-breadcrumb">
         <span class="topbar-page-title" id="topbar-title">Command Center</span>
         <span class="topbar-page-sub" id="topbar-date"></span>
       </div>
       <div class="topbar-spacer"></div>
       <div class="topbar-search" id="topbar-search-btn" role="search" aria-label="Busca global">
-        <span class="topbar-search-icon" aria-hidden="true">🔍</span>
+        <span class="topbar-search-icon" aria-hidden="true"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></span>
         <input class="topbar-search-input" id="global-search" type="search" placeholder="Buscar…" aria-label="Busca global">
         <span class="topbar-search-kbd" aria-hidden="true">⌘K</span>
       </div>
       <div class="topbar-divider" aria-hidden="true"></div>
       <button class="topbar-icon-btn" id="notif-btn" type="button" aria-label="Notificações">
-        🔔<span class="notif-dot" id="notif-dot" style="display:none" aria-hidden="true"></span>
+        <i data-lucide="bell" class="pg-icon" aria-hidden="true"></i><span class="notif-dot" id="notif-dot" style="display:none" aria-hidden="true"></span>
       </button>
       <button class="topbar-btn" type="button" id="export-btn">⬇ Exportar</button>
-      <button class="topbar-btn primary" type="button" id="new-action-btn">+ Nova ação</button>
+      <button class="topbar-btn primary" type="button" id="new-action-btn"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova ação</button>
     </header>
 
     <!-- Content -->
@@ -805,7 +806,7 @@
   <div class="modal" id="modal">
     <div class="modal-header">
       <h2 class="modal-title" id="modal-title">Modal</h2>
-      <button class="modal-close" id="modal-close-btn" type="button" aria-label="Fechar">✕</button>
+      <button class="modal-close" id="modal-close-btn" type="button" aria-label="Fechar"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
     </div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer" id="modal-footer" style="display:none"></div>
@@ -816,13 +817,13 @@
 <div class="cmd-overlay" id="cmd-overlay" role="dialog" aria-modal="true" aria-label="Paleta de comandos">
   <div class="cmd-palette">
     <div class="cmd-input-wrap">
-      <span class="cmd-search-icon" aria-hidden="true">🔍</span>
+      <span class="cmd-search-icon" aria-hidden="true"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></span>
       <input class="cmd-input" id="cmd-input" type="text" placeholder="Buscar ações, módulos, membros…" autocomplete="off" aria-label="Busca de comandos">
       <span class="cmd-esc">ESC</span>
     </div>
     <div class="cmd-results" id="cmd-results"></div>
     <div class="cmd-footer">
-      <span class="cmd-hint"><span class="cmd-kbd">↑↓</span> navegar</span>
+      <span class="cmd-hint"><span class="cmd-kbd"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i></span> navegar</span>
       <span class="cmd-hint"><span class="cmd-kbd">↵</span> selecionar</span>
       <span class="cmd-hint"><span class="cmd-kbd">ESC</span> fechar</span>
     </div>
@@ -859,10 +860,10 @@
   // ── Toast ──
   function toast(msg, type='info', title='') {
     const stack = document.getElementById('toast-stack');
-    const icons = {success:'✓',error:'✕',warning:'⚠',info:'ℹ'};
+    const icons = {success:'\u{2713}',error:'\u{2715}',warning:'\u{26A0}',info:'\u{2139}'};
     const el = document.createElement('div');
     el.className = `toast ${type}`;
-    el.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ'}</span><div class="toast-body"><div class="toast-title">${esc(title||msg)}</div>${title?`<div class="toast-desc">${esc(msg)}</div>`:''}</div>`;
+    el.innerHTML = `<span class="toast-icon">${icons[type]||'\u{2139}'}</span><div class="toast-body"><div class="toast-title">${esc(title||msg)}</div>${title?`<div class="toast-desc">${esc(msg)}</div>`:''}</div>`;
     stack.appendChild(el);
     setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 250); }, 4000);
   }
@@ -979,17 +980,17 @@
     document.getElementById('command-content').innerHTML = `
       ${insights.length > 0 ? `
       <div class="alert-banner" id="cmd-alert">
-        <span class="alert-icon">🧠</span>
+        <span class="alert-icon">\u{1F9E0}</span>
         <span class="alert-text"><strong>Companion detectou:</strong> ${insights.length} insight${insights.length>1?'s':''} em aberto — ${esc(insights[0].title)}</span>
-        <button class="alert-action" data-view="intelligence" type="button">Revisar →</button>
-        <button class="alert-close" onclick="this.closest('.alert-banner').remove()" type="button" aria-label="Fechar">✕</button>
+        <button class="alert-action" data-view="intelligence" type="button">Revisar \u{2192}</button>
+        <button class="alert-close" onclick="this.closest('.alert-banner').remove()" type="button" aria-label="Fechar">\u{2715}</button>
       </div>` : ''}
 
       <div class="kpi-grid">
         <div class="kpi-card" style="animation-delay:0.05s">
           <div class="kpi-card-header">
-            <div class="kpi-icon" style="background:rgba(99,102,241,0.12)">👥</div>
-            <span class="kpi-trend up">↑ +12%</span>
+            <div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{1F465}</div>
+            <span class="kpi-trend up">\u{2191} +12%</span>
           </div>
           <div class="kpi-value">${(state.data.members||[]).length}</div>
           <div class="kpi-label">Membros ativos</div>
@@ -997,8 +998,8 @@
         </div>
         <div class="kpi-card" style="animation-delay:0.10s">
           <div class="kpi-card-header">
-            <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">⚡</div>
-            <span class="kpi-trend up">↑ ${sys.uptime||99.9}%</span>
+            <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{26A1}</div>
+            <span class="kpi-trend up">\u{2191} ${sys.uptime||99.9}%</span>
           </div>
           <div class="kpi-value" style="color:#10B981">${sys.uptime||99.9}%</div>
           <div class="kpi-label">Uptime</div>
@@ -1006,8 +1007,8 @@
         </div>
         <div class="kpi-card" style="animation-delay:0.15s">
           <div class="kpi-card-header">
-            <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">💳</div>
-            <span class="kpi-trend flat">→ Estável</span>
+            <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{1F4B3}</div>
+            <span class="kpi-trend flat">\u{2192} Estável</span>
           </div>
           <div class="kpi-value">${money(sub.monthlyValue||0)}</div>
           <div class="kpi-label">MRR</div>
@@ -1015,8 +1016,8 @@
         </div>
         <div class="kpi-card" style="animation-delay:0.20s">
           <div class="kpi-card-header">
-            <div class="kpi-icon" style="background:rgba(244,63,94,0.12)">🧠</div>
-            <span class="kpi-trend ${insights.length>0?'down':'up'}">${insights.length>0?'↓':'↑'} ${insights.length} abertos</span>
+            <div class="kpi-icon" style="background:rgba(244,63,94,0.12)">\u{1F9E0}</div>
+            <span class="kpi-trend ${insights.length>0?'down':'up'}">${insights.length>0?'\u{2193}':'\u{2191}'} ${insights.length} abertos</span>
           </div>
           <div class="kpi-value" style="color:${insights.length>0?'#F43F5E':'#10B981'}">${insights.length}</div>
           <div class="kpi-label">Insights</div>
@@ -1034,7 +1035,7 @@
           <div class="activity-list">
             ${audit.length ? audit.map(log => `
               <div class="activity-item">
-                <div class="activity-icon" style="background:rgba(99,102,241,0.10)">📝</div>
+                <div class="activity-icon" style="background:rgba(99,102,241,0.10)">\u{1F4DD}</div>
                 <div class="activity-body">
                   <div class="activity-title">${esc(log.action)}</div>
                   <div class="activity-desc">${esc(log.detail)}</div>
@@ -1044,7 +1045,7 @@
                   </div>
                 </div>
               </div>
-            `).join('') : `<div class="empty-state" style="padding:32px"><div class="empty-state-icon">📋</div><div class="empty-state-title">Sem atividade</div></div>`}
+            `).join('') : `<div class="empty-state" style="padding:32px"><div class="empty-state-icon">\u{1F4CB}</div><div class="empty-state-title">Sem atividade</div></div>`}
           </div>
         </div>
 
@@ -1102,12 +1103,12 @@
         <div class="card">
           <div class="card-header"><div class="card-title">Ações Rápidas</div></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="members" type="button">👥 Convidar membro</button>
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="roles" type="button">🔐 Gerenciar permissões</button>
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="billing" type="button">💳 Ver billing</button>
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="compliance" type="button">📋 Auditoria</button>
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="integrations" type="button">🔌 Integrações</button>
-            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="security" type="button">🛡️ Segurança & MFA</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="members" type="button">\u{1F465} Convidar membro</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="roles" type="button">\u{1F510} Gerenciar permissões</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="billing" type="button">\u{1F4B3} Ver billing</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="compliance" type="button">\u{1F4CB} Auditoria</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="integrations" type="button">\u{1F50C} Integrações</button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;gap:10px" data-view="security" type="button">\u{1F6E1}\u{FE0F} Segurança & MFA</button>
           </div>
         </div>
       </div>
@@ -1125,10 +1126,10 @@
         <p class="page-subtitle">Métricas de desempenho e crescimento da organização.</p>
       </div>
       <div class="kpi-grid" style="margin-bottom:24px">
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">📈</div><span class="kpi-trend up">↑ 18%</span></div><div class="kpi-value">${members.length}</div><div class="kpi-label">Total membros</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">✅</div><span class="kpi-trend up">↑ 5%</span></div><div class="kpi-value">${sys.uptime||99.9}%</div><div class="kpi-label">Disponibilidade</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">⚡</div><span class="kpi-trend flat">→ Estável</span></div><div class="kpi-value">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(59,130,246,0.12)">🔄</div><span class="kpi-trend up">↑ 23%</span></div><div class="kpi-value">${sys.activeSessions||12}</div><div class="kpi-label">Sessões ativas</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{1F4C8}</div><span class="kpi-trend up">\u{2191} 18%</span></div><div class="kpi-value">${members.length}</div><div class="kpi-label">Total membros</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{2705}</div><span class="kpi-trend up">\u{2191} 5%</span></div><div class="kpi-value">${sys.uptime||99.9}%</div><div class="kpi-label">Disponibilidade</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{26A1}</div><span class="kpi-trend flat">\u{2192} Estável</span></div><div class="kpi-value">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(59,130,246,0.12)">\u{1F504}</div><span class="kpi-trend up">\u{2191} 23%</span></div><div class="kpi-value">${sys.activeSessions||12}</div><div class="kpi-label">Sessões ativas</div></div>
       </div>
       <div class="grid-2">
         <div class="card">
@@ -1195,14 +1196,14 @@
             </span>
             <span style="font-size:11px;color:var(--text-tertiary)">${fmtDate(ins.createdAt)}</span>
             ${ins.status==='open' ? `
-              <button class="btn btn-sm btn-primary" style="margin-left:auto" data-action="intelligence.resolve" data-id="${esc(ins.id)}" data-status="resolved" type="button">✓ Resolver</button>
+              <button class="btn btn-sm btn-primary" style="margin-left:auto" data-action="intelligence.resolve" data-id="${esc(ins.id)}" data-status="resolved" type="button">\u{2713} Resolver</button>
               <button class="btn btn-sm btn-secondary" data-action="intelligence.resolve" data-id="${esc(ins.id)}" data-status="dismissed" type="button">Dispensar</button>
             ` : ''}
           </div>
         </div>
       `).join('') : `
         <div class="empty-state">
-          <div class="empty-state-icon">🧠</div>
+          <div class="empty-state-icon">\u{1F9E0}</div>
           <div class="empty-state-title">Nenhum insight disponível</div>
           <div class="empty-state-desc">O Companion analisará sua organização e gerará recomendações automaticamente.</div>
         </div>
@@ -1220,7 +1221,7 @@
       </div>
       <div class="grid-2">
         <div class="card">
-          <div class="card-header"><div class="card-title">Informações</div><button class="btn btn-sm btn-secondary" data-action="org.edit" type="button">✏ Editar</button></div>
+          <div class="card-header"><div class="card-title">Informações</div><button class="btn btn-sm btn-secondary" data-action="org.edit" type="button">\u{270F} Editar</button></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
             <div>
               <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Nome</div>
@@ -1275,7 +1276,7 @@
           <h1 class="page-title">Membros & Convites</h1>
           <p class="page-subtitle">${members.length} membro${members.length!==1?'s':''} na organização.</p>
         </div>
-        <button class="btn btn-primary" data-action="member.invite" type="button">+ Convidar membro</button>
+        <button class="btn btn-primary" data-action="member.invite" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Convidar membro</button>
       </div>
       <div class="card">
         <div class="card-header">
@@ -1298,11 +1299,11 @@
                   <td>${statusBadge(m.status||'active')}</td>
                   <td>${fmtDate(m.lastActiveAt, true)}</td>
                   <td><div style="display:flex;gap:4px">
-                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.edit" data-id="${esc(m.id)}" type="button" title="Editar">✏</button>
-                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.remove" data-id="${esc(m.id)}" type="button" title="Remover" style="color:#F43F5E">🗑</button>
+                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.edit" data-id="${esc(m.id)}" type="button" title="Editar">\u{270F}</button>
+                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.remove" data-id="${esc(m.id)}" type="button" title="Remover" style="color:#F43F5E">\u{1F5D1}</button>
                   </div></td>
                 </tr>
-              `).join('') : `<tr><td colspan="7"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">👥</div><div class="empty-state-title">Nenhum membro encontrado</div></div></td></tr>`}
+              `).join('') : `<tr><td colspan="7"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">\u{1F465}</div><div class="empty-state-title">Nenhum membro encontrado</div></div></td></tr>`}
             </tbody>
           </table>
         </div>
@@ -1323,7 +1324,7 @@
           <h1 class="page-title">Perfis & RBAC</h1>
           <p class="page-subtitle">Controle de acesso baseado em funções.</p>
         </div>
-        <button class="btn btn-primary" data-action="role.create" type="button">+ Novo perfil</button>
+        <button class="btn btn-primary" data-action="role.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo perfil</button>
       </div>
       <div class="grid-2">
         ${roles.map(r => `
@@ -1334,7 +1335,7 @@
                 <div class="card-subtitle">${(r.permissions||[]).length} permissões</div>
               </div>
               <div style="display:flex;gap:6px">
-                ${!r.system ? `<button class="btn btn-sm btn-secondary" data-action="role.edit" data-id="${esc(r.id)}" type="button">✏ Editar</button>` : '<span class="badge badge-neutral">Sistema</span>'}
+                ${!r.system ? `<button class="btn btn-sm btn-secondary" data-action="role.edit" data-id="${esc(r.id)}" type="button">\u{270F} Editar</button>` : '<span class="badge badge-neutral">Sistema</span>'}
               </div>
             </div>
             <div class="card-body">
@@ -1358,7 +1359,7 @@
           <h1 class="page-title">Workspaces</h1>
           <p class="page-subtitle">${ws.length} workspace${ws.length!==1?'s':''} configurados.</p>
         </div>
-        <button class="btn btn-primary" data-action="workspace.create" type="button">+ Novo workspace</button>
+        <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo workspace</button>
       </div>
       ${ws.length ? `
       <div class="grid-2">
@@ -1366,7 +1367,7 @@
           <div class="card card-interactive" style="padding:20px">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
               <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px">📁</div>
+                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px">\u{1F4C1}</div>
                 <div>
                   <div style="font-size:14px;font-weight:600;color:var(--text-primary)">${esc(w.name)}</div>
                   <div style="font-size:12px;color:var(--text-tertiary)">${esc(w.type||'workspace')}</div>
@@ -1377,16 +1378,16 @@
             <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">${esc(w.description||'')}</div>
             <div style="display:flex;align-items:center;justify-content:space-between">
               <span style="font-size:11px;color:var(--text-tertiary)">${(w.members||[]).length} membros</span>
-              <button class="btn btn-sm btn-ghost" data-action="workspace.open" data-id="${esc(w.id)}" type="button">Abrir →</button>
+              <button class="btn btn-sm btn-ghost" data-action="workspace.open" data-id="${esc(w.id)}" type="button">Abrir \u{2192}</button>
             </div>
           </div>
         `).join('')}
       </div>` : `
       <div class="empty-state">
-        <div class="empty-state-icon">📁</div>
+        <div class="empty-state-icon">\u{1F4C1}</div>
         <div class="empty-state-title">Nenhum workspace</div>
         <div class="empty-state-desc">Crie workspaces para organizar projetos e equipes.</div>
-        <button class="btn btn-primary" data-action="workspace.create" type="button">+ Criar workspace</button>
+        <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar workspace</button>
       </div>`}
     `;
   }
@@ -1414,10 +1415,10 @@
             </div>
             <div class="plan-price">${p.price}<span>/mês</span></div>
             <div class="plan-features">
-              ${p.features.map(f => `<div class="plan-feature"><span class="plan-feature-icon">✓</span>${f}</div>`).join('')}
+              ${p.features.map(f => `<div class="plan-feature"><span class="plan-feature-icon">\u{2713}</span>${f}</div>`).join('')}
             </div>
             ${sub.plan===p.id
-              ? `<button class="btn btn-secondary" style="width:100%" disabled type="button">✓ Plano atual</button>`
+              ? `<button class="btn btn-secondary" style="width:100%" disabled type="button">\u{2713} Plano atual</button>`
               : `<button class="btn btn-primary" style="width:100%" data-action="plan.change" data-plan="${p.id}" type="button">Mudar para ${p.name}</button>`
             }
           </div>
@@ -1482,7 +1483,7 @@
                   <td style="color:var(--text-secondary)">${esc(log.detail)}</td>
                   <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-tertiary)">${esc(log.ip||'—')}</td>
                 </tr>
-              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">📋</div><div class="empty-state-title">Nenhum evento registrado</div></div></td></tr>`}
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">\u{1F4CB}</div><div class="empty-state-title">Nenhum evento registrado</div></div></td></tr>`}
             </tbody>
           </table>
         </div>
@@ -1494,12 +1495,12 @@
   function renderIntegrations() {
     const integrations = state.data?.integrations || [];
     const allIntegrations = [
-      { id:'slack', name:'Slack', desc:'Notificações e alertas em tempo real', icon:'💬', category:'Comunicação' },
-      { id:'github', name:'GitHub', desc:'Rastreamento de repositórios e PRs', icon:'🐙', category:'Desenvolvimento' },
-      { id:'jira', name:'Jira', desc:'Sincronização de tarefas e sprints', icon:'📌', category:'Gestão' },
-      { id:'google', name:'Google Workspace', desc:'SSO e sincronização de calendário', icon:'🔵', category:'Produtividade' },
-      { id:'salesforce', name:'Salesforce', desc:'Dados de CRM e pipeline', icon:'☁️', category:'Vendas' },
-      { id:'zapier', name:'Zapier', desc:'Automações sem código', icon:'⚡', category:'Automação' },
+      { id:'slack', name:'Slack', desc:'Notificações e alertas em tempo real', icon:'\u{1F4AC}', category:'Comunicação' },
+      { id:'github', name:'GitHub', desc:'Rastreamento de repositórios e PRs', icon:'\u{1F419}', category:'Desenvolvimento' },
+      { id:'jira', name:'Jira', desc:'Sincronização de tarefas e sprints', icon:'\u{1F4CC}', category:'Gestão' },
+      { id:'google', name:'Google Workspace', desc:'SSO e sincronização de calendário', icon:'\u{1F535}', category:'Produtividade' },
+      { id:'salesforce', name:'Salesforce', desc:'Dados de CRM e pipeline', icon:'\u{2601}\u{FE0F}', category:'Vendas' },
+      { id:'zapier', name:'Zapier', desc:'Automações sem código', icon:'\u{26A1}', category:'Automação' },
     ];
     document.getElementById('integrations-content').innerHTML = `
       <div class="page-header">
@@ -1588,14 +1589,14 @@
           <div class="card-body" style="padding:12px 20px">
             ${devices.length ? devices.map(d => `
               <div class="device-item">
-                <div class="device-icon">${d.type==='mobile'?'📱':d.type==='tablet'?'📟':'💻'}</div>
+                <div class="device-icon">${d.type==='mobile'?'\u{1F4F1}':d.type==='tablet'?'\u{1F4DF}':'\u{1F4BB}'}</div>
                 <div class="device-info">
                   <div class="device-name">${esc(d.name||d.browser||'Dispositivo')}</div>
                   <div class="device-meta">${esc(d.os||'')} · ${esc(d.location||'')} · ${fmtDate(d.lastSeen, true)}</div>
                 </div>
                 ${d.current ? '<span class="badge badge-success">Atual</span>' : `<button class="btn btn-sm btn-danger" data-action="device.revoke" data-id="${esc(d.id)}" type="button">Revogar</button>`}
               </div>
-            `).join('') : `<div class="empty-state" style="padding:24px"><div class="empty-state-icon">💻</div><div class="empty-state-title">Nenhuma sessão</div></div>`}
+            `).join('') : `<div class="empty-state" style="padding:24px"><div class="empty-state-icon">\u{1F4BB}</div><div class="empty-state-title">Nenhuma sessão</div></div>`}
           </div>
         </div>
       </div>
@@ -1640,12 +1641,12 @@
           <h1 class="page-title">Notificações</h1>
           <p class="page-subtitle">${notifs.filter(n=>!n.read).length} não lidas.</p>
         </div>
-        <button class="btn btn-secondary" data-action="notifications.markAll" type="button">✓ Marcar todas como lidas</button>
+        <button class="btn btn-secondary" data-action="notifications.markAll" type="button">\u{2713} Marcar todas como lidas</button>
       </div>
       <div class="card">
         ${notifs.length ? notifs.map(n => `
           <div class="activity-item ${n.read?'':''}${!n.read?'" style="background:rgba(99,102,241,0.04)':''}">
-            <div class="activity-icon" style="background:rgba(99,102,241,0.10)">${n.icon||'🔔'}</div>
+            <div class="activity-icon" style="background:rgba(99,102,241,0.10)">${n.icon||'\u{1F514}'}</div>
             <div class="activity-body">
               <div class="activity-title">${esc(n.title)}</div>
               <div class="activity-desc">${esc(n.message||n.body||'')}</div>
@@ -1654,11 +1655,11 @@
                 ${!n.read ? '<span class="badge badge-primary">Nova</span>' : ''}
               </div>
             </div>
-            ${!n.read ? `<button class="btn btn-sm btn-ghost" data-action="notification.read" data-id="${esc(n.id)}" type="button">✓</button>` : ''}
+            ${!n.read ? `<button class="btn btn-sm btn-ghost" data-action="notification.read" data-id="${esc(n.id)}" type="button" aria-label="Marcar notificação como lida" title="Marcar como lida">\u{2713}</button>` : ''}
           </div>
         `).join('') : `
           <div class="empty-state">
-            <div class="empty-state-icon">🔔</div>
+            <div class="empty-state-icon">\u{1F514}</div>
             <div class="empty-state-title">Sem notificações</div>
             <div class="empty-state-desc">Você está em dia! Novas notificações aparecerão aqui.</div>
           </div>`}
@@ -1780,20 +1781,20 @@
 
   // ── COMMAND PALETTE ──
   const cmdCommands = [
-    { icon:'◈', label:'Command Center', desc:'Visão geral executiva', view:'command' },
-    { icon:'📊', label:'Analytics', desc:'Métricas e gráficos', view:'analytics' },
-    { icon:'🧠', label:'Inteligência', desc:'Insights do Companion', view:'intelligence' },
-    { icon:'🏢', label:'Organização', desc:'Configurações da org', view:'organization' },
-    { icon:'👥', label:'Membros', desc:'Gerenciar equipe', view:'members' },
-    { icon:'🔐', label:'Perfis & RBAC', desc:'Permissões e funções', view:'roles' },
-    { icon:'📁', label:'Workspaces', desc:'Projetos e espaços', view:'workspaces' },
-    { icon:'💳', label:'Billing', desc:'Planos e faturas', view:'billing' },
-    { icon:'📋', label:'Auditoria', desc:'Log de eventos', view:'compliance' },
-    { icon:'🔌', label:'Integrações', desc:'Conectores externos', view:'integrations' },
-    { icon:'🛡️', label:'Segurança & MFA', desc:'Autenticação e sessões', view:'security' },
-    { icon:'🔔', label:'Notificações', desc:'Alertas e mensagens', view:'notifications' },
-    { icon:'👤', label:'Meu Perfil', desc:'Dados pessoais', view:'profile' },
-    { icon:'⚙️', label:'Configurações', desc:'Preferências do sistema', view:'settings' },
+    { icon:'\u{25C8}', label:'Command Center', desc:'Visão geral executiva', view:'command' },
+    { icon:'\u{1F4CA}', label:'Analytics', desc:'Métricas e gráficos', view:'analytics' },
+    { icon:'\u{1F9E0}', label:'Inteligência', desc:'Insights do Companion', view:'intelligence' },
+    { icon:'\u{1F3E2}', label:'Organização', desc:'Configurações da org', view:'organization' },
+    { icon:'\u{1F465}', label:'Membros', desc:'Gerenciar equipe', view:'members' },
+    { icon:'\u{1F510}', label:'Perfis & RBAC', desc:'Permissões e funções', view:'roles' },
+    { icon:'\u{1F4C1}', label:'Workspaces', desc:'Projetos e espaços', view:'workspaces' },
+    { icon:'\u{1F4B3}', label:'Billing', desc:'Planos e faturas', view:'billing' },
+    { icon:'\u{1F4CB}', label:'Auditoria', desc:'Log de eventos', view:'compliance' },
+    { icon:'\u{1F50C}', label:'Integrações', desc:'Conectores externos', view:'integrations' },
+    { icon:'\u{1F6E1}\u{FE0F}', label:'Segurança & MFA', desc:'Autenticação e sessões', view:'security' },
+    { icon:'\u{1F514}', label:'Notificações', desc:'Alertas e mensagens', view:'notifications' },
+    { icon:'\u{1F464}', label:'Meu Perfil', desc:'Dados pessoais', view:'profile' },
+    { icon:'\u{2699}\u{FE0F}', label:'Configurações', desc:'Preferências do sistema', view:'settings' },
   ];
   let cmdSelected = 0;
 
@@ -1989,9 +1990,9 @@
 
   // ── KEYBOARD SHORTCUTS ──
   function handleKeydown(e) {
-    // Cmd/Ctrl+K → Command Palette
+    // Cmd/Ctrl+K \u{2192} Command Palette
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openCmdPalette(); return; }
-    // ESC → close modals/palette
+    // ESC \u{2192} close modals/palette
     if (e.key === 'Escape') {
       if (document.getElementById('cmd-overlay').classList.contains('open')) { closeCmdPalette(); return; }
       closeModal();
@@ -2027,7 +2028,7 @@
       if (state.view === 'members') renderMembers();
     });
 
-    // Topbar search → open cmd palette
+    // Topbar search \u{2192} open cmd palette
     document.getElementById('topbar-search-btn')?.addEventListener('click', e => {
       if (e.target === document.getElementById('global-search')) return;
       openCmdPalette();
@@ -2055,7 +2056,7 @@
       document.getElementById('sidebar').classList.toggle('mobile-open');
     });
 
-    // Sidebar logo → command
+    // Sidebar logo \u{2192} command
     document.getElementById('sidebar-logo-btn')?.addEventListener('click', () => navigate('command'));
 
     // Org selector
@@ -2099,7 +2100,7 @@
     } catch (err) {
       document.getElementById('command-content').innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">\u{26A0}\u{FE0F}</div>
           <div class="empty-state-title">Erro ao carregar</div>
           <div class="empty-state-desc">${esc(err.message)}</div>
           <button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button>
@@ -2112,5 +2113,6 @@
   window.addEventListener('DOMContentLoaded', init);
 })();
 </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

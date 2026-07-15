@@ -1,0 +1,583 @@
+/* LifeOS Enterprise — Precision Graphite Visual Layer
+   Visual-only override. No layout, data, authentication or behavior changes. */
+
+:root,
+html[data-theme="dark"],
+body[data-theme="dark"] {
+  color-scheme: dark;
+  --pg-bg-canvas: #0c0d10;
+  --pg-bg-sidebar: #101114;
+  --pg-bg-surface: #15171b;
+  --pg-bg-raised: #1a1c21;
+  --pg-bg-hover: #20232a;
+  --pg-bg-subtle: #121317;
+  --pg-border: rgba(255, 255, 255, 0.085);
+  --pg-border-strong: rgba(255, 255, 255, 0.14);
+  --pg-text: #f4f4f5;
+  --pg-text-secondary: #a1a1aa;
+  --pg-text-muted: #71717a;
+  --pg-indigo: #6366f1;
+  --pg-indigo-hover: #7174f4;
+  --pg-indigo-soft: rgba(99, 102, 241, 0.14);
+  --pg-indigo-border: rgba(99, 102, 241, 0.34);
+  --pg-success: #34d399;
+  --pg-warning: #fbbf24;
+  --pg-danger: #fb7185;
+  --pg-info: #818cf8;
+  --pg-radius-xs: 5px;
+  --pg-radius-sm: 7px;
+  --pg-radius-md: 10px;
+  --pg-radius-lg: 14px;
+  --pg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
+  --pg-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.24);
+  --pg-motion: 180ms;
+  --pg-motion-slow: 220ms;
+  --pg-ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Compatibility with the existing design systems. */
+  --bg-base: var(--pg-bg-canvas);
+  --bg-primary: var(--pg-bg-canvas);
+  --bg-secondary: var(--pg-bg-sidebar);
+  --bg-elevated: var(--pg-bg-subtle);
+  --bg-card: var(--pg-bg-surface);
+  --bg-card-hover: var(--pg-bg-hover);
+  --bg-sidebar: var(--pg-bg-sidebar);
+  --surface: var(--pg-bg-surface);
+  --surface-1: var(--pg-bg-surface);
+  --surface-2: var(--pg-bg-raised);
+  --surface-hover: var(--pg-bg-hover);
+  --border: var(--pg-border);
+  --border-color: var(--pg-border);
+  --border-subtle: var(--pg-border);
+  --border-accent: var(--pg-indigo-border);
+  --text-primary: var(--pg-text);
+  --text-secondary: var(--pg-text-secondary);
+  --text-muted: var(--pg-text-muted);
+  --accent: var(--pg-indigo);
+  --accent-primary: var(--pg-indigo);
+  --accent-light: #a5b4fc;
+  --accent-hover: var(--pg-indigo-hover);
+  --accent-glow: var(--pg-indigo-soft);
+  --primary: var(--pg-indigo);
+  --primary-hover: var(--pg-indigo-hover);
+  --purple: var(--pg-indigo);
+  --cyan: #94a3b8;
+  --blue: #818cf8;
+  --green: var(--pg-success);
+  --amber: var(--pg-warning);
+  --red: var(--pg-danger);
+  --pink: #a78bfa;
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  --gradient-hero: linear-gradient(135deg, #818cf8 0%, #6366f1 54%, #4f46e5 100%);
+  --radius-sm: var(--pg-radius-sm);
+  --radius-md: var(--pg-radius-md);
+  --radius-lg: var(--pg-radius-lg);
+}
+
+*,
+*::before,
+*::after {
+  scrollbar-color: #2c2f37 transparent;
+}
+
+html {
+  background: var(--pg-bg-canvas);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--pg-bg-canvas) !important;
+  color: var(--pg-text) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.008em;
+}
+
+button,
+input,
+textarea,
+select,
+option {
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+.nav-item,
+.card,
+.panel,
+.menu-item,
+.dropdown-item,
+.tab,
+.badge {
+  transition-duration: var(--pg-motion) !important;
+  transition-timing-function: var(--pg-ease) !important;
+}
+
+button:active,
+.btn:active,
+[role="button"]:active {
+  transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid #818cf8 !important;
+  outline-offset: 2px !important;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.34);
+  color: #ffffff;
+}
+
+/* Lucide icon foundation */
+.lucide,
+.pg-icon,
+[data-lucide] {
+  width: 1em;
+  height: 1em;
+  min-width: 1em;
+  stroke-width: 1.8;
+  vertical-align: -0.14em;
+  color: currentColor;
+  pointer-events: none;
+}
+
+.pg-icon-wrap,
+.sidebar-logo,
+.logo-icon,
+.brand-icon,
+.onboarding-brand-mark,
+.nav-icon,
+.kpi-icon,
+.stat-icon,
+.feature-icon,
+.benefit-icon,
+.integration-icon,
+.module-icon,
+.action-icon,
+.card-icon,
+.alert-icon,
+.input-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo .lucide,
+.logo-icon .lucide,
+.brand-icon .lucide,
+.onboarding-brand-mark .lucide {
+  width: 17px;
+  height: 17px;
+}
+
+.nav-icon .lucide,
+.topbar-btn .lucide,
+.topbar-toggle .lucide,
+.btn .lucide,
+button .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Neutral graphite surfaces */
+.sidebar,
+.app-sidebar,
+.admin-sidebar,
+.enterprise-sidebar,
+.side-nav {
+  background: var(--pg-bg-sidebar) !important;
+  border-color: var(--pg-border) !important;
+  box-shadow: none !important;
+}
+
+.topbar,
+.header,
+.app-header,
+.admin-header,
+.enterprise-header,
+.navbar,
+.navbar.scrolled {
+  background: rgba(12, 13, 16, 0.94) !important;
+  border-color: var(--pg-border) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(14px) saturate(120%);
+}
+
+.card,
+.panel,
+.modal-content,
+.dialog,
+.dropdown,
+.popover,
+.command-palette,
+.auth-card,
+.login-card,
+.pricing-card,
+.kpi-card,
+.stat-card,
+.metric-card,
+.settings-card,
+.profile-card,
+.org-card,
+.workspace-card,
+.billing-card,
+.notification-card,
+.search-card,
+.admin-card,
+.feature-card,
+.benefit-card,
+.integration-card,
+.module-card,
+.activity-card,
+.chart-card,
+.table-card {
+  background: var(--pg-bg-surface) !important;
+  border-color: var(--pg-border) !important;
+  box-shadow: var(--pg-shadow-sm) !important;
+}
+
+.card:hover,
+.panel:hover,
+.pricing-card:hover,
+.kpi-card:hover,
+.stat-card:hover,
+.metric-card:hover,
+.feature-card:hover,
+.benefit-card:hover,
+.integration-card:hover,
+.module-card:hover {
+  border-color: var(--pg-border-strong) !important;
+  box-shadow: var(--pg-shadow-md) !important;
+}
+
+.sidebar-logo,
+.logo-icon,
+.brand-icon,
+.onboarding-brand-mark {
+  background: var(--pg-indigo) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border-radius: var(--pg-radius-sm) !important;
+}
+
+.sidebar-badge,
+.badge-primary,
+.badge-pro,
+.plan-badge,
+.version-badge,
+.nav-item.active,
+.tab.active,
+.filter.active {
+  background: var(--pg-indigo-soft) !important;
+  border-color: var(--pg-indigo-border) !important;
+  color: #c7d2fe !important;
+}
+
+.nav-item {
+  border: 1px solid transparent !important;
+  border-radius: var(--pg-radius-sm) !important;
+  color: var(--pg-text-secondary) !important;
+}
+
+.nav-item:hover {
+  background: var(--pg-bg-hover) !important;
+  color: var(--pg-text) !important;
+}
+
+.nav-item.active {
+  box-shadow: inset 2px 0 0 var(--pg-indigo);
+}
+
+.nav-section-label,
+.eyebrow,
+.kicker,
+.overline,
+.card-title,
+.section-label {
+  color: var(--pg-text-muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.09em !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.page-title,
+.modal-title,
+.sidebar-title,
+.brand-name {
+  color: var(--pg-text) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.025em;
+}
+
+p,
+.page-subtitle,
+.subtitle,
+.description,
+.helper-text,
+.meta,
+.muted {
+  color: var(--pg-text-secondary);
+}
+
+/* Controls */
+.btn,
+button,
+input,
+textarea,
+select,
+.search-box,
+.search-input,
+.topbar-search,
+.form-control,
+.input-group {
+  border-radius: var(--pg-radius-sm) !important;
+}
+
+input,
+textarea,
+select,
+.search-box,
+.search-input,
+.topbar-search,
+.form-control {
+  background: var(--pg-bg-subtle) !important;
+  border-color: var(--pg-border-strong) !important;
+  color: var(--pg-text) !important;
+  box-shadow: none !important;
+}
+
+input:hover,
+textarea:hover,
+select:hover,
+.search-box:hover,
+.topbar-search:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.search-box:focus-within,
+.topbar-search:focus-within {
+  border-color: var(--pg-indigo) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--pg-text-muted) !important;
+}
+
+.btn-primary,
+.btn.primary,
+button.primary,
+.cta-primary,
+.hero-cta-primary,
+.auth-submit,
+.login-btn,
+[aria-current="page"] {
+  background: var(--pg-indigo) !important;
+  border-color: var(--pg-indigo) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:hover,
+.btn.primary:hover,
+button.primary:hover,
+.cta-primary:hover,
+.hero-cta-primary:hover,
+.auth-submit:hover,
+.login-btn:hover {
+  background: var(--pg-indigo-hover) !important;
+  border-color: var(--pg-indigo-hover) !important;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2) !important;
+}
+
+.btn-ghost,
+.btn-secondary,
+.btn-outline,
+button.secondary,
+button.ghost,
+.topbar-btn,
+.topbar-toggle,
+.icon-btn {
+  background: transparent !important;
+  border-color: var(--pg-border-strong) !important;
+  color: var(--pg-text-secondary) !important;
+  box-shadow: none !important;
+}
+
+.btn-ghost:hover,
+.btn-secondary:hover,
+.btn-outline:hover,
+button.secondary:hover,
+button.ghost:hover,
+.topbar-btn:hover,
+.topbar-toggle:hover,
+.icon-btn:hover {
+  background: var(--pg-bg-hover) !important;
+  color: var(--pg-text) !important;
+  border-color: var(--pg-border-strong) !important;
+}
+
+/* Tables, separators and status */
+table,
+.table,
+.table-container {
+  border-color: var(--pg-border) !important;
+}
+
+th {
+  background: var(--pg-bg-subtle) !important;
+  color: var(--pg-text-muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.055em;
+}
+
+td,
+tr,
+.divider,
+.separator,
+hr {
+  border-color: var(--pg-border) !important;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
+.status-success,
+.badge-success,
+.trend-up {
+  color: var(--pg-success) !important;
+  background: rgba(52, 211, 153, 0.1) !important;
+}
+
+.status-warning,
+.badge-warning {
+  color: var(--pg-warning) !important;
+  background: rgba(251, 191, 36, 0.1) !important;
+}
+
+.status-danger,
+.badge-danger,
+.trend-down {
+  color: var(--pg-danger) !important;
+  background: rgba(251, 113, 133, 0.1) !important;
+}
+
+.progress-fill,
+.progress-bar-fill,
+.progress-value {
+  background: var(--pg-indigo) !important;
+  transition: transform var(--pg-motion-slow) var(--pg-ease), width var(--pg-motion-slow) var(--pg-ease) !important;
+}
+
+/* Landing and authentication */
+.hero::before,
+.hero::after,
+.landing::before,
+.auth-page::before,
+.login-page::before,
+body::before,
+body::after {
+  filter: saturate(35%) !important;
+  opacity: 0.42 !important;
+}
+
+.gradient-text,
+.hero-title span,
+.text-gradient {
+  background-image: linear-gradient(135deg, #a5b4fc, #6366f1) !important;
+}
+
+.feature-icon,
+.benefit-icon,
+.integration-icon,
+.module-icon,
+.kpi-icon,
+.stat-icon,
+.action-icon,
+.card-icon {
+  background: var(--pg-indigo-soft) !important;
+  border: 1px solid var(--pg-indigo-border) !important;
+  color: #a5b4fc !important;
+  box-shadow: none !important;
+}
+
+.logo,
+.brand,
+.navbar-brand,
+.auth-brand,
+.sidebar-header {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* Modals, notices and overlays */
+.modal-overlay,
+.dialog-overlay,
+.overlay,
+.command-overlay {
+  background: rgba(4, 5, 7, 0.74) !important;
+  backdrop-filter: blur(8px);
+}
+
+.toast,
+.notification,
+.alert {
+  background: var(--pg-bg-raised) !important;
+  border-color: var(--pg-border-strong) !important;
+  box-shadow: var(--pg-shadow-md) !important;
+}
+
+/* Keep motion restrained and enterprise-grade. */
+@media (prefers-reduced-motion: no-preference) {
+  .page.active,
+  .modal-content,
+  .dropdown,
+  .popover,
+  .toast {
+    animation-duration: var(--pg-motion-slow) !important;
+    animation-timing-function: var(--pg-ease) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .content,
+  .main-content,
+  .page-content {
+    padding: 16px !important;
+  }
+
+  .card,
+  .panel,
+  .auth-card,
+  .login-card {
+    border-radius: var(--pg-radius-md) !important;
+  }
+}

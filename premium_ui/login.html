@@ -135,16 +135,16 @@
         <div class="form-group">
           <label class="form-label" for="username">E-mail corporativo</label>
           <div class="input-wrap">
-            <span class="input-icon" aria-hidden="true">✉</span>
+            <span class="input-icon" aria-hidden="true"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span>
             <input id="username" name="username" type="email" class="form-input" placeholder="seu@empresa.com" autocomplete="email" required aria-required="true">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" for="password">Senha</label>
           <div class="input-wrap">
-            <span class="input-icon" aria-hidden="true">🔒</span>
+            <span class="input-icon" aria-hidden="true"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></span>
             <input id="password" name="password" type="password" class="form-input" placeholder="••••••••••••" autocomplete="current-password" required aria-required="true">
-            <button type="button" class="input-toggle" id="pwd-toggle" aria-label="Mostrar senha">👁</button>
+            <button type="button" class="input-toggle" id="pwd-toggle" aria-label="Mostrar senha"><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="form-options">
@@ -170,10 +170,10 @@
       </div>
     </div>
     <div class="login-footer">
-      <a href="/">← Voltar ao LifeOS</a> &nbsp;·&nbsp; <a href="/enterprise">Dashboard Enterprise</a>
+      <a href="/"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar ao LifeOS</a> &nbsp;·&nbsp; <a href="/enterprise">Dashboard Enterprise</a>
     </div>
     <div class="security-badge">
-      🔒 Conexão segura HTTPS · Sessão criptografada · SOC 2 Type II
+      <i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Conexão segura HTTPS · Sessão criptografada · SOC 2 Type II
     </div>
   </main>
   <script>
@@ -193,7 +193,7 @@
       pwdToggle.addEventListener('click', () => {
         const isText = pwdInput.type === 'text';
         pwdInput.type = isText ? 'password' : 'text';
-        pwdToggle.textContent = isText ? '👁' : '🙈';
+        pwdToggle.textContent = isText ? '\u{1F441}' : '\u{1F648}';
         pwdToggle.setAttribute('aria-label', isText ? 'Mostrar senha' : 'Ocultar senha');
       });
 
@@ -232,7 +232,7 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Credenciais inválidas. Verifique e tente novamente.');
-          showStatus('success', '✓ Autenticado com sucesso. Redirecionando...');
+          showStatus('success', '\u{2713} Autenticado com sucesso. Redirecionando...');
           setTimeout(() => location.replace('/admin'), 900);
         } catch (err) {
           pwdInput.classList.add('error');

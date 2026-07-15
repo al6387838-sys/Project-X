@@ -215,9 +215,9 @@ const ThemeEngine = (() => {
     if (!container) return;
 
     const themes = [
-      { value: THEMES.DARK,          label: 'Escuro',        icon: '🌙' },
-      { value: THEMES.LIGHT,         label: 'Claro',         icon: '☀️' },
-      { value: THEMES.AUTO,          label: 'Automático',    icon: '⚡' },
+      { value: THEMES.DARK,          label: 'Escuro',        icon: '\u{1F319}' },
+      { value: THEMES.LIGHT,         label: 'Claro',         icon: '\u{2600}\u{FE0F}' },
+      { value: THEMES.AUTO,          label: 'Automático',    icon: '\u{26A1}' },
       { value: THEMES.HIGH_CONTRAST, label: 'Alto Contraste',icon: '◑' },
     ];
 

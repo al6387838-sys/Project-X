@@ -86,7 +86,7 @@
     .habit-item:last-child { border-bottom: none; }
     .habit-check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all var(--t-fast); }
     .habit-check.done { background: var(--green); border-color: var(--green); }
-    .habit-check.done::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+    .habit-check.done::after { content: '\u{2713}'; color: #fff; font-size: 12px; font-weight: 700; }
     .habit-info { flex: 1; }
     .habit-name { font-size: 13px; font-weight: 600; }
     .habit-streak { font-size: 11px; color: var(--amber); font-weight: 600; }
@@ -181,7 +181,7 @@
   </div>
   <div class="lh-actions">
     <button class="btn btn-ghost" onclick="lhExport()">⬇ Exportar</button>
-    <button class="btn btn-primary" onclick="lhNewEntry()">+ Nova Entrada</button>
+    <button class="btn btn-primary" onclick="lhNewEntry()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Entrada</button>
   </div>
 </div>
 
@@ -254,25 +254,25 @@
   <div class="lh-panel active" id="lh-overview">
     <div class="grid grid-4" style="margin-bottom:20px">
       <div class="card" style="text-align:center">
-        <div style="font-size:28px;margin-bottom:6px">🔥</div>
+        <div style="font-size:28px;margin-bottom:6px"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:24px;font-weight:900;color:#F59E0B">14</div>
         <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Dias de Streak</div>
-        <div style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600">↑ Recorde pessoal!</div>
+        <div style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Recorde pessoal!</div>
       </div>
       <div class="card" style="text-align:center">
-        <div style="font-size:28px;margin-bottom:6px">✅</div>
+        <div style="font-size:28px;margin-bottom:6px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:24px;font-weight:900;color:#10B981">7/9</div>
         <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Hábitos Hoje</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">78% de conclusão</div>
       </div>
       <div class="card" style="text-align:center">
-        <div style="font-size:28px;margin-bottom:6px">🎯</div>
+        <div style="font-size:28px;margin-bottom:6px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:24px;font-weight:900;color:#818CF8">3/5</div>
         <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Metas Ativas</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">2 no prazo</div>
       </div>
       <div class="card" style="text-align:center">
-        <div style="font-size:28px;margin-bottom:6px">📓</div>
+        <div style="font-size:28px;margin-bottom:6px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:24px;font-weight:900;color:#A78BFA">23</div>
         <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Entradas no Mês</div>
         <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">+4 esta semana</div>
@@ -283,13 +283,13 @@
       <!-- Hábitos do Dia -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><div class="card-icon" style="background:rgba(16,185,129,0.1)">✅</div>Hábitos de Hoje</div>
+          <div class="card-title"><div class="card-icon" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>Hábitos de Hoje</div>
           <span class="badge badge-success">7/9</span>
         </div>
         <div id="habits-today">
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Meditação 10min</div><div class="habit-streak">🔥 14 dias</div></div>
+            <div class="habit-info"><div class="habit-name">Meditação 10min</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
@@ -297,7 +297,7 @@
           </div>
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Exercício 30min</div><div class="habit-streak">🔥 8 dias</div></div>
+            <div class="habit-info"><div class="habit-name">Exercício 30min</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 8 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot partial"></div><div class="habit-dot done"></div>
@@ -305,7 +305,7 @@
           </div>
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Leitura 20min</div><div class="habit-streak">🔥 21 dias</div></div>
+            <div class="habit-info"><div class="habit-name">Leitura 20min</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
@@ -313,7 +313,7 @@
           </div>
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Água 2L</div><div class="habit-streak">🔥 5 dias</div></div>
+            <div class="habit-info"><div class="habit-name">Água 2L</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 5 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot partial"></div><div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
@@ -333,28 +333,28 @@
       <!-- Metas Ativas -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><div class="card-icon" style="background:rgba(99,102,241,0.1)">🎯</div>Metas Ativas</div>
+          <div class="card-title"><div class="card-icon" style="background:rgba(99,102,241,0.1)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>Metas Ativas</div>
           <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="lhTab('goals',document.querySelector('.lh-tab:nth-child(3)'))">Ver todas</button>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Aprender TypeScript</span><span class="goal-pct">72%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:72%"></div></div>
-          <div class="goal-meta"><span class="goal-tag">📚 Carreira</span><span class="goal-tag">⏰ 18 dias restantes</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Carreira</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 18 dias restantes</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Poupar R$ 5.000</span><span class="goal-pct">56%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:56%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">💰 Finanças</span><span class="goal-tag">⏰ 45 dias restantes</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 45 dias restantes</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Correr 5km</span><span class="goal-pct">88%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:88%;background:linear-gradient(135deg,#10B981,#06B6D4)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">🏃 Saúde</span><span class="goal-tag">⏰ 7 dias restantes</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 7 dias restantes</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Meditar 30 dias seguidos</span><span class="goal-pct">47%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:47%;background:linear-gradient(135deg,#8B5CF6,#06B6D4)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">🧘 Bem-estar</span><span class="goal-tag">⏰ 16 dias restantes</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Bem-estar</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 16 dias restantes</span></div>
         </div>
       </div>
     </div>
@@ -364,7 +364,7 @@
   <div class="lh-panel" id="lh-habits">
     <div class="grid grid-3" style="margin-bottom:20px">
       <div class="card" style="text-align:center">
-        <div style="font-size:32px;font-weight:900;color:#F59E0B">🔥 14</div>
+        <div style="font-size:32px;font-weight:900;color:#F59E0B"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">Maior streak atual</div>
       </div>
       <div class="card" style="text-align:center">
@@ -379,7 +379,7 @@
     <div class="card">
       <div class="card-header">
         <div class="card-title">Todos os Hábitos</div>
-        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="lhAddHabit()">+ Novo Hábito</button>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="lhAddHabit()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Hábito</button>
       </div>
       <div id="all-habits">
         <!-- Rendered by JS -->
@@ -392,42 +392,42 @@
     <div class="grid grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🎯 Metas de Curto Prazo</div>
+          <div class="card-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Metas de Curto Prazo</div>
           <span class="badge badge-accent">3 ativas</span>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Aprender TypeScript</span><span class="goal-pct">72%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:72%"></div></div>
-          <div class="goal-meta"><span class="goal-tag">📚 Carreira</span><span class="goal-tag">⏰ 18 dias</span><span class="badge badge-accent" style="font-size:9px">Em andamento</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Carreira</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 18 dias</span><span class="badge badge-accent" style="font-size:9px">Em andamento</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Correr 5km sem parar</span><span class="goal-pct">88%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:88%;background:linear-gradient(135deg,#10B981,#06B6D4)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">🏃 Saúde</span><span class="goal-tag">⏰ 7 dias</span><span class="badge badge-success" style="font-size:9px">Quase lá!</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 7 dias</span><span class="badge badge-success" style="font-size:9px">Quase lá!</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Meditar 30 dias seguidos</span><span class="goal-pct">47%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:47%;background:linear-gradient(135deg,#8B5CF6,#06B6D4)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">🧘 Bem-estar</span><span class="goal-tag">⏰ 16 dias</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Bem-estar</span><span class="goal-tag"><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i> 16 dias</span></div>
         </div>
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🏆 Metas de Longo Prazo</div>
+          <div class="card-title"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Metas de Longo Prazo</div>
           <span class="badge badge-purple">2 ativas</span>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Poupar R$ 50.000</span><span class="goal-pct">34%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:34%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
-          <div class="goal-meta"><span class="goal-tag">💰 Finanças</span><span class="goal-tag">📅 Dez 2026</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</span><span class="goal-tag"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Dez 2026</span></div>
         </div>
         <div class="goal-item">
           <div class="goal-header"><span class="goal-name">Lançar produto SaaS</span><span class="goal-pct">22%</span></div>
           <div class="goal-bar"><div class="goal-fill" style="width:22%"></div></div>
-          <div class="goal-meta"><span class="goal-tag">🚀 Carreira</span><span class="goal-tag">📅 Mar 2027</span></div>
+          <div class="goal-meta"><span class="goal-tag"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i> Carreira</span><span class="goal-tag"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Mar 2027</span></div>
         </div>
         <div style="margin-top:16px;padding:16px;background:rgba(99,102,241,0.05);border:1px dashed rgba(99,102,241,0.2);border-radius:10px;text-align:center;cursor:pointer" onclick="lhAddGoal()">
-          <div style="font-size:20px;margin-bottom:6px">+</div>
+          <div style="font-size:20px;margin-bottom:6px"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:13px;color:var(--text-secondary)">Adicionar nova meta</div>
         </div>
       </div>
@@ -438,45 +438,45 @@
   <div class="lh-panel" id="lh-wellness">
     <div class="wellness-grid" style="margin-bottom:20px">
       <div class="wellness-card">
-        <div class="wellness-icon">😴</div>
+        <div class="wellness-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Sono</div>
         <div class="wellness-value">7.5h</div>
-        <div class="wellness-delta up">↑ +0.5h vs ontem</div>
+        <div class="wellness-delta up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +0.5h vs ontem</div>
       </div>
       <div class="wellness-card">
-        <div class="wellness-icon">🏃</div>
+        <div class="wellness-icon"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Passos</div>
         <div class="wellness-value">8.2k</div>
-        <div class="wellness-delta up">↑ 82% da meta</div>
+        <div class="wellness-delta up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> 82% da meta</div>
       </div>
       <div class="wellness-card">
-        <div class="wellness-icon">💧</div>
+        <div class="wellness-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Hidratação</div>
         <div class="wellness-value">1.8L</div>
-        <div class="wellness-delta flat">→ 90% da meta</div>
+        <div class="wellness-delta flat"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 90% da meta</div>
       </div>
       <div class="wellness-card">
-        <div class="wellness-icon">🧘</div>
+        <div class="wellness-icon"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Meditação</div>
         <div class="wellness-value">10min</div>
-        <div class="wellness-delta up">↑ Meta atingida</div>
+        <div class="wellness-delta up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Meta atingida</div>
       </div>
       <div class="wellness-card">
-        <div class="wellness-icon">🍎</div>
+        <div class="wellness-icon"><i data-lucide="heart-pulse" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Nutrição</div>
         <div class="wellness-value">1.840</div>
-        <div class="wellness-delta flat">→ kcal hoje</div>
+        <div class="wellness-delta flat"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> kcal hoje</div>
       </div>
       <div class="wellness-card">
-        <div class="wellness-icon">❤️</div>
+        <div class="wellness-icon"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></div>
         <div class="wellness-label">Humor</div>
         <div class="wellness-value">8/10</div>
-        <div class="wellness-delta up">↑ Ótimo dia!</div>
+        <div class="wellness-delta up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Ótimo dia!</div>
       </div>
     </div>
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📊 Tendência Semanal</div>
+        <div class="card-title"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Tendência Semanal</div>
         <span class="badge badge-success">Semana positiva</span>
       </div>
       <div style="display:flex;gap:8px;align-items:flex-end;height:80px;padding:8px 0">
@@ -518,18 +518,18 @@
       <textarea placeholder="Como foi o seu dia? O que você aprendeu? O que está sentindo?..." id="journal-input"></textarea>
       <div class="journal-new-footer">
         <div class="mood-picker">
-          <button class="mood-btn" onclick="selectMood(this,'😊')">😊</button>
-          <button class="mood-btn" onclick="selectMood(this,'😐')">😐</button>
-          <button class="mood-btn" onclick="selectMood(this,'😔')">😔</button>
-          <button class="mood-btn" onclick="selectMood(this,'😤')">😤</button>
-          <button class="mood-btn" onclick="selectMood(this,'🤩')">🤩</button>
+          <button class="mood-btn" onclick="selectMood(this,'')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="mood-btn" onclick="selectMood(this,'')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="mood-btn" onclick="selectMood(this,'')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="mood-btn" onclick="selectMood(this,'')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="mood-btn" onclick="selectMood(this,'')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
         </div>
         <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="saveJournal()">Salvar entrada</button>
       </div>
     </div>
     <div id="journal-entries">
       <div class="journal-entry">
-        <div class="journal-date"><span>Hoje, 08:32</span><span class="journal-mood">🤩</span></div>
+        <div class="journal-date"><span>Hoje, 08:32</span><span class="journal-mood"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span></div>
         <div class="journal-text">Acordei com muita energia hoje. A meditação matinal foi incrível — consegui manter o foco por 15 minutos sem interrupções. Sinto que estou progredindo bastante no meu objetivo de mindfulness. O projeto do TypeScript também avançou bem ontem à noite.</div>
         <div class="journal-tags">
           <span class="journal-tag">meditação</span>
@@ -538,7 +538,7 @@
         </div>
       </div>
       <div class="journal-entry">
-        <div class="journal-date"><span>Ontem, 22:15</span><span class="journal-mood">😊</span></div>
+        <div class="journal-date"><span>Ontem, 22:15</span><span class="journal-mood"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span></div>
         <div class="journal-text">Dia produtivo. Completei 3 módulos do curso de TypeScript e fiz uma corrida de 4.2km — quase atingindo minha meta de 5km. O treino está valendo a pena. Preciso dormir mais cedo para manter a consistência.</div>
         <div class="journal-tags">
           <span class="journal-tag">exercício</span>
@@ -547,7 +547,7 @@
         </div>
       </div>
       <div class="journal-entry">
-        <div class="journal-date"><span>13 Jul, 19:45</span><span class="journal-mood">😐</span></div>
+        <div class="journal-date"><span>13 Jul, 19:45</span><span class="journal-mood"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span></div>
         <div class="journal-text">Dia um pouco cansativo. Reuniões demais e pouco tempo para trabalho focado. Preciso bloquear melhor meu calendário para deep work. A parte boa: li 30 minutos antes de dormir e mantive o streak de meditação.</div>
         <div class="journal-tags">
           <span class="journal-tag">trabalho</span>
@@ -562,42 +562,42 @@
   <div class="lh-panel" id="lh-areas">
     <div class="grid grid-3">
       <div class="area-card" onclick="lhAreaDetail('saude')">
-        <div class="area-icon-wrap" style="background:rgba(16,185,129,0.1)">🏥</div>
+        <div class="area-icon-wrap" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Saúde & Bem-estar</div>
         <div class="area-desc">Exercícios, sono, nutrição e saúde mental</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#10B981">88/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:88%;background:linear-gradient(135deg,#10B981,#06B6D4)"></div></div>
       </div>
       <div class="area-card" onclick="lhAreaDetail('carreira')">
-        <div class="area-icon-wrap" style="background:rgba(99,102,241,0.1)">💼</div>
+        <div class="area-icon-wrap" style="background:rgba(99,102,241,0.1)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Carreira & Crescimento</div>
         <div class="area-desc">Habilidades, projetos e desenvolvimento profissional</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#818CF8">92/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:92%;background:linear-gradient(135deg,#6366F1,#8B5CF6)"></div></div>
       </div>
       <div class="area-card" onclick="lhAreaDetail('financas')">
-        <div class="area-icon-wrap" style="background:rgba(245,158,11,0.1)">💰</div>
+        <div class="area-icon-wrap" style="background:rgba(245,158,11,0.1)"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Finanças & Patrimônio</div>
         <div class="area-desc">Poupança, investimentos e controle financeiro</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#F59E0B">78/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:78%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
       </div>
       <div class="area-card" onclick="lhAreaDetail('relacoes')">
-        <div class="area-icon-wrap" style="background:rgba(139,92,246,0.1)">❤️</div>
+        <div class="area-icon-wrap" style="background:rgba(139,92,246,0.1)"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Relações & Família</div>
         <div class="area-desc">Conexões, amizades e vida social</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#A78BFA">81/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:81%;background:linear-gradient(135deg,#8B5CF6,#06B6D4)"></div></div>
       </div>
       <div class="area-card" onclick="lhAreaDetail('proposito')">
-        <div class="area-icon-wrap" style="background:rgba(6,182,212,0.1)">🌟</div>
+        <div class="area-icon-wrap" style="background:rgba(6,182,212,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Propósito & Impacto</div>
         <div class="area-desc">Missão, valores e contribuição ao mundo</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#22D3EE">74/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:74%;background:linear-gradient(135deg,#06B6D4,#10B981)"></div></div>
       </div>
       <div class="area-card" onclick="lhAreaDetail('aprendizado')">
-        <div class="area-icon-wrap" style="background:rgba(251,191,36,0.1)">📚</div>
+        <div class="area-icon-wrap" style="background:rgba(251,191,36,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="area-name">Aprendizado & Mente</div>
         <div class="area-desc">Leitura, cursos e desenvolvimento intelectual</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#FBBF24">86/100</span></div>
@@ -611,65 +611,65 @@
     <div class="grid grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">📅 Eventos Recentes</div>
+          <div class="card-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Eventos Recentes</div>
           <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Ver tudo</button>
         </div>
         <div class="timeline">
           <div class="tl-item success">
             <div class="tl-time">Hoje, 07:30</div>
-            <div class="tl-text">✅ Meta de corrida: 4.8km concluída</div>
+            <div class="tl-text"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Meta de corrida: 4.8km concluída</div>
             <div class="tl-sub">Novo recorde pessoal de distância</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">Ontem, 22:00</div>
-            <div class="tl-text">📚 Módulo 7 do curso TypeScript concluído</div>
+            <div class="tl-text"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Módulo 7 do curso TypeScript concluído</div>
             <div class="tl-sub">72% do curso completado</div>
           </div>
           <div class="tl-item success">
             <div class="tl-time">13 Jul, 09:15</div>
-            <div class="tl-text">🔥 Streak de 14 dias de meditação</div>
+            <div class="tl-text"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> Streak de 14 dias de meditação</div>
             <div class="tl-sub">Novo recorde pessoal!</div>
           </div>
           <div class="tl-item warning">
             <div class="tl-time">12 Jul, 18:30</div>
-            <div class="tl-text">⚠️ Meta de poupança atrasada</div>
+            <div class="tl-text"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Meta de poupança atrasada</div>
             <div class="tl-sub">Revisão do orçamento necessária</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">10 Jul, 10:00</div>
-            <div class="tl-text">🎯 Nova meta criada: Lançar produto SaaS</div>
+            <div class="tl-text"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Nova meta criada: Lançar produto SaaS</div>
             <div class="tl-sub">Prazo: Março 2027</div>
           </div>
           <div class="tl-item success">
             <div class="tl-time">08 Jul, 08:00</div>
-            <div class="tl-text">🏆 Life Score atingiu 85 pontos</div>
+            <div class="tl-text"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Life Score atingiu 85 pontos</div>
             <div class="tl-sub">Melhor score dos últimos 3 meses</div>
           </div>
         </div>
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title">🔮 Próximos Marcos</div>
+          <div class="card-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Próximos Marcos</div>
         </div>
         <div class="timeline">
           <div class="tl-item">
             <div class="tl-time">Em 7 dias</div>
-            <div class="tl-text">🏃 Meta: Correr 5km completos</div>
+            <div class="tl-text"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Meta: Correr 5km completos</div>
             <div class="tl-sub">88% do caminho percorrido</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">Em 16 dias</div>
-            <div class="tl-text">🧘 30 dias de meditação seguidos</div>
+            <div class="tl-text"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> 30 dias de meditação seguidos</div>
             <div class="tl-sub">Streak atual: 14 dias</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">Em 18 dias</div>
-            <div class="tl-text">📚 Conclusão do curso TypeScript</div>
+            <div class="tl-text"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conclusão do curso TypeScript</div>
             <div class="tl-sub">72% concluído</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">Em 45 dias</div>
-            <div class="tl-text">💰 Meta de poupança R$ 5.000</div>
+            <div class="tl-text"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Meta de poupança R$ 5.000</div>
             <div class="tl-sub">56% atingido</div>
           </div>
         </div>
@@ -725,7 +725,7 @@ function renderAllHabits() {
         <div style="font-size:11px;color:var(--text-muted)">${h.category}</div>
       </div>
       <div style="text-align:right">
-        <div class="habit-streak">🔥 ${h.streak} dias</div>
+        <div class="habit-streak">\u{1F525} ${h.streak} dias</div>
         <div class="habit-dots" style="justify-content:flex-end;margin-top:4px">
           ${[...Array(7)].map((_,j) => `<div class="habit-dot ${j < h.streak % 7 ? 'done' : ''}"></div>`).join('')}
         </div>
@@ -735,7 +735,7 @@ function renderAllHabits() {
 }
 
 // Journal
-let selectedMood = '😊';
+let selectedMood = '\u{1F60A}';
 function selectMood(btn, mood) {
   document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');

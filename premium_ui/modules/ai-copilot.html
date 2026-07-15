@@ -145,7 +145,7 @@
     <div class="ai-sidebar-header">
       <div class="ai-sidebar-title">Conversas</div>
       <button class="ai-new-chat" onclick="aiNewChat()">
-        <span>✦</span> Nova conversa
+        <span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Nova conversa
       </button>
     </div>
     <div class="ai-conv-list" id="ai-conv-list">
@@ -172,8 +172,8 @@
     </div>
     <div class="ai-sidebar-footer">
       <div class="ai-model-selector" onclick="aiSelectModel()">
-        <span>🤖 LifeOS AI Pro</span>
-        <span style="font-size:10px;color:var(--text-muted)">▼</span>
+        <span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> LifeOS AI Pro</span>
+        <span style="font-size:10px;color:var(--text-muted)"><i data-lucide="chevron-down" class="pg-icon" aria-hidden="true"></i></span>
       </div>
       <div style="font-size:11px;color:var(--text-muted);margin-top:8px;text-align:center">
         Powered by GPT-4o · Contexto: 128k tokens
@@ -191,7 +191,7 @@
       <div class="ai-chat-actions">
         <button class="ai-btn-icon" title="Exportar" onclick="aiExport()">⬇</button>
         <button class="ai-btn-icon" title="Compartilhar" onclick="aiShare()">↗</button>
-        <button class="ai-btn-icon" title="Limpar" onclick="aiClear()">🗑</button>
+        <button class="ai-btn-icon" title="Limpar" onclick="aiClear()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
 
@@ -200,22 +200,22 @@
     </div>
 
     <div class="ai-suggestions" id="ai-suggestions">
-      <button class="ai-suggestion" onclick="aiSuggest(this)">📊 Analisar minha semana</button>
-      <button class="ai-suggestion" onclick="aiSuggest(this)">🎯 Revisar minhas metas</button>
-      <button class="ai-suggestion" onclick="aiSuggest(this)">💡 Sugerir melhorias</button>
-      <button class="ai-suggestion" onclick="aiSuggest(this)">📈 Relatório de hábitos</button>
-      <button class="ai-suggestion" onclick="aiSuggest(this)">🔮 Previsão do mês</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analisar minha semana</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Revisar minhas metas</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Sugerir melhorias</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Relatório de hábitos</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Previsão do mês</button>
     </div>
 
     <div class="ai-input-area">
       <div class="ai-input-wrap">
         <div class="ai-input-tools">
-          <button class="ai-input-tool" title="Anexar arquivo" onclick="aiAttach()">📎</button>
-          <button class="ai-input-tool" title="Contexto LifeOS" onclick="aiContext()">🔗</button>
-          <button class="ai-input-tool" title="Voz" onclick="aiVoice()">🎤</button>
+          <button class="ai-input-tool" title="Anexar arquivo" onclick="aiAttach()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="ai-input-tool" title="Contexto LifeOS" onclick="aiContext()"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="ai-input-tool" title="Voz" onclick="aiVoice()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
         </div>
         <textarea class="ai-textarea" id="ai-input" placeholder="Pergunte qualquer coisa ao seu AI Copilot..." rows="1" onkeydown="aiKeydown(event)" oninput="aiInputResize(this)"></textarea>
-        <button class="ai-send" id="ai-send" onclick="aiSend()">➤</button>
+        <button class="ai-send" id="ai-send" onclick="aiSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div class="ai-input-footer">
         <div class="ai-input-hint">Enter para enviar · Shift+Enter para nova linha</div>
@@ -231,27 +231,27 @@
     </div>
     <div class="ai-right-content">
       <div class="ai-cap-card" onclick="aiCapability('analyze')">
-        <div class="ai-cap-icon">📊</div>
+        <div class="ai-cap-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
         <div class="ai-cap-name">Análise de Dados</div>
         <div class="ai-cap-desc">Analisa seus hábitos, metas e métricas para gerar insights personalizados</div>
       </div>
       <div class="ai-cap-card" onclick="aiCapability('plan')">
-        <div class="ai-cap-icon">🗓️</div>
+        <div class="ai-cap-icon"><i data-lucide="calendar-range" class="pg-icon" aria-hidden="true"></i></div>
         <div class="ai-cap-name">Planejamento</div>
         <div class="ai-cap-desc">Cria planos de ação, cronogramas e estratégias baseadas nos seus objetivos</div>
       </div>
       <div class="ai-cap-card" onclick="aiCapability('write')">
-        <div class="ai-cap-icon">✍️</div>
+        <div class="ai-cap-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="ai-cap-name">Escrita & Conteúdo</div>
         <div class="ai-cap-desc">Redigir emails, relatórios, resumos e qualquer tipo de conteúdo textual</div>
       </div>
       <div class="ai-cap-card" onclick="aiCapability('code')">
-        <div class="ai-cap-icon">💻</div>
+        <div class="ai-cap-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
         <div class="ai-cap-name">Código & Automação</div>
         <div class="ai-cap-desc">Escrever, revisar e explicar código em qualquer linguagem de programação</div>
       </div>
       <div class="ai-cap-card" onclick="aiCapability('research')">
-        <div class="ai-cap-icon">🔍</div>
+        <div class="ai-cap-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div>
         <div class="ai-cap-name">Pesquisa</div>
         <div class="ai-cap-desc">Pesquisar tópicos, resumir documentos e sintetizar informações complexas</div>
       </div>
@@ -260,27 +260,27 @@
         <div class="ai-right-title">Contexto Ativo</div>
       </div>
       <div class="ai-ctx-item">
-        <span class="ai-ctx-icon">📊</span>
+        <span class="ai-ctx-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></span>
         <span class="ai-ctx-text">Dados de hábitos (7 dias)</span>
         <span class="ai-ctx-badge">Ativo</span>
       </div>
       <div class="ai-ctx-item">
-        <span class="ai-ctx-icon">🎯</span>
+        <span class="ai-ctx-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></span>
         <span class="ai-ctx-text">Metas ativas (5)</span>
         <span class="ai-ctx-badge">Ativo</span>
       </div>
       <div class="ai-ctx-item">
-        <span class="ai-ctx-icon">💰</span>
+        <span class="ai-ctx-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></span>
         <span class="ai-ctx-text">Resumo financeiro</span>
         <span class="ai-ctx-badge">Ativo</span>
       </div>
       <div class="ai-ctx-item">
-        <span class="ai-ctx-icon">📅</span>
+        <span class="ai-ctx-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span>
         <span class="ai-ctx-text">Calendário (próx. 7 dias)</span>
         <span class="ai-ctx-badge">Ativo</span>
       </div>
       <div class="ai-ctx-item" style="opacity:0.5">
-        <span class="ai-ctx-icon">📧</span>
+        <span class="ai-ctx-icon"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span>
         <span class="ai-ctx-text">Emails (desativado)</span>
         <span style="font-size:10px;color:var(--text-muted)">Off</span>
       </div>
@@ -297,29 +297,29 @@ const conversations = [
       { role: 'user', text: 'Analise minha produtividade desta semana com base nos meus dados de hábitos e metas.', time: '09:10' },
       { role: 'ai', text: `Com base nos seus dados desta semana, aqui está uma análise detalhada da sua produtividade:
 
-**📊 Resumo Geral**
+**\u{1F4CA} Resumo Geral**
 Você teve uma semana acima da média, com um Life Score de **85/100** — top 12% dos usuários.
 
-**✅ Pontos Fortes**
+**\u{2705} Pontos Fortes**
 - **Meditação**: 14 dias de streak consecutivos — excelente consistência
 - **Leitura**: 21 dias de streak — seu hábito mais consolidado
 - **Exercício**: 8 dias seguidos, com progresso visível na meta de 5km
 
-**⚠️ Áreas de Atenção**
+**\u{26A0}\u{FE0F} Áreas de Atenção**
 - **Journaling**: Apenas 3 dias esta semana — considere vincular ao ritual matinal
 - **Sono**: Média de 7.2h, abaixo da meta de 8h em 3 noites
 
-**🎯 Recomendações para a próxima semana**
+**\u{1F3AF} Recomendações para a próxima semana**
 1. Adicione journaling imediatamente após a meditação matinal
 2. Defina um alarme de "preparação para dormir" às 22h30
 3. Aumente a intensidade do treino — você está a 88% da meta de 5km
 
-**📈 Tendência**
+**\u{1F4C8} Tendência**
 Sua produtividade cresceu **+12%** em relação à semana anterior. Continue assim!`, time: '09:11' },
       { role: 'user', text: 'Quais hábitos têm maior impacto no meu Life Score?', time: '09:14' },
       { role: 'ai', text: `Analisando a correlação entre seus hábitos e o Life Score, aqui estão os de maior impacto:
 
-**🏆 Top 3 Hábitos por Impacto**
+**\u{1F3C6} Top 3 Hábitos por Impacto**
 
 | Hábito | Impacto | Streak | Contribuição |
 |--------|---------|--------|-------------|
@@ -327,10 +327,10 @@ Sua produtividade cresceu **+12%** em relação à semana anterior. Continue ass
 | Exercício | Alto | 8 dias | +7.5 pts |
 | Leitura | Médio | 21 dias | +5.1 pts |
 
-**💡 Insight Principal**
+**\u{1F4A1} Insight Principal**
 A meditação tem o maior ROI por minuto investido. 10 minutos diários geram mais impacto no seu score do que 30 minutos de exercício, pois afeta positivamente todos os outros pilares (foco, sono, humor).
 
-**🔮 Projeção**
+**\u{1F52E} Projeção**
 Se mantiver os hábitos atuais + adicionar journaling consistente, seu Life Score pode atingir **92/100** em 30 dias.`, time: '09:15' },
     ]
   },
@@ -407,7 +407,7 @@ function renderMessages() {
   container.innerHTML = conv.messages.map(msg => `
     <div class="ai-msg ${msg.role}">
       <div class="ai-msg-avatar ${msg.role === 'ai' ? 'ai-avatar-ai' : 'ai-avatar-user'}">
-        ${msg.role === 'ai' ? '✦' : '👤'}
+        ${msg.role === 'ai' ? '\u{2726}' : '\u{1F464}'}
       </div>
       <div class="ai-msg-content">
         <div class="ai-msg-bubble">${formatMessage(msg.text)}</div>
@@ -415,7 +415,7 @@ function renderMessages() {
           <span>${msg.time}</span>
           ${msg.role === 'ai' ? `
             <div class="ai-msg-actions">
-              <button class="ai-msg-action" onclick="aiCopy(this)">📋 Copiar</button>
+              <button class="ai-msg-action" onclick="aiCopy(this)">\u{1F4CB} Copiar</button>
               <button class="ai-msg-action" onclick="aiRegenerate()">↻ Regenerar</button>
             </div>
           ` : ''}
@@ -445,27 +445,27 @@ function renderWelcome() {
   const container = document.getElementById('ai-messages');
   container.innerHTML = `
     <div class="ai-welcome">
-      <div class="ai-welcome-logo">✦</div>
+      <div class="ai-welcome-logo">\u{2726}</div>
       <div class="ai-welcome-title">Olá! Sou seu <span>AI Copilot</span></div>
       <div class="ai-welcome-desc">Estou conectado ao seu LifeOS e tenho acesso a seus dados de hábitos, metas, finanças e calendário. Como posso ajudar hoje?</div>
       <div class="ai-welcome-grid">
-        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'📊 Analisar minha semana'})">
-          <div class="ai-welcome-card-icon">📊</div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4CA} Analisar minha semana'})">
+          <div class="ai-welcome-card-icon">\u{1F4CA}</div>
           <div class="ai-welcome-card-title">Analisar minha semana</div>
           <div class="ai-welcome-card-desc">Insights sobre produtividade, hábitos e metas</div>
         </div>
-        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'🎯 Criar plano de metas'})">
-          <div class="ai-welcome-card-icon">🎯</div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F3AF} Criar plano de metas'})">
+          <div class="ai-welcome-card-icon">\u{1F3AF}</div>
           <div class="ai-welcome-card-title">Criar plano de metas</div>
           <div class="ai-welcome-card-desc">Estratégia personalizada para seus objetivos</div>
         </div>
-        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'💡 Sugerir melhorias'})">
-          <div class="ai-welcome-card-icon">💡</div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4A1} Sugerir melhorias'})">
+          <div class="ai-welcome-card-icon">\u{1F4A1}</div>
           <div class="ai-welcome-card-title">Sugerir melhorias</div>
           <div class="ai-welcome-card-desc">Recomendações baseadas nos seus padrões</div>
         </div>
-        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'💻 Criar automação'})">
-          <div class="ai-welcome-card-icon">💻</div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4BB} Criar automação'})">
+          <div class="ai-welcome-card-icon">\u{1F4BB}</div>
           <div class="ai-welcome-card-title">Criar automação</div>
           <div class="ai-welcome-card-desc">Scripts e workflows para o LifeOS</div>
         </div>
@@ -521,7 +521,7 @@ function showThinking() {
   thinkDiv.className = 'ai-msg ai';
   thinkDiv.id = 'ai-thinking';
   thinkDiv.innerHTML = `
-    <div class="ai-msg-avatar ai-avatar-ai">✦</div>
+    <div class="ai-msg-avatar ai-avatar-ai">\u{2726}</div>
     <div class="ai-msg-content">
       <div class="ai-msg-bubble">
         <div class="ai-thinking">

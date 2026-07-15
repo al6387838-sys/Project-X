@@ -174,6 +174,7 @@
     @media (max-width: 1024px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) { .sidebar { display: none; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } .grid-2, .grid-3 { grid-template-columns: 1fr; } }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body style="visibility:hidden">
 
@@ -189,31 +190,31 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-logo-icon">⚙</div>
+      <div class="sidebar-logo-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div>
       <span class="sidebar-logo-text">LifeOS</span>
       <span class="sidebar-badge">ADMIN</span>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section">
         <div class="nav-section-label">Dashboard</div>
-        <button class="nav-item active" data-view="overview" type="button"><span class="nav-item-icon">📊</span>Overview</button>
+        <button class="nav-item active" data-view="overview" type="button"><span class="nav-item-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></span>Overview</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">Gerenciamento</div>
-        <button class="nav-item" data-view="members" type="button"><span class="nav-item-icon">👥</span>Membros</button>
-        <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon">🏢</span>Organizações</button>
-        <button class="nav-item" data-view="billing" type="button"><span class="nav-item-icon">💳</span>Billing</button>
+        <button class="nav-item" data-view="members" type="button"><span class="nav-item-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></span>Membros</button>
+        <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>Organizações</button>
+        <button class="nav-item" data-view="billing" type="button"><span class="nav-item-icon"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></span>Billing</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">Sistema</div>
-        <button class="nav-item" data-view="audit" type="button"><span class="nav-item-icon">📋</span>Auditoria</button>
-        <button class="nav-item" data-view="system" type="button"><span class="nav-item-icon">⚡</span>Sistema</button>
-        <button class="nav-item" data-view="security" type="button"><span class="nav-item-icon">🛡️</span>Segurança</button>
+        <button class="nav-item" data-view="audit" type="button"><span class="nav-item-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span>Auditoria</button>
+        <button class="nav-item" data-view="system" type="button"><span class="nav-item-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></span>Sistema</button>
+        <button class="nav-item" data-view="security" type="button"><span class="nav-item-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">Navegação</div>
-        <a class="nav-item" href="/enterprise"><span class="nav-item-icon">◈</span>Enterprise</a>
-        <a class="nav-item" href="/dashboard"><span class="nav-item-icon">←</span>Workspace</a>
+        <a class="nav-item" href="/enterprise"><span class="nav-item-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>Enterprise</a>
+        <a class="nav-item" href="/dashboard"><span class="nav-item-icon"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i></span>Workspace</a>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -233,11 +234,11 @@
     <header class="topbar">
       <span class="topbar-title" id="topbar-title">Master Admin Panel</span>
       <div class="topbar-spacer"></div>
-      <span class="topbar-badge">🔴 ADMIN RESTRITO</span>
+      <span class="topbar-badge"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> ADMIN RESTRITO</span>
       <button class="btn btn-secondary" id="refresh-btn" type="button">↻ Atualizar</button>
     </header>
     <div class="content" id="content">
-      <div class="empty-state"><div class="empty-state-icon">⚙️</div><div class="empty-state-title">Carregando…</div></div>
+      <div class="empty-state"><div class="empty-state-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Carregando…</div></div>
     </div>
   </main>
 </div>
@@ -250,7 +251,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title" id="modal-title">Modal</h2>
-      <button class="modal-close" id="modal-close" type="button">✕</button>
+      <button class="modal-close" id="modal-close" type="button"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
     </div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer" id="modal-footer" style="display:none"></div>
@@ -275,7 +276,7 @@
     const stack = document.getElementById('toast-stack');
     const el = document.createElement('div');
     el.className = `toast ${type}`;
-    el.textContent = (type==='success'?'✓ ':type==='error'?'✕ ':'ℹ ') + msg;
+    el.textContent = (type==='success'?'\u{2713} ':type==='error'?'\u{2715} ':'\u{2139} ') + msg;
     stack.appendChild(el);
     setTimeout(() => el.remove(), 3500);
   }
@@ -380,7 +381,7 @@
     document.getElementById('content').innerHTML = `
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
         <div><h1 class="page-title">Membros</h1><p class="page-sub">${members.length} membros na organização.</p></div>
-        <button class="btn btn-primary" data-action="member.invite" type="button">+ Convidar</button>
+        <button class="btn btn-primary" data-action="member.invite" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Convidar</button>
       </div>
       <div class="card">
         <div class="card-header">
@@ -440,8 +441,8 @@
             </div>
           </div>
           <div style="margin-top:16px;display:flex;gap:8px">
-            <button class="btn btn-primary" data-action="org.edit" type="button">✏ Editar</button>
-            <button class="btn btn-danger" data-action="org.suspend" type="button">⚠ Suspender</button>
+            <button class="btn btn-primary" data-action="org.edit" type="button">\u{270F} Editar</button>
+            <button class="btn btn-danger" data-action="org.suspend" type="button">\u{26A0} Suspender</button>
           </div>
         </div>
       </div>
@@ -472,7 +473,7 @@
                   <td>${statusBadge(inv.status||'paid')}</td>
                   <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button">⬇ PDF</button></td>
                 </tr>
-              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">💳</div><div class="empty-state-title">Sem faturas</div></div></td></tr>`}
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">\u{1F4B3}</div><div class="empty-state-title">Sem faturas</div></div></td></tr>`}
             </tbody>
           </table>
         </div>
@@ -534,9 +535,9 @@
           <div class="card-header"><span class="card-title">Ações de Sistema</span></div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
             <button class="btn btn-secondary" data-action="system.refresh" type="button" style="justify-content:flex-start">↻ Atualizar diagnóstico</button>
-            <button class="btn btn-secondary" data-action="system.clearCache" type="button" style="justify-content:flex-start">🗑 Limpar cache</button>
+            <button class="btn btn-secondary" data-action="system.clearCache" type="button" style="justify-content:flex-start">\u{1F5D1} Limpar cache</button>
             <button class="btn btn-secondary" data-action="system.exportLogs" type="button" style="justify-content:flex-start">⬇ Exportar logs</button>
-            <button class="btn btn-danger" data-action="system.maintenance" type="button" style="justify-content:flex-start">⚠ Modo manutenção</button>
+            <button class="btn btn-danger" data-action="system.maintenance" type="button" style="justify-content:flex-start">\u{26A0} Modo manutenção</button>
           </div>
         </div>
       </div>
@@ -561,7 +562,7 @@
                   <td>${fmtDate(d.lastSeen, true)}</td>
                   <td>${d.current ? '<span class="badge badge-success">Atual</span>' : `<button class="btn btn-danger" style="height:26px;padding:0 8px;font-size:11px" data-action="device.revoke" data-id="${esc(d.id)}" type="button">Revogar</button>`}</td>
                 </tr>
-              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">🛡️</div><div class="empty-state-title">Nenhuma sessão</div></div></td></tr>`}
+              `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">\u{1F6E1}\u{FE0F}</div><div class="empty-state-title">Nenhuma sessão</div></div></td></tr>`}
             </tbody>
           </table>
         </div>
@@ -629,12 +630,13 @@
       const hash = location.hash.slice(1);
       render(['overview','members','organizations','billing','audit','system','security'].includes(hash) ? hash : 'overview');
     } catch(e) {
-      document.getElementById('content').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Erro ao carregar</div><div class="empty-state-desc">${esc(e.message)}</div><button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button></div>`;
+      document.getElementById('content').innerHTML = `<div class="empty-state"><div class="empty-state-icon">\u{26A0}\u{FE0F}</div><div class="empty-state-title">Erro ao carregar</div><div class="empty-state-desc">${esc(e.message)}</div><button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button></div>`;
     }
   }
 
   init();
 })();
 </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

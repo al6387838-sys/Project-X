@@ -5,14 +5,14 @@
 <div class="page" id="page-automation">
   <div class="page-header">
     <div>
-      <div class="page-title">🤖 Automation Studio</div>
+      <div class="page-title"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Automation Studio</div>
       <div class="page-subtitle">Fluxos de automação, gatilhos, condições e agendamento</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="autoTab('flows')">⚡ Fluxos</button>
-      <button class="btn btn-ghost" onclick="autoTab('scheduler')">🕐 Scheduler</button>
-      <button class="btn btn-ghost" onclick="autoTab('templates')">📋 Templates</button>
-      <button class="btn btn-primary" onclick="autoNewFlow()">+ Novo Fluxo</button>
+      <button class="btn btn-ghost" onclick="autoTab('flows')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Fluxos</button>
+      <button class="btn btn-ghost" onclick="autoTab('scheduler')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Scheduler</button>
+      <button class="btn btn-ghost" onclick="autoTab('templates')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Templates</button>
+      <button class="btn btn-primary" onclick="autoNewFlow()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Fluxo</button>
     </div>
   </div>
 
@@ -44,7 +44,7 @@
           <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">📧</div>
+          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div>
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700">Notificar reunião próxima</div>
             <div style="font-size:12px;color:var(--text-muted)">Gatilho: 15min antes do evento no calendário</div>
@@ -58,7 +58,7 @@
           <div><strong style="color:var(--text-primary)">Execuções:</strong> 24/mês</div>
         </div>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> evento calendário → <strong style="color:var(--text-primary)">Se</strong> tipo = reunião → <strong style="color:var(--text-primary)">Então</strong> enviar notificação 15min antes</div>
+          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> evento calendário <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> tipo = reunião <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> enviar notificação 15min antes</div>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
           <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">🔄</div>
+          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700">Lembrete de hábitos pendentes</div>
             <div style="font-size:12px;color:var(--text-muted)">Gatilho: Diariamente às 20h se hábito não completado</div>
@@ -81,7 +81,7 @@
           <div><strong style="color:var(--text-primary)">Execuções:</strong> 30/mês</div>
         </div>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 20h → <strong style="color:var(--text-primary)">Se</strong> hábito incompleto → <strong style="color:var(--text-primary)">Então</strong> enviar alerta</div>
+          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 20h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> hábito incompleto <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> enviar alerta</div>
         </div>
       </div>
 
@@ -90,7 +90,7 @@
           <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">💾</div>
+          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700">Backup automático semanal</div>
             <div style="font-size:12px;color:var(--text-muted)">Gatilho: Todo domingo às 02:00</div>
@@ -99,12 +99,12 @@
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
           <div><strong style="color:var(--text-primary)">Gatilho:</strong> Cron (dom 02:00)</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> Backup → S3</div>
+          <div><strong style="color:var(--text-primary)">Ação:</strong> Backup <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3</div>
           <div><strong style="color:var(--text-primary)">Último:</strong> Dom 02:00</div>
           <div><strong style="color:var(--text-primary)">Execuções:</strong> 4/mês</div>
         </div>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> dom 02h → <strong style="color:var(--text-primary)">Então</strong> backup completo → S3 → notificar</div>
+          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> dom 02h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> backup completo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> notificar</div>
         </div>
       </div>
 
@@ -113,7 +113,7 @@
           <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">💰</div>
+          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700">Alerta de gasto acima do limite</div>
             <div style="font-size:12px;color:var(--text-muted)">Gatilho: Quando gasto diário > R$ 500</div>
@@ -127,7 +127,7 @@
           <div><strong style="color:var(--text-primary)">Execuções:</strong> 3/mês</div>
         </div>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> gasto registrado → <strong style="color:var(--text-primary)">Se</strong> valor > R$500 → <strong style="color:var(--text-primary)">Então</strong> alerta push + log</div>
+          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> gasto registrado <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> valor > R$500 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> alerta push + log</div>
         </div>
       </div>
 
@@ -136,7 +136,7 @@
           <div style="width:14px;height:14px;border-radius:50%;background:#fff;transition:0.2s"></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">☀️</div>
+          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700">Resumo diário via AI</div>
             <div style="font-size:12px;color:var(--text-muted)">Gatilho: Diariamente às 07:00 — gerar resumo com IA</div>
@@ -150,7 +150,7 @@
           <div><strong style="color:var(--text-primary)">Execuções:</strong> 0/mês</div>
         </div>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 07h → <strong style="color:var(--text-primary)">Então</strong> AI gera resumo diário → enviar por email</div>
+          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 07h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> AI gera resumo diário <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> enviar por email</div>
         </div>
       </div>
     </div>
@@ -160,7 +160,7 @@
   <div id="auto-scheduler-tab" style="display:none">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">🕐 Jobs Agendados</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Jobs Agendados</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
             <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">07:00</div>
@@ -188,25 +188,25 @@
             <label style="width:32px;height:16px;background:var(--green);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" checked style="opacity:0;width:0"/><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
           </div>
         </div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="autoNewSchedule()">+ Novo Job</button>
+        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="autoNewSchedule()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Job</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📊 Histórico de Execuções</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Histórico de Execuções</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Hoje</span><span>Backup diário</span><span style="color:var(--green)">✓ OK</span><span style="color:var(--text-muted)">0.3s</span>
+            <span style="color:var(--text-muted)">Hoje</span><span>Backup diário</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.3s</span>
           </div>
           <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Hoje</span><span>Lembrete hábitos</span><span style="color:var(--green)">✓ OK</span><span style="color:var(--text-muted)">0.1s</span>
+            <span style="color:var(--text-muted)">Hoje</span><span>Lembrete hábitos</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.1s</span>
           </div>
           <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Ontem</span><span>Alerta financeiro</span><span style="color:var(--amber)">⚠ Skip</span><span style="color:var(--text-muted)">—</span>
+            <span style="color:var(--text-muted)">Ontem</span><span>Alerta financeiro</span><span style="color:var(--amber)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Skip</span><span style="color:var(--text-muted)">—</span>
           </div>
           <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Ontem</span><span>Reunião notificação</span><span style="color:var(--green)">✓ OK</span><span style="color:var(--text-muted)">0.2s</span>
+            <span style="color:var(--text-muted)">Ontem</span><span>Reunião notificação</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.2s</span>
           </div>
           <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px">
-            <span style="color:var(--text-muted)">2d atrás</span><span>Backup semanal</span><span style="color:var(--green)">✓ OK</span><span style="color:var(--text-muted)">2.1s</span>
+            <span style="color:var(--text-muted)">2d atrás</span><span>Backup semanal</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">2.1s</span>
           </div>
         </div>
       </div>
@@ -217,42 +217,42 @@
   <div id="auto-templates-tab" style="display:none">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('notificar')">
-        <div style="font-size:24px;margin-bottom:8px">📧</div>
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px">Notificação de Eventos</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Notificar sobre reuniões e eventos com antecedência configurável</div>
         <div style="font-size:11px;color:var(--accent-light)">Gatilho: Calendar · Ação: Push + Email</div>
         <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('backups')">
-        <div style="font-size:24px;margin-bottom:8px">💾</div>
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px">Backup Automático</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Backup agendado de dados e configurações para armazenamento seguro</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron · Ação: Backup → S3</div>
+        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron · Ação: Backup <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3</div>
         <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('habits')">
-        <div style="font-size:24px;margin-bottom:8px">🔄</div>
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px">Lembrete de Hábitos</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Lembrar de completar hábitos pendentes ao final do dia</div>
         <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron 20h · Ação: Notificação</div>
         <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('finance')">
-        <div style="font-size:24px;margin-bottom:8px">💰</div>
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px">Alerta Financeiro</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Alertar quando gastos ultrapassam limites configurados</div>
         <div style="font-size:11px;color:var(--accent-light)">Gatilho: Evento · Ação: Alerta + Log</div>
         <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('daily')">
-        <div style="font-size:24px;margin-bottom:8px">☀️</div>
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px">Resumo Diário AI</div>
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Gerar resumo diário personalizado com IA e enviar por email</div>
         <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron 07h · Ação: AI + Email</div>
         <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;border-style:dashed" onclick="autoNewFlow()">
-        <div style="font-size:24px;margin-bottom:8px;opacity:0.5">+</div>
+        <div style="font-size:24px;margin-bottom:8px;opacity:0.5"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-size:14px;font-weight:700;margin-bottom:4px;opacity:0.5">Criar Fluxo do Zero</div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Defina gatilhos, condições e ações manualmente</div>
       </div>

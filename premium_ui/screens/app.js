@@ -29,47 +29,47 @@ const AppState = {
    CONSTANTS
    ============================================================ */
 const LIFE_AREAS = [
-  { id: 'saude',          name: 'Saúde',          icon: '💪', color: '#10B981' },
-  { id: 'carreira',       name: 'Carreira',        icon: '🚀', color: '#3B82F6' },
-  { id: 'relacionamentos',name: 'Relacionamentos', icon: '❤️', color: '#EF4444' },
-  { id: 'financas',       name: 'Finanças',        icon: '💰', color: '#F59E0B' },
-  { id: 'aprendizado',    name: 'Aprendizado',     icon: '📚', color: '#8B5CF6' },
-  { id: 'lazer',          name: 'Lazer',           icon: '🎨', color: '#EC4899' },
+  { id: 'saude',          name: 'Saúde',          icon: '\u{1F4AA}', color: '#10B981' },
+  { id: 'carreira',       name: 'Carreira',        icon: '\u{1F680}', color: '#3B82F6' },
+  { id: 'relacionamentos',name: 'Relacionamentos', icon: '\u{2764}\u{FE0F}', color: '#EF4444' },
+  { id: 'financas',       name: 'Finanças',        icon: '\u{1F4B0}', color: '#F59E0B' },
+  { id: 'aprendizado',    name: 'Aprendizado',     icon: '\u{1F4DA}', color: '#8B5CF6' },
+  { id: 'lazer',          name: 'Lazer',           icon: '\u{1F3A8}', color: '#EC4899' },
 ];
 
 const VALUES = [
-  '🌟 Família', '🕊️ Liberdade', '📈 Crescimento', '🌍 Impacto',
-  '💚 Saúde', '🎨 Criatividade', '📖 Conhecimento', '🛡️ Segurança',
-  '🏔️ Aventura', '🤝 Conexão', '⚖️ Equilíbrio', '🔥 Paixão'
+  '\u{1F31F} Família', '\u{1F54A}\u{FE0F} Liberdade', '\u{1F4C8} Crescimento', '\u{1F30D} Impacto',
+  '\u{1F49A} Saúde', '\u{1F3A8} Criatividade', '\u{1F4D6} Conhecimento', '\u{1F6E1}\u{FE0F} Segurança',
+  '\u{1F3D4}\u{FE0F} Aventura', '\u{1F91D} Conexão', '\u{2696}\u{FE0F} Equilíbrio', '\u{1F525} Paixão'
 ];
 
 const ONBOARDING_STEPS = [
   {
-    icon: '🧠',
+    icon: '\u{1F9E0}',
     title: 'Bem-vindo ao LifeOS',
     subtitle: 'Seu copiloto de vida pessoal. Vamos configurar sua experiência em menos de 2 minutos.',
     type: 'welcome',
   },
   {
-    icon: '🌟',
+    icon: '\u{1F31F}',
     title: 'Seus Valores',
     subtitle: 'Selecione os valores que mais importam para você. Eles guiarão todas as decisões do LifeOS.',
     type: 'values',
   },
   {
-    icon: '⚖️',
+    icon: '\u{2696}\u{FE0F}',
     title: 'Áreas da Vida',
     subtitle: 'Como você avalia cada área da sua vida agora? Seja honesto — isso é apenas para você.',
     type: 'areas',
   },
   {
-    icon: '🎯',
+    icon: '\u{1F3AF}',
     title: 'Seu Primeiro Objetivo',
     subtitle: 'Qual é a coisa mais importante que você quer alcançar nos próximos 90 dias?',
     type: 'goal',
   },
   {
-    icon: '✨',
+    icon: '\u{2728}',
     title: 'Tudo Pronto!',
     subtitle: 'Seu LifeOS está configurado. Vamos começar sua jornada.',
     type: 'complete',
@@ -156,16 +156,16 @@ const MOCK_TIMELINE = [
 ];
 
 const COMMANDS = [
-  { icon: '⚡', label: 'Dashboard',       shortcut: 'G D', action: () => showView('dashboard') },
-  { icon: '🤖', label: 'Companion',       shortcut: 'G C', action: () => showView('companion') },
-  { icon: '🎯', label: 'Missões',         shortcut: 'G M', action: () => showView('missions') },
-  { icon: '📅', label: 'Timeline',        shortcut: 'G T', action: () => showView('timeline') },
-  { icon: '🕸️', label: 'Life Graph',      shortcut: 'G L', action: () => showView('lifegraph') },
-  { icon: '⚙️', label: 'Configurações',   shortcut: 'G S', action: () => showView('settings') },
-  { icon: '➕', label: 'Nova Missão',     shortcut: 'N M', action: () => openNewMissionModal() },
-  { icon: '🎨', label: 'Alterar Tema',    shortcut: '',    action: () => toggleThemePanel() },
-  { icon: '🌙', label: 'Tema Escuro',     shortcut: '',    action: () => ThemeEngine.setTheme('dark') },
-  { icon: '☀️', label: 'Tema Claro',      shortcut: '',    action: () => ThemeEngine.setTheme('light') },
+  { icon: '\u{26A1}', label: 'Dashboard',       shortcut: 'G D', action: () => showView('dashboard') },
+  { icon: '\u{1F916}', label: 'Companion',       shortcut: 'G C', action: () => showView('companion') },
+  { icon: '\u{1F3AF}', label: 'Missões',         shortcut: 'G M', action: () => showView('missions') },
+  { icon: '\u{1F4C5}', label: 'Timeline',        shortcut: 'G T', action: () => showView('timeline') },
+  { icon: '\u{1F578}\u{FE0F}', label: 'Life Graph',      shortcut: 'G L', action: () => showView('lifegraph') },
+  { icon: '\u{2699}\u{FE0F}', label: 'Configurações',   shortcut: 'G S', action: () => showView('settings') },
+  { icon: '\u{2795}', label: 'Nova Missão',     shortcut: 'N M', action: () => openNewMissionModal() },
+  { icon: '\u{1F3A8}', label: 'Alterar Tema',    shortcut: '',    action: () => toggleThemePanel() },
+  { icon: '\u{1F319}', label: 'Tema Escuro',     shortcut: '',    action: () => ThemeEngine.setTheme('dark') },
+  { icon: '\u{2600}\u{FE0F}', label: 'Tema Claro',      shortcut: '',    action: () => ThemeEngine.setTheme('light') },
   { icon: '◑',  label: 'Alto Contraste',  shortcut: '',    action: () => ThemeEngine.setTheme('high-contrast') },
 ];
 
@@ -224,7 +224,7 @@ function startExperience() {
 function enterDemo() {
   // Pre-populate with demo data
   AppState.user.name = 'Demo User';
-  AppState.user.values = ['🌟 Família', '📈 Crescimento', '💚 Saúde'];
+  AppState.user.values = ['\u{1F31F} Família', '\u{1F4C8} Crescimento', '\u{1F49A} Saúde'];
   AppState.user.lifeAreas = { saude: 7, carreira: 8, relacionamentos: 6, financas: 5, aprendizado: 9, lazer: 6 };
   AppState.user.lifeScore = 73;
   AppState.missions = [...MOCK_MISSIONS];
@@ -237,7 +237,7 @@ function enterDemo() {
   const splash = document.getElementById('screen-splash');
   splash.style.display = 'none';
   showAppShell();
-  showToast('success', '✨ Demo carregado!', 'Explore todas as funcionalidades do LifeOS.');
+  showToast('success', '\u{2728} Demo carregado!', 'Explore todas as funcionalidades do LifeOS.');
 }
 
 /* ============================================================
@@ -268,15 +268,15 @@ function renderOnboardingStep(stepIndex) {
         <p class="onboarding-subtitle">${step.subtitle}</p>
         <div class="flex-col gap-3" style="margin-top:var(--space-2);">
           <div class="flex-start gap-3" style="padding:var(--space-3);background:var(--surface-100);border-radius:var(--radius-xl);">
-            <span style="font-size:18px;">🧠</span>
+            <span style="font-size:18px;">\u{1F9E0}</span>
             <span style="font-size:var(--text-sm);color:var(--text-secondary);">IA que aprende com você</span>
           </div>
           <div class="flex-start gap-3" style="padding:var(--space-3);background:var(--surface-100);border-radius:var(--radius-xl);">
-            <span style="font-size:18px;">🔒</span>
+            <span style="font-size:18px;">\u{1F512}</span>
             <span style="font-size:var(--text-sm);color:var(--text-secondary);">100% privado — seus dados ficam com você</span>
           </div>
           <div class="flex-start gap-3" style="padding:var(--space-3);background:var(--surface-100);border-radius:var(--radius-xl);">
-            <span style="font-size:18px;">⚡</span>
+            <span style="font-size:18px;">\u{26A1}</span>
             <span style="font-size:var(--text-sm);color:var(--text-secondary);">Configuração em menos de 2 minutos</span>
           </div>
         </div>
@@ -382,7 +382,7 @@ function renderOnboardingStep(stepIndex) {
         <div class="flex-col gap-2" style="margin-top:var(--space-2);">
           ${AppState.user.values.slice(0,3).map(v => `
             <div class="flex-start gap-2">
-              <span style="color:var(--color-success-400);">✓</span>
+              <span style="color:var(--color-success-400);">\u{2713}</span>
               <span style="font-size:var(--text-sm);color:var(--text-secondary);">${v}</span>
             </div>
           `).join('')}
@@ -396,13 +396,13 @@ function renderOnboardingStep(stepIndex) {
       ${content}
       <div class="flex-between" style="margin-top:var(--space-6);gap:var(--space-3);">
         ${stepIndex > 0
-          ? `<button class="btn btn-ghost" onclick="renderOnboardingStep(${stepIndex - 1})">← Voltar</button>`
+          ? `<button class="btn btn-ghost" onclick="renderOnboardingStep(${stepIndex - 1})">\u{2190} Voltar</button>`
           : `<div></div>`
         }
         <button class="btn btn-primary ${step.type === 'complete' ? 'btn-lg' : ''}"
           onclick="${step.type === 'complete' ? 'completeOnboarding()' : `nextOnboardingStep(${stepIndex})`}"
           style="${step.type !== 'complete' ? '' : 'flex:1;'}">
-          ${step.type === 'complete' ? '🚀 Entrar no LifeOS' : 'Continuar →'}
+          ${step.type === 'complete' ? '\u{1F680} Entrar no LifeOS' : 'Continuar \u{2192}'}
         </button>
       </div>
     </div>
@@ -480,7 +480,7 @@ function completeOnboarding() {
   onboarding.style.display = 'none';
 
   showAppShell();
-  showToast('success', '🎉 Bem-vindo ao LifeOS!', 'Sua experiência premium está pronta.');
+  showToast('success', '\u{1F389} Bem-vindo ao LifeOS!', 'Sua experiência premium está pronta.');
   if (window.Motion?.Haptic) window.Motion.Haptic.success();
   if (window.Motion?.Sound) window.Motion.Sound.success();
 }
@@ -583,7 +583,7 @@ function renderDashboard() {
   const name = AppState.user.name !== 'Usuário' ? `, ${AppState.user.name.split(' ')[0]}` : '';
 
   const greetingEl = document.getElementById('dashboard-greeting');
-  if (greetingEl) greetingEl.textContent = `${greeting}${name} 👋`;
+  if (greetingEl) greetingEl.textContent = `${greeting}${name} \u{1F44B}`;
 
   const dateEl = document.getElementById('dashboard-date');
   if (dateEl) {
@@ -698,7 +698,7 @@ function renderDashboardMissions() {
   if (!active.length) {
     container.innerHTML = `
       <div class="empty-state" style="padding:var(--space-8);">
-        <div class="empty-state-icon">🎯</div>
+        <div class="empty-state-icon">\u{1F3AF}</div>
         <div class="empty-state-title">Nenhuma missão ainda</div>
         <div class="empty-state-description">Crie sua primeira missão para começar.</div>
       </div>
@@ -711,14 +711,14 @@ function renderDashboardMissions() {
     relacionamentos: '#EF4444', aprendizado: '#8B5CF6', pessoal: '#EC4899'
   };
   const categoryIcons = {
-    carreira: '🚀', saude: '💪', financas: '💰',
-    relacionamentos: '❤️', aprendizado: '📚', pessoal: '✨'
+    carreira: '\u{1F680}', saude: '\u{1F4AA}', financas: '\u{1F4B0}',
+    relacionamentos: '\u{2764}\u{FE0F}', aprendizado: '\u{1F4DA}', pessoal: '\u{2728}'
   };
 
   container.innerHTML = active.map(m => `
     <div class="mission-item animate-fade-in" onclick="showView('missions')">
       <div class="mission-item-icon" style="background:${categoryColors[m.category] || '#6366F1'}22;">
-        ${categoryIcons[m.category] || '🎯'}
+        ${categoryIcons[m.category] || '\u{1F3AF}'}
       </div>
       <div class="mission-item-content">
         <div class="mission-item-title">${m.title}</div>
@@ -769,8 +769,8 @@ function renderMissions(filter = 'all') {
     relacionamentos: '#EF4444', aprendizado: '#8B5CF6', pessoal: '#EC4899'
   };
   const categoryIcons = {
-    carreira: '🚀', saude: '💪', financas: '💰',
-    relacionamentos: '❤️', aprendizado: '📚', pessoal: '✨'
+    carreira: '\u{1F680}', saude: '\u{1F4AA}', financas: '\u{1F4B0}',
+    relacionamentos: '\u{2764}\u{FE0F}', aprendizado: '\u{1F4DA}', pessoal: '\u{2728}'
   };
   const priorityBadge = {
     high: '<span class="badge badge-danger badge-sm">Alta</span>',
@@ -784,7 +784,7 @@ function renderMissions(filter = 'all') {
   if (!missions.length) {
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">🎯</div>
+        <div class="empty-state-icon">\u{1F3AF}</div>
         <div class="empty-state-title">Nenhuma missão encontrada</div>
         <div class="empty-state-description">Crie uma nova missão para começar.</div>
         <button class="btn btn-primary" onclick="openNewMissionModal()">+ Nova Missão</button>
@@ -802,7 +802,7 @@ function renderMissions(filter = 'all') {
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${categoryColors[m.category] || '#6366F1'};border-radius:var(--radius-full) var(--radius-full) 0 0;"></div>
       <div class="mission-card-header">
         <div class="mission-card-icon" style="background:${categoryColors[m.category] || '#6366F1'}22;">
-          ${categoryIcons[m.category] || '🎯'}
+          ${categoryIcons[m.category] || '\u{1F3AF}'}
         </div>
         <div class="mission-card-meta">
           <div class="mission-card-title">${m.title}</div>
@@ -851,12 +851,12 @@ function showMissionDetail(missionId) {
     relacionamentos: '#EF4444', aprendizado: '#8B5CF6', pessoal: '#EC4899'
   };
   const categoryIcons = {
-    carreira: '🚀', saude: '💪', financas: '💰',
-    relacionamentos: '❤️', aprendizado: '📚', pessoal: '✨'
+    carreira: '\u{1F680}', saude: '\u{1F4AA}', financas: '\u{1F4B0}',
+    relacionamentos: '\u{2764}\u{FE0F}', aprendizado: '\u{1F4DA}', pessoal: '\u{2728}'
   };
 
   const color = categoryColors[mission.category] || '#6366F1';
-  const icon = categoryIcons[mission.category] || '🎯';
+  const icon = categoryIcons[mission.category] || '\u{1F3AF}';
   const subtasks = mission.subtasks || [];
   const done = subtasks.filter(s => s.done).length;
 
@@ -890,7 +890,7 @@ function showMissionDetail(missionId) {
         <div class="mission-subtask ${st.done ? 'mission-subtask-done' : ''}"
              onclick="toggleSubtask(${mission.id}, ${st.id})"
              role="checkbox" aria-checked="${st.done}" tabindex="0">
-          <div class="mission-subtask-check">${st.done ? '✓' : ''}</div>
+          <div class="mission-subtask-check">${st.done ? '\u{2713}' : ''}</div>
           <div class="mission-subtask-text">${st.text}</div>
         </div>
       `).join('') : `
@@ -900,7 +900,7 @@ function showMissionDetail(missionId) {
       `}
       <div style="margin-top:var(--space-6);display:flex;gap:var(--space-2);">
         <button class="btn btn-primary btn-sm btn-full" onclick="showView('companion')">
-          🤖 Pedir ajuda ao Companion
+          \u{1F916} Pedir ajuda ao Companion
         </button>
       </div>
     </div>
@@ -929,7 +929,7 @@ function toggleSubtask(missionId, subtaskId) {
   renderMissions();
 
   if (subtask.done) {
-    showToast('success', '✓ Subtarefa concluída!', subtask.text);
+    showToast('success', '\u{2713} Subtarefa concluída!', subtask.text);
     if (window.Motion?.Haptic) window.Motion.Haptic.success();
     if (window.Motion?.Sound) window.Motion.Sound.success();
   } else {
@@ -950,7 +950,7 @@ function renderTimeline(filter = 'all') {
   if (!events.length) {
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">📅</div>
+        <div class="empty-state-icon">\u{1F4C5}</div>
         <div class="empty-state-title">Nenhum evento encontrado</div>
         <div class="empty-state-description">Adicione eventos à sua timeline de vida.</div>
       </div>
@@ -1032,7 +1032,7 @@ function renderCompanionMessages() {
   container.innerHTML = AppState.companionMessages.map(msg => `
     <div class="message-bubble message-bubble-${msg.role === 'ai' ? 'ai' : 'user'} animate-fade-in">
       <div class="message-bubble-avatar">
-        ${msg.role === 'ai' ? '🤖' : '👤'}
+        ${msg.role === 'ai' ? '\u{1F916}' : '\u{1F464}'}
       </div>
       <div class="message-content">
         <div class="message-text">${msg.text}</div>
@@ -1071,7 +1071,7 @@ function sendCompanionMessage() {
     typing.id = 'typing-indicator';
     typing.className = 'message-bubble message-bubble-ai animate-fade-in';
     typing.innerHTML = `
-      <div class="message-bubble-avatar">🤖</div>
+      <div class="message-bubble-avatar">\u{1F916}</div>
       <div class="message-content">
         <div class="message-text" style="padding:var(--space-3) var(--space-4);">
           <div class="typing-indicator">
@@ -1120,7 +1120,7 @@ function generateAIResponse(userText) {
     return `Seu Life Graph conecta todos os seus eventos, decisões e áreas da vida. Com ${AppState.timelineEvents.length} eventos na sua timeline, posso identificar padrões interessantes. Sua área mais forte é <strong>${LIFE_AREAS.find(a => AppState.user.lifeAreas[a.id] === Math.max(...Object.values(AppState.user.lifeAreas || {5:5})))?.name || 'Aprendizado'}</strong>.`;
   }
   if (lower.includes('obrigado') || lower.includes('valeu')) {
-    return `Fico feliz em ajudar! Estou sempre aqui quando precisar. Lembre-se: pequenas ações consistentes constroem grandes resultados. 🚀`;
+    return `Fico feliz em ajudar! Estou sempre aqui quando precisar. Lembre-se: pequenas ações consistentes constroem grandes resultados. \u{1F680}`;
   }
 
   const defaults = [
@@ -1177,7 +1177,7 @@ function renderBriefing() {
   container.innerHTML = `
     <div class="briefing-card animate-fade-in">
       <div class="briefing-header">
-        <div class="briefing-icon">⚡</div>
+        <div class="briefing-icon">\u{26A1}</div>
         <div>
           <div class="briefing-title">Life Score</div>
           <div class="briefing-time">Atualizado agora</div>
@@ -1203,7 +1203,7 @@ function renderBriefing() {
     </div>
 
     <div class="card animate-fade-in delay-100">
-      <div class="section-title" style="margin-bottom:var(--space-4);">🎯 Missões em Destaque</div>
+      <div class="section-title" style="margin-bottom:var(--space-4);">\u{1F3AF} Missões em Destaque</div>
       <div class="flex-col gap-3">
         ${active.slice(0,3).map(m => `
           <div class="mission-item">
@@ -1222,18 +1222,18 @@ function renderBriefing() {
     </div>
 
     <div class="card animate-fade-in delay-200">
-      <div class="section-title" style="margin-bottom:var(--space-4);">💡 Insights do Companion</div>
+      <div class="section-title" style="margin-bottom:var(--space-4);">\u{1F4A1} Insights do Companion</div>
       <div class="flex-col gap-3">
         <div class="insight-item">
-          <div class="insight-icon" style="background:rgba(99,102,241,0.12);">📈</div>
+          <div class="insight-icon" style="background:rgba(99,102,241,0.12);">\u{1F4C8}</div>
           <div class="insight-text">Você está consistente há 7 dias. Mantenha o ritmo para criar um hábito sólido.</div>
         </div>
         <div class="insight-item">
-          <div class="insight-icon" style="background:rgba(245,158,11,0.12);">⚠️</div>
+          <div class="insight-icon" style="background:rgba(245,158,11,0.12);">\u{26A0}\u{FE0F}</div>
           <div class="insight-text">Área de Finanças com score baixo. Considere revisar seu orçamento esta semana.</div>
         </div>
         <div class="insight-item">
-          <div class="insight-icon" style="background:rgba(16,185,129,0.12);">🎯</div>
+          <div class="insight-icon" style="background:rgba(16,185,129,0.12);">\u{1F3AF}</div>
           <div class="insight-text">Missão "Aprender TypeScript" está a 65% — você pode concluir em 2 semanas com foco.</div>
         </div>
       </div>
@@ -1242,10 +1242,10 @@ function renderBriefing() {
 }
 
 function refreshBriefing() {
-  showToast('info', '🔄 Atualizando briefing...', 'Analisando seus dados.');
+  showToast('info', '\u{1F504} Atualizando briefing...', 'Analisando seus dados.');
   setTimeout(() => {
     renderBriefing();
-    showToast('success', '✅ Briefing atualizado!', 'Dados mais recentes carregados.');
+    showToast('success', '\u{2705} Briefing atualizado!', 'Dados mais recentes carregados.');
   }, 1500);
 }
 
@@ -1397,7 +1397,7 @@ function createMission() {
     if (el) el.value = '';
   });
 
-  showToast('success', '🎯 Missão criada!', `"${title}" foi adicionada às suas missões.`);
+  showToast('success', '\u{1F3AF} Missão criada!', `"${title}" foi adicionada às suas missões.`);
   if (window.Motion?.Haptic) window.Motion.Haptic.success();
   if (window.Motion?.Sound) window.Motion.Sound.success();
 
@@ -1519,9 +1519,9 @@ function confirmClearData() {
 }
 
 function generateLifeGraph() {
-  showToast('info', '🕸️ Gerando Life Graph...', 'Analisando suas conexões.');
+  showToast('info', '\u{1F578}\u{FE0F} Gerando Life Graph...', 'Analisando suas conexões.');
   setTimeout(() => {
-    showToast('success', '✅ Life Graph gerado!', 'Sua rede neural pessoal está pronta.');
+    showToast('success', '\u{2705} Life Graph gerado!', 'Sua rede neural pessoal está pronta.');
   }, 2000);
 }
 
@@ -1532,7 +1532,7 @@ function showToast(type, title, message, duration = 4000) {
   const container = document.getElementById('toast-container');
   if (!container) return;
 
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const icons = { success: '\u{2705}', error: '\u{274C}', warning: '\u{26A0}\u{FE0F}', info: '\u{2139}️' };
   const id = `toast-${Date.now()}`;
 
   const toast = document.createElement('div');
@@ -1540,12 +1540,12 @@ function showToast(type, title, message, duration = 4000) {
   toast.className = `toast toast-${type}`;
   toast.setAttribute('role', 'alert');
   toast.innerHTML = `
-    <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
+    <div class="toast-icon">${icons[type] || '\u{2139}️'}</div>
     <div class="toast-content">
       <div class="toast-title">${title}</div>
       ${message ? `<div class="toast-message">${message}</div>` : ''}
     </div>
-    <button class="toast-close" onclick="removeToast('${id}')" aria-label="Fechar notificação">×</button>
+    <button class="toast-close" onclick="removeToast('${id}')" aria-label="Fechar notificação">\u{D7}</button>
   `;
 
   container.appendChild(toast);

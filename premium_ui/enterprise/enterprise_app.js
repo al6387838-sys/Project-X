@@ -70,32 +70,32 @@
 
     return `
       <div class="alert-banner animate-slide-in-down">
-        <span class="alert-icon">◈</span>
+        <span class="alert-icon">\u{25C8}</span>
         <span class="alert-text"><strong>Companion:</strong> ${insights.length > 0 ? `${insights[0].title}. Impacto: ${String(insights[0].impact || insights[0].severity || 'medium').toUpperCase()}.` : 'Ambiente operacional estável e seguro.'}</span>
-        <span class="alert-action" onclick="window.enterpriseApp.render('intelligence')">Revisar insights →</span>
+        <span class="alert-action" onclick="window.enterpriseApp.render('intelligence')">Revisar insights \u{2192}</span>
       </div>
       <div class="section-header"><span class="section-title">Métricas Executivas</span><span class="section-action">Dados em tempo real</span></div>
       <div class="kpi-grid">
         <div class="kpi-card animate-fade-in" style="animation-delay: 0.1s">
-          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">◈</div><div class="kpi-trend up">↑ ${sys.uptime}%</div></div>
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{25C8}</div><div class="kpi-trend up">\u{2191} ${sys.uptime}%</div></div>
           <div class="kpi-value" style="background:var(--gradient-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.uptime}%</div>
           <div class="kpi-label">Uptime do Sistema</div>
           <div class="kpi-sub">Região: ${sys.region}</div>
         </div>
         <div class="kpi-card animate-fade-in" style="animation-delay: 0.2s">
-          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">◎</div><div class="kpi-trend up">Estável</div></div>
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{25CE}</div><div class="kpi-trend up">Estável</div></div>
           <div class="kpi-value" style="color:var(--success-500)">${sys.apiP95}ms</div>
           <div class="kpi-label">Latência p95</div>
           <div class="kpi-sub">Taxa de erro: ${sys.errorRate}%</div>
         </div>
         <div class="kpi-card animate-fade-in" style="animation-delay: 0.3s">
-          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">◇</div><div class="kpi-trend">${sub.plan}</div></div>
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{25C7}</div><div class="kpi-trend">${sub.plan}</div></div>
           <div class="kpi-value" style="color:var(--warning-500)">${state.data.members.length}</div>
           <div class="kpi-label">Membros Ativos</div>
           <div class="kpi-sub">Limite: ${sub.seats} assentos</div>
         </div>
         <div class="kpi-card animate-fade-in" style="animation-delay: 0.4s">
-          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(236,72,153,0.12)">◬</div><div class="kpi-trend">BRL</div></div>
+          <div class="kpi-header"><div class="kpi-icon" style="background:rgba(236,72,153,0.12)">\u{25EC}</div><div class="kpi-trend">BRL</div></div>
           <div class="kpi-value" style="color:var(--danger-400)">${money(sub.monthlyValue)}</div>
           <div class="kpi-label">MRR Consolidado</div>
           <div class="kpi-sub">Renovação: ${fmtDate(sub.renewalAt)}</div>

@@ -5,7 +5,7 @@
 <div class="page" id="page-kanban">
   <div class="page-header">
     <div>
-      <div class="page-title">📋 Kanban</div>
+      <div class="page-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Kanban</div>
       <div class="page-subtitle">Gerencie suas tarefas visualmente</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -16,96 +16,96 @@
         <option>Trabalho</option>
       </select>
       <button class="btn btn-ghost" onclick="showPage('gantt')">Gantt</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-task')">+ Tarefa</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 180px);overflow-x:auto">
     <!-- Coluna: Backlog -->
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--text-muted)">
-        <span>📥 Backlog</span><span class="kanban-count">5</span>
+        <span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Backlog</span><span class="kanban-count">5</span>
       </div>
       <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'backlog')">
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k1">
           <div class="kanban-card-title">Pesquisar concorrentes</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Pesquisa</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Sem prazo</span><span style="font-size:11px">👤 Eu</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Sem prazo</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
         </div>
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k2">
           <div class="kanban-card-title">Configurar CI/CD pipeline</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">Dev</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">20 Jul</span><span style="font-size:11px">👤 Carlos</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">20 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Carlos</span></div>
         </div>
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k3">
           <div class="kanban-card-title">Documentar API v2</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(245,158,11,0.15);color:var(--amber)">Docs</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">25 Jul</span><span style="font-size:11px">👤 Ana</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">25 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Ana</span></div>
         </div>
       </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <!-- Coluna: Em Progresso -->
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--accent)">
-        <span>🔄 Em Progresso</span><span class="kanban-count">3</span>
+        <span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Em Progresso</span><span class="kanban-count">3</span>
       </div>
       <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')">
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k4">
           <div class="kanban-card-title">Implementar módulo Finance</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Dev</span><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Urgente</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">15 Jul</span><span style="font-size:11px">👤 Eu</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">15 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
           <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:65%"></div></div>
           <div style="font-size:10px;color:var(--text-muted);margin-top:3px">65% concluído</div>
         </div>
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k5">
           <div class="kanban-card-title">Design da landing page v2</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(236,72,153,0.15);color:var(--pink)">Design</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">18 Jul</span><span style="font-size:11px">👤 Maria</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">18 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Maria</span></div>
           <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,var(--pink),#F472B6)"></div></div>
           <div style="font-size:10px;color:var(--text-muted);margin-top:3px">40% concluído</div>
         </div>
       </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <!-- Coluna: Revisão -->
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--amber)">
-        <span>👁️ Revisão</span><span class="kanban-count">2</span>
+        <span><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i> Revisão</span><span class="kanban-count">2</span>
       </div>
       <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')">
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k6">
           <div class="kanban-card-title">Testes de integração</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">QA</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">14 Jul</span><span style="font-size:11px">👤 Carlos</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">14 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Carlos</span></div>
         </div>
         <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k7">
           <div class="kanban-card-title">Revisão de segurança</div>
           <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Segurança</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">16 Jul</span><span style="font-size:11px">👤 Eu</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">16 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
         </div>
       </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <!-- Coluna: Concluído -->
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--green)">
-        <span>✅ Concluído</span><span class="kanban-count">8</span>
+        <span><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Concluído</span><span class="kanban-count">8</span>
       </div>
       <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')">
         <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k8">
           <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Setup do ambiente</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 10 Jul</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 10 Jul</span></div>
         </div>
         <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k9">
           <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Autenticação JWT</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 12 Jul</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 12 Jul</span></div>
         </div>
         <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k10">
           <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Deploy inicial</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)">✓ 13 Jul</span></div>
+          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 13 Jul</span></div>
         </div>
       </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')">+ Adicionar</button>
+      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
   </div>
 </div>
@@ -114,7 +114,7 @@
 <div class="page" id="page-gantt">
   <div class="page-header">
     <div>
-      <div class="page-title">📊 Gantt</div>
+      <div class="page-title"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Gantt</div>
       <div class="page-subtitle">Cronograma visual do projeto</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -123,7 +123,7 @@
         <option>Projeto Alpha</option>
         <option>Projeto Beta</option>
       </select>
-      <button class="btn btn-primary" onclick="openModal('modal-new-task')">+ Tarefa</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
   <div class="card" style="overflow-x:auto">
@@ -165,23 +165,23 @@
 <div class="page" id="page-crm">
   <div class="page-header">
     <div>
-      <div class="page-title">👥 CRM</div>
+      <div class="page-title"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> CRM</div>
       <div class="page-subtitle">Gestão de relacionamentos e pipeline</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('crm-pipeline')">Pipeline</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-contact')">+ Contato</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-contact')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Contato</button>
     </div>
   </div>
   <div class="grid-4" style="margin-bottom:20px">
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)">👥</div><div class="kpi-value">142</div><div class="kpi-label">Contatos</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">💼</div><div class="kpi-value">28</div><div class="kpi-label">Oportunidades</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)">💰</div><div class="kpi-value">R$ 480k</div><div class="kpi-label">Pipeline Total</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)">🏆</div><div class="kpi-value">R$ 120k</div><div class="kpi-label">Fechado no Mês</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">142</div><div class="kpi-label">Contatos</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">28</div><div class="kpi-label">Oportunidades</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">R$ 480k</div><div class="kpi-label">Pipeline Total</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">R$ 120k</div><div class="kpi-label">Fechado no Mês</div></div>
   </div>
   <div class="card">
     <div style="display:flex;gap:8px;margin-bottom:16px">
-      <input type="text" class="form-input" placeholder="🔍 Buscar contatos..." style="flex:1" />
+      <input type="text" class="form-input" placeholder=" Buscar contatos..." style="flex:1" />
       <select class="form-input" style="width:auto">
         <option>Todos os status</option>
         <option>Lead</option>
@@ -226,20 +226,20 @@
 <div class="page" id="page-crm-pipeline">
   <div class="page-header">
     <div>
-      <div class="page-title">💼 Pipeline de Vendas</div>
+      <div class="page-title"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Pipeline de Vendas</div>
       <div class="page-subtitle">Acompanhe suas oportunidades</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('crm')">← CRM</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-opportunity')">+ Oportunidade</button>
+      <button class="btn btn-ghost" onclick="showPage('crm')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> CRM</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-opportunity')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Oportunidade</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;height:calc(100vh - 180px);overflow-x:auto">
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#6366F1"><span>🎯 Lead</span><span class="kanban-count">8</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Corp Brasil — Sistema ERP</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 80.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">João Silva</span><span style="font-size:11px;color:var(--text-muted)">20%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#F59E0B"><span>📞 Contato</span><span class="kanban-count">5</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Startup XYZ — App Mobile</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 28.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Carlos Mendes</span><span style="font-size:11px;color:var(--text-muted)">40%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#06B6D4"><span>📋 Proposta</span><span class="kanban-count">7</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Tech Corp — Consultoria</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 55.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Maria Santos</span><span style="font-size:11px;color:var(--text-muted)">60%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span>🤝 Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Ana Costa</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#10B981"><span>🏆 Fechado</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card done"><div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Global Inc — Plataforma</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 120.000</div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#6366F1"><span><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Lead</span><span class="kanban-count">8</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Corp Brasil — Sistema ERP</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 80.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">João Silva</span><span style="font-size:11px;color:var(--text-muted)">20%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#F59E0B"><span><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i> Contato</span><span class="kanban-count">5</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Startup XYZ — App Mobile</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 28.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Carlos Mendes</span><span style="font-size:11px;color:var(--text-muted)">40%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#06B6D4"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Proposta</span><span class="kanban-count">7</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Tech Corp — Consultoria</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 55.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Maria Santos</span><span style="font-size:11px;color:var(--text-muted)">60%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span><i data-lucide="handshake" class="pg-icon" aria-hidden="true"></i> Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Ana Costa</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#10B981"><span><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Fechado</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card done"><div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Global Inc — Plataforma</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 120.000</div></div></div></div>
   </div>
 </div>
 
@@ -247,51 +247,51 @@
 <div class="page" id="page-wiki">
   <div class="page-header">
     <div>
-      <div class="page-title">📚 Wiki</div>
+      <div class="page-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Wiki</div>
       <div class="page-subtitle">Base de conhecimento pessoal e corporativa</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="openModal('modal-new-wiki-page')">+ Nova Página</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-wiki-page')">✏️ Editar</button>
+      <button class="btn btn-ghost" onclick="openModal('modal-new-wiki-page')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-wiki-page')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:240px 1fr;gap:16px;height:calc(100vh - 160px)">
     <!-- Sidebar Wiki -->
     <div class="card" style="overflow-y:auto;padding:12px">
-      <input type="text" class="form-input" placeholder="🔍 Buscar..." style="width:100%;margin-bottom:12px;font-size:12px" />
+      <input type="text" class="form-input" placeholder=" Buscar..." style="width:100%;margin-bottom:12px;font-size:12px" />
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Espaços</div>
-      <div class="wiki-nav-item active" onclick="wikiOpen('home')">🏠 Início</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('work')">💼 Trabalho</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('personal')">👤 Pessoal</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('projects')">🚀 Projetos</div>
+      <div class="wiki-nav-item active" onclick="wikiOpen('home')"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Início</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('work')"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Trabalho</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('personal')"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Pessoal</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('projects')"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i> Projetos</div>
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin:12px 0 8px">Páginas Recentes</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('setup')">📄 Setup do Ambiente</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('api')">📄 Documentação API</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('onboarding')">📄 Onboarding</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('processes')">📄 Processos</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('setup')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Setup do Ambiente</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('api')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Documentação API</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('onboarding')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Onboarding</div>
+      <div class="wiki-nav-item" onclick="wikiOpen('processes')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Processos</div>
     </div>
     <!-- Conteúdo Wiki -->
     <div class="card" style="overflow-y:auto" id="wiki-content">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div>
-          <div style="font-size:24px;font-weight:800;margin-bottom:4px">🏠 Início — Wiki LifeOS</div>
+          <div style="font-size:24px;font-weight:800;margin-bottom:4px"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Início — Wiki LifeOS</div>
           <div style="font-size:12px;color:var(--text-muted)">Atualizado: 14 Jul 2026 · por Você</div>
         </div>
-        <button class="btn btn-ghost" onclick="showToast('Modo de edição ativado','info')">✏️ Editar</button>
+        <button class="btn btn-ghost" onclick="showToast('Modo de edição ativado','info')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button>
       </div>
       <div style="line-height:1.8;color:var(--text-secondary)">
         <p>Bem-vindo à sua base de conhecimento pessoal. Aqui você pode documentar processos, ideias, referências e qualquer informação importante.</p>
-        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px">📌 Páginas em Destaque</h3>
+        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px"><i data-lucide="pin" class="pg-icon" aria-hidden="true"></i> Páginas em Destaque</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
-          <div class="wiki-page-card" onclick="wikiOpen('setup')"><div style="font-size:20px;margin-bottom:6px">⚙️</div><div style="font-weight:600;font-size:13px">Setup do Ambiente</div><div style="font-size:11px;color:var(--text-muted)">Configuração completa do ambiente de desenvolvimento</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('api')"><div style="font-size:20px;margin-bottom:6px">🔌</div><div style="font-weight:600;font-size:13px">Documentação API</div><div style="font-size:11px;color:var(--text-muted)">Endpoints, autenticação e exemplos de uso</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('onboarding')"><div style="font-size:20px;margin-bottom:6px">🚀</div><div style="font-weight:600;font-size:13px">Onboarding</div><div style="font-size:11px;color:var(--text-muted)">Guia de integração para novos membros</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('processes')"><div style="font-size:20px;margin-bottom:6px">📋</div><div style="font-weight:600;font-size:13px">Processos</div><div style="font-size:11px;color:var(--text-muted)">Fluxos e procedimentos operacionais</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('setup')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Setup do Ambiente</div><div style="font-size:11px;color:var(--text-muted)">Configuração completa do ambiente de desenvolvimento</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('api')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Documentação API</div><div style="font-size:11px;color:var(--text-muted)">Endpoints, autenticação e exemplos de uso</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('onboarding')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Onboarding</div><div style="font-size:11px;color:var(--text-muted)">Guia de integração para novos membros</div></div>
+          <div class="wiki-page-card" onclick="wikiOpen('processes')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Processos</div><div style="font-size:11px;color:var(--text-muted)">Fluxos e procedimentos operacionais</div></div>
         </div>
-        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px">📅 Atividade Recente</h3>
+        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Atividade Recente</h3>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span>📝</span><div><div style="font-size:13px;font-weight:600">Documentação API atualizada</div><div style="font-size:11px;color:var(--text-muted)">Hoje, 10:30</div></div></div>
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span>➕</span><div><div style="font-size:13px;font-weight:600">Nova página: Processos de Deploy</div><div style="font-size:11px;color:var(--text-muted)">Ontem, 15:20</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i></span><div><div style="font-size:13px;font-weight:600">Documentação API atualizada</div><div style="font-size:11px;color:var(--text-muted)">Hoje, 10:30</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></span><div><div style="font-size:13px;font-weight:600">Nova página: Processos de Deploy</div><div style="font-size:11px;color:var(--text-muted)">Ontem, 15:20</div></div></div>
         </div>
       </div>
     </div>

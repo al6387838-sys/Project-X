@@ -195,37 +195,37 @@
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">Requisições / min</div><div class="metric-period">Última hora</div></div>
         <div class="metric-value" style="color:var(--cyan)">4,287</div>
-        <div class="metric-change up">↑ +12.4% vs ontem</div>
+        <div class="metric-change up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +12.4% vs ontem</div>
         <div class="sparkline" id="spark1"></div>
       </div>
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">Latência P95</div><div class="metric-period">Última hora</div></div>
         <div class="metric-value" style="color:var(--green)">142ms</div>
-        <div class="metric-change up">↓ -8ms vs ontem</div>
+        <div class="metric-change up"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> -8ms vs ontem</div>
         <div class="sparkline" id="spark2"></div>
       </div>
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">Taxa de Erro</div><div class="metric-period">Última hora</div></div>
         <div class="metric-value" style="color:var(--amber)">0.12%</div>
-        <div class="metric-change down">↑ +0.02% vs ontem</div>
+        <div class="metric-change down"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +0.02% vs ontem</div>
         <div class="sparkline" id="spark3"></div>
       </div>
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">Usuários Ativos</div><div class="metric-period">Agora</div></div>
         <div class="metric-value" style="color:var(--accent)">1,847</div>
-        <div class="metric-change up">↑ +234 vs ontem</div>
+        <div class="metric-change up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +234 vs ontem</div>
         <div class="sparkline" id="spark4"></div>
       </div>
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">CPU Usage</div><div class="metric-period">Agora</div></div>
         <div class="metric-value" style="color:var(--purple)">34%</div>
-        <div class="metric-change up">↓ -6% vs ontem</div>
+        <div class="metric-change up"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> -6% vs ontem</div>
         <div class="sparkline" id="spark5"></div>
       </div>
       <div class="metric-card">
         <div class="metric-header"><div class="metric-title">Memória</div><div class="metric-period">Agora</div></div>
         <div class="metric-value" style="color:var(--green)">2.1 GB</div>
-        <div class="metric-change up">↑ +0.2GB vs ontem</div>
+        <div class="metric-change up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +0.2GB vs ontem</div>
         <div class="sparkline" id="spark6"></div>
       </div>
     </div>
@@ -243,23 +243,23 @@
       <button class="btn-primary" style="padding:8px 16px;font-size:12px">Exportar</button>
     </div>
     <div class="log-container" id="logContainer">
-      <div class="log-line"><span class="log-time">14:32:01</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">POST /api/session → 200 OK (42ms) user=al6387838@gmail.com</span></div>
+      <div class="log-line"><span class="log-time">14:32:01</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">POST /api/session <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 200 OK (42ms) user=al6387838@gmail.com</span></div>
       <div class="log-line"><span class="log-time">14:32:00</span><span class="log-level info">INFO</span><span class="log-service">finance</span><span class="log-message">Transaction processed: R$2847.00 account=checking status=success</span></div>
       <div class="log-line"><span class="log-time">14:31:58</span><span class="log-level warn">WARN</span><span class="log-service">ai-engine</span><span class="log-message">Rate limit approaching: 847/1000 requests (84.7%) — throttling may occur</span></div>
       <div class="log-line"><span class="log-time">14:31:55</span><span class="log-level info">INFO</span><span class="log-service">auth</span><span class="log-message">Session validated: token=valid ttl=3600s ip=189.28.xx.xx</span></div>
       <div class="log-line"><span class="log-time">14:31:52</span><span class="log-level debug">DEBUG</span><span class="log-service">kv-store</span><span class="log-message">Cache HIT key=session:usr_01 latency=1.2ms</span></div>
       <div class="log-line"><span class="log-time">14:31:49</span><span class="log-level info">INFO</span><span class="log-service">notifications</span><span class="log-message">Email sent: type=daily_summary to=al6387838@gmail.com status=delivered</span></div>
       <div class="log-line"><span class="log-time">14:31:45</span><span class="log-level error">ERROR</span><span class="log-service">ai-engine</span><span class="log-message">OpenAI API timeout after 30000ms — retrying (attempt 2/3)</span></div>
-      <div class="log-line"><span class="log-time">14:31:44</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">GET /api/enterprise-data → 200 OK (18ms)</span></div>
+      <div class="log-line"><span class="log-time">14:31:44</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">GET /api/enterprise-data <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 200 OK (18ms)</span></div>
       <div class="log-line"><span class="log-time">14:31:40</span><span class="log-level info">INFO</span><span class="log-service">finance</span><span class="log-message">Open Finance sync completed: 3 accounts updated, 12 transactions imported</span></div>
       <div class="log-line"><span class="log-time">14:31:38</span><span class="log-level warn">WARN</span><span class="log-service">security</span><span class="log-message">Login attempt from new device: ip=200.175.xx.xx device=Firefox/Windows</span></div>
       <div class="log-line"><span class="log-time">14:31:35</span><span class="log-level info">INFO</span><span class="log-service">webhooks</span><span class="log-message">Webhook delivered: event=transaction.created endpoint=api.empresa.com status=200</span></div>
       <div class="log-line"><span class="log-time">14:31:30</span><span class="log-level debug">DEBUG</span><span class="log-service">cdn</span><span class="log-message">Cache MISS /app/index.html — fetching from origin, caching for 3600s</span></div>
-      <div class="log-line"><span class="log-time">14:31:28</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">POST /api/admin-session → 200 OK (35ms)</span></div>
+      <div class="log-line"><span class="log-time">14:31:28</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">POST /api/admin-session <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 200 OK (35ms)</span></div>
       <div class="log-line"><span class="log-time">14:31:25</span><span class="log-level info">INFO</span><span class="log-service">billing</span><span class="log-message">Invoice generated: inv_2026071501 amount=R$299.00 plan=enterprise</span></div>
       <div class="log-line"><span class="log-time">14:31:20</span><span class="log-level error">ERROR</span><span class="log-service">ai-engine</span><span class="log-message">OpenAI API timeout — retry successful on attempt 2 (latency=8420ms)</span></div>
       <div class="log-line"><span class="log-time">14:31:15</span><span class="log-level info">INFO</span><span class="log-service">auth</span><span class="log-message">2FA verification success: user=al6387838@gmail.com method=totp</span></div>
-      <div class="log-line"><span class="log-time">14:31:10</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">GET /health → 200 OK (3ms) all_services=healthy</span></div>
+      <div class="log-line"><span class="log-time">14:31:10</span><span class="log-level info">INFO</span><span class="log-service">api-gateway</span><span class="log-message">GET /health <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 200 OK (3ms) all_services=healthy</span></div>
     </div>
   </div>
 
@@ -267,11 +267,11 @@
   <div id="panel-alerts" class="obs-panel">
     <div class="section-toolbar">
       <h3>Alertas Ativos</h3>
-      <button class="btn-primary">+ Criar Alerta</button>
+      <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar Alerta</button>
     </div>
     <div class="alert-list">
       <div class="alert-item warning">
-        <div class="alert-icon">⚠️</div>
+        <div class="alert-icon"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></div>
         <div class="alert-content">
           <div class="alert-title">AI Engine — Rate Limit Próximo</div>
           <div class="alert-desc">O AI Engine está em 84.7% do limite de requisições por hora. Pode haver throttling em breve.</div>
@@ -287,7 +287,7 @@
         </div>
       </div>
       <div class="alert-item critical">
-        <div class="alert-icon">🔴</div>
+        <div class="alert-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div class="alert-content">
           <div class="alert-title">AI Engine — Timeout Detectado</div>
           <div class="alert-desc">2 timeouts na API OpenAI nos últimos 5 minutos. Retry automático ativo, mas latência elevada.</div>
@@ -303,7 +303,7 @@
         </div>
       </div>
       <div class="alert-item info">
-        <div class="alert-icon">ℹ️</div>
+        <div class="alert-icon"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i>️</div>
         <div class="alert-content">
           <div class="alert-title">Novo Dispositivo Detectado</div>
           <div class="alert-desc">Login de novo dispositivo: Firefox/Windows 11 — IP 200.175.xx.xx (Campinas, BR).</div>
@@ -319,7 +319,7 @@
         </div>
       </div>
       <div class="alert-item resolved">
-        <div class="alert-icon">✅</div>
+        <div class="alert-icon"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
         <div class="alert-content">
           <div class="alert-title">Finance Sync — Atraso Resolvido</div>
           <div class="alert-desc">Sincronização do Open Finance atrasou 4 min. Resolvido automaticamente às 14:28.</div>
@@ -340,7 +340,7 @@
   <div id="panel-performance" class="obs-panel">
     <div class="perf-grid">
       <div class="perf-card">
-        <div class="perf-title">⚡ Latência por Endpoint</div>
+        <div class="perf-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Latência por Endpoint</div>
         <div class="perf-metric-row">
           <div class="perf-metric-name">GET /api/session</div>
           <div style="display:flex;align-items:center;gap:10px">
@@ -378,7 +378,7 @@
         </div>
       </div>
       <div class="perf-card">
-        <div class="perf-title">🖥️ Recursos do Sistema</div>
+        <div class="perf-title"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i> Recursos do Sistema</div>
         <div class="perf-metric-row">
           <div class="perf-metric-name">CPU Usage</div>
           <div style="display:flex;align-items:center;gap:10px">

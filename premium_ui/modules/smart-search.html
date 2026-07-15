@@ -92,26 +92,26 @@
 <body>
   <!-- SEARCH BAR -->
   <div class="ss-bar-wrap">
-    <span class="ss-bar-icon">🔍</span>
+    <span class="ss-bar-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></span>
     <input class="ss-bar" id="ss-input" type="text" placeholder="Buscar em tudo: usuários, documentos, tarefas, módulos..." autocomplete="off" />
     <span class="ss-shortcut" id="ss-shortcut-hint">⌘K</span>
-    <button class="ss-bar-clear" id="ss-clear" onclick="clearSearch()" title="Limpar">✕</button>
+    <button class="ss-bar-clear" id="ss-clear" onclick="clearSearch()" title="Limpar"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
   </div>
 
   <!-- FILTERS -->
   <div class="ss-filters" id="ss-filters">
     <button class="ss-filter active" data-filter="all" onclick="setFilter('all', this)">Tudo <span class="ss-filter-count" id="fc-all">0</span></button>
-    <button class="ss-filter" data-filter="users" onclick="setFilter('users', this)">👤 Usuários</button>
-    <button class="ss-filter" data-filter="orgs" onclick="setFilter('orgs', this)">🏢 Organizações</button>
-    <button class="ss-filter" data-filter="workspaces" onclick="setFilter('workspaces', this)">📁 Workspaces</button>
-    <button class="ss-filter" data-filter="documents" onclick="setFilter('documents', this)">📄 Documentos</button>
-    <button class="ss-filter" data-filter="tasks" onclick="setFilter('tasks', this)">✅ Tarefas</button>
-    <button class="ss-filter" data-filter="habits" onclick="setFilter('habits', this)">🔄 Hábitos</button>
-    <button class="ss-filter" data-filter="goals" onclick="setFilter('goals', this)">🎯 Metas</button>
-    <button class="ss-filter" data-filter="audit" onclick="setFilter('audit', this)">🛡 Auditoria</button>
-    <button class="ss-filter" data-filter="notifications" onclick="setFilter('notifications', this)">🔔 Notificações</button>
-    <button class="ss-filter" data-filter="modules" onclick="setFilter('modules', this)">🧩 Módulos</button>
-    <button class="ss-filter" data-filter="settings" onclick="setFilter('settings', this)">⚙️ Configurações</button>
+    <button class="ss-filter" data-filter="users" onclick="setFilter('users', this)"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Usuários</button>
+    <button class="ss-filter" data-filter="orgs" onclick="setFilter('orgs', this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Organizações</button>
+    <button class="ss-filter" data-filter="workspaces" onclick="setFilter('workspaces', this)"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Workspaces</button>
+    <button class="ss-filter" data-filter="documents" onclick="setFilter('documents', this)"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Documentos</button>
+    <button class="ss-filter" data-filter="tasks" onclick="setFilter('tasks', this)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Tarefas</button>
+    <button class="ss-filter" data-filter="habits" onclick="setFilter('habits', this)"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Hábitos</button>
+    <button class="ss-filter" data-filter="goals" onclick="setFilter('goals', this)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Metas</button>
+    <button class="ss-filter" data-filter="audit" onclick="setFilter('audit', this)"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
+    <button class="ss-filter" data-filter="notifications" onclick="setFilter('notifications', this)"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i> Notificações</button>
+    <button class="ss-filter" data-filter="modules" onclick="setFilter('modules', this)"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i> Módulos</button>
+    <button class="ss-filter" data-filter="settings" onclick="setFilter('settings', this)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurações</button>
   </div>
 
   <!-- MAIN AREA -->
@@ -120,11 +120,11 @@
     <div class="ss-section" id="ss-recent-section">
       <div class="ss-section-title">Buscas recentes</div>
       <div class="ss-recent-tags" id="ss-recent-tags">
-        <span class="ss-recent-tag" onclick="fillSearch('relatório Q3')">🕐 relatório Q3</span>
-        <span class="ss-recent-tag" onclick="fillSearch('Ana Martins')">🕐 Ana Martins</span>
-        <span class="ss-recent-tag" onclick="fillSearch('projeto alpha')">🕐 projeto alpha</span>
-        <span class="ss-recent-tag" onclick="fillSearch('configurações de segurança')">🕐 configurações de segurança</span>
-        <span class="ss-recent-tag" onclick="fillSearch('fatura novembro')">🕐 fatura novembro</span>
+        <span class="ss-recent-tag" onclick="fillSearch('relatório Q3')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> relatório Q3</span>
+        <span class="ss-recent-tag" onclick="fillSearch('Ana Martins')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ana Martins</span>
+        <span class="ss-recent-tag" onclick="fillSearch('projeto alpha')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> projeto alpha</span>
+        <span class="ss-recent-tag" onclick="fillSearch('configurações de segurança')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> configurações de segurança</span>
+        <span class="ss-recent-tag" onclick="fillSearch('fatura novembro')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> fatura novembro</span>
       </div>
     </div>
 
@@ -133,17 +133,17 @@
       <div class="ss-section-title">Sugestões</div>
       <div class="ss-results">
         <div class="ss-result-item" onclick="navigateTo('modules')">
-          <div class="ss-result-icon" style="background:rgba(99,102,241,0.12)">🧩</div>
+          <div class="ss-result-icon" style="background:rgba(99,102,241,0.12)"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i></div>
           <div class="ss-result-content"><div class="ss-result-title">App Ecosystem</div><div class="ss-result-meta">Módulo · Gerenciar apps e integrações</div></div>
           <span class="ss-result-badge" style="background:rgba(16,185,129,0.1);color:var(--green)">Módulo</span>
         </div>
         <div class="ss-result-item" onclick="navigateTo('observability')">
-          <div class="ss-result-icon" style="background:rgba(6,182,212,0.1)">📊</div>
+          <div class="ss-result-icon" style="background:rgba(6,182,212,0.1)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
           <div class="ss-result-content"><div class="ss-result-title">Observability</div><div class="ss-result-meta">Módulo · Monitoramento e métricas</div></div>
           <span class="ss-result-badge" style="background:rgba(6,182,212,0.1);color:var(--cyan)">Módulo</span>
         </div>
         <div class="ss-result-item" onclick="navigateTo('settings')">
-          <div class="ss-result-icon" style="background:rgba(245,158,11,0.1)">⚙️</div>
+          <div class="ss-result-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div>
           <div class="ss-result-content"><div class="ss-result-title">Enterprise Settings</div><div class="ss-result-meta">Configurações · Segurança, API Keys, Webhooks</div></div>
           <span class="ss-result-badge" style="background:rgba(245,158,11,0.1);color:var(--amber)">Config</span>
         </div>
@@ -156,7 +156,7 @@
     <div class="ss-stats" id="ss-stats"></div>
     <div id="ss-results-list"></div>
     <div class="ss-keyboard-hints">
-      <div class="ss-hint"><span class="ss-key">↑↓</span> Navegar</div>
+      <div class="ss-hint"><span class="ss-key"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i></span> Navegar</div>
       <div class="ss-hint"><span class="ss-key">↵</span> Abrir</div>
       <div class="ss-hint"><span class="ss-key">Esc</span> Fechar</div>
       <div class="ss-hint"><span class="ss-key">⌘K</span> Busca rápida</div>
@@ -167,51 +167,51 @@
     // ── DATA INDEX ──────────────────────────────────────────────────
     const SEARCH_INDEX = [
       // Usuários
-      { id: 'u1', type: 'users', icon: '👤', title: 'Ana Martins', meta: 'Usuário · ana@empresa.com · Admin', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
-      { id: 'u2', type: 'users', icon: '👤', title: 'Carlos Pereira', meta: 'Usuário · carlos@empresa.com · Editor', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
-      { id: 'u3', type: 'users', icon: '👤', title: 'Mariana Silva', meta: 'Usuário · mariana@empresa.com · Viewer', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
+      { id: 'u1', type: 'users', icon: '\u{1F464}', title: 'Ana Martins', meta: 'Usuário · ana@empresa.com · Admin', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
+      { id: 'u2', type: 'users', icon: '\u{1F464}', title: 'Carlos Pereira', meta: 'Usuário · carlos@empresa.com · Editor', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
+      { id: 'u3', type: 'users', icon: '\u{1F464}', title: 'Mariana Silva', meta: 'Usuário · mariana@empresa.com · Viewer', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
       // Organizações
-      { id: 'o1', type: 'orgs', icon: '🏢', title: 'LifeOS Corp', meta: 'Organização · 12 membros · Plano Enterprise', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
-      { id: 'o2', type: 'orgs', icon: '🏢', title: 'Equipe de Produto', meta: 'Organização · 5 membros · Workspace Alpha', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
+      { id: 'o1', type: 'orgs', icon: '\u{1F3E2}', title: 'LifeOS Corp', meta: 'Organização · 12 membros · Plano Enterprise', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
+      { id: 'o2', type: 'orgs', icon: '\u{1F3E2}', title: 'Equipe de Produto', meta: 'Organização · 5 membros · Workspace Alpha', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
       // Workspaces
-      { id: 'w1', type: 'workspaces', icon: '📁', title: 'Workspace Alpha', meta: 'Workspace · 8 projetos · Ativo', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
-      { id: 'w2', type: 'workspaces', icon: '📁', title: 'Workspace Beta', meta: 'Workspace · 3 projetos · Em pausa', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
+      { id: 'w1', type: 'workspaces', icon: '\u{1F4C1}', title: 'Workspace Alpha', meta: 'Workspace · 8 projetos · Ativo', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
+      { id: 'w2', type: 'workspaces', icon: '\u{1F4C1}', title: 'Workspace Beta', meta: 'Workspace · 3 projetos · Em pausa', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
       // Documentos
-      { id: 'd1', type: 'documents', icon: '📄', title: 'Relatório Q3 2026', meta: 'Documento · Atualizado ontem · PDF', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
-      { id: 'd2', type: 'documents', icon: '📄', title: 'Plano de Marketing', meta: 'Documento · Atualizado há 3 dias · DOCX', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
-      { id: 'd3', type: 'documents', icon: '📝', title: 'Notas de Reunião — Sprint 12', meta: 'Nota · Criado hoje · Memory Center', badge: 'Nota', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'memory' },
-      { id: 'd4', type: 'documents', icon: '📄', title: 'Fatura Novembro 2025', meta: 'Documento · Financeiro · R$2.847,00', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'finance' },
+      { id: 'd1', type: 'documents', icon: '\u{1F4C4}', title: 'Relatório Q3 2026', meta: 'Documento · Atualizado ontem · PDF', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
+      { id: 'd2', type: 'documents', icon: '\u{1F4C4}', title: 'Plano de Marketing', meta: 'Documento · Atualizado há 3 dias · DOCX', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
+      { id: 'd3', type: 'documents', icon: '\u{1F4DD}', title: 'Notas de Reunião — Sprint 12', meta: 'Nota · Criado hoje · Memory Center', badge: 'Nota', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'memory' },
+      { id: 'd4', type: 'documents', icon: '\u{1F4C4}', title: 'Fatura Novembro 2025', meta: 'Documento · Financeiro · R$2.847,00', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'finance' },
       // Tarefas
-      { id: 't1', type: 'tasks', icon: '✅', title: 'Implementar autenticação 2FA', meta: 'Tarefa · Projeto Alpha · Alta prioridade', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'projects' },
-      { id: 't2', type: 'tasks', icon: '✅', title: 'Revisar relatório Q3', meta: 'Tarefa · Hoje · Pendente', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'agenda' },
-      { id: 't3', type: 'tasks', icon: '✅', title: 'Correr 5km', meta: 'Tarefa · Meta: Correr 100km · Hábito', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'habits' },
-      { id: 't4', type: 'tasks', icon: '✅', title: 'Ler capítulo 7 — Atomic Habits', meta: 'Tarefa · Meta: Ler 24 livros · Hoje', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'goals' },
+      { id: 't1', type: 'tasks', icon: '\u{2705}', title: 'Implementar autenticação 2FA', meta: 'Tarefa · Projeto Alpha · Alta prioridade', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'projects' },
+      { id: 't2', type: 'tasks', icon: '\u{2705}', title: 'Revisar relatório Q3', meta: 'Tarefa · Hoje · Pendente', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'agenda' },
+      { id: 't3', type: 'tasks', icon: '\u{2705}', title: 'Correr 5km', meta: 'Tarefa · Meta: Correr 100km · Hábito', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'habits' },
+      { id: 't4', type: 'tasks', icon: '\u{2705}', title: 'Ler capítulo 7 — Atomic Habits', meta: 'Tarefa · Meta: Ler 24 livros · Hoje', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'goals' },
       // Hábitos
-      { id: 'h1', type: 'habits', icon: '🔄', title: 'Meditação 10 minutos', meta: 'Hábito · Streak 14 dias · Concluído hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
-      { id: 'h2', type: 'habits', icon: '💧', title: 'Hidratação 2 litros', meta: 'Hábito · Streak 3 dias · Pendente hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
+      { id: 'h1', type: 'habits', icon: '\u{1F504}', title: 'Meditação 10 minutos', meta: 'Hábito · Streak 14 dias · Concluído hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
+      { id: 'h2', type: 'habits', icon: '\u{1F4A7}', title: 'Hidratação 2 litros', meta: 'Hábito · Streak 3 dias · Pendente hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
       // Metas
-      { id: 'g1', type: 'goals', icon: '🎯', title: 'Correr 100 km', meta: 'Meta · 72% concluída · Prazo em 28 dias', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'goals' },
-      { id: 'g2', type: 'goals', icon: '💰', title: 'Economizar R$ 10 mil', meta: 'Meta financeira · 45% concluída', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'finance-goals' },
+      { id: 'g1', type: 'goals', icon: '\u{1F3AF}', title: 'Correr 100 km', meta: 'Meta · 72% concluída · Prazo em 28 dias', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'goals' },
+      { id: 'g2', type: 'goals', icon: '\u{1F4B0}', title: 'Economizar R$ 10 mil', meta: 'Meta financeira · 45% concluída', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'finance-goals' },
       // Auditoria
-      { id: 'a1', type: 'audit', icon: '🛡', title: 'Login administrativo aprovado', meta: 'Auditoria · admin@lifeos.io · MFA · Hoje 09:42', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'observability' },
-      { id: 'a2', type: 'audit', icon: '🔑', title: 'API key rotacionada', meta: 'Auditoria · Integrações · Ontem 18:10', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'enterprise-settings' },
+      { id: 'a1', type: 'audit', icon: '\u{1F6E1}', title: 'Login administrativo aprovado', meta: 'Auditoria · admin@lifeos.io · MFA · Hoje 09:42', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'observability' },
+      { id: 'a2', type: 'audit', icon: '\u{1F511}', title: 'API key rotacionada', meta: 'Auditoria · Integrações · Ontem 18:10', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'enterprise-settings' },
       // Notificações
-      { id: 'n1', type: 'notifications', icon: '🔔', title: 'AI Engine timeout detectado', meta: 'Notificação · Observability · Ontem 14:31', badge: 'Alerta', badgeColor: 'rgba(239,68,68,0.1)', badgeText: 'var(--red)', page: 'notifications' },
-      { id: 'n2', type: 'notifications', icon: '🔔', title: 'Novo membro adicionado ao workspace', meta: 'Notificação · Workspace Alpha · Hoje', badge: 'Info', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'notifications' },
-      { id: 'n3', type: 'notifications', icon: '🔔', title: 'Fatura processada com sucesso', meta: 'Notificação · Billing · Hoje 06:00', badge: 'Sucesso', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'billing' },
+      { id: 'n1', type: 'notifications', icon: '\u{1F514}', title: 'AI Engine timeout detectado', meta: 'Notificação · Observability · Ontem 14:31', badge: 'Alerta', badgeColor: 'rgba(239,68,68,0.1)', badgeText: 'var(--red)', page: 'notifications' },
+      { id: 'n2', type: 'notifications', icon: '\u{1F514}', title: 'Novo membro adicionado ao workspace', meta: 'Notificação · Workspace Alpha · Hoje', badge: 'Info', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'notifications' },
+      { id: 'n3', type: 'notifications', icon: '\u{1F514}', title: 'Fatura processada com sucesso', meta: 'Notificação · Billing · Hoje 06:00', badge: 'Sucesso', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'billing' },
       // Módulos
-      { id: 'm1', type: 'modules', icon: '🧩', title: 'App Ecosystem', meta: 'Módulo · Registry, Marketplace, Integrações', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'app-ecosystem' },
-      { id: 'm2', type: 'modules', icon: '🏠', title: 'Personal Hub', meta: 'Módulo · Centrais Financeira, IA, Produtividade', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'personal-hub' },
-      { id: 'm3', type: 'modules', icon: '📊', title: 'Observability', meta: 'Módulo · Logs, Métricas, Alertas, Health', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'observability' },
-      { id: 'm4', type: 'modules', icon: '💰', title: 'Finance', meta: 'Módulo · Contas, Cartões, Investimentos, PIX', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'finance' },
-      { id: 'm5', type: 'modules', icon: '🤖', title: 'Companion AI', meta: 'Módulo · Recomendações, planejamento e memória contextual', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'companion-ai' },
-      { id: 'm6', type: 'modules', icon: '🔗', title: 'Central de Integrações', meta: 'Módulo · Google, Microsoft, Slack, GitHub e webhooks', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'integration-center' },
+      { id: 'm1', type: 'modules', icon: '\u{1F9E9}', title: 'App Ecosystem', meta: 'Módulo · Registry, Marketplace, Integrações', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'app-ecosystem' },
+      { id: 'm2', type: 'modules', icon: '\u{1F3E0}', title: 'Personal Hub', meta: 'Módulo · Centrais Financeira, IA, Produtividade', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'personal-hub' },
+      { id: 'm3', type: 'modules', icon: '\u{1F4CA}', title: 'Observability', meta: 'Módulo · Logs, Métricas, Alertas, Health', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'observability' },
+      { id: 'm4', type: 'modules', icon: '\u{1F4B0}', title: 'Finance', meta: 'Módulo · Contas, Cartões, Investimentos, PIX', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'finance' },
+      { id: 'm5', type: 'modules', icon: '\u{1F916}', title: 'Companion AI', meta: 'Módulo · Recomendações, planejamento e memória contextual', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'companion-ai' },
+      { id: 'm6', type: 'modules', icon: '\u{1F517}', title: 'Central de Integrações', meta: 'Módulo · Google, Microsoft, Slack, GitHub e webhooks', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'integration-center' },
       // Configurações
-      { id: 's1', type: 'settings', icon: '🔐', title: 'Segurança — Autenticação 2FA', meta: 'Configuração · Enterprise Settings · Segurança', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's2', type: 'settings', icon: '🔑', title: 'API Keys', meta: 'Configuração · Enterprise Settings · Integrações', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's3', type: 'settings', icon: '🎨', title: 'Tema e Aparência', meta: 'Configuração · Dark mode, Cores, Tipografia', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'settings' },
-      { id: 's4', type: 'settings', icon: '🌐', title: 'Idioma e Região', meta: 'Configuração · Fuso horário, Formato de data', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's5', type: 'settings', icon: '🪝', title: 'Webhooks', meta: 'Configuração · Endpoints, Logs de entrega, Retry', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
+      { id: 's1', type: 'settings', icon: '\u{1F510}', title: 'Segurança — Autenticação 2FA', meta: 'Configuração · Enterprise Settings · Segurança', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
+      { id: 's2', type: 'settings', icon: '\u{1F511}', title: 'API Keys', meta: 'Configuração · Enterprise Settings · Integrações', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
+      { id: 's3', type: 'settings', icon: '\u{1F3A8}', title: 'Tema e Aparência', meta: 'Configuração · Dark mode, Cores, Tipografia', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'settings' },
+      { id: 's4', type: 'settings', icon: '\u{1F310}', title: 'Idioma e Região', meta: 'Configuração · Fuso horário, Formato de data', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
+      { id: 's5', type: 'settings', icon: '\u{1FA9D}', title: 'Webhooks', meta: 'Configuração · Endpoints, Logs de entrega, Retry', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
     ];
 
     // Contrato de provedores para expansão sem alterar a API pública da busca.
@@ -272,7 +272,7 @@
       // Update filter counts
       document.getElementById('fc-all').textContent = results.length;
       if (!results.length) {
-        listEl.innerHTML = `<div class="ss-empty"><div class="ss-empty-icon">🔍</div><div class="ss-empty-title">Nenhum resultado para "${q}"</div><div class="ss-empty-desc">Tente outros termos ou verifique os filtros ativos.</div></div>`;
+        listEl.innerHTML = `<div class="ss-empty"><div class="ss-empty-icon">\u{1F50D}</div><div class="ss-empty-title">Nenhum resultado para "${q}"</div><div class="ss-empty-desc">Tente outros termos ou verifique os filtros ativos.</div></div>`;
         return;
       }
       // Group by type
@@ -290,7 +290,7 @@
               <div class="ss-result-meta">${item.meta}</div>
             </div>
             <span class="ss-result-badge" style="background:${item.badgeColor};color:${item.badgeText}">${item.badge}</span>
-            <span class="ss-result-action">Abrir →</span>
+            <span class="ss-result-action">Abrir \u{2192}</span>
           </div>`;
         });
       });
@@ -365,7 +365,7 @@
     function renderRecentTags() {
       const container = document.getElementById('ss-recent-tags');
       if (recentSearches.length) {
-        container.innerHTML = recentSearches.map(r => `<span class="ss-recent-tag" onclick="fillSearch('${r.replace(/'/g, "\\'")}')">🕐 ${r}</span>`).join('');
+        container.innerHTML = recentSearches.map(r => `<span class="ss-recent-tag" onclick="fillSearch('${r.replace(/'/g, "\\'")}')">\u{1F550} ${r}</span>`).join('');
       }
     }
 

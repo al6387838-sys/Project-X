@@ -57,6 +57,7 @@
       .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body style="visibility:hidden">
 <script>
@@ -69,9 +70,9 @@
     <aside class="executive-sidebar">
       <div class="executive-sidebar-header"><div class="executive-sidebar-logo">L</div><div class="executive-sidebar-title">LifeOS</div></div>
       <nav class="executive-sidebar-nav">
-        <a href="#dashboard" class="executive-sidebar-item active" data-view="dashboard">📊 Dashboard</a>
-        <a href="#analytics" class="executive-sidebar-item" data-view="analytics">📈 Analytics</a>
-        <a href="/enterprise" class="executive-sidebar-item">← Voltar</a>
+        <a href="#dashboard" class="executive-sidebar-item active" data-view="dashboard"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Dashboard</a>
+        <a href="#analytics" class="executive-sidebar-item" data-view="analytics"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Analytics</a>
+        <a href="/enterprise" class="executive-sidebar-item"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</a>
       </nav>
     </aside>
     <div class="executive-main">
@@ -108,7 +109,7 @@
         const sys = state.data.system;
         return `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">💰 Receita & Faturamento</div>
+            <div class="dashboard-section-title">\u{1F4B0} Receita & Faturamento</div>
             <div class="kpi-grid">
               <div class="kpi-card">
                 <div class="kpi-header"><span class="kpi-label">MRR</span><span class="kpi-badge">Estável</span></div>
@@ -166,5 +167,6 @@
       init();
     })();
   </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

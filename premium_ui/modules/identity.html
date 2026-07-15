@@ -5,13 +5,13 @@
 <div class="page" id="page-identity">
   <div class="page-header">
     <div>
-      <div class="page-title">🔐 Identidade Digital</div>
+      <div class="page-title"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Identidade Digital</div>
       <div class="page-subtitle">Gestão de perfis, autenticação, dispositivos e segurança</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="identityToggleView('grid')">⊞</button>
-      <button class="btn btn-ghost" onclick="identityToggleView('list')">☰</button>
-      <button class="btn btn-primary" onclick="identityNewProfile()">+ Novo Perfil</button>
+      <button class="btn btn-ghost" onclick="identityToggleView('grid')" aria-label="Visualização em grade"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" onclick="identityToggleView('list')" aria-label="Visualização em lista"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-primary" onclick="identityNewProfile()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Perfil</button>
     </div>
   </div>
   <!-- Tabs -->
@@ -71,7 +71,7 @@
 
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative;cursor:pointer;border-style:dashed" onclick="identityNewProfile()">
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px 0">
-          <div style="font-size:32px;opacity:0.5">+</div>
+          <div style="font-size:32px;opacity:0.5"><i data-lucide="user-round-plus" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:14px;font-weight:600;color:var(--text-secondary)">Criar Novo Perfil</div>
           <div style="font-size:12px;color:var(--text-muted);text-align:center">Adicione um perfil pessoal ou workspace</div>
         </div>
@@ -87,16 +87,16 @@
     </div>
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="background:var(--bg-card);border:1px solid var(--border-accent);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
-        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">💻</div>
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
         <div style="flex:1">
-          <div style="font-size:14px;font-weight:600">MacBook Pro 16" <span style="color:var(--green);font-size:11px;margin-left:8px">● Atual</span></div>
+          <div style="font-size:14px;font-weight:600">MacBook Pro 16" <span style="color:var(--green);font-size:11px;margin-left:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Atual</span></div>
           <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Chrome 125 · IP 192.168.1.42</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Iniciada em 15 Jul 2026 09:32 · Duração: 6h 28m</div>
         </div>
         <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="identityCloseSession('macbook')">Encerrar</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
-        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">📱</div>
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:600">iPhone 15 Pro</div>
           <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Safari iOS · IP 192.168.1.42</div>
@@ -105,7 +105,7 @@
         <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="identityCloseSession('iphone')">Encerrar</button>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
-        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">🖥️</div>
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:600">iPad Air</div>
           <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Safari iPadOS · IP 192.168.1.55</div>
@@ -121,43 +121,43 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <div style="font-size:24px">💻</div>
+          <div style="font-size:24px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
           <div><div style="font-size:14px;font-weight:600">MacBook Pro 16"</div><div style="font-size:11px;color:var(--text-muted)">macOS Sonoma 14.5</div></div>
           <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Fingerprint</span><span style="color:var(--green)">✓ Registrado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Fingerprint</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Registrado</span></div>
           <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--text-secondary)">Não configurado</span></div>
           <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>15 Jul 09:32</span></div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <div style="font-size:24px">📱</div>
+          <div style="font-size:24px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
           <div><div style="font-size:14px;font-weight:600">iPhone 15 Pro</div><div style="font-size:11px;color:var(--text-muted)">iOS 17.5</div></div>
           <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)">✓ Configurado</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)">✓ Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Configurado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
           <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>14 Jul 07:15</span></div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <div style="font-size:24px">🖥️</div>
+          <div style="font-size:24px"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
           <div><div style="font-size:14px;font-weight:600">iPad Air</div><div style="font-size:11px;color:var(--text-muted)">iPadOS 17.5</div></div>
           <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)">✓ Configurado</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)">✓ Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Configurado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
           <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>13 Jul 14:20</span></div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;cursor:pointer;border-style:dashed" onclick="identityRegisterDevice()">
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px">
-          <div style="font-size:28px;opacity:0.5">+</div>
+          <div style="font-size:28px;opacity:0.5"><i data-lucide="monitor-smartphone" class="pg-icon" aria-hidden="true"></i></div>
           <div style="font-size:13px;font-weight:600;color:var(--text-secondary)">Registrar Dispositivo</div>
         </div>
       </div>
@@ -168,32 +168,32 @@
   <div id="identity-mfa-tab" style="display:none">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
-        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px">🔒 Métodos 2FA Ativos</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Métodos 2FA Ativos</div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid rgba(16,185,129,0.3)">
-            <div style="font-size:24px">📱</div>
+            <div style="font-size:24px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">TOTP (Authenticator)</div><div style="font-size:11px;color:var(--text-muted)">Google Authenticator · Configurado</div></div>
             <span style="font-size:11px;font-weight:700;color:var(--green);padding:3px 8px;background:rgba(16,185,129,0.15);border-radius:4px">ATIVO</span>
           </div>
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid rgba(16,185,129,0.3)">
-            <div style="font-size:24px">📲</div>
+            <div style="font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Push Notification</div><div style="font-size:11px;color:var(--text-muted)">iPhone 15 Pro · Configurado</div></div>
             <span style="font-size:11px;font-weight:700;color:var(--green);padding:3px 8px;background:rgba(16,185,129,0.15);border-radius:4px">ATIVO</span>
           </div>
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border)">
-            <div style="font-size:24px">🔑</div>
+            <div style="font-size:24px"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Security Key (FIDO2)</div><div style="font-size:11px;color:var(--text-muted)">Não configurado</div></div>
             <button class="btn btn-ghost" style="font-size:11px" onclick="identitySetupSecurityKey()">Configurar</button>
           </div>
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border)">
-            <div style="font-size:24px">💻</div>
+            <div style="font-size:24px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
             <div style="flex:1"><div style="font-size:13px;font-weight:600">Backup Codes</div><div style="font-size:11px;color:var(--text-muted)">10 códigos restantes</div></div>
             <button class="btn btn-ghost" style="font-size:11px" onclick="identityViewBackupCodes()">Ver</button>
           </div>
         </div>
       </div>
       <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
-        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px">🛡️ Configurações de Segurança</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Configurações de Segurança</div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
             <div><div style="font-size:13px;font-weight:600">2FA Obrigatório</div><div style="font-size:11px;color:var(--text-muted)">Exigir 2FA para todos os logins</div></div>
@@ -235,7 +235,7 @@
   <!-- AUDITORIA -->
   <div id="identity-audit-tab" style="display:none">
     <div style="margin-bottom:16px;display:flex;gap:8px">
-      <input type="text" class="form-input" placeholder="🔍 Filtrar auditoria..." style="flex:1;min-width:200px" />
+      <input type="text" class="form-input" placeholder=" Filtrar auditoria..." style="flex:1;min-width:200px" />
       <select class="form-input" style="width:auto">
         <option>Todos os tipos</option>
         <option>Login</option>
@@ -254,49 +254,49 @@
         <div>Login bem-sucedido — MacBook Pro</div>
         <div style="color:var(--text-muted)">192.168.1.42</div>
         <div>MacBook Pro 16"</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
         <div style="color:var(--text-muted)">09:30</div>
         <div>2FA verificado — TOTP</div>
         <div style="color:var(--text-muted)">192.168.1.42</div>
         <div>MacBook Pro 16"</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
         <div style="color:var(--text-muted)">Ontem</div>
         <div>Deploy v10.6.0 publicado</div>
         <div style="color:var(--text-muted)">192.168.1.42</div>
         <div>MacBook Pro 16"</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
         <div style="color:var(--text-muted)">2d</div>
         <div>Device registrado — iPad Air</div>
         <div style="color:var(--text-muted)">192.168.1.55</div>
         <div>iPad Air</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
         <div style="color:var(--text-muted)">3d</div>
         <div style="color:var(--amber)">Tentativa de login falha</div>
         <div style="color:var(--text-muted)">200.145.33.12</div>
         <div>Chrome 124</div>
-        <div style="color:var(--red);font-weight:600">✕ Falha</div>
+        <div style="color:var(--red);font-weight:600"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i> Falha</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
         <div style="color:var(--text-muted)">5d</div>
         <div>Integração Google Calendar</div>
         <div style="color:var(--text-muted)">192.168.1.42</div>
         <div>MacBook Pro 16"</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
       <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px">
         <div style="color:var(--text-muted)">7d</div>
         <div>2FA ativado — Push Notification</div>
         <div style="color:var(--text-muted)">192.168.1.42</div>
         <div>iPhone 15 Pro</div>
-        <div style="color:var(--green);font-weight:600">✓ OK</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
       </div>
     </div>
   </div>

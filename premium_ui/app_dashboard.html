@@ -1057,6 +1057,7 @@
       .onboarding-progress > span, .guided-tour-highlight, .guided-tour-overlay, .first-steps { transition: none; }
     }
   </style>
+  <link rel="stylesheet" href="/precision_graphite.css?v=11.2.0" data-visual-system="precision-graphite" />
 </head>
 <body>
 <div class="app-shell">
@@ -1064,7 +1065,7 @@
   <!-- ─── SIDEBAR ─── -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)">⚡</div>
+      <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
       <div style="flex:1;min-width:0">
         <div class="sidebar-title">LifeOS</div>
         <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v11.1</div>
@@ -1073,143 +1074,143 @@
     <nav class="sidebar-nav">
       <div class="nav-section-label">Principal</div>
       <div class="nav-item active" onclick="showPage('dashboard')">
-        <div class="nav-icon">🏠</div><span>Command Center</span>
+        <div class="nav-icon"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></div><span>Command Center</span>
       </div>
       <div class="nav-item" onclick="showPage('agenda')">
-        <div class="nav-icon">📅</div><span>Agenda</span>
+        <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Agenda</span>
       </div>
       <div class="nav-item" onclick="showPage('habits')">
-        <div class="nav-icon">🔄</div><span>Hábitos</span>
+        <div class="nav-icon"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div><span>Hábitos</span>
       </div>
       <div class="nav-item" onclick="showPage('goals')">
-        <div class="nav-icon">🎯</div><span>Metas</span>
+        <div class="nav-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><span>Metas</span>
       </div>
       <div class="nav-item" onclick="showPage('projects')">
-        <div class="nav-icon">🚀</div><span>Projetos</span>
+        <div class="nav-icon"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><span>Projetos</span>
       </div>
 
       <div class="nav-section-label">Inteligência</div>
       <div class="nav-item" onclick="showPage('ai')">
-        <div class="nav-icon">🤖</div><span>IA Insights</span>
+        <div class="nav-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><span>IA Insights</span>
       </div>
       <div class="nav-item" onclick="showPage('ai-daily')">
-        <div class="nav-icon">☀️</div><span>Resumo Diário</span>
+        <div class="nav-icon"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div><span>Resumo Diário</span>
       </div>
       <div class="nav-item" onclick="showPage('ai-weekly')">
-        <div class="nav-icon">📅</div><span>Resumo Semanal</span>
+        <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Resumo Semanal</span>
       </div>
       <div class="nav-item" onclick="showPage('ai-recommendations')">
-        <div class="nav-icon">💡</div><span>Recomendações</span>
+        <div class="nav-icon"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i></div><span>Recomendações</span>
       </div>
       <div class="nav-item" onclick="showPage('lifescore')">
-        <div class="nav-icon">📊</div><span>Life Score</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Life Score</span>
       </div>
       <div class="nav-item" onclick="showPage('timeline')">
-        <div class="nav-icon">⏱</div><span>Timeline</span>
+        <div class="nav-icon"><i data-lucide="timer" class="pg-icon" aria-hidden="true"></i></div><span>Timeline</span>
       </div>
       <div class="nav-item" onclick="showPage('memory')">
-        <div class="nav-icon">🧠</div><span>Memory Center</span>
+        <div class="nav-icon"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><span>Memory Center</span>
       </div>
 
       <div class="nav-section-label">Finanças</div>
       <div class="nav-item" onclick="showPage('finance')">
-        <div class="nav-icon">💰</div><span>Finance Hub</span>
+        <div class="nav-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div><span>Finance Hub</span>
       </div>
       <div class="nav-item" onclick="showPage('finance-goals')">
-        <div class="nav-icon">🎯</div><span>Metas Financeiras</span>
+        <div class="nav-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><span>Metas Financeiras</span>
       </div>
       <div class="nav-item" onclick="showPage('finance-cashflow')">
-        <div class="nav-icon">💹</div><span>Fluxo de Caixa</span>
+        <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Fluxo de Caixa</span>
       </div>
       <div class="nav-item" onclick="showPage('finance-budget')">
-        <div class="nav-icon">📊</div><span>Orçamento</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Orçamento</span>
       </div>
       <div class="nav-item" onclick="showPage('finance-openfinance')">
-        <div class="nav-icon">🔗</div><span>Open Finance</span>
+        <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Open Finance</span>
       </div>
       <div class="nav-section-label">Comunicação</div>
       <div class="nav-item" onclick="showPage('messages')">
-        <div class="nav-icon">💬</div><span>Mensagens</span>
+        <div class="nav-icon"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></div><span>Mensagens</span>
       </div>
       <div class="nav-item" onclick="showPage('email')">
-        <div class="nav-icon">📧</div><span>Email</span>
+        <div class="nav-icon"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div><span>Email</span>
       </div>
       <div class="nav-item" onclick="showPage('calendar')">
-        <div class="nav-icon">📅</div><span>Calendário</span>
+        <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Calendário</span>
       </div>
       <div class="nav-section-label">Produtividade</div>
       <div class="nav-item" onclick="showPage('kanban')">
-        <div class="nav-icon">📋</div><span>Kanban</span>
+        <div class="nav-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><span>Kanban</span>
       </div>
       <div class="nav-item" onclick="showPage('gantt')">
-        <div class="nav-icon">📊</div><span>Gantt</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Gantt</span>
       </div>
       <div class="nav-item" onclick="showPage('crm')">
-        <div class="nav-icon">👥</div><span>CRM</span>
+        <div class="nav-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div><span>CRM</span>
       </div>
       <div class="nav-item" onclick="showPage('wiki')">
-        <div class="nav-icon">📚</div><span>Wiki</span>
+        <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Wiki</span>
       </div>
       <div class="nav-section-label">Ferramentas</div>
       <div class="nav-item" onclick="showPage('documents')">
-        <div class="nav-icon">📁</div><span>Documentos</span>
+        <div class="nav-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div><span>Documentos</span>
       </div>
       <div class="nav-item" onclick="showPage('ai-center')">
-        <div class="nav-icon">🧠</div><span>IA Center</span>
+        <div class="nav-icon"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><span>IA Center</span>
       </div>
       <div class="nav-item" onclick="showPage('marketplace')">
-        <div class="nav-icon">🏪</div><span>Marketplace</span>
+        <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Marketplace</span>
       </div>
       <div class="nav-section-label">Ecossistema v9.5</div>
       <div class="nav-item" onclick="showPage('app-ecosystem')">
-        <div class="nav-icon">🧩</div><span>App Ecosystem</span>
+        <div class="nav-icon"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i></div><span>App Ecosystem</span>
       </div>
       <div class="nav-item" onclick="showPage('integration-center')">
-        <div class="nav-icon">🔗</div><span>Central de Integrações</span>
+        <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Central de Integrações</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <div class="nav-item" onclick="showPage('personal-hub')">
-        <div class="nav-icon">🏠</div><span>Personal Hub</span>
+        <div class="nav-icon"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></div><span>Personal Hub</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <div class="nav-item" onclick="showPage('observability')">
-        <div class="nav-icon">📊</div><span>Observability</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Observability</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <!-- ═══ ENTERPRISE v11 ═══ -->
       <div class="nav-section-label">Enterprise v11</div>
       <div class="nav-item" onclick="showPage('command-center')">
-        <div class="nav-icon">⚡</div><span>Command Center</span>
+        <div class="nav-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><span>Command Center</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <div class="nav-item" onclick="showPage('identity')">
-        <div class="nav-icon">🔐</div><span>Identidade Digital</span>
+        <div class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div><span>Identidade Digital</span>
       </div>
       <div class="nav-item" onclick="showPage('file-center')">
-        <div class="nav-icon">📁</div><span>File Center</span>
+        <div class="nav-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div><span>File Center</span>
       </div>
       <div class="nav-item" onclick="showPage('automation')">
-        <div class="nav-icon">🤖</div><span>Automation Studio</span>
+        <div class="nav-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><span>Automation Studio</span>
       </div>
       <div class="nav-item" onclick="showPage('analytics')">
-        <div class="nav-icon">📊</div><span>Analytics Center</span>
+        <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Analytics Center</span>
       </div>
       <div class="nav-section-label">Conta</div>
       <div class="nav-item" onclick="showPage('notifications')">
-        <div class="nav-icon">🔔</div><span>Notificações</span>
+        <div class="nav-icon"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></div><span>Notificações</span>
         <span class="nav-badge" id="notif-count">3</span>
       </div>
       <div class="nav-item" onclick="showPage('search')">
-        <div class="nav-icon">🔍</div><span>Busca Global</span>
+        <div class="nav-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div><span>Busca Global</span>
       </div>
       <div class="nav-item" onclick="showPage('profile')">
-        <div class="nav-icon">👤</div><span>Perfil</span>
+        <div class="nav-icon"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div><span>Perfil</span>
       </div>
       <div class="nav-item" onclick="showPage('settings')">
-        <div class="nav-icon">⚙️</div><span>Configurações</span>
+        <div class="nav-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><span>Configurações</span>
       </div>
       <div class="nav-item" onclick="showPage('billing')">
-        <div class="nav-icon">💳</div><span>Assinatura</span>
+        <div class="nav-icon"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><span>Assinatura</span>
       </div>
     </nav>
     <div class="sidebar-footer">
@@ -1228,7 +1229,7 @@
   <div class="main-area">
     <!-- TOPBAR -->
     <header class="topbar">
-      <button class="topbar-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <button class="topbar-toggle" onclick="toggleSidebar()" aria-label="Menu"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
       <div class="topbar-search" onclick="document.getElementById('global-search').focus()" style="cursor:text">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" placeholder="Buscar em tudo..." id="global-search" oninput="globalSearch(this.value)" />
@@ -1236,10 +1237,10 @@
       </div>
       <div class="topbar-right">
         <button class="topbar-btn" onclick="showPage('notifications')" aria-label="Notificações">
-          🔔
+          <i data-lucide="bell" class="pg-icon" aria-hidden="true"></i>
           <span class="topbar-notif-dot" id="notif-dot"></span>
         </button>
-        <button class="topbar-btn" onclick="doLogout()" aria-label="Sair" title="Sair">🚪</button>
+        <button class="topbar-btn" onclick="doLogout()" aria-label="Sair" title="Sair"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </header>
 
@@ -1257,7 +1258,7 @@
       <div class="page" id="page-agenda">
         <div class="page-header">
           <div><div class="page-title">Agenda</div><div class="page-subtitle">Planejamento diário e semanal</div></div>
-          <button class="btn btn-primary">+ Novo evento</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo evento</button>
         </div>
         <div class="grid-2">
           <div class="card">
@@ -1317,23 +1318,23 @@
       <div class="page" id="page-habits">
         <div class="page-header">
           <div><div class="page-title">Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
-          <button class="btn btn-primary">+ Novo hábito</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
         </div>
         <div class="grid-4" style="margin-bottom:20px">
-          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value">14d</div><div class="card-trend trend-up">🔥 Recorde!</div></div>
+          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value">14d</div><div class="card-trend trend-up"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> Recorde!</div></div>
           <div class="card"><div class="card-title">Taxa Hoje</div><div class="card-value">67%</div><div class="card-sub">4 de 6 completos</div></div>
-          <div class="card"><div class="card-title">Esta Semana</div><div class="card-value">89%</div><div class="card-trend trend-up">↑ +5% vs semana anterior</div></div>
+          <div class="card"><div class="card-title">Esta Semana</div><div class="card-value">89%</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +5% vs semana anterior</div></div>
           <div class="card"><div class="card-title">Total Hábitos</div><div class="card-value">6</div><div class="card-sub">Todos ativos</div></div>
         </div>
         <div class="card">
           <div class="card-title">Todos os Hábitos</div>
           <div style="margin-top:12px">
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">🧘 Meditação 10min</span><span class="habit-streak">🔥 14d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">🏃 Exercício físico</span><span class="habit-streak">🔥 7d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">📚 Leitura 30min</span><span class="habit-streak">🔥 21d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check">✓</div><span class="habit-name">✍️ Journaling</span><span class="habit-streak">🔥 5d</span></div>
-            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name">💧 Hidratação 2L</span><span class="habit-streak">🔥 3d</span></div>
-            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name">😴 Sono 8h</span><span class="habit-streak">🔥 2d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Meditação 10min</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Exercício físico</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 7d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Leitura 30min</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21d</span></div>
+            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Journaling</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 5d</span></div>
+            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Hidratação 2L</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3d</span></div>
+            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Sono 8h</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 2d</span></div>
           </div>
         </div>
       </div>
@@ -1342,25 +1343,25 @@
       <div class="page" id="page-goals">
         <div class="page-header">
           <div><div class="page-title">Metas</div><div class="page-subtitle">Objetivos e OKRs</div></div>
-          <button class="btn btn-primary">+ Nova meta</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova meta</button>
         </div>
         <div class="grid-3">
           <div class="card">
-            <div style="font-size:24px;margin-bottom:12px">🏃</div>
+            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
             <div style="font-size:15px;font-weight:700;margin-bottom:6px">Correr 100km</div>
             <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">72km completados · Prazo: Dez 2025</div>
             <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
             <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>72%</span><span>28km restantes</span></div>
           </div>
           <div class="card">
-            <div style="font-size:24px;margin-bottom:12px">📚</div>
+            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
             <div style="font-size:15px;font-weight:700;margin-bottom:6px">Ler 24 livros</div>
             <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">14 lidos · Prazo: Dez 2025</div>
             <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
             <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>58%</span><span>10 restantes</span></div>
           </div>
           <div class="card">
-            <div style="font-size:24px;margin-bottom:12px">💰</div>
+            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
             <div style="font-size:15px;font-weight:700;margin-bottom:6px">Economizar R$10k</div>
             <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">R$4.500 guardados · Prazo: Jun 2026</div>
             <div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
@@ -1373,12 +1374,12 @@
       <div class="page" id="page-projects">
         <div class="page-header">
           <div><div class="page-title">Projetos</div><div class="page-subtitle">Gerencie seus projetos</div></div>
-          <button class="btn btn-primary">+ Novo projeto</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo projeto</button>
         </div>
         <div class="grid-3">
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">💼</div><div><div style="font-size:14px;font-weight:700">Projeto Alpha</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">8 tarefas · 3 pendentes</div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">🌱</div><div><div style="font-size:14px;font-weight:700">Saúde & Bem-estar</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">12 tarefas · 2 pendentes</div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;font-size:18px">📈</div><div><div style="font-size:14px;font-weight:700">Finanças Pessoais</div><div style="font-size:11px;color:var(--text-muted)">Planejamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">5 tarefas · 4 pendentes</div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Projeto Alpha</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">8 tarefas · 3 pendentes</div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="sprout" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Saúde & Bem-estar</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">12 tarefas · 2 pendentes</div></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Finanças Pessoais</div><div style="font-size:11px;color:var(--text-muted)">Planejamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">5 tarefas · 4 pendentes</div></div>
         </div>
       </div>
 
@@ -1389,19 +1390,19 @@
         </div>
         <div style="display:flex;flex-direction:column;gap:16px">
           <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon">📊</div><div><div class="ai-insight-label">Produtividade</div></div></div>
+            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Produtividade</div></div></div>
             <div class="ai-insight-text">Seu pico de produtividade é entre 9h–11h. Você completa 87% das tarefas nesse período. Recomendo agendar suas atividades mais importantes nesse horário e protegê-lo de reuniões.</div>
           </div>
           <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon">🔄</div><div><div class="ai-insight-label">Hábitos</div></div></div>
+            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Hábitos</div></div></div>
             <div class="ai-insight-text">Você mantém uma taxa de 89% nos hábitos esta semana. O hábito de "Sono 8h" tem a menor consistência (2 dias). Dormir bem impacta diretamente seu Life Score — considere criar um ritual noturno.</div>
           </div>
           <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon">🎯</div><div><div class="ai-insight-label">Metas</div></div></div>
+            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Metas</div></div></div>
             <div class="ai-insight-text">Sua meta de "Correr 100km" está 3km atrás do ritmo ideal para o prazo. Adicionar uma corrida de 5km esta semana te colocará de volta no cronograma. Você consegue!</div>
           </div>
           <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon">⚡</div><div><div class="ai-insight-label">Life Score</div></div></div>
+            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Life Score</div></div></div>
             <div class="ai-insight-text">Seu Life Score de 87 está no top 15% dos usuários LifeOS. Para chegar a 90+, foque em melhorar a consistência do sono e adicionar um hábito de gratidão diária.</div>
           </div>
         </div>
@@ -1423,16 +1424,16 @@
               <div class="score-ring-value">87</div>
             </div>
             <div class="score-ring-label">Life Score Global</div>
-            <div class="card-trend trend-up" style="justify-content:center;margin-top:12px">↑ +3 esta semana</div>
+            <div class="card-trend trend-up" style="justify-content:center;margin-top:12px"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 esta semana</div>
           </div>
           <div class="card">
             <div class="card-title">Dimensões</div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🏃 Saúde</span><span style="font-weight:700">92</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>💼 Produtividade</span><span style="font-weight:700">88</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>💰 Finanças</span><span style="font-weight:700">75</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>❤️ Relacionamentos</span><span style="font-weight:700">85</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%;background:linear-gradient(90deg,var(--pink),#F9A8D4)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>🧠 Mente</span><span style="font-weight:700">90</span></div><div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,var(--purple),#C4B5FD)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</span><span style="font-weight:700">92</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Produtividade</span><span style="font-weight:700">88</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</span><span style="font-weight:700">75</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i> Relacionamentos</span><span style="font-weight:700">85</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%;background:linear-gradient(90deg,var(--pink),#F9A8D4)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i> Mente</span><span style="font-weight:700">90</span></div><div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,var(--purple),#C4B5FD)"></div></div></div>
             </div>
           </div>
         </div>
@@ -1445,12 +1446,12 @@
         </div>
         <div class="card">
           <div style="display:flex;flex-direction:column">
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title">✅ Hábito completado: Meditação 10min</div><div class="timeline-time">Hoje, 07:30</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title">✅ Hábito completado: Exercício físico</div><div class="timeline-time">Hoje, 06:45</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent)"></div><div class="timeline-content"><div class="timeline-title">🎯 Meta atualizada: Correr 100km (72km)</div><div class="timeline-time">Hoje, 06:50</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--amber)"></div><div class="timeline-content"><div class="timeline-title">📝 Nota adicionada: "Ideias para projeto"</div><div class="timeline-time">Ontem, 22:15</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--purple)"></div><div class="timeline-content"><div class="timeline-title">⚡ Life Score aumentou: 84 → 87</div><div class="timeline-time">Ontem, 20:00</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--cyan)"></div><div class="timeline-content"><div class="timeline-title">🔔 Streak de 14 dias alcançado!</div><div class="timeline-time">Ontem, 23:59</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito completado: Meditação 10min</div><div class="timeline-time">Hoje, 07:30</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito completado: Exercício físico</div><div class="timeline-time">Hoje, 06:45</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Meta atualizada: Correr 100km (72km)</div><div class="timeline-time">Hoje, 06:50</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--amber)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Nota adicionada: "Ideias para projeto"</div><div class="timeline-time">Ontem, 22:15</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--purple)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Life Score aumentou: 84 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 87</div><div class="timeline-time">Ontem, 20:00</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--cyan)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i> Streak de 14 dias alcançado!</div><div class="timeline-time">Ontem, 23:59</div></div></div>
           </div>
         </div>
       </div>
@@ -1459,12 +1460,12 @@
       <div class="page" id="page-memory">
         <div class="page-header">
           <div><div class="page-title">Memory Center</div><div class="page-subtitle">Capture e organize seu conhecimento</div></div>
-          <button class="btn btn-primary">+ Nova nota</button>
+          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova nota</button>
         </div>
         <div class="grid-3">
-          <div class="card"><div style="font-size:18px;margin-bottom:10px">💡</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Ideias para projeto</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Automatizar relatórios semanais com IA. Integrar com Google Sheets para exportar dados...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">Ontem, 22:15</div></div>
-          <div class="card"><div style="font-size:18px;margin-bottom:10px">📖</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Resumo: Atomic Habits</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Hábitos são compostos de: deixa, rotina, recompensa. A regra dos 2 minutos: se leva menos de 2 minutos, faça agora...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">3 dias atrás</div></div>
-          <div class="card"><div style="font-size:18px;margin-bottom:10px">🎯</div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Planejamento Q4</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Objetivos principais: finalizar projeto Alpha, atingir 90 no Life Score, economizar R$3k adicionais...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">1 semana atrás</div></div>
+          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Ideias para projeto</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Automatizar relatórios semanais com IA. Integrar com Google Sheets para exportar dados...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">Ontem, 22:15</div></div>
+          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="book-open" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Resumo: Atomic Habits</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Hábitos são compostos de: deixa, rotina, recompensa. A regra dos 2 minutos: se leva menos de 2 minutos, faça agora...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">3 dias atrás</div></div>
+          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Planejamento Q4</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Objetivos principais: finalizar projeto Alpha, atingir 90 no Life Score, economizar R$3k adicionais...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">1 semana atrás</div></div>
         </div>
       </div>
 
@@ -1473,8 +1474,8 @@
         <div class="page-header">
           <div><div class="page-title">Central de Notificações</div><div class="page-subtitle" id="nc-subtitle">Carregando...</div></div>
           <div style="display:flex;gap:8px">
-            <button class="btn btn-ghost" onclick="ncMarkAllRead()">✓ Marcar todas lidas</button>
-            <button class="btn btn-ghost" onclick="ncClearHistory()">🗑 Limpar histórico</button>
+            <button class="btn btn-ghost" onclick="ncMarkAllRead()"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Marcar todas lidas</button>
+            <button class="btn btn-ghost" onclick="ncClearHistory()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Limpar histórico</button>
           </div>
         </div>
         <div id="nc-container"></div>
@@ -1502,7 +1503,7 @@
           <div>
             <div class="profile-name" id="profile-name">Usuário</div>
             <div class="profile-email" id="profile-email">usuario@email.com</div>
-            <div class="profile-plan">⚡ Plano Pro</div>
+            <div class="profile-plan"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Plano Pro</div>
           </div>
         </div>
         <div class="grid-2">
@@ -1551,17 +1552,17 @@
           <div class="card">
             <div class="card-title">Segurança</div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <button class="btn btn-ghost" style="justify-content:flex-start">🔑 Alterar senha</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start">📱 Ativar MFA</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start">📋 Ver sessões ativas</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i> Alterar senha</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i> Ativar MFA</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Ver sessões ativas</button>
             </div>
           </div>
           <div class="card">
             <div class="card-title">Dados</div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <button class="btn btn-ghost" style="justify-content:flex-start">📤 Exportar dados</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start">🔄 Importar dados</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()">🚪 Sair da conta</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Exportar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Importar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i> Sair da conta</button>
             </div>
           </div>
         </div>
@@ -1589,7 +1590,7 @@
         <div class="grid-3">
           <div class="card"><div class="card-title">Uso do Mês</div><div style="display:flex;flex-direction:column;gap:10px;margin-top:8px"><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Hábitos</span><span>6 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Metas</span><span>3 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Notas</span><span>47 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div></div></div>
           <div class="card"><div class="card-title">Histórico</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jul 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jun 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Mai 2025</span><span>R$49,00</span></div></div></div>
-          <div class="card"><div class="card-title">Método de Pagamento</div><div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md)"><div style="font-size:24px">💳</div><div><div style="font-size:13px;font-weight:600">•••• •••• •••• 4242</div><div style="font-size:11px;color:var(--text-muted)">Expira 12/2027</div></div></div></div>
+          <div class="card"><div class="card-title">Método de Pagamento</div><div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md)"><div style="font-size:24px"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:13px;font-weight:600">•••• •••• •••• 4242</div><div style="font-size:11px;color:var(--text-muted)">Expira 12/2027</div></div></div></div>
         </div>
       </div>
 
@@ -1655,7 +1656,7 @@
 <div class="modal-overlay" id="modal-change-password">
   <div class="modal-box">
     <div class="modal-header">
-      <span class="modal-title">🔑 Alterar Senha</span>
+      <span class="modal-title"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i> Alterar Senha</span>
       <button class="modal-close" onclick="closeModal()">&#x2715;</button>
     </div>
     <div id="pwd-status" style="display:none;padding:10px 14px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px"></div>
@@ -1679,7 +1680,7 @@
 <div class="modal-overlay" id="modal-invite">
   <div class="modal-box">
     <div class="modal-header">
-      <span class="modal-title">✉️ Convidar Usuário</span>
+      <span class="modal-title"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Convidar Usuário</span>
       <button class="modal-close" onclick="closeModal()">&#x2715;</button>
     </div>
     <div id="invite-status" style="display:none;padding:10px 14px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px"></div>
@@ -1829,7 +1830,7 @@
       if (greetEl) {
         const hour = new Date().getHours();
         const g = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
-        greetEl.textContent = `${g}, ${name.split(' ')[0]}! 👋`;
+        greetEl.textContent = `${g}, ${name.split(' ')[0]}! \u{1F44B}`;
       }
       const dateEl = document.getElementById('d2-date');
       if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -1899,7 +1900,7 @@
   function toggleHabit(el) {
     el.classList.toggle('done');
     const check = el.querySelector('.habit-check');
-    check.textContent = el.classList.contains('done') ? '✓' : '';
+    check.textContent = el.classList.contains('done') ? '\u{2713}' : '';
   }
 
   // Notifications
@@ -1912,11 +1913,11 @@
 
   // Search
   const searchData = [
-    { type: 'Hábito', icon: '🔄', title: 'Meditação 10min', desc: 'Streak de 14 dias' },
-    { type: 'Meta', icon: '🎯', title: 'Correr 100km', desc: '72% completo' },
-    { type: 'Nota', icon: '📝', title: 'Ideias para projeto', desc: 'Ontem, 22:15' },
-    { type: 'Projeto', icon: '🚀', title: 'Projeto Alpha', desc: '65% completo' },
-    { type: 'Insight', icon: '🤖', title: 'Pico de produtividade 9h-11h', desc: 'IA Insight' },
+    { type: 'Hábito', icon: '\u{1F504}', title: 'Meditação 10min', desc: 'Streak de 14 dias' },
+    { type: 'Meta', icon: '\u{1F3AF}', title: 'Correr 100km', desc: '72% completo' },
+    { type: 'Nota', icon: '\u{1F4DD}', title: 'Ideias para projeto', desc: 'Ontem, 22:15' },
+    { type: 'Projeto', icon: '\u{1F680}', title: 'Projeto Alpha', desc: '65% completo' },
+    { type: 'Insight', icon: '\u{1F916}', title: 'Pico de produtividade 9h-11h', desc: 'IA Insight' },
   ];
   function doSearch(q) {
     const results = document.getElementById('search-results');
@@ -1949,7 +1950,7 @@
   // ─── Toast system ─────────────────────────────────────────────
   function showToast(msg, type = 'info') {
     const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };
-    const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+    const icons = { success: '\u{2713}', error: '\u{2715}', info: '\u{2139}', warning: '\u{26A0}' };
     const toast = document.createElement('div');
     toast.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:#1E293B;border:1px solid ${colors[type]};border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeIn 0.3s ease;max-width:360px;font-size:14px;color:#F0F4FF;`;
     toast.innerHTML = `<span style="width:20px;height:20px;border-radius:50%;background:${colors[type]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">${icons[type]}</span><span>${msg}</span>`;
@@ -2206,7 +2207,7 @@
     if (!container || !step) return;
     const progress = Math.round(((onboardingStep + 1) / ONBOARDING_STEPS.length) * 100);
     container.innerHTML = `<div class="onboarding-shell">
-      <div class="onboarding-top"><div class="onboarding-brand"><div class="onboarding-brand-mark">⚡</div><div><strong>LifeOS Enterprise</strong><span>Configuração personalizada</span></div></div><div class="onboarding-step-label">Etapa ${onboardingStep + 1} de ${ONBOARDING_STEPS.length}</div></div>
+      <div class="onboarding-top"><div class="onboarding-brand"><div class="onboarding-brand-mark">\u{26A1}</div><div><strong>LifeOS Enterprise</strong><span>Configuração personalizada</span></div></div><div class="onboarding-step-label">Etapa ${onboardingStep + 1} de ${ONBOARDING_STEPS.length}</div></div>
       <div class="onboarding-progress"><span style="width:${progress}%"></span></div>
       <div class="onboarding-body"><div class="onboarding-kicker">${step.kicker}</div><h2 class="onboarding-title" id="onboarding-title">${step.title}</h2><p class="onboarding-copy">${step.copy}</p>${onboardingStepContent(step)}<div class="onboarding-error" id="onboarding-error" role="alert"></div></div>
       <div class="onboarding-actions"><button class="onboarding-skip" type="button" onclick="pauseEnterpriseOnboarding()">Fazer depois</button><div class="onboarding-actions-right">${onboardingStep > 0 ? '<button class="btn btn-ghost" type="button" onclick="prevOnboardingStep()">Voltar</button>' : ''}<button class="btn btn-primary onboarding-primary" id="onboarding-next" type="button" onclick="nextOnboardingStep()">${step.id === 'review' ? 'Concluir e iniciar tour' : 'Continuar'}</button></div></div>
@@ -2795,7 +2796,7 @@
     });
   }
   function mktInstall(btn, name) {
-    btn.textContent = '✓ Instalado';
+    btn.textContent = '\u{2713} Instalado';
     btn.disabled = true;
     btn.style.opacity = '0.6';
     btn.closest('.mkt-app-card').classList.add('installed');
@@ -2805,5 +2806,6 @@
     showToast(el.checked ? name + ' ativado' : name + ' desativado', el.checked ? 'success' : 'info');
   }
 </script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

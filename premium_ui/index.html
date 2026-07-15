@@ -2415,7 +2415,7 @@
     </div>
     <div class="command-results" id="command-results"></div>
     <div class="command-footer">
-      <span><kbd>↑↓</kbd> navegar</span>
+      <span><kbd><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i></kbd> navegar</span>
       <span><kbd>↵</kbd> selecionar</span>
       <span><kbd>Esc</kbd> fechar</span>
     </div>
@@ -2736,7 +2736,7 @@
                 <div class="score-label">Score</div>
               </div>
             </div>
-            <div class="score-trend" id="score-trend">↑ +4.2 esta semana</div>
+            <div class="score-trend" id="score-trend"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +4.2 esta semana</div>
           </div>
         </div>
 
@@ -2746,7 +2746,7 @@
             <div class="kpi-accent" style="background:var(--gradient-primary);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(99,102,241,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-              <span class="kpi-delta kpi-delta-up">↑ 4.2</span>
+              <span class="kpi-delta kpi-delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> 4.2</span>
             </div>
             <div class="kpi-value" id="kpi-score">--</div>
             <div class="kpi-label">Life Score</div>
@@ -2756,7 +2756,7 @@
             <div class="kpi-accent" style="background:var(--gradient-success);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(16,185,129,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg></div>
-              <span class="kpi-delta kpi-delta-up">↑ 2 novas</span>
+              <span class="kpi-delta kpi-delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> 2 novas</span>
             </div>
             <div class="kpi-value" id="kpi-missions">0</div>
             <div class="kpi-label">Missões Ativas</div>
@@ -2766,7 +2766,7 @@
             <div class="kpi-accent" style="background:var(--gradient-warning);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(245,158,11,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg></div>
-              <span class="kpi-delta kpi-delta-up">↑ Recorde</span>
+              <span class="kpi-delta kpi-delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Recorde</span>
             </div>
             <div class="kpi-value" id="kpi-streak">7</div>
             <div class="kpi-label">Dias Consecutivos</div>
@@ -2776,7 +2776,7 @@
             <div class="kpi-accent" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(139,92,246,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-              <span class="kpi-delta kpi-delta-up">↑ 3 hoje</span>
+              <span class="kpi-delta kpi-delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> 3 hoje</span>
             </div>
             <div class="kpi-value" id="kpi-insights">12</div>
             <div class="kpi-label">Insights</div>
@@ -2795,7 +2795,7 @@
                   <div class="widget-title">Prioridades do Dia</div>
                   <div class="widget-subtitle" id="priorities-date"></div>
                 </div>
-                <button class="btn btn-ghost btn-sm" onclick="openNewMissionModal()">+ Adicionar</button>
+                <button class="btn btn-ghost btn-sm" onclick="openNewMissionModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
               </div>
               <div id="priorities-list"></div>
             </div>
@@ -2942,7 +2942,7 @@
 
             <!-- Reminders -->
             <div class="companion-panel-card">
-              <div class="companion-panel-title"><span>⏰</span> Lembretes</div>
+              <div class="companion-panel-title"><span><i data-lucide="alarm-clock" class="pg-icon" aria-hidden="true"></i></span> Lembretes</div>
               <div id="companion-reminders">
                 <div class="reminder-item">
                   <span class="reminder-time">09:00</span>
@@ -2999,7 +2999,7 @@
           <button class="chip chip-interactive chip-active" onclick="filterMissions('all',this)">Todas</button>
           <button class="chip chip-interactive" onclick="filterMissions('active',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Ativas</button>
           <button class="chip chip-interactive" onclick="filterMissions('completed',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluídas</button>
-          <button class="chip chip-interactive" onclick="filterMissions('paused',this)">⏸ Pausadas</button>
+          <button class="chip chip-interactive" onclick="filterMissions('paused',this)"><i data-lucide="pause" class="pg-icon" aria-hidden="true"></i> Pausadas</button>
         </div>
         <div class="missions-layout">
           <div id="missions-grid" class="flex-col gap-4"></div>
@@ -3114,17 +3114,17 @@
           <div class="analytics-card animate-fade-in delay-50">
             <div class="analytics-card-title">Life Score Médio</div>
             <div class="analytics-value gradient-text" id="metrics-avg-score">--</div>
-            <div class="analytics-change analytics-change-up">↑ +12% vs período anterior</div>
+            <div class="analytics-change analytics-change-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +12% vs período anterior</div>
           </div>
           <div class="analytics-card animate-fade-in delay-100">
             <div class="analytics-card-title">Missões Concluídas</div>
             <div class="analytics-value" id="metrics-completed">0</div>
-            <div class="analytics-change analytics-change-up">↑ +3 este mês</div>
+            <div class="analytics-change analytics-change-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 este mês</div>
           </div>
           <div class="analytics-card animate-fade-in delay-150">
             <div class="analytics-card-title">Taxa de Hábitos</div>
             <div class="analytics-value" id="metrics-habit-rate">--</div>
-            <div class="analytics-change analytics-change-up">↑ +8% vs semana passada</div>
+            <div class="analytics-change analytics-change-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8% vs semana passada</div>
           </div>
         </div>
 
@@ -3201,7 +3201,7 @@
             <button class="settings-nav-item" onclick="showSettingsSection('privacy',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Privacidade</button>
             <button class="settings-nav-item" onclick="showSettingsSection('security',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Segurança e MFA</button>
             <button class="settings-nav-item" onclick="showSettingsSection('enterprise',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Enterprise</button>
-            <button class="settings-nav-item" onclick="showSettingsSection('about',this)">ℹ Sobre</button>
+            <button class="settings-nav-item" onclick="showSettingsSection('about',this)"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i> Sobre</button>
             <button class="settings-nav-item" onclick="lifeosLogout()" style="color:var(--color-danger-400);margin-top:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Encerrar Sessão</button>
           </nav>
           <div class="settings-content" id="settings-content-area">
@@ -3712,7 +3712,7 @@ function initCompanion() {
   const h = new Date().getHours();
   const greeting = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
   const msgs = {
-    morning: `Bom dia! <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Analisei seu dia e preparei um resumo:\n\n**Score atual:** 87 pontos (↑ +4.2 esta semana)\n**Prioridade #1:** Finalizar relatório Q3 — prazo hoje\n**Hábitos:** Meditação e hidratação em dia <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>\n\nComo posso ajudar você hoje?`,
+    morning: `Bom dia! <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Analisei seu dia e preparei um resumo:\n\n**Score atual:** 87 pontos (\u{2191} +4.2 esta semana)\n**Prioridade #1:** Finalizar relatório Q3 — prazo hoje\n**Hábitos:** Meditação e hidratação em dia <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>\n\nComo posso ajudar você hoje?`,
     afternoon: `Boa tarde! <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 17a5.5 5.5 0 0 0-10.5-1h-1A3.5 3.5 0 0 0 2 12c0-1.42.519-2.742 1.464-3.822m21.866-1.38A9.5 9.5 0 0 0 8 2.5M8 13v5m4-9v.01M4 20h16"/></svg> Você está indo bem hoje.\n\n**Progresso:** 2 de 4 prioridades concluídas\n**Sequência:** 7 dias consecutivos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg>\n**Próxima ação:** Revisão de código às 14h\n\nAlgo em que posso ajudar?`,
     evening: `Boa noite! <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Aqui está seu resumo do dia:\n\n**Concluído:** 3 de 5 prioridades <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>\n**Hábitos:** 3 de 5 concluídos\n**Life Score:** +1.2 pontos hoje\n\nQuer fazer uma reflexão noturna?`,
   };
@@ -3782,7 +3782,7 @@ const companionResponses = [
       return `Com base no seu perfil, recomendo focar em:\n\n1. **Relatório Q3** — prazo hoje, 75% concluído\n2. **Revisão TypeScript** — prazo amanhã\n3. **Exercício** — 3 dias sem atividade física\n\nSua janela de maior produtividade é entre **9h e 12h**. Use esse tempo para a tarefa mais difícil.`;
     }
     if (lower.includes('progresso') || lower.includes('saindo')) {
-      return `Sua performance esta semana:\n\n**Life Score:** 87 (↑ +4.2)\n**Hábitos:** 60% de conclusão\n**Missões:** 5 ativas, 2 próximas do prazo\n**Sequência:** 7 dias <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg>\n\nPonto de atenção: área de **Saúde** caiu 5 pontos. Recomendo priorizar exercício amanhã.`;
+      return `Sua performance esta semana:\n\n**Life Score:** 87 (\u{2191} +4.2)\n**Hábitos:** 60% de conclusão\n**Missões:** 5 ativas, 2 próximas do prazo\n**Sequência:** 7 dias <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg>\n\nPonto de atenção: área de **Saúde** caiu 5 pontos. Recomendo priorizar exercício amanhã.`;
     }
     if (lower.includes('missão') || lower.includes('criar')) {
       return `Vou criar uma missão personalizada para você!\n\nBaseado no seu perfil, sugiro:\n\n**"Dominar TypeScript em 30 dias"**\n- Categoria: Aprendizado\n- Prioridade: Alta\n- Subtarefas: 8 módulos\n- Prazo: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR')}\n\nQuer que eu crie essa missão?`;
@@ -3794,7 +3794,7 @@ const companionResponses = [
       return `Seus principais pontos fortes identificados:\n\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> **Aprendizado contínuo** — 88% de consistência\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74.5 5 2c.5.5 1 1 2 1s1.5-.5 2-1c1.26-1.5 5-2 5-2s-.5-3.74-2-5M12 12m-1 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0M6 5l-1-4M18 5l1-4"/></svg> **Orientação a resultados** — 5 missões ativas\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg> **Disciplina** — 7 dias de sequência\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> **Comunicação** — alta pontuação em Relacionamentos\n\nVocê está no top 20% em consistência de hábitos!`;
     }
     if (lower.includes('previsão') || lower.includes('semana')) {
-      return `Previsão para os próximos 7 dias:\n\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 17"/><polyline points="17 6 23 6 23 12"/></svg> **Life Score:** 87 → 91 (se mantiver hábitos)\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg> **Missões:** 2 devem ser concluídas\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v7a6 6 0 0 0 6 6M4 12a8 8 0 0 1 8-8v8a6 6 0 0 1-6 6H4v-6z"/></svg> **Saúde:** Requer atenção — risco de queda\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> **Finanças:** Estável, sem grandes mudanças\n\n**Ação crítica:** Exercício 3x esta semana para reverter tendência negativa em Saúde.`;
+      return `Previsão para os próximos 7 dias:\n\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 17"/><polyline points="17 6 23 6 23 12"/></svg> **Life Score:** 87 \u{2192} 91 (se mantiver hábitos)\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg> **Missões:** 2 devem ser concluídas\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v7a6 6 0 0 0 6 6M4 12a8 8 0 0 1 8-8v8a6 6 0 0 1-6 6H4v-6z"/></svg> **Saúde:** Requer atenção — risco de queda\n<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> **Finanças:** Estável, sem grandes mudanças\n\n**Ação crítica:** Exercício 3x esta semana para reverter tendência negativa em Saúde.`;
     }
     return null;
   }
@@ -4600,7 +4600,7 @@ function renderMissionsGrid() {
           <div class="mission-title">${m.title}</div>
           <div class="mission-category">${m.category}</div>
         </div>
-        <span class="mission-status-badge status-${m.status}">${m.status === 'active' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Ativa' : m.status === 'completed' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluída' : '⏸ Pausada'}</span>
+        <span class="mission-status-badge status-${m.status}">${m.status === 'active' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Ativa' : m.status === 'completed' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluída' : '\u{23F8} Pausada'}</span>
       </div>
       <div class="mission-progress-row">
         <div class="mission-progress-bar">
@@ -4832,7 +4832,7 @@ function showToast(message, type = 'info') {
   toast.innerHTML = `
     <span class="toast-icon">${icons[type] || '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'}</span>
     <span>${message}</span>
-    <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Fechar">×</button>
+    <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Fechar">\u{D7}</button>
   `;
   container.appendChild(toast);
   setTimeout(() => {
@@ -4898,7 +4898,7 @@ function showNotifications() {
   panel.innerHTML = `
     <div class="theme-panel-header">
       <div><div class="theme-panel-title">Notificações</div><div style="font-size:var(--text-xs);color:var(--text-tertiary);margin-top:2px">3 atualizações operacionais</div></div>
-      <button class="btn btn-ghost btn-icon btn-sm" onclick="showNotifications()" aria-label="Fechar notificações">×</button>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="showNotifications()" aria-label="Fechar notificações">\u{D7}</button>
     </div>
     <div class="theme-panel-body" style="display:grid;gap:var(--space-3)">
       <button class="settings-row" style="text-align:left;width:100%" onclick="showView('briefing');showNotifications()"><span class="status-dot status-dot-success"></span><span class="settings-row-info"><span class="settings-row-label">Morning Briefing pronto</span><span class="settings-row-desc">Prioridades e agenda sincronizadas às 07:00</span></span></button>
