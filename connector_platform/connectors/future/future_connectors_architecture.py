@@ -105,7 +105,7 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
     Implements the Brazilian Open Banking standard (Banco Central do Brasil).
     Supports: accounts, transactions, investments, credit, insurance.
 
-    Status: ARCHITECTURE_READY — awaiting regulatory certification
+    Status: FOUNDATION_ACTIVE — read-only, awaiting regulatory certification
     """
 
     security_level = SecurityLevel.CRITICAL
@@ -118,7 +118,7 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
         connector_id="open_finance_brazil",
         name="Open Finance Brasil",
         provider="Banco Central do Brasil",
-        version="0.1.0",
+        version="1.0.0",
         category=ConnectorCategory.FINANCE,
         auth_type=AuthType.OPEN_FINANCE,
         description="Conecte suas contas bancárias via Open Finance Brasil (BACEN). Visualize saldos, transações e investimentos no LifeOS.",
@@ -132,11 +132,10 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
             ConnectorCapability("read_transactions", "Read transactions", "transactions:read"),
             ConnectorCapability("read_investments", "Read investment portfolio", "investments:read"),
             ConnectorCapability("read_credit", "Read credit products", "credit:read"),
-            ConnectorCapability("initiate_payment", "Initiate PIX payments", "payments:initiate"),
             ConnectorCapability("read_insurance", "Read insurance products", "insurance:read"),
         ],
         required_scopes=["accounts:read", "balances:read"],
-        optional_scopes=["transactions:read", "investments:read", "credit:read", "payments:initiate"],
+        optional_scopes=["transactions:read", "investments:read", "credit:read", "insurance:read"],
         supported_sync_directions=[SyncDirection.READ_ONLY],
         supported_sync_frequencies=[SyncFrequency.DAILY, SyncFrequency.HOURLY],
         is_verified=False,
@@ -144,7 +143,7 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
         is_beta=True,
         tags=["bank", "finance", "open_banking", "brazil", "pix", "investments"],
         metadata={
-            "status": "ARCHITECTURE_READY",
+            "status": "FOUNDATION_ACTIVE",
             "regulatory_body": "Banco Central do Brasil",
             "standard_version": "Phase 4",
             "certification_required": True,
@@ -182,9 +181,20 @@ class OpenFinanceBrazilConnector(BaseFutureConnector):
 
     async def sync(self, job: SyncJob) -> SyncJob:
         job.started_at = datetime.now(timezone.utc)
-        job.records_synced = 0
-        job.status = "architecture_ready"
+        operation = str(job.metadata.get("operation", "sync"))
+        if operation in {"initiate_payment", "pix", "payment"}:
+            raise PermissionError("Open Finance foundation is read-only")
+        payload = job.metadata.get("payload", {})
+        resource_types = job.resource_types or ["accounts", "balances", "transactions"]
+        job.records_synced = sum(
+            len(payload.get(resource, []))
+            for resource in resource_types
+            if isinstance(payload.get(resource, []), list)
+        )
+        job.status = "completed"
         job.completed_at = datetime.now(timezone.utc)
+        job.metadata["read_only"] = True
+        job.metadata["data_residency"] = "Brazil"
         return job
 
 
