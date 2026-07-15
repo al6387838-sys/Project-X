@@ -1,0 +1,527 @@
+<!-- LifeOS Enterprise — Finance Hub v2.0 — Phase 141 -->
+<!-- Contas bancárias, Open Finance, PIX, pagamentos, recebimentos, histórico -->
+<div id="module-finance-hub" style="display:none">
+
+<!-- ─── RESUMO FINANCEIRO ─── -->
+<div class="page" id="page-finance-hub">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="landmark" class="pg-icon" aria-hidden="true"></i> Finance Hub</div>
+      <div class="page-subtitle">Gestão financeira completa — dados reais</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-accounts')"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Contas</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-pix')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> PIX</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-openfinance')"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Open Finance</button>
+      <button class="btn btn-primary" onclick="showPage('finance-hub-history')"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico</button>
+    </div>
+  </div>
+
+  <!-- KPIs reais -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="banknote" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="fh-saldo-total">—</div>
+      <div class="kpi-label">Saldo Total</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="fh-receitas">—</div>
+      <div class="kpi-label">Receitas do Mês</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="fh-despesas">—</div>
+      <div class="kpi-label">Despesas do Mês</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="fh-saldo-mes">—</div>
+      <div class="kpi-label">Saldo do Mês</div>
+    </div>
+  </div>
+
+  <!-- Transações recentes -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="card-title" style="margin:0"><i data-lucide="clock" class="pg-icon" aria-hidden="true"></i> Transações Recentes</div>
+      <button class="btn btn-ghost" style="font-size:12px" onclick="showPage('finance-hub-history')">Ver todas</button>
+    </div>
+    <div id="fh-recent-tx" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:24px;color:var(--text-muted)">Carregando...</div>
+    </div>
+  </div>
+
+  <!-- Adicionar transação manual -->
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px"><i data-lucide="plus-circle" class="pg-icon" aria-hidden="true"></i> Registrar Transação</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
+      <div>
+        <label class="form-label">Descrição</label>
+        <input type="text" class="form-input" id="fh-tx-desc" placeholder="Ex: Supermercado" />
+      </div>
+      <div>
+        <label class="form-label">Valor (R$)</label>
+        <input type="number" class="form-input" id="fh-tx-amount" placeholder="0,00" min="0" step="0.01" />
+      </div>
+      <div>
+        <label class="form-label">Tipo</label>
+        <select class="form-input" id="fh-tx-type">
+          <option value="debit">Débito (saída)</option>
+          <option value="credit">Crédito (entrada)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="fhAddTransaction()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONTAS BANCÁRIAS ─── -->
+<div class="page" id="page-finance-hub-accounts">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Contas Bancárias</div>
+      <div class="page-subtitle">Gerencie suas contas e cartões</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Conta</button>
+    </div>
+  </div>
+  <div id="fh-accounts-list" style="display:flex;flex-direction:column;gap:12px">
+    <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando contas...</div>
+  </div>
+</div>
+
+<!-- ─── PIX ─── -->
+<div class="page" id="page-finance-hub-pix">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> PIX</div>
+      <div class="page-subtitle">Chaves, pagamentos e recebimentos</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <!-- Minhas chaves PIX -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title" style="margin:0">Minhas Chaves PIX</div>
+        <button class="btn btn-primary" style="font-size:12px" onclick="openModal('modal-add-pix-key')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      </div>
+      <div id="fh-pix-keys" style="display:flex;flex-direction:column;gap:8px">
+        <div style="text-align:center;padding:16px;color:var(--text-muted)">Carregando...</div>
+      </div>
+    </div>
+
+    <!-- Enviar PIX -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Enviar PIX</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <label class="form-label">Chave PIX destino</label>
+          <input type="text" class="form-input" id="fh-pix-target" placeholder="CPF, e-mail, telefone ou chave aleatória" />
+        </div>
+        <div>
+          <label class="form-label">Valor (R$)</label>
+          <input type="number" class="form-input" id="fh-pix-amount" placeholder="0,00" min="0.01" step="0.01" />
+        </div>
+        <div>
+          <label class="form-label">Descrição (opcional)</label>
+          <input type="text" class="form-input" id="fh-pix-desc" placeholder="Motivo do pagamento" />
+        </div>
+        <button class="btn btn-primary" onclick="fhSendPix()"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Enviar PIX</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Histórico PIX -->
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Histórico PIX</div>
+    <div id="fh-pix-history" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:16px;color:var(--text-muted)">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OPEN FINANCE ─── -->
+<div class="page" id="page-finance-hub-openfinance">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Open Finance</div>
+      <div class="page-subtitle">Conecte suas instituições financeiras — Open Finance Brasil</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(16,185,129,0.06),rgba(99,102,241,0.06));border-color:rgba(16,185,129,0.2);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
+      <div>
+        <div style="font-weight:700">Open Finance Brasil — Padrão Oficial</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Conexão segura via OAuth 2.0 · Dados criptografados · Revogação a qualquer momento</div>
+      </div>
+    </div>
+  </div>
+  <div id="fh-openfinance-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+    <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando instituições...</div>
+  </div>
+</div>
+
+<!-- ─── HISTÓRICO FINANCEIRO ─── -->
+<div class="page" id="page-finance-hub-history">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico Financeiro</div>
+      <div class="page-subtitle">Todas as transações registradas</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <select class="form-input" id="fh-hist-type" onchange="fhLoadHistory()" style="width:auto">
+        <option value="">Todos</option>
+        <option value="credit">Entradas</option>
+        <option value="debit">Saídas</option>
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <div id="fh-history-list" style="display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Conta -->
+<div class="modal" id="modal-add-account" style="display:none">
+  <div class="modal-overlay" onclick="closeModal('modal-add-account')"></div>
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Nova Conta Bancária</div><button class="modal-close" onclick="closeModal('modal-add-account')">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
+      <div><label class="form-label">Nome da conta</label><input type="text" class="form-input" id="acc-name" placeholder="Ex: Conta Corrente Nubank" /></div>
+      <div><label class="form-label">Tipo</label>
+        <select class="form-input" id="acc-type">
+          <option value="checking">Conta Corrente</option>
+          <option value="savings">Poupança</option>
+          <option value="investment">Investimento</option>
+          <option value="credit">Cartão de Crédito</option>
+        </select>
+      </div>
+      <div><label class="form-label">Instituição</label><input type="text" class="form-input" id="acc-institution" placeholder="Ex: Nubank" /></div>
+      <div><label class="form-label">Saldo inicial (R$)</label><input type="number" class="form-input" id="acc-balance" placeholder="0,00" step="0.01" /></div>
+      <button class="btn btn-primary" onclick="fhAddAccount()">Adicionar Conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Chave PIX -->
+<div class="modal" id="modal-add-pix-key" style="display:none">
+  <div class="modal-overlay" onclick="closeModal('modal-add-pix-key')"></div>
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Nova Chave PIX</div><button class="modal-close" onclick="closeModal('modal-add-pix-key')">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
+      <div><label class="form-label">Tipo de chave</label>
+        <select class="form-input" id="pix-key-type">
+          <option value="cpf">CPF</option>
+          <option value="email">E-mail</option>
+          <option value="phone">Telefone</option>
+          <option value="random">Chave Aleatória</option>
+          <option value="cnpj">CNPJ</option>
+        </select>
+      </div>
+      <div><label class="form-label">Valor da chave</label><input type="text" class="form-input" id="pix-key-value" placeholder="Digite a chave" /></div>
+      <button class="btn btn-primary" onclick="fhAddPixKey()">Cadastrar Chave</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Finance Hub v2.0 — Phase 141 ───
+function fmtBRL(v) {
+  if (v === null || v === undefined) return '—';
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+}
+
+async function loadFinanceHubSummary() {
+  try {
+    const res = await fetch('/api/finance/hub?view=summary', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+    const s = data.summary;
+    const el = id => document.getElementById(id);
+    if (el('fh-saldo-total')) el('fh-saldo-total').textContent = fmtBRL(s.totalBalance);
+    if (el('fh-receitas')) el('fh-receitas').textContent = fmtBRL(s.monthlyIncome);
+    if (el('fh-despesas')) el('fh-despesas').textContent = fmtBRL(s.monthlyExpenses);
+    if (el('fh-saldo-mes')) {
+      const net = s.netBalance;
+      el('fh-saldo-mes').textContent = fmtBRL(net);
+      el('fh-saldo-mes').style.color = net >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+    if (el('fh-recent-tx') && s.recentTransactions) {
+      renderTransactions('fh-recent-tx', s.recentTransactions);
+    }
+  } catch (e) { console.error('Finance Hub summary error:', e); }
+}
+
+function renderTransactions(containerId, txs) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!txs || txs.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted)">Nenhuma transação registrada</div>';
+    return;
+  }
+  el.innerHTML = txs.map(t => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg-elevated);border-radius:8px">
+      <div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${t.type === 'credit' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}">
+        <i data-lucide="${t.type === 'credit' ? 'download' : 'upload'}" style="color:${t.type === 'credit' ? 'var(--green)' : 'var(--red)'}" aria-hidden="true"></i>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${t.description || t.category}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${new Date(t.date).toLocaleDateString('pt-BR')} · ${t.source || 'manual'}</div>
+      </div>
+      <div style="font-weight:700;color:${t.type === 'credit' ? 'var(--green)' : 'var(--red)'}">
+        ${t.type === 'credit' ? '+' : '-'}${fmtBRL(t.amount)}
+      </div>
+    </div>
+  `).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+async function loadFinanceAccounts() {
+  try {
+    const res = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const el = document.getElementById('fh-accounts-list');
+    if (!el) return;
+    if (!data.accounts || data.accounts.length === 0) {
+      el.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:var(--text-muted)">Nenhuma conta cadastrada. Clique em "Nova Conta" para começar.</div>';
+      return;
+    }
+    const typeLabels = { checking: 'Conta Corrente', savings: 'Poupança', investment: 'Investimento', credit: 'Cartão de Crédito' };
+    el.innerHTML = data.accounts.map(a => `
+      <div class="card" style="display:flex;align-items:center;gap:14px">
+        <div style="width:48px;height:48px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center">
+          <i data-lucide="credit-card" style="color:var(--accent)" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:15px">${a.name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${typeLabels[a.type] || a.type} · ${a.institution || 'Sem instituição'}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800;color:${a.balance >= 0 ? 'var(--green)' : 'var(--red)'}">${fmtBRL(a.balance)}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${a.currency}</div>
+        </div>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (e) { console.error('Finance accounts error:', e); }
+}
+
+async function loadFinancePix() {
+  try {
+    const res = await fetch('/api/finance/hub?view=pix', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const keysEl = document.getElementById('fh-pix-keys');
+    const histEl = document.getElementById('fh-pix-history');
+    if (keysEl) {
+      if (!data.keys || data.keys.length === 0) {
+        keysEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-muted)">Nenhuma chave PIX cadastrada</div>';
+      } else {
+        keysEl.innerHTML = data.keys.map(k => `
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+            <i data-lucide="zap" style="color:var(--green)" aria-hidden="true"></i>
+            <div style="flex:1">
+              <div style="font-size:12px;color:var(--text-muted)">${k.type.toUpperCase()}</div>
+              <div style="font-size:13px;font-weight:600">${k.value}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+    if (histEl) {
+      if (!data.history || data.history.length === 0) {
+        histEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-muted)">Nenhuma transação PIX</div>';
+      } else {
+        histEl.innerHTML = data.history.map(h => `
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+            <i data-lucide="zap" style="color:${h.type === 'payment' ? 'var(--red)' : 'var(--green)'}" aria-hidden="true"></i>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600">${h.description}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${new Date(h.date).toLocaleString('pt-BR')} · ${h.targetKey}</div>
+            </div>
+            <div style="font-weight:700;color:${h.type === 'payment' ? 'var(--red)' : 'var(--green)'}">
+              ${h.type === 'payment' ? '-' : '+'}${fmtBRL(h.amount)}
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (e) { console.error('Finance PIX error:', e); }
+}
+
+async function loadOpenFinance() {
+  try {
+    const res = await fetch('/api/finance/hub?view=open-finance', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const el = document.getElementById('fh-openfinance-list');
+    if (!el || !data.institutions) return;
+    el.innerHTML = data.institutions.map(inst => `
+      <div class="card" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:10px;background:${inst.color}22;display:flex;align-items:center;justify-content:center;border:1px solid ${inst.color}44">
+            <i data-lucide="${inst.logo}" style="color:${inst.color}" aria-hidden="true"></i>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:700">${inst.name}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${inst.connected ? `Conectado · ${inst.lastSync ? new Date(inst.lastSync).toLocaleDateString('pt-BR') : 'nunca sincronizado'}` : 'Não conectado'}</div>
+          </div>
+          ${inst.connected
+            ? '<span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Ativo</span>'
+            : `<button class="btn btn-primary" style="font-size:12px" onclick="fhConnectBank('${inst.id}')">Conectar</button>`
+          }
+        </div>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (e) { console.error('Open Finance error:', e); }
+}
+
+async function fhLoadHistory() {
+  const type = document.getElementById('fh-hist-type')?.value || '';
+  try {
+    const url = `/api/finance/hub?view=transactions${type ? `&type=${type}` : ''}`;
+    const res = await fetch(url, { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    renderTransactions('fh-history-list', data.transactions);
+  } catch (e) { console.error('Finance history error:', e); }
+}
+
+async function fhAddAccount() {
+  const name = document.getElementById('acc-name')?.value?.trim();
+  const type = document.getElementById('acc-type')?.value;
+  const institution = document.getElementById('acc-institution')?.value?.trim();
+  const balance = parseFloat(document.getElementById('acc-balance')?.value || '0');
+  if (!name) { if (typeof showToast === 'function') showToast('Nome obrigatório', 'error'); return; }
+  try {
+    const res = await fetch('/api/finance/hub', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'add-account', name, type, institution, balance }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Conta adicionada!', 'success');
+      if (typeof closeModal === 'function') closeModal('modal-add-account');
+      await loadFinanceAccounts();
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao adicionar conta', 'error'); }
+}
+
+async function fhAddTransaction() {
+  const desc = document.getElementById('fh-tx-desc')?.value?.trim();
+  const amount = parseFloat(document.getElementById('fh-tx-amount')?.value || '0');
+  const type = document.getElementById('fh-tx-type')?.value;
+  if (!desc || !amount) { if (typeof showToast === 'function') showToast('Preencha todos os campos', 'error'); return; }
+  // Usar primeira conta disponível
+  const accRes = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
+  const accData = await accRes.json();
+  if (!accData.accounts || accData.accounts.length === 0) {
+    if (typeof showToast === 'function') showToast('Adicione uma conta primeiro', 'error'); return;
+  }
+  const accountId = accData.accounts[0].id;
+  try {
+    const res = await fetch('/api/finance/hub', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'add-transaction', accountId, type, amount, description: desc }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Transação registrada!', 'success');
+      document.getElementById('fh-tx-desc').value = '';
+      document.getElementById('fh-tx-amount').value = '';
+      await loadFinanceHubSummary();
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao registrar', 'error'); }
+}
+
+async function fhAddPixKey() {
+  const keyType = document.getElementById('pix-key-type')?.value;
+  const keyValue = document.getElementById('pix-key-value')?.value?.trim();
+  if (!keyValue) { if (typeof showToast === 'function') showToast('Valor da chave obrigatório', 'error'); return; }
+  try {
+    const res = await fetch('/api/finance/hub', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'add-pix-key', keyType, keyValue }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Chave PIX cadastrada!', 'success');
+      if (typeof closeModal === 'function') closeModal('modal-add-pix-key');
+      await loadFinancePix();
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao cadastrar chave', 'error'); }
+}
+
+async function fhSendPix() {
+  const targetKey = document.getElementById('fh-pix-target')?.value?.trim();
+  const amount = parseFloat(document.getElementById('fh-pix-amount')?.value || '0');
+  const description = document.getElementById('fh-pix-desc')?.value?.trim();
+  if (!targetKey || !amount) { if (typeof showToast === 'function') showToast('Preencha chave e valor', 'error'); return; }
+  const accRes = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
+  const accData = await accRes.json();
+  if (!accData.accounts || accData.accounts.length === 0) {
+    if (typeof showToast === 'function') showToast('Adicione uma conta primeiro', 'error'); return;
+  }
+  const accountId = accData.accounts[0].id;
+  try {
+    const res = await fetch('/api/finance/hub', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'pix-payment', targetKey, amount, description, accountId }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('PIX enviado com sucesso!', 'success');
+      document.getElementById('fh-pix-target').value = '';
+      document.getElementById('fh-pix-amount').value = '';
+      document.getElementById('fh-pix-desc').value = '';
+      await loadFinancePix();
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro ao enviar PIX', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao enviar PIX', 'error'); }
+}
+
+async function fhConnectBank(institutionId) {
+  try {
+    const res = await fetch('/api/finance/hub', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'connect-bank', institutionId }),
+    });
+    const data = await res.json();
+    if (data.authUrl) {
+      window.location.href = data.authUrl;
+    } else if (data.setupInstructions) {
+      alert(data.setupInstructions);
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao conectar banco', 'error'); }
+}
+
+// Auto-carregar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadFinanceHubSummary);
+} else {
+  loadFinanceHubSummary();
+}
+</script>
+
+<!-- END module-finance-hub -->

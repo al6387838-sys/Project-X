@@ -1,7 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 13.0.0 (Phases 131-138 — Real Data, Auth, Connectors, Open Finance, Enterprise)
-
+// Version: 14.0.0 (Phases 139-146 — Real Backend, Communication Hub, Finance Hub, Document Center, AI Orchestrator, Enterprise Security)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -119,6 +118,11 @@ await copy('modules/automation.html', 'modules/automation.html');
 await copy('modules/analytics.html', 'modules/analytics.html');
 await copy('services/oauth-manager.js', 'services/oauth-manager.js');
 
+// ─── Copiar módulos HTML v14.0 (Phases 139-144) ─────────────────────────────
+await copy('modules/communication-hub.html', 'modules/communication-hub.html');
+await copy('modules/finance-hub.html', 'modules/finance-hub.html');
+await copy('modules/document-center.html', 'modules/document-center.html');
+
 // ─── Rotas principais v10.6 ──────────────────────────────────────────────────
 // Landing Page (/) — minificado
 await copyHtml('landing.html', 'index.html');
@@ -160,9 +164,9 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
   } catch { /* arquivo público opcional */ }
 }
 
-// Gerar _redirects v10.6 com rotas preservadas
+// Gerar _redirects v14.0 com todas as rotas
 const redirects = [
-  '# LifeOS Enterprise v13.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v14.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -186,8 +190,6 @@ const redirects = [
   '/ai-copilot         /app/index.html             200',
   '/marketplace        /app/index.html             200',
   '',
-  '# v10.6 integration routes',
-  '',
   '# v11 module routes',
   '/command-center   /app/index.html             200',
   '/identity         /app/index.html             200',
@@ -196,6 +198,13 @@ const redirects = [
   '/analytics        /app/index.html             200',
   '/integrations       /app/index.html             200',
   '/integrations/*     /app/index.html             200',
+  '',
+  '# v14.0 module routes (Phases 139-146)',
+  '/communication-hub  /app/index.html             200',
+  '/finance-hub        /app/index.html             200',
+  '/document-center    /app/index.html             200',
+  '/ai-orchestrator    /app/index.html             200',
+  '/security           /app/index.html             200',
   '',
   '# Legacy routes (compatibilidade)',
   '/enterprise         /enterprise/index.html      200',
@@ -206,7 +215,6 @@ const redirects = [
   '/timeline           /app/index.html             200',
   '/lifegraph          /app/index.html             200',
   '/briefing           /app/index.html             200',
-  '/analytics          /app/index.html             200',
   '/profile            /app/index.html             200',
   '/settings           /app/index.html             200',
   '',
@@ -217,10 +225,10 @@ const redirects = [
 
 await writeFile(resolve(dist, '_redirects'), redirects);
 
-// ─── Build metadata v10.6 ────────────────────────────────────────────────────
+// ─── Build metadata v14.0 ────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v13.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v14.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -246,23 +254,29 @@ const routes = [
   '/settings',
   '/reset-password',
   '/accept-invite',
+  '/communication-hub',
+  '/finance-hub',
+  '/document-center',
+  '/ai-orchestrator',
+  '/security',
 ];
 
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '13.0.0',
+  version: '14.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
-  architecture: 'multi-page-rbac-modules-oauth2-openfinance-enterprise',
+  architecture: 'multi-page-rbac-modules-oauth2-openfinance-enterprise-ai-orchestrator-security',
   phases: [
     '093-CommandCenter','094-UniversalSearch','095-IntegrationCenter','096-CompanionAI',
     '097-EnterpriseAdmin','098-Hardening','099-ReleaseCandidate','100-ProductionRelease',
     '101-ProductPolish','102-LifeHub','103-IntegrationMarketplace','104-AICopilot',
     '105-EnterpriseAdmin','106-QA','107-Build','108-Release','109-IntegrationReadiness',
     '111-UniversalCommandCenter','112-DigitalIdentity','113-EnterpriseFileCenter','114-AutomationStudio','115-AnalyticsCenter','119-EnterpriseOnboarding',
-    '131-RealDataFoundation','132-RealAuthentication','133-CommunicationConnectors','134-OpenFinanceFoundation','135-EnterpriseUserManagement','136-ProductionHardening','137-BuildRelease','138-CloudflareProduction'
+    '131-RealDataFoundation','132-RealAuthentication','133-CommunicationConnectors','134-OpenFinanceFoundation','135-EnterpriseUserManagement','136-ProductionHardening','137-BuildRelease','138-CloudflareProduction',
+    '139-RealBackendCompletion','140-RealCommunicationHub','141-FinanceHubFoundation','142-DocumentCenter','143-AIOrchestrator','144-EnterpriseSecurity','145-ProductionCertification','146-BuildCloudflare',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -270,7 +284,20 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     'app-ecosystem','personal-hub','enterprise-settings','observability',
     'dashboard-v2','smart-search','notification-center','integration-center',
     'life-hub','integration-marketplace','ai-copilot','enterprise-admin',
-    'integrations-manager','dashboard-v11','identity','file-center','automation','analytics'
+    'integrations-manager','dashboard-v11','identity','file-center','automation','analytics',
+    'communication-hub','finance-hub','document-center',
+  ],
+  apis: [
+    '/api/dashboard','/api/tasks','/api/habits','/api/goals',
+    '/api/communication/hub','/api/communication/callback/[provider]',
+    '/api/finance/hub','/api/documents',
+    '/api/ai/orchestrator','/api/security',
+    '/api/auth/google','/api/auth/apple',
+    '/api/connectors/communication','/api/finance/open-finance','/api/finance/pix',
+    '/api/enterprise/invite','/api/enterprise/members',
+    '/api/login','/api/logout','/api/register','/api/session','/api/sessions',
+    '/api/profile','/api/settings','/api/notifications','/api/workspaces','/api/organization',
+    '/api/password-reset','/api/onboarding','/api/health',
   ],
   commit,
   builtAt,
@@ -280,7 +307,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '13.0.0',
+  version: '14.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -365,6 +392,16 @@ for (const mod of v106Modules) {
   await stat(resolve(dist, mod));
 }
 
+// Validar módulos v14.0 (Phases 139-144)
+const v140Modules = [
+  'app/modules/communication-hub.html',
+  'app/modules/finance-hub.html',
+  'app/modules/document-center.html',
+];
+for (const mod of v140Modules) {
+  await stat(resolve(dist, mod));
+}
+
 // ─── Patch URLs legadas ────────────────────────────────────────────────────────
 async function patchApiUrls(filePath) {
   try {
@@ -408,14 +445,15 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v13.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v14.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 13.0.0`);
+console.log(`  Version       : 14.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Architecture  : Multi-Page RBAC + OAuth 2.0 + Open Finance + Enterprise`);
-console.log(`  Phases        : 131-138 Real Data | Auth | Connectors | Open Finance | Enterprise`);
-console.log(`  Modules       : 26 total (8 legacy + 4 v9.5 + 4 v10 + 4 v10.1 + 1 v10.6 + 5 v11)`);
+console.log(`  Architecture  : Multi-Page RBAC + OAuth 2.0 + Open Finance + Enterprise + AI Orchestrator + Security`);
+console.log(`  Phases        : 139-146 Real Backend | Comm Hub | Finance Hub | Doc Center | AI Orchestrator | Security`);
+console.log(`  Modules       : 29 total (26 legacy + 3 v14.0)`);
+console.log(`  APIs          : 30+ endpoints`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);
