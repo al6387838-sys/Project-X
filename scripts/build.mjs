@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 10.6.0 (Phases 101-109 — Product Polish, Life Hub, Integration Marketplace, AI Copilot, Enterprise Admin, Integration Readiness)
+// Version: 11.1.0 (Phases 101-119 — Enterprise Core e Onboarding)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -154,7 +154,7 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
 
 // Gerar _redirects v10.6 com rotas preservadas
 const redirects = [
-  '# LifeOS Enterprise v11.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v11.1.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -208,7 +208,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 // ─── Build metadata v10.6 ────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v11.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v11.1.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -237,7 +237,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '11.0.0',
+  version: '11.1.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -246,7 +246,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '093-CommandCenter','094-UniversalSearch','095-IntegrationCenter','096-CompanionAI',
     '097-EnterpriseAdmin','098-Hardening','099-ReleaseCandidate','100-ProductionRelease',
     '101-ProductPolish','102-LifeHub','103-IntegrationMarketplace','104-AICopilot',
-    '105-EnterpriseAdmin','106-QA','107-Build','108-Release','109-IntegrationReadiness','111-UniversalCommandCenter','112-DigitalIdentity','113-EnterpriseFileCenter','114-AutomationStudio','115-AnalyticsCenter'
+    '105-EnterpriseAdmin','106-QA','107-Build','108-Release','109-IntegrationReadiness','111-UniversalCommandCenter','112-DigitalIdentity','113-EnterpriseFileCenter','114-AutomationStudio','115-AnalyticsCenter','119-EnterpriseOnboarding'
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -264,7 +264,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '11.0.0',
+  version: '11.1.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -392,13 +392,13 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v11.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v11.1.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 11.0.0`);
+console.log(`  Version       : 11.1.0`);
 console.log(`  Build ID      : ${buildId}`);
 console.log(`  Architecture  : Multi-Page RBAC + OAuth 2.0 + Integration Ready`);
-console.log(`  Phases        : 101-109 Product/LifeHub/Marketplace/AICopilot/Admin/QA/Build/Release/Integrations | 111-115 v11 Core`);
+console.log(`  Phases        : 101-109 Enterprise Foundation | 111-115 v11 Core | 119 Enterprise Onboarding`);
 console.log(`  Modules       : 26 total (8 legacy + 4 v9.5 + 4 v10 + 4 v10.1 + 1 v10.6 + 5 v11)`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
