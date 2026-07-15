@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard 2.0 — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25); --text-primary: #F0F4FF;
+      --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12); --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-hero: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: transparent; color: var(--text-primary); font-size: 14px; }
+
+    /* ── HEADER ── */
+    .dash2-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .dash2-greeting { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .dash2-date { font-size: 13px; color: var(--text-secondary); margin-top: 3px; }
+    .dash2-header-actions { display: flex; gap: 8px; align-items: center; }
+    .btn-dash { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid; }
+    .btn-dash-primary { background: var(--gradient-primary); color: #fff; border-color: transparent; box-shadow: 0 2px 10px rgba(99,102,241,0.3); }
+    .btn-dash-secondary { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--text-secondary); }
+    .btn-dash-secondary:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+    .btn-dash-icon { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--text-secondary); padding: 8px 10px; }
+    .btn-dash-icon:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+    .edit-mode-badge { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: none; }
+    .edit-mode-badge.visible { display: block; }
+
+    /* ── WIDGET GRID ── */
+    .widget-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+    .widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .widget::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    }
+    .widget:hover { border-color: rgba(99,102,241,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    /* Column spans */
+    .w-3  { grid-column: span 3; }
+    .w-4  { grid-column: span 4; }
+    .w-6  { grid-column: span 6; }
+    .w-8  { grid-column: span 8; }
+    .w-12 { grid-column: span 12; }
+    @media (max-width: 1200px) {
+      .w-3 { grid-column: span 6; }
+      .w-4 { grid-column: span 6; }
+      .w-8 { grid-column: span 12; }
+    }
+    @media (max-width: 768px) {
+      .widget-grid { grid-template-columns: 1fr; }
+      .w-3, .w-4, .w-6, .w-8, .w-12 { grid-column: span 1; }
+    }
+
+    /* ── EDIT MODE ── */
+    .widget-grid.edit-mode .widget {
+      border-color: rgba(245,158,11,0.25);
+      cursor: grab;
+    }
+    .widget-grid.edit-mode .widget:hover {
+      border-color: rgba(245,158,11,0.5);
+      box-shadow: 0 0 0 2px rgba(245,158,11,0.15);
+    }
+    .widget-grid.edit-mode .widget.dragging {
+      opacity: 0.5; cursor: grabbing;
+    }
+    .widget-grid.edit-mode .widget.drag-over {
+      border-color: rgba(99,102,241,0.6);
+      background: rgba(99,102,241,0.06);
+    }
+    .widget-drag-handle {
+      position: absolute; top: 10px; right: 10px;
+      width: 24px; height: 24px;
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 6px;
+      display: none; align-items: center; justify-content: center;
+      cursor: grab; font-size: 12px; color: var(--amber);
+    }
+    .widget-grid.edit-mode .widget-drag-handle { display: flex; }
+    .widget-remove-btn {
+      position: absolute; top: 10px; left: 10px;
+      width: 22px; height: 22px;
+      background: rgba(239,68,68,0.15);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 10px; color: var(--red);
+      transition: all 0.15s;
+    }
+    .widget-remove-btn:hover { background: rgba(239,68,68,0.3); }
+    .widget-grid.edit-mode .widget-remove-btn { display: flex; }
+    .widget-hidden { display: none !important; }
+
+    /* ── WIDGET HEADER ── */
+    .widget-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .widget-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); }
+    .widget-action { font-size: 11px; font-weight: 600; color: var(--accent-light); cursor: pointer; background: none; border: none; padding: 0; }
+    .widget-action:hover { text-decoration: underline; }
+
+    /* ── WIDGET: RESUMO DO DIA ── */
+    .day-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .day-summary-item { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px; }
+    .day-summary-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .day-summary-value { font-size: 18px; font-weight: 800; }
+    .day-summary-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* ── WIDGET: LIFE SCORE ── */
+    .score-ring-container { display: flex; align-items: center; gap: 20px; }
+    .score-ring { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .score-ring-value { font-size: 22px; font-weight: 900; background: var(--gradient-hero); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .score-ring-label { font-size: 9px; color: var(--text-muted); font-weight: 600; }
+    .score-breakdown { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .score-item { display: flex; align-items: center; gap: 8px; }
+    .score-item-label { font-size: 11px; color: var(--text-secondary); width: 70px; flex-shrink: 0; }
+    .score-item-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .score-item-fill { height: 100%; border-radius: 2px; }
+    .score-item-val { font-size: 11px; font-weight: 700; width: 28px; text-align: right; flex-shrink: 0; }
+
+    /* ── WIDGET: AGENDA ── */
+    .agenda-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .agenda-item:last-child { border-bottom: none; }
+    .agenda-time { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 42px; flex-shrink: 0; margin-top: 2px; }
+    .agenda-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .agenda-content { flex: 1; }
+    .agenda-title { font-size: 13px; font-weight: 600; }
+    .agenda-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .agenda-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+
+    /* ── WIDGET: PRÓXIMOS COMPROMISSOS ── */
+    .upcoming-item { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 8px; }
+    .upcoming-item:last-child { margin-bottom: 0; }
+    .upcoming-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .upcoming-info { flex: 1; }
+    .upcoming-title { font-size: 13px; font-weight: 600; }
+    .upcoming-when { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .upcoming-countdown { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
+
+    /* ── WIDGET: HÁBITOS ── */
+    .habit-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .habit-row:last-child { border-bottom: none; }
+    .habit-check-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; font-size: 11px; font-weight: 700; }
+    .habit-check-btn.done { background: var(--green); border-color: var(--green); color: #fff; }
+    .habit-name-text { flex: 1; font-size: 13px; }
+    .habit-streak-badge { font-size: 10px; color: var(--amber); font-weight: 700; }
+    .habits-progress { margin-top: 12px; }
+    .habits-progress-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .habits-progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .habits-progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), #34D399); transition: width 0.5s; }
+
+    /* ── WIDGET: METAS ── */
+    .goal-row { margin-bottom: 12px; }
+    .goal-row:last-child { margin-bottom: 0; }
+    .goal-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .goal-row-name { font-size: 13px; font-weight: 600; }
+    .goal-row-pct { font-size: 12px; font-weight: 700; }
+    .goal-row-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .goal-row-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+    /* ── WIDGET: FINANCE RESUMO ── */
+    .finance-summary-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .finance-summary-row:last-child { border-bottom: none; }
+    .finance-summary-label { font-size: 12px; color: var(--text-secondary); }
+    .finance-summary-value { font-size: 14px; font-weight: 700; }
+    .finance-summary-value.positive { color: var(--green); }
+    .finance-summary-value.negative { color: var(--red); }
+    .finance-summary-value.neutral { color: var(--amber); }
+    .finance-mini-chart { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin-top: 12px; }
+    .finance-mini-bar { flex: 1; border-radius: 2px 2px 0 0; }
+
+    /* ── WIDGET: COMUNICAÇÃO ── */
+    .comm-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .comm-item:last-child { border-bottom: none; }
+    .comm-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .comm-info { flex: 1; min-width: 0; }
+    .comm-name { font-size: 13px; font-weight: 600; }
+    .comm-preview { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .comm-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+    .comm-time { font-size: 10px; color: var(--text-muted); }
+    .comm-unread { background: var(--accent); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px; }
+
+    /* ── WIDGET: IA COMPANION ── */
+    .ai-companion-msg { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+    .ai-companion-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .ai-companion-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .ai-companion-name { font-size: 12px; font-weight: 700; color: var(--accent-light); }
+    .ai-companion-text { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+    .ai-companion-input { display: flex; gap: 8px; margin-top: 10px; }
+    .ai-companion-field { flex: 1; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 12px; font-size: 13px; color: var(--text-primary); font-family: inherit; outline: none; transition: border-color 0.2s; }
+    .ai-companion-field:focus { border-color: var(--border-accent); }
+    .ai-companion-send { background: var(--gradient-primary); color: #fff; border: none; border-radius: var(--radius-md); padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+    /* ── WIDGET: ATIVIDADES RECENTES ── */
+    .activity-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .activity-content { flex: 1; }
+    .activity-title { font-size: 13px; font-weight: 500; }
+    .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── WIDGET CATALOG (Add Widget Panel) ── */
+    .widget-catalog-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      z-index: 1000; display: none; align-items: center; justify-content: center;
+    }
+    .widget-catalog-overlay.open { display: flex; }
+    .widget-catalog {
+      background: var(--bg-elevated); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl); padding: 28px; width: 580px; max-width: 95vw;
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      animation: scaleIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes scaleIn { from { opacity:0; transform: scale(0.92); } to { opacity:1; transform: scale(1); } }
+    .catalog-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .catalog-title { font-size: 18px; font-weight: 800; }
+    .catalog-close { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: var(--text-secondary); }
+    .catalog-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .catalog-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; cursor: pointer; transition: all 0.2s; }
+    .catalog-item:hover { border-color: var(--border-accent); background: var(--bg-card-hover); }
+    .catalog-item.added { border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.05); }
+    .catalog-item-icon { font-size: 24px; margin-bottom: 8px; }
+    .catalog-item-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .catalog-item-desc { font-size: 12px; color: var(--text-muted); }
+    .catalog-item-status { font-size: 10px; font-weight: 700; margin-top: 8px; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+    .catalog-item-status.active { background: rgba(16,185,129,0.12); color: var(--green); }
+    .catalog-item-status.inactive { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+    /* ── MISC ── */
+    .trend-up { color: var(--green); font-size: 11px; font-weight: 600; }
+    .trend-down { color: var(--red); font-size: 11px; font-weight: 600; }
+    .badge-sm { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+    .badge-green { background: rgba(16,185,129,0.12); color: var(--green); }
+    .badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .badge-accent { background: rgba(99,102,241,0.12); color: var(--accent-light); }
+    .badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="dash2-header">
+    <div>
+      <div class="dash2-greeting" id="d2-greeting">Bom dia! 👋</div>
+      <div class="dash2-date" id="d2-date">Carregando...</div>
+    </div>
+    <div class="dash2-header-actions">
+      <span class="edit-mode-badge" id="edit-badge">✏️ Modo Edição</span>
+      <button class="btn-dash btn-dash-secondary" onclick="openWidgetCatalog()">＋ Adicionar Widget</button>
+      <button class="btn-dash btn-dash-secondary" id="edit-btn" onclick="toggleEditMode()">⚙ Personalizar</button>
+      <button class="btn-dash btn-dash-primary" onclick="saveLayout()">💾 Salvar Layout</button>
+    </div>
+  </div>
+
+  <!-- WIDGET GRID -->
+  <div class="widget-grid" id="widgetGrid">
+
+    <!-- W1: Resumo do Dia -->
+    <div class="widget w-12" id="widget-day-summary" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-day-summary')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Resumo do Dia</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver agenda →</button>
+      </div>
+      <div class="day-summary-grid">
+        <div class="day-summary-item">
+          <div class="day-summary-label">Tarefas hoje</div>
+          <div class="day-summary-value" style="color:var(--accent)">8</div>
+          <div class="day-summary-sub">3 concluídas · 5 pendentes</div>
+        </div>
+        <div class="day-summary-item">
+          <div class="day-summary-label">Reuniões</div>
+          <div class="day-summary-value" style="color:var(--cyan)">3</div>
+          <div class="day-summary-sub">Próxima: 14h30 · Daily</div>
+        </div>
+        <div class="day-summary-item">
+          <div class="day-summary-label">Hábitos</div>
+          <div class="day-summary-value" style="color:var(--green)">4/6</div>
+          <div class="day-summary-sub">67% concluído</div>
+        </div>
+        <div class="day-summary-item">
+          <div class="day-summary-label">Foco acumulado</div>
+          <div class="day-summary-value" style="color:var(--purple)">2h 40m</div>
+          <div class="day-summary-sub">Meta: 4h diárias</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- W2: Life Score -->
+    <div class="widget w-4" id="widget-lifescore" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-lifescore')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Life Score</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('lifescore')">Detalhes →</button>
+      </div>
+      <div class="score-ring-container">
+        <div class="score-ring">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+            <circle cx="45" cy="45" r="38" fill="none" stroke="url(#scoreGrad)" stroke-width="8"
+              stroke-dasharray="238.76" stroke-dashoffset="31.04" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6366F1"/>
+                <stop offset="50%" stop-color="#8B5CF6"/>
+                <stop offset="100%" stop-color="#06B6D4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="score-ring-center">
+            <div class="score-ring-value">87</div>
+            <div class="score-ring-label">/ 100</div>
+          </div>
+        </div>
+        <div class="score-breakdown">
+          <div class="score-item">
+            <div class="score-item-label">Hábitos</div>
+            <div class="score-item-bar"><div class="score-item-fill" style="width:92%;background:var(--green)"></div></div>
+            <div class="score-item-val" style="color:var(--green)">92</div>
+          </div>
+          <div class="score-item">
+            <div class="score-item-label">Metas</div>
+            <div class="score-item-bar"><div class="score-item-fill" style="width:78%;background:var(--accent)"></div></div>
+            <div class="score-item-val" style="color:var(--accent)">78</div>
+          </div>
+          <div class="score-item">
+            <div class="score-item-label">Finanças</div>
+            <div class="score-item-bar"><div class="score-item-fill" style="width:85%;background:var(--cyan)"></div></div>
+            <div class="score-item-val" style="color:var(--cyan)">85</div>
+          </div>
+          <div class="score-item">
+            <div class="score-item-label">Bem-estar</div>
+            <div class="score-item-bar"><div class="score-item-fill" style="width:90%;background:var(--purple)"></div></div>
+            <div class="score-item-val" style="color:var(--purple)">90</div>
+          </div>
+          <div class="score-item">
+            <div class="score-item-label">Produt.</div>
+            <div class="score-item-bar"><div class="score-item-fill" style="width:82%;background:var(--amber)"></div></div>
+            <div class="score-item-val" style="color:var(--amber)">82</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:8px">
+        <span class="trend-up">↑ +3 esta semana</span>
+        <span style="font-size:11px;color:var(--text-muted)">· Recorde: 91</span>
+      </div>
+    </div>
+
+    <!-- W3: Agenda -->
+    <div class="widget w-4" id="widget-agenda" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-agenda')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Agenda de Hoje</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver tudo →</button>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">09:00</div>
+        <div class="agenda-dot" style="background:var(--green)"></div>
+        <div class="agenda-content">
+          <div class="agenda-title">Meditação matinal</div>
+          <div class="agenda-meta">10 min · Pessoal</div>
+        </div>
+        <span class="agenda-badge badge-sm badge-green">Feito</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">10:30</div>
+        <div class="agenda-dot" style="background:var(--accent)"></div>
+        <div class="agenda-content">
+          <div class="agenda-title">Revisão de Sprint</div>
+          <div class="agenda-meta">1h · Google Meet</div>
+        </div>
+        <span class="agenda-badge badge-sm badge-accent">Em breve</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">14:30</div>
+        <div class="agenda-dot" style="background:var(--cyan)"></div>
+        <div class="agenda-content">
+          <div class="agenda-title">Daily Standup</div>
+          <div class="agenda-meta">30 min · Zoom</div>
+        </div>
+        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">16:00</div>
+        <div class="agenda-dot" style="background:var(--purple)"></div>
+        <div class="agenda-content">
+          <div class="agenda-title">Treino funcional</div>
+          <div class="agenda-meta">1h · Academia</div>
+        </div>
+        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">19:00</div>
+        <div class="agenda-dot" style="background:var(--amber)"></div>
+        <div class="agenda-content">
+          <div class="agenda-title">Leitura noturna</div>
+          <div class="agenda-meta">30 min · Pessoal</div>
+        </div>
+        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
+      </div>
+    </div>
+
+    <!-- W4: Próximos Compromissos -->
+    <div class="widget w-4" id="widget-upcoming" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-upcoming')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Próximos Compromissos</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('calendar')">Calendário →</button>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-icon" style="background:rgba(99,102,241,0.15)">📋</div>
+        <div class="upcoming-info">
+          <div class="upcoming-title">Revisão Q3 2026</div>
+          <div class="upcoming-when">Amanhã · 10:00 · 2h</div>
+        </div>
+        <span class="upcoming-countdown" style="background:rgba(99,102,241,0.12);color:var(--accent-light)">1d</span>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-icon" style="background:rgba(6,182,212,0.12)">🎂</div>
+        <div class="upcoming-info">
+          <div class="upcoming-title">Aniversário — Ana</div>
+          <div class="upcoming-when">Quinta-feira · Todo o dia</div>
+        </div>
+        <span class="upcoming-countdown" style="background:rgba(6,182,212,0.1);color:var(--cyan)">3d</span>
+      </div>
+      <div class="upcoming-item">
+        <div class="upcoming-icon" style="background:rgba(16,185,129,0.12)">✈️</div>
+        <div class="upcoming-info">
+          <div class="upcoming-title">Viagem — São Paulo</div>
+          <div class="upcoming-when">Próxima semana · 3 dias</div>
+        </div>
+        <span class="upcoming-countdown" style="background:rgba(16,185,129,0.1);color:var(--green)">7d</span>
+      </div>
+    </div>
+
+    <!-- W5: Hábitos -->
+    <div class="widget w-4" id="widget-habits" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-habits')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Hábitos de Hoje</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('habits')">Ver todos →</button>
+      </div>
+      <div id="d2-habits-list">
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Meditação 10min</span><span class="habit-streak-badge">🔥 14d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Exercício físico</span><span class="habit-streak-badge">🔥 7d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Leitura 30min</span><span class="habit-streak-badge">🔥 21d</span></div>
+        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)">✓</div><span class="habit-name-text">Journaling</span><span class="habit-streak-badge">🔥 5d</span></div>
+        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Hidratação 2L</span><span class="habit-streak-badge">🔥 3d</span></div>
+        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Sono 8h</span><span class="habit-streak-badge">🔥 2d</span></div>
+      </div>
+      <div class="habits-progress">
+        <div class="habits-progress-label"><span>Progresso</span><span id="d2-habit-pct">67%</span></div>
+        <div class="habits-progress-bar"><div class="habits-progress-fill" id="d2-habit-bar" style="width:67%"></div></div>
+      </div>
+    </div>
+
+    <!-- W6: Metas -->
+    <div class="widget w-4" id="widget-goals" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-goals')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Metas Ativas</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('goals')">Ver todas →</button>
+      </div>
+      <div class="goal-row">
+        <div class="goal-row-header"><span class="goal-row-name">🏃 Correr 100km</span><span class="goal-row-pct" style="color:var(--accent)">72%</span></div>
+        <div class="goal-row-bar"><div class="goal-row-fill" style="width:72%;background:var(--gradient-primary)"></div></div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-row-header"><span class="goal-row-name">📚 Ler 24 livros</span><span class="goal-row-pct" style="color:var(--amber)">58%</span></div>
+        <div class="goal-row-bar"><div class="goal-row-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-row-header"><span class="goal-row-name">💰 Economizar R$10k</span><span class="goal-row-pct" style="color:var(--green)">45%</span></div>
+        <div class="goal-row-bar"><div class="goal-row-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
+      </div>
+      <div class="goal-row">
+        <div class="goal-row-header"><span class="goal-row-name">🧘 Meditação 30d</span><span class="goal-row-pct" style="color:var(--purple)">93%</span></div>
+        <div class="goal-row-bar"><div class="goal-row-fill" style="width:93%;background:linear-gradient(90deg,var(--purple),var(--accent))"></div></div>
+      </div>
+    </div>
+
+    <!-- W7: Finance Hub Resumo -->
+    <div class="widget w-4" id="widget-finance" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-finance')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Finance Hub</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('finance')">Abrir →</button>
+      </div>
+      <div class="finance-summary-row">
+        <span class="finance-summary-label">Saldo total</span>
+        <span class="finance-summary-value positive">R$ 24.847,00</span>
+      </div>
+      <div class="finance-summary-row">
+        <span class="finance-summary-label">Gastos este mês</span>
+        <span class="finance-summary-value negative">R$ 3.240,00</span>
+      </div>
+      <div class="finance-summary-row">
+        <span class="finance-summary-label">Investimentos</span>
+        <span class="finance-summary-value positive">R$ 18.500,00</span>
+      </div>
+      <div class="finance-summary-row">
+        <span class="finance-summary-label">Meta de economia</span>
+        <span class="finance-summary-value neutral">45%</span>
+      </div>
+      <div class="finance-mini-chart" id="d2-finance-chart"></div>
+    </div>
+
+    <!-- W8: Comunicação Resumo -->
+    <div class="widget w-4" id="widget-comm" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-comm')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Comunicação</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('messages')">Inbox →</button>
+      </div>
+      <div class="comm-item">
+        <div class="comm-avatar" style="background:var(--gradient-primary)">AM</div>
+        <div class="comm-info"><div class="comm-name">Ana Martins</div><div class="comm-preview">Oi! Você viu o relatório que mandei?</div></div>
+        <div class="comm-meta"><span class="comm-time">14:28</span><span class="comm-unread">2</span></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#06B6D4,#0891B2)">TS</div>
+        <div class="comm-info"><div class="comm-name">Time de Suporte</div><div class="comm-preview">Ticket #4821 foi resolvido com sucesso</div></div>
+        <div class="comm-meta"><span class="comm-time">13:15</span></div>
+      </div>
+      <div class="comm-item">
+        <div class="comm-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">CP</div>
+        <div class="comm-info"><div class="comm-name">Carlos Pereira</div><div class="comm-preview">Reunião confirmada para amanhã 10h</div></div>
+        <div class="comm-meta"><span class="comm-time">11:42</span><span class="comm-unread">1</span></div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <span class="badge-sm badge-accent">3 não lidas</span>
+        <span class="badge-sm badge-amber">2 urgentes</span>
+      </div>
+    </div>
+
+    <!-- W9: IA Companion -->
+    <div class="widget w-6" id="widget-ai" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-ai')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">IA Companion</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('ai')">IA Center →</button>
+      </div>
+      <div class="ai-companion-msg">
+        <div class="ai-companion-header">
+          <div class="ai-companion-avatar">🤖</div>
+          <div class="ai-companion-name">LifeOS AI · Insight do Dia</div>
+        </div>
+        <div class="ai-companion-text">
+          Seu padrão de produtividade mostra pico entre <strong>9h–11h</strong>. Você completou 87% das tarefas agendadas nesse horário. Considere reservar suas atividades mais importantes para esse período. Além disso, seu Life Score aumentou 3 pontos esta semana — continue assim!
+        </div>
+      </div>
+      <div class="ai-companion-input">
+        <input class="ai-companion-field" id="d2-ai-input" placeholder="Pergunte algo à IA..." onkeydown="if(event.key==='Enter')sendD2AI()" />
+        <button class="ai-companion-send" onclick="sendD2AI()">→</button>
+      </div>
+    </div>
+
+    <!-- W10: Atividades Recentes -->
+    <div class="widget w-6" id="widget-activities" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-activities')" title="Remover">✕</button>
+      <div class="widget-header">
+        <div class="widget-title">Atividades Recentes</div>
+        <button class="widget-action" onclick="window.parent?.showPage?.('timeline')">Timeline →</button>
+      </div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Hábito concluído: Meditação 10min</div><div class="activity-time">Hoje, 07:30</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-content"><div class="activity-title">Meta atualizada: Correr 100km → 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Transação registrada: R$2.847,00 recebido</div><div class="activity-time">Hoje, 06:00</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--amber)"></div><div class="activity-content"><div class="activity-title">Nota adicionada ao Memory Center</div><div class="activity-time">Ontem, 22:15</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--purple)"></div><div class="activity-content"><div class="activity-title">Life Score aumentou para 87 (+3)</div><div class="activity-time">Ontem, 20:00</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Hábito concluído: Exercício físico</div><div class="activity-time">Ontem, 18:30</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--red)"></div><div class="activity-content"><div class="activity-title">Alerta: AI Engine timeout detectado</div><div class="activity-time">Ontem, 14:31</div></div></div>
+    </div>
+
+  </div>
+
+  <!-- WIDGET CATALOG OVERLAY -->
+  <div class="widget-catalog-overlay" id="widgetCatalog">
+    <div class="widget-catalog">
+      <div class="catalog-header">
+        <div class="catalog-title">Adicionar Widget</div>
+        <button class="catalog-close" onclick="closeWidgetCatalog()">✕</button>
+      </div>
+      <div class="catalog-grid" id="catalogGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Init ──
+    (function() {
+      const hour = new Date().getHours();
+      const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+      const el = document.getElementById('d2-greeting');
+      if (el) el.textContent = `${greeting}! 👋`;
+      const dateEl = document.getElementById('d2-date');
+      if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    })();
+
+    // ── Finance mini chart ──
+    (function() {
+      const chart = document.getElementById('d2-finance-chart');
+      if (!chart) return;
+      const vals = [40,55,35,70,60,80,65,90,75,85,70,95];
+      vals.forEach(v => {
+        const bar = document.createElement('div');
+        bar.className = 'finance-mini-bar';
+        bar.style.cssText = `flex:1;height:${v}%;border-radius:2px 2px 0 0;background:${v > 70 ? 'var(--green)' : 'var(--accent)'};opacity:${0.4 + v/100 * 0.6}`;
+        chart.appendChild(bar);
+      });
+    })();
+
+    // ── Habit toggle ──
+    function toggleD2Habit(btn) {
+      btn.classList.toggle('done');
+      btn.textContent = btn.classList.contains('done') ? '✓' : '';
+      updateHabitProgress();
+    }
+    function updateHabitProgress() {
+      const total = document.querySelectorAll('#d2-habits-list .habit-check-btn').length;
+      const done = document.querySelectorAll('#d2-habits-list .habit-check-btn.done').length;
+      const pct = Math.round(done / total * 100);
+      const pctEl = document.getElementById('d2-habit-pct');
+      const barEl = document.getElementById('d2-habit-bar');
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (barEl) barEl.style.width = pct + '%';
+    }
+
+    // ── AI Companion ──
+    function sendD2AI() {
+      const input = document.getElementById('d2-ai-input');
+      if (!input || !input.value.trim()) return;
+      const msg = input.value.trim();
+      input.value = '';
+      const msgEl = document.querySelector('.ai-companion-text');
+      if (msgEl) {
+        msgEl.textContent = '⏳ Processando sua pergunta: "' + msg + '"...';
+        setTimeout(() => {
+          msgEl.innerHTML = `Ótima pergunta sobre "<strong>${msg}</strong>". Com base no seu histórico, recomendo focar nas tarefas de maior impacto no período da manhã. Seu padrão mostra 87% de eficiência entre 9h–11h.`;
+        }, 1200);
+      }
+    }
+
+    // ── Edit Mode ──
+    let editMode = false;
+    function toggleEditMode() {
+      editMode = !editMode;
+      const grid = document.getElementById('widgetGrid');
+      const badge = document.getElementById('edit-badge');
+      const btn = document.getElementById('edit-btn');
+      grid.classList.toggle('edit-mode', editMode);
+      badge.classList.toggle('visible', editMode);
+      btn.textContent = editMode ? '✓ Concluir' : '⚙ Personalizar';
+      if (!editMode) saveLayout();
+    }
+
+    // ── Drag & Drop ──
+    let dragSrc = null;
+    document.addEventListener('dragstart', (e) => {
+      const widget = e.target.closest('.widget');
+      if (!widget || !editMode) return;
+      dragSrc = widget;
+      widget.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    document.addEventListener('dragend', (e) => {
+      const widget = e.target.closest('.widget');
+      if (widget) widget.classList.remove('dragging');
+      document.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+    });
+    document.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const widget = e.target.closest('.widget');
+      if (widget && widget !== dragSrc && editMode) {
+        document.querySelectorAll('.widget').forEach(w => w.classList.remove('drag-over'));
+        widget.classList.add('drag-over');
+      }
+    });
+    document.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const target = e.target.closest('.widget');
+      if (!target || target === dragSrc || !editMode) return;
+      const grid = document.getElementById('widgetGrid');
+      const nodes = [...grid.children];
+      const srcIdx = nodes.indexOf(dragSrc);
+      const tgtIdx = nodes.indexOf(target);
+      if (srcIdx < tgtIdx) grid.insertBefore(dragSrc, target.nextSibling);
+      else grid.insertBefore(dragSrc, target);
+      target.classList.remove('drag-over');
+      showToastD2('Widget reposicionado!', 'success');
+    });
+
+    // ── Remove Widget ──
+    function removeWidget(id) {
+      const w = document.getElementById(id);
+      if (w) {
+        w.style.transition = 'all 0.3s';
+        w.style.opacity = '0';
+        w.style.transform = 'scale(0.9)';
+        setTimeout(() => { w.classList.add('widget-hidden'); w.style.opacity = ''; w.style.transform = ''; }, 300);
+        saveLayout();
+        showToastD2('Widget removido. Você pode adicioná-lo novamente.', 'info');
+      }
+    }
+
+    // ── Widget Catalog ──
+    const WIDGET_CATALOG = [
+      { id: 'widget-day-summary', icon: '📅', name: 'Resumo do Dia', desc: 'Visão geral do seu dia' },
+      { id: 'widget-lifescore', icon: '⭐', name: 'Life Score', desc: 'Pontuação de vida com breakdown' },
+      { id: 'widget-agenda', icon: '🗓️', name: 'Agenda', desc: 'Compromissos de hoje' },
+      { id: 'widget-upcoming', icon: '⏰', name: 'Próximos Compromissos', desc: 'Eventos futuros' },
+      { id: 'widget-habits', icon: '🔄', name: 'Hábitos', desc: 'Hábitos diários e progresso' },
+      { id: 'widget-goals', icon: '🎯', name: 'Metas', desc: 'Metas ativas com progresso' },
+      { id: 'widget-finance', icon: '💰', name: 'Finance Hub', desc: 'Resumo financeiro' },
+      { id: 'widget-comm', icon: '💬', name: 'Comunicação', desc: 'Mensagens recentes' },
+      { id: 'widget-ai', icon: '🤖', name: 'IA Companion', desc: 'Insights e chat com IA' },
+      { id: 'widget-activities', icon: '📋', name: 'Atividades Recentes', desc: 'Timeline de ações' },
+    ];
+    function openWidgetCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      grid.innerHTML = WIDGET_CATALOG.map(w => {
+        const el = document.getElementById(w.id);
+        const isVisible = el && !el.classList.contains('widget-hidden');
+        return `<div class="catalog-item ${isVisible ? 'added' : ''}" onclick="toggleWidgetFromCatalog('${w.id}', this)">
+          <div class="catalog-item-icon">${w.icon}</div>
+          <div class="catalog-item-name">${w.name}</div>
+          <div class="catalog-item-desc">${w.desc}</div>
+          <span class="catalog-item-status ${isVisible ? 'active' : 'inactive'}">${isVisible ? '✓ Ativo' : '+ Adicionar'}</span>
+        </div>`;
+      }).join('');
+      document.getElementById('widgetCatalog').classList.add('open');
+    }
+    function closeWidgetCatalog() {
+      document.getElementById('widgetCatalog').classList.remove('open');
+    }
+    function toggleWidgetFromCatalog(id, el) {
+      const widget = document.getElementById(id);
+      if (!widget) return;
+      const isHidden = widget.classList.contains('widget-hidden');
+      if (isHidden) {
+        widget.classList.remove('widget-hidden');
+        widget.style.animation = 'none';
+        widget.offsetHeight;
+        widget.style.animation = 'fadeIn 0.3s ease';
+        el.classList.add('added');
+        el.querySelector('.catalog-item-status').textContent = '✓ Ativo';
+        el.querySelector('.catalog-item-status').className = 'catalog-item-status active';
+        showToastD2('Widget adicionado!', 'success');
+      } else {
+        widget.classList.add('widget-hidden');
+        el.classList.remove('added');
+        el.querySelector('.catalog-item-status').textContent = '+ Adicionar';
+        el.querySelector('.catalog-item-status').className = 'catalog-item-status inactive';
+        showToastD2('Widget removido.', 'info');
+      }
+      saveLayout();
+    }
+    document.getElementById('widgetCatalog').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('widgetCatalog')) closeWidgetCatalog();
+    });
+
+    // ── Save Layout ──
+    function saveLayout() {
+      const grid = document.getElementById('widgetGrid');
+      const order = [...grid.children].map(w => w.id);
+      const hidden = [...document.querySelectorAll('.widget.widget-hidden')].map(w => w.id);
+      try {
+        localStorage.setItem('lifeos_dashboard_v2_order', JSON.stringify(order));
+        localStorage.setItem('lifeos_dashboard_v2_hidden', JSON.stringify(hidden));
+      } catch (_) {}
+    }
+    function loadLayout() {
+      try {
+        const order = JSON.parse(localStorage.getItem('lifeos_dashboard_v2_order') || '[]');
+        const hidden = JSON.parse(localStorage.getItem('lifeos_dashboard_v2_hidden') || '[]');
+        const grid = document.getElementById('widgetGrid');
+        if (order.length) {
+          order.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) grid.appendChild(el);
+          });
+        }
+        hidden.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('widget-hidden');
+        });
+      } catch (_) {}
+    }
+    loadLayout();
+
+    // ── Toast ──
+    function showToastD2(msg, type = 'info') {
+      const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };
+      const toast = document.createElement('div');
+      toast.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:#1E293B;border:1px solid ${colors[type]};border-radius:12px;padding:12px 18px;font-size:13px;color:#F0F4FF;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeIn 0.3s ease;`;
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+
+    // ── Keyboard shortcut ──
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeWidgetCatalog();
+    });
+  </script>
+</body>
+</html>

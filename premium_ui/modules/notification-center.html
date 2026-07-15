@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notification Center — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25);
+      --text-primary: #F0F4FF; --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8; --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: transparent; color: var(--text-primary); font-size: 14px; }
+
+    /* ── TABS ── */
+    .nc-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--bg-card); border-radius: var(--radius-md); padding: 4px; border: 1px solid var(--border); }
+    .nc-tab { flex: 1; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-muted); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .nc-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+    .nc-tab.active { background: var(--gradient-primary); color: #fff; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+    .nc-tab-count { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 8px; }
+    .nc-tab-count.red { background: rgba(239,68,68,0.2); color: var(--red); }
+    .nc-tab-count.green { background: rgba(16,185,129,0.2); color: var(--green); }
+
+    /* ── FILTER BAR ── */
+    .nc-filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .nc-filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .nc-filter-btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); transition: all 0.15s; }
+    .nc-filter-btn:hover { border-color: rgba(99,102,241,0.3); color: var(--text-primary); }
+    .nc-filter-btn.active { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.4); color: var(--accent-light); }
+    .nc-priority-select { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); appearance: none; }
+    .nc-stats-bar { display: flex; gap: 16px; margin-bottom: 16px; }
+    .nc-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+    .nc-stat-val { font-weight: 700; color: var(--text-primary); }
+
+    /* ── NOTIFICATION ITEM ── */
+    .nc-item {
+      display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px;
+      border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s;
+      border: 1px solid transparent; margin-bottom: 6px; position: relative;
+    }
+    .nc-item:hover { background: var(--bg-card); border-color: var(--border); }
+    .nc-item.unread { background: rgba(99,102,241,0.03); border-color: rgba(99,102,241,0.1); }
+    .nc-item.unread:hover { background: rgba(99,102,241,0.06); border-color: rgba(99,102,241,0.2); }
+    .nc-item.read { opacity: 0.7; }
+    .nc-item-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .nc-item-content { flex: 1; min-width: 0; }
+    .nc-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .nc-item-title { font-size: 14px; font-weight: 600; }
+    .nc-item-priority { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .nc-item-priority.critical { background: rgba(239,68,68,0.15); color: var(--red); }
+    .nc-item-priority.high { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .nc-item-priority.medium { background: rgba(99,102,241,0.15); color: var(--accent-light); }
+    .nc-item-priority.low { background: rgba(16,185,129,0.15); color: var(--green); }
+    .nc-item-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 4px; }
+    .nc-item-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); }
+    .nc-item-cat { font-weight: 600; }
+    .nc-item-time { font-family: 'JetBrains Mono', monospace; }
+    .nc-item-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; flex-shrink: 0; }
+    .nc-item:hover .nc-item-actions { opacity: 1; }
+    .nc-action-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: var(--text-muted); transition: all 0.15s; }
+    .nc-action-btn:hover { border-color: var(--accent); color: var(--accent-light); }
+    .nc-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 16px; box-shadow: 0 0 8px rgba(99,102,241,0.4); }
+
+    /* ── CATEGORY GROUP ── */
+    .nc-cat-group { margin-bottom: 8px; }
+    .nc-cat-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 6px; border: 1px solid var(--border); }
+    .nc-cat-icon { font-size: 14px; }
+    .nc-cat-count { background: rgba(255,255,255,0.06); color: var(--text-muted); font-size: 10px; padding: 1px 6px; border-radius: 8px; }
+
+    /* ── TOAST SIMULATION ── */
+    .nc-toast-badge {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999;
+      background: var(--bg-card); border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg); padding: 12px 18px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: slideUp 0.3s ease; cursor: pointer;
+    }
+    @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .nc-toast-icon { font-size: 20px; }
+    .nc-toast-text { font-size: 13px; font-weight: 600; }
+    .nc-toast-time { font-size: 10px; color: var(--text-muted); }
+
+    /* ── EMPTY ── */
+    .nc-empty { text-align: center; padding: 48px 20px; }
+    .nc-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .nc-empty-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .nc-empty-desc { font-size: 13px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <!-- TABS -->
+  <div class="nc-tabs">
+    <button class="nc-tab active" onclick="ncSetTab('all', this)" id="nc-tab-all">Todas <span class="nc-tab-count red" id="nc-count-unread">0</span></button>
+    <button class="nc-tab" onclick="ncSetTab('unread', this)" id="nc-tab-unread">Não lidas <span class="nc-tab-count red" id="nc-count-unread2">0</span></button>
+    <button class="nc-tab" onclick="ncSetTab('categories', this)" id="nc-tab-categories">Por categoria</button>
+    <button class="nc-tab" onclick="ncSetTab('history', this)" id="nc-tab-history">Histórico</button>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="nc-filter-bar" id="nc-filter-bar">
+    <div class="nc-filter-group">
+      <button class="nc-filter-btn active" onclick="ncFilterPriority('all', this)">Todas prioridades</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('critical', this)">🔴 Crítica</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('high', this)">🟠 Alta</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('medium', this)">🔵 Média</button>
+      <button class="nc-filter-btn" onclick="ncFilterPriority('low', this)">🟢 Baixa</button>
+    </div>
+    <div class="nc-filter-group">
+      <button class="nc-filter-btn" onclick="ncFilterCategory('all', this)">Todas categorias</button>
+      <button class="nc-filter-btn" onclick="ncFilterCategory('system', this)">Sistema</button>
+      <button class="nc-filter-btn" onclick="ncFilterCategory('productivity', this)">Produtividade</button>
+      <button class="nc-filter-btn" onclick="ncFilterCategory('finance', this)">Financeiro</button>
+      <button class="nc-filter-btn" onclick="ncFilterCategory('social', this)">Social</button>
+      <button class="nc-filter-btn" onclick="ncFilterCategory('security', this)">Segurança</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="nc-stats-bar" id="nc-stats">
+    <div class="nc-stat"><span class="nc-stat-val" id="nc-stat-total">0</span> total</div>
+    <div class="nc-stat"><span class="nc-stat-val" id="nc-stat-unread">0</span> não lidas</div>
+    <div class="nc-stat"><span class="nc-stat-val" id="nc-stat-critical">0</span> críticas</div>
+    <div class="nc-stat"><span class="nc-stat-val" id="nc-stat-today">0</span> hoje</div>
+  </div>
+
+  <!-- NOTIFICATIONS LIST -->
+  <div id="nc-list"></div>
+
+  <!-- Empty state -->
+  <div id="nc-empty" class="nc-empty" style="display:none">
+    <div class="nc-empty-icon">🔔</div>
+    <div class="nc-empty-title">Nenhuma notificação</div>
+    <div class="nc-empty-desc">Você está em dia! Nenhuma notificação pendente.</div>
+  </div>
+
+  <script>
+    // ── DATA ──
+    const NOTIFICATIONS = [
+      { id: 'n01', title: 'AI Engine timeout detectado', desc: 'Timeout de 30s no endpoint /api/ai/analyze. Retry automático agendado.', time: 'Hoje, 14:31', priority: 'critical', category: 'system', icon: '🔴', iconBg: 'rgba(239,68,68,0.12)', read: false },
+      { id: 'n02', title: 'Backup automático concluído', desc: 'Backup completo do banco de dados realizado com sucesso. 2.4 GB comprimido.', time: 'Hoje, 03:00', priority: 'low', category: 'system', icon: '✅', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n03', title: 'Streak de 14 dias!', desc: 'Parabéns! Você manteve seus hábitos por 14 dias consecutivos. Seu recorde anterior era 21 dias.', time: 'Hoje, 00:01', priority: 'medium', category: 'productivity', icon: '🔥', iconBg: 'rgba(245,158,11,0.12)', read: false },
+      { id: 'n04', title: 'Life Score aumentou para 87', desc: 'Seu Life Score subiu de 84 para 87. Hábitos e metas estão no caminho certo.', time: 'Ontem, 20:00', priority: 'medium', category: 'productivity', icon: '⭐', iconBg: 'rgba(139,92,246,0.12)', read: false },
+      { id: 'n05', title: 'Meta próxima do prazo', desc: '"Ler 24 livros" vence em 30 dias. Você está 58% completo (14/24). Considere acelerar.', time: 'Ontem, 09:00', priority: 'high', category: 'productivity', icon: '⏰', iconBg: 'rgba(245,158,11,0.12)', read: false },
+      { id: 'n06', title: 'Transação: R$2.847,00 recebido', desc: 'Depósito recebido na conta principal. Saldo atualizado: R$24.847,00.', time: 'Hoje, 06:00', priority: 'high', category: 'finance', icon: '💰', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n07', title: 'Fatura processada com sucesso', desc: 'Pagamento de R$1.290,00 processado. Próxima fatura em 30 dias.', time: 'Ontem, 18:00', priority: 'low', category: 'finance', icon: '🧾', iconBg: 'rgba(16,185,129,0.12)', read: false },
+      { id: 'n08', title: 'Novo insight de IA disponível', desc: 'A IA identificou um padrão interessante na sua produtividade. Pico entre 9h–11h.', time: 'Ontem, 14:31', priority: 'medium', category: 'system', icon: '🤖', iconBg: 'rgba(99,102,241,0.12)', read: true },
+      { id: 'n09', title: 'Membro adicionado ao workspace', desc: 'Carlos Pereira foi adicionado ao Workspace Alpha como Editor.', time: 'Ontem, 11:20', priority: 'low', category: 'social', icon: '👤', iconBg: 'rgba(6,182,212,0.12)', read: true },
+      { id: 'n10', title: 'Alerta de segurança: novo dispositivo', desc: 'Login detectado em Chrome · Windows · São Paulo, SP. Se não foi você, revogue a sessão.', time: '2 dias atrás', priority: 'critical', category: 'security', icon: '🔐', iconBg: 'rgba(239,68,68,0.12)', read: true },
+      { id: 'n11', title: 'API Key rotacionada com sucesso', desc: 'A chave API principal foi rotacionada. A chave antiga expira em 24h.', time: '2 dias atrás', priority: 'high', category: 'security', icon: '🔑', iconBg: 'rgba(245,158,11,0.12)', read: true },
+      { id: 'n12', title: 'Novo insight de IA disponível', desc: 'A IA identificou que você pode economizar R$420/mês ajustando assinaturas.', time: '3 dias atrás', priority: 'medium', category: 'system', icon: '🤖', iconBg: 'rgba(99,102,241,0.12)', read: true },
+      { id: 'n13', title: 'Meta concluída: Meditação 30d', desc: 'Parabéns! Você completou a meta de 30 dias de meditação consecutiva.', time: '3 dias atrás', priority: 'medium', category: 'productivity', icon: '🧘', iconBg: 'rgba(16,185,129,0.12)', read: true },
+      { id: 'n14', title: 'Webhook delivery falhou', desc: 'Webhook #3 falhou na entrega para https://api.example.com/hook. Retry em 5min.', time: '3 dias atrás', priority: 'high', category: 'system', icon: '⚠️', iconBg: 'rgba(245,158,11,0.12)', read: true },
+      { id: 'n15', title: 'Relatório semanal pronto', desc: 'Seu relatório de produtividade semanal está disponível. Clique para ver.', time: '5 dias atrás', priority: 'low', category: 'productivity', icon: '📊', iconBg: 'rgba(99,102,241,0.12)', read: true },
+    ];
+
+    let currentTab = 'all';
+    let priorityFilter = 'all';
+    let categoryFilter = 'all';
+
+    function getFiltered() {
+      let list = NOTIFICATIONS;
+      if (currentTab === 'unread') list = list.filter(n => !n.read);
+      if (currentTab === 'history') list = list.filter(n => n.read);
+      if (priorityFilter !== 'all') list = list.filter(n => n.priority === priorityFilter);
+      if (categoryFilter !== 'all') list = list.filter(n => n.category === categoryFilter);
+      return list;
+    }
+
+    function updateStats() {
+      const total = NOTIFICATIONS.length;
+      const unread = NOTIFICATIONS.filter(n => !n.read).length;
+      const critical = NOTIFICATIONS.filter(n => n.priority === 'critical').length;
+      const today = NOTIFICATIONS.filter(n => n.time.includes('Hoje')).length;
+      document.getElementById('nc-stat-total').textContent = total;
+      document.getElementById('nc-stat-unread').textContent = unread;
+      document.getElementById('nc-stat-critical').textContent = critical;
+      document.getElementById('nc-stat-today').textContent = today;
+      document.getElementById('nc-count-unread').textContent = unread;
+      document.getElementById('nc-count-unread2').textContent = unread;
+      const sub = document.getElementById('nc-subtitle');
+      if (sub) sub.textContent = unread > 0 ? `${unread} não lida${unread > 1 ? 's' : ''} · ${total} total` : 'Todas lidas';
+    }
+
+    function renderNotifications() {
+      const list = getFiltered();
+      const container = document.getElementById('nc-list');
+      const emptyEl = document.getElementById('nc-empty');
+      const filterBar = document.getElementById('nc-filter-bar');
+      const statsBar = document.getElementById('nc-stats');
+
+      if (!list.length) {
+        container.innerHTML = '';
+        emptyEl.style.display = 'block';
+        filterBar.style.display = 'none';
+        statsBar.style.display = 'none';
+        return;
+      }
+      emptyEl.style.display = 'none';
+      filterBar.style.display = 'flex';
+      statsBar.style.display = 'flex';
+
+      if (currentTab === 'categories') {
+        const groups = {};
+        list.forEach(n => { if (!groups[n.category]) groups[n.category] = []; groups[n.category].push(n); });
+        const catIcons = { system: '⚙️', productivity: '📈', finance: '💰', social: '👥', security: '🔐' };
+        const catLabels = { system: 'Sistema', productivity: 'Produtividade', finance: 'Financeiro', social: 'Social', security: 'Segurança' };
+        let html = '';
+        Object.entries(groups).forEach(([cat, items]) => {
+          html += `<div class="nc-cat-group"><div class="nc-cat-header"><span class="nc-cat-icon">${catIcons[cat] || '📌'}</span>${catLabels[cat] || cat} <span class="nc-cat-count">${items.length}</span></div>`;
+          items.forEach(n => html += renderItem(n));
+          html += `</div>`;
+        });
+        container.innerHTML = html;
+      } else {
+        container.innerHTML = list.map(n => renderItem(n)).join('');
+      }
+    }
+
+    function renderItem(n) {
+      const priLabel = { critical: 'Crítica', high: 'Alta', medium: 'Média', low: 'Baixa' };
+      return `<div class="nc-item ${n.read ? 'read' : 'unread'}" id="nc-${n.id}" onclick="ncToggleRead('${n.id}')">
+        <div class="nc-item-icon" style="background:${n.iconBg}">${n.icon}</div>
+        <div class="nc-item-content">
+          <div class="nc-item-header">
+            <span class="nc-item-title">${n.title}</span>
+            <span class="nc-item-priority ${n.priority}">${priLabel[n.priority]}</span>
+          </div>
+          <div class="nc-item-desc">${n.desc}</div>
+          <div class="nc-item-meta">
+            <span class="nc-item-cat" style="color:${n.iconBg.includes('239') ? 'var(--red)' : n.iconBg.includes('245') ? 'var(--amber)' : n.iconBg.includes('16') ? 'var(--green)' : 'var(--accent-light)'}">${n.category}</span>
+            <span>·</span>
+            <span class="nc-item-time">${n.time}</span>
+          </div>
+        </div>
+        <div class="nc-item-actions">
+          ${!n.read ? `<button class="nc-action-btn" onclick="event.stopPropagation();ncToggleRead('${n.id}')" title="Marcar como lida">✓</button>` : ''}
+          <button class="nc-action-btn" onclick="event.stopPropagation();ncDelete('${n.id}')" title="Remover">🗑</button>
+        </div>
+        ${!n.read ? `<div class="nc-unread-dot"></div>` : ''}
+      </div>`;
+    }
+
+    function ncSetTab(tab, btn) {
+      currentTab = tab;
+      document.querySelectorAll('.nc-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderNotifications();
+    }
+    function ncFilterPriority(pri, btn) {
+      priorityFilter = pri;
+      document.querySelectorAll('.nc-filter-btn').forEach(b => { if (b.getAttribute('onclick')?.includes('FilterPriority')) b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderNotifications();
+    }
+    function ncFilterCategory(cat, btn) {
+      categoryFilter = cat;
+      document.querySelectorAll('.nc-filter-btn').forEach(b => { if (b.getAttribute('onclick')?.includes('FilterCategory')) b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderNotifications();
+    }
+    function ncToggleRead(id) {
+      const n = NOTIFICATIONS.find(x => x.id === id);
+      if (n) { n.read = !n.read; renderNotifications(); updateStats(); }
+    }
+    function ncDelete(id) {
+      const idx = NOTIFICATIONS.findIndex(x => x.id === id);
+      if (idx >= 0) {
+        NOTIFICATIONS.splice(idx, 1);
+        renderNotifications(); updateStats();
+        showToastNC('Notificação removida', 'success');
+      }
+    }
+
+    // ── GLOBAL FUNCTIONS (called from parent) ──
+    window.ncMarkAllRead = function() {
+      NOTIFICATIONS.forEach(n => n.read = true);
+      renderNotifications(); updateStats();
+      showToastNC('Todas marcadas como lidas', 'success');
+    };
+    window.ncClearHistory = function() {
+      const unread = NOTIFICATIONS.filter(n => !n.read);
+      NOTIFICATIONS.length = 0;
+      NOTIFICATIONS.push(...unread);
+      renderNotifications(); updateStats();
+      showToastNC('Histórico limpo. Não lidas preservadas.', 'info');
+    };
+
+    function showToastNC(msg, type = 'info') {
+      const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };
+      const toast = document.createElement('div');
+      toast.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;background:#1E293B;border:1px solid ${colors[type]};border-radius:12px;padding:12px 18px;font-size:13px;color:#F0F4FF;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:slideUp 0.3s ease;`;
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+
+    // ── SIMULATED REAL-TIME NOTIFICATION ──
+    function simulateRealTime() {
+      const newNotif = {
+        id: 'n' + Date.now(),
+        title: 'Nova atividade detectada',
+        desc: 'Um evento de sistema foi registrado. Verifique o painel de Observability.',
+        time: 'Agora',
+        priority: 'medium',
+        category: 'system',
+        icon: '🔔',
+        iconBg: 'rgba(99,102,241,0.12)',
+        read: false
+      };
+      NOTIFICATIONS.unshift(newNotif);
+      renderNotifications(); updateStats();
+      // Show toast
+      const badge = document.createElement('div');
+      badge.className = 'nc-toast-badge';
+      badge.innerHTML = `<span class="nc-toast-icon">🔔</span><div><div class="nc-toast-text">Nova notificação</div><div class="nc-toast-time">Agora · ${newNotif.title}</div></div>`;
+      badge.onclick = () => { badge.remove(); };
+      document.body.appendChild(badge);
+      setTimeout(() => { if (badge.parentNode) badge.remove(); }, 5000);
+    }
+
+    // ── INIT ──
+    updateStats();
+    renderNotifications();
+    // Simulate real-time after 10s
+    setTimeout(simulateRealTime, 10000);
+  </script>
+</body>
+</html>

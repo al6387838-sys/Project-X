@@ -1145,165 +1145,9 @@
 
       <!-- ─── DASHBOARD ─── -->
       <div class="page active" id="page-dashboard">
-        <div class="page-header">
-          <div>
-            <div class="page-title" id="dash-greeting">Bom dia!</div>
-            <div class="page-subtitle" id="dash-date">Carregando...</div>
-          </div>
-          <button class="btn btn-primary" onclick="showPage('agenda')">+ Adicionar tarefa</button>
-        </div>
+        <!-- Life Dashboard 2.0 — Phase 088 -->
+        <div id="dashboard-v2-container"></div>
 
-        <!-- KPIs -->
-        <div class="grid-4" style="margin-bottom:20px">
-          <div class="card">
-            <div class="card-title">Life Score</div>
-            <div class="card-value" style="background:var(--gradient-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="kpi-score">87</div>
-            <div class="card-trend trend-up">↑ +3 esta semana</div>
-            <div class="progress-bar"><div class="progress-fill" id="score-bar" style="width:87%"></div></div>
-          </div>
-          <div class="card">
-            <div class="card-title">Hábitos Hoje</div>
-            <div class="card-value" id="kpi-habits">4/6</div>
-            <div class="card-sub">67% completo</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:67%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
-          </div>
-          <div class="card">
-            <div class="card-title">Metas Ativas</div>
-            <div class="card-value" id="kpi-goals">3</div>
-            <div class="card-sub">68% progresso médio</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
-          </div>
-          <div class="card">
-            <div class="card-title">Streak</div>
-            <div class="card-value" id="kpi-streak">14d</div>
-            <div class="card-trend trend-up">🔥 Recorde pessoal!</div>
-          </div>
-        </div>
-
-        <!-- Main grid -->
-        <div class="grid-main">
-          <div>
-            <!-- AI Insight -->
-            <div class="ai-insight">
-              <div class="ai-insight-header">
-                <div class="ai-insight-icon">🤖</div>
-                <div>
-                  <div class="ai-insight-label">IA Insight do Dia</div>
-                </div>
-              </div>
-              <div class="ai-insight-text" id="ai-daily-insight">
-                Seu padrão de produtividade mostra pico entre 9h–11h. Você completou 87% das tarefas agendadas nesse horário. Considere reservar suas atividades mais importantes para esse período.
-              </div>
-            </div>
-
-            <!-- Hábitos de hoje -->
-            <div class="card" style="margin-bottom:16px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-                <div class="card-title" style="margin:0">Hábitos de Hoje</div>
-                <button class="btn btn-ghost" onclick="showPage('habits')" style="font-size:12px;padding:5px 10px">Ver todos</button>
-              </div>
-              <div id="habits-today">
-                <div class="habit-item done" onclick="toggleHabit(this)">
-                  <div class="habit-check">✓</div>
-                  <span class="habit-name">Meditação 10min</span>
-                  <span class="habit-streak">🔥 14d</span>
-                </div>
-                <div class="habit-item done" onclick="toggleHabit(this)">
-                  <div class="habit-check">✓</div>
-                  <span class="habit-name">Exercício físico</span>
-                  <span class="habit-streak">🔥 7d</span>
-                </div>
-                <div class="habit-item done" onclick="toggleHabit(this)">
-                  <div class="habit-check">✓</div>
-                  <span class="habit-name">Leitura 30min</span>
-                  <span class="habit-streak">🔥 21d</span>
-                </div>
-                <div class="habit-item done" onclick="toggleHabit(this)">
-                  <div class="habit-check">✓</div>
-                  <span class="habit-name">Journaling</span>
-                  <span class="habit-streak">🔥 5d</span>
-                </div>
-                <div class="habit-item" onclick="toggleHabit(this)">
-                  <div class="habit-check"></div>
-                  <span class="habit-name">Hidratação 2L</span>
-                  <span class="habit-streak">🔥 3d</span>
-                </div>
-                <div class="habit-item" onclick="toggleHabit(this)">
-                  <div class="habit-check"></div>
-                  <span class="habit-name">Sono 8h</span>
-                  <span class="habit-streak">🔥 2d</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <!-- Metas -->
-            <div class="card" style="margin-bottom:16px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-                <div class="card-title" style="margin:0">Metas Ativas</div>
-                <button class="btn btn-ghost" onclick="showPage('goals')" style="font-size:12px;padding:5px 10px">Ver todas</button>
-              </div>
-              <div class="goal-item">
-                <div class="goal-header">
-                  <span class="goal-name">🏃 Correr 100km</span>
-                  <span class="goal-pct">72%</span>
-                </div>
-                <div class="goal-desc">72km de 100km completados</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-header">
-                  <span class="goal-name">📚 Ler 24 livros</span>
-                  <span class="goal-pct">58%</span>
-                </div>
-                <div class="goal-desc">14 de 24 livros lidos</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-header">
-                  <span class="goal-name">💰 Economizar R$10k</span>
-                  <span class="goal-pct">45%</span>
-                </div>
-                <div class="goal-desc">R$4.500 de R$10.000</div>
-                <div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
-              </div>
-            </div>
-
-            <!-- Timeline recente -->
-            <div class="card">
-              <div class="card-title">Timeline Recente</div>
-              <div class="timeline-item">
-                <div class="timeline-dot" style="background:var(--green)"></div>
-                <div class="timeline-content">
-                  <div class="timeline-title">Hábito completado: Meditação</div>
-                  <div class="timeline-time">Hoje, 07:30</div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot" style="background:var(--accent)"></div>
-                <div class="timeline-content">
-                  <div class="timeline-title">Meta atualizada: Correr 100km</div>
-                  <div class="timeline-time">Hoje, 06:45</div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot" style="background:var(--amber)"></div>
-                <div class="timeline-content">
-                  <div class="timeline-title">Nota adicionada ao Memory Center</div>
-                  <div class="timeline-time">Ontem, 22:15</div>
-                </div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-dot" style="background:var(--purple)"></div>
-                <div class="timeline-content">
-                  <div class="timeline-title">Life Score aumentou para 87</div>
-                  <div class="timeline-time">Ontem, 20:00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- ─── AGENDA ─── -->
@@ -1521,34 +1365,27 @@
         </div>
       </div>
 
-      <!-- ─── NOTIFICAÇÕES ─── -->
+      <!-- ─── NOTIFICAÇÕES — Enterprise Notification Center (Phase 090) ─── -->
       <div class="page" id="page-notifications">
         <div class="page-header">
-          <div><div class="page-title">Notificações</div><div class="page-subtitle">3 não lidas</div></div>
-          <button class="btn btn-ghost" onclick="markAllRead()">Marcar todas como lidas</button>
-        </div>
-        <div class="card">
-          <div id="notif-list">
-            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(16,185,129,0.15)">🔥</div><div><div class="notif-title">Streak de 14 dias!</div><div class="notif-desc">Parabéns! Você manteve seus hábitos por 14 dias consecutivos.</div><div class="notif-time">Hoje, 00:01</div></div></div>
-            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(99,102,241,0.15)">⚡</div><div><div class="notif-title">Life Score aumentou</div><div class="notif-desc">Seu Life Score subiu de 84 para 87. Continue assim!</div><div class="notif-time">Ontem, 20:00</div></div></div>
-            <div class="notif-item unread"><div class="notif-icon" style="background:rgba(245,158,11,0.15)">🎯</div><div><div class="notif-title">Meta próxima do prazo</div><div class="notif-desc">"Ler 24 livros" vence em 30 dias. Você está 58% completo.</div><div class="notif-time">Ontem, 09:00</div></div></div>
-            <div class="notif-item"><div class="notif-icon" style="background:rgba(139,92,246,0.15)">🤖</div><div><div class="notif-title">Novo insight de IA disponível</div><div class="notif-desc">A IA identificou um padrão interessante na sua produtividade.</div><div class="notif-time">2 dias atrás</div></div></div>
+          <div><div class="page-title">Central de Notificações</div><div class="page-subtitle" id="nc-subtitle">Carregando...</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="ncMarkAllRead()">✓ Marcar todas lidas</button>
+            <button class="btn btn-ghost" onclick="ncClearHistory()">🗑 Limpar histórico</button>
           </div>
         </div>
+        <div id="nc-container"></div>
       </div>
 
-      <!-- ─── BUSCA ─── -->
+      <!-- ─── BUSCA — Smart Search 2.0 (Phase 089) ─── -->
       <div class="page" id="page-search">
         <div class="page-header">
-          <div><div class="page-title">Busca Global</div><div class="page-subtitle">Encontre qualquer coisa no LifeOS</div></div>
+          <div><div class="page-title">Smart Search</div><div class="page-subtitle">Busca global inteligente em todos os módulos</div></div>
+          <div style="display:flex;gap:8px">
+            <span style="font-size:12px;color:var(--text-muted);background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:6px 10px">⌘K para abrir</span>
+          </div>
         </div>
-        <div class="card" style="margin-bottom:16px">
-          <input type="text" class="form-input" placeholder="Buscar hábitos, metas, notas, projetos..." id="search-input" oninput="doSearch(this.value)" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;font-size:15px;color:var(--text-primary);font-family:inherit;outline:none" />
-        </div>
-        <div id="search-results" class="card" style="display:none">
-          <div class="card-title">Resultados</div>
-          <div id="search-list"></div>
-        </div>
+        <div id="smart-search-container"></div>
       </div>
 
       <!-- ─── PERFIL ─── -->
@@ -1767,11 +1604,104 @@
     if (profileInputs[0]) profileInputs[0].value = name;
     if (profileInputs[1]) profileInputs[1].value = user.username;
     if (profileInputs[2]) profileInputs[2].value = user.timezone || 'America/Sao_Paulo';
-    // Greeting
-    const hour = new Date().getHours();
-    const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
-    document.getElementById('dash-greeting').textContent = `${greeting}, ${name.split(' ')[0]}! 👋`;
-    document.getElementById('dash-date').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    // Load Life Dashboard 2.0 (Phase 088)
+    loadDashboardV2(name);
+  }
+
+  // ── Notification Center Loader (Phase 090) ─────────────────────────────
+  let notifCenterLoaded = false;
+  async function loadNotificationCenter() {
+    if (notifCenterLoaded) return;
+    try {
+      const resp = await fetch('/app/modules/notification-center.html');
+      const html = await resp.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      doc.querySelectorAll('style').forEach(s => {
+        const ns = document.createElement('style');
+        ns.textContent = s.textContent;
+        document.head.appendChild(ns);
+      });
+      const container = document.getElementById('nc-container');
+      if (container) {
+        container.innerHTML = doc.body.innerHTML;
+        container.querySelectorAll('script').forEach(oldScript => {
+          const newScript = document.createElement('script');
+          newScript.textContent = oldScript.textContent;
+          document.body.appendChild(newScript);
+          oldScript.remove();
+        });
+      }
+      notifCenterLoaded = true;
+    } catch (err) { console.warn('Notification Center load error:', err); }
+  }
+
+  // ── Smart Search Loader ───────────────────────────────────────────────
+  let smartSearchLoaded = false;
+  async function loadSmartSearch() {
+    if (smartSearchLoaded) return;
+    try {
+      const resp = await fetch('/app/modules/smart-search.html');
+      const html = await resp.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      doc.querySelectorAll('style').forEach(s => {
+        const ns = document.createElement('style');
+        ns.textContent = s.textContent;
+        document.head.appendChild(ns);
+      });
+      const container = document.getElementById('smart-search-container');
+      if (container) {
+        container.innerHTML = doc.body.innerHTML;
+        container.querySelectorAll('script').forEach(oldScript => {
+          const newScript = document.createElement('script');
+          newScript.textContent = oldScript.textContent;
+          document.body.appendChild(newScript);
+          oldScript.remove();
+        });
+      }
+      smartSearchLoaded = true;
+    } catch (err) { console.warn('Smart Search load error:', err); }
+  }
+
+  // ── Life Dashboard 2.0 Loader ────────────────────────────────────────
+  async function loadDashboardV2(name) {
+    try {
+      const resp = await fetch('/app/modules/dashboard-v2.html');
+      const html = await resp.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      // Inject styles
+      doc.querySelectorAll('style').forEach(s => {
+        if (!document.querySelector(`style[data-d2="${s.textContent.slice(0,20)}"]`)) {
+          const ns = document.createElement('style');
+          ns.setAttribute('data-d2', s.textContent.slice(0,20));
+          ns.textContent = s.textContent;
+          document.head.appendChild(ns);
+        }
+      });
+      // Inject body content
+      const container = document.getElementById('dashboard-v2-container');
+      if (container) container.innerHTML = doc.body.innerHTML;
+      // Execute scripts
+      container.querySelectorAll('script').forEach(oldScript => {
+        const newScript = document.createElement('script');
+        newScript.textContent = oldScript.textContent;
+        document.body.appendChild(newScript);
+        oldScript.remove();
+      });
+      // Personalize greeting with user name
+      const greetEl = document.getElementById('d2-greeting');
+      if (greetEl) {
+        const hour = new Date().getHours();
+        const g = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
+        greetEl.textContent = `${g}, ${name.split(' ')[0]}! 👋`;
+      }
+      const dateEl = document.getElementById('d2-date');
+      if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    } catch (err) {
+      console.warn('Dashboard v2 load error:', err);
+    }
   }
 
   // Navigation
@@ -1794,6 +1724,9 @@
     });
     // Scroll to top
     document.querySelector('.content').scrollTop = 0;
+    // Lazy load modules
+    if (id === 'search') loadSmartSearch();
+    if (id === 'notifications') loadNotificationCenter();
     // Fechar sidebar no mobile
     if (window.innerWidth <= 768) {
       document.getElementById('sidebar').classList.remove('mobile-open');

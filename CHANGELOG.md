@@ -5,6 +5,54 @@ All notable changes to LifeOS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.6.0] — 2026-07-15
+
+### Release: LIFEOS ENTERPRISE v9.6.0 — Phases 088–092
+
+#### Phase 088 — Life Dashboard 2.0
+- **Centro de Comando**: Dashboard recriado como hub central com widgets configuráveis
+- **10 Widgets**: Resumo do Dia, Agenda, Compromissos, Metas, Hábitos, Life Score, Finance Hub, Comunicação, IA Companion, Atividades Recentes
+- **Drag-and-Drop**: Sistema para reorganizar widgets livremente
+- **Persistência**: Layout salvo automaticamente no localStorage
+- **Toggle**: Ativar/desativar cada widget individualmente
+- **Loader Dinâmico**: Carregamento assíncrono do módulo dashboard-v2.html
+
+#### Phase 089 — Smart Search Global
+- **Busca Unificada**: Indexação de 8 categorias (Usuários, Organizações, Workspaces, Documentos, Tarefas, Notificações, Módulos, Configurações)
+- **Filtros Inteligentes**: Filtro por tipo de conteúdo com contadores dinâmicos
+- **Navegação por Teclado**: ↑↓ para navegar, Enter para abrir, Esc para fechar
+- **Buscas Recentes**: Persistência no localStorage com até 8 termos
+- **Highlight**: Destaque visual dos termos pesquisados nos resultados
+- **Stats**: Contagem de resultados por categoria em tempo real
+- **Loader Dinâmico**: Carregamento lazy quando a página de busca é aberta
+
+#### Phase 090 — Enterprise Notification Center
+- **Abas**: Todas, Não lidas, Por categoria, Histórico
+- **Filtros**: Prioridade (Crítica, Alta, Média, Baixa) e Categoria (Sistema, Produtividade, Financeiro, Social, Segurança)
+- **Stats em Tempo Real**: Total, não lidas, críticas, hoje
+- **Ações**: Marcar lida, remover, marcar todas lidas, limpar histórico
+- **Tempo Real**: Simulação de notificação em tempo real com toast após 10s
+- **15 Notificações**: Cobrindo todos os cenários (system, productivity, finance, social, security)
+- **Loader Dinâmico**: Carregamento lazy quando a página de notificações é aberta
+
+#### Phase 091 — Stability + QA
+- Removido conteúdo órfão do dashboard antigo (hábitos/metas/timeline hardcoded)
+- Corrigidas referências quebradas (dash-greeting, dash-date → d2-greeting, d2-date)
+- Removida função doSearch obsoleta substituída pelo Smart Search
+- Adicionados loaders lazy para Dashboard 2.0, Smart Search e Notification Center
+- Validados todos os 15 módulos no dist
+- Validadas rotas legadas no _redirects
+- Patch de URLs Netlify legadas mantido
+
+#### Phase 092 — Production Release
+- **Version**: 9.6.0
+- **Modules**: 15 (8 legacy + 4 v9.5 + 3 v9.6)
+- **Build Size**: 2.0 MB
+- **Routes**: 17 rotas
+- **Design System**: enterprise_v9_5.css mantido
+
+---
+
 ## [9.5.0] — 2026-07-15
 
 ### Release: LIFEOS ENTERPRISE v9.5.0 — Phases 081–087
