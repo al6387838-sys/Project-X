@@ -829,7 +829,6 @@
   </div>
 </div>
 
-<script src="/enterprise/enterprise_app.js" defer></script>
 <script>
 // ============================================================
 // ENTERPRISE APP v4.0 — PHASE 010/011/012
@@ -1281,7 +1280,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">Todos os membros</div>
-          <input class="form-input" style="width:220px;height:32px;font-size:12px" type="search" placeholder="Filtrar membros…" id="members-filter" value="${esc(state.query)}">
+          <input class="form-input" style="width:220px;height:32px;font-size:12px" type="search" placeholder="Filtrar membros…" id="members-filter" value="${esc(state.query)}" aria-label="Filtrar membros">
         </div>
         <div class="table-wrap">
           <table class="table">
@@ -1607,8 +1606,8 @@
         <div class="card-body">
           <div class="grid-2">
             <div>
-              <div class="form-group"><label class="form-label">Comprimento mínimo</label><input class="form-input" type="number" value="12" min="8" max="32"></div>
-              <div class="form-group"><label class="form-label">Expiração (dias)</label><input class="form-input" type="number" value="90" min="30"></div>
+              <div class="form-group"><label class="form-label">Comprimento mínimo</label><input class="form-input" type="number" value="12" min="8" max="32" aria-label="Comprimento mínimo da senha"></div>
+              <div class="form-group"><label class="form-label">Expiração (dias)</label><input class="form-input" type="number" value="90" min="30" aria-label="Expiração da senha em dias"></div>
             </div>
             <div>
               <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
@@ -1687,9 +1686,9 @@
                 <div style="font-size:13px;color:var(--text-tertiary)">${esc(user.email||'admin@empresa.com')}</div>
               </div>
             </div>
-            <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" type="text" value="${esc(user.name||'')}"></div>
-            <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" value="${esc(user.email||'')}"></div>
-            <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" type="text" value="${esc(user.title||'')}"></div>
+            <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" type="text" value="${esc(user.name||'')}" aria-label="Nome completo"></div>
+            <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" type="email" value="${esc(user.email||'')}" aria-label="E-mail"></div>
+            <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" type="text" value="${esc(user.title||'')}" aria-label="Cargo"></div>
             <div style="display:flex;justify-content:flex-end;margin-top:8px">
               <button class="btn btn-primary" data-action="profile.save" type="button">Salvar alterações</button>
             </div>
@@ -1698,9 +1697,9 @@
         <div class="card">
           <div class="card-header"><div class="card-title">Alterar Senha</div></div>
           <div class="card-body">
-            <div class="form-group"><label class="form-label">Senha atual</label><input class="form-input" type="password" placeholder="••••••••"></div>
-            <div class="form-group"><label class="form-label">Nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
-            <div class="form-group"><label class="form-label">Confirmar nova senha</label><input class="form-input" type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label class="form-label">Senha atual</label><input class="form-input" type="password" placeholder="••••••••" aria-label="Senha atual"></div>
+            <div class="form-group"><label class="form-label">Nova senha</label><input class="form-input" type="password" placeholder="••••••••" aria-label="Nova senha"></div>
+            <div class="form-group"><label class="form-label">Confirmar nova senha</label><input class="form-input" type="password" placeholder="••••••••" aria-label="Confirmar nova senha"></div>
             <div style="display:flex;justify-content:flex-end;margin-top:8px">
               <button class="btn btn-primary" data-action="profile.changePassword" type="button">Alterar senha</button>
             </div>
@@ -1751,12 +1750,12 @@
           <div class="card-body">
             <div class="form-group"><label class="form-label">API Key</label>
               <div style="display:flex;gap:8px">
-                <input class="form-input" type="password" value="leos_ent_••••••••••••••••" readonly>
+                <input class="form-input" type="password" value="leos_ent_••••••••••••••••" readonly aria-label="Chave da API">
                 <button class="btn btn-secondary" data-action="api.regenerate" type="button">Regenerar</button>
               </div>
             </div>
             <div class="form-group"><label class="form-label">Webhook URL</label>
-              <input class="form-input" type="url" placeholder="https://seu-servidor.com/webhook">
+              <input class="form-input" type="url" placeholder="https://seu-servidor.com/webhook" aria-label="URL do webhook">
             </div>
           </div>
         </div>

@@ -5,6 +5,30 @@ All notable changes to LifeOS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0] — 2026-07-15
+
+### Added
+
+- Publicação das rotas públicas `/register`, `robots.txt` e `sitemap.xml` no pipeline oficial do Cloudflare Pages.
+- Metatags completas para indexação, compartilhamento social, idioma e URL canônica da landing page.
+
+### Changed
+
+- Otimização final da landing page para Performance, Accessibility, Best Practices e SEO.
+- Testes funcionais e responsivos alinhados exclusivamente à prévia e aos endpoints Cloudflare.
+- Pipeline de build atualizado para validar também cadastro e artefatos públicos de SEO.
+
+### Fixed
+
+- Contrastes de texto reprovados na auditoria de acessibilidade.
+- Erro de console causado pela consulta opcional de sessão na landing pública.
+- Controlador Enterprise legado incompatível removido, preservando o controlador completo incorporado à página.
+- Referências residuais de QA a endpoints Netlify substituídas por `/api/*` do Cloudflare.
+
+### Quality
+
+- Lighthouse final: Performance 97, Accessibility 100, Best Practices 100 e SEO 100.
+
 ## [1.0.0-rc]
 ### Added
 - **Extensibility Platform:** Conclusão da fase EXECUTION-008, validando a arquitetura do Connector Engine, Marketplace, OAuth System e SDK inicial.

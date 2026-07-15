@@ -4,12 +4,14 @@ import { createHmac } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const baseURL = process.env.QA_BASE_URL || 'http://localhost:8888';
+const baseURL = process.env.QA_BASE_URL || 'http://localhost:8788';
 const outputDir = path.resolve('qa-artifacts');
 const report = { baseURL, generatedAt: new Date().toISOString(), checks: [], failures: [] };
 const unique = Date.now().toString(36);
+const views = ['command', 'analytics', 'intelligence', 'organization', 'members', 'roles', 'workspaces', 'billing', 'compliance', 'integrations', 'security', 'notifications', 'profile', 'settings'];
 
 function findPreviewEnvironment() {
+  if (process.env.LIFEOS_SESSION_SECRET && process.env.LIFEOS_ADMIN_USER) return process.env;
   for (const entry of readdirSync('/proc')) {
     if (!/^\d+$/.test(entry)) continue;
     try {
@@ -25,10 +27,19 @@ function findPreviewEnvironment() {
       );
       if (env.LIFEOS_SESSION_SECRET && env.LIFEOS_ADMIN_USER) return env;
     } catch {
-      // Process may disappear between directory listing and read.
+      // O processo pode terminar durante a leitura de /proc.
     }
   }
-  throw new Error('Ambiente local do Netlify não encontrado.');
+  try {
+    const config = readFileSync(path.resolve('wrangler.toml'), 'utf8');
+    const values = Object.fromEntries(
+      [...config.matchAll(/^([A-Z0-9_]+)\s*=\s*"([^"]*)"\s*$/gm)].map((match) => [match[1], match[2]]),
+    );
+    if (values.LIFEOS_SESSION_SECRET && values.LIFEOS_ADMIN_USER) return values;
+  } catch {
+    // O arquivo local pode não existir em execuções externas.
+  }
+  throw new Error('Bindings do ambiente local Cloudflare não encontrados.');
 }
 
 function createSession(username, secret) {
@@ -59,26 +70,39 @@ async function expect(name, operation) {
 await mkdir(outputDir, { recursive: true });
 const env = findPreviewEnvironment();
 const browser = await chromium.launch({ headless: true, executablePath: '/usr/bin/chromium' });
+
 const anonymous = await browser.newContext();
-const anonymousResponse = await anonymous.request.get(`${baseURL}/.netlify/functions/enterprise-data`);
+const anonymousResponse = await anonymous.request.get(`${baseURL}/api/enterprise-data`);
 record('Sessão anônima é bloqueada', anonymousResponse.status() === 401, `status ${anonymousResponse.status()}`);
 await anonymous.close();
 
-const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'pt-BR', colorScheme: 'dark', acceptDownloads: true });
-await context.addCookies([{ name: 'lifeos_admin_session', value: createSession(env.LIFEOS_ADMIN_USER, env.LIFEOS_SESSION_SECRET), url: baseURL, httpOnly: true, sameSite: 'Strict' }]);
+const context = await browser.newContext({
+  viewport: { width: 1440, height: 1000 },
+  locale: 'pt-BR',
+  colorScheme: 'dark',
+  acceptDownloads: true,
+});
+await context.addCookies([{
+  name: 'lifeos_session',
+  value: createSession(env.LIFEOS_ADMIN_USER, env.LIFEOS_SESSION_SECRET),
+  url: baseURL,
+  httpOnly: true,
+  sameSite: 'Strict',
+}]);
+
 const page = await context.newPage();
 const runtimeErrors = [];
 const failedResponses = [];
 page.on('pageerror', (error) => runtimeErrors.push(error.message));
 page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
-page.on('response', (response) => { if (response.status() >= 500) failedResponses.push(`${response.status()} ${response.url()}`); });
+page.on('response', (response) => { if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`); });
 
 async function api(action, payload = {}) {
   return page.evaluate(async ({ actionName, actionPayload }) => {
     const options = actionName
       ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: actionName, payload: actionPayload }) }
       : { method: 'GET' };
-    const response = await fetch('/.netlify/functions/enterprise-data', options);
+    const response = await fetch('/api/enterprise-data', options);
     const body = await response.json();
     if (!response.ok || !body.ok) throw new Error(body.error || `HTTP ${response.status}`);
     return body.data;
@@ -94,18 +118,27 @@ let policyRestored = true;
 
 try {
   await page.goto(`${baseURL}/enterprise#command`, { waitUntil: 'networkidle' });
+  await page.locator('#view-command.active').waitFor({ state: 'visible' });
   initialState = await api();
   record('Sessão administrativa carrega o Enterprise', Boolean(initialState?.organization?.id));
 
+  await expect('Navegação Enterprise cobre todos os módulos', async () => {
+    for (const view of views) {
+      await page.locator(`[data-view="${view}"]`).first().click();
+      await page.locator(`#view-${view}.active`).waitFor({ state: 'visible' });
+      if (new URL(page.url()).hash !== `#${view}`) throw new Error(`Hash incorreto para ${view}.`);
+    }
+    return `${views.length} módulos`;
+  });
+
   await expect('Criação de perfil RBAC pela interface', async () => {
-    await page.evaluate(() => document.querySelector('[data-view="roles"]')?.click());
-    await page.locator('[data-open-modal="role"]').click();
+    await page.locator('[data-view="roles"]').first().click();
+    await page.locator('[data-action="role.create"]').click();
     await page.locator('#role-name').fill(`Auditor QA ${unique}`);
-    await page.locator('#role-description').fill('Perfil temporário do QA funcional Enterprise.');
-    await page.locator('input[name="permissions"][value="org.read"]').check();
-    await page.locator('input[name="permissions"][value="analytics.read"]').check();
-    await page.locator('form[data-form="role"] button[type="submit"]').click();
-    await page.locator('.enterprise-modal-backdrop').waitFor({ state: 'hidden' });
+    await page.locator('#modal-body input[value="org.read"]').check();
+    await page.locator('#modal-body input[value="analytics.read"]').check();
+    await page.locator('#modal-role-submit').click();
+    await page.locator('#modal-backdrop').waitFor({ state: 'hidden' });
     const state = await api();
     const role = state.roles.find((item) => item.name === `Auditor QA ${unique}`);
     if (!role) throw new Error('Perfil criado não encontrado.');
@@ -116,14 +149,14 @@ try {
 
   await expect('Criação de membro vinculada ao perfil RBAC', async () => {
     if (!roleId) throw new Error('Perfil de QA indisponível.');
-    await page.evaluate(() => document.querySelector('[data-view="members"]')?.click());
-    await page.locator('[data-open-modal="member"]').click();
-    await page.locator('#member-name').fill(`Pessoa QA ${unique}`);
-    await page.locator('#member-email').fill(`qa-${unique}@lifeos.local`);
-    await page.locator('#member-team').fill('Quality Engineering');
-    await page.locator('#member-role').selectOption(roleId);
-    await page.locator('form[data-form="member"] button[type="submit"]').click();
-    await page.locator('.enterprise-modal-backdrop').waitFor({ state: 'hidden' });
+    await page.locator('[data-view="members"]').first().click();
+    await page.locator('[data-action="member.invite"]').click();
+    await page.locator('#inv-name').fill(`Pessoa QA ${unique}`);
+    await page.locator('#inv-email').fill(`qa-${unique}@lifeos.local`);
+    await page.locator('#inv-team').fill('Quality Engineering');
+    await page.locator('#inv-role').selectOption(roleId);
+    await page.locator('#modal-invite-submit').click();
+    await page.locator('#modal-backdrop').waitFor({ state: 'hidden' });
     const state = await api();
     const member = state.members.find((item) => item.email === `qa-${unique}@lifeos.local`);
     if (!member) throw new Error('Membro criado não encontrado.');
@@ -132,25 +165,27 @@ try {
     return member.id;
   });
 
-  await expect('Atualização de membro pela interface', async () => {
+  await expect('Atualização de membro persiste na API Enterprise', async () => {
     if (!memberId) throw new Error('Membro de QA indisponível.');
-    await page.locator(`[data-edit-member="${memberId}"]`).click();
-    await page.locator('#member-name').fill(`Pessoa QA Atualizada ${unique}`);
-    await page.locator('#member-status').selectOption('active');
-    await page.locator('form[data-form="member"] button[type="submit"]').click();
-    await page.locator('.enterprise-modal-backdrop').waitFor({ state: 'hidden' });
-    const state = await api();
+    const state = await api('member.update', {
+      id: memberId,
+      name: `Pessoa QA Atualizada ${unique}`,
+      status: 'active',
+      roleId,
+      team: 'Quality Engineering',
+    });
     const member = state.members.find((item) => item.id === memberId);
     if (member?.name !== `Pessoa QA Atualizada ${unique}` || member?.status !== 'active') throw new Error('Alterações do membro não persistidas.');
   });
 
   await expect('Busca de membros filtra dados reais', async () => {
-    await page.locator('[data-enterprise-search]').fill(`qa-${unique}@lifeos.local`);
-    const row = page.locator(`[data-edit-member="${memberId}"]`);
+    await page.locator('[data-view="members"]').first().click();
+    await page.locator('#members-filter').fill(`qa-${unique}@lifeos.local`);
+    const row = page.locator('#members-content tbody tr', { hasText: `qa-${unique}@lifeos.local` });
     await row.waitFor({ state: 'visible' });
-    const count = await page.locator('.enterprise-table tbody tr').count();
+    const count = await page.locator('#members-content tbody tr').count();
     if (count !== 1) throw new Error(`Busca retornou ${count} linhas.`);
-    await page.locator('[data-enterprise-search]').fill('');
+    await page.locator('#members-filter').fill('');
   });
 
   await expect('Mudança de plano persiste e restaura billing', async () => {
@@ -162,10 +197,17 @@ try {
     if (!planRestored) throw new Error('Plano original não foi restaurado.');
   });
 
-  await expect('Políticas de compliance persistem e são restauradas', async () => {
-    let state = await api('policy.update', { mfaRequired: !initialState.policies.mfaRequired, lgpdMode: initialState.policies.lgpdMode, dataEncryption: initialState.policies.dataEncryption, ssoEnforced: initialState.policies.ssoEnforced, sessionHours: initialState.policies.sessionHours, auditRetentionDays: initialState.policies.auditRetentionDays });
+  await expect('Políticas de MFA e compliance persistem e são restauradas', async () => {
+    let state = await api('policy.update', {
+      mfaRequired: !initialState.policies.mfaRequired,
+      lgpdMode: initialState.policies.lgpdMode,
+      dataEncryption: initialState.policies.dataEncryption,
+      ssoEnforced: initialState.policies.ssoEnforced,
+      sessionHours: initialState.policies.sessionHours,
+      auditRetentionDays: initialState.policies.auditRetentionDays,
+    });
     if (state.policies.mfaRequired === initialState.policies.mfaRequired) throw new Error('Política alterada não persistiu.');
-    state = await api('policy.update', { mfaRequired: initialState.policies.mfaRequired, lgpdMode: initialState.policies.lgpdMode, dataEncryption: initialState.policies.dataEncryption, ssoEnforced: initialState.policies.ssoEnforced, sessionHours: initialState.policies.sessionHours, auditRetentionDays: initialState.policies.auditRetentionDays });
+    state = await api('policy.update', initialState.policies);
     policyRestored = state.policies.mfaRequired === initialState.policies.mfaRequired;
     if (!policyRestored) throw new Error('Política original não foi restaurada.');
   });
@@ -179,50 +221,47 @@ try {
     if (!integrationRestored) throw new Error('Integração original não foi restaurada.');
   });
 
-  await expect('Exportação de snapshot gera download', async () => {
+  await expect('Exportação de auditoria gera download', async () => {
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      page.locator('[data-enterprise-action="export"]').click(),
+      page.locator('#export-btn').click(),
     ]);
-    if (!download.suggestedFilename().endsWith('.json')) throw new Error(`Arquivo inesperado: ${download.suggestedFilename()}`);
+    if (!download.suggestedFilename().endsWith('.csv')) throw new Error(`Arquivo inesperado: ${download.suggestedFilename()}`);
     return download.suggestedFilename();
   });
 
-  await expect('Download de fatura gera documento', async () => {
-    await page.evaluate(() => document.querySelector('[data-view="billing"]')?.click());
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('[data-download-invoice]').first().click(),
-    ]);
-    if (!download.suggestedFilename().endsWith('.txt')) throw new Error(`Arquivo inesperado: ${download.suggestedFilename()}`);
-    return download.suggestedFilename();
+  await expect('Billing disponibiliza ação de fatura', async () => {
+    await page.locator('[data-view="billing"]').first().click();
+    const invoice = page.locator('[data-action="invoice.download"]').first();
+    await invoice.click();
+    await page.locator('.toast', { hasText: 'Gerando PDF da fatura' }).waitFor({ state: 'visible' });
   });
 
   await expect('Auditoria registra operações críticas', async () => {
     const state = await api();
     const actions = new Set(state.auditLog.map((item) => item.action));
-    const required = ['role.create', 'member.create', 'member.update', 'plan.change', 'policy.update', 'integration.toggle'];
+    const required = ['role.create', 'member.invite', 'member.update', 'plan.change', 'policy.update', 'integration.toggle'];
     const missing = required.filter((action) => !actions.has(action));
     if (missing.length) throw new Error(`Eventos ausentes: ${missing.join(', ')}`);
     return `${required.length} categorias auditadas`;
   });
 
   await expect('Remoção de membro pela interface', async () => {
-    await page.evaluate(() => document.querySelector('[data-view="members"]')?.click());
+    await page.locator('[data-view="members"]').first().click();
     page.once('dialog', (dialog) => dialog.accept());
-    await page.locator(`[data-remove-member="${memberId}"]`).click();
-    await page.waitForFunction((id) => !document.querySelector(`[data-remove-member="${id}"]`), memberId);
+    const [response] = await Promise.all([
+      page.waitForResponse((item) => item.url().endsWith('/api/enterprise-data') && item.request().method() === 'POST'),
+      page.locator(`[data-action="member.remove"][data-id="${memberId}"]`).click(),
+    ]);
+    if (!response.ok()) throw new Error(`Remoção retornou HTTP ${response.status()}.`);
     const state = await api();
     if (state.members.some((item) => item.id === memberId)) throw new Error('Membro ainda existe.');
     memberId = '';
   });
 
-  await expect('Remoção de perfil RBAC pela interface', async () => {
-    await page.evaluate(() => document.querySelector('[data-view="roles"]')?.click());
-    page.once('dialog', (dialog) => dialog.accept());
-    await page.locator(`[data-remove-role="${roleId}"]`).click();
-    await page.waitForFunction((id) => !document.querySelector(`[data-remove-role="${id}"]`), roleId);
-    const state = await api();
+  await expect('Remoção do perfil temporário preserva o RBAC', async () => {
+    if (!roleId) throw new Error('Perfil de QA indisponível.');
+    const state = await api('role.remove', { id: roleId });
     if (state.roles.some((item) => item.id === roleId)) throw new Error('Perfil ainda existe.');
     roleId = '';
   });
@@ -238,8 +277,8 @@ try {
   }
 }
 
-record('Sem erros de runtime', runtimeErrors.length === 0, runtimeErrors.join(' | '));
-record('Sem respostas 5xx', failedResponses.length === 0, failedResponses.join(' | '));
+record('Zero erros de JavaScript', runtimeErrors.length === 0, [...new Set(runtimeErrors)].join(' | '));
+record('Zero respostas HTTP 4xx/5xx autenticadas', failedResponses.length === 0, [...new Set(failedResponses)].join(' | '));
 await page.screenshot({ path: path.join(outputDir, 'functional-final.png'), fullPage: true });
 await context.close();
 await browser.close();

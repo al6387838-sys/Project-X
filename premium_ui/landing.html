@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0A0E14" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="application-name" content="LifeOS Enterprise" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="format-detection" content="telephone=no" />
   <meta name="description" content="LifeOS Enterprise — O sistema operacional da sua vida. Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="LifeOS Enterprise" />
@@ -11,17 +15,15 @@
   <meta property="og:title" content="LifeOS Enterprise — Seu Sistema Operacional de Vida" />
   <meta property="og:description" content="Gerencie hábitos, metas, projetos e insights com IA de nível enterprise." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://lifeos-enterprise.pages.dev" />
+  <meta property="og:site_name" content="LifeOS Enterprise" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:url" content="https://lifeos-enterprise.pages.dev/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="LifeOS Enterprise" />
   <meta name="twitter:description" content="O sistema operacional da sua vida com IA enterprise." />
-  <link rel="canonical" href="https://lifeos-enterprise.pages.dev" />
+  <meta name="twitter:url" content="https://lifeos-enterprise.pages.dev/" />
+  <link rel="canonical" href="https://lifeos-enterprise.pages.dev/" />
   <title>LifeOS Enterprise — Seu Sistema Operacional de Vida</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -33,7 +35,7 @@
       --border-accent: rgba(99,102,241,0.3);
       --text-primary: #F0F4FF;
       --text-secondary: #8892A4;
-      --text-muted: #4A5568;
+      --text-muted: #7F8CA3;
       --accent: #6366F1;
       --accent-light: #818CF8;
       --accent-glow: rgba(99,102,241,0.15);
@@ -53,11 +55,15 @@
     }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg-base);
       color: var(--text-primary);
       line-height: 1.6;
       overflow-x: hidden;
+    }
+    .features, .modules, .security-section, .ai-section, #integrations, .plans, .testimonials, .cta-section, footer {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 800px;
     }
 
     /* ─── NAVBAR ─── */
@@ -234,7 +240,7 @@
       letter-spacing: -2px;
       line-height: 1.05;
       margin-bottom: 24px;
-      animation: fadeInUp 0.7s ease 0.1s both;
+      animation: none;
     }
     .hero-title-gradient {
       background: var(--gradient-hero);
@@ -630,7 +636,7 @@
       flex-shrink: 0;
     }
     .plan-features li.disabled {
-      opacity: 0.4;
+      color: var(--text-muted);
     }
     .plan-features li.disabled::before {
       content: '×';
@@ -1345,7 +1351,7 @@
   // Check session — redirect if already logged in
   (async () => {
     try {
-      const r = await fetch('/api/session', { credentials: 'same-origin' });
+      const r = await fetch('/api/session?optional=1', { credentials: 'same-origin' });
       if (r.ok) {
         const data = await r.json();
         if (data.ok && data.redirect) {

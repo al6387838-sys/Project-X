@@ -11,7 +11,13 @@ export async function onRequestGet({ request, env }) {
   const token = getCookie(cookieHeader);
   const session = await verifySession(token, secret);
 
-  if (!session) return json(401, { ok: false, error: 'Sessão inválida ou expirada' });
+  if (!session) {
+    const optional = new URL(request.url).searchParams.get('optional') === '1';
+    return json(optional ? 200 : 401, {
+      ok: false,
+      ...(optional ? {} : { error: 'Sessão inválida ou expirada' }),
+    });
+  }
 
   return json(200, {
     ok: true,

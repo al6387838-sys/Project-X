@@ -19,7 +19,7 @@
       --border-accent: rgba(99,102,241,0.3);
       --text-primary: #F0F4FF;
       --text-secondary: #8892A4;
-      --text-muted: #4A5568;
+      --text-muted: #7F8CA3;
       --accent: #6366F1;
       --accent-light: #818CF8;
       --green: #10B981;
@@ -418,10 +418,13 @@
       document.getElementById('tab-register').classList.toggle('active', tab === 'register');
     }
 
+    // Open the registration panel when using the dedicated /register route
+    if (location.pathname.replace(/\/+$/, '') === '/register') switchTab('register');
+
     // Check existing session
     (async () => {
       try {
-        const r = await fetch('/api/session', { credentials: 'same-origin' });
+        const r = await fetch('/api/session?optional=1', { credentials: 'same-origin' });
         if (r.ok) {
           const data = await r.json();
           if (data.ok && data.redirect) location.replace(data.redirect);

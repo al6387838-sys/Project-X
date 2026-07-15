@@ -4,7 +4,7 @@ import { createHmac } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const baseURL = process.env.QA_BASE_URL || 'http://localhost:8888';
+const baseURL = process.env.QA_BASE_URL || 'http://localhost:8788';
 const outputDir = path.resolve('qa-artifacts');
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
@@ -12,9 +12,10 @@ const viewports = [
   { name: 'tablet', width: 768, height: 1024 },
   { name: 'mobile', width: 390, height: 844 },
 ];
-const views = ['command', 'members', 'billing', 'compliance', 'admin'];
+const views = ['command', 'analytics', 'intelligence', 'organization', 'members', 'roles', 'workspaces', 'billing', 'compliance', 'integrations', 'security', 'notifications', 'profile', 'settings'];
 
 function findPreviewEnvironment() {
+  if (process.env.LIFEOS_SESSION_SECRET && process.env.LIFEOS_ADMIN_USER) return process.env;
   for (const entry of readdirSync('/proc')) {
     if (!/^\d+$/.test(entry)) continue;
     try {
@@ -33,7 +34,16 @@ function findPreviewEnvironment() {
       // Process may disappear between directory listing and read.
     }
   }
-  throw new Error('Ambiente local do Netlify não encontrado.');
+  try {
+    const config = readFileSync(path.resolve('wrangler.toml'), 'utf8');
+    const values = Object.fromEntries(
+      [...config.matchAll(/^([A-Z0-9_]+)\s*=\s*"([^"]*)"\s*$/gm)].map((match) => [match[1], match[2]]),
+    );
+    if (values.LIFEOS_SESSION_SECRET && values.LIFEOS_ADMIN_USER) return values;
+  } catch {
+    // O arquivo local pode não existir em execuções externas.
+  }
+  throw new Error('Bindings do ambiente local Cloudflare não encontrados.');
 }
 
 function createSession(username, secret) {
@@ -54,7 +64,7 @@ for (const viewport of viewports) {
   const context = await browser.newContext({ viewport, locale: 'pt-BR', colorScheme: 'dark' });
   await context.addCookies([
     {
-      name: 'lifeos_admin_session',
+      name: 'lifeos_session',
       value: createSession(env.LIFEOS_ADMIN_USER, env.LIFEOS_SESSION_SECRET),
       url: baseURL,
       httpOnly: true,
@@ -73,26 +83,22 @@ for (const viewport of viewports) {
   });
 
   await page.goto(`${baseURL}/enterprise#command`, { waitUntil: 'networkidle' });
-  await page.locator('#enterprise-command').waitFor({ state: 'visible' });
+  await page.locator('#view-command.active').waitFor({ state: 'visible' });
   for (const view of views) {
-    if (view !== 'command') {
-      await page.evaluate((targetView) => document.querySelector(`[data-view="${targetView}"]`)?.click(), view);
-      await page.locator('#enterprise-dynamic').waitFor({ state: 'visible' });
-      await page.waitForFunction((targetView) => location.hash === `#${targetView}`, view);
-    } else {
-      await page.evaluate(() => document.querySelector('[data-view="command"]')?.click());
-      await page.locator('#enterprise-command').waitFor({ state: 'visible' });
-    }
+    await page.evaluate((targetView) => document.querySelector(`[data-view="${targetView}"]`)?.click(), view);
+    await page.locator(`#view-${view}.active`).waitFor({ state: 'visible' });
+    await page.waitForFunction((targetView) => location.hash === `#${targetView}`, view);
     const audit = await page.evaluate(() => {
       const root = document.documentElement;
       const unlabeled = [...document.querySelectorAll('button, input, select, textarea, a[href]')]
         .filter((element) => {
-          if (element.matches('[aria-hidden="true"], [disabled], [type="hidden"]')) return false;
+          if (element.matches('[aria-hidden="true"], [disabled], [type="hidden"]') || element.offsetParent === null) return false;
           const text = element.textContent?.trim();
-          const label = element.getAttribute('aria-label') || element.getAttribute('title');
+          const label = element.getAttribute('aria-label') || element.getAttribute('aria-labelledby') || element.getAttribute('title');
           const id = element.getAttribute('id');
           const explicitLabel = id && document.querySelector(`label[for="${CSS.escape(id)}"]`);
-          return !text && !label && !explicitLabel;
+          const implicitLabel = element.closest('label');
+          return !text && !label && !explicitLabel && !implicitLabel;
         })
         .map((element) => `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ''}.${element.className || ''}`);
       const imagesWithoutAlt = [...document.querySelectorAll('img:not([alt])')].length;
@@ -104,7 +110,7 @@ for (const viewport of viewports) {
         unlabeled,
         imagesWithoutAlt,
         title: document.title,
-        heading: document.querySelector('.enterprise-shell-panel.active h2, .enterprise-shell-panel.active .section-title')?.textContent?.trim() || '',
+        heading: document.querySelector('.view.active h1, .view.active h2, .view.active h3, .view.active .section-title')?.textContent?.trim() || '',
       };
     });
     const screenshot = path.join(outputDir, `${viewport.name}-${view}.png`);

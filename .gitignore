@@ -2,6 +2,7 @@
 node_modules/
 dist/
 .netlify/
+.wrangler/
 deploy-*.zip
 netlify_tools_checkpoint.txt
 deploy_checkpoint_findings.md

@@ -56,6 +56,7 @@ const productionAssets = [
   'design_system/variables.css',
   'design_system/enterprise_identity.css',
   'design_system/enterprise_components.css',
+  'design_system/enterprise_v4.css',
   'design_system/responsive.css',
   'animations/animations.css',
   'animations/premium_motion.css',
@@ -79,6 +80,9 @@ await copyHtml('landing.html', 'index.html');
 // Login unificado (/login) — minificado
 await copyHtml('login_new.html', 'login/index.html');
 
+// Cadastro (/register) — reutiliza o painel de cadastro da autenticação unificada
+await copyHtml('login_new.html', 'register/index.html');
+
 // Recuperação de senha (/forgot-password) — minificado
 await copyHtml('forgot_password.html', 'forgot-password/index.html');
 
@@ -100,10 +104,12 @@ await Promise.all(productionAssets.map((asset) => copy(asset)));
 // ─── Módulos v8.0 — carregados dinamicamente pelo app dashboard ───────────
 await cp(resolve(source, 'modules'), resolve(dist, 'app/modules'), { recursive: true });
 
-// ─── _redirects e _headers ─────────────────────────────────────────────────
-try {
-  await cp(resolve(publicDir, '_headers'), resolve(dist, '_headers'));
-} catch { /* sem _headers customizado */ }
+// ─── Arquivos públicos, _redirects e _headers ───────────────────────────────
+for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
+  try {
+    await cp(resolve(publicDir, publicFile), resolve(dist, publicFile));
+  } catch { /* arquivo público opcional */ }
+}
 
 // Gerar _redirects v8 com novas rotas
 const redirects = [
@@ -111,6 +117,7 @@ const redirects = [
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
+  '/register           /register/index.html        200',
   '/forgot-password    /forgot-password/index.html 200',
   '',
   '# App routes (autenticado)',
@@ -148,6 +155,7 @@ const builtAt = new Date().toISOString();
 const routes = [
   '/',
   '/login',
+  '/register',
   '/forgot-password',
   '/app',
   '/admin',
@@ -182,10 +190,13 @@ await writeFile(resolve(dist, 'health.json'), JSON.stringify({
 const required = [
   'index.html',
   'login/index.html',
+  'register/index.html',
   'forgot-password/index.html',
   'app/index.html',
   'admin/index.html',
   '_redirects',
+  'robots.txt',
+  'sitemap.xml',
 ];
 
 for (const file of required) {
@@ -229,6 +240,7 @@ async function patchApiUrls(filePath) {
 const htmlFiles = [
   'index.html',
   'login/index.html',
+  'register/index.html',
   'app/index.html',
   'admin/index.html',
   'admin/master.html',
