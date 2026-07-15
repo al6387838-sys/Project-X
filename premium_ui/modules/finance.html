@@ -760,5 +760,392 @@
   </div>
 </div>
 
+
+<!-- ─── METAS FINANCEIRAS ─── -->
+<div class="page" id="page-finance-goals">
+  <div class="page-header">
+    <div>
+      <div class="page-title">🎯 Metas Financeiras</div>
+      <div class="page-subtitle">Acompanhe seus objetivos financeiros</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance')">← Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-goal')">+ Nova Meta</button>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Metas Ativas</div><div style="font-size:28px;font-weight:800;color:var(--accent)">4</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Acumulado</div><div style="font-size:28px;font-weight:800;color:var(--green)">R$ 38.400</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Meta Total</div><div style="font-size:28px;font-weight:800;color:var(--amber)">R$ 120.000</div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">🏠</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">Entrada do Apartamento</div>
+            <div style="font-size:12px;color:var(--text-secondary)">Prazo: Dezembro 2026</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800;color:var(--green)">R$ 18.000</div>
+          <div style="font-size:11px;color:var(--text-muted)">de R$ 50.000</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:36%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:8px;transition:width 0.6s ease"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
+        <span>36% concluído</span><span>Faltam R$ 32.000 · +R$ 4.571/mês</span>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">✈️</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">Viagem Europa</div>
+            <div style="font-size:12px;color:var(--text-secondary)">Prazo: Julho 2027</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800;color:var(--accent)">R$ 8.400</div>
+          <div style="font-size:11px;color:var(--text-muted)">de R$ 20.000</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:42%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:8px;transition:width 0.6s ease"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
+        <span>42% concluído</span><span>Faltam R$ 11.600 · +R$ 966/mês</span>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">🚗</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">Reserva de Emergência</div>
+            <div style="font-size:12px;color:var(--text-secondary)">Prazo: Março 2027</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800;color:var(--amber)">R$ 12.000</div>
+          <div style="font-size:11px;color:var(--text-muted)">de R$ 30.000</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:40%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:8px;transition:width 0.6s ease"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
+        <span>40% concluído</span><span>Faltam R$ 18.000 · +R$ 2.250/mês</span>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">📈</div>
+          <div>
+            <div style="font-weight:700;font-size:15px">Carteira de Investimentos</div>
+            <div style="font-size:12px;color:var(--text-secondary)">Prazo: Dezembro 2027</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800;color:var(--cyan)">R$ 0</div>
+          <div style="font-size:11px;color:var(--text-muted)">de R$ 20.000</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:8px;transition:width 0.6s ease"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
+        <span>0% concluído</span><span>Faltam R$ 20.000 · +R$ 1.176/mês</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FLUXO DE CAIXA ─── -->
+<div class="page" id="page-finance-cashflow">
+  <div class="page-header">
+    <div>
+      <div class="page-title">💹 Fluxo de Caixa</div>
+      <div class="page-subtitle">Entradas e saídas projetadas</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance')">← Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Exportando fluxo de caixa...','info')">📥 Exportar</button>
+    </div>
+  </div>
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Entradas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--green)">R$ 14.500</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saídas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--red)">R$ 8.960</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saldo Líquido</div><div style="font-size:24px;font-weight:800;color:var(--accent)">R$ 5.540</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Projeção Agosto</div><div style="font-size:24px;font-weight:800;color:var(--amber)">R$ 6.200</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">📅 Calendário de Pagamentos — Julho</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <div><div style="font-weight:600;font-size:13px">Salário</div><div style="font-size:11px;color:var(--text-muted)">01/07 · Recorrente</div></div>
+          <span style="color:var(--green);font-weight:700">+R$ 12.500</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div><div style="font-weight:600;font-size:13px">Aluguel</div><div style="font-size:11px;color:var(--text-muted)">05/07 · Vencido</div></div>
+          <span style="color:var(--red);font-weight:700">-R$ 2.800</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div><div style="font-weight:600;font-size:13px">Fatura Nubank</div><div style="font-size:11px;color:var(--text-muted)">10/07 · Pendente</div></div>
+          <span style="color:var(--red);font-weight:700">-R$ 2.840</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <div><div style="font-weight:600;font-size:13px">Freelance Design</div><div style="font-size:11px;color:var(--text-muted)">15/07 · Aguardando</div></div>
+          <span style="color:var(--green);font-weight:700">+R$ 2.000</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div><div style="font-weight:600;font-size:13px">Assinaturas</div><div style="font-size:11px;color:var(--text-muted)">Vários · Recorrente</div></div>
+          <span style="color:var(--red);font-weight:700">-R$ 307,70</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div><div style="font-weight:600;font-size:13px">Investimento Mensal</div><div style="font-size:11px;color:var(--text-muted)">25/07 · Programado</div></div>
+          <span style="color:var(--red);font-weight:700">-R$ 1.200</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border-accent);margin-top:4px">
+          <span style="font-weight:700">Saldo Projetado Final</span>
+          <span style="color:var(--green);font-weight:800;font-size:16px">+R$ 7.352,30</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">📊 Projeção 6 Meses</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Jul</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:55%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 5.540</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Ago</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:62%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 6.200</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Set</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 5.800</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Out</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 7.000</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Nov</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 6.500</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;font-size:12px;color:var(--text-secondary)">Dez</div>
+          <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
+            <div style="height:100%;width:45%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 4.500</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Acumulado Projetado (6 meses)</div>
+        <div style="font-size:22px;font-weight:800;color:var(--accent)">R$ 35.540</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ORÇAMENTO ─── -->
+<div class="page" id="page-finance-budget">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📊 Orçamento</div>
+      <div class="page-subtitle">Controle de gastos por categoria</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance')">← Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-budget')">+ Nova Categoria</button>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Orçamento Total</div><div style="font-size:24px;font-weight:800;color:var(--text-primary)">R$ 10.000</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Gasto Até Agora</div><div style="font-size:24px;font-weight:800;color:var(--amber)">R$ 6.847</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Disponível</div><div style="font-size:24px;font-weight:800;color:var(--green)">R$ 3.153</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Categorias de Orçamento — Julho 2026</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🏠</span><span style="font-weight:600;font-size:13px">Moradia</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 2.800 / R$ 3.000 <span style="color:var(--amber)">(93%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:93%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🍔</span><span style="font-weight:600;font-size:13px">Alimentação</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 980 / R$ 1.500 <span style="color:var(--green)">(65%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🚗</span><span style="font-weight:600;font-size:13px">Transporte</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 420 / R$ 600 <span style="color:var(--green)">(70%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🎭</span><span style="font-weight:600;font-size:13px">Lazer e Entretenimento</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 847 / R$ 800 <span style="color:var(--red)">(106%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:100%;background:linear-gradient(90deg,var(--red),#F87171);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>💊</span><span style="font-weight:600;font-size:13px">Saúde e Bem-estar</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 320 / R$ 500 <span style="color:var(--green)">(64%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:64%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>📚</span><span style="font-weight:600;font-size:13px">Educação</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 180 / R$ 400 <span style="color:var(--green)">(45%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:45%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🔄</span><span style="font-weight:600;font-size:13px">Assinaturas</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 307,70 / R$ 400 <span style="color:var(--green)">(77%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:77%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:6px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <div style="display:flex;align-items:center;gap:8px"><span>📈</span><span style="font-weight:600;font-size:13px">Investimentos</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">R$ 992,30 / R$ 1.800 <span style="color:var(--green)">(55%)</span></div>
+        </div>
+        <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:55%;background:linear-gradient(90deg,var(--purple),#A78BFA);border-radius:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OPEN FINANCE ─── -->
+<div class="page" id="page-finance-openfinance">
+  <div class="page-header">
+    <div>
+      <div class="page-title">🔗 Open Finance</div>
+      <div class="page-subtitle">Conecte todas as suas instituições financeiras</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance')">← Voltar</button>
+      <button class="btn btn-primary" onclick="showToast('Iniciando conexão Open Finance...','info')">+ Conectar Banco</button>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.3)">🔗</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">Open Finance Brasil — Ativo</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Regulamentado pelo Banco Central · Dados criptografados · Consentimento gerenciado</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="text-align:center;padding:8px 16px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
+          <div style="font-size:20px;font-weight:700;color:var(--green)">5</div>
+          <div style="font-size:10px;color:var(--text-muted)">Conectados</div>
+        </div>
+        <div style="text-align:center;padding:8px 16px;background:rgba(99,102,241,0.1);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
+          <div style="font-size:20px;font-weight:700;color:var(--accent)">12</div>
+          <div style="font-size:10px;color:var(--text-muted)">Contas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="border-color:rgba(131,0,0,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#830000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">B</div>
+        <div><div style="font-weight:700">Bradesco</div><div style="font-size:11px;color:var(--text-muted)">2 contas · 1 cartão</div></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Ativo</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 5 min</div>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Bradesco...','info')">🔄 Sincronizar</button>
+    </div>
+    <div class="card" style="border-color:rgba(131,0,131,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#820080,#B300B3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">N</div>
+        <div><div style="font-weight:700">Nubank</div><div style="font-size:11px;color:var(--text-muted)">1 conta · 2 cartões</div></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Ativo</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 2 min</div>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Nubank...','info')">🔄 Sincronizar</button>
+    </div>
+    <div class="card" style="border-color:rgba(0,100,0,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#006400,#008000);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">I</div>
+        <div><div style="font-weight:700">Itaú</div><div style="font-size:11px;color:var(--text-muted)">2 contas · 1 cartão</div></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Ativo</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 8 min</div>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Itaú...','info')">🔄 Sincronizar</button>
+    </div>
+    <div class="card" style="border-color:rgba(0,0,200,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#0000C8,#0000FF);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">C</div>
+        <div><div style="font-weight:700">Caixa Econômica</div><div style="font-size:11px;color:var(--text-muted)">1 conta poupança</div></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Ativo</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 15 min</div>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Caixa...','info')">🔄 Sincronizar</button>
+    </div>
+    <div class="card" style="border-color:rgba(0,100,200,0.3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#0064C8,#0078D4);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">X</div>
+        <div><div style="font-weight:700">XP Investimentos</div><div style="font-size:11px;color:var(--text-muted)">1 conta investimento</div></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Ativo</span></div>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 1h</div>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando XP...','info')">🔄 Sincronizar</button>
+    </div>
+    <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="showToast('Iniciando conexão Open Finance...','info')">
+      <div style="font-size:32px;margin-bottom:8px">+</div>
+      <div style="font-weight:600;font-size:14px">Adicionar Instituição</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mais de 200 bancos disponíveis</div>
+    </div>
+  </div>
+</div>
+
 </div>
 <!-- END module-finance -->

@@ -152,21 +152,21 @@
       <div class="integration-name">WhatsApp Business</div>
       <div class="integration-desc">Mensagens pessoais e empresariais via WhatsApp Business API</div>
       <div class="integration-status connected">● Conectado</div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showToast('Configurações do WhatsApp','info')">Configurar</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-whatsapp')">Configurar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(0,136,204,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#0088CC,#229ED9)">✈️</div>
       <div class="integration-name">Telegram</div>
       <div class="integration-desc">Grupos, canais e mensagens diretas via Telegram Bot API</div>
       <div class="integration-status connected">● Conectado</div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showToast('Configurações do Telegram','info')">Configurar</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-telegram')">Configurar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(74,21,75,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#4A154B,#7C3085)">💼</div>
       <div class="integration-name">Slack</div>
       <div class="integration-desc">Canais, DMs e integrações de workspace via Slack API</div>
       <div class="integration-status connected">● Conectado</div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showToast('Configurações do Slack','info')">Configurar</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-slack')">Configurar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(88,101,242,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#5865F2,#7289DA)">🎮</div>
@@ -180,24 +180,284 @@
       <div class="integration-name">Microsoft Teams</div>
       <div class="integration-desc">Canais e chats corporativos via Microsoft Graph API</div>
       <div class="integration-status connected">● Conectado</div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showToast('Configurações do Teams','info')">Configurar</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-teams')">Configurar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(225,48,108,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D)">📸</div>
       <div class="integration-name">Instagram</div>
       <div class="integration-desc">DMs e comentários via Instagram Graph API</div>
       <div class="integration-status pending">○ Configurar</div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showToast('Conectando Instagram...','info')">Conectar</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showPage('comm-instagram')">Conectar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(24,119,242,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#1877F2,#0D6EFD)">👥</div>
       <div class="integration-name">Facebook Messenger</div>
       <div class="integration-desc">Mensagens de páginas e perfis via Messenger API</div>
       <div class="integration-status pending">○ Configurar</div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showToast('Conectando Facebook...','info')">Conectar</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showPage('comm-facebook')">Conectar</button>
     </div>
   </div>
 </div>
 
 </div>
+
+<!-- ─── CONFIGURAÇÃO WHATSAPP ─── -->
+<div class="page" id="page-comm-whatsapp">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:16px">📱</div> WhatsApp Business</div>
+      <div class="page-subtitle">Configuração e gestão da integração WhatsApp</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(37,211,102,0.08);border-radius:10px;border:1px solid rgba(37,211,102,0.2);margin-bottom:16px">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(37,211,102,0.6)"></div>
+        <div>
+          <div style="font-weight:700">Conectado via WhatsApp Business API</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Número: +55 (11) 99999-0000 · Verificado</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Mensagens hoje</span>
+          <span style="font-weight:700">47</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Conversas ativas</span>
+          <span style="font-weight:700">12</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Taxa de resposta</span>
+          <span style="font-weight:700;color:var(--green)">94%</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Configurações</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Respostas Automáticas</div><div style="font-size:11px;color:var(--text-muted)">Responder mensagens fora do horário</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Respostas automáticas ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Notificações Push</div><div style="font-size:11px;color:var(--text-muted)">Alertas de novas mensagens</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Notificações ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Sincronização de Contatos</div><div style="font-size:11px;color:var(--text-muted)">Importar contatos do WhatsApp</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Sincronização ' + (this.checked ? 'ativada' : 'desativada'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Webhook Ativo</div><div style="font-size:11px;color:var(--text-muted)">Receber eventos em tempo real</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Webhook ' + (this.checked ? 'ativado' : 'desativado'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title" style="margin-bottom:16px">Templates de Mensagem</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Boas-vindas</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Olá {{nome}}! Bem-vindo ao nosso serviço. Como posso ajudar?</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Confirmação de Reunião</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Confirmando nossa reunião em {{data}} às {{hora}}. Até lá!</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Follow-up</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Oi {{nome}}, passando para verificar como está o andamento do projeto.</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO TELEGRAM ─── -->
+<div class="page" id="page-comm-telegram">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0088CC,#229ED9);display:flex;align-items:center;justify-content:center;font-size:16px">✈️</div> Telegram</div>
+      <div class="page-subtitle">Grupos, canais e mensagens via Telegram Bot API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Grupos</div><div style="font-size:24px;font-weight:800;color:var(--cyan)">8</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--accent)">3</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Mensagens/dia</div><div style="font-size:24px;font-weight:800;color:var(--green)">156</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Bot Configurado</div>
+      <div style="padding:16px;background:rgba(0,136,204,0.08);border-radius:10px;border:1px solid rgba(0,136,204,0.2);margin-bottom:16px">
+        <div style="font-weight:700;margin-bottom:4px">@LifeOS_Bot</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Token: ****...****abc123 · Ativo</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Abrindo configurações do bot...','info')">⚙️ Configurar Comandos</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Webhook configurado!','success')">🔗 Configurar Webhook</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Testando bot...','info')">🧪 Testar Bot</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Grupos e Canais</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px">👥</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Equipe Dev</div><div style="font-size:11px;color:var(--text-muted)">12 membros</div></div>
+          <span style="font-size:11px;color:var(--green)">● Ativo</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px">📢</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Atualizações LifeOS</div><div style="font-size:11px;color:var(--text-muted)">Canal · 847 inscritos</div></div>
+          <span style="font-size:11px;color:var(--green)">● Ativo</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px">👥</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Família</div><div style="font-size:11px;color:var(--text-muted)">6 membros</div></div>
+          <span style="font-size:11px;color:var(--green)">● Ativo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO SLACK ─── -->
+<div class="page" id="page-comm-slack">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#4A154B,#7C3085);display:flex;align-items:center;justify-content:center;font-size:16px">💼</div> Slack</div>
+      <div class="page-subtitle">Canais e workspaces via Slack API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Workspaces</div><div style="font-size:24px;font-weight:800;color:var(--purple)">2</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--accent)">18</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Membros</div><div style="font-size:24px;font-weight:800;color:var(--green)">47</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Workspaces Conectados</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#4A154B,#7C3085);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff">A</div>
+        <div style="flex:1">
+          <div style="font-weight:700">Acme Corp</div>
+          <div style="font-size:12px;color:var(--text-secondary)">32 membros · 12 canais · Plano Pro</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Conectado</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack Acme Corp','info')">Configurar</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7C3085,#9B59B6);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff">P</div>
+        <div style="flex:1">
+          <div style="font-weight:700">Pessoal</div>
+          <div style="font-size:12px;color:var(--text-secondary)">15 membros · 6 canais · Plano Free</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">● Conectado</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack Pessoal','info')">Configurar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO INSTAGRAM ─── -->
+<div class="page" id="page-comm-instagram">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D);display:flex;align-items:center;justify-content:center;font-size:16px">📸</div> Instagram</div>
+      <div class="page-subtitle">DMs e comentários via Instagram Graph API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(225,48,108,0.08),rgba(131,58,180,0.08));border-color:rgba(225,48,108,0.2);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D);display:flex;align-items:center;justify-content:center;font-size:24px">📸</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">@lifeos_enterprise</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Conta Business · Verificada · 2.847 seguidores</div>
+      </div>
+      <button class="btn btn-primary" onclick="showToast('Conectando Instagram...','info');setTimeout(()=>showToast('Instagram conectado!','success'),1500)">Conectar Conta</button>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">DMs não lidas</div><div style="font-size:28px;font-weight:800;color:var(--pink)">24</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Comentários</div><div style="font-size:28px;font-weight:800;color:var(--purple)">87</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Menções</div><div style="font-size:28px;font-weight:800;color:var(--accent)">12</div></div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO MICROSOFT TEAMS ─── -->
+<div class="page" id="page-comm-teams">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px">🏢</div> Microsoft Teams</div>
+      <div class="page-subtitle">Canais corporativos via Microsoft Graph API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Equipes</div><div style="font-size:24px;font-weight:800;color:var(--accent)">3</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--purple)">14</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Reuniões Hoje</div><div style="font-size:24px;font-weight:800;color:var(--cyan)">2</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Equipes Conectadas</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">P</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Projeto Alpha</div><div style="font-size:11px;color:var(--text-muted)">8 membros · 4 canais</div></div>
+        <span style="font-size:11px;color:var(--green)">● Ativo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">E</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Engenharia</div><div style="font-size:11px;color:var(--text-muted)">24 membros · 7 canais</div></div>
+        <span style="font-size:11px;color:var(--green)">● Ativo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">G</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Geral</div><div style="font-size:11px;color:var(--text-muted)">47 membros · 3 canais</div></div>
+        <span style="font-size:11px;color:var(--green)">● Ativo</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO FACEBOOK ─── -->
+<div class="page" id="page-comm-facebook">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1877F2,#0D6EFD);display:flex;align-items:center;justify-content:center;font-size:16px">👥</div> Facebook Messenger</div>
+      <div class="page-subtitle">Mensagens de páginas via Messenger API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')">← Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(24,119,242,0.08),rgba(13,110,253,0.06));border-color:rgba(24,119,242,0.2);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1877F2,#0D6EFD);display:flex;align-items:center;justify-content:center;font-size:24px">👥</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">LifeOS Enterprise — Página</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Página Business · 1.234 curtidas</div>
+      </div>
+      <button class="btn btn-primary" onclick="showToast('Conectando Facebook...','info');setTimeout(()=>showToast('Facebook conectado!','success'),1500)">Conectar Página</button>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Mensagens</div><div style="font-size:28px;font-weight:800;color:var(--accent)">18</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Comentários</div><div style="font-size:28px;font-weight:800;color:var(--cyan)">43</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Avaliações</div><div style="font-size:28px;font-weight:800;color:var(--amber)">⭐ 4.8</div></div>
+  </div>
+</div>
+
 <!-- END module-communication -->

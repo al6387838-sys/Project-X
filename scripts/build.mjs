@@ -73,7 +73,16 @@ const productionAssets = [
   'admin/master_admin.html',
 ];
 
-// ─── Rotas principais v8 ───────────────────────────────────────────────────
+// ─── Copiar módulos HTML ─────────────────────────────────────────────────────
+await copy('modules/finance.html', 'modules/finance.html');
+await copy('modules/communication.html', 'modules/communication.html');
+await copy('modules/email.html', 'modules/email.html');
+await copy('modules/calendar.html', 'modules/calendar.html');
+await copy('modules/ai-center.html', 'modules/ai-center.html');
+await copy('modules/documents.html', 'modules/documents.html');
+await copy('modules/productivity.html', 'modules/productivity.html');
+await copy('modules/marketplace.html', 'modules/marketplace.html');
+// ─── Rotas principais v9 ───────────────────────────────────────────────────
 // Landing Page (/) — minificado
 await copyHtml('landing.html', 'index.html');
 
@@ -166,7 +175,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '8.0.0',
+  version: '9.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   architecture: 'multi-page-rbac-modules',
@@ -179,7 +188,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '8.0.0',
+  version: '9.0.0',
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
@@ -263,12 +272,12 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v8.0.0 — Build OK ✓         ║');
+console.log('║   LifeOS Enterprise v9.0.0 — Build OK ✓         ║');
 console.log('╚══════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 8.0.0`);
-console.log(`  Architecture  : Multi-Page RBAC + 8 Módulos`);
-console.log(`  Modules       : Finance | Comm | Email | Calendar | AI | Docs | Prod | Market`);
+console.log(`  Version       : 9.0.0`);
+console.log(`  Architecture  : Multi-Page RBAC + Finance Hub + Comm Hub + AI Platform`);
+console.log(`  Modules       : Finance Hub | Communication Hub | AI Platform | Email | Calendar | Docs | Prod | Market`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);

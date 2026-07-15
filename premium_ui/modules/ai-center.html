@@ -294,4 +294,343 @@
 </div>
 
 </div>
+
+<!-- ─── RESUMO DIÁRIO ─── -->
+<div class="page" id="page-ai-daily">
+  <div class="page-header">
+    <div>
+      <div class="page-title">☀️ Resumo Diário</div>
+      <div class="page-subtitle">Briefing inteligente do seu dia — gerado pela IA</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
+      <button class="btn btn-primary" onclick="showToast('Gerando novo resumo...','info');setTimeout(()=>showToast('Resumo atualizado!','success'),1500)">🔄 Atualizar</button>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.06));border-color:rgba(245,158,11,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FCD34D);display:flex;align-items:center;justify-content:center;font-size:20px">☀️</div>
+      <div>
+        <div style="font-weight:700;font-size:16px">Bom dia! Seu briefing de hoje</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quarta-feira, 15 de Julho de 2026 · Gerado às 08:00</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="text-align:center;padding:12px;background:rgba(16,185,129,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--green)">87</div>
+        <div style="font-size:11px;color:var(--text-muted)">Life Score</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(99,102,241,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--accent)">6</div>
+        <div style="font-size:11px;color:var(--text-muted)">Tarefas hoje</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(6,182,212,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--cyan)">3</div>
+        <div style="font-size:11px;color:var(--text-muted)">Reuniões</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(239,68,68,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--red)">2</div>
+        <div style="font-size:11px;color:var(--text-muted)">Urgentes</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">📋 Prioridades do Dia</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <span style="font-size:16px">🔴</span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Revisar proposta cliente XYZ</div><div style="font-size:11px;color:var(--text-muted)">Prazo: hoje 14h · Alta prioridade</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
+          <span style="font-size:16px">🟡</span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Reunião equipe dev — 10h</div><div style="font-size:11px;color:var(--text-muted)">Google Meet · 45 min</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
+          <span style="font-size:16px">🔵</span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Pagar fatura Nubank</div><div style="font-size:11px;color:var(--text-muted)">Vence hoje · R$ 2.840</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <span style="font-size:16px">🟢</span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Treino — 18h30</div><div style="font-size:11px;color:var(--text-muted)">Smart Fit · Musculação</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">🤖 Insights da IA para Hoje</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px">💡 Produtividade</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Seu pico de foco é entre 9h–11h. Reserve esse período para a proposta do cliente XYZ.</div>
+        </div>
+        <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px">💰 Financeiro</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Fatura do Nubank vence hoje. Saldo disponível: R$ 8.420. Pagamento recomendado antes das 18h.</div>
+        </div>
+        <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px">🏃 Saúde</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Você dormiu 7h30 ontem. Hidratação: lembre-se de beber água a cada 2h para manter o foco.</div>
+        </div>
+        <div style="padding:12px;background:rgba(6,182,212,0.08);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px">📊 Hábitos</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Streak de 14 dias! Não quebre hoje. Hábito crítico: meditação matinal ainda não registrada.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── RESUMO SEMANAL ─── -->
+<div class="page" id="page-ai-weekly">
+  <div class="page-header">
+    <div>
+      <div class="page-title">📅 Resumo Semanal</div>
+      <div class="page-subtitle">Análise completa da semana — gerada pela IA</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Exportando relatório...','info')">📥 Exportar PDF</button>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:20px">📊</div>
+      <div>
+        <div style="font-weight:700;font-size:16px">Semana 28 — 07 a 13 de Julho de 2026</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Análise gerada em 13/07 às 20:00 · 847 pontos de dados analisados</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+      <div style="text-align:center;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--green)">89%</div>
+        <div style="font-size:10px;color:var(--text-muted)">Hábitos</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(99,102,241,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--accent)">34/38</div>
+        <div style="font-size:10px;color:var(--text-muted)">Tarefas</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(6,182,212,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--cyan)">42h</div>
+        <div style="font-size:10px;color:var(--text-muted)">Foco</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--amber)">R$ 1.240</div>
+        <div style="font-size:10px;color:var(--text-muted)">Gastos</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(139,92,246,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--purple)">87</div>
+        <div style="font-size:10px;color:var(--text-muted)">Life Score</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">📈 Performance por Área</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px">🏃 Saúde & Bem-estar</span><span style="font-weight:700;color:var(--green)">92%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:92%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px">💼 Produtividade</span><span style="font-weight:700;color:var(--accent)">88%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:88%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px">💰 Finanças</span><span style="font-weight:700;color:var(--amber)">74%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:74%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px">🎓 Aprendizado</span><span style="font-weight:700;color:var(--cyan)">81%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:81%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px">👥 Relacionamentos</span><span style="font-weight:700;color:var(--pink)">69%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:69%;background:linear-gradient(90deg,var(--pink),#F9A8D4);border-radius:4px"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">🤖 Recomendações da IA</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">✅ Continue assim</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Sua consistência nos hábitos de saúde está excelente. Mantenha o treino 3x por semana.</div>
+        </div>
+        <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">⚠️ Atenção necessária</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Gastos com lazer ultrapassaram o orçamento em 6%. Revise suas assinaturas na próxima semana.</div>
+        </div>
+        <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">💡 Oportunidade</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Você tem 3h livres na sexta-feira. Ideal para avançar no curso de Python que está parado há 2 semanas.</div>
+        </div>
+        <div style="padding:12px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">🚨 Alerta</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Meta "Viagem Europa" está 8% abaixo do ritmo necessário. Considere aumentar o aporte mensal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── RECOMENDAÇÕES INTELIGENTES ─── -->
+<div class="page" id="page-ai-recommendations">
+  <div class="page-header">
+    <div>
+      <div class="page-title">💡 Recomendações Inteligentes</div>
+      <div class="page-subtitle">Sugestões personalizadas baseadas nos seus padrões</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Recomendações Ativas</div><div style="font-size:28px;font-weight:800;color:var(--accent)">12</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Implementadas</div><div style="font-size:28px;font-weight:800;color:var(--green)">8</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Impacto Estimado</div><div style="font-size:28px;font-weight:800;color:var(--amber)">+23%</div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div class="card" style="border-color:rgba(16,185,129,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏃</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Adicionar caminhada matinal</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">Saúde</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Baseado no seu histórico, uma caminhada de 20 min às 7h aumentaria seu Life Score em +4 pontos e melhoraria seu humor nas reuniões matinais.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Hábito adicionado: Caminhada matinal!','success')">✓ Adicionar hábito</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💰</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Cancelar assinatura subutilizada</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:20px;font-weight:600">Finanças</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você não usa o Adobe Creative Cloud há 23 dias. Cancelar economizaria R$ 89,90/mês = R$ 1.078,80/ano.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showPage('finance-subscriptions')">Ver assinaturas</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação adiada por 30 dias','info')">Adiar 30 dias</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(99,102,241,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📚</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Retomar curso de Python</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(99,102,241,0.15);color:var(--accent);border-radius:20px;font-weight:600">Aprendizado</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você tem 3h livres na sexta-feira. Completar o módulo de APIs do curso aumentaria sua empregabilidade em +15%.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Tarefa adicionada para sexta!','success')">Agendar para sexta</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(6,182,212,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👥</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Conectar-se com Ana Costa</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(6,182,212,0.15);color:var(--cyan);border-radius:20px;font-weight:600">Relacionamentos</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você não fala com Ana há 12 dias. Ela é uma conexão importante para o Projeto Alpha. Um check-in rápido fortaleceria o relacionamento.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showPage('messages')">Enviar mensagem</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Lembrete criado para amanhã','info')">Lembrar amanhã</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ORGANIZAÇÃO AUTOMÁTICA ─── -->
+<div class="page" id="page-ai-organize">
+  <div class="page-header">
+    <div>
+      <div class="page-title">⚡ Organização Automática</div>
+      <div class="page-subtitle">A IA organiza sua vida digital automaticamente</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));border-color:rgba(139,92,246,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#6366F1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(139,92,246,0.3)">⚡</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">Auto-Organização Ativa</div>
+        <div style="font-size:13px;color:var(--text-secondary)">A IA monitora e organiza continuamente seus dados · Última execução: há 3 min</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="text-align:center;padding:8px 14px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
+          <div style="font-size:18px;font-weight:700;color:var(--green)">247</div>
+          <div style="font-size:10px;color:var(--text-muted)">Ações hoje</div>
+        </div>
+        <div style="text-align:center;padding:8px 14px;background:rgba(99,102,241,0.1);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
+          <div style="font-size:18px;font-weight:700;color:var(--accent)">3.2h</div>
+          <div style="font-size:10px;color:var(--text-muted)">Economizadas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">🔄 Regras de Organização</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">📧 Email → Tarefa automática</div><div style="font-size:11px;color:var(--text-muted)">Emails com "urgente" viram tarefas</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">📅 Eventos → Blocos de foco</div><div style="font-size:11px;color:var(--text-muted)">Cria blocos de prep antes de reuniões</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">💰 Gastos → Categorização</div><div style="font-size:11px;color:var(--text-muted)">Categoriza transações automaticamente</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">📁 Docs → Pasta correta</div><div style="font-size:11px;color:var(--text-muted)">Organiza documentos por tipo e projeto</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">📋 Log de Ações Recentes</div>
+      <div style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto">
+        <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+          <span style="font-size:14px">✅</span>
+          <div><div style="font-size:12px;font-weight:600">Tarefa criada: "Responder João Silva"</div><div style="font-size:11px;color:var(--text-muted)">Email → Tarefa · há 3 min</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+          <span style="font-size:14px">💰</span>
+          <div><div style="font-size:12px;font-weight:600">Transação categorizada: Restaurante → Alimentação</div><div style="font-size:11px;color:var(--text-muted)">R$ 87,50 · há 12 min</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+          <span style="font-size:14px">📅</span>
+          <div><div style="font-size:12px;font-weight:600">Bloco de prep criado: 30 min antes da reunião das 10h</div><div style="font-size:11px;color:var(--text-muted)">Calendário · há 45 min</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+          <span style="font-size:14px">📁</span>
+          <div><div style="font-size:12px;font-weight:600">Documento movido: Proposta_XYZ.pdf → /Projetos/Alpha</div><div style="font-size:11px;color:var(--text-muted)">Documentos · há 1h</div></div>
+        </div>
+        <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+          <span style="font-size:14px">🧠</span>
+          <div><div style="font-size:12px;font-weight:600">Memória salva: preferência de horário de reuniões</div><div style="font-size:11px;color:var(--text-muted)">Memória permanente · há 2h</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- END module-ai-center -->
