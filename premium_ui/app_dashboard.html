@@ -1078,6 +1078,19 @@
       <div class="nav-item" onclick="showPage('marketplace')">
         <div class="nav-icon">🏪</div><span>Marketplace</span>
       </div>
+      <div class="nav-section-label">Ecossistema v9.5</div>
+      <div class="nav-item" onclick="showPage('app-ecosystem')">
+        <div class="nav-icon">🧩</div><span>App Ecosystem</span>
+        <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
+      </div>
+      <div class="nav-item" onclick="showPage('personal-hub')">
+        <div class="nav-icon">🏠</div><span>Personal Hub</span>
+        <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
+      </div>
+      <div class="nav-item" onclick="showPage('observability')">
+        <div class="nav-icon">📊</div><span>Observability</span>
+        <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
+      </div>
       <div class="nav-section-label">Conta</div>
       <div class="nav-item" onclick="showPage('notifications')">
         <div class="nav-icon">🔔</div><span>Notificações</span>
@@ -1656,6 +1669,14 @@
       <div id="module-productivity-container"></div>
       <!-- ═══ MÓDULO MARKETPLACE ═══ -->
       <div id="module-marketplace-container"></div>
+      <!-- ═══ MÓDULO APP ECOSYSTEM (Phase 081) ═══ -->
+      <div id="module-app-ecosystem-container"></div>
+      <!-- ═══ MÓDULO PERSONAL HUB (Phase 082) ═══ -->
+      <div id="module-personal-hub-container"></div>
+      <!-- ═══ MÓDULO ENTERPRISE SETTINGS (Phase 083) ═══ -->
+      <div id="module-enterprise-settings-container"></div>
+      <!-- ═══ MÓDULO OBSERVABILITY (Phase 084) ═══ -->
+      <div id="module-observability-container"></div>
 
     </main>
   </div>
@@ -2083,6 +2104,35 @@
     'marketplace': 'module-marketplace-container',
     'marketplace-installed': 'module-marketplace-container',
     'marketplace-api': 'module-marketplace-container',
+    'app-ecosystem': 'module-app-ecosystem-container',
+    'app-registry': 'module-app-ecosystem-container',
+    'app-marketplace': 'module-app-ecosystem-container',
+    'app-dependencies': 'module-app-ecosystem-container',
+    'app-versions': 'module-app-ecosystem-container',
+    'app-integrations': 'module-app-ecosystem-container',
+    'personal-hub': 'module-personal-hub-container',
+    'hub-finance': 'module-personal-hub-container',
+    'hub-communication': 'module-personal-hub-container',
+    'hub-documents': 'module-personal-hub-container',
+    'hub-calendar': 'module-personal-hub-container',
+    'hub-ai': 'module-personal-hub-container',
+    'hub-productivity': 'module-personal-hub-container',
+    'enterprise-settings': 'module-enterprise-settings-container',
+    'settings-preferences': 'module-enterprise-settings-container',
+    'settings-language': 'module-enterprise-settings-container',
+    'settings-theme': 'module-enterprise-settings-container',
+    'settings-integrations': 'module-enterprise-settings-container',
+    'settings-security': 'module-enterprise-settings-container',
+    'settings-sessions': 'module-enterprise-settings-container',
+    'settings-devices': 'module-enterprise-settings-container',
+    'settings-apikeys': 'module-enterprise-settings-container',
+    'settings-webhooks': 'module-enterprise-settings-container',
+    'observability': 'module-observability-container',
+    'obs-health': 'module-observability-container',
+    'obs-metrics': 'module-observability-container',
+    'obs-logs': 'module-observability-container',
+    'obs-alerts': 'module-observability-container',
+    'obs-performance': 'module-observability-container',
   };
   const _moduleFiles = {
     'module-finance-container': 'modules/finance.html',
@@ -2093,6 +2143,10 @@
     'module-documents-container': 'modules/documents.html',
     'module-productivity-container': 'modules/productivity.html',
     'module-marketplace-container': 'modules/marketplace.html',
+    'module-app-ecosystem-container': 'modules/app-ecosystem.html',
+    'module-personal-hub-container': 'modules/personal-hub.html',
+    'module-enterprise-settings-container': 'modules/enterprise-settings.html',
+    'module-observability-container': 'modules/observability.html',
   };
   const _loadedModules = new Set();
   async function _loadModule(containerId) {

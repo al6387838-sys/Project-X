@@ -5,6 +5,67 @@ All notable changes to LifeOS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.5.0] — 2026-07-15
+
+### Release: LIFEOS ENTERPRISE v9.5.0 — Phases 081–087
+
+#### Phase 081 — App Ecosystem
+- **App Registry**: catálogo completo de todos os apps instalados com status, versão e dependências
+- **Module Marketplace**: loja de módulos com categorias, avaliações, instalação e preview
+- **Dependency Manager**: mapa visual de dependências entre módulos com detecção de conflitos
+- **Version Manager**: controle de versões com histórico, rollback e changelog por módulo
+- **Integration Catalog**: catálogo de integrações externas (OAuth, API Key, Webhook) com status em tempo real
+
+#### Phase 082 — Personal Digital Hub
+- **Central Financeira**: visão consolidada de contas, investimentos, gastos e metas financeiras
+- **Central de Comunicação**: inbox unificado de mensagens, e-mails e notificações
+- **Central de Documentos**: gerenciador de arquivos com busca, tags e preview
+- **Central de Agenda**: calendário integrado com eventos, lembretes e sincronização
+- **Central de IA**: acesso rápido a todos os recursos de inteligência artificial
+- **Central de Produtividade**: kanban, gantt, projetos e metas em um único hub
+
+#### Phase 083 — Enterprise Settings
+- **Preferências Gerais**: configurações de comportamento, notificações e acessibilidade
+- **Idioma & Região**: seleção de idioma, fuso horário, formato de data e moeda
+- **Tema & Aparência**: dark/light mode, cores de destaque, densidade e tipografia
+- **Integrações**: gerenciamento de todas as integrações externas ativas
+- **Segurança**: 2FA, política de senhas, logs de acesso e alertas de segurança
+- **Sessões Ativas**: visualização e revogação de sessões por dispositivo
+- **Dispositivos**: gerenciamento de dispositivos confiáveis
+- **API Keys**: criação, rotação e revogação de chaves de API
+- **Webhooks**: configuração de endpoints com logs de entrega e retry
+
+#### Phase 084 — Observability Enterprise
+- **Health Dashboard**: status em tempo real de todos os 8 serviços com uptime (30 dias)
+- **Métricas**: requisições/min, latência P95, taxa de erro, usuários ativos, CPU, memória
+- **Logs**: stream de logs com filtros por nível (INFO/WARN/ERROR/DEBUG) e busca full-text
+- **Alertas**: sistema de alertas com severidade, reconhecimento e resolução
+- **Performance**: latência por endpoint e utilização de recursos do sistema
+
+#### Phase 085 — Product Polish
+- **Design System v9.5**: tokens expandidos, shadows premium, glassmorphism, transitions spring
+- **Cards Enterprise**: hover effects, gradientes, before/after decorativos
+- **Grids Responsivos**: sistema de grid completo com breakpoints automáticos
+- **Forms Enterprise**: estados de foco, erro, sucesso com acessibilidade
+- **Animations Premium**: fadeIn, slideUp, scaleIn, bounceIn, stagger children
+- **Loading States**: skeleton shimmer, spinner, progress bar animado
+- **Buttons v9.5**: primary, secondary, ghost, danger com ripple effect
+- **Sidebar v9.5**: collapsed mode, active indicator, badge counter
+
+#### Phase 086 — QA Final
+- Build script atualizado para v9.5.0
+- Validação de todos os 12 módulos no dist
+- Todos os assets validados com sucesso
+
+#### Phase 087 — Production Release
+- **Version**: 9.5.0
+- **Build ID**: lifeos-v9.5.0-ce78f692fed1
+- **Platform**: Cloudflare Pages
+- **Modules**: 12 (8 legacy + 4 novos)
+- **Design System**: enterprise_v9_5.css
+
+---
+
 ## [8.0.0] — 2026-07-15
 
 ### Added

@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 9.2.0 (com módulos independentes)
+// Version: 9.5.0 (Phase 081-087 — App Ecosystem + Personal Hub + Enterprise Settings + Observability + Polish)
 
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -57,6 +57,7 @@ const productionAssets = [
   'design_system/enterprise_identity.css',
   'design_system/enterprise_components.css',
   'design_system/enterprise_v4.css',
+  'design_system/enterprise_v9_5.css',
   'design_system/responsive.css',
   'animations/animations.css',
   'animations/premium_motion.css',
@@ -73,7 +74,7 @@ const productionAssets = [
   'admin/master_admin.html',
 ];
 
-// ─── Copiar módulos HTML ─────────────────────────────────────────────────────
+// ─── Copiar módulos HTML v9.2 ────────────────────────────────────────────────
 await copy('modules/finance.html', 'modules/finance.html');
 await copy('modules/communication.html', 'modules/communication.html');
 await copy('modules/email.html', 'modules/email.html');
@@ -82,7 +83,14 @@ await copy('modules/ai-center.html', 'modules/ai-center.html');
 await copy('modules/documents.html', 'modules/documents.html');
 await copy('modules/productivity.html', 'modules/productivity.html');
 await copy('modules/marketplace.html', 'modules/marketplace.html');
-// ─── Rotas principais v9 ───────────────────────────────────────────────────
+
+// ─── Copiar módulos HTML v9.5 (Phase 081-084) ────────────────────────────────
+await copy('modules/app-ecosystem.html', 'modules/app-ecosystem.html');
+await copy('modules/personal-hub.html', 'modules/personal-hub.html');
+await copy('modules/enterprise-settings.html', 'modules/enterprise-settings.html');
+await copy('modules/observability.html', 'modules/observability.html');
+
+// ─── Rotas principais v9.5 ───────────────────────────────────────────────────
 // Landing Page (/) — minificado
 await copyHtml('landing.html', 'index.html');
 
@@ -110,19 +118,19 @@ await copyHtml('memory_center.html', 'memory-center/index.html');
 // Assets de produção
 await Promise.all(productionAssets.map((asset) => copy(asset)));
 
-// ─── Módulos v8.0 — carregados dinamicamente pelo app dashboard ───────────
+// ─── Módulos — carregados dinamicamente pelo app dashboard ───────────────────
 await cp(resolve(source, 'modules'), resolve(dist, 'app/modules'), { recursive: true });
 
-// ─── Arquivos públicos, _redirects e _headers ───────────────────────────────
+// ─── Arquivos públicos, _redirects e _headers ────────────────────────────────
 for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
   try {
     await cp(resolve(publicDir, publicFile), resolve(dist, publicFile));
   } catch { /* arquivo público opcional */ }
 }
 
-// Gerar _redirects v8 com novas rotas
+// Gerar _redirects v9.5 com novas rotas
 const redirects = [
-  '# LifeOS Enterprise v9.2.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v9.5.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -157,10 +165,10 @@ const redirects = [
 
 await writeFile(resolve(dist, '_redirects'), redirects);
 
-// ─── Build metadata ────────────────────────────────────────────────────────
+// ─── Build metadata v9.5 ──────────────────────────────────────────────────────
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v9.2.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v9.5.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/',
@@ -185,12 +193,17 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '9.2.0',
+  version: '9.5.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
-  architecture: 'multi-page-rbac-modules',
-  modules: ['finance','communication','email','calendar','ai-center','documents','productivity','marketplace'],
+  architecture: 'multi-page-rbac-modules-ecosystem',
+  phases: ['081-AppEcosystem','082-PersonalHub','083-EnterpriseSettings','084-Observability','085-ProductPolish'],
+  modules: [
+    'finance','communication','email','calendar','ai-center',
+    'documents','productivity','marketplace',
+    'app-ecosystem','personal-hub','enterprise-settings','observability'
+  ],
   commit,
   builtAt,
   routes,
@@ -199,7 +212,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '9.2.0',
+  version: '9.5.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -207,7 +220,7 @@ await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   builtAt,
 }, null, 2) + '\n');
 
-// ─── Validação do build ────────────────────────────────────────────────────
+// ─── Validação do build ────────────────────────────────────────────────────────
 const required = [
   'index.html',
   'login/index.html',
@@ -242,7 +255,18 @@ if (!adminPanel.includes('Admin') || !adminPanel.includes('/api/session')) {
   throw new Error('Build inválido: admin panel incompleto');
 }
 
-// ─── Patch URLs legadas ────────────────────────────────────────────────────
+// Validar novos módulos v9.5
+const newModules = [
+  'app/modules/app-ecosystem.html',
+  'app/modules/personal-hub.html',
+  'app/modules/enterprise-settings.html',
+  'app/modules/observability.html',
+];
+for (const mod of newModules) {
+  await stat(resolve(dist, mod));
+}
+
+// ─── Patch URLs legadas ────────────────────────────────────────────────────────
 async function patchApiUrls(filePath) {
   try {
     let content = await readFile(filePath, 'utf8');
@@ -283,14 +307,15 @@ for (const file of [...htmlFiles, ...jsFiles]) {
 }
 
 console.log('');
-console.log('╔══════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v9.2.0 — Build OK ✓         ║');
-console.log('╚══════════════════════════════════════════════════╝');
+console.log('╔══════════════════════════════════════════════════════════╗');
+console.log('║   LifeOS Enterprise v9.5.0 — Build OK ✓                 ║');
+console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 9.2.0`);
+console.log(`  Version       : 9.5.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Architecture  : Multi-Page RBAC + Finance Hub + Comm Hub + AI Platform`);
-console.log(`  Modules       : Finance Hub | Communication Hub | AI Platform | Email | Calendar | Docs | Prod | Market`);
+console.log(`  Architecture  : Multi-Page RBAC + App Ecosystem + Personal Hub + Observability`);
+console.log(`  Phases        : 081 AppEcosystem | 082 PersonalHub | 083 Settings | 084 Observability | 085 Polish`);
+console.log(`  Modules       : Finance | Comm | Email | Calendar | AI | Docs | Prod | Market | Ecosystem | Hub | Settings | Obs`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);

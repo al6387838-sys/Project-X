@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise Settings — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25); --text-primary: #F0F4FF;
+      --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12); --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+    /* Settings Layout */
+    .settings-sidebar { width: 220px; background: var(--bg-elevated); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; overflow-y: auto; }
+    .settings-sidebar-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; padding: 0 16px 10px; }
+    .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; color: var(--text-secondary); font-size: 13px; font-weight: 500; border-left: 2px solid transparent; }
+    .settings-nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
+    .settings-nav-item.active { background: var(--accent-glow); color: var(--accent-light); border-left-color: var(--accent); }
+    .settings-nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+    .settings-nav-sep { height: 1px; background: var(--border); margin: 10px 16px; }
+    .settings-content { flex: 1; overflow-y: auto; padding: 28px 32px; }
+    .settings-header { margin-bottom: 28px; }
+    .settings-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .settings-desc { font-size: 13px; color: var(--text-secondary); }
+    .settings-badge { display: inline-block; background: rgba(99,102,241,0.15); color: var(--accent-light); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+    .settings-panel { display: none; }
+    .settings-panel.active { display: block; }
+    /* Form Elements */
+    .settings-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 18px; }
+    .settings-section-title { font-size: 14px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .settings-section-title span { font-size: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .form-input { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; color: var(--text-primary); font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: var(--border-accent); }
+    .form-select { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; color: var(--text-primary); font-size: 13px; outline: none; cursor: pointer; }
+    .form-select:focus { border-color: var(--border-accent); }
+    /* Toggle */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .toggle-info { flex: 1; }
+    .toggle-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .toggle-desc { font-size: 12px; color: var(--text-secondary); }
+    .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--border); border-radius: 24px; transition: 0.3s; }
+    .toggle-slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: var(--text-muted); border-radius: 50%; transition: 0.3s; }
+    .toggle input:checked + .toggle-slider { background: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); background: #fff; }
+    /* Theme Selector */
+    .theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .theme-option { border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .theme-option.active { border-color: var(--accent); }
+    .theme-option:hover { border-color: var(--border-accent); }
+    .theme-preview { height: 48px; border-radius: 6px; margin-bottom: 8px; }
+    .theme-name { font-size: 12px; font-weight: 600; }
+    /* Security */
+    .security-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .security-item:last-child { border-bottom: none; }
+    .security-info { display: flex; align-items: center; gap: 12px; }
+    .security-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .security-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .security-desc { font-size: 12px; color: var(--text-secondary); }
+    .security-status { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+    .security-status.enabled { background: rgba(16,185,129,0.12); color: var(--green); }
+    .security-status.disabled { background: rgba(239,68,68,0.1); color: var(--red); }
+    .security-status.warning { background: rgba(245,158,11,0.12); color: var(--amber); }
+    /* Sessions */
+    .session-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .session-device { display: flex; align-items: center; gap: 12px; }
+    .session-icon { font-size: 22px; }
+    .session-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .session-meta { font-size: 12px; color: var(--text-muted); }
+    .session-current { font-size: 11px; font-weight: 700; color: var(--green); background: rgba(16,185,129,0.1); padding: 2px 8px; border-radius: 4px; }
+    .session-revoke { font-size: 12px; color: var(--red); cursor: pointer; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); padding: 5px 10px; border-radius: 6px; }
+    /* API Keys */
+    .api-key-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .api-key-info { flex: 1; }
+    .api-key-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .api-key-value { font-family: monospace; font-size: 12px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 4px; display: inline-block; }
+    .api-key-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .api-key-actions { display: flex; gap: 8px; }
+    .btn-sm { font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; border: 1px solid; transition: all 0.2s; }
+    .btn-sm.copy { border-color: var(--border-accent); color: var(--accent-light); background: var(--accent-glow); }
+    .btn-sm.revoke { border-color: rgba(239,68,68,0.3); color: var(--red); background: rgba(239,68,68,0.06); }
+    /* Webhooks */
+    .webhook-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .webhook-url { font-family: monospace; font-size: 12px; color: var(--cyan); }
+    .webhook-events { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .webhook-event-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: rgba(6,182,212,0.1); color: var(--cyan); }
+    .btn-primary { background: var(--gradient-primary); color: #fff; font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-md); border: none; cursor: pointer; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-danger { background: rgba(239,68,68,0.1); color: var(--red); font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-md); border: 1px solid rgba(239,68,68,0.3); cursor: pointer; }
+    .form-actions { display: flex; gap: 10px; margin-top: 6px; }
+    .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .lang-option { border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+    .lang-option.active { border-color: var(--accent); background: var(--accent-glow); }
+    .lang-option:hover:not(.active) { border-color: var(--border-accent); }
+    .lang-flag { font-size: 20px; }
+    .lang-name { font-size: 13px; font-weight: 600; }
+    .lang-native { font-size: 11px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="settings-sidebar">
+    <div class="settings-sidebar-title">Configurações</div>
+    <div class="settings-nav-item active" onclick="switchSettings('preferences')"><span class="nav-icon">⚙️</span>Preferências</div>
+    <div class="settings-nav-item" onclick="switchSettings('language')"><span class="nav-icon">🌐</span>Idioma</div>
+    <div class="settings-nav-item" onclick="switchSettings('theme')"><span class="nav-icon">🎨</span>Tema</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('integrations')"><span class="nav-icon">🔗</span>Integrações</div>
+    <div class="settings-nav-item" onclick="switchSettings('security')"><span class="nav-icon">🔐</span>Segurança</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('sessions')"><span class="nav-icon">📱</span>Sessões</div>
+    <div class="settings-nav-item" onclick="switchSettings('devices')"><span class="nav-icon">💻</span>Dispositivos</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('apikeys')"><span class="nav-icon">🔑</span>API Keys</div>
+    <div class="settings-nav-item" onclick="switchSettings('webhooks')"><span class="nav-icon">🪝</span>Webhooks</div>
+  </div>
+
+  <div class="settings-content">
+
+    <!-- PREFERENCES -->
+    <div id="panel-preferences" class="settings-panel active">
+      <div class="settings-header">
+        <div class="settings-title">Preferências <span class="settings-badge">Phase 083</span></div>
+        <div class="settings-desc">Personalize sua experiência no LifeOS Enterprise</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>👤</span> Perfil</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" value="Alexandre Lima" /></div>
+          <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" value="al6387838@gmail.com" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" value="CEO & Founder" /></div>
+          <div class="form-group"><label class="form-label">Organização</label><input class="form-input" value="LifeOS Enterprise" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary">Salvar Alterações</button></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🔔</span> Notificações</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Notificações por e-mail</div><div class="toggle-desc">Receber resumos diários e alertas importantes</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Notificações push</div><div class="toggle-desc">Alertas em tempo real no navegador</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Resumo semanal</div><div class="toggle-desc">Relatório de produtividade toda segunda-feira</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Alertas financeiros</div><div class="toggle-desc">Notificações de movimentações acima de R$ 500</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🖥️</span> Interface</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Sidebar compacta</div><div class="toggle-desc">Exibir sidebar recolhida por padrão</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Animações premium</div><div class="toggle-desc">Transições e efeitos visuais avançados</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Modo compacto</div><div class="toggle-desc">Reduzir espaçamento para mais conteúdo</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANGUAGE -->
+    <div id="panel-language" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Idioma</div>
+        <div class="settings-desc">Selecione o idioma da interface do LifeOS</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🌐</span> Idioma da Interface</div>
+        <div class="lang-grid">
+          <div class="lang-option active"><div class="lang-flag">🇧🇷</div><div><div class="lang-name">Português</div><div class="lang-native">Português do Brasil</div></div></div>
+          <div class="lang-option"><div class="lang-flag">🇺🇸</div><div><div class="lang-name">English</div><div class="lang-native">English (US)</div></div></div>
+          <div class="lang-option"><div class="lang-flag">🇪🇸</div><div><div class="lang-name">Español</div><div class="lang-native">Español (Latinoamérica)</div></div></div>
+          <div class="lang-option"><div class="lang-flag">🇫🇷</div><div><div class="lang-name">Français</div><div class="lang-native">Français</div></div></div>
+          <div class="lang-option"><div class="lang-flag">🇩🇪</div><div><div class="lang-name">Deutsch</div><div class="lang-native">Deutsch</div></div></div>
+          <div class="lang-option"><div class="lang-flag">🇯🇵</div><div><div class="lang-name">日本語</div><div class="lang-native">Japanese</div></div></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>📅</span> Formatos Regionais</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Formato de data</label>
+            <select class="form-select"><option selected>DD/MM/AAAA</option><option>MM/DD/AAAA</option><option>AAAA-MM-DD</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Formato de hora</label>
+            <select class="form-select"><option selected>24h (14:30)</option><option>12h (2:30 PM)</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Moeda padrão</label>
+            <select class="form-select"><option selected>BRL — Real Brasileiro</option><option>USD — US Dollar</option><option>EUR — Euro</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Fuso horário</label>
+            <select class="form-select"><option selected>America/Sao_Paulo (GMT-3)</option><option>America/New_York (GMT-5)</option><option>Europe/London (GMT+0)</option></select>
+          </div>
+        </div>
+        <div class="form-actions"><button class="btn-primary">Salvar Preferências</button></div>
+      </div>
+    </div>
+
+    <!-- THEME -->
+    <div id="panel-theme" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Tema</div>
+        <div class="settings-desc">Personalize a aparência visual da plataforma</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🎨</span> Tema da Interface</div>
+        <div class="theme-grid">
+          <div class="theme-option active">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0A0E14,#141B28)"></div>
+            <div class="theme-name">Dark (Padrão)</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#F8FAFC,#E2E8F0)"></div>
+            <div class="theme-name" style="color:var(--text-secondary)">Light</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0D0D1A,#1A0A2E)"></div>
+            <div class="theme-name">Deep Purple</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0A1628,#0F2040)"></div>
+            <div class="theme-name">Ocean Blue</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>✨</span> Cor de Destaque</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);cursor:pointer;border:3px solid white;box-shadow:0 0 12px rgba(99,102,241,0.5)"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#06B6D4,#0891B2);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#10B981,#059669);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#D97706);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#DC2626);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#DB2777);cursor:pointer;border:3px solid transparent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS -->
+    <div id="panel-integrations" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Integrações</div>
+        <div class="settings-desc">Gerencie conexões com serviços externos</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🔗</span> Serviços Conectados</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Google Workspace</div><div class="toggle-desc">Gmail, Calendar, Drive e Meet</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Open Finance Brasil</div><div class="toggle-desc">Dados bancários via Open Banking</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">OpenAI GPT-4</div><div class="toggle-desc">Motor de IA para assistente e análises</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Stripe Payments</div><div class="toggle-desc">Processamento de pagamentos e assinaturas</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">GitHub</div><div class="toggle-desc">Deploy automático e CI/CD</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Slack</div><div class="toggle-desc">Notificações e comandos slash</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div id="panel-security" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Segurança</div>
+        <div class="settings-desc">Gerencie autenticação e controles de acesso</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>🔐</span> Autenticação</div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(16,185,129,0.12)">🔑</div>
+            <div><div class="security-name">Senha</div><div class="security-desc">Última alteração há 30 dias</div></div>
+          </div>
+          <span class="security-status enabled">Ativo</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(99,102,241,0.12)">📱</div>
+            <div><div class="security-name">Autenticação 2FA</div><div class="security-desc">Verificação em dois fatores via app</div></div>
+          </div>
+          <span class="security-status enabled">Ativo</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(245,158,11,0.12)">🔒</div>
+            <div><div class="security-name">SSO Enterprise</div><div class="security-desc">Login único via SAML/OAuth</div></div>
+          </div>
+          <span class="security-status warning">Configurar</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(239,68,68,0.1)">🛡️</div>
+            <div><div class="security-name">Passkey / WebAuthn</div><div class="security-desc">Login sem senha via biometria</div></div>
+          </div>
+          <span class="security-status disabled">Inativo</span>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>📋</span> Políticas de Acesso</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Bloqueio automático</div><div class="toggle-desc">Bloquear sessão após 30 min de inatividade</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Alertas de login</div><div class="toggle-desc">Notificar sobre novos acessos à conta</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Restrição por IP</div><div class="toggle-desc">Permitir acesso apenas de IPs autorizados</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div id="panel-sessions" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Sessões Ativas</div>
+        <div class="settings-desc">Gerencie todos os dispositivos com sessão ativa</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>📱</span> Sessões</div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">💻</div>
+            <div>
+              <div class="session-name">Chrome — macOS <span class="session-current">SESSÃO ATUAL</span></div>
+              <div class="session-meta">São Paulo, BR · IP 189.28.xx.xx · Agora</div>
+            </div>
+          </div>
+        </div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">📱</div>
+            <div>
+              <div class="session-name">Safari — iPhone 15 Pro</div>
+              <div class="session-meta">São Paulo, BR · IP 177.92.xx.xx · 2h atrás</div>
+            </div>
+          </div>
+          <button class="session-revoke">Revogar</button>
+        </div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">🖥️</div>
+            <div>
+              <div class="session-name">Firefox — Windows 11</div>
+              <div class="session-meta">Campinas, BR · IP 200.175.xx.xx · 1 dia atrás</div>
+            </div>
+          </div>
+          <button class="session-revoke">Revogar</button>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn-danger">Revogar Todas as Outras Sessões</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVICES -->
+    <div id="panel-devices" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Dispositivos Conectados</div>
+        <div class="settings-desc">Dispositivos autorizados para acesso à conta</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>💻</span> Dispositivos</div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">💻</div>
+            <div>
+              <div class="session-name">MacBook Pro 16" <span class="session-current">PRINCIPAL</span></div>
+              <div class="session-meta">macOS Sequoia · Adicionado em Jan 2026</div>
+            </div>
+          </div>
+          <button class="session-revoke">Remover</button>
+        </div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">📱</div>
+            <div>
+              <div class="session-name">iPhone 15 Pro</div>
+              <div class="session-meta">iOS 18 · Adicionado em Mar 2026</div>
+            </div>
+          </div>
+          <button class="session-revoke">Remover</button>
+        </div>
+        <div class="session-item">
+          <div class="session-device">
+            <div class="session-icon">🖥️</div>
+            <div>
+              <div class="session-name">Desktop Office</div>
+              <div class="session-meta">Windows 11 · Adicionado em Mai 2026</div>
+            </div>
+          </div>
+          <button class="session-revoke">Remover</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- API KEYS -->
+    <div id="panel-apikeys" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">API Keys</div>
+        <div class="settings-desc">Gerencie chaves de acesso à API do LifeOS</div>
+      </div>
+      <div class="settings-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="settings-section-title" style="margin-bottom:0"><span>🔑</span> Chaves de API</div>
+          <button class="btn-primary">+ Gerar Nova Chave</button>
+        </div>
+        <div class="api-key-item">
+          <div class="api-key-info">
+            <div class="api-key-name">Production Key</div>
+            <div class="api-key-value">leos_prod_••••••••••••••••••••••••••••••••</div>
+            <div class="api-key-meta">Criada em 01 Jan 2026 · Último uso: hoje · Permissões: read, write</div>
+          </div>
+          <div class="api-key-actions">
+            <button class="btn-sm copy">Copiar</button>
+            <button class="btn-sm revoke">Revogar</button>
+          </div>
+        </div>
+        <div class="api-key-item">
+          <div class="api-key-info">
+            <div class="api-key-name">Development Key</div>
+            <div class="api-key-value">leos_dev_••••••••••••••••••••••••••••••••</div>
+            <div class="api-key-meta">Criada em 15 Mar 2026 · Último uso: ontem · Permissões: read</div>
+          </div>
+          <div class="api-key-actions">
+            <button class="btn-sm copy">Copiar</button>
+            <button class="btn-sm revoke">Revogar</button>
+          </div>
+        </div>
+        <div class="api-key-item">
+          <div class="api-key-info">
+            <div class="api-key-name">Webhook Secret</div>
+            <div class="api-key-value">whsec_••••••••••••••••••••••••••••••••••</div>
+            <div class="api-key-meta">Criada em 10 Jun 2026 · Último uso: há 2h · Permissões: webhook</div>
+          </div>
+          <div class="api-key-actions">
+            <button class="btn-sm copy">Copiar</button>
+            <button class="btn-sm revoke">Revogar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEBHOOKS -->
+    <div id="panel-webhooks" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Webhooks</div>
+        <div class="settings-desc">Configure endpoints para receber eventos em tempo real</div>
+      </div>
+      <div class="settings-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="settings-section-title" style="margin-bottom:0"><span>🪝</span> Endpoints Configurados</div>
+          <button class="btn-primary">+ Adicionar Webhook</button>
+        </div>
+        <div class="webhook-item">
+          <div style="flex:1">
+            <div class="api-key-name">Notificações Financeiras</div>
+            <div class="webhook-url">https://api.empresa.com/webhooks/finance</div>
+            <div class="webhook-events">
+              <span class="webhook-event-tag">transaction.created</span>
+              <span class="webhook-event-tag">payment.received</span>
+              <span class="webhook-event-tag">invoice.paid</span>
+            </div>
+          </div>
+          <div class="api-key-actions">
+            <span class="security-status enabled" style="font-size:11px">Ativo</span>
+            <button class="btn-sm revoke">Remover</button>
+          </div>
+        </div>
+        <div class="webhook-item">
+          <div style="flex:1">
+            <div class="api-key-name">Alertas de Segurança</div>
+            <div class="webhook-url">https://api.empresa.com/webhooks/security</div>
+            <div class="webhook-events">
+              <span class="webhook-event-tag">login.new_device</span>
+              <span class="webhook-event-tag">session.revoked</span>
+            </div>
+          </div>
+          <div class="api-key-actions">
+            <span class="security-status enabled" style="font-size:11px">Ativo</span>
+            <button class="btn-sm revoke">Remover</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span>📋</span> Eventos Disponíveis</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.created</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.updated</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">transaction.created</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">payment.received</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">session.started</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">session.revoked</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">document.signed</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">alert.triggered</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchSettings(panel) {
+      document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + panel).classList.add('active');
+    }
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
