@@ -1,4 +1,4 @@
-# LifeOS Enterprise v6.0.0 — Cloudflare Pages Redirects
+# LifeOS Enterprise v16.0.0 — Cloudflare Pages Redirects
 
 # Auth routes
 /login              /login/index.html           200
@@ -24,6 +24,12 @@
 /analytics          /app/index.html             200
 /profile            /app/index.html             200
 /settings           /app/index.html             200
+
+# Public commercial pages
+/privacy            /privacy/index.html         200
+/terms              /terms/index.html           200
+/contact            /contact/index.html         200
+/status             /status/index.html          200
 
 # SPA fallback — Landing Page
 /*                  /index.html                 200

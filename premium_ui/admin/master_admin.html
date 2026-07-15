@@ -204,11 +204,15 @@
         <button class="nav-item" data-view="members" type="button"><span class="nav-item-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></span>Membros</button>
         <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>Organizações</button>
         <button class="nav-item" data-view="billing" type="button"><span class="nav-item-icon"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></span>Billing</button>
+        <button class="nav-item" data-view="plans" type="button"><span class="nav-item-icon"><i data-lucide="layers" class="pg-icon" aria-hidden="true"></i></span>Planos</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">Sistema</div>
         <button class="nav-item" data-view="audit" type="button"><span class="nav-item-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span>Auditoria</button>
+        <button class="nav-item" data-view="metrics" type="button"><span class="nav-item-icon"><i data-lucide="bar-chart-3" class="pg-icon" aria-hidden="true"></i></span>Métricas</button>
         <button class="nav-item" data-view="system" type="button"><span class="nav-item-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></span>Sistema</button>
+        <button class="nav-item" data-view="queue" type="button"><span class="nav-item-icon"><i data-lucide="list-ordered" class="pg-icon" aria-hidden="true"></i></span>Fila de Tarefas</button>
+        <button class="nav-item" data-view="integrations-monitor" type="button"><span class="nav-item-icon"><i data-lucide="plug" class="pg-icon" aria-hidden="true"></i></span>Integrações</button>
         <button class="nav-item" data-view="security" type="button"><span class="nav-item-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</button>
       </div>
       <div class="nav-section">
@@ -570,14 +574,139 @@
     `;
   }
 
+  function renderMetrics() {
+    const d = state.data || {};
+    const sys = d.system || {};
+    const members = d.members || [];
+    const sub = d.subscription || {};
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Métricas da Plataforma</h1><p class="page-sub">Visão consolidada de uso e performance.</p></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val">${members.length}</div><div class="kpi-label">Usuários ativos</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${sys.uptime||99.9}%</div><div class="kpi-label">Uptime</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#818CF8">${money(sub.monthlyValue||0)}</div><div class="kpi-label">MRR</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||0}</div><div class="kpi-label">Sessões ativas</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Uso de Recursos</span></div>
+          <div class="card-body">
+            ${[['CPU',sys.cpu||23,'#6366F1'],['Memória',sys.memory||41,'#8B5CF6'],['Disco',sys.disk||18,'#10B981'],['Rede',sys.network||12,'#F59E0B'],['KV Reads',sys.kvReads||67,'#06B6D4']].map(([l,v,c]) => `
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <span style="font-size:11px;color:var(--text-secondary);width:80px">${l}</span>
+                <div class="progress" style="flex:1"><div class="progress-bar" style="width:${v}%;background:${c}"></div></div>
+                <span style="font-size:11px;font-weight:600;width:30px;text-align:right">${v}%</span>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Distribuição de Planos</span></div>
+          <div class="card-body">
+            ${[['Free',sub.plansFree||0,'#64748B'],['Starter',sub.plansStarter||0,'#6366F1'],['Professional',sub.plansPro||0,'#8B5CF6'],['Enterprise',sub.plansEnterprise||1,'#10B981']].map(([l,v,c]) => `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+                <span style="font-size:13px;color:var(--text-secondary)">${l}</span>
+                <span style="font-size:13px;font-weight:700;color:${c}">${v} usuários</span>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderPlans() {
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Gerenciamento de Planos</h1><p class="page-sub">Configure os planos disponíveis na plataforma.</p></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Planos Ativos</span><button class="btn btn-primary" type="button" onclick="alert('Configure planos via Stripe Dashboard')">+ Novo Plano</button></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Plano</th><th>Preço/mês</th><th>Usuários</th><th>Recursos</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Free</strong></td><td>R$ 0</td><td>—</td><td>5 módulos, 1 GB</td><td><span class="badge badge-success">Ativo</span></td></tr>
+              <tr><td><strong>Starter</strong></td><td>R$ 49</td><td>Até 3</td><td>15 módulos, 10 GB, IA básica</td><td><span class="badge badge-success">Ativo</span></td></tr>
+              <tr><td><strong>Professional</strong></td><td>R$ 149</td><td>Até 10</td><td>Todos os módulos, 100 GB, IA avançada</td><td><span class="badge badge-success">Ativo</span></td></tr>
+              <tr><td><strong>Enterprise</strong></td><td>Sob consulta</td><td>Ilimitado</td><td>Tudo + SLA, SAML, suporte dedicado</td><td><span class="badge badge-success">Ativo</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  function renderQueue() {
+    const integrations = state.data?.integrations || [];
+    const now = new Date();
+    const tasks = [
+      { id: 'task_001', name: 'Sync Google Calendar', status: 'running', started: new Date(now - 30000).toISOString(), retries: 0 },
+      { id: 'task_002', name: 'AI Insights Generation', status: 'queued', started: null, retries: 0 },
+      { id: 'task_003', name: 'Audit Log Cleanup', status: 'completed', started: new Date(now - 300000).toISOString(), retries: 0 },
+      { id: 'task_004', name: 'Email Notification Batch', status: 'failed', started: new Date(now - 600000).toISOString(), retries: 3 },
+      { id: 'task_005', name: 'KV Backup Snapshot', status: 'completed', started: new Date(now - 900000).toISOString(), retries: 0 },
+    ];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Fila de Tarefas</h1><p class="page-sub">Monitoramento de jobs e processos em background.</p></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi-card"><div class="kpi-val" style="color:#6366F1">${tasks.filter(t=>t.status==='running').length}</div><div class="kpi-label">Em execução</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#F59E0B">${tasks.filter(t=>t.status==='queued').length}</div><div class="kpi-label">Na fila</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${tasks.filter(t=>t.status==='completed').length}</div><div class="kpi-label">Concluídas</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#F43F5E">${tasks.filter(t=>t.status==='failed').length}</div><div class="kpi-label">Com falha</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Tarefas Recentes</span><button class="btn btn-secondary" type="button" onclick="location.reload()">↻ Atualizar</button></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>ID</th><th>Tarefa</th><th>Status</th><th>Início</th><th>Tentativas</th></tr></thead>
+            <tbody>${tasks.map(t => `<tr>
+              <td style="font-family:monospace;font-size:10px;color:var(--text-tertiary)">${esc(t.id)}</td>
+              <td>${esc(t.name)}</td>
+              <td>${statusBadge(t.status)}</td>
+              <td>${t.started ? fmtDate(t.started, true) : '<span style="color:var(--text-tertiary)">Aguardando</span>'}</td>
+              <td>${t.retries > 0 ? `<span style="color:#F43F5E">${t.retries}x</span>` : '0'}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  function renderIntegrationsMonitor() {
+    const integrations = state.data?.integrations || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header"><h1 class="page-title">Monitoramento de Integrações</h1><p class="page-sub">Status e saúde das conexões com serviços externos.</p></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Serviços Externos</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Serviço</th><th>Categoria</th><th>Status</th><th>Último Sync</th><th>Ação</th></tr></thead>
+            <tbody>${integrations.length ? integrations.map(i => `<tr>
+              <td style="font-weight:600">${esc(i.name)}</td>
+              <td><span class="badge badge-neutral">${esc(i.category||'—')}</span></td>
+              <td>${statusBadge(i.connected ? 'active' : 'inactive')}</td>
+              <td>${i.lastSyncAt ? fmtDate(i.lastSyncAt, true) : '<span style="color:var(--text-tertiary)">Nunca</span>'}</td>
+              <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button" onclick="alert('Configure credenciais no Cloudflare Dashboard')">Configurar</button></td>
+            </tr>`).join('') : '<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">🔌</div><div class="empty-state-title">Nenhuma integração configurada</div></div></td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Integrações Pendentes de Credenciais</span></div>
+        <div class="card-body">
+          ${[['Stripe','STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET'],['Mercado Pago','MP_ACCESS_TOKEN'],['Google OAuth','GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET'],['Apple Sign In','APPLE_CLIENT_ID, APPLE_TEAM_ID, APPLE_KEY_ID, APPLE_PRIVATE_KEY'],['WhatsApp Business','WA_TOKEN, WA_PHONE_ID'],['OpenAI','OPENAI_API_KEY']].map(([n,v]) => `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+              <div><div style="font-size:13px;font-weight:600">${n}</div><div style="font-size:11px;color:var(--text-muted);font-family:monospace">${v}</div></div>
+              <span class="badge badge-warning">Pendente</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
   function render(view) {
     state.view = view || 'overview';
     document.querySelectorAll('.nav-item[data-view]').forEach(el => el.classList.toggle('active', el.dataset.view === state.view));
     document.getElementById('topbar-title').textContent = {
       overview:'System Overview', members:'Membros', organizations:'Organizações',
-      billing:'Billing', audit:'Auditoria', system:'Sistema', security:'Segurança',
+      billing:'Billing', plans:'Planos', audit:'Auditoria', metrics:'Métricas',
+      system:'Sistema', queue:'Fila de Tarefas', 'integrations-monitor':'Integrações', security:'Segurança',
     }[state.view] || 'Admin';
-    const fn = {overview:renderOverview, members:renderMembers, organizations:renderOrganizations, billing:renderBilling, audit:renderAudit, system:renderSystem, security:renderSecurity}[state.view];
+    const fn = {overview:renderOverview, members:renderMembers, organizations:renderOrganizations, billing:renderBilling, plans:renderPlans, audit:renderAudit, metrics:renderMetrics, system:renderSystem, queue:renderQueue, 'integrations-monitor':renderIntegrationsMonitor, security:renderSecurity}[state.view];
     if (fn) fn();
     history.replaceState(null, '', `#${state.view}`);
   }

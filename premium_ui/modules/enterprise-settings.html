@@ -121,6 +121,7 @@
     <div class="settings-nav-item" onclick="switchSettings('integrations')"><span class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span>Integrações</div>
     <div class="settings-nav-item" onclick="switchSettings('security')"><span class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</div>
     <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('account')"><span class="nav-icon"><i data-lucide="user-cog" class="pg-icon" aria-hidden="true"></i></span>Conta</div>
     <div class="settings-nav-item" onclick="switchSettings('sessions')"><span class="nav-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span>Sessões</div>
     <div class="settings-nav-item" onclick="switchSettings('devices')"><span class="nav-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span>Dispositivos</div>
     <div class="settings-nav-sep"></div>
@@ -133,20 +134,21 @@
     <!-- PREFERENCES -->
     <div id="panel-preferences" class="settings-panel active">
       <div class="settings-header">
-        <div class="settings-title">Preferências <span class="settings-badge">Phase 083</span></div>
+        <div class="settings-title">Preferências</div>
         <div class="settings-desc">Personalize sua experiência no LifeOS Enterprise</div>
       </div>
       <div class="settings-section">
         <div class="settings-section-title"><span><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></span> Perfil</div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" value="Alexandre Lima" /></div>
-          <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" value="al6387838@gmail.com" /></div>
+          <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" id="pref-name" placeholder="Seu nome" /></div>
+          <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" id="pref-email" placeholder="seu@email.com" readonly /></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" value="CEO & Founder" /></div>
-          <div class="form-group"><label class="form-label">Organização</label><input class="form-input" value="LifeOS Enterprise" /></div>
+          <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" id="pref-role" placeholder="Seu cargo" /></div>
+          <div class="form-group"><label class="form-label">Fuso horário</label><select class="form-input" id="pref-timezone"><option value="America/Sao_Paulo">America/São Paulo (GMT-3)</option><option value="America/New_York">America/New York (GMT-5)</option><option value="Europe/London">Europe/London (GMT+0)</option><option value="America/Los_Angeles">America/Los Angeles (GMT-8)</option></select></div>
         </div>
-        <div class="form-actions"><button class="btn-primary">Salvar Alterações</button></div>
+        <div id="pref-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-actions"><button class="btn-primary" id="pref-save-btn" onclick="saveProfile()">Salvar Alterações</button></div>
       </div>
       <div class="settings-section">
         <div class="settings-section-title"><span><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></span> Notificações</div>
@@ -352,6 +354,42 @@
       </div>
     </div>
 
+    <!-- ACCOUNT LIFECYCLE -->
+    <div id="panel-account" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Gerenciamento de Conta</div>
+        <div class="settings-desc">Altere sua senha, e-mail ou encerre sua conta</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></span> Alterar Senha</div>
+        <div id="pwd-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Senha atual</label><input type="password" class="form-input" id="pwd-current" placeholder="••••••••" /></div>
+          <div class="form-group"><label class="form-label">Nova senha</label><input type="password" class="form-input" id="pwd-new" placeholder="Mínimo 8 caracteres" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary" onclick="changePassword()">Alterar Senha</button></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span> Alterar E-mail</div>
+        <div id="email-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Novo e-mail</label><input type="email" class="form-input" id="new-email" placeholder="novo@email.com" /></div>
+          <div class="form-group"><label class="form-label">Confirme com sua senha</label><input type="password" class="form-input" id="email-pwd" placeholder="••••••••" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary" onclick="changeEmail()">Alterar E-mail</button></div>
+      </div>
+      <div class="settings-section" style="border-top:1px solid rgba(239,68,68,0.2);padding-top:20px">
+        <div class="settings-section-title" style="color:var(--red)"><span><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></span> Zona de Perigo</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">A exclusão da conta é permanente e irreversível. Todos os seus dados serão removidos imediatamente.</p>
+        <div id="delete-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Confirme sua senha</label><input type="password" class="form-input" id="delete-pwd" placeholder="••••••••" /></div>
+          <div class="form-group"><label class="form-label">Digite: EXCLUIR MINHA CONTA</label><input type="text" class="form-input" id="delete-confirm" placeholder="EXCLUIR MINHA CONTA" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-danger" onclick="deleteAccount()">Excluir Minha Conta Permanentemente</button></div>
+      </div>
+    </div>
+
     <!-- SESSIONS -->
     <div id="panel-sessions" class="settings-panel">
       <div class="settings-header">
@@ -360,37 +398,9 @@
       </div>
       <div class="settings-section">
         <div class="settings-section-title"><span><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span> Sessões</div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">Chrome — macOS <span class="session-current">SESSÃO ATUAL</span></div>
-              <div class="session-meta">São Paulo, BR · IP 189.28.xx.xx · Agora</div>
-            </div>
-          </div>
-        </div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">Safari — iPhone 15 Pro</div>
-              <div class="session-meta">São Paulo, BR · IP 177.92.xx.xx · 2h atrás</div>
-            </div>
-          </div>
-          <button class="session-revoke">Revogar</button>
-        </div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">Firefox — Windows 11</div>
-              <div class="session-meta">Campinas, BR · IP 200.175.xx.xx · 1 dia atrás</div>
-            </div>
-          </div>
-          <button class="session-revoke">Revogar</button>
-        </div>
+        <div id="sessions-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando sessões...</div></div>
         <div style="margin-top:16px">
-          <button class="btn-danger">Revogar Todas as Outras Sessões</button>
+          <button class="btn-danger" onclick="revokeAllSessions()">Revogar Todas as Outras Sessões</button>
         </div>
       </div>
     </div>
@@ -403,36 +413,7 @@
       </div>
       <div class="settings-section">
         <div class="settings-section-title"><span><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span> Dispositivos</div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">MacBook Pro 16" <span class="session-current">PRINCIPAL</span></div>
-              <div class="session-meta">macOS Sequoia · Adicionado em Jan 2026</div>
-            </div>
-          </div>
-          <button class="session-revoke">Remover</button>
-        </div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">iPhone 15 Pro</div>
-              <div class="session-meta">iOS 18 · Adicionado em Mar 2026</div>
-            </div>
-          </div>
-          <button class="session-revoke">Remover</button>
-        </div>
-        <div class="session-item">
-          <div class="session-device">
-            <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
-            <div>
-              <div class="session-name">Desktop Office</div>
-              <div class="session-meta">Windows 11 · Adicionado em Mai 2026</div>
-            </div>
-          </div>
-          <button class="session-revoke">Remover</button>
-        </div>
+        <div id="devices-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando dispositivos...</div></div>
       </div>
     </div>
 
@@ -542,11 +523,15 @@
   </div>
 
   <script>
+    'use strict';
+
     function switchSettings(panel) {
       document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
       event.currentTarget.classList.add('active');
       document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
       document.getElementById('panel-' + panel).classList.add('active');
+      if (panel === 'sessions') loadSessions();
+      if (panel === 'devices') loadDevices();
     }
     document.querySelectorAll('.lang-option').forEach(opt => {
       opt.addEventListener('click', () => {
@@ -560,6 +545,177 @@
         opt.classList.add('active');
       });
     });
+
+    // Load profile data
+    (async () => {
+      try {
+        const r = await fetch('/api/profile', { credentials: 'same-origin' });
+        if (r.ok) {
+          const d = await r.json();
+          if (d.ok && d.user) {
+            const u = d.user;
+            const nameEl = document.getElementById('pref-name');
+            const emailEl = document.getElementById('pref-email');
+            const tzEl = document.getElementById('pref-timezone');
+            if (nameEl) nameEl.value = u.name || '';
+            if (emailEl) emailEl.value = u.email || '';
+            if (tzEl && u.timezone) {
+              for (const opt of tzEl.options) { if (opt.value === u.timezone) { opt.selected = true; break; } }
+            }
+          }
+        }
+      } catch (_) {}
+    })();
+
+    function showMsg(id, type, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = 'block';
+      el.style.background = type === 'success' ? 'rgba(16,185,129,0.1)' : type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.1)';
+      el.style.border = type === 'success' ? '1px solid rgba(16,185,129,0.2)' : type === 'error' ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(99,102,241,0.2)';
+      el.style.color = type === 'success' ? '#6EE7B7' : type === 'error' ? '#FCA5A5' : '#818CF8';
+      el.textContent = msg;
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('pref-name').value.trim();
+      const timezone = document.getElementById('pref-timezone').value;
+      const btn = document.getElementById('pref-save-btn');
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/profile-update', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'profile.update', name, timezone })
+        });
+        const d = await r.json();
+        showMsg('pref-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro ao salvar');
+      } catch (_) { showMsg('pref-status', 'error', 'Erro de conexão'); }
+      btn.disabled = false;
+    }
+
+    async function changePassword() {
+      const currentPassword = document.getElementById('pwd-current').value;
+      const newPassword = document.getElementById('pwd-new').value;
+      if (!currentPassword || !newPassword) { showMsg('pwd-status', 'error', 'Preencha todos os campos'); return; }
+      if (newPassword.length < 8) { showMsg('pwd-status', 'error', 'Nova senha deve ter pelo menos 8 caracteres'); return; }
+      try {
+        const r = await fetch('/api/profile-update', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'password.change', currentPassword, newPassword })
+        });
+        const d = await r.json();
+        showMsg('pwd-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) { document.getElementById('pwd-current').value = ''; document.getElementById('pwd-new').value = ''; }
+      } catch (_) { showMsg('pwd-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function changeEmail() {
+      const email = document.getElementById('new-email').value.trim();
+      const password = document.getElementById('email-pwd').value;
+      if (!email || !password) { showMsg('email-status', 'error', 'Preencha todos os campos'); return; }
+      try {
+        const r = await fetch('/api/profile', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'change_email', email, password })
+        });
+        const d = await r.json();
+        showMsg('email-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) setTimeout(() => location.replace('/login'), 2000);
+      } catch (_) { showMsg('email-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function deleteAccount() {
+      const password = document.getElementById('delete-pwd').value;
+      const confirmation = document.getElementById('delete-confirm').value;
+      if (!password || !confirmation) { showMsg('delete-status', 'error', 'Preencha todos os campos'); return; }
+      try {
+        const r = await fetch('/api/profile', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_account', password, confirmation })
+        });
+        const d = await r.json();
+        showMsg('delete-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) setTimeout(() => location.replace('/'), 2000);
+      } catch (_) { showMsg('delete-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function loadSessions() {
+      const list = document.getElementById('sessions-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/sessions', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.sessions || !d.sessions.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhuma sessão ativa encontrada.</div>';
+          return;
+        }
+        list.innerHTML = d.sessions.map(s => `
+          <div class="session-item">
+            <div class="session-device">
+              <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
+              <div>
+                <div class="session-name">${escHtml(s.userAgent || 'Dispositivo desconhecido')} ${s.current ? '<span class="session-current">SESSÃO ATUAL</span>' : ''}</div>
+                <div class="session-meta">${escHtml(s.country || '')} · IP ${escHtml(s.ip || '')} · ${escHtml(new Date(s.lastActiveAt || s.createdAt).toLocaleString('pt-BR'))}</div>
+              </div>
+            </div>
+            ${!s.current ? `<button class="session-revoke" onclick="revokeSession('${escHtml(s.id)}')">Revogar</button>` : ''}
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar sessões.</div>'; }
+    }
+
+    async function loadDevices() {
+      const list = document.getElementById('devices-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/sessions', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.sessions || !d.sessions.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhum dispositivo registrado.</div>';
+          return;
+        }
+        list.innerHTML = d.sessions.map(s => `
+          <div class="session-item">
+            <div class="session-device">
+              <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+              <div>
+                <div class="session-name">${escHtml(s.userAgent || 'Dispositivo').substring(0, 60)} ${s.current ? '<span class="session-current">ATUAL</span>' : ''}</div>
+                <div class="session-meta">${escHtml(s.country || '')} · Último acesso: ${escHtml(new Date(s.lastActiveAt || s.createdAt).toLocaleString('pt-BR'))}</div>
+              </div>
+            </div>
+            ${!s.current ? `<button class="session-revoke" onclick="revokeSession('${escHtml(s.id)}')">Remover</button>` : ''}
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar dispositivos.</div>'; }
+    }
+
+    async function revokeSession(id) {
+      try {
+        await fetch('/api/sessions', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke', sessionId: id })
+        });
+        loadSessions();
+      } catch (_) {}
+    }
+
+    async function revokeAllSessions() {
+      try {
+        await fetch('/api/sessions', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke_all' })
+        });
+        loadSessions();
+      } catch (_) {}
+    }
+
+    function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
   </script>
 </body>
 </html>

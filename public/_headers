@@ -3,10 +3,10 @@
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), accelerometer=(), autoplay=(), clipboard-write=(self), display-capture=(), encrypted-media=(), fullscreen=(self), gyroscope=(), magnetometer=(), picture-in-picture=(), publickey-credentials-get=(self), screen-wake-lock=(), sync-xhr=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
 /*.html
@@ -30,9 +30,26 @@
 /api/*
   Cache-Control: private, no-store, no-cache
   X-Robots-Tag: noindex
+  X-Content-Type-Options: nosniff
 
 /admin/*
   X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: DENY
 
 /app/*
   X-Robots-Tag: noindex, nofollow
+
+/login/*
+  X-Robots-Tag: noindex, nofollow
+
+/privacy/*
+  Cache-Control: public, max-age=86400
+
+/terms/*
+  Cache-Control: public, max-age=86400
+
+/contact/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/status/*
+  Cache-Control: public, max-age=60

@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 15.0.0 (Phases 147-152 — Payment Platform, Collaboration, API Platform, Performance, QA)
+// Version: 16.0.0 (Phases 153-160 — Production Readiness, UX, Account Lifecycle, Admin, Commercial, Security, RC, Deploy)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -107,6 +107,10 @@ await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
 await copy('enterprise/executive_dashboard.html', 'enterprise/executive.html');
 await copyHtml('memory_center.html', 'memory-center/index.html');
+await copyHtml('privacy.html', 'privacy/index.html');
+await copyHtml('terms.html', 'terms/index.html');
+await copyHtml('contact.html', 'contact/index.html');
+await copyHtml('status.html', 'status/index.html');
 
 await Promise.all(productionAssets.map((asset) => copy(asset)));
 await cp(resolve(source, 'modules'), resolve(dist, 'app/modules'), { recursive: true });
@@ -118,7 +122,7 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
 }
 
 const redirects = [
-  '# LifeOS Enterprise v15.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v16.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -146,6 +150,12 @@ const redirects = [
   '/enterprise         /enterprise/index.html      200',
   '/memory-center      /memory-center/index.html   200',
   '/dashboard          /app/index.html             200',
+  '',
+  '# Public commercial pages',
+  '/privacy            /privacy/index.html         200',
+  '/terms              /terms/index.html           200',
+  '/contact            /contact/index.html         200',
+  '/status             /status/index.html          200',
   '/*                  /index.html                 200',
   '',
 ].join('\n');
@@ -154,7 +164,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v15.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v16.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -169,7 +179,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '15.0.0',
+  version: '16.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -203,7 +213,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '15.0.0',
+  version: '16.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -231,12 +241,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v15.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v16.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 15.0.0`);
+console.log(`  Version       : 16.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Phases        : 147-152 Payments | Collaboration | API Platform | Performance | QA`);
+  console.log(`  Phases        : 153-160 Production Readiness | UX | Account | Admin | Commercial | Security | RC | Deploy`);
 console.log(`  Modules       : 32 total`);
 console.log(`  APIs          : 20+ endpoints`);
 console.log(`  Commit        : ${commit}`);
