@@ -5,6 +5,24 @@ All notable changes to LifeOS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [10.0.0-rc.1] — 2026-07-15
+
+### Release: LifeOS Enterprise v10.0.0-rc.1 — Phases 093–100
+
+A release candidate v10 evolui o dashboard para **Command Center com 12 widgets**, expande a **Busca Universal**, adiciona uma **Central de Integrações com 9 conectores**, transforma o AI Center em **Companion AI com Memory Center** e amplia o **Enterprise Admin** com gestão operacional de usuários e tenants.
+
+| Controle | Resultado |
+|---|---:|
+| Build de produção | Aprovado |
+| QA responsivo | 60 / 60 |
+| QA funcional | 17 / 17 |
+| Regressão v10 | 9 / 9 |
+| Vulnerabilidades npm | 0 |
+
+O hardening inclui composição segura de mensagens, caminhos modulares determinísticos, visibilidade exclusiva do módulo ativo, handlers administrativos independentes do objeto global `event` e correção da persistência de widgets removidos. Os detalhes completos estão em [`CHANGELOG_v10.md`](CHANGELOG_v10.md) e o estado de continuidade em [`CHECKPOINT_v10.0.0-rc.1.md`](CHECKPOINT_v10.0.0-rc.1.md).
+
+---
+
 ## [9.6.0] — 2026-07-15
 
 ### Release: LIFEOS ENTERPRISE v9.6.0 — Phases 088–092

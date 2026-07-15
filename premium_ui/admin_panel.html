@@ -314,7 +314,7 @@
         <div class="nav-icon">👥</div><span>Usuários</span>
       </div>
       <div class="nav-item" onclick="showPage('organizations')">
-        <div class="nav-icon">🏢</div><span>Organizações</span>
+        <div class="nav-icon">🏢</div><span>Tenants</span>
       </div>
       <div class="nav-item" onclick="showPage('billing')">
         <div class="nav-icon">💰</div><span>Billing</span>
@@ -378,7 +378,7 @@
             <div class="page-title">Dashboard Administrativo</div>
             <div class="page-subtitle" id="admin-date">Carregando...</div>
           </div>
-          <button class="btn btn-primary" onclick="refreshData()">↻ Atualizar dados</button>
+          <button class="btn btn-primary" onclick="refreshData(this)">↻ Atualizar dados</button>
         </div>
 
         <!-- KPIs -->
@@ -461,7 +461,7 @@
               </div>
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
-                <div style="flex:1;font-size:13px">Deploy concluído: <strong>v9.0.0</strong></div>
+                <div style="flex:1;font-size:13px">Deploy concluído: <strong>v10.0.0-rc.1</strong></div>
                 <div style="font-size:11px;color:var(--text-muted)">2h</div>
               </div>
             </div>
@@ -515,7 +515,7 @@
       <div class="page" id="page-health">
         <div class="page-header">
           <div><div class="page-title">Health Check</div><div class="page-subtitle">Status de todos os serviços</div></div>
-          <button class="btn btn-primary" onclick="refreshHealth()">↻ Verificar agora</button>
+          <button class="btn btn-primary" onclick="refreshHealth(this)">↻ Verificar agora</button>
         </div>
         <div class="grid-2">
           <div class="card">
@@ -543,12 +543,12 @@
       <div class="page" id="page-users">
         <div class="page-header">
           <div><div class="page-title">Usuários</div><div class="page-subtitle">1.247 usuários cadastrados</div></div>
-          <button class="btn btn-primary">+ Convidar usuário</button>
+          <button class="btn btn-primary" onclick="adminInviteUser()">+ Convidar usuário</button>
         </div>
         <div class="card">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-            <input type="text" placeholder="Buscar usuários..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:9px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none" />
-            <select style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:9px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none">
+            <input id="admin-user-search" type="search" placeholder="Buscar usuários..." oninput="adminFilterUsers()" aria-label="Buscar usuários" style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:9px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none" />
+            <select id="admin-plan-filter" onchange="adminFilterUsers()" aria-label="Filtrar usuários por plano" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:9px 14px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none">
               <option>Todos os planos</option>
               <option>Free</option>
               <option>Pro</option>
@@ -566,14 +566,14 @@
                 <th>Ações</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="admin-users-body">
               <tr>
                 <td><div style="font-weight:600">João Silva</div><div style="font-size:11px;color:var(--text-muted)">joao@example.com</div></td>
                 <td><span class="badge badge-blue">Pro</span></td>
                 <td><span class="badge badge-green">Ativo</span></td>
                 <td><strong>87</strong></td>
                 <td style="color:var(--text-secondary)">Jan 2025</td>
-                <td><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Editar</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="adminOpenUser(this)">Gerenciar</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="adminSuspendUser(this)">Suspender</button></div></td>
               </tr>
               <tr>
                 <td><div style="font-weight:600">Maria Santos</div><div style="font-size:11px;color:var(--text-muted)">maria@example.com</div></td>
@@ -581,7 +581,7 @@
                 <td><span class="badge badge-green">Ativo</span></td>
                 <td><strong>92</strong></td>
                 <td style="color:var(--text-secondary)">Fev 2025</td>
-                <td><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Editar</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="adminOpenUser(this)">Gerenciar</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="adminSuspendUser(this)">Suspender</button></div></td>
               </tr>
               <tr>
                 <td><div style="font-weight:600">Carlos Oliveira</div><div style="font-size:11px;color:var(--text-muted)">carlos@example.com</div></td>
@@ -589,7 +589,7 @@
                 <td><span class="badge badge-amber">Trial</span></td>
                 <td><strong>64</strong></td>
                 <td style="color:var(--text-secondary)">Jul 2025</td>
-                <td><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Editar</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="adminOpenUser(this)">Gerenciar</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="adminSuspendUser(this)">Suspender</button></div></td>
               </tr>
               <tr>
                 <td><div style="font-weight:600">Ana Lima</div><div style="font-size:11px;color:var(--text-muted)">ana@example.com</div></td>
@@ -597,7 +597,7 @@
                 <td><span class="badge badge-red">Inativo</span></td>
                 <td><strong>71</strong></td>
                 <td style="color:var(--text-secondary)">Mar 2025</td>
-                <td><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px">Editar</button></td>
+                <td><div style="display:flex;gap:5px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="adminOpenUser(this)">Gerenciar</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="adminSuspendUser(this)">Suspender</button></div></td>
               </tr>
             </tbody>
           </table>
@@ -607,14 +607,16 @@
       <!-- ─── ORGANIZAÇÕES ─── -->
       <div class="page" id="page-organizations">
         <div class="page-header">
-          <div><div class="page-title">Organizações</div><div class="page-subtitle">87 organizações ativas</div></div>
-          <button class="btn btn-primary">+ Nova organização</button>
+          <div><div class="page-title">Gestão de Tenants</div><div class="page-subtitle">Planos, usuários, atividade e postura operacional por tenant</div></div>
+          <button class="btn btn-primary" onclick="adminCreateTenant()">+ Novo tenant</button>
         </div>
         <div class="grid-3">
           <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">🏢</div><div><div style="font-size:14px;font-weight:700">TechCorp Brasil</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 45 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
           <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">🌱</div><div><div style="font-size:14px;font-weight:700">StartupXYZ</div><div style="font-size:11px;color:var(--text-muted)">Pro · 12 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-blue">Pro</span><span class="badge badge-green">Ativo</span></div></div>
           <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="width:40px;height:40px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:20px">📊</div><div><div style="font-size:14px;font-weight:700">Consultoria Alpha</div><div style="font-size:11px;color:var(--text-muted)">Enterprise · 28 membros</div></div></div><div style="display:flex;gap:8px"><span class="badge badge-purple">Enterprise</span><span class="badge badge-green">Ativo</span></div></div>
         </div>
+        <div class="grid-4" style="margin:20px 0"><div class="card"><div class="card-title">Tenants ativos</div><div class="card-value">87</div></div><div class="card"><div class="card-title">Usuários gerenciados</div><div class="card-value">1.247</div></div><div class="card"><div class="card-title">Eventos em 24h</div><div class="card-value">18,4k</div></div><div class="card"><div class="card-title">Risco operacional</div><div class="card-value" style="color:var(--green)">Baixo</div></div></div>
+        <div class="card"><div class="card-title" style="margin-bottom:12px">Atividade e ações de tenants</div><table class="data-table"><thead><tr><th>Tenant</th><th>Plano</th><th>Usuários</th><th>Atividade 24h</th><th>Status</th><th>Ações rápidas</th></tr></thead><tbody><tr><td><strong>TechCorp Brasil</strong><div style="font-size:11px;color:var(--text-muted)">techcorp.lifeos.app</div></td><td><span class="badge badge-purple">Enterprise</span></td><td>45 / 75</td><td>8.742 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr><tr><td><strong>StartupXYZ</strong><div style="font-size:11px;color:var(--text-muted)">startupxyz.lifeos.app</div></td><td><span class="badge badge-blue">Pro</span></td><td>12 / 20</td><td>3.126 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr><tr><td><strong>Consultoria Alpha</strong><div style="font-size:11px;color:var(--text-muted)">alpha.lifeos.app</div></td><td><span class="badge badge-purple">Enterprise</span></td><td>28 / 50</td><td>6.584 eventos</td><td><span class="badge badge-green">Ativo</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="adminOpenTenant(this)">Detalhes</button><button class="btn btn-ghost" style="color:var(--red)" onclick="adminSuspendTenant(this)">Suspender</button></div></td></tr></tbody></table></div>
       </div>
 
       <!-- ─── BILLING ─── -->
@@ -666,7 +668,7 @@
             <div class="audit-item"><div class="audit-icon" style="background:rgba(99,102,241,0.15)">👤</div><div><div class="audit-action">Novo usuário cadastrado</div><div class="audit-detail">user@example.com · Plano Free</div><div class="audit-time">Hoje, 18:30</div></div></div>
             <div class="audit-item"><div class="audit-icon" style="background:rgba(245,158,11,0.15)">💳</div><div><div class="audit-action">Upgrade de plano</div><div class="audit-detail">pro@example.com · Free → Pro · R$49,00</div><div class="audit-time">Hoje, 17:45</div></div></div>
             <div class="audit-item"><div class="audit-icon" style="background:rgba(239,68,68,0.15)">🚪</div><div><div class="audit-action">Logout</div><div class="audit-detail">user2@example.com · Sessão encerrada</div><div class="audit-time">Hoje, 16:20</div></div></div>
-            <div class="audit-item"><div class="audit-icon" style="background:rgba(6,182,212,0.15)">🚀</div><div><div class="audit-action">Deploy realizado</div><div class="audit-detail">v9.0.0 · Cloudflare Pages · Branch: main</div><div class="audit-time">Hoje, 15:00</div></div></div>
+            <div class="audit-item"><div class="audit-icon" style="background:rgba(6,182,212,0.15)">🚀</div><div><div class="audit-action">Deploy realizado</div><div class="audit-detail">v10.0.0-rc.1 · Cloudflare Pages · Branch: main</div><div class="audit-time">Hoje, 15:00</div></div></div>
           </div>
         </div>
       </div>
@@ -708,7 +710,7 @@
         </div>
         <div class="card">
           <div style="background:var(--bg-base);border-radius:var(--radius-md);padding:16px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;max-height:400px;overflow-y:auto">
-            <div style="color:var(--green)">[2026-07-15 18:52:01] INFO  Deploy v9.0.0 concluído com sucesso</div>
+            <div style="color:var(--green)">[2026-07-15 18:52:01] INFO  Deploy v10.0.0-rc.1 concluído com sucesso</div>
             <div style="color:var(--text-secondary)">[2026-07-15 18:51:45] INFO  Build gerado: 47 arquivos, 2.3MB</div>
             <div style="color:var(--accent-light)">[2026-07-15 18:50:12] INFO  Login: admin@lifeos.io (role: admin)</div>
             <div style="color:var(--text-secondary)">[2026-07-15 18:30:05] INFO  Novo usuário: user@example.com</div>
@@ -762,7 +764,7 @@
           <table class="data-table">
             <thead><tr><th>Versão</th><th>Branch</th><th>Status</th><th>Commit</th><th>Data</th><th>Duração</th></tr></thead>
             <tbody>
-              <tr><td><strong>v9.0.0</strong></td><td>main</td><td><span class="badge badge-green">✓ Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)" id="deploy-commit">pending</td><td style="color:var(--text-secondary)">Hoje</td><td style="color:var(--text-secondary)">—</td></tr>
+              <tr><td><strong>v10.0.0-rc.1</strong></td><td>main</td><td><span class="badge badge-green">✓ Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)" id="deploy-commit">pending</td><td style="color:var(--text-secondary)">Hoje</td><td style="color:var(--text-secondary)">—</td></tr>
               <tr><td>v5.0.0</td><td>main</td><td><span class="badge badge-green">✓ Sucesso</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">97392e9</td><td style="color:var(--text-secondary)">3 dias atrás</td><td style="color:var(--text-secondary)">1m 18s</td></tr>
               <tr><td>v4.9.0</td><td>main</td><td><span class="badge badge-red">✗ Falhou</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">da71460</td><td style="color:var(--text-secondary)">5 dias atrás</td><td style="color:var(--text-secondary)">0m 45s</td></tr>
             </tbody>
@@ -779,7 +781,7 @@
           <div class="card">
             <div class="card-title">Informações do Sistema</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Versão</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace">v9.0.0</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Versão</span><span style="font-weight:600;font-family:'JetBrains Mono',monospace">v10.0.0-rc.1</span></div>
               <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Plataforma</span><span style="font-weight:600">Cloudflare Pages</span></div>
               <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Runtime</span><span style="font-weight:600">Edge Workers</span></div>
               <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Região</span><span style="font-weight:600">Global (200+ PoPs)</span></div>
@@ -789,7 +791,7 @@
           <div class="card">
             <div class="card-title">Ações do Sistema</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
-              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="refreshData()">↻ Atualizar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="refreshData(this)">↻ Atualizar dados</button>
               <button class="btn btn-ghost" style="justify-content:flex-start">📤 Exportar backup</button>
               <button class="btn btn-ghost" style="justify-content:flex-start">🔄 Limpar cache</button>
               <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()">🚪 Encerrar sessão admin</button>
@@ -831,15 +833,15 @@
     document.querySelector('.content').scrollTop = 0;
   }
 
-  function refreshData() {
-    const btn = event.target;
+  function refreshData(btn) {
+    if (!btn) return;
     btn.textContent = '↻ Atualizando...';
     btn.disabled = true;
     setTimeout(() => { btn.textContent = '↻ Atualizar dados'; btn.disabled = false; }, 1500);
   }
 
-  function refreshHealth() {
-    const btn = event.target;
+  function refreshHealth(btn) {
+    if (!btn) return;
     btn.textContent = '↻ Verificando...';
     btn.disabled = true;
     setTimeout(() => { btn.textContent = '↻ Verificar agora'; btn.disabled = false; }, 2000);
@@ -850,6 +852,28 @@
       alert('Deploy iniciado! Acompanhe o progresso na aba Deploys.');
     }
   }
+
+  function adminEntityName(button) { return button.closest('tr')?.querySelector('td strong, td div')?.textContent?.trim() || 'registro'; }
+  function adminAudit(message) {
+    const log = document.getElementById('audit-log');
+    if (!log) return;
+    const item = document.createElement('div');
+    item.className = 'audit-item';
+    item.innerHTML = '<div class="audit-icon" style="background:rgba(99,102,241,.15)">OP</div><div><div class="audit-action"></div><div class="audit-detail">Operação administrativa · registro local da sessão</div><div class="audit-time">Agora</div></div>';
+    item.querySelector('.audit-action').textContent = message;
+    log.prepend(item);
+  }
+  function adminFilterUsers() {
+    const q = (document.getElementById('admin-user-search')?.value || '').toLowerCase();
+    const plan = document.getElementById('admin-plan-filter')?.value || 'Todos os planos';
+    document.querySelectorAll('#admin-users-body tr').forEach(row => { row.style.display = row.textContent.toLowerCase().includes(q) && (plan === 'Todos os planos' || row.textContent.includes(plan)) ? '' : 'none'; });
+  }
+  function adminInviteUser() { adminAudit('Convite de usuário iniciado'); alert('Fluxo de convite preparado para o provedor de identidade.'); }
+  function adminCreateTenant() { adminAudit('Criação de tenant iniciada'); alert('Assistente de criação de tenant preparado.'); }
+  function adminOpenUser(button) { const name = adminEntityName(button); adminAudit('Perfil de usuário consultado: ' + name); alert('Gerenciando usuário: ' + name); }
+  function adminOpenTenant(button) { const name = adminEntityName(button); adminAudit('Tenant consultado: ' + name); alert('Detalhes operacionais de ' + name); }
+  function adminSuspendUser(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(3) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Usuário reativado: ' : 'Usuário suspenso: ') + name); }
+  function adminSuspendTenant(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(5) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Tenant reativado: ' : 'Tenant suspenso: ') + name); }
 
   async function doLogout() {
     try {

@@ -106,6 +106,9 @@
     <button class="ss-filter" data-filter="workspaces" onclick="setFilter('workspaces', this)">📁 Workspaces</button>
     <button class="ss-filter" data-filter="documents" onclick="setFilter('documents', this)">📄 Documentos</button>
     <button class="ss-filter" data-filter="tasks" onclick="setFilter('tasks', this)">✅ Tarefas</button>
+    <button class="ss-filter" data-filter="habits" onclick="setFilter('habits', this)">🔄 Hábitos</button>
+    <button class="ss-filter" data-filter="goals" onclick="setFilter('goals', this)">🎯 Metas</button>
+    <button class="ss-filter" data-filter="audit" onclick="setFilter('audit', this)">🛡 Auditoria</button>
     <button class="ss-filter" data-filter="notifications" onclick="setFilter('notifications', this)">🔔 Notificações</button>
     <button class="ss-filter" data-filter="modules" onclick="setFilter('modules', this)">🧩 Módulos</button>
     <button class="ss-filter" data-filter="settings" onclick="setFilter('settings', this)">⚙️ Configurações</button>
@@ -183,6 +186,15 @@
       { id: 't2', type: 'tasks', icon: '✅', title: 'Revisar relatório Q3', meta: 'Tarefa · Hoje · Pendente', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'agenda' },
       { id: 't3', type: 'tasks', icon: '✅', title: 'Correr 5km', meta: 'Tarefa · Meta: Correr 100km · Hábito', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'habits' },
       { id: 't4', type: 'tasks', icon: '✅', title: 'Ler capítulo 7 — Atomic Habits', meta: 'Tarefa · Meta: Ler 24 livros · Hoje', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'goals' },
+      // Hábitos
+      { id: 'h1', type: 'habits', icon: '🔄', title: 'Meditação 10 minutos', meta: 'Hábito · Streak 14 dias · Concluído hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
+      { id: 'h2', type: 'habits', icon: '💧', title: 'Hidratação 2 litros', meta: 'Hábito · Streak 3 dias · Pendente hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
+      // Metas
+      { id: 'g1', type: 'goals', icon: '🎯', title: 'Correr 100 km', meta: 'Meta · 72% concluída · Prazo em 28 dias', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'goals' },
+      { id: 'g2', type: 'goals', icon: '💰', title: 'Economizar R$ 10 mil', meta: 'Meta financeira · 45% concluída', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'finance-goals' },
+      // Auditoria
+      { id: 'a1', type: 'audit', icon: '🛡', title: 'Login administrativo aprovado', meta: 'Auditoria · admin@lifeos.io · MFA · Hoje 09:42', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'observability' },
+      { id: 'a2', type: 'audit', icon: '🔑', title: 'API key rotacionada', meta: 'Auditoria · Integrações · Ontem 18:10', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'enterprise-settings' },
       // Notificações
       { id: 'n1', type: 'notifications', icon: '🔔', title: 'AI Engine timeout detectado', meta: 'Notificação · Observability · Ontem 14:31', badge: 'Alerta', badgeColor: 'rgba(239,68,68,0.1)', badgeText: 'var(--red)', page: 'notifications' },
       { id: 'n2', type: 'notifications', icon: '🔔', title: 'Novo membro adicionado ao workspace', meta: 'Notificação · Workspace Alpha · Hoje', badge: 'Info', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'notifications' },
@@ -192,7 +204,8 @@
       { id: 'm2', type: 'modules', icon: '🏠', title: 'Personal Hub', meta: 'Módulo · Centrais Financeira, IA, Produtividade', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'personal-hub' },
       { id: 'm3', type: 'modules', icon: '📊', title: 'Observability', meta: 'Módulo · Logs, Métricas, Alertas, Health', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'observability' },
       { id: 'm4', type: 'modules', icon: '💰', title: 'Finance', meta: 'Módulo · Contas, Cartões, Investimentos, PIX', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'finance' },
-      { id: 'm5', type: 'modules', icon: '🤖', title: 'AI Center', meta: 'Módulo · Insights, Chat, Análise, Memória', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'ai' },
+      { id: 'm5', type: 'modules', icon: '🤖', title: 'Companion AI', meta: 'Módulo · Recomendações, planejamento e memória contextual', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'companion-ai' },
+      { id: 'm6', type: 'modules', icon: '🔗', title: 'Central de Integrações', meta: 'Módulo · Google, Microsoft, Slack, GitHub e webhooks', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'integration-center' },
       // Configurações
       { id: 's1', type: 'settings', icon: '🔐', title: 'Segurança — Autenticação 2FA', meta: 'Configuração · Enterprise Settings · Segurança', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
       { id: 's2', type: 'settings', icon: '🔑', title: 'API Keys', meta: 'Configuração · Enterprise Settings · Integrações', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
@@ -200,6 +213,13 @@
       { id: 's4', type: 'settings', icon: '🌐', title: 'Idioma e Região', meta: 'Configuração · Fuso horário, Formato de data', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
       { id: 's5', type: 'settings', icon: '🪝', title: 'Webhooks', meta: 'Configuração · Endpoints, Logs de entrega, Retry', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
     ];
+
+    // Contrato de provedores para expansão sem alterar a API pública da busca.
+    const FUTURE_SEARCH_SOURCES = Object.freeze({
+      email: { enabled: false, label: 'E-mail', fields: ['subject', 'sender', 'body'], page: 'email' },
+      messages: { enabled: false, label: 'Mensagens', fields: ['channel', 'sender', 'body'], page: 'messages' },
+      finance: { enabled: false, label: 'Finanças', fields: ['description', 'category', 'account'], page: 'finance' }
+    });
 
     // ── STATE ──
     let currentFilter = 'all';
@@ -235,7 +255,8 @@
       const lower = q.toLowerCase();
       let results = SEARCH_INDEX.filter(item => {
         if (currentFilter !== 'all' && item.type !== currentFilter) return false;
-        return item.title.toLowerCase().includes(lower) || item.meta.toLowerCase().includes(lower);
+        const searchable = [item.title, item.meta, item.badge, item.keywords || ''].join(' ').toLowerCase();
+        return searchable.includes(lower);
       });
       renderResults(results, q);
     }
@@ -350,7 +371,7 @@
 
     // ── UTILS ──
     function typeLabel(type) {
-      const labels = { users: 'Usuários', orgs: 'Organizações', workspaces: 'Workspaces', documents: 'Documentos', tasks: 'Tarefas', notifications: 'Notificações', modules: 'Módulos', settings: 'Configurações' };
+      const labels = { users: 'Usuários', orgs: 'Organizações', workspaces: 'Workspaces', documents: 'Documentos', tasks: 'Tarefas', habits: 'Hábitos', goals: 'Metas', audit: 'Auditoria', notifications: 'Notificações', modules: 'Módulos', settings: 'Configurações' };
       return labels[type] || type;
     }
     function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }

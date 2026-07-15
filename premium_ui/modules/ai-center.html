@@ -5,13 +5,13 @@
 <div class="page" id="page-ai-center">
   <div class="page-header">
     <div>
-      <div class="page-title">🧠 IA Center</div>
-      <div class="page-subtitle">Inteligência artificial integrada ao seu LifeOS</div>
+      <div class="page-title">Companion AI</div>
+      <div class="page-subtitle">Assistente contextual para planejamento, recomendações e decisões do dia a dia</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-memory')">Memória</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-memory')">Memory Center</button>
       <button class="btn btn-ghost" onclick="showPage('ai-automations')">Automações</button>
-      <button class="btn btn-primary" onclick="showPage('ai-chat')">💬 Chat IA</button>
+      <button class="btn btn-primary" onclick="showPage('ai-chat')">Abrir Companion</button>
     </div>
   </div>
 
@@ -20,8 +20,8 @@
     <div style="display:flex;align-items:center;gap:16px">
       <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.4)">🤖</div>
       <div style="flex:1">
-        <div style="font-weight:700;font-size:16px">LifeOS AI — Ativo</div>
-        <div style="font-size:13px;color:var(--text-secondary)">Memória permanente ativada · 847 memórias armazenadas · Última análise: há 2 minutos</div>
+        <div style="font-weight:700;font-size:16px">Companion AI — Contexto ativo</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Memory Center conectado · 847 memórias indexadas · Preferências aplicadas · Última análise: há 2 minutos</div>
       </div>
       <div style="display:flex;gap:8px">
         <div style="text-align:center;padding:8px 16px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
@@ -36,6 +36,17 @@
           <div style="font-size:20px;font-weight:700;color:var(--amber)">5</div>
           <div style="font-size:10px;color:var(--text-muted)">Automações</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div><div class="card-title" style="margin-bottom:3px">Preferências do Companion</div><div style="font-size:12px;color:var(--text-secondary)">Controle como recomendações e planos são apresentados.</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <select id="ai-tone" class="form-input" style="width:auto" onchange="aiSavePreferences()" aria-label="Tom das respostas"><option value="objective">Objetivo</option><option value="coach">Coach</option><option value="analytical">Analítico</option></select>
+        <select id="ai-detail" class="form-input" style="width:auto" onchange="aiSavePreferences()" aria-label="Nível de detalhe"><option value="concise">Conciso</option><option value="balanced">Equilibrado</option><option value="detailed">Detalhado</option></select>
+        <label style="display:flex;align-items:center;gap:7px;padding:0 10px;font-size:12px;color:var(--text-secondary)"><input id="ai-proactive" type="checkbox" checked onchange="aiSavePreferences()"> Recomendações proativas</label>
       </div>
     </div>
   </div>
@@ -109,7 +120,7 @@
 
   <!-- Recomendações -->
   <div class="card">
-    <div class="card-title">🌟 Recomendações Personalizadas</div>
+    <div class="card-title">Recomendações contextuais e planos sugeridos</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
       <div class="ai-rec-card" style="border-color:rgba(16,185,129,0.3)">
         <div style="font-size:24px;margin-bottom:8px">🏃</div>
@@ -137,8 +148,8 @@
 <div class="page" id="page-ai-memory">
   <div class="page-header">
     <div>
-      <div class="page-title">🧠 Memória Permanente</div>
-      <div class="page-subtitle">Tudo que a IA sabe sobre você</div>
+      <div class="page-title">Memory Center</div>
+      <div class="page-subtitle">Memórias explicáveis, com origem, relevância e controle do usuário</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
@@ -155,8 +166,8 @@
 
   <div class="card">
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-      <input type="text" class="form-input" placeholder="🔍 Buscar memórias..." style="flex:1;min-width:200px" />
-      <select class="form-input" style="width:auto">
+      <input id="ai-memory-search" type="search" class="form-input" placeholder="Buscar memórias..." style="flex:1;min-width:200px" oninput="aiFilterMemories()" />
+      <select id="ai-memory-category" class="form-input" style="width:auto" onchange="aiFilterMemories()">
         <option>Todas as categorias</option>
         <option>Preferências</option>
         <option>Hábitos</option>
@@ -167,28 +178,28 @@
       </select>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px" id="ai-memory-list">
-      <div class="ai-memory-item">
+      <div class="ai-memory-item" data-category="Preferências">
         <div class="ai-memory-category" style="background:rgba(99,102,241,0.15);color:var(--accent)">Preferências</div>
         <div class="ai-memory-content">Prefere trabalhar no período da manhã (9h-12h). Produtividade 40% maior nesse horário.</div>
-        <div class="ai-memory-meta">Adicionado: 10 Jul 2026 · Fonte: Análise de padrões</div>
+        <div class="ai-memory-meta">Adicionado: 10 Jul 2026 · Fonte: Análise de padrões · Relevância: 98%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
-      <div class="ai-memory-item">
+      <div class="ai-memory-item" data-category="Saúde">
         <div class="ai-memory-category" style="background:rgba(16,185,129,0.15);color:var(--green)">Saúde</div>
         <div class="ai-memory-content">Meta de exercícios: correr 3x por semana. Melhor desempenho em dias com sono de 7h+.</div>
-        <div class="ai-memory-meta">Adicionado: 05 Jul 2026 · Fonte: Hábitos</div>
+        <div class="ai-memory-meta">Adicionado: 05 Jul 2026 · Fonte: Hábitos · Relevância: 96%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
-      <div class="ai-memory-item">
+      <div class="ai-memory-item" data-category="Financeiro">
         <div class="ai-memory-category" style="background:rgba(245,158,11,0.15);color:var(--amber)">Financeiro</div>
         <div class="ai-memory-content">Orçamento mensal: R$ 8.000. Maior gasto recorrente: moradia (R$ 3.450). Meta de economia: 15% da renda.</div>
-        <div class="ai-memory-meta">Adicionado: 01 Jul 2026 · Fonte: Finance</div>
+        <div class="ai-memory-meta">Adicionado: 01 Jul 2026 · Fonte: Finance · Relevância: 91%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
-      <div class="ai-memory-item">
+      <div class="ai-memory-item" data-category="Trabalho">
         <div class="ai-memory-category" style="background:rgba(139,92,246,0.15);color:var(--purple)">Trabalho</div>
         <div class="ai-memory-content">Trabalha como desenvolvedor full-stack. Projetos principais: Alpha, Beta. Reuniões: terças e quintas.</div>
-        <div class="ai-memory-meta">Adicionado: 28 Jun 2026 · Fonte: Calendário</div>
+        <div class="ai-memory-meta">Adicionado: 28 Jun 2026 · Fonte: Calendário · Relevância: 89%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
     </div>
@@ -199,8 +210,8 @@
 <div class="page" id="page-ai-chat">
   <div class="page-header">
     <div>
-      <div class="page-title">💬 Chat com IA</div>
-      <div class="page-subtitle">Converse com seu assistente pessoal</div>
+      <div class="page-title">Companion AI</div>
+      <div class="page-subtitle">Converse com contexto do seu calendário, metas, hábitos e memórias autorizadas</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('ai-center')">← Voltar</button>
@@ -213,7 +224,7 @@
       <div class="ai-chat-msg ai">
         <div class="ai-chat-avatar">🤖</div>
         <div class="ai-chat-bubble">
-          <p>Olá! Sou o seu assistente LifeOS. Tenho acesso à sua memória permanente, finanças, calendário, tarefas e muito mais.</p>
+          <p>Olá! Sou o Companion AI. Uso somente as fontes autorizadas no LifeOS e explico quais memórias influenciaram cada recomendação.</p>
           <p style="margin-top:8px">Como posso ajudar você hoje?</p>
           <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
             <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Qual é meu saldo total?')">💰 Saldo total</button>
@@ -226,7 +237,7 @@
     </div>
     <!-- Input do chat -->
     <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end">
-      <textarea id="ai-chat-input" placeholder="Pergunte qualquer coisa sobre sua vida digital..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:48px;max-height:150px;outline:none;transition:border-color 0.2s" onkeydown="aiChatKey(event)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <textarea id="ai-chat-input" placeholder="Peça um plano, uma recomendação ou uma análise contextual..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:48px;max-height:150px;outline:none;transition:border-color 0.2s" onkeydown="aiChatKey(event)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
       <button class="btn btn-primary" style="padding:12px 16px;flex-shrink:0" onclick="aiChatSend()">➤ Enviar</button>
     </div>
   </div>

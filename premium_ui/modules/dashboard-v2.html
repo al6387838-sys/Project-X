@@ -222,6 +222,19 @@
     .activity-title { font-size: 13px; font-weight: 500; }
     .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
+    /* ── COMMAND CENTER STATUS ── */
+    .command-status { display:flex; flex-wrap:wrap; gap:8px; margin:-10px 0 18px; }
+    .command-status-pill { display:inline-flex; align-items:center; gap:7px; padding:7px 10px; border:1px solid var(--border); border-radius:999px; background:rgba(255,255,255,0.025); color:var(--text-secondary); font-size:11px; font-weight:600; }
+    .command-status-pill strong { color:var(--text-primary); }
+    .status-led { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px rgba(16,185,129,.7); }
+    .productivity-kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .productivity-kpi { padding:12px; border-radius:var(--radius-md); background:var(--bg-elevated); }
+    .productivity-kpi strong { display:block; font-size:20px; margin-top:5px; }
+    .health-service { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.035); }
+    .health-service:last-child { border-bottom:0; }
+    .health-service span { color:var(--text-secondary); font-size:12px; }
+    .health-service b { color:var(--green); font-size:11px; }
+
     /* ── WIDGET CATALOG (Add Widget Panel) ── */
     .widget-catalog-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
@@ -264,8 +277,8 @@
   <!-- HEADER -->
   <div class="dash2-header">
     <div>
-      <div class="dash2-greeting" id="d2-greeting">Bom dia! 👋</div>
-      <div class="dash2-date" id="d2-date">Carregando...</div>
+      <div class="dash2-greeting" id="d2-greeting">Command Center</div>
+      <div class="dash2-date" id="d2-date">Visão operacional unificada · Carregando...</div>
     </div>
     <div class="dash2-header-actions">
       <span class="edit-mode-badge" id="edit-badge">✏️ Modo Edição</span>
@@ -273,6 +286,14 @@
       <button class="btn-dash btn-dash-secondary" id="edit-btn" onclick="toggleEditMode()">⚙ Personalizar</button>
       <button class="btn-dash btn-dash-primary" onclick="saveLayout()">💾 Salvar Layout</button>
     </div>
+  </div>
+
+  <div class="command-status" aria-label="Status da plataforma">
+    <span class="command-status-pill"><i class="status-led"></i><strong>Plataforma</strong> operacional</span>
+    <span class="command-status-pill"><i class="status-led"></i><strong>Autenticação</strong> saudável</span>
+    <span class="command-status-pill"><i class="status-led"></i><strong>Dados</strong> sincronizados</span>
+    <span class="command-status-pill"><strong>Uptime</strong> 99,98%</span>
+    <span class="command-status-pill"><strong>Latência</strong> 42 ms</span>
   </div>
 
   <!-- WIDGET GRID -->
@@ -604,6 +625,30 @@
       <div class="activity-item"><div class="activity-dot" style="background:var(--red)"></div><div class="activity-content"><div class="activity-title">Alerta: AI Engine timeout detectado</div><div class="activity-time">Ontem, 14:31</div></div></div>
     </div>
 
+    <!-- W11: Produtividade -->
+    <div class="widget w-6" id="widget-productivity" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-productivity')" title="Remover">✕</button>
+      <div class="widget-header"><div class="widget-title">Produtividade</div><button class="widget-action" onclick="window.parent?.showPage?.('kanban')">Workspace →</button></div>
+      <div class="productivity-kpis">
+        <div class="productivity-kpi"><span class="day-summary-label">Conclusão</span><strong style="color:var(--green)">78%</strong><span class="day-summary-sub">+9% na semana</span></div>
+        <div class="productivity-kpi"><span class="day-summary-label">Foco</span><strong style="color:var(--purple)">2h40</strong><span class="day-summary-sub">Meta 4h</span></div>
+        <div class="productivity-kpi"><span class="day-summary-label">Entregas</span><strong style="color:var(--accent-light)">12</strong><span class="day-summary-sub">3 hoje</span></div>
+      </div>
+      <div class="habits-progress" style="margin-top:14px"><div class="habits-progress-label"><span>Capacidade semanal utilizada</span><span>64%</span></div><div class="habits-progress-bar"><div class="habits-progress-fill" style="width:64%;background:var(--gradient-primary)"></div></div></div>
+    </div>
+
+    <!-- W12: Saúde do Sistema -->
+    <div class="widget w-6" id="widget-system-health" draggable="true">
+      <div class="widget-drag-handle" title="Arrastar">⠿</div>
+      <button class="widget-remove-btn" onclick="removeWidget('widget-system-health')" title="Remover">✕</button>
+      <div class="widget-header"><div class="widget-title">Saúde do Sistema</div><button class="widget-action" onclick="window.parent?.showPage?.('observability')">Observabilidade →</button></div>
+      <div class="health-service"><span>Cloudflare Pages</span><b>● OPERACIONAL</b></div>
+      <div class="health-service"><span>Pages Functions</span><b>● OPERACIONAL</b></div>
+      <div class="health-service"><span>KV / Estado Enterprise</span><b>● SINCRONIZADO</b></div>
+      <div class="health-service"><span>Autenticação e sessão</span><b>● SAUDÁVEL</b></div>
+    </div>
+
   </div>
 
   <!-- WIDGET CATALOG OVERLAY -->
@@ -625,9 +670,9 @@
       const hour = new Date().getHours();
       const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite';
       const el = document.getElementById('d2-greeting');
-      if (el) el.textContent = `${greeting}! 👋`;
+      if (el) el.textContent = `${greeting} — Command Center`;
       const dateEl = document.getElementById('d2-date');
-      if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      if (dateEl) dateEl.textContent = 'Visão operacional unificada · ' + new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     })();
 
     // ── Finance mini chart ──
@@ -730,8 +775,12 @@
         w.style.transition = 'all 0.3s';
         w.style.opacity = '0';
         w.style.transform = 'scale(0.9)';
-        setTimeout(() => { w.classList.add('widget-hidden'); w.style.opacity = ''; w.style.transform = ''; }, 300);
-        saveLayout();
+        setTimeout(() => {
+          w.classList.add('widget-hidden');
+          w.style.opacity = '';
+          w.style.transform = '';
+          saveLayout();
+        }, 300);
         showToastD2('Widget removido. Você pode adicioná-lo novamente.', 'info');
       }
     }
@@ -748,6 +797,8 @@
       { id: 'widget-comm', icon: '💬', name: 'Comunicação', desc: 'Mensagens recentes' },
       { id: 'widget-ai', icon: '🤖', name: 'IA Companion', desc: 'Insights e chat com IA' },
       { id: 'widget-activities', icon: '📋', name: 'Atividades Recentes', desc: 'Timeline de ações' },
+      { id: 'widget-productivity', icon: '⚡', name: 'Produtividade', desc: 'Foco, entregas e capacidade' },
+      { id: 'widget-system-health', icon: '🛡', name: 'Saúde do Sistema', desc: 'Disponibilidade dos serviços' },
     ];
     function openWidgetCatalog() {
       const grid = document.getElementById('catalogGrid');

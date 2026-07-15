@@ -985,13 +985,13 @@
       <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)">⚡</div>
       <div style="flex:1;min-width:0">
         <div class="sidebar-title">LifeOS</div>
-        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v9.0</div>
+        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v10.0 RC</div>
       </div>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-label">Principal</div>
       <div class="nav-item active" onclick="showPage('dashboard')">
-        <div class="nav-icon">🏠</div><span>Dashboard</span>
+        <div class="nav-icon">🏠</div><span>Command Center</span>
       </div>
       <div class="nav-item" onclick="showPage('agenda')">
         <div class="nav-icon">📅</div><span>Agenda</span>
@@ -1081,6 +1081,9 @@
       <div class="nav-section-label">Ecossistema v9.5</div>
       <div class="nav-item" onclick="showPage('app-ecosystem')">
         <div class="nav-icon">🧩</div><span>App Ecosystem</span>
+      </div>
+      <div class="nav-item" onclick="showPage('integration-center')">
+        <div class="nav-icon">🔗</div><span>Central de Integrações</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <div class="nav-item" onclick="showPage('personal-hub')">
@@ -1114,7 +1117,7 @@
         <div class="user-avatar" id="sidebar-avatar" style="background:var(--gradient-primary);box-shadow:0 0 10px rgba(99,102,241,0.3)">U</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Carregando...</div>
-          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v9.0</div>
+          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v10.0 RC</div>
         </div>
         <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);flex-shrink:0"></div>
       </div>
@@ -1145,7 +1148,7 @@
 
       <!-- ─── DASHBOARD ─── -->
       <div class="page active" id="page-dashboard">
-        <!-- Life Dashboard 2.0 — Phase 088 -->
+        <!-- Command Center — Phase 093 -->
         <div id="dashboard-v2-container"></div>
 
       </div>
@@ -1508,6 +1511,8 @@
       <div id="module-marketplace-container"></div>
       <!-- ═══ MÓDULO APP ECOSYSTEM (Phase 081) ═══ -->
       <div id="module-app-ecosystem-container"></div>
+      <!-- ═══ CENTRAL DE INTEGRAÇÕES (Phase 095) ═══ -->
+      <div id="module-integration-center-container"></div>
       <!-- ═══ MÓDULO PERSONAL HUB (Phase 082) ═══ -->
       <div id="module-personal-hub-container"></div>
       <!-- ═══ MÓDULO ENTERPRISE SETTINGS (Phase 083) ═══ -->
@@ -1613,7 +1618,7 @@
   async function loadNotificationCenter() {
     if (notifCenterLoaded) return;
     try {
-      const resp = await fetch('/app/modules/notification-center.html');
+      const resp = await fetch('/app/modules/notification-center');
       const html = await resp.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
@@ -1641,7 +1646,7 @@
   async function loadSmartSearch() {
     if (smartSearchLoaded) return;
     try {
-      const resp = await fetch('/app/modules/smart-search.html');
+      const resp = await fetch('/app/modules/smart-search');
       const html = await resp.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
@@ -1667,15 +1672,15 @@
   // ── Life Dashboard 2.0 Loader ────────────────────────────────────────
   async function loadDashboardV2(name) {
     try {
-      const resp = await fetch('/app/modules/dashboard-v2.html');
+      const resp = await fetch('/app/modules/dashboard-v2');
       const html = await resp.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       // Inject styles
       doc.querySelectorAll('style').forEach(s => {
-        if (!document.querySelector(`style[data-d2="${s.textContent.slice(0,20)}"]`)) {
+        if (!document.querySelector('style[data-dashboard-v2]')) {
           const ns = document.createElement('style');
-          ns.setAttribute('data-d2', s.textContent.slice(0,20));
+          ns.setAttribute('data-dashboard-v2', 'true');
           ns.textContent = s.textContent;
           document.head.appendChild(ns);
         }
@@ -2021,6 +2026,8 @@
     'calendar': 'module-calendar-container',
     'calendar-integrations': 'module-calendar-container',
     'ai-center': 'module-ai-center-container',
+    'companion-ai': 'module-ai-center-container',
+    'ai-chat': 'module-ai-center-container',
     'ai-memory': 'module-ai-center-container',
     'ai-automations': 'module-ai-center-container',
     'ai-daily': 'module-ai-center-container',
@@ -2043,6 +2050,8 @@
     'app-dependencies': 'module-app-ecosystem-container',
     'app-versions': 'module-app-ecosystem-container',
     'app-integrations': 'module-app-ecosystem-container',
+    'integration-center': 'module-integration-center-container',
+    'integrations': 'module-integration-center-container',
     'personal-hub': 'module-personal-hub-container',
     'hub-finance': 'module-personal-hub-container',
     'hub-communication': 'module-personal-hub-container',
@@ -2068,18 +2077,19 @@
     'obs-performance': 'module-observability-container',
   };
   const _moduleFiles = {
-    'module-finance-container': 'modules/finance.html',
-    'module-communication-container': 'modules/communication.html',
-    'module-email-container': 'modules/email.html',
-    'module-calendar-container': 'modules/calendar.html',
-    'module-ai-center-container': 'modules/ai-center.html',
-    'module-documents-container': 'modules/documents.html',
-    'module-productivity-container': 'modules/productivity.html',
-    'module-marketplace-container': 'modules/marketplace.html',
-    'module-app-ecosystem-container': 'modules/app-ecosystem.html',
-    'module-personal-hub-container': 'modules/personal-hub.html',
-    'module-enterprise-settings-container': 'modules/enterprise-settings.html',
-    'module-observability-container': 'modules/observability.html',
+    'module-finance-container': 'modules/finance',
+    'module-communication-container': 'modules/communication',
+    'module-email-container': 'modules/email',
+    'module-calendar-container': 'modules/calendar',
+    'module-ai-center-container': 'modules/ai-center',
+    'module-documents-container': 'modules/documents',
+    'module-productivity-container': 'modules/productivity',
+    'module-marketplace-container': 'modules/marketplace',
+    'module-app-ecosystem-container': 'modules/app-ecosystem',
+    'module-integration-center-container': 'modules/integration-center',
+    'module-personal-hub-container': 'modules/personal-hub',
+    'module-enterprise-settings-container': 'modules/enterprise-settings',
+    'module-observability-container': 'modules/observability',
   };
   const _loadedModules = new Set();
   async function _loadModule(containerId) {
@@ -2088,17 +2098,47 @@
     if (!file) return;
     try {
       const r = await fetch(file);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const html = await r.text();
-      document.getElementById(containerId).innerHTML = html;
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('style').forEach(styleNode => {
+        const style = document.createElement('style');
+        style.dataset.module = containerId;
+        style.textContent = styleNode.textContent;
+        document.head.appendChild(style);
+      });
+      const container = document.getElementById(containerId);
+      if (!container) throw new Error(`Container ${containerId} ausente`);
+      container.innerHTML = doc.body.innerHTML;
+      const moduleRoot = container.querySelector(':scope > [id^="module-"]');
+      if (moduleRoot) moduleRoot.style.display = 'block';
+      container.querySelectorAll('script').forEach(oldScript => {
+        const script = document.createElement('script');
+        [...oldScript.attributes].forEach(attr => script.setAttribute(attr.name, attr.value));
+        script.textContent = oldScript.textContent;
+        oldScript.replaceWith(script);
+      });
       _loadedModules.add(containerId);
+      if (containerId === 'module-ai-center-container') setTimeout(aiLoadPreferences, 0);
     } catch(e) { console.warn('Module load error:', containerId, e); }
   }
   // Override showPage to load modules on demand
   const _origShowPage = showPage;
+  const _moduleContainers = [...new Set(Object.values(_moduleMap))];
+  const _routeAliases = { 'companion-ai': 'ai-center' };
   showPage = async function(id) {
     const containerId = _moduleMap[id];
-    if (containerId) await _loadModule(containerId);
-    _origShowPage(id);
+    _moduleContainers.forEach(candidate => {
+      const node = document.getElementById(candidate);
+      if (node) node.hidden = candidate !== containerId;
+    });
+    if (containerId) {
+      await _loadModule(containerId);
+      const activeModule = document.getElementById(containerId);
+      if (activeModule) activeModule.hidden = false;
+    }
+    _origShowPage(_routeAliases[id] || id);
+    if (_routeAliases[id]) history.replaceState({}, '', `#${id}`);
   };
 
   // ═══ FINANCE FUNCTIONS ═══
@@ -2110,7 +2150,9 @@
       'pix': 'finance-pix', 'cartão': 'finance-cards', 'cartoes': 'finance-cards',
       'metas': 'finance-goals', 'orçamento': 'finance-budget',
       'mensagens': 'messages', 'whatsapp': 'comm-whatsapp', 'telegram': 'comm-telegram',
-      'ia': 'ai-center', 'ai': 'ai-center', 'resumo': 'ai-daily',
+      'ia': 'companion-ai', 'ai': 'companion-ai', 'resumo': 'companion-ai', 'memória': 'companion-ai',
+      'integrações': 'integration-center', 'integracoes': 'integration-center', 'google': 'integration-center', 'slack': 'integration-center', 'github': 'integration-center',
+      'hábitos': 'habits', 'habitos': 'habits', 'auditoria': 'search', 'documentos': 'documents',
       'kanban': 'kanban', 'projetos': 'projects', 'agenda': 'agenda',
       'configurações': 'settings', 'perfil': 'profile', 'notificações': 'notifications',
     };
@@ -2160,7 +2202,16 @@
     if (msgs) {
       const div = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;margin-bottom:8px';
-      div.innerHTML = '<div class="msg-bubble sent"><div class="msg-bubble-text">' + inp.value + '</div><div class="msg-bubble-time">Agora</div></div>';
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble sent';
+      const text = document.createElement('div');
+      text.className = 'msg-bubble-text';
+      text.textContent = inp.value;
+      const time = document.createElement('div');
+      time.className = 'msg-bubble-time';
+      time.textContent = 'Agora';
+      bubble.append(text, time);
+      div.appendChild(bubble);
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
     }
@@ -2189,7 +2240,7 @@
   function calConnect(provider) { showToast('Conectando ' + provider + '...', 'info'); setTimeout(() => showToast(provider + ' sincronizado!', 'success'), 1200); }
   function calSync() { showToast('Sincronizando calendários...', 'info'); }
 
-  // ═══ AI CENTER FUNCTIONS ═══
+  // ═══ COMPANION AI FUNCTIONS ═══
   function aiShowTab(tab) {
     document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.ai-tab-content').forEach(c => c.style.display = 'none');
@@ -2198,30 +2249,71 @@
     if (btn) btn.classList.add('active');
     if (content) content.style.display = 'block';
   }
+  function aiAppendMessage(text, role) {
+    const msgs = document.getElementById('ai-chat-messages');
+    if (!msgs) return;
+    const row = document.createElement('div');
+    row.style.cssText = `display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;justify-content:${role === 'user' ? 'flex-end' : 'flex-start'}`;
+    const bubble = document.createElement('div');
+    bubble.className = 'ai-chat-bubble';
+    bubble.style.maxWidth = '78%';
+    bubble.textContent = text;
+    if (role === 'ai') {
+      const avatar = document.createElement('div');
+      avatar.className = 'ai-chat-avatar';
+      avatar.textContent = 'AI';
+      row.appendChild(avatar);
+    }
+    row.appendChild(bubble);
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  function aiContextualReply(query) {
+    const q = query.toLowerCase();
+    if (q.includes('plano') || q.includes('taref')) return 'Plano sugerido: priorize a entrega Alpha às 9h, reserve 45 minutos de foco e revise a fatura antes das 17h. Contexto usado: agenda, tarefas e preferência de produtividade matinal.';
+    if (q.includes('saldo') || q.includes('finan')) return 'Seu resumo financeiro indica orçamento mensal de R$ 8.000 e meta de economia de 15%. Antes de agir, confirme os dados no Finance Hub. Contexto usado: memória financeira e metas.';
+    if (q.includes('evento') || q.includes('agenda')) return 'Você tem três compromissos hoje; o próximo é a Daily às 14h30. Recomendo um bloco de preparação de 15 minutos. Contexto usado: calendário autorizado.';
+    if (q.includes('hábito') || q.includes('habito')) return 'Sua consistência está em 67%. Meditação mantém streak de 14 dias; hidratação está pendente. Contexto usado: hábitos e metas de saúde.';
+    return 'Identifiquei oportunidades em produtividade, agenda e hábitos. Posso transformar esta análise em um plano de hoje ou explicar quais memórias influenciaram a recomendação.';
+  }
   function aiSendChat() {
     const inp = document.getElementById('ai-chat-input');
     if (!inp || !inp.value.trim()) return;
-    const msgs = document.getElementById('ai-chat-messages');
-    if (msgs) {
-      const div = document.createElement('div');
-      div.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;margin-bottom:12px';
-      div.innerHTML = '<div class="ai-chat-msg user-side"><div class="ai-chat-bubble">' + inp.value + '</div></div>';
-      msgs.appendChild(div);
-      msgs.scrollTop = msgs.scrollHeight;
-      const q = inp.value; inp.value = '';
-      setTimeout(() => {
-        const reply = document.createElement('div');
-        reply.style.cssText = 'display:flex;flex-direction:column;align-items:flex-start;margin-bottom:12px';
-        const aiResponses = ['Analisando seus dados e padrões...', 'Com base no seu histórico, recomendo focar nas tarefas de alta prioridade primeiro.', 'Seu Life Score está em 87 — acima da média. Continue assim!', 'Identifiquei 3 oportunidades de otimização no seu fluxo de trabalho.', 'Baseado nos seus hábitos, seu pico de produtividade é entre 9h-11h.']; const aiReply = aiResponses[Math.floor(Math.random() * aiResponses.length)]; reply.innerHTML = '<div class="ai-chat-msg ai-side"><div class="ai-chat-avatar">🤖</div><div class="ai-chat-bubble">' + aiReply + '</div></div>';
-        msgs.appendChild(reply);
-        msgs.scrollTop = msgs.scrollHeight;
-      }, 800);
-    }
+    const query = inp.value.trim();
+    inp.value = '';
+    aiAppendMessage(query, 'user');
+    setTimeout(() => aiAppendMessage(aiContextualReply(query), 'ai'), 450);
   }
-  function aiAddMemory() { showToast('Memória adicionada', 'success'); }
-  function aiToggleAutomation(el, name) {
-    showToast(el.checked ? name + ' ativada' : name + ' desativada', el.checked ? 'success' : 'info');
+  function aiChatSend() { aiSendChat(); }
+  function aiQuickPrompt(prompt) { const inp = document.getElementById('ai-chat-input'); if (inp) inp.value = prompt; aiSendChat(); }
+  function aiChatKey(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); aiSendChat(); } }
+  function aiClearChat() { const msgs = document.getElementById('ai-chat-messages'); if (msgs) msgs.innerHTML = ''; showToast('Conversa limpa', 'info'); }
+  function aiGenerateTasks() { showToast('Plano contextual atualizado com 4 tarefas', 'success'); }
+  function aiTaskDone(input) { input.closest('.ai-task-item')?.classList.toggle('done', input.checked); }
+  function aiAddAllTasks() { showToast('Tarefas adicionadas ao Kanban', 'success'); }
+  function aiSavePreferences() {
+    const prefs = { tone: document.getElementById('ai-tone')?.value || 'objective', detail: document.getElementById('ai-detail')?.value || 'concise', proactive: !!document.getElementById('ai-proactive')?.checked };
+    localStorage.setItem('lifeos_v10_companion_preferences', JSON.stringify(prefs));
+    showToast('Preferências do Companion salvas', 'success');
   }
+  function aiLoadPreferences() {
+    const prefs = JSON.parse(localStorage.getItem('lifeos_v10_companion_preferences') || '{}');
+    const tone = document.getElementById('ai-tone'), detail = document.getElementById('ai-detail'), proactive = document.getElementById('ai-proactive');
+    if (tone && prefs.tone) tone.value = prefs.tone;
+    if (detail && prefs.detail) detail.value = prefs.detail;
+    if (proactive && typeof prefs.proactive === 'boolean') proactive.checked = prefs.proactive;
+  }
+  function aiFilterMemories() {
+    const q = (document.getElementById('ai-memory-search')?.value || '').toLowerCase();
+    const category = document.getElementById('ai-memory-category')?.value || 'Todas as categorias';
+    document.querySelectorAll('#ai-memory-list .ai-memory-item').forEach(item => {
+      const matchesText = item.textContent.toLowerCase().includes(q);
+      const matchesCategory = category === 'Todas as categorias' || item.dataset.category === category;
+      item.style.display = matchesText && matchesCategory ? '' : 'none';
+    });
+  }
+  function aiAddMemory() { showToast('Memória adicionada ao Memory Center', 'success'); }
+  function aiToggleAutomation(el, name) { showToast(el.checked ? name + ' ativada' : name + ' desativada', el.checked ? 'success' : 'info'); }
 
   // ═══ DOCUMENTS FUNCTIONS ═══
   function docsView(mode) { showToast('Vista: ' + mode, 'info'); }
