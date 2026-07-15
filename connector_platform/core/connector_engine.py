@@ -346,6 +346,17 @@ class ConnectorEngine:
         cls = self._connectors.get(connector_id)
         return cls.manifest if cls else None
 
+    def create_connector(
+        self,
+        connector_id: str,
+        config: Optional[IntegrationConfig] = None,
+    ) -> BaseConnector:
+        """Build a registered connector through the stable public engine API."""
+        connector_class = self._connectors.get(connector_id)
+        if connector_class is None:
+            raise ValueError(f"Connector not registered: {connector_id}")
+        return connector_class(config, self._vault)
+
     # ── Integration Lifecycle ─────────────────
 
     async def activate_integration(

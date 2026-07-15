@@ -20,6 +20,7 @@ import logging
 import os
 import secrets
 import time
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode, urlparse, parse_qs
@@ -29,6 +30,7 @@ from connector_platform.models.connector_models import (
     OAuthConfig,
     OAuthToken,
 )
+from connector_platform.security.secrets_manager import SecretsManager
 
 logger = logging.getLogger(__name__)
 
@@ -107,27 +109,96 @@ class OAuthStateManager:
 # ─────────────────────────────────────────────
 
 class TokenStore:
-    """
-    Secure in-memory token store with encryption.
-    In production: backed by encrypted database (PostgreSQL + pgcrypto).
-    """
+    """OAuth token metadata store with secret material delegated to SecretsManager."""
 
-    def __init__(self):
+    ACCESS_SECRET = "oauth.access_token"
+    REFRESH_SECRET = "oauth.refresh_token"
+
+    def __init__(
+        self,
+        secrets_manager: Optional[SecretsManager] = None,
+        tenant_id: str = "default",
+    ):
         self._tokens: Dict[str, OAuthToken] = {}
+        self._secrets = secrets_manager
+        self._tenant_id = tenant_id
 
     def _key(self, user_id: str, connector_id: str) -> str:
         return f"{user_id}:{connector_id}"
 
     def save(self, token: OAuthToken):
         key = self._key(token.user_id, token.connector_id)
-        self._tokens[key] = token
-        logger.debug(f"[TokenStore] Saved token: {key}")
+        if self._secrets:
+            self._secrets.put_secret(
+                self._tenant_id,
+                token.user_id,
+                token.connector_id,
+                self.ACCESS_SECRET,
+                token.access_token,
+                expires_at=token.expires_at,
+                metadata={"kind": "oauth_access_token"},
+                actor_id=token.user_id,
+            )
+            if token.refresh_token:
+                self._secrets.put_secret(
+                    self._tenant_id,
+                    token.user_id,
+                    token.connector_id,
+                    self.REFRESH_SECRET,
+                    token.refresh_token,
+                    metadata={"kind": "oauth_refresh_token"},
+                    actor_id=token.user_id,
+                )
+            self._tokens[key] = replace(
+                token,
+                access_token="<managed-secret>",
+                refresh_token="<managed-secret>" if token.refresh_token else None,
+            )
+        else:
+            self._tokens[key] = token
+        logger.debug(f"[TokenStore] Saved token metadata: {key}")
 
     def get(self, user_id: str, connector_id: str) -> Optional[OAuthToken]:
-        return self._tokens.get(self._key(user_id, connector_id))
+        token = self._tokens.get(self._key(user_id, connector_id))
+        if token is None or self._secrets is None:
+            return token
+        access_token = self._secrets.get_secret(
+            self._tenant_id,
+            user_id,
+            connector_id,
+            self.ACCESS_SECRET,
+            actor_id=user_id,
+        )
+        if access_token is None:
+            return None
+        refresh_token = None
+        if token.refresh_token:
+            refresh_token = self._secrets.get_secret(
+                self._tenant_id,
+                user_id,
+                connector_id,
+                self.REFRESH_SECRET,
+                actor_id=user_id,
+            )
+        return replace(token, access_token=access_token, refresh_token=refresh_token)
 
     def delete(self, user_id: str, connector_id: str):
         self._tokens.pop(self._key(user_id, connector_id), None)
+        if self._secrets:
+            self._secrets.delete_secret(
+                self._tenant_id,
+                user_id,
+                connector_id,
+                self.ACCESS_SECRET,
+                actor_id=user_id,
+            )
+            self._secrets.delete_secret(
+                self._tenant_id,
+                user_id,
+                connector_id,
+                self.REFRESH_SECRET,
+                actor_id=user_id,
+            )
 
     def is_expired(self, token: OAuthToken) -> bool:
         if not token.expires_at:
@@ -141,7 +212,13 @@ class TokenStore:
         return datetime.now(timezone.utc) >= (token.expires_at - timedelta(seconds=buffer_seconds))
 
     def list_user_tokens(self, user_id: str) -> List[OAuthToken]:
-        return [t for k, t in self._tokens.items() if k.startswith(f"{user_id}:")]
+        tokens: List[OAuthToken] = []
+        for key, token in self._tokens.items():
+            if key.startswith(f"{user_id}:"):
+                hydrated = self.get(user_id, token.connector_id)
+                if hydrated:
+                    tokens.append(hydrated)
+        return tokens
 
 
 # ─────────────────────────────────────────────
@@ -247,8 +324,14 @@ class OAuthManager:
       5. Token introspection and validation
     """
 
-    def __init__(self):
-        self._token_store = TokenStore()
+    def __init__(
+        self,
+        secrets_manager: Optional[SecretsManager] = None,
+        tenant_id: str = "default",
+    ):
+        self._secrets_manager = secrets_manager
+        self._tenant_id = tenant_id
+        self._token_store = TokenStore(secrets_manager, tenant_id)
         self._state_manager = OAuthStateManager()
         self._pkce_sessions: Dict[str, Dict] = {}  # state → pkce pair
         self._configs: Dict[str, OAuthConfig] = {}

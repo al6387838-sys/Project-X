@@ -201,6 +201,7 @@ def test_models():
     suite.run("IntegrationConfig creation", test_integration_config)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -262,6 +263,7 @@ def test_registry():
     suite.run("Registry statistics", test_stats)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -309,6 +311,7 @@ def test_manifests():
     suite.run("Future connectors architecture", test_future_connectors_architecture)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -395,6 +398,7 @@ def test_oauth():
     suite.run("Get provider config (Google + Microsoft)", test_get_provider_config)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -458,6 +462,7 @@ def test_authentication():
     suite.run("Connection tests for all major connectors", test_connection_test)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -530,6 +535,7 @@ def test_sync():
     suite.run("Sync manager statistics", test_sync_stats)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -621,6 +627,7 @@ def test_webhooks():
     suite.run("Webhook manager statistics", test_webhook_stats)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -683,6 +690,7 @@ def test_permissions():
     suite.run("List active permissions", test_list_permissions)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -758,6 +766,7 @@ def test_marketplace():
     suite.run("Get full catalog", test_get_catalog)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -811,6 +820,7 @@ def test_monitor():
     suite.run("Latency percentiles", test_latency_percentiles)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -950,6 +960,7 @@ def test_e2e_dual_calendar():
     suite.run("Token refresh for both connectors", test_token_refresh_both)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
@@ -1038,6 +1049,7 @@ def test_security():
     suite.run("Token isolation per user", test_token_isolation)
     passed, total = suite.summary()
     assert passed == total, f"Connector tests failed: {passed}/{total} passed"
+    return suite
 
 
 # ─────────────────────────────────────────────
