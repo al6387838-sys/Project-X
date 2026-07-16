@@ -429,8 +429,10 @@
     function genSparkline(id, color, min, max) {
       const el = document.getElementById(id);
       if (!el) return;
+      // Valores determinísticos baseados no índice (zero Math.random)
+      const pattern = [60,65,55,70,75,68,72,80,78,85,82,88,84,90,86,92,88,94,90,95];
       for (let i = 0; i < 20; i++) {
-        const h = Math.floor(Math.random() * (max - min) + min);
+        const h = Math.floor(min + (pattern[i] / 100) * (max - min));
         const bar = document.createElement('div');
         bar.className = 'spark-bar';
         bar.style.height = h + '%';

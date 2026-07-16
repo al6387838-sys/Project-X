@@ -1,8 +1,8 @@
 {
   "name": "lifeos-enterprise",
-  "version": "17.5.0",
+  "version": "23.0.0",
   "private": true,
-  "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance, integrações OAuth 2.0 e automação.",
+  "description": "LifeOS Enterprise \u2014 sistema operacional pessoal com governan\u00e7a organizacional, RBAC, billing, compliance, integra\u00e7\u00f5es OAuth 2.0 e automa\u00e7\u00e3o.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "deploy": "bash scripts/deploy-cloudflare.sh",

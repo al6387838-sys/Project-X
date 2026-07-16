@@ -543,7 +543,7 @@ function showThinking() {
     conversations[currentConv].messages.push({ role: 'ai', text: response, time: now });
     isThinking = false;
     renderMessages();
-  }, 1400 + Math.random() * 800);
+  }, 1400);
 }
 
 function aiKeydown(e) {

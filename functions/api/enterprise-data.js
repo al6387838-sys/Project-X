@@ -305,7 +305,7 @@ function normalizeText(value, maxLen = 500) {
 }
 
 function generateId() {
-  return 'id_' + Math.random().toString(36).slice(2, 11) + '_' + Date.now().toString(36);
+  return 'id_' + crypto.randomUUID().replace(/-/g,'').slice(0,11) + '_' + Date.now().toString(36);
 }
 
 function audit(state, actor, action, resourceId, detail) {

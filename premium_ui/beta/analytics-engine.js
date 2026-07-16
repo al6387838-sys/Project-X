@@ -39,7 +39,7 @@ const AnalyticsEngine = (() => {
         console.warn('Falha ao carregar dados de analytics:', e);
       }
     }
-    console.log('[AnalyticsEngine] Inicializado');
+    // [removed]
   }
 
   /**
@@ -63,7 +63,7 @@ const AnalyticsEngine = (() => {
    * @returns {string} sessionId
    */
   function startSession(userId) {
-    const sessionId = `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const sessionId = `sess_${Date.now()}_${(typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,9) : Date.now().toString(36))}`;
 
     const session = {
       sessionId,

@@ -404,7 +404,7 @@ class CommandPalette {
   }
 
   action(action) {
-    console.log(`Action: ${action}`);
+    // [removed]
     // Implementar ações específicas
   }
 

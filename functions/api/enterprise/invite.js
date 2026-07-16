@@ -44,7 +44,6 @@ async function sendInviteEmail(toEmail, inviterName, orgName, token, origin, env
     } catch (_) { return false; }
   }
 
-  console.log(`[LifeOS] Invite for ${toEmail}: ${inviteUrl}`);
   return false;
 }
 

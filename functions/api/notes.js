@@ -4,7 +4,7 @@
 import { getCookie, json, verifySession } from '../_auth.js';
 
 function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  return crypto.randomUUID().replace(/-/g,'').slice(0,16);
 }
 
 function escapeHtml(str) {

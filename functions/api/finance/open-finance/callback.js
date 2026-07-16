@@ -66,7 +66,7 @@ export async function onRequestGet({ request, env }) {
         if (accountsRes.ok) {
           const accountsData = await accountsRes.json();
           accounts = (accountsData.data || []).map(acc => ({
-            id: acc.accountId || `acc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+            id: acc.accountId || `acc_${crypto.randomUUID().replace(/-/g,'').slice(0,16)}`,
             institutionId,
             type: acc.type || 'CONTA_DEPOSITO_A_VISTA',
             subtype: acc.subtype || '',

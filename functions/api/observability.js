@@ -116,23 +116,19 @@ export async function onRequestGet({ request, env }) {
   const alerts = await getAlerts(kv);
   const orgConsumption = await getOrgConsumption(kv);
 
-  // Histórico de resposta do KV (últimas 24 horas)
-  const responseTimeHistory = Array.from({ length: 24 }, (_, i) => {
+  // Histórico de resposta — dados reais do KV ou baseline determinístico (zero Math.random)
+  const storedHistory = await kv?.get('observability:response_history', { type: 'json' }).catch(() => null);
+  const responseTimeHistory = storedHistory || Array.from({ length: 24 }, (_, i) => {
     const hour = new Date(now - (23 - i) * 3600000).getHours();
-    return {
-      hour: `${String(hour).padStart(2, '0')}:00`,
-      p50: 18 + Math.floor(Math.random() * 37),
-      p95: 55 + Math.floor(Math.random() * 125),
-      p99: 120 + Math.floor(Math.random() * 260),
-    };
+    // Determinístico: padrão de latência baseado na hora do dia (pico comercial 9-18h)
+    const isPeak = hour >= 9 && hour <= 18;
+    return { hour: `${String(hour).padStart(2, '0')}:00`, p50: isPeak ? 28 : 18, p95: isPeak ? 95 : 60, p99: isPeak ? 220 : 140 };
   });
 
-  const errorRateHistory = Array.from({ length: 24 }, (_, i) => {
+  const storedErrorHistory = await kv?.get('observability:error_history', { type: 'json' }).catch(() => null);
+  const errorRateHistory = storedErrorHistory || Array.from({ length: 24 }, (_, i) => {
     const hour = new Date(now - (23 - i) * 3600000).getHours();
-    return {
-      hour: `${String(hour).padStart(2, '0')}:00`,
-      rate: (Math.random() * 0.5).toFixed(2),
-    };
+    return { hour: `${String(hour).padStart(2, '0')}:00`, rate: '0.00' };
   });
 
   return json(200, {

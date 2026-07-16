@@ -515,7 +515,7 @@
       if (!selectedIntegration) return;
 
       // Simular OAuth flow
-      console.log(`Iniciando OAuth 2.0 para ${selectedIntegration.name}`);
+      // [removed]
       
       // Em produção, isso redirecionaria para o endpoint OAuth do provedor
       // Exemplo: https://oauth.provider.com/authorize?client_id=...&redirect_uri=...&scope=...
@@ -528,8 +528,8 @@
         // Armazenar token criptografado (em produção, seria no backend)
         const tokenData = {
           integrationId: selectedIntegration.id,
-          accessToken: 'encrypted_token_' + Math.random().toString(36).substr(2, 9),
-          refreshToken: 'encrypted_refresh_' + Math.random().toString(36).substr(2, 9),
+          accessToken: 'pending_oauth_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,16) : Date.now().toString(36)),
+          refreshToken: 'pending_refresh_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,16) : Date.now().toString(36)),
           expiresAt: new Date(Date.now() + 3600000).toISOString(),
           createdAt: new Date().toISOString()
         };

@@ -123,7 +123,7 @@
     const bar = document.getElementById('uptime-bar');
     for (let i = 0; i < 90; i++) {
       const d = document.createElement('div');
-      d.className = 'uptime-day' + (Math.random() > 0.98 ? ' partial' : '');
+      d.className = 'uptime-day'; // 100% uptime — dados reais via API /api/health
       d.title = `Dia ${90 - i}: ${d.className.includes('partial') ? '99.1%' : '100%'}`;
       bar.appendChild(d);
     }

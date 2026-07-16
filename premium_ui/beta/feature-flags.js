@@ -46,7 +46,7 @@ const FeatureFlagsEngine = (() => {
     // Iniciar rastreamento de heatmap
     initializeHeatmapTracking();
 
-    console.log('[FeatureFlagsEngine] Inicializado com', Object.keys(flags).length, 'flags');
+    // [removed]
   }
 
   /**
@@ -113,7 +113,7 @@ const FeatureFlagsEngine = (() => {
       ...config
     };
 
-    console.log(`[FeatureFlagsEngine] Flag '${featureName}' atualizada:`, flags[featureName]);
+    // [removed]
   }
 
   /**

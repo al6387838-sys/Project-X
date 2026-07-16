@@ -3843,10 +3843,10 @@ function sendCompanionMessage() {
         `Ótima pergunta! Analisando seu histórico e padrões de comportamento, vejo que "${text}" pode ser um catalisador importante para sua área de maior potencial.\n\nQuer que eu crie um plano de ação estruturado?`,
         `Com base na sua jornada até agora, posso ajudar com isso. Seu perfil indica alta capacidade de execução — você tem **${activeMissions} missões ativas**.\n\nVamos transformar "${text}" em uma ação concreta?`,
       ];
-      response = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+      response = fallbacks[Date.now() % fallbacks.length];
     }
     addMessage('ai', response);
-  }, 1200 + Math.random() * 800);
+  }, 1400);
 }
 
 function quickMessage(text) {
@@ -3984,8 +3984,8 @@ function initLifeGraph() {
       background:${node.color}22;
       border:2px solid ${node.color}66;
       transform:translate(-50%,-50%);
-      animation:float ${2.5 + Math.random() * 2}s ease-in-out infinite;
-      animation-delay:${Math.random() * 2}s;
+      animation:float ${2.5 + (i % 4) * 0.5}s ease-in-out infinite;
+      animation-delay:${(i % 5) * 0.4}s;
     `;
     el.innerHTML = `
       ${node.emoji}

@@ -7,7 +7,7 @@ function generateInviteToken() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let token = '';
   for (let i = 0; i < 32; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
+    token += chars.charAt(Math.floor((crypto.getRandomValues(new Uint8Array(1))[0]) % chars.length));
   }
   return token;
 }

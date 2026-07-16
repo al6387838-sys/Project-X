@@ -41,7 +41,7 @@ const BetaManager = (() => {
         console.warn('Falha ao carregar dados de beta:', e);
       }
     }
-    console.log('[BetaManager] Inicializado');
+    // [removed]
   }
 
   /**
@@ -335,14 +335,14 @@ const BetaManager = (() => {
   // ===== HELPERS =====
 
   function generateId() {
-    return `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `user_${Date.now()}_${(typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,9) : Date.now().toString(36))}`;
   }
 
   function generateRandomCode(length) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
     for (let i = 0; i < length; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
+      code += chars.charAt(Math.floor(((typeof crypto !== "undefined" && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(1))[0] : Date.now()) % chars.length));
     }
     return code;
   }

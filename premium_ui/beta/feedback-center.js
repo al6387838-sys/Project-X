@@ -34,7 +34,7 @@ const FeedbackCenter = (() => {
         console.warn('Falha ao carregar dados de feedback:', e);
       }
     }
-    console.log('[FeedbackCenter] Inicializado');
+    // [removed]
   }
 
   /**
@@ -350,7 +350,7 @@ const FeedbackCenter = (() => {
   // ===== PRIVATE HELPERS =====
 
   function generateId(prefix) {
-    return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `${prefix}_${Date.now()}_${(typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,9) : Date.now().toString(36))}`;
   }
 
   function updateUserFeedbackCount(userId, type) {

@@ -67,7 +67,7 @@ const TelemetryEngine = (() => {
     window.addEventListener('error', handleGlobalError);
     window.addEventListener('unhandledrejection', handleUnhandledRejection);
 
-    console.log('[TelemetryEngine] Inicializado', { enabled: config.enabled, consentGiven: config.consentGiven });
+    // [removed]
   }
 
   /**
@@ -92,7 +92,7 @@ const TelemetryEngine = (() => {
       };
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(consentData));
-      console.log('[TelemetryEngine] Consentimento concedido');
+      // [removed]
 
       // Flush de eventos pendentes
       await flush();
@@ -308,7 +308,7 @@ const TelemetryEngine = (() => {
       sessionId = generateSessionId();
       userHash = generateUserHash();
 
-      console.log('[TelemetryEngine] Dados do usuário deletados');
+      // [removed]
       return true;
     } catch (e) {
       console.warn('[TelemetryEngine] Falha ao deletar dados:', e);
@@ -373,7 +373,7 @@ const TelemetryEngine = (() => {
   }
 
   function generateSessionId() {
-    return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `sess_${Date.now()}_${(typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,9) : Date.now().toString(36))}`;
   }
 
   function generateUserHash() {
@@ -389,7 +389,7 @@ const TelemetryEngine = (() => {
   }
 
   function generateEventId() {
-    return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `evt_${Date.now()}_${(typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,9) : Date.now().toString(36))}`;
   }
 
   function handleGlobalError(event) {

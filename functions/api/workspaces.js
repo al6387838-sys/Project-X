@@ -61,7 +61,7 @@ export async function onRequestPost({ request, env }) {
       }
 
       const workspace = {
-        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        id: `ws_${crypto.randomUUID().replace(/-/g,'').slice(0,16)}`,
         name,
         description,
         icon,

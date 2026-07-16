@@ -1099,7 +1099,7 @@ function sendCompanionMessage() {
     });
     renderCompanionMessages();
     if (window.Motion?.Sound) window.Motion.Sound.notification();
-  }, 1200 + Math.random() * 800);
+  }, 1400);
 }
 
 function generateAIResponse(userText) {
@@ -1128,7 +1128,7 @@ function generateAIResponse(userText) {
     `Boa pergunta! Analisando seus dados, vejo que você tem potencial para crescer especialmente nas áreas de ${LIFE_AREAS.slice(0,2).map(a => a.name).join(' e ')}. Quer que eu elabore um plano detalhado?`,
     `Baseado no seu histórico e objetivos atuais, recomendo focar em consistência. Você já tem ${activeMissions.length} missões ativas — isso é ótimo! Qual delas você quer acelerar?`,
   ];
-  return defaults[Math.floor(Math.random() * defaults.length)];
+  return defaults[Date.now() % defaults.length];
 }
 
 function quickMessage(text) {

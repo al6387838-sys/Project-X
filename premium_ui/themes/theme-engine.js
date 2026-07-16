@@ -127,7 +127,7 @@ const ThemeEngine = (() => {
       else window.LifeOSMotion.Sound.disable();
     }
 
-    console.log(`[ThemeEngine] Initialized: theme=${_currentTheme}, font=${_currentFont}`);
+    // [removed]
   }
 
   function setTheme(theme) {

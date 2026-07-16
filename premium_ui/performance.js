@@ -214,9 +214,9 @@ class PerformanceMonitor {
       try {
         performance.measure(name, `${name}-start`, `${name}-end`);
         const measure = performance.getEntriesByName(name)[0];
-        console.log(`[Performance] ${name}: ${measure.duration.toFixed(2)}ms`);
+        // [removed]
       } catch (e) {
-        console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`);
+        // [removed]
       }
     }
   }
@@ -229,7 +229,7 @@ class PerformanceMonitor {
           lcp: 0,
           cls: 0,
         };
-        console.log('[Web Vitals]', vitals);
+        // [removed]
       });
     }
   }
@@ -274,9 +274,9 @@ function optimizeImages() {
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then(reg => {
-      console.log('[Performance] Service Worker registrado');
+      // [removed]
     }).catch(err => {
-      console.log('[Performance] Service Worker erro:', err);
+      // [removed]
     });
   }
 }

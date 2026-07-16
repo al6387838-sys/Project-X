@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 22.1.0 (Phases 178-184 — Observability, Audit, Performance, A11y, Hardening, Report & Deploy)
+// Version: 23.0.0 (Phases 178-184 — Observability, Audit, Performance, A11y, Hardening, Report & Deploy)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -187,7 +187,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v22.1.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v23.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -202,7 +202,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '22.1.0',
+  version: '23.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -240,7 +240,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '22.1.0',
+  version: '23.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -271,10 +271,10 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v22.1.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v23.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 22.1.0`);
+console.log(`  Version       : 23.0.0`);
 console.log(`  Build ID      : ${buildId}`);
 console.log(`  Phases        : 178-184, 200 — Phase 200: Zero Mocks, Real APIs`);
 console.log(`  Modules       : 33 total`);

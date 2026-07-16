@@ -284,7 +284,7 @@ class OAuthManager {
    */
   async syncData(providerKey, data) {
     // Implementação específica por provider
-    console.log(`Sincronizando dados de ${providerKey}:`, data);
+    // [removed]
     
     return {
       provider: providerKey,
@@ -305,7 +305,7 @@ class OAuthManager {
       metadata: metadata
     };
 
-    console.log(`[INTEGRATION] ${event.timestamp} | ${eventType} | ${providerKey}`, metadata);
+    // [removed]
     
     // Em produção: enviar para sistema de logging (CloudFlare Logs, Datadog, etc.)
   }
