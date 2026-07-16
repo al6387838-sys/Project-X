@@ -122,7 +122,7 @@
       <div class="ss-recent-tags" id="ss-recent-tags">
         <span class="ss-recent-tag" onclick="fillSearch('relatório Q3')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> relatório Q3</span>
         <span class="ss-recent-tag" onclick="fillSearch('Ana Martins')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ana Martins</span>
-        <span class="ss-recent-tag" onclick="fillSearch('projeto alpha')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> projeto alpha</span>
+        <span class="ss-recent-tag" onclick="fillSearch('hábitos')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> hábitos</span>
         <span class="ss-recent-tag" onclick="fillSearch('configurações de segurança')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> configurações de segurança</span>
         <span class="ss-recent-tag" onclick="fillSearch('fatura novembro')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> fatura novembro</span>
       </div>
@@ -165,54 +165,7 @@
 
   <script>
     // ── DATA INDEX ──────────────────────────────────────────────────
-    const SEARCH_INDEX = [
-      // Usuários
-      { id: 'u1', type: 'users', icon: '\u{1F464}', title: 'Ana Martins', meta: 'Usuário · ana@empresa.com · Admin', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
-      { id: 'u2', type: 'users', icon: '\u{1F464}', title: 'Carlos Pereira', meta: 'Usuário · carlos@empresa.com · Editor', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
-      { id: 'u3', type: 'users', icon: '\u{1F464}', title: 'Mariana Silva', meta: 'Usuário · mariana@empresa.com · Viewer', badge: 'Usuário', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'profile' },
-      // Organizações
-      { id: 'o1', type: 'orgs', icon: '\u{1F3E2}', title: 'LifeOS Corp', meta: 'Organização · 12 membros · Plano Enterprise', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
-      { id: 'o2', type: 'orgs', icon: '\u{1F3E2}', title: 'Equipe de Produto', meta: 'Organização · 5 membros · Workspace Alpha', badge: 'Org', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'settings' },
-      // Workspaces
-      { id: 'w1', type: 'workspaces', icon: '\u{1F4C1}', title: 'Workspace Alpha', meta: 'Workspace · 8 projetos · Ativo', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
-      { id: 'w2', type: 'workspaces', icon: '\u{1F4C1}', title: 'Workspace Beta', meta: 'Workspace · 3 projetos · Em pausa', badge: 'Workspace', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'projects' },
-      // Documentos
-      { id: 'd1', type: 'documents', icon: '\u{1F4C4}', title: 'Relatório Q3 2026', meta: 'Documento · Atualizado ontem · PDF', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
-      { id: 'd2', type: 'documents', icon: '\u{1F4C4}', title: 'Plano de Marketing', meta: 'Documento · Atualizado há 3 dias · DOCX', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'documents' },
-      { id: 'd3', type: 'documents', icon: '\u{1F4DD}', title: 'Notas de Reunião — Sprint 12', meta: 'Nota · Criado hoje · Memory Center', badge: 'Nota', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'memory' },
-      { id: 'd4', type: 'documents', icon: '\u{1F4C4}', title: 'Fatura Novembro 2025', meta: 'Documento · Financeiro · R$2.847,00', badge: 'Doc', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'finance' },
-      // Tarefas
-      { id: 't1', type: 'tasks', icon: '\u{2705}', title: 'Implementar autenticação 2FA', meta: 'Tarefa · Projeto Alpha · Alta prioridade', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'projects' },
-      { id: 't2', type: 'tasks', icon: '\u{2705}', title: 'Revisar relatório Q3', meta: 'Tarefa · Hoje · Pendente', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'agenda' },
-      { id: 't3', type: 'tasks', icon: '\u{2705}', title: 'Correr 5km', meta: 'Tarefa · Meta: Correr 100km · Hábito', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'habits' },
-      { id: 't4', type: 'tasks', icon: '\u{2705}', title: 'Ler capítulo 7 — Atomic Habits', meta: 'Tarefa · Meta: Ler 24 livros · Hoje', badge: 'Tarefa', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'goals' },
-      // Hábitos
-      { id: 'h1', type: 'habits', icon: '\u{1F504}', title: 'Meditação 10 minutos', meta: 'Hábito · Streak 14 dias · Concluído hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
-      { id: 'h2', type: 'habits', icon: '\u{1F4A7}', title: 'Hidratação 2 litros', meta: 'Hábito · Streak 3 dias · Pendente hoje', badge: 'Hábito', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'habits' },
-      // Metas
-      { id: 'g1', type: 'goals', icon: '\u{1F3AF}', title: 'Correr 100 km', meta: 'Meta · 72% concluída · Prazo em 28 dias', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'goals' },
-      { id: 'g2', type: 'goals', icon: '\u{1F4B0}', title: 'Economizar R$ 10 mil', meta: 'Meta financeira · 45% concluída', badge: 'Meta', badgeColor: 'rgba(139,92,246,0.1)', badgeText: 'var(--purple)', page: 'finance-goals' },
-      // Auditoria
-      { id: 'a1', type: 'audit', icon: '\u{1F6E1}', title: 'Login administrativo aprovado', meta: 'Auditoria · admin@lifeos.io · MFA · Hoje 09:42', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'observability' },
-      { id: 'a2', type: 'audit', icon: '\u{1F511}', title: 'API key rotacionada', meta: 'Auditoria · Integrações · Ontem 18:10', badge: 'Audit', badgeColor: 'rgba(6,182,212,0.1)', badgeText: 'var(--cyan)', page: 'enterprise-settings' },
-      // Notificações
-      { id: 'n1', type: 'notifications', icon: '\u{1F514}', title: 'AI Engine timeout detectado', meta: 'Notificação · Observability · Ontem 14:31', badge: 'Alerta', badgeColor: 'rgba(239,68,68,0.1)', badgeText: 'var(--red)', page: 'notifications' },
-      { id: 'n2', type: 'notifications', icon: '\u{1F514}', title: 'Novo membro adicionado ao workspace', meta: 'Notificação · Workspace Alpha · Hoje', badge: 'Info', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'notifications' },
-      { id: 'n3', type: 'notifications', icon: '\u{1F514}', title: 'Fatura processada com sucesso', meta: 'Notificação · Billing · Hoje 06:00', badge: 'Sucesso', badgeColor: 'rgba(16,185,129,0.1)', badgeText: 'var(--green)', page: 'billing' },
-      // Módulos
-      { id: 'm1', type: 'modules', icon: '\u{1F9E9}', title: 'App Ecosystem', meta: 'Módulo · Registry, Marketplace, Integrações', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'app-ecosystem' },
-      { id: 'm2', type: 'modules', icon: '\u{1F3E0}', title: 'Personal Hub', meta: 'Módulo · Centrais Financeira, IA, Produtividade', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'personal-hub' },
-      { id: 'm3', type: 'modules', icon: '\u{1F4CA}', title: 'Observability', meta: 'Módulo · Logs, Métricas, Alertas, Health', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'observability' },
-      { id: 'm4', type: 'modules', icon: '\u{1F4B0}', title: 'Finance', meta: 'Módulo · Contas, Cartões, Investimentos, PIX', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'finance' },
-      { id: 'm5', type: 'modules', icon: '\u{1F916}', title: 'Companion AI', meta: 'Módulo · Recomendações, planejamento e memória contextual', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'companion-ai' },
-      { id: 'm6', type: 'modules', icon: '\u{1F517}', title: 'Central de Integrações', meta: 'Módulo · Google, Microsoft, Slack, GitHub e webhooks', badge: 'Módulo', badgeColor: 'rgba(99,102,241,0.1)', badgeText: 'var(--accent-light)', page: 'integration-center' },
-      // Configurações
-      { id: 's1', type: 'settings', icon: '\u{1F510}', title: 'Segurança — Autenticação 2FA', meta: 'Configuração · Enterprise Settings · Segurança', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's2', type: 'settings', icon: '\u{1F511}', title: 'API Keys', meta: 'Configuração · Enterprise Settings · Integrações', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's3', type: 'settings', icon: '\u{1F3A8}', title: 'Tema e Aparência', meta: 'Configuração · Dark mode, Cores, Tipografia', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'settings' },
-      { id: 's4', type: 'settings', icon: '\u{1F310}', title: 'Idioma e Região', meta: 'Configuração · Fuso horário, Formato de data', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-      { id: 's5', type: 'settings', icon: '\u{1FA9D}', title: 'Webhooks', meta: 'Configuração · Endpoints, Logs de entrega, Retry', badge: 'Config', badgeColor: 'rgba(245,158,11,0.1)', badgeText: 'var(--amber)', page: 'enterprise-settings' },
-    ];
+    const SEARCH_INDEX = [] /* Phase 200: dados carregados via /api/search */
 
     // Contrato de provedores para expansão sem alterar a API pública da busca.
     const FUTURE_SEARCH_SOURCES = Object.freeze({

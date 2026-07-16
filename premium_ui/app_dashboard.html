@@ -1262,57 +1262,19 @@
       <div class="page" id="page-agenda">
         <div class="page-header">
           <div><div class="page-title">Agenda</div><div class="page-subtitle">Planejamento diário e semanal</div></div>
-          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo evento</button>
+          <button class="btn btn-primary" onclick="openNewEventModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo evento</button>
         </div>
         <div class="grid-2">
           <div class="card">
             <div class="card-title">Hoje</div>
-            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">09:00</div>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Reunião de planejamento</div>
-                  <div style="font-size:11px;color:var(--text-secondary)">1h · Zoom</div>
-                </div>
-                <div style="width:4px;height:36px;border-radius:2px;background:var(--accent)"></div>
-              </div>
-              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">11:00</div>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Deep work — Projeto Alpha</div>
-                  <div style="font-size:11px;color:var(--text-secondary)">2h · Foco</div>
-                </div>
-                <div style="width:4px;height:36px;border-radius:2px;background:var(--green)"></div>
-              </div>
-              <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-                <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">14:00</div>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Review semanal</div>
-                  <div style="font-size:11px;color:var(--text-secondary)">30min · Pessoal</div>
-                </div>
-                <div style="width:4px;height:36px;border-radius:2px;background:var(--amber)"></div>
-              </div>
+            <div id="agenda-events-list" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando eventos...</div>
             </div>
           </div>
           <div class="card">
             <div class="card-title">Tarefas do Dia</div>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md);transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
-                <input type="checkbox" checked style="accent-color:var(--accent)" />
-                <span style="font-size:13px;text-decoration:line-through;color:var(--text-muted)">Revisar relatório Q3</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
-                <input type="checkbox" style="accent-color:var(--accent)" />
-                <span style="font-size:13px">Responder e-mails pendentes</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
-                <input type="checkbox" style="accent-color:var(--accent)" />
-                <span style="font-size:13px">Atualizar metas mensais</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md)">
-                <input type="checkbox" style="accent-color:var(--accent)" />
-                <span style="font-size:13px">Preparar apresentação</span>
-              </label>
+            <div id="agenda-tasks-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+              <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando tarefas...</div>
             </div>
           </div>
         </div>
@@ -1324,21 +1286,16 @@
           <div><div class="page-title">Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
           <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
         </div>
-        <div class="grid-4" style="margin-bottom:20px">
-          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value">14d</div><div class="card-trend trend-up"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> Recorde!</div></div>
-          <div class="card"><div class="card-title">Taxa Hoje</div><div class="card-value">67%</div><div class="card-sub">4 de 6 completos</div></div>
-          <div class="card"><div class="card-title">Esta Semana</div><div class="card-value">89%</div><div class="card-trend trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +5% vs semana anterior</div></div>
-          <div class="card"><div class="card-title">Total Hábitos</div><div class="card-value">6</div><div class="card-sub">Todos ativos</div></div>
+        <div class="grid-4" style="margin-bottom:20px" id="habits-stats-grid">
+          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value" id="h-streak">—</div><div class="card-trend trend-up" id="h-streak-label" style="display:none"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> <span id="h-streak-text"></span></div></div>
+          <div class="card"><div class="card-title">Taxa Hoje</div><div class="card-value" id="h-rate">—</div><div class="card-sub" id="h-rate-sub">Carregando...</div></div>
+          <div class="card"><div class="card-title">Hábitos Ativos</div><div class="card-value" id="h-active">—</div><div class="card-sub" id="h-active-sub"></div></div>
+          <div class="card"><div class="card-title">Total Hábitos</div><div class="card-value" id="h-total">—</div><div class="card-sub" id="h-total-sub"></div></div>
         </div>
         <div class="card">
           <div class="card-title">Todos os Hábitos</div>
-          <div style="margin-top:12px">
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Meditação 10min</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Exercício físico</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 7d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Leitura 30min</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21d</span></div>
-            <div class="habit-item done" onclick="toggleHabit(this)"><div class="habit-check"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Journaling</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 5d</span></div>
-            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Hidratação 2L</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3d</span></div>
-            <div class="habit-item" onclick="toggleHabit(this)"><div class="habit-check"></div><span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Sono 8h</span><span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 2d</span></div>
+          <div id="habits-list" style="margin-top:12px">
+            <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando hábitos...</div>
           </div>
         </div>
       </div>
@@ -1347,29 +1304,12 @@
       <div class="page" id="page-goals">
         <div class="page-header">
           <div><div class="page-title">Metas</div><div class="page-subtitle">Objetivos e OKRs</div></div>
-          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova meta</button>
+          <button class="btn btn-primary" onclick="openNewGoalModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova meta</button>
         </div>
-        <div class="grid-3">
-          <div class="card">
-            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
-            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Correr 100km</div>
-            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">72km completados · Prazo: Dez 2025</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>72%</span><span>28km restantes</span></div>
-          </div>
-          <div class="card">
-            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Ler 24 livros</div>
-            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">14 lidos · Prazo: Dez 2025</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>58%</span><span>10 restantes</span></div>
-          </div>
-          <div class="card">
-            <div style="font-size:24px;margin-bottom:12px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-            <div style="font-size:15px;font-weight:700;margin-bottom:6px">Economizar R$10k</div>
-            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">R$4.500 guardados · Prazo: Jun 2026</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)"><span>45%</span><span>R$5.500 restantes</span></div>
+        <div id="goals-grid" class="grid-3">
+          <div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
+            <div style="font-size:32px;margin-bottom:12px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="font-size:14px">Carregando metas...</div>
           </div>
         </div>
       </div>
@@ -1378,12 +1318,13 @@
       <div class="page" id="page-projects">
         <div class="page-header">
           <div><div class="page-title">Projetos</div><div class="page-subtitle">Gerencie seus projetos</div></div>
-          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo projeto</button>
+          <button class="btn btn-primary" onclick="openNewProjectModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo projeto</button>
         </div>
-        <div class="grid-3">
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Projeto Alpha</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">8 tarefas · 3 pendentes</div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="sprout" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Saúde & Bem-estar</div><div style="font-size:11px;color:var(--text-muted)">Em andamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">12 tarefas · 2 pendentes</div></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:14px;font-weight:700">Finanças Pessoais</div><div style="font-size:11px;color:var(--text-muted)">Planejamento</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div><div style="font-size:12px;color:var(--text-secondary);margin-top:8px">5 tarefas · 4 pendentes</div></div>
+        <div id="projects-grid" class="grid-3">
+          <div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
+            <div style="font-size:32px;margin-bottom:12px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="font-size:14px">Carregando projetos...</div>
+          </div>
         </div>
       </div>
 
@@ -1391,23 +1332,12 @@
       <div class="page" id="page-ai">
         <div class="page-header">
           <div><div class="page-title">IA Insights</div><div class="page-subtitle">Análises personalizadas para você</div></div>
+          <button class="btn btn-ghost" onclick="loadAIInsights(true)" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
         </div>
-        <div style="display:flex;flex-direction:column;gap:16px">
+        <div id="ai-insights-list" style="display:flex;flex-direction:column;gap:16px">
           <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Produtividade</div></div></div>
-            <div class="ai-insight-text">Seu pico de produtividade é entre 9h–11h. Você completa 87% das tarefas nesse período. Recomendo agendar suas atividades mais importantes nesse horário e protegê-lo de reuniões.</div>
-          </div>
-          <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Hábitos</div></div></div>
-            <div class="ai-insight-text">Você mantém uma taxa de 89% nos hábitos esta semana. O hábito de "Sono 8h" tem a menor consistência (2 dias). Dormir bem impacta diretamente seu Life Score — considere criar um ritual noturno.</div>
-          </div>
-          <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Metas</div></div></div>
-            <div class="ai-insight-text">Sua meta de "Correr 100km" está 3km atrás do ritmo ideal para o prazo. Adicionar uma corrida de 5km esta semana te colocará de volta no cronograma. Você consegue!</div>
-          </div>
-          <div class="ai-insight">
-            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Life Score</div></div></div>
-            <div class="ai-insight-text">Seu Life Score de 87 está no top 15% dos usuários LifeOS. Para chegar a 90+, foque em melhorar a consistência do sono e adicionar um hábito de gratidão diária.</div>
+            <div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Carregando</div></div></div>
+            <div class="ai-insight-text">Analisando seus dados reais para gerar insights personalizados...</div>
           </div>
         </div>
       </div>
@@ -1417,27 +1347,23 @@
         <div class="page-header">
           <div><div class="page-title">Life Score</div><div class="page-subtitle">Métricas holísticas da sua vida</div></div>
         </div>
-        <div class="grid-2" style="margin-bottom:20px">
+        <div class="grid-2" style="margin-bottom:20px" id="lifescore-grid">
           <div class="card" style="text-align:center">
             <div class="score-ring">
               <svg width="120" height="120" viewBox="0 0 120 120">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="8"/>
-                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="40" stroke-linecap="round"/>
+                <circle id="ls-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"/>
                 <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#6366F1"/><stop offset="100%" style="stop-color:#06B6D4"/></linearGradient></defs>
               </svg>
-              <div class="score-ring-value">87</div>
+              <div class="score-ring-value" id="ls-score-value">—</div>
             </div>
             <div class="score-ring-label">Life Score Global</div>
-            <div class="card-trend trend-up" style="justify-content:center;margin-top:12px"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 esta semana</div>
+            <div class="card-trend" id="ls-trend" style="justify-content:center;margin-top:12px;display:none"></div>
           </div>
           <div class="card">
             <div class="card-title">Dimensões</div>
-            <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</span><span style="font-weight:700">92</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Produtividade</span><span style="font-weight:700">88</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</span><span style="font-weight:700">75</span></div><div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i> Relacionamentos</span><span style="font-weight:700">85</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%;background:linear-gradient(90deg,var(--pink),#F9A8D4)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i> Mente</span><span style="font-weight:700">90</span></div><div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,var(--purple),#C4B5FD)"></div></div></div>
+            <div id="ls-dimensions" style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+              <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:10px 0">Carregando métricas...</div>
             </div>
           </div>
         </div>
@@ -1449,13 +1375,12 @@
           <div><div class="page-title">Timeline</div><div class="page-subtitle">Histórico da sua jornada</div></div>
         </div>
         <div class="card">
-          <div style="display:flex;flex-direction:column">
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito completado: Meditação 10min</div><div class="timeline-time">Hoje, 07:30</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--green)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito completado: Exercício físico</div><div class="timeline-time">Hoje, 06:45</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--accent)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Meta atualizada: Correr 100km (72km)</div><div class="timeline-time">Hoje, 06:50</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--amber)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Nota adicionada: "Ideias para projeto"</div><div class="timeline-time">Ontem, 22:15</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--purple)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Life Score aumentou: 84 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 87</div><div class="timeline-time">Ontem, 20:00</div></div></div>
-            <div class="timeline-item"><div class="timeline-dot" style="background:var(--cyan)"></div><div class="timeline-content"><div class="timeline-title"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i> Streak de 14 dias alcançado!</div><div class="timeline-time">Ontem, 23:59</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <span style="font-size:13px;color:var(--text-muted)" id="timeline-count"></span>
+            <button class="btn btn-ghost" onclick="openNewTimelineEventModal()" style="font-size:12px"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar evento</button>
+          </div>
+          <div id="timeline-list" style="display:flex;flex-direction:column">
+            <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px 0">Carregando timeline...</div>
           </div>
         </div>
       </div>
@@ -1464,15 +1389,15 @@
       <div class="page" id="page-memory">
         <div class="page-header">
           <div><div class="page-title">Memory Center</div><div class="page-subtitle">Capture e organize seu conhecimento</div></div>
-          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova nota</button>
+          <button class="btn btn-primary" onclick="openNewNoteModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova nota</button>
         </div>
-        <div class="grid-3">
-          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Ideias para projeto</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Automatizar relatórios semanais com IA. Integrar com Google Sheets para exportar dados...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">Ontem, 22:15</div></div>
-          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="book-open" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Resumo: Atomic Habits</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Hábitos são compostos de: deixa, rotina, recompensa. A regra dos 2 minutos: se leva menos de 2 minutos, faça agora...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">3 dias atrás</div></div>
-          <div class="card"><div style="font-size:18px;margin-bottom:10px"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><div style="font-size:14px;font-weight:700;margin-bottom:6px">Planejamento Q4</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Objetivos principais: finalizar projeto Alpha, atingir 90 no Life Score, economizar R$3k adicionais...</div><div style="font-size:11px;color:var(--text-muted);margin-top:10px">1 semana atrás</div></div>
+        <div id="memory-grid" class="grid-3">
+          <div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
+            <div style="font-size:32px;margin-bottom:12px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="font-size:14px">Carregando notas...</div>
+          </div>
         </div>
       </div>
-
       <!-- ─── NOTIFICAÇÕES — Enterprise Notification Center (Phase 090) ─── -->
       <div class="page" id="page-notifications">
         <div class="page-header">
@@ -1521,12 +1446,12 @@
           </div>
           <div class="card">
             <div class="card-title">Estatísticas</div>
-            <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Membro desde</span><span style="font-weight:600">Jan 2025</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Hábitos criados</span><span style="font-weight:600">6</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Metas concluídas</span><span style="font-weight:600">12</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Notas criadas</span><span style="font-weight:600">47</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Streak máximo</span><span style="font-weight:600">21 dias</span></div>
+            <div id="profile-stats" style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Membro desde</span><span style="font-weight:600" id="stat-member-since">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Hábitos ativos</span><span style="font-weight:600" id="stat-habits">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Metas ativas</span><span style="font-weight:600" id="stat-goals">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Notas criadas</span><span style="font-weight:600" id="stat-notes">—</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Tarefas concluídas</span><span style="font-weight:600" id="stat-tasks-done">—</span></div>
             </div>
           </div>
         </div>
@@ -1937,22 +1862,22 @@
     document.querySelector('#page-notifications .page-subtitle').textContent = 'Nenhuma não lida';
   }
 
-  // Search
-  const searchData = [
-    { type: 'Hábito', icon: '\u{1F504}', title: 'Meditação 10min', desc: 'Streak de 14 dias' },
-    { type: 'Meta', icon: '\u{1F3AF}', title: 'Correr 100km', desc: '72% completo' },
-    { type: 'Nota', icon: '\u{1F4DD}', title: 'Ideias para projeto', desc: 'Ontem, 22:15' },
-    { type: 'Projeto', icon: '\u{1F680}', title: 'Projeto Alpha', desc: '65% completo' },
-    { type: 'Insight', icon: '\u{1F916}', title: 'Pico de produtividade 9h-11h', desc: 'IA Insight' },
-  ];
-  function doSearch(q) {
+  // Search — Real API
+  let _searchTimeout = null;
+  async function doSearch(q) {
     const results = document.getElementById('search-results');
     const list = document.getElementById('search-list');
     if (!q.trim()) { results.style.display = 'none'; return; }
-    const filtered = searchData.filter(d => d.title.toLowerCase().includes(q.toLowerCase()) || d.desc.toLowerCase().includes(q.toLowerCase()));
-    if (!filtered.length) { results.style.display = 'none'; return; }
-    list.innerHTML = filtered.map(d => `<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-md);cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''"><span style="font-size:20px">${d.icon}</span><div><div style="font-size:13px;font-weight:600">${d.title}</div><div style="font-size:11px;color:var(--text-muted)">${d.type} · ${d.desc}</div></div></div>`).join('');
-    results.style.display = 'block';
+    clearTimeout(_searchTimeout);
+    _searchTimeout = setTimeout(async () => {
+      try {
+        const r = await fetch('/api/search?q=' + encodeURIComponent(q), { credentials: 'same-origin' });
+        const data = await r.json();
+        if (!data.ok || !data.results.length) { results.style.display = 'none'; return; }
+        list.innerHTML = data.results.map(d => `<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-md);cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''"><span style="font-size:20px">${d.icon}</span><div><div style="font-size:13px;font-weight:600">${d.title}</div><div style="font-size:11px;color:var(--text-muted)">${d.type} · ${d.desc}</div></div></div>`).join('');
+        results.style.display = 'block';
+      } catch (_) { results.style.display = 'none'; }
+    }, 300);
   }
 
   // Logout
@@ -2740,21 +2665,54 @@
     msgs.appendChild(row);
     msgs.scrollTop = msgs.scrollHeight;
   }
-  function aiContextualReply(query) {
-    const q = query.toLowerCase();
-    if (q.includes('plano') || q.includes('taref')) return 'Plano sugerido: priorize a entrega Alpha às 9h, reserve 45 minutos de foco e revise a fatura antes das 17h. Contexto usado: agenda, tarefas e preferência de produtividade matinal.';
-    if (q.includes('saldo') || q.includes('finan')) return 'Seu resumo financeiro indica orçamento mensal de R$ 8.000 e meta de economia de 15%. Antes de agir, confirme os dados no Finance Hub. Contexto usado: memória financeira e metas.';
-    if (q.includes('evento') || q.includes('agenda')) return 'Você tem três compromissos hoje; o próximo é a Daily às 14h30. Recomendo um bloco de preparação de 15 minutos. Contexto usado: calendário autorizado.';
-    if (q.includes('hábito') || q.includes('habito')) return 'Sua consistência está em 67%. Meditação mantém streak de 14 dias; hidratação está pendente. Contexto usado: hábitos e metas de saúde.';
-    return 'Identifiquei oportunidades em produtividade, agenda e hábitos. Posso transformar esta análise em um plano de hoje ou explicar quais memórias influenciaram a recomendação.';
+  async function aiContextualReply(query) {
+    // Buscar contexto real dos dados do usuário
+    try {
+      const [habitsR, goalsR, tasksR] = await Promise.all([
+        fetch('/api/habits', { credentials: 'same-origin' }).then(r => r.json()).catch(() => ({ habits: [] })),
+        fetch('/api/goals', { credentials: 'same-origin' }).then(r => r.json()).catch(() => ({ goals: [] })),
+        fetch('/api/tasks', { credentials: 'same-origin' }).then(r => r.json()).catch(() => ({ tasks: [] })),
+      ]);
+      const q = query.toLowerCase();
+      const habits = habitsR.habits || [];
+      const goals = goalsR.goals || [];
+      const tasks = tasksR.tasks || [];
+      const today = new Date().toISOString().split('T')[0];
+      if (q.includes('hábito') || q.includes('habito')) {
+        const active = habits.filter(h => h.active);
+        const done = habits.filter(h => h.completions?.includes(today));
+        const maxStreak = Math.max(...habits.map(h => h.streak || 0), 0);
+        return `Você tem ${active.length} hábito(s) ativo(s). Hoje: ${done.length} de ${active.length} completos. ${maxStreak > 0 ? `Maior streak: ${maxStreak} dias.` : ''} Contexto: dados reais do KV.`;
+      }
+      if (q.includes('meta') || q.includes('objetivo')) {
+        const active = goals.filter(g => g.status === 'active');
+        const avg = active.length > 0 ? Math.round(active.reduce((s, g) => s + (g.progress || 0), 0) / active.length) : 0;
+        return `Você tem ${active.length} meta(s) ativa(s) com progresso médio de ${avg}%. ${active[0] ? `Meta principal: "${active[0].title}" (${active[0].progress || 0}%).` : ''} Contexto: dados reais do KV.`;
+      }
+      if (q.includes('taref') || q.includes('plano')) {
+        const todayTasks = tasks.filter(t => t.dueDate === today && t.status !== 'done');
+        const done = tasks.filter(t => t.status === 'done').length;
+        return `Tarefas para hoje: ${todayTasks.length}. Total concluídas: ${done}. ${todayTasks[0] ? `Próxima: "${todayTasks[0].title}".` : 'Nenhuma tarefa pendente para hoje.'} Contexto: dados reais do KV.`;
+      }
+      return `Identifiquei ${habits.filter(h=>h.active).length} hábito(s), ${goals.filter(g=>g.status==='active').length} meta(s) e ${tasks.filter(t=>t.status!=='done').length} tarefa(s) pendente(s). Posso analisar qualquer área específica. Contexto: dados reais do KV.`;
+    } catch (_) {
+      return 'Não foi possível acessar seus dados agora. Verifique sua conexão e tente novamente.';
+    }
   }
-  function aiSendChat() {
+  async function aiSendChat() {
     const inp = document.getElementById('ai-chat-input');
     if (!inp || !inp.value.trim()) return;
     const query = inp.value.trim();
     inp.value = '';
     aiAppendMessage(query, 'user');
-    setTimeout(() => aiAppendMessage(aiContextualReply(query), 'ai'), 450);
+    aiAppendMessage('Analisando seus dados reais...', 'ai');
+    const reply = await aiContextualReply(query);
+    const msgs = document.getElementById('ai-chat-messages');
+    if (msgs) {
+      const last = msgs.lastElementChild;
+      if (last && last.textContent.includes('Analisando')) last.remove();
+    }
+    aiAppendMessage(reply, 'ai');
   }
   function aiChatSend() { aiSendChat(); }
   function aiQuickPrompt(prompt) { const inp = document.getElementById('ai-chat-input'); if (inp) inp.value = prompt; aiSendChat(); }
@@ -2831,6 +2789,559 @@
   function mktToggleApp(el, name) {
     showToast(el.checked ? name + ' ativado' : name + ' desativado', el.checked ? 'success' : 'info');
   }
+
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // PHASE 200 — REAL DATA FUNCTIONS (ZERO MOCKS)
+  // Todas as funções abaixo consomem exclusivamente APIs reais / KV / R2
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ── Utilitário: fetch com auth ────────────────────────────────────────
+  async function apiFetch(url, opts = {}) {
+    const r = await fetch(url, { credentials: 'same-origin', ...opts });
+    if (!r.ok) throw new Error(`API ${url} retornou ${r.status}`);
+    return r.json();
+  }
+
+  // ── initTimeline: carrega eventos reais da API /api/timeline ─────────
+  async function initTimeline() {
+    const el = document.getElementById('timeline-list');
+    const countEl = document.getElementById('timeline-count');
+    if (!el) return;
+    try {
+      const data = await apiFetch('/api/timeline');
+      const events = data.events || [];
+      if (countEl) countEl.textContent = `${events.length} evento(s)`;
+      if (!events.length) {
+        el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px 0">Nenhum evento na timeline ainda. Suas ações serão registradas automaticamente.</div>';
+        return;
+      }
+      const colorMap = { habit: 'var(--green)', goal: 'var(--accent)', note: 'var(--amber)', score: 'var(--purple)', task: 'var(--cyan)', event: 'var(--cyan)', default: 'var(--text-muted)' };
+      el.innerHTML = events.map(e => {
+        const color = colorMap[e.type] || colorMap.default;
+        const time = e.createdAt ? new Date(e.createdAt).toLocaleString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+        return `<div class="timeline-item"><div class="timeline-dot" style="background:${color}"></div><div class="timeline-content"><div class="timeline-title">${e.title || e.description || 'Evento'}</div><div class="timeline-time">${time}</div></div></div>`;
+      }).join('');
+    } catch (err) {
+      console.warn('initTimeline error:', err);
+      if (el) el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar timeline. Tente novamente.</div>';
+    }
+  }
+
+  // ── initBriefing: carrega briefing real da API /api/briefing ─────────
+  async function initBriefing() {
+    try {
+      const data = await apiFetch('/api/briefing');
+      const b = data.briefing || {};
+      // Score
+      const scoreEl = document.getElementById('briefing-score');
+      if (scoreEl && b.score !== undefined) scoreEl.textContent = b.score;
+      // Prioridades
+      const prioEl = document.getElementById('briefing-priorities');
+      if (prioEl && b.priorities) {
+        prioEl.innerHTML = b.priorities.map(p => `<div class="priority-item"><div class="priority-dot"></div><span>${p.title || p}</span></div>`).join('');
+      }
+      // Próxima ação
+      const naEl = document.getElementById('briefing-next-action');
+      if (naEl && b.nextAction) naEl.textContent = b.nextAction;
+    } catch (err) {
+      console.warn('initBriefing error:', err);
+    }
+  }
+
+  // ── initMetrics: carrega métricas reais da API /api/metrics ──────────
+  async function initMetrics() {
+    try {
+      const data = await apiFetch('/api/metrics');
+      const m = data.metrics || {};
+      // Atualizar cards de métricas
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setEl('metric-tasks-done', m.tasksDone ?? '—');
+      setEl('metric-habits-rate', m.habitsRate !== undefined ? `${m.habitsRate}%` : '—');
+      setEl('metric-streak', m.maxStreak !== undefined ? `${m.maxStreak}d` : '—');
+      setEl('metric-goals-active', m.goalsActive ?? '—');
+      setEl('metric-life-score', m.lifeScore ?? '—');
+      setEl('metric-notes', m.notes ?? '—');
+    } catch (err) {
+      console.warn('initMetrics error:', err);
+    }
+  }
+
+  // ── initLifeGraph: carrega dados reais da API /api/life-graph ─────────
+  async function initLifeGraph() {
+    const canvas = document.getElementById('life-graph-canvas');
+    if (!canvas) return;
+    try {
+      const data = await apiFetch('/api/life-graph');
+      const points = data.points || [];
+      if (!points.length) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      const maxVal = Math.max(...points.map(p => p.value || 0), 100);
+      const step = w / Math.max(points.length - 1, 1);
+      // Gradiente
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(99,102,241,0.3)');
+      grad.addColorStop(1, 'rgba(99,102,241,0)');
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const x = i * step;
+        const y = h - (p.value / maxVal) * h * 0.85 - 10;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#6366F1';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Fill
+      ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+    } catch (err) {
+      console.warn('initLifeGraph error:', err);
+    }
+  }
+
+  // ── loadAgenda: carrega eventos e tarefas de hoje ─────────────────────
+  async function loadAgenda() {
+    const eventsEl = document.getElementById('agenda-events-list');
+    const tasksEl = document.getElementById('agenda-tasks-list');
+    const today = new Date().toISOString().split('T')[0];
+    // Eventos
+    if (eventsEl) {
+      try {
+        const data = await apiFetch(`/api/events?date=${today}`);
+        const events = data.events || [];
+        if (!events.length) {
+          eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Nenhum evento hoje. <button class="btn btn-ghost" style="font-size:12px;margin-top:8px" onclick="openNewEventModal()">+ Adicionar evento</button></div>';
+        } else {
+          const colors = ['var(--accent)', 'var(--green)', 'var(--amber)', 'var(--purple)', 'var(--cyan)'];
+          eventsEl.innerHTML = events.map((e, i) => `
+            <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">${e.time || '—'}</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:600">${e.title}</div><div style="font-size:11px;color:var(--text-secondary)">${e.duration || ''} ${e.location ? '· ' + e.location : ''}</div></div>
+              <div style="width:4px;height:36px;border-radius:2px;background:${e.color || colors[i % colors.length]}"></div>
+            </div>`).join('');
+        }
+      } catch { eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar eventos.</div>'; }
+    }
+    // Tarefas do dia
+    if (tasksEl) {
+      try {
+        const data = await apiFetch('/api/tasks');
+        const tasks = (data.tasks || []).filter(t => t.dueDate === today || (!t.dueDate && t.status !== 'done')).slice(0, 8);
+        if (!tasks.length) {
+          tasksEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Nenhuma tarefa para hoje.</div>';
+        } else {
+          tasksEl.innerHTML = tasks.map(t => `
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius-md);transition:background 0.15s" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
+              <input type="checkbox" ${t.status === 'done' ? 'checked' : ''} style="accent-color:var(--accent)" onchange="toggleTaskStatus('${t.id}', this.checked)" />
+              <span style="font-size:13px${t.status === 'done' ? ';text-decoration:line-through;color:var(--text-muted)' : ''}">${t.title}</span>
+            </label>`).join('');
+        }
+      } catch { tasksEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar tarefas.</div>'; }
+    }
+  }
+
+  // ── loadHabits: carrega hábitos reais ─────────────────────────────────
+  async function loadHabits() {
+    const listEl = document.getElementById('habits-list');
+    if (!listEl) return;
+    try {
+      const data = await apiFetch('/api/habits');
+      const habits = data.habits || [];
+      const today = new Date().toISOString().split('T')[0];
+      // Stats
+      const active = habits.filter(h => h.active);
+      const done = habits.filter(h => h.completions?.includes(today));
+      const maxStreak = Math.max(...habits.map(h => h.streak || 0), 0);
+      const rate = active.length > 0 ? Math.round((done.length / active.length) * 100) : 0;
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setEl('h-streak', maxStreak > 0 ? `${maxStreak}d` : '0d');
+      setEl('h-streak-text', maxStreak >= 7 ? 'Recorde!' : `${maxStreak} dias`);
+      const streakLabel = document.getElementById('h-streak-label');
+      if (streakLabel && maxStreak > 0) streakLabel.style.display = 'flex';
+      setEl('h-rate', `${rate}%`);
+      setEl('h-rate-sub', `${done.length} de ${active.length} completos`);
+      setEl('h-active', active.length);
+      setEl('h-active-sub', active.length === habits.length ? 'Todos ativos' : `${habits.length - active.length} inativos`);
+      setEl('h-total', habits.length);
+      // Lista
+      if (!habits.length) {
+        listEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px 0">Nenhum hábito cadastrado. <button class="btn btn-primary" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto" onclick="openNewHabitModal()">+ Criar primeiro hábito</button></div>';
+        return;
+      }
+      listEl.innerHTML = habits.map(h => {
+        const isDone = h.completions?.includes(today);
+        return `<div class="habit-item ${isDone ? 'done' : ''}" onclick="toggleHabitReal('${h.id}', this)" data-id="${h.id}">
+          <div class="habit-check">${isDone ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : ''}</div>
+          <span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> ${h.title}</span>
+          <span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> ${h.streak || 0}d</span>
+        </div>`;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      console.warn('loadHabits error:', err);
+      if (listEl) listEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar hábitos.</div>';
+    }
+  }
+
+  // ── toggleHabitReal: toggle de hábito via API real ────────────────────
+  async function toggleHabitReal(id, el) {
+    try {
+      const r = await fetch('/api/habits', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, action: 'toggle' }),
+      });
+      const data = await r.json();
+      if (data.ok) {
+        el.classList.toggle('done');
+        const check = el.querySelector('.habit-check');
+        if (check) check.innerHTML = el.classList.contains('done') ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : '';
+        if (window.lucide) lucide.createIcons();
+        showToast(el.classList.contains('done') ? 'Hábito marcado como concluído!' : 'Hábito desmarcado', 'success');
+        // Recarregar stats
+        setTimeout(loadHabits, 500);
+      }
+    } catch { showToast('Erro ao atualizar hábito', 'error'); }
+  }
+
+  // ── toggleTaskStatus: toggle de tarefa via API real ───────────────────
+  async function toggleTaskStatus(id, done) {
+    try {
+      await fetch('/api/tasks', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: done ? 'done' : 'todo' }),
+      });
+      showToast(done ? 'Tarefa concluída!' : 'Tarefa reaberta', 'success');
+    } catch { showToast('Erro ao atualizar tarefa', 'error'); }
+  }
+
+  // ── loadGoals: carrega metas reais ────────────────────────────────────
+  async function loadGoals() {
+    const gridEl = document.getElementById('goals-grid');
+    if (!gridEl) return;
+    try {
+      const data = await apiFetch('/api/goals');
+      const goals = data.goals || [];
+      if (!goals.length) {
+        gridEl.innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px">
+          <div style="font-size:48px;margin-bottom:16px">🎯</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhuma meta cadastrada</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Defina seus objetivos e acompanhe o progresso</div>
+          <button class="btn btn-primary" onclick="openNewGoalModal()">+ Criar primeira meta</button>
+        </div>`;
+        return;
+      }
+      const gradients = [
+        'linear-gradient(90deg,var(--accent),#06B6D4)',
+        'linear-gradient(90deg,var(--amber),#FCD34D)',
+        'linear-gradient(90deg,var(--green),#34D399)',
+        'linear-gradient(90deg,var(--purple),#C4B5FD)',
+        'linear-gradient(90deg,var(--pink),#F9A8D4)',
+      ];
+      gridEl.innerHTML = goals.map((g, i) => `
+        <div class="card">
+          <div style="font-size:24px;margin-bottom:12px"><i data-lucide="${g.icon || 'target'}" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px">${g.title}</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">${g.description || ''} ${g.targetDate ? '· Prazo: ' + new Date(g.targetDate).toLocaleDateString('pt-BR', {month:'short',year:'numeric'}) : ''}</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${g.progress || 0}%;background:${gradients[i % gradients.length]}"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)">
+            <span>${g.progress || 0}%</span>
+            <span>${g.status === 'done' ? '✅ Concluída' : g.status === 'paused' ? '⏸ Pausada' : 'Em andamento'}</span>
+          </div>
+        </div>`).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      console.warn('loadGoals error:', err);
+      if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar metas.</div>';
+    }
+  }
+
+  // ── loadProjects: carrega projetos reais ──────────────────────────────
+  async function loadProjects() {
+    const gridEl = document.getElementById('projects-grid');
+    if (!gridEl) return;
+    try {
+      const data = await apiFetch('/api/projects');
+      const projects = data.projects || [];
+      if (!projects.length) {
+        gridEl.innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px">
+          <div style="font-size:48px;margin-bottom:16px">🚀</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhum projeto cadastrado</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Organize suas iniciativas em projetos</div>
+          <button class="btn btn-primary" onclick="openNewProjectModal()">+ Criar primeiro projeto</button>
+        </div>`;
+        return;
+      }
+      gridEl.innerHTML = projects.map(p => `
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="width:36px;height:36px;border-radius:10px;background:${p.color || '#6366F1'}22;display:flex;align-items:center;justify-content:center;font-size:18px">
+              <i data-lucide="${p.icon || 'briefcase-business'}" class="pg-icon" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700">${p.title}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${p.status === 'active' ? 'Em andamento' : p.status === 'done' ? 'Concluído' : 'Planejamento'}</div>
+            </div>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${p.progress || 0}%;background:${p.color || 'var(--accent)'}"></div></div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:8px">${p.taskCount || 0} tarefas · ${p.pendingCount || 0} pendentes</div>
+        </div>`).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      console.warn('loadProjects error:', err);
+      if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar projetos.</div>';
+    }
+  }
+
+  // ── loadAIInsights: carrega insights reais ────────────────────────────
+  async function loadAIInsights(force = false) {
+    const listEl = document.getElementById('ai-insights-list');
+    if (!listEl) return;
+    try {
+      const data = await apiFetch('/api/ai-insights');
+      const insights = data.insights || [];
+      if (!insights.length) {
+        listEl.innerHTML = '<div class="ai-insight"><div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Sem insights</div></div></div><div class="ai-insight-text">Adicione hábitos, metas e tarefas para receber insights personalizados.</div></div>';
+        return;
+      }
+      listEl.innerHTML = insights.map(ins => `
+        <div class="ai-insight">
+          <div class="ai-insight-header">
+            <div class="ai-insight-icon"><i data-lucide="${ins.icon || 'zap'}" class="pg-icon" aria-hidden="true"></i></div>
+            <div><div class="ai-insight-label">${ins.label || 'Insight'}</div></div>
+          </div>
+          <div class="ai-insight-text">${ins.text}</div>
+        </div>`).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      console.warn('loadAIInsights error:', err);
+      if (listEl) listEl.innerHTML = '<div class="ai-insight"><div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="alert-circle" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Erro</div></div></div><div class="ai-insight-text">Não foi possível carregar insights. Tente novamente.</div></div>';
+    }
+  }
+
+  // ── loadMemory: carrega notas reais ───────────────────────────────────
+  async function loadMemory() {
+    const gridEl = document.getElementById('memory-grid');
+    if (!gridEl) return;
+    try {
+      const data = await apiFetch('/api/notes');
+      const notes = data.notes || [];
+      if (!notes.length) {
+        gridEl.innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px">
+          <div style="font-size:48px;margin-bottom:16px">💡</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhuma nota cadastrada</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Capture suas ideias e conhecimentos</div>
+          <button class="btn btn-primary" onclick="openNewNoteModal()">+ Criar primeira nota</button>
+        </div>`;
+        return;
+      }
+      const icons = { geral: 'lightbulb', livro: 'book-open', meta: 'target', projeto: 'briefcase-business', ideia: 'zap', default: 'lightbulb' };
+      gridEl.innerHTML = notes.map(n => {
+        const icon = icons[n.category] || icons.default;
+        const date = n.createdAt ? new Date(n.createdAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        return `<div class="card" style="cursor:pointer" onclick="openNoteDetail('${n.id}')">
+          <div style="font-size:18px;margin-bottom:10px"><i data-lucide="${icon}" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:6px">${n.title}</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">${(n.content || '').slice(0, 120)}${n.content && n.content.length > 120 ? '...' : ''}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:10px">${date}</div>
+        </div>`;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      console.warn('loadMemory error:', err);
+      if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar notas.</div>';
+    }
+  }
+
+  // ── loadLifeScore: carrega Life Score real ────────────────────────────
+  async function loadLifeScore() {
+    try {
+      const data = await apiFetch('/api/life-graph');
+      const score = data.currentScore || 0;
+      const areas = data.areas || [];
+      // Ring
+      const scoreEl = document.getElementById('ls-score-value');
+      if (scoreEl) scoreEl.textContent = score;
+      const circle = document.getElementById('ls-ring-circle');
+      if (circle) {
+        const offset = 314 - (score / 100) * 314;
+        circle.setAttribute('stroke-dashoffset', offset);
+      }
+      // Dimensões
+      const dimEl = document.getElementById('ls-dimensions');
+      if (dimEl && areas.length) {
+        const areaColors = { saude: 'var(--green)', produtividade: 'var(--accent)', financas: 'var(--amber)', relacionamentos: 'var(--pink)', mente: 'var(--purple)' };
+        const areaIcons = { saude: 'activity', produtividade: 'briefcase-business', financas: 'wallet-cards', relacionamentos: 'heart', mente: 'brain' };
+        dimEl.innerHTML = areas.map(a => {
+          const key = (a.name || '').toLowerCase().replace(/[^a-z]/g, '');
+          const color = areaColors[key] || 'var(--accent)';
+          const icon = areaIcons[key] || 'zap';
+          return `<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span><i data-lucide="${icon}" class="pg-icon" aria-hidden="true"></i> ${a.name}</span><span style="font-weight:700">${a.score || 0}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${a.score || 0}%;background:${color}"></div></div></div>`;
+        }).join('');
+        if (window.lucide) lucide.createIcons();
+      } else if (dimEl) {
+        dimEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:10px 0">Adicione hábitos e metas para calcular suas dimensões.</div>';
+      }
+    } catch (err) {
+      console.warn('loadLifeScore error:', err);
+    }
+  }
+
+  // ── loadProfileStats: carrega estatísticas reais do perfil ───────────
+  async function loadProfileStats() {
+    try {
+      const [habitsData, goalsData, notesData, tasksData, sessionData] = await Promise.all([
+        apiFetch('/api/habits').catch(() => ({ habits: [] })),
+        apiFetch('/api/goals').catch(() => ({ goals: [] })),
+        apiFetch('/api/notes').catch(() => ({ notes: [] })),
+        apiFetch('/api/tasks').catch(() => ({ tasks: [] })),
+        apiFetch('/api/session').catch(() => ({})),
+      ]);
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      const habits = habitsData.habits || [];
+      const goals = goalsData.goals || [];
+      const notes = notesData.notes || [];
+      const tasks = tasksData.tasks || [];
+      const user = sessionData.user || {};
+      // Membro desde
+      const since = user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : '—';
+      setEl('stat-member-since', since);
+      setEl('stat-habits', habits.filter(h => h.active).length);
+      setEl('stat-goals', goals.filter(g => g.status === 'active').length);
+      setEl('stat-notes', notes.length);
+      setEl('stat-tasks-done', tasks.filter(t => t.status === 'done').length);
+    } catch (err) {
+      console.warn('loadProfileStats error:', err);
+    }
+  }
+
+  // ── Modais de criação ─────────────────────────────────────────────────
+  function openNewEventModal() {
+    const today = new Date().toISOString().split('T')[0];
+    const title = prompt('Título do evento:');
+    if (!title) return;
+    const time = prompt('Horário (ex: 09:00):', '09:00') || '09:00';
+    const duration = prompt('Duração (ex: 1h):', '1h') || '1h';
+    fetch('/api/events', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, date: today, time, duration }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Evento criado!', 'success'); loadAgenda(); }
+      else showToast(d.error || 'Erro ao criar evento', 'error');
+    }).catch(() => showToast('Erro ao criar evento', 'error'));
+  }
+
+  function openNewGoalModal() {
+    const title = prompt('Título da meta:');
+    if (!title) return;
+    const description = prompt('Descrição (opcional):') || '';
+    fetch('/api/goals', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, description }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Meta criada!', 'success'); loadGoals(); }
+      else showToast(d.error || 'Erro ao criar meta', 'error');
+    }).catch(() => showToast('Erro ao criar meta', 'error'));
+  }
+
+  function openNewProjectModal() {
+    const title = prompt('Título do projeto:');
+    if (!title) return;
+    const description = prompt('Descrição (opcional):') || '';
+    fetch('/api/projects', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, description }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Projeto criado!', 'success'); loadProjects(); }
+      else showToast(d.error || 'Erro ao criar projeto', 'error');
+    }).catch(() => showToast('Erro ao criar projeto', 'error'));
+  }
+
+  function openNewNoteModal() {
+    const title = prompt('Título da nota:');
+    if (!title) return;
+    const content = prompt('Conteúdo:') || '';
+    fetch('/api/notes', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Nota criada!', 'success'); loadMemory(); }
+      else showToast(d.error || 'Erro ao criar nota', 'error');
+    }).catch(() => showToast('Erro ao criar nota', 'error'));
+  }
+
+  function openNewTimelineEventModal() {
+    const title = prompt('Descrição do evento:');
+    if (!title) return;
+    fetch('/api/timeline', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, type: 'event' }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Evento registrado!', 'success'); initTimeline(); }
+      else showToast(d.error || 'Erro ao registrar evento', 'error');
+    }).catch(() => showToast('Erro ao registrar evento', 'error'));
+  }
+
+  function openNoteDetail(id) {
+    showToast('Abrindo nota...', 'info');
+  }
+
+  function openNewHabitModal() {
+    showPage('habits');
+  }
+
+  // ── Override showPage para carregar dados reais por página ────────────
+  const _origShowPagePhase200 = typeof showPage === 'function' ? showPage : null;
+  showPage = async function(id) {
+    if (_origShowPagePhase200) _origShowPagePhase200(id);
+    // Carregar dados reais por página
+    switch (id) {
+      case 'agenda': await loadAgenda(); break;
+      case 'habits': await loadHabits(); break;
+      case 'goals': await loadGoals(); break;
+      case 'projects': await loadProjects(); break;
+      case 'ai': await loadAIInsights(); break;
+      case 'lifescore': await loadLifeScore(); break;
+      case 'timeline': await initTimeline(); break;
+      case 'memory': await loadMemory(); break;
+      case 'profile': await loadProfileStats(); break;
+    }
+  };
+
+  // ── Inicialização automática ao carregar o dashboard ─────────────────
+  window.addEventListener('lifeos:dashboard-ready', async () => {
+    // Carregar dados da página inicial (dashboard)
+    await Promise.allSettled([
+      initBriefing(),
+      initMetrics(),
+      initLifeGraph(),
+    ]);
+  });
+
+  // Disparar evento quando o dashboard estiver pronto
+  document.addEventListener('DOMContentLoaded', () => {
+    // Aguardar autenticação e então carregar dados
+    const checkReady = setInterval(() => {
+      if (typeof currentUser !== 'undefined' && currentUser) {
+        clearInterval(checkReady);
+        window.dispatchEvent(new Event('lifeos:dashboard-ready'));
+      }
+    }, 200);
+    // Timeout de segurança
+    setTimeout(() => clearInterval(checkReady), 10000);
+  });
+
 </script>
   <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
 </body>

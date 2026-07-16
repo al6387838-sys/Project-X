@@ -10,7 +10,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <select class="form-input" style="width:auto;font-size:13px">
-        <option>Projeto Alpha</option>
+        <option>Selecione um projeto</option>
         <option>Projeto Beta</option>
         <option>Pessoal</option>
         <option>Trabalho</option>
@@ -120,7 +120,7 @@
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('kanban')">Kanban</button>
       <select class="form-input" style="width:auto;font-size:13px">
-        <option>Projeto Alpha</option>
+        <option>Selecione um projeto</option>
         <option>Projeto Beta</option>
       </select>
       <button class="btn btn-primary" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
@@ -194,7 +194,7 @@
       <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Nome</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Empresa</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Status</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Valor</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Último Contato</th><th style="padding:8px"></th></tr></thead>
       <tbody>
         <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
-          <td style="padding:10px 8px"><div style="font-weight:600">Ana Costa</div><div style="font-size:11px;color:var(--text-muted)">ana@empresa.com</div></td>
+          <td style="padding:10px 8px"><div style="font-weight:600">Membro da equipe</div><div style="font-size:11px;color:var(--text-muted)">ana@empresa.com</div></td>
           <td style="padding:10px 8px;font-size:13px">Empresa ABC</td>
           <td style="padding:10px 8px"><span style="background:rgba(16,185,129,0.15);color:var(--green);padding:3px 8px;border-radius:4px;font-size:11px">Cliente</span></td>
           <td style="padding:10px 8px;font-weight:600;color:var(--green)">R$ 45.000</td>
@@ -238,7 +238,7 @@
     <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#6366F1"><span><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Lead</span><span class="kanban-count">8</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Corp Brasil — Sistema ERP</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 80.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">João Silva</span><span style="font-size:11px;color:var(--text-muted)">20%</span></div></div></div></div>
     <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#F59E0B"><span><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i> Contato</span><span class="kanban-count">5</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Startup XYZ — App Mobile</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 28.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Carlos Mendes</span><span style="font-size:11px;color:var(--text-muted)">40%</span></div></div></div></div>
     <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#06B6D4"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Proposta</span><span class="kanban-count">7</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Tech Corp — Consultoria</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 55.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Maria Santos</span><span style="font-size:11px;color:var(--text-muted)">60%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span><i data-lucide="handshake" class="pg-icon" aria-hidden="true"></i> Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Ana Costa</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
+    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span><i data-lucide="handshake" class="pg-icon" aria-hidden="true"></i> Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Responsável</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
     <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#10B981"><span><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Fechado</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card done"><div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Global Inc — Plataforma</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 120.000</div></div></div></div>
   </div>
 </div>

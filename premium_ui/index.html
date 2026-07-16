@@ -2782,7 +2782,7 @@
               <div class="kpi-icon" style="background:rgba(245,158,11,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg></div>
               <span class="kpi-delta kpi-delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Recorde</span>
             </div>
-            <div class="kpi-value" id="kpi-streak">7</div>
+            <div class="kpi-value" id="kpi-streak">—</div>
             <div class="kpi-label">Dias Consecutivos</div>
             <canvas class="kpi-sparkline" id="sparkline-streak"></canvas>
           </div>
@@ -3424,7 +3424,7 @@ const LifeOS = {
     const sparklineData = {
       'sparkline-score':    [78,80,82,81,84,85,87],
       'sparkline-missions': [3,3,4,4,5,5,5],
-      'sparkline-streak':   [1,2,3,4,5,6,7],
+      'sparkline-streak':   [],
       'sparkline-insights': [6,7,8,9,10,11,12],
     };
     const colors = {
@@ -3467,7 +3467,7 @@ const LifeOS = {
     const priorities = [
       { rank: 1, title: 'Finalizar relatório Q3', meta: 'Carreira · Prazo hoje', progress: 75, color: '#F43F5E' },
       { rank: 2, title: 'Sessão de exercícios', meta: 'Saúde · 45 min', progress: 0, color: '#F59E0B' },
-      { rank: 3, title: 'Revisar missão TypeScript', meta: 'Aprendizado · Prazo amanhã', progress: 40, color: '#6366F1' },
+      { rank: 3, title: 'Revisar suas missões ativas', meta: 'Aprendizado · Prazo amanhã', progress: 40, color: '#6366F1' },
       { rank: 4, title: 'Meditação matinal', meta: 'Pessoal · 15 min', progress: 100, color: '#10B981' },
     ];
     const el = document.getElementById('priorities-list');
@@ -3511,13 +3511,7 @@ const LifeOS = {
   },
 
   renderNextActions() {
-    const actions = [
-      { title: 'Responder e-mail do cliente XYZ', meta: 'Carreira', priority: 'high', done: false },
-      { title: 'Atualizar planilha de finanças', meta: 'Finanças', priority: 'med', done: false },
-      { title: 'Ler capítulo 12 do livro atual', meta: 'Aprendizado', priority: 'low', done: true },
-      { title: 'Ligar para o mentor', meta: 'Carreira', priority: 'high', done: false },
-      { title: 'Preparar apresentação da semana', meta: 'Carreira', priority: 'med', done: false },
-    ];
+    const actions = [] // Phase 200: carregado via /api/tasks
     this.state.actions = actions;
     const el = document.getElementById('next-actions-list');
     const countEl = document.getElementById('actions-count');
@@ -3572,13 +3566,7 @@ const LifeOS = {
   },
 
   renderHabits() {
-    const habits = [
-      { name: 'Meditação', streak: '7 dias', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 22V9M9 9h6M9 9l-3-3M15 9l3-3"/></svg>', color: '#8B5CF6', days: [true,true,true,true,true,true,true], todayDone: true },
-      { name: 'Leitura 20min', streak: '5 dias', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>', color: '#6366F1', days: [true,false,true,true,true,true,false], todayDone: false },
-      { name: 'Exercício', streak: '3 dias', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v7a6 6 0 0 0 6 6M4 12a8 8 0 0 1 8-8v8a6 6 0 0 1-6 6H4v-6z"/></svg>', color: '#10B981', days: [false,true,false,true,true,true,false], todayDone: false },
-      { name: 'Água 2L', streak: '7 dias', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>', color: '#3B82F6', days: [true,true,true,true,true,true,true], todayDone: true },
-      { name: 'Journaling', streak: '4 dias', icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>', color: '#F59E0B', days: [true,false,true,true,false,true,false], todayDone: false },
-    ];
+    const habits = [] // Phase 200: carregado via /api/habits
     this.state.habits = habits;
     const el = document.getElementById('habits-list');
     const countEl = document.getElementById('habits-count-text');
@@ -3603,12 +3591,22 @@ const LifeOS = {
   },
 
   renderInsights() {
-    const insights = [
-      { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', bg: 'rgba(99,102,241,0.12)', title: 'Produtividade em alta', desc: 'Você está 23% mais produtivo que na semana passada.', type: 'Performance' },
-      { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v7a6 6 0 0 0 6 6M4 12a8 8 0 0 1 8-8v8a6 6 0 0 1-6 6H4v-6z"/></svg>', bg: 'rgba(16,185,129,0.12)', title: 'Saúde precisa de atenção', desc: '3 dias sem exercício. Seu score de saúde caiu 5 pontos.', type: 'Saúde' },
-      { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg>', bg: 'rgba(245,158,11,0.12)', title: 'Sequência recorde!', desc: '7 dias consecutivos. Você está no top 15% dos usuários.', type: 'Hábitos' },
-      { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg>', bg: 'rgba(244,63,94,0.12)', title: 'Meta próxima', desc: 'Você está a 32% de concluir a missão "Aprender TypeScript".', type: 'Missões' },
-    ];
+    const insights = []; // Phase 200: carregado via /api/ai-insights
+    // Carregar insights reais
+    fetch('/api/ai-insights', { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(data => {
+        const el = document.getElementById('insights-list');
+        if (!el) return;
+        const ins = data.insights || [];
+        if (!ins.length) {
+          el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Adicione hábitos e metas para receber insights personalizados.</div>';
+          return;
+        }
+        el.innerHTML = ins.map(i => `<div class="insight-card"><div class="insight-icon-wrap" style="background:rgba(99,102,241,0.12)"><i data-lucide="${i.icon || 'zap'}" class="pg-icon" aria-hidden="true"></i></div><div class="insight-body"><div class="insight-title">${i.label || 'Insight'}</div><div class="insight-desc">${i.text}</div></div></div>`).join('');
+        if (window.lucide) lucide.createIcons();
+      })
+      .catch(() => {})
     const el = document.getElementById('insights-list');
     if (!el) return;
     el.innerHTML = insights.map(ins => `
@@ -4021,19 +4019,24 @@ function initBriefing() {
   if (periodLabel) periodLabel.innerHTML = isMorning ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Morning Briefing' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Evening Briefing';
   if (headline) headline.textContent = isMorning ? `Bom dia! Aqui está seu plano para hoje.` : `Boa noite! Aqui está seu resumo do dia.`;
 
-  const sections = isMorning ? [
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg> Prioridades de Hoje', items: ['Finalizar relatório Q3 (prazo hoje)', 'Sessão de foco: 2 horas', 'Revisar missão TypeScript', 'Exercício físico — 45 min'], color: '#6366F1' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Agenda', items: ['08:00 — Daily Standup', '10:30 — Sessão de foco', '14:00 — Revisão de código', '17:00 — Exercício'], color: '#10B981' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg> Hábitos para Manter', items: ['Meditação matinal <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>', 'Leitura 20 min', 'Água 2L', 'Journaling noturno'], color: '#F59E0B' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Insights do Companion', items: ['Produtividade 23% acima da média', 'Área de Saúde precisa de atenção', 'Sequência de 7 dias — recorde!', 'Score em alta: 87 pontos'], color: '#8B5CF6' },
-  ] : [
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluído Hoje', items: ['Relatório Q3 finalizado', 'Daily Standup realizado', 'Meditação matinal', 'Leitura 20 min'], color: '#10B981' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pendente para Amanhã', items: ['Exercício físico', 'Revisão missão TypeScript', 'Responder e-mails pendentes'], color: '#F59E0B' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> Métricas do Dia', items: ['Life Score: +1.2 pontos', 'Hábitos: 3/5 concluídos', 'Foco: 3h 20min', 'Sequência mantida: 7 dias'], color: '#6366F1' },
-    { title: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Reflexão', items: ['O que funcionou bem hoje?', 'O que pode melhorar amanhã?', 'Gratidão: 3 coisas positivas', 'Planejamento de amanhã'], color: '#8B5CF6' },
-  ];
-
-  el.innerHTML = sections.map(s => `
+  // Phase 200: briefing carregado via /api/briefing
+  fetch('/api/briefing', { credentials: 'same-origin' })
+    .then(r => r.json())
+    .then(data => {
+      const b = data.briefing || {};
+      const el = document.getElementById('briefing-content');
+      if (!el) return;
+      const sections = b.sections || [];
+      if (!sections.length) {
+        el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Adicione dados para gerar seu briefing personalizado.</div>';
+        return;
+      }
+      el.innerHTML = sections.map(s => `<div class="briefing-section animate-fade-in"><div class="briefing-section-title" style="color:${s.color || 'var(--accent)'}">${s.title}</div><ul class="briefing-list">${(s.items || []).map(item => `<li>${item}</li>`).join('')}</ul></div>`).join('');
+    })
+    .catch(() => {});
+  // Placeholder para sections (não usado mais)
+  const sections = [];
+  if (false) el.innerHTML = sections.map(s => `
     <div class="briefing-section animate-fade-in">
       <div class="briefing-section-title" style="color:${s.color};">${s.title}</div>
       ${s.items.map(item => `

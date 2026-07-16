@@ -404,7 +404,7 @@
         <div class="agenda-time">09:00</div>
         <div class="agenda-dot" style="background:var(--green)"></div>
         <div class="agenda-content">
-          <div class="agenda-title">Meditação matinal</div>
+          <div class="agenda-title" id="d2-agenda-item-1">Carregando...</div>
           <div class="agenda-meta">10 min · Pessoal</div>
         </div>
         <span class="agenda-badge badge-sm badge-green">Feito</span>
@@ -440,7 +440,7 @@
         <div class="agenda-time">19:00</div>
         <div class="agenda-dot" style="background:var(--amber)"></div>
         <div class="agenda-content">
-          <div class="agenda-title">Leitura noturna</div>
+          <div class="agenda-title" id="d2-agenda-item-2">—</div>
           <div class="agenda-meta">30 min · Pessoal</div>
         </div>
         <span class="agenda-badge badge-sm badge-amber">Hoje</span>
@@ -490,12 +490,9 @@
         <button class="widget-action" onclick="window.parent?.showPage?.('habits')">Ver todos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div id="d2-habits-list">
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Meditação 10min</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Exercício físico</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 7d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Leitura 30min</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21d</span></div>
-        <div class="habit-row"><div class="habit-check-btn done" onclick="toggleD2Habit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="habit-name-text">Journaling</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 5d</span></div>
-        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Hidratação 2L</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3d</span></div>
-        <div class="habit-row"><div class="habit-check-btn" onclick="toggleD2Habit(this)"></div><span class="habit-name-text">Sono 8h</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 2d</span></div>
+        <div id="d2-habits-list" style="display:flex;flex-direction:column">
+          <div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px 0">Carregando hábitos...</div>
+        </div>
       </div>
       <div class="habits-progress">
         <div class="habits-progress-label"><span>Progresso</span><span id="d2-habit-pct">67%</span></div>
@@ -511,21 +508,8 @@
         <div class="widget-title">Metas Ativas</div>
         <button class="widget-action" onclick="window.parent?.showPage?.('goals')">Ver todas <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
-      <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Correr 100km</span><span class="goal-row-pct" style="color:var(--accent)">72%</span></div>
-        <div class="goal-row-bar"><div class="goal-row-fill" style="width:72%;background:var(--gradient-primary)"></div></div>
-      </div>
-      <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ler 24 livros</span><span class="goal-row-pct" style="color:var(--amber)">58%</span></div>
-        <div class="goal-row-bar"><div class="goal-row-fill" style="width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
-      </div>
-      <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Economizar R$10k</span><span class="goal-row-pct" style="color:var(--green)">45%</span></div>
-        <div class="goal-row-bar"><div class="goal-row-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div>
-      </div>
-      <div class="goal-row">
-        <div class="goal-row-header"><span class="goal-row-name"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> Meditação 30d</span><span class="goal-row-pct" style="color:var(--purple)">93%</span></div>
-        <div class="goal-row-bar"><div class="goal-row-fill" style="width:93%;background:linear-gradient(90deg,var(--purple),var(--accent))"></div></div>
+      <div id="d2-goals-list">
+        <div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px 0">Carregando metas...</div>
       </div>
     </div>
 
@@ -616,8 +600,8 @@
         <div class="widget-title">Atividades Recentes</div>
         <button class="widget-action" onclick="window.parent?.showPage?.('timeline')">Timeline <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
-      <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Hábito concluído: Meditação 10min</div><div class="activity-time">Hoje, 07:30</div></div></div>
-      <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-content"><div class="activity-title">Meta atualizada: Correr 100km <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
+      <div id="d2-activity-list"><div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Carregando atividades...</div></div>
+<div class="activity-content"><div class="activity-title">Meta atualizada <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Transação registrada: R$2.847,00 recebido</div><div class="activity-time">Hoje, 06:00</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--amber)"></div><div class="activity-content"><div class="activity-title">Nota adicionada ao Memory Center</div><div class="activity-time">Ontem, 22:15</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--purple)"></div><div class="activity-content"><div class="activity-title">Life Score aumentou para 87 (+3)</div><div class="activity-time">Ontem, 20:00</div></div></div>
@@ -886,6 +870,97 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeWidgetCatalog();
     });
+
+    // ── Phase 200: Carregamento de dados reais ────────────────────────
+    async function d2LoadRealData() {
+      const today = new Date().toISOString().split('T')[0];
+      // Hábitos
+      const habitsList = document.getElementById('d2-habits-list');
+      if (habitsList) {
+        try {
+          const r = await fetch('/api/habits', { credentials: 'same-origin' });
+          const data = await r.json();
+          const habits = data.habits || [];
+          const done = habits.filter(h => h.completions?.includes(today));
+          const rate = habits.length > 0 ? Math.round((done.length / habits.filter(h=>h.active).length) * 100) : 0;
+          // Atualizar barra de progresso
+          const pctEl = document.getElementById('d2-habit-pct');
+          const barEl = document.getElementById('d2-habit-bar');
+          if (pctEl) pctEl.textContent = rate + '%';
+          if (barEl) barEl.style.width = rate + '%';
+          if (!habits.length) {
+            habitsList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px 0">Nenhum hábito. Crie o primeiro!</div>';
+          } else {
+            habitsList.innerHTML = habits.slice(0, 6).map(h => {
+              const isDone = h.completions?.includes(today);
+              return `<div class="habit-row"><div class="habit-check-btn ${isDone ? 'done' : ''}" onclick="toggleD2HabitReal('${h.id}', this)">${isDone ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : ''}</div><span class="habit-name-text">${h.title}</span><span class="habit-streak-badge"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> ${h.streak || 0}d</span></div>`;
+            }).join('');
+            if (window.lucide) lucide.createIcons();
+          }
+        } catch { habitsList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Erro ao carregar hábitos.</div>'; }
+      }
+      // Metas
+      const goalsList = document.getElementById('d2-goals-list');
+      if (goalsList) {
+        try {
+          const r = await fetch('/api/goals', { credentials: 'same-origin' });
+          const data = await r.json();
+          const goals = (data.goals || []).filter(g => g.status === 'active').slice(0, 4);
+          const gradients = ['var(--gradient-primary)', 'linear-gradient(90deg,var(--amber),#FCD34D)', 'linear-gradient(90deg,var(--green),#34D399)', 'linear-gradient(90deg,var(--purple),var(--accent))'];
+          if (!goals.length) {
+            goalsList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px 0">Nenhuma meta ativa. Crie a primeira!</div>';
+          } else {
+            goalsList.innerHTML = goals.map((g, i) => `<div class="goal-row"><div class="goal-row-header"><span class="goal-row-name"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> ${g.title}</span><span class="goal-row-pct" style="color:var(--accent)">${g.progress || 0}%</span></div><div class="goal-row-bar"><div class="goal-row-fill" style="width:${g.progress || 0}%;background:${gradients[i % gradients.length]}"></div></div></div>`).join('');
+            if (window.lucide) lucide.createIcons();
+          }
+        } catch { goalsList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Erro ao carregar metas.</div>'; }
+      }
+      // Agenda
+      try {
+        const r = await fetch('/api/events?date=' + today, { credentials: 'same-origin' });
+        const data = await r.json();
+        const events = data.events || [];
+        const item1 = document.getElementById('d2-agenda-item-1');
+        const item2 = document.getElementById('d2-agenda-item-2');
+        if (item1) item1.textContent = events[0]?.title || 'Nenhum evento hoje';
+        if (item2) item2.textContent = events[1]?.title || '—';
+      } catch {}
+    }
+    async function toggleD2HabitReal(id, el) {
+      try {
+        const r = await fetch('/api/habits', {
+          method: 'PUT', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, action: 'toggle' }),
+        });
+        const data = await r.json();
+        if (data.ok) {
+          el.classList.toggle('done');
+          el.innerHTML = el.classList.contains('done') ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : '';
+          if (window.lucide) lucide.createIcons();
+          setTimeout(d2LoadRealData, 500);
+        }
+      } catch {}
+    }
+    // Carregar dados reais ao inicializar
+    d2LoadRealData();
+    // Carregar activity items reais
+    (async function d2LoadActivity() {
+      const actEl = document.getElementById('d2-activity-list');
+      if (!actEl) return;
+      try {
+        const r = await fetch('/api/timeline', { credentials: 'same-origin' });
+        const data = await r.json();
+        const events = (data.events || []).slice(0, 5);
+        const colors = ['var(--green)', 'var(--accent)', 'var(--cyan)', 'var(--amber)', 'var(--purple)'];
+        if (!events.length) {
+          actEl.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Nenhuma atividade recente.</div>';
+        } else {
+          actEl.innerHTML = events.map((e, i) => `<div class="activity-item"><div class="activity-dot" style="background:${colors[i % colors.length]}"></div><div class="activity-text">${e.title || e.description || 'Atividade'}</div></div>`).join('');
+        }
+      } catch { actEl.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Erro ao carregar atividades.</div>'; }
+    })();
+
   </script>
 </body>
 </html>

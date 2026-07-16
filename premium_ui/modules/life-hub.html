@@ -289,7 +289,7 @@
         <div id="habits-today">
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Meditação 10min</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14 dias</div></div>
+            <div class="habit-info"><div class="habit-name" id="lh-habit-1">Carregando...</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
@@ -305,7 +305,7 @@
           </div>
           <div class="habit-item">
             <div class="habit-check done" onclick="toggleHabit(this)"></div>
-            <div class="habit-info"><div class="habit-name">Leitura 20min</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21 dias</div></div>
+            <div class="habit-info"><div class="habit-name" id="lh-habit-2">—</div><div class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 21 dias</div></div>
             <div class="habit-dots">
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
               <div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div><div class="habit-dot done"></div>
@@ -563,7 +563,7 @@
     <div class="grid grid-3">
       <div class="area-card" onclick="lhAreaDetail('saude')">
         <div class="area-icon-wrap" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-        <div class="area-name">Saúde & Bem-estar</div>
+        <div class="area-name" id="lh-area-1">Carregando...</div>
         <div class="area-desc">Exercícios, sono, nutrição e saúde mental</div>
         <div class="area-score-row"><span class="area-score-label">Score</span><span class="area-score-val" style="color:#10B981">88/100</span></div>
         <div class="area-bar"><div class="area-fill" style="width:88%;background:linear-gradient(135deg,#10B981,#06B6D4)"></div></div>
@@ -660,7 +660,7 @@
           <div class="tl-item">
             <div class="tl-time">Em 16 dias</div>
             <div class="tl-text"><i data-lucide="person-standing" class="pg-icon" aria-hidden="true"></i> 30 dias de meditação seguidos</div>
-            <div class="tl-sub">Streak atual: 14 dias</div>
+            <div class="tl-sub" id="lh-streak-sub">Carregando streak...</div>
           </div>
           <div class="tl-item">
             <div class="tl-time">Em 18 dias</div>
@@ -702,17 +702,7 @@ function updateHabitCount() {
 }
 
 // All habits data
-const habitsData = [
-  { name: 'Meditação 10min', streak: 14, category: 'Bem-estar', done: true, color: '#8B5CF6' },
-  { name: 'Exercício 30min', streak: 8, category: 'Saúde', done: true, color: '#10B981' },
-  { name: 'Leitura 20min', streak: 21, category: 'Aprendizado', done: true, color: '#F59E0B' },
-  { name: 'Água 2L', streak: 5, category: 'Saúde', done: true, color: '#06B6D4' },
-  { name: 'Journaling', streak: 3, category: 'Bem-estar', done: false, color: '#6366F1' },
-  { name: 'Sem redes sociais antes das 9h', streak: 7, category: 'Foco', done: true, color: '#EF4444' },
-  { name: 'Planejamento diário', streak: 12, category: 'Produtividade', done: true, color: '#818CF8' },
-  { name: 'Gratidão (3 itens)', streak: 6, category: 'Bem-estar', done: false, color: '#A78BFA' },
-  { name: 'Dormir às 23h', streak: 4, category: 'Saúde', done: true, color: '#22D3EE' },
-];
+const habitsData = [] /* Phase 200: dados carregados via /api/habits */
 
 function renderAllHabits() {
   const el = document.getElementById('all-habits');
@@ -772,5 +762,29 @@ function showToast(msg, type) {
   setTimeout(() => t.remove(), 2500);
 }
 </script>
+
+  <script>
+  // Phase 200 — Life Hub Real Data
+  (async function lhLoadRealData() {
+    const today = new Date().toISOString().split('T')[0];
+    try {
+      const [habitsR, lifeR] = await Promise.all([
+        fetch('/api/habits', { credentials: 'same-origin' }).then(r => r.json()).catch(() => ({ habits: [] })),
+        fetch('/api/life-graph', { credentials: 'same-origin' }).then(r => r.json()).catch(() => ({})),
+      ]);
+      const habits = habitsR.habits || [];
+      const maxStreak = Math.max(...habits.map(h => h.streak || 0), 0);
+      const el1 = document.getElementById('lh-habit-1');
+      const el2 = document.getElementById('lh-habit-2');
+      if (el1) el1.textContent = habits[0]?.title || 'Nenhum hábito';
+      if (el2) el2.textContent = habits[1]?.title || '—';
+      const streakEl = document.getElementById('lh-streak-sub');
+      if (streakEl) streakEl.textContent = maxStreak > 0 ? `Streak atual: ${maxStreak} dias` : 'Nenhum streak ainda';
+      const areas = lifeR.areas || [];
+      const areaEl = document.getElementById('lh-area-1');
+      if (areaEl) areaEl.textContent = areas[0]?.name || 'Saúde';
+    } catch {}
+  })();
+  </script>
 </body>
 </html>

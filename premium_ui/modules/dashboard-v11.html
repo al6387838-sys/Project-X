@@ -333,12 +333,12 @@
       <div>
         <div class="dv11-agenda-item">
           <div class="dv11-agenda-time">09:00</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Reunião de planejamento</div><div class="dv11-agenda-desc">1h · Zoom · Team Alpha</div></div>
+          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Evento 1</div><div class="dv11-agenda-desc">1h · Zoom · Team Alpha</div></div>
           <div class="dv11-agenda-bar" style="background:var(--accent)"></div>
         </div>
         <div class="dv11-agenda-item">
           <div class="dv11-agenda-time">11:00</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Deep work — Projeto Alpha</div><div class="dv11-agenda-desc">2h · Foco intenso</div></div>
+          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Evento 2</div><div class="dv11-agenda-desc">2h · Foco intenso</div></div>
           <div class="dv11-agenda-bar" style="background:var(--green)"></div>
         </div>
         <div class="dv11-agenda-item">
@@ -359,8 +359,8 @@
       <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-habits')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
       <div class="dv11-widget-header"><div class="dv11-widget-title">Hábitos de Hoje</div></div>
       <div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Meditação 10min</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 14 dias</span></div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Exercício físico</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 11 dias</span></div>
+        <div id="dv11-habits-container"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando hábitos...</div></div>
+<span class="dv11-habit-name">Exercício físico</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 11 dias</span></div>
         <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Leitura 30min</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 8 dias</span></div>
         <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Jornal</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 6 dias</span></div>
         <div class="dv11-habit-item"><div class="dv11-habit-check" onclick="dv11ToggleHabit(this)"></div><span class="dv11-habit-name" style="color:var(--text-muted)">Água 2L</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3 dias</span></div>
@@ -410,7 +410,7 @@
       <div class="dv11-widget-header"><div class="dv11-widget-title">AI Companion</div></div>
       <div class="dv11-ai-msg">
         <div class="dv11-ai-header"><div class="dv11-ai-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="dv11-ai-name">LifeOS AI</div></div>
-        <div class="dv11-ai-text">Bom dia! Seu pico de produtividade está entre 9h-11h. Recomendo bloquear esse horário para deep work no Projeto Alpha.</div>
+        <div class="dv11-ai-text">Analisando seus dados reais... Carregando recomendações personalizadas.</div>
       </div>
       <div class="dv11-ai-input">
         <input class="dv11-ai-field" placeholder="Pergunte algo à IA..." />
@@ -462,11 +462,10 @@
       <div class="dv11-widget-header"><div class="dv11-widget-title">Metas da Semana</div></div>
       <div>
         <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600">Projeto Alpha v11</span><span style="color:var(--green);font-weight:700">72%</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:72%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+          <div id="dv11-goals-container"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando metas...</div></div></div>
         </div>
         <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600">Correr 100km</span><span style="color:var(--accent-light);font-weight:700">72km</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600" id="dv11-goal-title-1">Meta ativa</span><span style="color:var(--accent-light);font-weight:700">72km</span></div>
           <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
         </div>
         <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
@@ -485,13 +484,9 @@
       <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-week-activities')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
       <div class="dv11-widget-header"><div class="dv11-widget-title">Atividades da Semana</div></div>
       <div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--green)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito completado: Meditação 10min (14 dias)</div><div class="dv11-activity-time">Hoje, 07:30</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--green)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Deploy v10.6.0 publicado no Cloudflare</div><div class="dv11-activity-time">Ontem, 16:35</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--accent)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Meta atualizada: Correr 100km (72km)</div><div class="dv11-activity-time">Ontem, 06:50</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--amber)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Nota adicionada: "Ideias para v11"</div><div class="dv11-activity-time">Ontem, 22:15</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--purple)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Life Score: 84 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 87</div><div class="dv11-activity-time">2 dias atrás</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--cyan)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Integração Google Calendar conectada</div><div class="dv11-activity-time">3 dias atrás</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--red)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Alerta: 2FA recomendado</div><div class="dv11-activity-time">4 dias atrás</div></div></div>
+        <div id="dv11-activity-container-1"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
+        <div id="dv11-activity-container-2"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
+        <div id="dv11-activity-container-3"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
       </div>
     </div>
   </div>
@@ -639,7 +634,7 @@
       </div>
       <div class="dv11-ai-msg">
         <div class="dv11-ai-header"><div class="dv11-ai-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="dv11-ai-name">LifeOS AI</div></div>
-        <div class="dv11-ai-text">O deploy v10.6.0 foi publicado com sucesso. 86/86 verificações passaram. Zero vulnerabilidades detectadas.</div>
+        <div class="dv11-ai-text">Olá! Sou seu assistente LifeOS. Como posso ajudar você hoje?</div>
       </div>
       <div class="dv11-ai-input">
         <input class="dv11-ai-field" placeholder="Pergunte algo à IA..." />
@@ -677,11 +672,7 @@
       <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-activities-widget')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
       <div class="dv11-widget-header"><div class="dv11-widget-title">Atividades Recentes</div></div>
       <div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--green)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Hábito: Meditação 10min</div><div class="dv11-activity-time">Hoje, 07:30</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--green)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Exercício físico completado</div><div class="dv11-activity-time">Hoje, 06:45</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--accent)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Meta: Correr 100km (72km)</div><div class="dv11-activity-time">Hoje, 06:50</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--amber)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Nota: "Ideias para v11"</div><div class="dv11-activity-time">Ontem, 22:15</div></div></div>
-        <div class="dv11-activity-item"><div class="dv11-activity-dot" style="background:var(--purple)"></div><div class="dv11-activity-content"><div class="dv11-activity-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Life Score: 84 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 87</div><div class="dv11-activity-time">Ontem, 20:00</div></div></div>
+        <div id="dv11-activity-container-3"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades reais...</div></div>
       </div>
     </div>
   </div>

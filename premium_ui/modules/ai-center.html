@@ -68,7 +68,7 @@
         </div>
         <div class="ai-insight-item" style="border-left-color:var(--accent)">
           <div class="ai-insight-title">Meta próxima do prazo</div>
-          <div class="ai-insight-desc">Sua meta "Correr 100km" vence em 45 dias. Você precisa correr 28km ainda. Ritmo atual: ok.</div>
+          <div class="ai-insight-desc">Analisando suas metas reais...isa correr 28km ainda. Ritmo atual: ok.</div>
           <button class="btn btn-ghost" style="font-size:11px;margin-top:6px" onclick="showPage('goals')">Ver Meta</button>
         </div>
       </div>
@@ -92,7 +92,7 @@
         <div class="ai-task-item">
           <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
           <div style="flex:1">
-            <div style="font-size:13px;font-weight:600">Responder email da Ana Costa</div>
+            <div style="font-size:13px;font-weight:600">Responder emails pendentes</div>
             <div style="font-size:11px;color:var(--text-muted)">Baseado em: email não respondido há 2 dias · Prioridade: Média</div>
           </div>
           <span style="font-size:10px;background:rgba(245,158,11,0.15);color:var(--amber);padding:2px 6px;border-radius:4px">Médio</span>
@@ -100,7 +100,7 @@
         <div class="ai-task-item">
           <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
           <div style="flex:1">
-            <div style="font-size:13px;font-weight:600">Preparar apresentação Projeto Alpha</div>
+            <div style="font-size:13px;font-weight:600">Carregando tarefas reais...</div>
             <div style="font-size:11px;color:var(--text-muted)">Baseado em: evento em 16/07 · Prioridade: Alta</div>
           </div>
           <span style="font-size:10px;background:rgba(239,68,68,0.15);color:var(--red);padding:2px 6px;border-radius:4px">Urgente</span>
@@ -137,7 +137,7 @@
       <div class="ai-rec-card" style="border-color:rgba(245,158,11,0.3)">
         <div style="font-size:24px;margin-bottom:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
         <div style="font-weight:600;margin-bottom:4px">Leitura recomendada</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Baseado nos seus interesses: "Atomic Habits" de James Clear — alinhado com suas metas de hábitos.</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Baseado nos seus dados reais de leitura e aprendizadoames Clear — alinhado com suas metas de hábitos.</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showToast('Livro adicionado à lista de leitura','success')">Adicionar à Lista</button>
       </div>
     </div>
@@ -384,7 +384,7 @@
         </div>
         <div style="padding:12px;background:rgba(6,182,212,0.08);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Hábitos</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Streak de 14 dias! Não quebre hoje. Hábito crítico: meditação matinal ainda não registrada.</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Seu streak atual está sendo calculado...uebre hoje. Hábito crítico: meditação matinal ainda não registrada.</div>
         </div>
       </div>
     </div>
@@ -439,19 +439,19 @@
       <div class="card-title" style="margin-bottom:14px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Performance por Área</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde & Bem-estar</span><span style="font-weight:700;color:var(--green)">92%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-1-name">Saúde</span></span><span style="font-weight:700;color:var(--green)" id="ai-area-1-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:92%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Produtividade</span><span style="font-weight:700;color:var(--accent)">88%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-2-name">Produtividade</span></span><span style="font-weight:700;color:var(--accent)" id="ai-area-2-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:88%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</span><span style="font-weight:700;color:var(--amber)">74%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-3-name">Finanças</span></span><span style="font-weight:700;color:var(--amber)" id="ai-area-3-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:74%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> Aprendizado</span><span style="font-weight:700;color:var(--cyan)">81%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-4-name">Aprendizado</span></span><span style="font-weight:700;color:var(--cyan)" id="ai-area-4-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:81%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:4px"></div></div>
         </div>
         <div>
@@ -552,10 +552,10 @@
         <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <div style="font-weight:700;font-size:15px">Conectar-se com Ana Costa</div>
+            <div style="font-weight:700;font-size:15px">Conectar-se com contatos importantes</div>
             <span style="font-size:10px;padding:2px 8px;background:rgba(6,182,212,0.15);color:var(--cyan);border-radius:20px;font-weight:600">Relacionamentos</span>
           </div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você não fala com Ana há 12 dias. Ela é uma conexão importante para o Projeto Alpha. Um check-in rápido fortaleceria o relacionamento.</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Mantenha contato com pessoas importantes. Um check-in rápido pode fortalecer seus relacionamentos.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showPage('messages')">Enviar mensagem</button>
             <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Lembrete criado para amanhã','info')">Lembrar amanhã</button>
