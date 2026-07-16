@@ -1,13 +1,15 @@
-// LifeOS Enterprise — Health Check
+// LifeOS Enterprise — Health Check v19.0
 // Cloudflare Pages Function: GET /api/health
-
 export async function onRequestGet() {
   return new Response(JSON.stringify({
     ok: true,
     service: 'lifeos-enterprise',
-    version: '16.5.0',
+    version: '19.0.0',
     environment: 'production',
+    platform: 'cloudflare-pages',
     timestamp: new Date().toISOString(),
+    status: 'operational',
+    phases: '178-184',
   }), {
     status: 200,
     headers: {
@@ -16,7 +18,6 @@ export async function onRequestGet() {
     },
   });
 }
-
 export async function onRequest({ request }) {
   if (request.method === 'GET') return onRequestGet();
   return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), {

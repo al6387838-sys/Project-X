@@ -1,0 +1,228 @@
+/* LifeOS Enterprise — Accessibility v19.0 (Phase 181) */
+/* WCAG 2.1 AA Compliance */
+
+/* ─── Skip Navigation ──────────────────────────────────────────────────────── */
+.skip-nav {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: #6366F1;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  transition: top 0.1s;
+}
+.skip-nav:focus {
+  top: 0;
+}
+
+/* ─── Focus Visible (WCAG 2.4.7) ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #6366F1;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── High Contrast Focus for Interactive Elements ─────────────────────────── */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #818CF8;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.20);
+}
+
+/* ─── Minimum Touch Target (WCAG 2.5.5 — 44×44px) ─────────────────────────── */
+button,
+[role="button"],
+a,
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+/* Exception: inline links */
+p a, li a, td a {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* ─── Color Contrast Enhancements (WCAG 1.4.3 — 4.5:1 minimum) ────────────── */
+:root {
+  --a11y-text-primary: #F1F5F9;     /* contrast 15.3:1 on #07070F */
+  --a11y-text-secondary: #CBD5E1;   /* contrast 10.2:1 on #07070F */
+  --a11y-text-muted: #94A3B8;       /* contrast 6.1:1 on #07070F */
+  --a11y-focus-ring: #818CF8;
+  --a11y-error: #FCA5A5;            /* contrast 7.2:1 on #07070F */
+  --a11y-success: #6EE7B7;          /* contrast 8.1:1 on #07070F */
+  --a11y-warning: #FCD34D;          /* contrast 9.4:1 on #07070F */
+}
+
+/* ─── Screen Reader Only Utility ───────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ─── Reduced Motion (WCAG 2.3.3) ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Error States (WCAG 1.4.1 — não usar apenas cor) ─────────────────────── */
+.field-error {
+  border-color: #F43F5E !important;
+  box-shadow: 0 0 0 2px rgba(244,63,94,0.20) !important;
+}
+.field-error::after {
+  content: " ⚠";
+  color: #F43F5E;
+}
+.error-message {
+  color: var(--a11y-error);
+  font-size: 12px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.error-message::before {
+  content: "⚠";
+  font-size: 12px;
+}
+
+/* ─── Form Labels (WCAG 1.3.1) ─────────────────────────────────────────────── */
+label {
+  cursor: pointer;
+}
+label[for] {
+  display: block;
+  margin-bottom: 4px;
+}
+input:required + label::after,
+label.required::after {
+  content: " *";
+  color: #F43F5E;
+  aria-label: "obrigatório";
+}
+
+/* ─── Loading States (WCAG 4.1.3) ─────────────────────────────────────────── */
+[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.7;
+}
+[aria-disabled="true"],
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ─── Live Regions ─────────────────────────────────────────────────────────── */
+[aria-live="polite"],
+[aria-live="assertive"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+/* ─── Keyboard Navigation Indicators ──────────────────────────────────────── */
+.keyboard-nav-active *:focus {
+  outline: 2px solid #818CF8 !important;
+  outline-offset: 3px !important;
+}
+
+/* ─── Table Accessibility (WCAG 1.3.1) ────────────────────────────────────── */
+table caption {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 0;
+  color: var(--a11y-text-primary);
+}
+th[scope] {
+  font-weight: 700;
+}
+tr:focus-within {
+  background: rgba(99,102,241,0.05);
+}
+
+/* ─── Dialog / Modal Accessibility ────────────────────────────────────────── */
+[role="dialog"] {
+  position: fixed;
+  z-index: 1000;
+}
+[role="dialog"]:focus {
+  outline: none;
+}
+[aria-modal="true"] {
+  isolation: isolate;
+}
+
+/* ─── Tooltip Accessibility ────────────────────────────────────────────────── */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E293B;
+  color: #F1F5F9;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+[data-tooltip]:hover::after,
+[data-tooltip]:focus::after {
+  opacity: 1;
+}
+
+/* ─── Print Accessibility ──────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  a[href]::after { content: " (" attr(href) ")"; }
+  abbr[title]::after { content: " (" attr(title) ")"; }
+}

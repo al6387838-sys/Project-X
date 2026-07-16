@@ -216,6 +216,13 @@
         <button class="nav-item" data-view="security" type="button"><span class="nav-item-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</button>
       </div>
       <div class="nav-section">
+        <div class="nav-section-label">Observabilidade</div>
+        <button class="nav-item" data-view="health" type="button"><span class="nav-item-icon"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></span>System Health</button>
+        <button class="nav-item" data-view="logs" type="button"><span class="nav-item-icon"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i></span>Logs</button>
+        <button class="nav-item" data-view="alerts" type="button"><span class="nav-item-icon"><i data-lucide="bell-ring" class="pg-icon" aria-hidden="true"></i></span>Alertas</button>
+        <button class="nav-item" data-view="org-usage" type="button"><span class="nav-item-icon"><i data-lucide="database" class="pg-icon" aria-hidden="true"></i></span>Consumo / Org</button>
+      </div>
+      <div class="nav-section">
         <div class="nav-section-label">Navegação</div>
         <a class="nav-item" href="/enterprise"><span class="nav-item-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>Enterprise</a>
         <a class="nav-item" href="/dashboard"><span class="nav-item-icon"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i></span>Workspace</a>
@@ -705,12 +712,233 @@
       overview:'System Overview', members:'Membros', organizations:'Organizações',
       billing:'Billing', plans:'Planos', audit:'Auditoria', metrics:'Métricas',
       system:'Sistema', queue:'Fila de Tarefas', 'integrations-monitor':'Integrações', security:'Segurança',
+      health:'System Health', logs:'Logs Estruturados', alerts:'Alertas', 'org-usage':'Consumo por Organização',
     }[state.view] || 'Admin';
-    const fn = {overview:renderOverview, members:renderMembers, organizations:renderOrganizations, billing:renderBilling, plans:renderPlans, audit:renderAudit, metrics:renderMetrics, system:renderSystem, queue:renderQueue, 'integrations-monitor':renderIntegrationsMonitor, security:renderSecurity}[state.view];
+    const fn = {overview:renderOverview, members:renderMembers, organizations:renderOrganizations, billing:renderBilling, plans:renderPlans, audit:renderAudit, metrics:renderMetrics, system:renderSystem, queue:renderQueue, 'integrations-monitor':renderIntegrationsMonitor, security:renderSecurity, health:renderHealth, logs:renderLogs, alerts:renderAlerts, 'org-usage':renderOrgUsage}[state.view];
     if (fn) fn();
     history.replaceState(null, '', `#${state.view}`);
   }
 
+  // ── OBSERVABILITY STATE ──
+  const obs = { data: null, loading: false, lastFetch: 0 };
+  async function loadObservability() {
+    const now = Date.now();
+    if (obs.loading) return;
+    if (obs.data && now - obs.lastFetch < 30000) return;
+    obs.loading = true;
+    try {
+      const res = await fetch('/api/observability', { credentials: 'same-origin' });
+      if (res.status === 401) { location.replace('/login'); return; }
+      const d = await res.json().catch(() => ({}));
+      if (d.ok) { obs.data = d; obs.lastFetch = Date.now(); }
+    } catch(e) { console.warn('Observability fetch failed:', e.message); }
+    finally { obs.loading = false; }
+  }
+  function exportLogs() {
+    const logs = obs.data?.logs || [];
+    const csv = ['Timestamp,Level,Service,Action,User,Duration(ms),Status', ...logs.map(l => `"${l.timestamp}","${l.level}","${l.service}","${l.action}","${l.user}",${l.duration},${l.status}`)].join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download = 'lifeos-logs.csv'; a.click();
+    toast('Logs exportados.', 'success');
+  }
+  function svcStatusBadge(status) {
+    if (status === 'healthy') return '<span class="badge badge-success">Saudável</span>';
+    if (status === 'degraded') return '<span class="badge badge-warning">Degradado</span>';
+    return '<span class="badge badge-danger">Inativo</span>';
+  }
+  function alertSeverityBadge(s) {
+    if (s === 'critical') return '<span class="badge badge-danger">Crítico</span>';
+    if (s === 'warning') return '<span class="badge badge-warning">Aviso</span>';
+    return '<span class="badge badge-neutral">Info</span>';
+  }
+  function renderHealth() {
+    const d = obs.data;
+    if (!d) { document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📡</div><div class="empty-state-title">Carregando observabilidade...</div></div>'; loadObservability().then(() => renderHealth()); return; }
+    const { healthScore, summary, services, system, responseTimeHistory, errorRateHistory } = d;
+    const scoreColor = healthScore >= 90 ? '#10B981' : healthScore >= 70 ? '#F59E0B' : '#F43F5E';
+    document.getElementById('content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">System Health</h1>
+        <p class="page-sub">Monitoramento enterprise em tempo real — atualizado em ${new Date(d.timestamp).toLocaleTimeString('pt-BR')}</p>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-secondary" data-action="health.refresh" type="button">↻ Atualizar</button>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val" style="color:${scoreColor}">${healthScore}</div><div class="kpi-label">Health Score</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${summary.healthyServices}/${summary.totalServices}</div><div class="kpi-label">Serviços OK</div></div>
+        <div class="kpi-card"><div class="kpi-val">${summary.avgLatencyMs}ms</div><div class="kpi-label">Latência Média</div></div>
+        <div class="kpi-card"><div class="kpi-val">${summary.totalRequestsPerMin}</div><div class="kpi-label">Req/min</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:${summary.activeAlerts > 0 ? '#F43F5E' : '#10B981'}">${summary.activeAlerts}</div><div class="kpi-label">Alertas Ativos</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">Status dos Serviços</span><span class="badge badge-neutral">${new Date(d.timestamp).toLocaleString('pt-BR')}</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Serviço</th><th>Status</th><th>Uptime</th><th>Latência</th><th>Taxa de Erro</th><th>Req/min</th><th>Última verificação</th></tr></thead>
+            <tbody>
+              ${services.map(s => `<tr>
+                <td><span style="font-size:16px;margin-right:6px">${s.icon}</span>${esc(s.name)}</td>
+                <td>${svcStatusBadge(s.status)}</td>
+                <td>${s.uptime}%</td>
+                <td>${s.latencyMs}ms</td>
+                <td>${s.errorRate}%</td>
+                <td>${s.requestsPerMin}</td>
+                <td style="font-size:11px;color:var(--text-tertiary)">${new Date(s.lastCheck).toLocaleTimeString('pt-BR')}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Tempo de Resposta (24h)</span></div>
+          <div class="card-body">
+            ${responseTimeHistory.slice(-12).map(h => `
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <span style="font-size:10px;color:var(--text-tertiary);width:36px">${h.hour}</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+                  <div style="display:flex;align-items:center;gap:4px">
+                    <div class="progress" style="flex:1;height:4px"><div class="progress-bar" style="width:${Math.min(h.p50/3,100)}%;background:#10B981"></div></div>
+                    <span style="font-size:10px;width:38px;text-align:right;color:#10B981">p50 ${h.p50}ms</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:4px">
+                    <div class="progress" style="flex:1;height:4px"><div class="progress-bar" style="width:${Math.min(h.p95/4,100)}%;background:#F59E0B"></div></div>
+                    <span style="font-size:10px;width:38px;text-align:right;color:#F59E0B">p95 ${h.p95}ms</span>
+                  </div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recursos do Sistema</span></div>
+          <div class="card-body">
+            ${[['CPU',system.cpu,'#6366F1'],['Memória',system.memory,'#8B5CF6'],['Disco',system.disk,'#10B981'],['Rede',system.network,'#F59E0B'],['KV Reads',system.kvReads,'#06B6D4']].map(([l,v,c]) => `
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                <span style="font-size:11px;color:var(--text-secondary);width:80px">${l}</span>
+                <div class="progress" style="flex:1"><div class="progress-bar" style="width:${v}%;background:${c}"></div></div>
+                <span style="font-size:11px;font-weight:600;width:36px;text-align:right">${v}%</span>
+              </div>`).join('')}
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-subtle)">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11px;color:var(--text-secondary)">Uptime</span><span style="font-size:11px;font-weight:600;color:#10B981">${system.uptime}%</span></div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11px;color:var(--text-secondary)">Sessões ativas</span><span style="font-size:11px;font-weight:600">${system.activeSessions}</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--text-secondary)">API p95</span><span style="font-size:11px;font-weight:600">${system.apiP95}ms</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  function renderLogs() {
+    const d = obs.data;
+    if (!d) { document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-title">Carregando logs...</div></div>'; loadObservability().then(() => renderLogs()); return; }
+    const logs = d.logs || [];
+    const levelColor = { INFO: '#6366F1', WARN: '#F59E0B', ERROR: '#F43F5E', DEBUG: '#64748B' };
+    document.getElementById('content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Logs Estruturados</h1>
+        <p class="page-sub">Auditoria centralizada de eventos da plataforma.</p>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-secondary" data-action="logs.refresh" type="button">↻ Atualizar</button>
+          <button class="btn btn-secondary" data-action="logs.export" type="button">⬇ Exportar CSV</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Eventos Recentes</span><span class="badge badge-neutral">${logs.length} entradas</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Timestamp</th><th>Nível</th><th>Serviço</th><th>Ação</th><th>Usuário</th><th>Duração</th><th>Status</th></tr></thead>
+            <tbody>
+              ${logs.map(l => `<tr>
+                <td style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary)">${new Date(l.timestamp).toLocaleString('pt-BR')}</td>
+                <td><span style="font-size:10px;font-weight:700;color:${levelColor[l.level]||'#94A3B8'};background:${levelColor[l.level]||'#94A3B8'}18;padding:2px 6px;border-radius:4px">${l.level}</span></td>
+                <td style="font-size:11px">${esc(l.service)}</td>
+                <td style="font-size:12px">${esc(l.action)}</td>
+                <td style="font-size:11px;color:var(--text-secondary)">${esc(l.user)}</td>
+                <td style="font-size:11px">${l.duration}ms</td>
+                <td><span style="font-size:10px;font-weight:600;color:${l.status===200?'#10B981':l.status===429?'#F59E0B':'#F43F5E'}">${l.status}</span></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+  function renderAlerts() {
+    const d = obs.data;
+    if (!d) { document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔔</div><div class="empty-state-title">Carregando alertas...</div></div>'; loadObservability().then(() => renderAlerts()); return; }
+    const alerts = d.alerts || [];
+    const active = alerts.filter(a => !a.resolved);
+    const resolved = alerts.filter(a => a.resolved);
+    document.getElementById('content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Alertas</h1>
+        <p class="page-sub">Monitoramento de falhas e anomalias da plataforma.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val" style="color:${active.length>0?'#F43F5E':'#10B981'}">${active.length}</div><div class="kpi-label">Alertas Ativos</div></div>
+        <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${resolved.length}</div><div class="kpi-label">Resolvidos</div></div>
+        <div class="kpi-card"><div class="kpi-val">${alerts.filter(a=>a.severity==='critical').length}</div><div class="kpi-label">Críticos</div></div>
+      </div>
+      ${active.length ? `
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">Alertas Ativos</span><span class="badge badge-danger">${active.length}</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+          ${active.map(a => `
+            <div style="padding:12px;background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.15);border-radius:8px">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${alertSeverityBadge(a.severity)}<span style="font-size:13px;font-weight:600">${esc(a.title)}</span></div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">${esc(a.description)}</div>
+                  <div style="font-size:11px;color:var(--text-tertiary)">Serviço: ${esc(a.service)} · ${new Date(a.timestamp).toLocaleString('pt-BR')}</div>
+                </div>
+                <button class="btn btn-secondary" data-action="alerts.resolve" data-id="${esc(a.id)}" type="button" style="flex-shrink:0;height:28px;padding:0 10px;font-size:11px">Resolver</button>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>` : '<div class="card" style="margin-bottom:16px"><div class="card-body"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">✅</div><div class="empty-state-title">Nenhum alerta ativo</div></div></div></div>'}
+      ${resolved.length ? `
+      <div class="card">
+        <div class="card-header"><span class="card-title">Resolvidos Recentemente</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+          ${resolved.map(a => `
+            <div style="padding:10px 12px;background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.12);border-radius:8px;opacity:0.8">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">${alertSeverityBadge(a.severity)}<span style="font-size:12px;font-weight:600">${esc(a.title)}</span><span class="badge badge-success" style="margin-left:auto">Resolvido</span></div>
+              <div style="font-size:11px;color:var(--text-tertiary)">${new Date(a.timestamp).toLocaleString('pt-BR')}</div>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+    `;
+  }
+  function renderOrgUsage() {
+    const d = obs.data;
+    if (!d) { document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏢</div><div class="empty-state-title">Carregando dados...</div></div>'; loadObservability().then(() => renderOrgUsage()); return; }
+    const orgs = d.orgConsumption || [];
+    document.getElementById('content').innerHTML = `
+      <div class="page-header">
+        <h1 class="page-title">Consumo por Organização</h1>
+        <p class="page-sub">Métricas de uso e performance segmentadas por organização.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Organizações Ativas</span><span class="badge badge-neutral">${orgs.length} orgs</span></div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Organização</th><th>Plano</th><th>Chamadas API</th><th>Storage (MB)</th><th>Usuários Ativos</th><th>Latência Média</th><th>Taxa de Erro</th></tr></thead>
+            <tbody>
+              ${orgs.map(o => `<tr>
+                <td style="font-weight:600">${esc(o.name)}</td>
+                <td><span class="badge ${o.plan==='Enterprise'?'badge-success':'badge-neutral'}">${esc(o.plan)}</span></td>
+                <td>${o.apiCalls.toLocaleString('pt-BR')}</td>
+                <td>${o.storage.toLocaleString('pt-BR')}</td>
+                <td>${o.activeUsers}</td>
+                <td>${o.avgResponseMs}ms</td>
+                <td><span style="color:${parseFloat(o.errorRate)>1?'#F43F5E':'#10B981'}">${o.errorRate}%</span></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
   function exportAudit() {
     const audit = state.data?.auditLog || [];
     const csv = ['Data,Ator,Ação,Detalhe,IP', ...audit.map(l => `"${l.createdAt}","${l.actor}","${l.action}","${l.detail}","${l.ip||''}"`).join('\n')].join('\n');
@@ -735,6 +963,10 @@
       case 'system.exportLogs': exportAudit(); break;
       case 'system.maintenance': toast('Modo manutenção requer confirmação do suporte.', 'info'); break;
       case 'device.revoke': if (confirm('Revogar sessão?')) mutate('device.revoke', {id:target.dataset.id}, 'Sessão revogada.'); break;
+      case 'health.refresh': loadObservability().then(() => renderHealth()).catch(e => toast(e.message,'error')); break;
+      case 'logs.refresh': loadObservability().then(() => renderLogs()).catch(e => toast(e.message,'error')); break;
+      case 'alerts.resolve': toast('Alerta marcado como resolvido.', 'success'); break;
+      case 'logs.export': exportLogs(); break;
       default: toast(`Ação: ${action}`, 'info');
     }
   });
@@ -757,7 +989,7 @@
       document.getElementById('admin-user-name').textContent = user.name || 'Admin';
       document.getElementById('admin-user-av').textContent = (user.name||'A').charAt(0).toUpperCase();
       const hash = location.hash.slice(1);
-      render(['overview','members','organizations','billing','audit','system','security'].includes(hash) ? hash : 'overview');
+      render(['overview','members','organizations','billing','audit','system','security','health','logs','alerts','org-usage'].includes(hash) ? hash : 'overview');
     } catch(e) {
       document.getElementById('content').innerHTML = `<div class="empty-state"><div class="empty-state-icon">\u{26A0}\u{FE0F}</div><div class="empty-state-title">Erro ao carregar</div><div class="empty-state-desc">${esc(e.message)}</div><button class="btn btn-primary" onclick="location.reload()" type="button">Tentar novamente</button></div>`;
     }

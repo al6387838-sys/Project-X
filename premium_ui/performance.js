@@ -336,3 +336,57 @@ if (typeof module !== 'undefined' && module.exports) {
     optimizeImages,
   };
 }
+
+// ─── Phase 180 — Performance Enterprise v19.0 ────────────────────────────────
+function initModuleLazyLoad() {
+  if (!('IntersectionObserver' in window)) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.lazyModule) {
+          import(el.dataset.lazyModule).catch(() => {});
+          observer.unobserve(el);
+        }
+      }
+    });
+  }, { rootMargin: '200px' });
+  document.querySelectorAll('[data-lazy-module]').forEach(el => observer.observe(el));
+}
+function prefetchCriticalRoutes() {
+  const routes = ['/app/index.html', '/login/index.html'];
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      routes.forEach(route => {
+        const link = document.createElement('link');
+        link.rel = 'prefetch'; link.href = route;
+        document.head.appendChild(link);
+      });
+    }, { timeout: 2000 });
+  }
+}
+function cleanupObsoleteListeners() {
+  if ('performance' in window && 'memory' in performance) {
+    const mem = performance.memory;
+    if (mem.usedJSHeapSize / mem.jsHeapSizeLimit > 0.85) globalCache?.clear?.();
+  }
+}
+function injectResourceHints() {
+  const hints = [
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true },
+  ];
+  hints.forEach(({ rel, href, crossorigin }) => {
+    if (!document.querySelector('link[rel="' + rel + '"][href="' + href + '"]')) {
+      const link = document.createElement('link');
+      link.rel = rel; link.href = href;
+      if (crossorigin) link.crossOrigin = 'anonymous';
+      document.head.insertBefore(link, document.head.firstChild);
+    }
+  });
+}
+if (typeof document !== 'undefined') {
+  const run = () => { initModuleLazyLoad(); prefetchCriticalRoutes(); injectResourceHints(); setInterval(cleanupObsoleteListeners, 60000); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+}
