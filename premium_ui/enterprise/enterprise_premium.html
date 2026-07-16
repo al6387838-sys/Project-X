@@ -664,6 +664,7 @@
         <button class="nav-item" data-view="notifications" type="button">
           <span class="nav-item-icon" aria-hidden="true"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Notificações</span>
+          <span class="nav-item-badge" id="nav-notification-count" style="display:none" aria-label="Notificações não lidas"></span>
         </button>
         <button class="nav-item" data-view="profile" type="button">
           <span class="nav-item-icon" aria-hidden="true"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></span>
@@ -844,6 +845,10 @@
     busy: false,
     query: '',
     notifOpen: false,
+    selectedWorkspaceId: null,
+    workspaceTab: 'overview',
+    notificationFilter: 'unread',
+    notificationCategory: 'all',
   };
 
   // ── Utilities ──
@@ -856,6 +861,18 @@
     const cls = map[s] || 'neutral';
     return `<span class="badge badge-${cls}">${esc(s)}</span>`;
   };
+
+  function syncNotificationIndicators() {
+    const unread = (state.data?.notifications || []).filter(notification => !notification.read).length;
+    const dot = document.getElementById('notif-dot');
+    const badge = document.getElementById('nav-notification-count');
+    if (dot) dot.style.display = unread > 0 ? 'block' : 'none';
+    if (badge) {
+      badge.textContent = unread > 99 ? '99+' : String(unread);
+      badge.style.display = unread > 0 ? 'flex' : 'none';
+      badge.setAttribute('aria-label', `${unread} notificação${unread === 1 ? '' : 'ões'} não lida${unread === 1 ? '' : 's'}`);
+    }
+  }
 
   // ── Toast ──
   function toast(msg, type='info', title='') {
@@ -908,7 +925,8 @@
     setBusy(true);
     try {
       await request(action, payload);
-      render(state.view);
+      renderView(state.view);
+      syncNotificationIndicators();
       toast(successMsg, 'success', successTitle);
     } catch (e) {
       toast(e.message, 'error', 'Erro');
@@ -990,25 +1008,25 @@
         <div class="kpi-card" style="animation-delay:0.05s">
           <div class="kpi-card-header">
             <div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{1F465}</div>
-            <span class="kpi-trend up">\u{2191} +12%</span>
+            <span class="kpi-trend flat">Estado atual</span>
           </div>
-          <div class="kpi-value">${(state.data.members||[]).length}</div>
+          <div class="kpi-value">${(state.data.members||[]).filter(member => member.status === 'active').length}</div>
           <div class="kpi-label">Membros ativos</div>
-          <div class="kpi-sub">Organização</div>
+          <div class="kpi-sub">Dados persistidos da organização</div>
         </div>
         <div class="kpi-card" style="animation-delay:0.10s">
           <div class="kpi-card-header">
             <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{26A1}</div>
-            <span class="kpi-trend up">\u{2191} ${sys.uptime||99.9}%</span>
+            <span class="kpi-trend flat">Não monitorada</span>
           </div>
-          <div class="kpi-value" style="color:#10B981">${sys.uptime||99.9}%</div>
-          <div class="kpi-label">Uptime</div>
-          <div class="kpi-sub">Últimos 30 dias</div>
+          <div class="kpi-value" style="font-size:18px;color:var(--text-secondary)">Indisponível</div>
+          <div class="kpi-label">Telemetria de infraestrutura</div>
+          <div class="kpi-sub">${esc(sys.telemetryReason||'Fonte de telemetria não configurada.')}</div>
         </div>
         <div class="kpi-card" style="animation-delay:0.15s">
           <div class="kpi-card-header">
             <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{1F4B3}</div>
-            <span class="kpi-trend flat">\u{2192} Estável</span>
+            <span class="kpi-trend flat">Valor contratado</span>
           </div>
           <div class="kpi-value">${money(sub.monthlyValue||0)}</div>
           <div class="kpi-label">MRR</div>
@@ -1017,11 +1035,11 @@
         <div class="kpi-card" style="animation-delay:0.20s">
           <div class="kpi-card-header">
             <div class="kpi-icon" style="background:rgba(244,63,94,0.12)">\u{1F9E0}</div>
-            <span class="kpi-trend ${insights.length>0?'down':'up'}">${insights.length>0?'\u{2193}':'\u{2191}'} ${insights.length} abertos</span>
+            <span class="kpi-trend ${insights.length>0?'down':'flat'}">${insights.length} em aberto</span>
           </div>
           <div class="kpi-value" style="color:${insights.length>0?'#F43F5E':'#10B981'}">${insights.length}</div>
           <div class="kpi-label">Insights</div>
-          <div class="kpi-sub">Requerem atenção</div>
+          <div class="kpi-sub">Estado persistido atual</div>
         </div>
       </div>
 
@@ -1052,25 +1070,19 @@
         <!-- System Health -->
         <div class="card">
           <div class="card-header">
-            <div><div class="card-title">Saúde do Sistema</div><div class="card-subtitle">Métricas em tempo real</div></div>
-            <span class="badge badge-success">Operacional</span>
+            <div><div class="card-title">Saúde do Sistema</div><div class="card-subtitle">Sinais verificáveis no estado Enterprise</div></div>
+            <span class="badge badge-warning">Telemetria não configurada</span>
           </div>
           <div class="card-body">
-            <div style="margin-bottom:16px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                <span style="font-size:12px;color:var(--text-secondary)">Score geral</span>
-                <span style="font-size:22px;font-weight:700;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.healthScore||94}%</span>
-              </div>
-              <div class="progress"><div class="progress-bar" style="width:${sys.healthScore||94}%"></div></div>
-            </div>
-            <div class="metric-row"><span class="metric-label">CPU</span><div class="metric-track"><div class="metric-fill" style="width:${sys.cpu||23}%;background:#6366F1"></div></div><span class="metric-val">${sys.cpu||23}%</span></div>
-            <div class="metric-row"><span class="metric-label">Memória</span><div class="metric-track"><div class="metric-fill" style="width:${sys.memory||41}%;background:#8B5CF6"></div></div><span class="metric-val">${sys.memory||41}%</span></div>
-            <div class="metric-row"><span class="metric-label">Latência p95</span><div class="metric-track"><div class="metric-fill" style="width:${Math.min((sys.apiP95||48)/5,100)}%;background:#10B981"></div></div><span class="metric-val">${sys.apiP95||48}ms</span></div>
-            <div class="metric-row"><span class="metric-label">Sessões</span><div class="metric-track"><div class="metric-fill" style="width:${Math.min((sys.activeSessions||12)/50*100,100)}%;background:#F59E0B"></div></div><span class="metric-val">${sys.activeSessions||12}</span></div>
+            <div class="metric-row"><span class="metric-label">Membros ativos</span><div class="metric-track"><div class="metric-fill" style="width:${Math.min(((sys.activeMembers ?? (state.data.members||[]).filter(member => member.status === 'active').length) / Math.max((state.data.members||[]).length, 1))*100,100)}%;background:#6366F1"></div></div><span class="metric-val">${sys.activeMembers ?? (state.data.members||[]).filter(member => member.status === 'active').length}</span></div>
+            <div class="metric-row"><span class="metric-label">Ambiente</span><span class="metric-val">Cloudflare Pages</span></div>
+            <div class="metric-row"><span class="metric-label">Infraestrutura</span><span class="metric-val">Não monitorada</span></div>
+            <div class="metric-row"><span class="metric-label">Última verificação</span><span class="metric-val">${fmtDate(sys.lastCheckedAt, true)}</span></div>
+            <p style="font-size:12px;line-height:1.55;color:var(--text-tertiary);margin:16px 0 0">${esc(sys.telemetryReason||'Métricas de CPU, memória, uptime e latência exigem uma fonte de telemetria configurada.')}</p>
           </div>
           <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:11px;color:var(--text-tertiary)">Atualizado agora</span>
-            <button class="btn btn-sm btn-secondary" data-action="system.refresh" type="button">↻ Atualizar</button>
+            <span style="font-size:11px;color:var(--text-tertiary)">Nenhum valor de infraestrutura é estimado</span>
+            <button class="btn btn-sm btn-secondary" data-action="system.refresh" type="button">↻ Verificar</button>
           </div>
         </div>
       </div>
@@ -1119,34 +1131,28 @@
   function renderAnalytics() {
     const members = state.data?.members || [];
     const sys = state.data?.system || {};
+    const activeMembers = members.filter(member => member.status === 'active').length;
     document.getElementById('analytics-content').innerHTML = `
       <div class="page-header">
         <div class="page-kicker">LifeOS Enterprise</div>
         <h1 class="page-title">Analytics Executivo</h1>
-        <p class="page-subtitle">Métricas de desempenho e crescimento da organização.</p>
+        <p class="page-subtitle">Indicadores calculados somente a partir do estado persistido da organização.</p>
       </div>
       <div class="kpi-grid" style="margin-bottom:24px">
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{1F4C8}</div><span class="kpi-trend up">\u{2191} 18%</span></div><div class="kpi-value">${members.length}</div><div class="kpi-label">Total membros</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{2705}</div><span class="kpi-trend up">\u{2191} 5%</span></div><div class="kpi-value">${sys.uptime||99.9}%</div><div class="kpi-label">Disponibilidade</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{26A1}</div><span class="kpi-trend flat">\u{2192} Estável</span></div><div class="kpi-value">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
-        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(59,130,246,0.12)">\u{1F504}</div><span class="kpi-trend up">\u{2191} 23%</span></div><div class="kpi-value">${sys.activeSessions||12}</div><div class="kpi-label">Sessões ativas</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(99,102,241,0.12)">\u{1F4C8}</div><span class="kpi-trend flat">Estado atual</span></div><div class="kpi-value">${members.length}</div><div class="kpi-label">Total de membros</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(16,185,129,0.12)">\u{2705}</div><span class="kpi-trend flat">Sem fonte</span></div><div class="kpi-value" style="font-size:18px;color:var(--text-secondary)">Indisponível</div><div class="kpi-label">Disponibilidade</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(245,158,11,0.12)">\u{26A1}</div><span class="kpi-trend flat">Sem fonte</span></div><div class="kpi-value" style="font-size:18px;color:var(--text-secondary)">Indisponível</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-card-header"><div class="kpi-icon" style="background:rgba(59,130,246,0.12)">\u{1F465}</div><span class="kpi-trend flat">Estado atual</span></div><div class="kpi-value">${activeMembers}</div><div class="kpi-label">Membros ativos</div></div>
       </div>
       <div class="grid-2">
         <div class="card">
-          <div class="card-header"><div class="card-title">Crescimento de Membros</div></div>
+          <div class="card-header"><div><div class="card-title">Crescimento de Membros</div><div class="card-subtitle">Série histórica</div></div></div>
           <div class="card-body">
-            <svg class="chart-svg" viewBox="0 0 400 160" style="height:160px">
-              <defs>
-                <linearGradient id="aGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#6366F1" stop-opacity="0.3"/>
-                  <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              ${[0,40,80,120].map(y => `<line x1="0" y1="${y+10}" x2="400" y2="${y+10}" class="chart-grid-line"/>`).join('')}
-              <path d="M0,130 C40,120 80,100 120,90 C160,80 200,70 240,55 C280,40 320,30 400,20" fill="url(#aGrad)"/>
-              <path d="M0,130 C40,120 80,100 120,90 C160,80 200,70 240,55 C280,40 320,30 400,20" fill="none" stroke="#6366F1" stroke-width="2.5" stroke-linecap="round"/>
-              ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul'].map((m,i) => `<text x="${i*60+10}" y="155" class="chart-label">${m}</text>`).join('')}
-            </svg>
+            <div class="empty-state" style="padding:36px 20px">
+              <div class="empty-state-icon">\u{1F4C8}</div>
+              <div class="empty-state-title">Série histórica indisponível</div>
+              <div class="empty-state-desc">O LIFEOS ainda não armazena snapshots temporais de membros. Nenhuma tendência é estimada.</div>
+            </div>
           </div>
         </div>
         <div class="card">
@@ -1351,44 +1357,133 @@
   }
 
   // ── WORKSPACES ──
+  function workspaceMembers(workspace) {
+    const references = workspace?.members || [];
+    return references.map(reference => (state.data?.members || []).find(member => member.id === reference || member.email === reference)).filter(Boolean);
+  }
+
   function renderWorkspaces() {
-    const ws = state.data?.workspaces || [];
+    const workspaces = state.data?.workspaces || [];
+    const selected = workspaces.find(workspace => workspace.id === state.selectedWorkspaceId);
+    if (state.selectedWorkspaceId && !selected) state.selectedWorkspaceId = null;
+    if (selected) { renderWorkspaceDetail(selected); return; }
+
     document.getElementById('workspaces-content').innerHTML = `
-      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
         <div>
           <h1 class="page-title">Workspaces</h1>
-          <p class="page-subtitle">${ws.length} workspace${ws.length!==1?'s':''} configurados.</p>
+          <p class="page-subtitle">${workspaces.length} workspace${workspaces.length!==1?'s':''} configurado${workspaces.length!==1?'s':''} e persistido${workspaces.length!==1?'s':''}.</p>
         </div>
         <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo workspace</button>
       </div>
-      ${ws.length ? `
+      ${workspaces.length ? `
       <div class="grid-2">
-        ${ws.map(w => `
-          <div class="card card-interactive" style="padding:20px">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
-              <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px">\u{1F4C1}</div>
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:var(--text-primary)">${esc(w.name)}</div>
-                  <div style="font-size:12px;color:var(--text-tertiary)">${esc(w.type||'workspace')}</div>
+        ${workspaces.map(workspace => {
+          const members = workspaceMembers(workspace);
+          return `
+          <article class="card card-interactive" style="padding:20px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                <div class="avatar" aria-hidden="true">${esc((workspace.name||'W').charAt(0).toUpperCase())}</div>
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(workspace.name)}</div>
+                  <div style="font-size:12px;color:var(--text-tertiary)">${esc(workspace.type||'general')}</div>
                 </div>
               </div>
-              ${statusBadge(w.status||'active')}
+              ${statusBadge(workspace.status||'active')}
             </div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">${esc(w.description||'')}</div>
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:11px;color:var(--text-tertiary)">${(w.members||[]).length} membros</span>
-              <button class="btn btn-sm btn-ghost" data-action="workspace.open" data-id="${esc(w.id)}" type="button">Abrir \u{2192}</button>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0 0 16px;min-height:36px">${esc(workspace.description||'Sem descrição definida.')}</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <span style="font-size:11px;color:var(--text-tertiary)">${members.length} membro${members.length!==1?'s':''} · Atualizado ${fmtDate(workspace.updatedAt||workspace.createdAt)}</span>
+              <button class="btn btn-sm btn-ghost" data-action="workspace.open" data-id="${esc(workspace.id)}" type="button">Abrir <span aria-hidden="true">→</span></button>
             </div>
-          </div>
-        `).join('')}
+          </article>`;
+        }).join('')}
       </div>` : `
       <div class="empty-state">
-        <div class="empty-state-icon">\u{1F4C1}</div>
+        <div class="empty-state-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
         <div class="empty-state-title">Nenhum workspace</div>
-        <div class="empty-state-desc">Crie workspaces para organizar projetos e equipes.</div>
+        <div class="empty-state-desc">Crie um workspace para organizar membros, preferências e atividades.</div>
         <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar workspace</button>
       </div>`}
+    `;
+  }
+
+  function renderWorkspaceDetail(workspace) {
+    const members = workspaceMembers(workspace);
+    const availableMembers = (state.data?.members || []).filter(member => !(workspace.members || []).includes(member.id));
+    const activity = workspace.activity || [];
+    const tabs = [
+      ['overview', 'Visão geral'],
+      ['members', 'Membros'],
+      ['activity', 'Atividade'],
+      ['preferences', 'Preferências'],
+    ];
+    const tab = tabs.some(item => item[0] === state.workspaceTab) ? state.workspaceTab : 'overview';
+    let content = '';
+
+    if (tab === 'overview') {
+      content = `
+        <div class="kpi-grid" style="margin-bottom:20px">
+          <div class="kpi-card"><div class="kpi-label">Membros</div><div class="kpi-value">${members.length}</div><div class="kpi-sub">Acesso ativo ao workspace</div></div>
+          <div class="kpi-card"><div class="kpi-label">Atividades</div><div class="kpi-value">${activity.length}</div><div class="kpi-sub">Eventos persistidos</div></div>
+          <div class="kpi-card"><div class="kpi-label">Status</div><div class="kpi-value" style="font-size:22px">${workspace.status === 'archived' ? 'Arquivado' : 'Ativo'}</div><div class="kpi-sub">Atualizado ${fmtDate(workspace.updatedAt||workspace.createdAt)}</div></div>
+        </div>
+        <div class="grid-2">
+          <section class="card">
+            <div class="card-header"><div><div class="card-title">Propósito</div><div class="card-subtitle">Contexto central do workspace</div></div></div>
+            <div class="card-body" style="font-size:13px;color:var(--text-secondary);line-height:1.65">${esc(workspace.description||'Nenhuma descrição definida.')}</div>
+          </section>
+          <section class="card">
+            <div class="card-header"><div><div class="card-title">Atividade recente</div><div class="card-subtitle">Últimas alterações persistidas</div></div><button class="btn btn-sm btn-ghost" data-action="workspace.tab" data-tab="activity" type="button">Ver tudo</button></div>
+            <div class="card-body" style="display:grid;gap:12px">
+              ${activity.length ? activity.slice(0,4).map(item => `<div style="display:flex;gap:10px;align-items:flex-start"><span class="status-dot status-dot-success" style="margin-top:6px"></span><div><div style="font-size:12px;color:var(--text-primary)">${esc(item.detail)}</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:3px">${esc(item.actor)} · ${fmtDate(item.createdAt,true)}</div></div></div>`).join('') : `<div class="empty-state" style="padding:28px 16px"><div class="empty-state-title">Sem atividade recente</div><div class="empty-state-desc">As alterações realizadas neste workspace aparecerão aqui.</div></div>`}
+            </div>
+          </section>
+        </div>`;
+    } else if (tab === 'members') {
+      content = `
+        <section class="card">
+          <div class="card-header" style="gap:16px;align-items:flex-end;flex-wrap:wrap">
+            <div><div class="card-title">Membros do workspace</div><div class="card-subtitle">${members.length} membro${members.length!==1?'s':''} com acesso</div></div>
+            ${availableMembers.length ? `<div style="display:flex;gap:8px;margin-left:auto"><select class="form-select" id="workspace-member-select" aria-label="Selecionar membro"><option value="">Selecionar membro</option>${availableMembers.map(member => `<option value="${esc(member.id)}">${esc(member.name)} · ${esc(roleName(member.roleId))}</option>`).join('')}</select><button class="btn btn-primary btn-sm" data-action="workspace.member.add" data-id="${esc(workspace.id)}" type="button">Adicionar</button></div>` : `<span class="badge badge-neutral">Todos adicionados</span>`}
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th>Perfil</th><th>Status</th><th aria-label="Ações"></th></tr></thead><tbody>${members.map(member => `<tr><td><div style="display:flex;align-items:center;gap:10px"><span class="avatar avatar-sm">${esc((member.name||'M').charAt(0).toUpperCase())}</span><div><div style="font-weight:600">${esc(member.name)}</div><div style="font-size:11px;color:var(--text-tertiary)">${esc(member.email)}</div></div></div></td><td>${esc(member.team||'Geral')}</td><td>${esc(roleName(member.roleId))}</td><td>${statusBadge(member.status||'active')}</td><td style="text-align:right"><button class="btn btn-sm btn-ghost" data-action="workspace.member.remove" data-id="${esc(workspace.id)}" data-member-id="${esc(member.id)}" ${members.length<=1?'disabled':''} type="button">Remover</button></td></tr>`).join('')}</tbody></table></div>
+        </section>`;
+    } else if (tab === 'activity') {
+      content = `
+        <section class="card">
+          <div class="card-header"><div><div class="card-title">Atividade do workspace</div><div class="card-subtitle">Registro persistente das alterações realizadas</div></div></div>
+          <div class="card-body" style="display:grid;gap:14px">${activity.length ? activity.map(item => `<div style="display:grid;grid-template-columns:minmax(140px,180px) 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)"><div style="font-size:11px;color:var(--text-tertiary)">${fmtDate(item.createdAt,true)}</div><div><div style="font-size:13px;color:var(--text-primary)">${esc(item.detail)}</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:4px">${esc(item.actor)} · ${esc(item.action)}</div></div></div>`).join('') : `<div class="empty-state"><div class="empty-state-title">Nenhuma atividade registrada</div><div class="empty-state-desc">A criação, edição e gestão de membros geram eventos automaticamente.</div></div>`}</div>
+        </section>`;
+    } else {
+      const preferences = workspace.preferences || {};
+      content = `
+        <div class="grid-2">
+          <section class="card">
+            <div class="card-header"><div><div class="card-title">Preferências</div><div class="card-subtitle">Configurações persistentes do workspace</div></div></div>
+            <div class="card-body">
+              <div class="form-group"><label class="form-label" for="workspace-name">Nome</label><input class="form-input" id="workspace-name" value="${esc(workspace.name)}" maxlength="120"></div>
+              <div class="form-group"><label class="form-label" for="workspace-description">Descrição</label><textarea class="form-input" id="workspace-description" rows="4" style="height:auto;resize:vertical">${esc(workspace.description||'')}</textarea></div>
+              <div class="form-group"><label class="form-label" for="workspace-default-view">Tela inicial</label><select class="form-select" id="workspace-default-view">${tabs.map(item => `<option value="${item[0]}" ${preferences.defaultView===item[0]?'selected':''}>${item[1]}</option>`).join('')}</select></div>
+              <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);margin-bottom:20px"><input id="workspace-notifications" type="checkbox" ${preferences.notifications!==false?'checked':''} style="accent-color:#6366F1"> Receber notificações deste workspace</label>
+              <button class="btn btn-primary" data-action="workspace.preferences.save" data-id="${esc(workspace.id)}" type="button">Salvar preferências</button>
+            </div>
+          </section>
+          <section class="card" style="border-color:rgba(239,68,68,.22)">
+            <div class="card-header"><div><div class="card-title">Zona de risco</div><div class="card-subtitle">Ações administrativas irreversíveis</div></div></div>
+            <div class="card-body"><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-top:0">A exclusão remove este workspace e seu histórico interno. O log global de auditoria permanece preservado.</p>${workspace.protected?`<div class="alert-banner" style="margin:0"><span class="alert-text"><strong>Workspace protegido.</strong> A organização deve manter este workspace.</span></div>`:`<button class="btn btn-danger" data-action="workspace.delete.prompt" data-id="${esc(workspace.id)}" type="button">Excluir workspace</button>`}</div>
+          </section>
+        </div>`;
+    }
+
+    document.getElementById('workspaces-content').innerHTML = `
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div><button class="btn btn-sm btn-ghost" data-action="workspace.back" type="button" style="margin-bottom:10px">← Todos os workspaces</button><h1 class="page-title">${esc(workspace.name)}</h1><p class="page-subtitle">${esc(workspace.type||'general')} · ${members.length} membro${members.length!==1?'s':''}</p></div>
+        <div style="display:flex;gap:8px;align-items:center">${workspace.protected?'<span class="badge badge-neutral">Protegido</span>':''}${statusBadge(workspace.status||'active')}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:10px">${tabs.map(item => `<button class="btn btn-sm ${tab===item[0]?'btn-primary':'btn-ghost'}" data-action="workspace.tab" data-tab="${item[0]}" aria-pressed="${tab===item[0]}" type="button">${item[1]}</button>`).join('')}</div>
+      ${content}
     `;
   }
 
@@ -1492,48 +1587,72 @@
   }
 
   // ── INTEGRATIONS ──
+  const integrationCatalog = [
+    { id:'google', name:'Google Workspace', desc:'Identidade, agenda e colaboração corporativa.', icon:'layout-grid', category:'Produtividade', permissions:[['directory.read','Ler diretório'],['calendar.read','Ler agendas'],['calendar.write','Gerenciar eventos']] },
+    { id:'slack', name:'Slack', desc:'Canal administrativo para alertas e eventos.', icon:'message-square', category:'Comunicação', permissions:[['channels.read','Ler canais'],['messages.write','Enviar mensagens'],['users.read','Ler usuários']] },
+    { id:'notion', name:'Notion', desc:'Bases de conhecimento e páginas autorizadas.', icon:'notebook-tabs', category:'Conhecimento', permissions:[['pages.read','Ler páginas'],['pages.write','Atualizar páginas'],['databases.read','Ler bases']] },
+    { id:'github', name:'GitHub', desc:'Repositórios, issues e pull requests autorizados.', icon:'github', category:'Engenharia', permissions:[['repo.read','Ler repositórios'],['issues.read','Ler issues'],['pull_requests.read','Ler pull requests']] },
+    { id:'jira', name:'Jira', desc:'Projetos, tarefas e ciclos de entrega.', icon:'panels-top-left', category:'Gestão', permissions:[['projects.read','Ler projetos'],['issues.read','Ler tarefas'],['issues.write','Atualizar tarefas']] },
+    { id:'salesforce', name:'Salesforce', desc:'Contas e oportunidades do ambiente autorizado.', icon:'cloud', category:'Vendas', permissions:[['accounts.read','Ler contas'],['opportunities.read','Ler oportunidades'],['opportunities.write','Atualizar oportunidades']] },
+  ];
+
+  function integrationStatusMeta(integration) {
+    if (integration.status === 'failed') return { label:'Falha', badge:'badge-danger', icon:'circle-alert' };
+    if (integration.connected) return { label:'Ativa', badge:'badge-success', icon:'circle-check' };
+    if (integration.configured) return { label:'Desconectada', badge:'badge-warning', icon:'circle-pause' };
+    return { label:'Não configurada', badge:'badge-neutral', icon:'circle-minus' };
+  }
+
   function renderIntegrations() {
     const integrations = state.data?.integrations || [];
-    const allIntegrations = [
-      { id:'slack', name:'Slack', desc:'Notificações e alertas em tempo real', icon:'\u{1F4AC}', category:'Comunicação' },
-      { id:'github', name:'GitHub', desc:'Rastreamento de repositórios e PRs', icon:'\u{1F419}', category:'Desenvolvimento' },
-      { id:'jira', name:'Jira', desc:'Sincronização de tarefas e sprints', icon:'\u{1F4CC}', category:'Gestão' },
-      { id:'google', name:'Google Workspace', desc:'SSO e sincronização de calendário', icon:'\u{1F535}', category:'Produtividade' },
-      { id:'salesforce', name:'Salesforce', desc:'Dados de CRM e pipeline', icon:'\u{2601}\u{FE0F}', category:'Vendas' },
-      { id:'zapier', name:'Zapier', desc:'Automações sem código', icon:'\u{26A1}', category:'Automação' },
-    ];
+    const connectedCount = integrations.filter(item => item.connected).length;
+    const configuredCount = integrations.filter(item => item.configured).length;
+    const failureCount = integrations.filter(item => item.status === 'failed').length;
     document.getElementById('integrations-content').innerHTML = `
       <div class="page-header">
-        <h1 class="page-title">Integrações</h1>
-        <p class="page-subtitle">Conecte o LifeOS com suas ferramentas favoritas.</p>
+        <h1 class="page-title">Central de Integrações</h1>
+        <p class="page-subtitle">Configurações, permissões e eventos persistidos. O LIFEOS não reporta sincronizações externas sem evidência do provedor.</p>
       </div>
+      <div class="grid-3" style="margin-bottom:18px">
+        <div class="card"><div class="card-body"><div class="stat-label">Configuradas</div><div class="stat-value">${configuredCount}</div><div class="stat-sub">de ${integrationCatalog.length} disponíveis</div></div></div>
+        <div class="card"><div class="card-body"><div class="stat-label">Conexões ativas</div><div class="stat-value">${connectedCount}</div><div class="stat-sub">estado administrativo no LIFEOS</div></div></div>
+        <div class="card"><div class="card-body"><div class="stat-label">Falhas registradas</div><div class="stat-value">${failureCount}</div><div class="stat-sub">baseado no histórico persistido</div></div></div>
+      </div>
+      <div class="alert-banner" style="margin-bottom:18px"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i><span class="alert-text"><strong>Estado verificável.</strong> Configurar ou reconectar organiza o acesso dentro do LIFEOS; chamadas ao provedor só serão registradas quando uma credencial externa estiver disponível.</span></div>
       <div class="grid-2">
-        ${allIntegrations.map(int => {
-          const active = integrations.find(i => i.id === int.id)?.enabled;
+        ${integrationCatalog.map(meta => {
+          const integration = integrations.find(item => item.id === meta.id) || { id:meta.id, configured:false, connected:false, status:'not_configured', permissions:[], history:[], config:{} };
+          const status = integrationStatusMeta(integration);
+          const permissions = integration.permissions || [];
           return `
           <div class="card">
-            <div class="card-body" style="padding:16px 20px">
-              <div class="integration-item" style="padding:0;border:none">
-                <div class="integration-icon">${int.icon}</div>
-                <div class="integration-info">
-                  <div class="integration-name">${esc(int.name)}</div>
-                  <div class="integration-desc">${esc(int.desc)}</div>
-                  <span class="badge badge-neutral" style="margin-top:4px">${esc(int.category)}</span>
+            <div class="card-body" style="padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <div class="integration-icon" aria-hidden="true"><i data-lucide="${meta.icon}" class="pg-icon"></i></div>
+                <div class="integration-info" style="min-width:0">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div class="integration-name">${esc(meta.name)}</div><span class="badge ${status.badge}"><i data-lucide="${status.icon}" class="pg-icon" aria-hidden="true"></i> ${status.label}</span></div>
+                  <div class="integration-desc">${esc(meta.desc)}</div>
+                  <span class="badge badge-neutral" style="margin-top:5px">${esc(meta.category)}</span>
                 </div>
-                <label class="toggle-switch" aria-label="Ativar ${int.name}">
-                  <input type="checkbox" ${active?'checked':''} data-action="integration.toggle" data-id="${int.id}">
-                  <div class="toggle-track"></div>
-                </label>
+              </div>
+              ${integration.configured ? `
+                <div style="display:grid;gap:7px;padding:12px;border:1px solid var(--border-subtle);border-radius:10px;background:var(--bg-elevated)">
+                  <div style="display:flex;justify-content:space-between;gap:12px"><span class="text-muted">Conta / ambiente</span><strong style="font-size:12px;text-align:right">${esc(integration.config?.accountLabel || '—')}</strong></div>
+                  <div style="display:flex;justify-content:space-between;gap:12px"><span class="text-muted">Última conexão</span><span style="font-size:12px;text-align:right">${integration.lastConnectionAt ? fmtDate(integration.lastConnectionAt, true) : 'Nenhuma registrada'}</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:12px"><span class="text-muted">Última sincronização externa</span><span style="font-size:12px;text-align:right">${integration.lastSyncAt ? fmtDate(integration.lastSyncAt, true) : 'Nenhuma registrada'}</span></div>
+                  ${integration.lastError ? `<div style="color:var(--danger);font-size:12px"><strong>Falha:</strong> ${esc(integration.lastError)}</div>` : ''}
+                </div>
+                <div><div class="stat-label" style="margin-bottom:7px">Permissões autorizadas</div><div style="display:flex;gap:6px;flex-wrap:wrap">${permissions.length ? permissions.map(permission => `<span class="badge badge-neutral">${esc(permission)}</span>`).join('') : '<span class="text-muted">Nenhuma permissão selecionada.</span>'}</div></div>
+              ` : `<div class="empty-state" style="padding:14px 10px"><div class="empty-state-title">Configuração necessária</div><div class="empty-state-desc">Nenhuma conta, permissão ou evento de conexão foi registrado.</div></div>`}
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
+                <button class="btn ${integration.configured?'btn-secondary':'btn-primary'}" data-action="integration.configure.open" data-id="${meta.id}" type="button"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i>${integration.configured?'Configurar':'Configurar integração'}</button>
+                ${integration.configured ? `<button class="btn ${integration.connected?'btn-secondary':'btn-primary'}" data-action="${integration.connected?'integration.disconnect':'integration.reconnect'}" data-id="${meta.id}" type="button"><i data-lucide="${integration.connected?'unplug':'refresh-cw'}" class="pg-icon" aria-hidden="true"></i>${integration.connected?'Desconectar':'Reconectar'}</button><button class="btn btn-ghost" data-action="integration.history.open" data-id="${meta.id}" type="button"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i>Histórico</button>` : ''}
               </div>
             </div>
           </div>`;
         }).join('')}
       </div>
     `;
-    // Bind toggles
-    document.querySelectorAll('#integrations-content input[data-action="integration.toggle"]').forEach(el => {
-      el.addEventListener('change', () => mutate('integration.toggle', {id:el.dataset.id}, `Integração ${el.dataset.id} ${el.checked?'ativada':'desativada'}.`, 'Integração'));
-    });
   }
 
   // ── SECURITY ──
@@ -1633,38 +1752,93 @@
   }
 
   // ── NOTIFICATIONS ──
+  const notificationCategories = {
+    security: { label:'Segurança', icon:'shield-alert' },
+    billing: { label:'Assinatura', icon:'credit-card' },
+    people: { label:'Pessoas', icon:'users' },
+    workspaces: { label:'Workspaces', icon:'layout-grid' },
+    integrations: { label:'Integrações', icon:'plug' },
+    intelligence: { label:'Inteligência', icon:'brain-circuit' },
+    system: { label:'Sistema', icon:'server-cog' },
+  };
+
   function renderNotifications() {
     const notifs = state.data?.notifications || [];
+    const unread = notifs.filter(notification => !notification.read).length;
+    const filtered = notifs.filter(notification => {
+      const statusMatches = state.notificationFilter === 'all' || (state.notificationFilter === 'unread' && !notification.read) || (state.notificationFilter === 'read' && notification.read);
+      const categoryMatches = state.notificationCategory === 'all' || notification.category === state.notificationCategory;
+      return statusMatches && categoryMatches;
+    });
+    const emptyTitle = notifs.length ? 'Nenhuma notificação neste filtro' : 'Nenhum evento registrado';
+    const emptyDescription = notifs.length ? 'Ajuste o status ou a categoria para ampliar os resultados.' : 'Eventos operacionais reais aparecerão aqui quando ocorrerem no LIFEOS.';
     document.getElementById('notifications-content').innerHTML = `
-      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
         <div>
+          <div class="page-kicker">Central unificada</div>
           <h1 class="page-title">Notificações</h1>
-          <p class="page-subtitle">${notifs.filter(n=>!n.read).length} não lidas.</p>
+          <p class="page-subtitle">${unread} não lida${unread === 1 ? '' : 's'} de ${notifs.length} evento${notifs.length === 1 ? '' : 's'} persistido${notifs.length === 1 ? '' : 's'}.</p>
         </div>
-        <button class="btn btn-secondary" data-action="notifications.markAll" type="button">\u{2713} Marcar todas como lidas</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+          <button class="btn btn-secondary" data-action="notifications.preferences.open" type="button"><i data-lucide="sliders-horizontal" class="pg-icon" aria-hidden="true"></i> Preferências</button>
+          <button class="btn btn-secondary" data-action="notifications.markAll" type="button" ${unread ? '' : 'disabled'}><i data-lucide="check-check" class="pg-icon" aria-hidden="true"></i> Marcar todas como lidas</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div class="filter-chips" role="group" aria-label="Filtrar notificações por leitura">
+            ${[['unread','Não lidas'],['all','Todas'],['read','Lidas']].map(([value,label]) => `<button class="filter-chip ${state.notificationFilter === value ? 'active' : ''}" data-action="notifications.filter" data-filter="${value}" type="button">${label}</button>`).join('')}
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary)">
+            Categoria
+            <select class="form-select" id="notification-category-filter" style="width:180px;height:32px;font-size:12px" aria-label="Filtrar notificações por categoria">
+              <option value="all">Todas as categorias</option>
+              ${Object.entries(notificationCategories).map(([value,meta]) => `<option value="${value}" ${state.notificationCategory === value ? 'selected' : ''}>${meta.label}</option>`).join('')}
+            </select>
+          </label>
+        </div>
       </div>
       <div class="card">
-        ${notifs.length ? notifs.map(n => `
-          <div class="activity-item ${n.read?'':''}${!n.read?'" style="background:rgba(99,102,241,0.04)':''}">
-            <div class="activity-icon" style="background:rgba(99,102,241,0.10)">${n.icon||'\u{1F514}'}</div>
+        ${filtered.length ? filtered.map(notification => {
+          const category = notificationCategories[notification.category] || notificationCategories.system;
+          return `
+          <div class="activity-item" ${!notification.read ? 'style="background:rgba(99,102,241,0.04)"' : ''}>
+            <div class="activity-icon" style="background:rgba(99,102,241,0.10)"><i data-lucide="${category.icon}" class="pg-icon" aria-hidden="true"></i></div>
             <div class="activity-body">
-              <div class="activity-title">${esc(n.title)}</div>
-              <div class="activity-desc">${esc(n.message||n.body||'')}</div>
+              <div class="activity-title">${esc(notification.title)}</div>
+              <div class="activity-desc">${esc(notification.message || '')}</div>
               <div class="activity-meta">
-                <span class="activity-time">${fmtDate(n.createdAt, true)}</span>
-                ${!n.read ? '<span class="badge badge-primary">Nova</span>' : ''}
+                <span class="badge badge-neutral">${category.label}</span>
+                <span class="activity-time">${fmtDate(notification.createdAt, true)}</span>
+                ${!notification.read ? '<span class="badge badge-primary">Não lida</span>' : `<span class="badge badge-success">Lida ${notification.readAt ? fmtDate(notification.readAt, true) : ''}</span>`}
               </div>
             </div>
-            ${!n.read ? `<button class="btn btn-sm btn-ghost" data-action="notification.read" data-id="${esc(n.id)}" type="button" aria-label="Marcar notificação como lida" title="Marcar como lida">\u{2713}</button>` : ''}
-          </div>
-        `).join('') : `
+            ${!notification.read ? `<button class="btn btn-sm btn-ghost" data-action="notification.read" data-id="${esc(notification.id)}" type="button" aria-label="Marcar ${esc(notification.title)} como lida" title="Marcar como lida"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></button>` : ''}
+          </div>`;
+        }).join('') : `
           <div class="empty-state">
-            <div class="empty-state-icon">\u{1F514}</div>
-            <div class="empty-state-title">Sem notificações</div>
-            <div class="empty-state-desc">Você está em dia! Novas notificações aparecerão aqui.</div>
+            <div class="empty-state-icon"><i data-lucide="bell-off" class="pg-icon" aria-hidden="true"></i></div>
+            <div class="empty-state-title">${emptyTitle}</div>
+            <div class="empty-state-desc">${emptyDescription}</div>
           </div>`}
       </div>
     `;
+    document.getElementById('notification-category-filter')?.addEventListener('change', event => {
+      state.notificationCategory = event.target.value;
+      renderNotifications();
+    });
+    syncNotificationIndicators();
+  }
+
+  function openNotificationPreferencesModal() {
+    const preferences = state.data?.notificationPreferences || {};
+    openModal('Preferências de notificações', `
+      <p style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px">Escolha quais categorias podem gerar novos avisos. A alteração não remove eventos já registrados.</p>
+      <div style="display:grid;gap:8px">
+        ${Object.entries(notificationCategories).map(([category,meta]) => `<label class="card" style="display:flex;align-items:center;gap:12px;padding:12px;cursor:pointer"><div class="activity-icon" style="background:rgba(99,102,241,0.10)"><i data-lucide="${meta.icon}" class="pg-icon" aria-hidden="true"></i></div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-primary)">${meta.label}</div><div style="font-size:11px;color:var(--text-tertiary)">Receber novos eventos desta categoria</div></div><span class="toggle-switch"><input id="notification-pref-${category}" type="checkbox" ${preferences[category] !== false ? 'checked' : ''}><span class="toggle-track"></span></span></label>`).join('')}
+      </div>
+    `, `<button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button><button class="btn btn-primary" data-action="notifications.preferences.save" type="button">Salvar preferências</button>`, '620px');
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
   }
 
   // ── PROFILE ──
@@ -1896,6 +2070,23 @@
     });
   }
 
+  function openWorkspaceDeleteModal(workspace) {
+    openModal('Excluir workspace', `
+      <div class="alert-banner" style="margin-bottom:16px"><span class="alert-text"><strong>Ação irreversível.</strong> O workspace será removido, mas o log global de auditoria será preservado.</span></div>
+      <div class="form-group"><label class="form-label" for="workspace-delete-confirm">Digite <strong>${esc(workspace.name)}</strong> para confirmar</label><input class="form-input" id="workspace-delete-confirm" autocomplete="off" placeholder="${esc(workspace.name)}"></div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-danger" id="modal-workspace-delete" type="button">Excluir definitivamente</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-workspace-delete')?.addEventListener('click', () => {
+      const confirmName = document.getElementById('workspace-delete-confirm')?.value.trim();
+      if (confirmName !== workspace.name) { toast('Digite o nome exato do workspace.', 'error', 'Confirmação inválida'); return; }
+      state.selectedWorkspaceId = null;
+      mutate('workspace.delete', { id: workspace.id, confirmName }, `Workspace "${workspace.name}" excluído.`, 'Excluído');
+    });
+  }
+
   function openWorkspaceCreateModal() {
     openModal('Criar Workspace', `
       <div class="form-group"><label class="form-label">Nome do workspace</label><input class="form-input" id="ws-name" type="text" placeholder="Ex: Produto & Tecnologia"></div>
@@ -1924,6 +2115,40 @@
       }, `Workspace "${name}" criado.`, 'Criado');
     });
   }
+  function openIntegrationConfigModal(integrationId) {
+    const meta = integrationCatalog.find(item => item.id === integrationId);
+    const integration = (state.data?.integrations || []).find(item => item.id === integrationId) || { config:{}, permissions:[] };
+    if (!meta) return;
+    openModal(`Configurar ${meta.name}`, `
+      <div class="alert-banner" style="margin-bottom:16px"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i><span class="alert-text">Informe apenas identificadores administrativos. <strong>Não cole senhas, tokens ou chaves secretas.</strong></span></div>
+      <div class="form-group"><label class="form-label" for="integration-account-label">Conta ou ambiente</label><input class="form-input" id="integration-account-label" type="text" maxlength="120" value="${esc(integration.config?.accountLabel || '')}" placeholder="Ex: Organização principal" autocomplete="off"><div class="form-hint">Nome legível usado para identificar a configuração no LIFEOS.</div></div>
+      <div class="form-group"><label class="form-label" for="integration-endpoint">URL administrativa <span class="text-muted">(opcional)</span></label><input class="form-input" id="integration-endpoint" type="url" maxlength="500" value="${esc(integration.config?.endpoint || '')}" placeholder="https://..." autocomplete="off"><div class="form-hint">Referência do ambiente; não é usada para sincronizar dados automaticamente.</div></div>
+      <div class="form-group"><div class="form-label">Permissões solicitadas</div><div style="display:grid;gap:9px;margin-top:8px">${meta.permissions.map(([permission,label]) => `<label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" value="${permission}" ${(integration.permissions||[]).includes(permission)?'checked':''} style="accent-color:#6366F1"><span><strong style="font-size:12px">${esc(label)}</strong><span class="text-muted" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10px">${permission}</span></span></label>`).join('')}</div></div>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-integration-save" type="button">Salvar configuração</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-integration-save')?.addEventListener('click', () => {
+      const accountLabel = document.getElementById('integration-account-label')?.value.trim();
+      if (!accountLabel) { toast('Informe a conta ou ambiente.', 'error', 'Integração'); return; }
+      const permissions = [...document.querySelectorAll('#modal-body input[type="checkbox"]:checked')].map(item => item.value);
+      mutate('integration.configure', { id:integrationId, accountLabel, endpoint:document.getElementById('integration-endpoint')?.value.trim(), permissions }, `${meta.name} configurada sem executar sincronização externa.`, 'Integração');
+    });
+  }
+
+  function openIntegrationHistoryModal(integrationId) {
+    const meta = integrationCatalog.find(item => item.id === integrationId);
+    const integration = (state.data?.integrations || []).find(item => item.id === integrationId);
+    if (!meta || !integration) return;
+    const history = integration.history || [];
+    openModal(`Histórico · ${meta.name}`, `
+      <div class="alert-banner" style="margin-bottom:16px"><i data-lucide="database" class="pg-icon" aria-hidden="true"></i><span class="alert-text">Eventos persistidos no LIFEOS. Operações externas só aparecem quando efetivamente registradas.</span></div>
+      ${history.length ? `<div class="table-wrap"><table class="table"><thead><tr><th>Data/Hora</th><th>Estado</th><th>Ator</th><th>Detalhe</th></tr></thead><tbody>${history.map(event => `<tr><td style="white-space:nowrap;font-size:11px">${fmtDate(event.createdAt, true)}</td><td><span class="badge ${event.status==='failed'?'badge-danger':event.status==='active'?'badge-success':event.status==='disconnected'?'badge-warning':'badge-neutral'}">${esc(event.status)}</span></td><td>${esc(event.actor)}</td><td style="color:var(--text-secondary)">${esc(event.detail)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty-state"><div class="empty-state-icon"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Nenhum evento registrado</div><div class="empty-state-desc">Configure ou altere a conexão para iniciar o histórico.</div></div>`}
+    `, `<button class="btn btn-secondary" id="modal-cancel" type="button">Fechar</button>`, '760px');
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+  }
+
   // ── EVENT DELEGATION ──
   function handleClick(e) {
     const target = e.target.closest('[data-view],[data-action],[data-cmd-view]');
@@ -1960,14 +2185,74 @@
       case 'audit.export': exportAudit(); break;
       case 'data.export': toast('Exportação iniciada. Você receberá um e-mail com o arquivo.', 'info', 'Exportação'); break;
       case 'system.refresh': mutate('system.refresh', {}, 'Diagnóstico atualizado.', 'Sistema'); break;
+      case 'integration.configure.open': openIntegrationConfigModal(target.dataset.id); break;
+      case 'integration.history.open': openIntegrationHistoryModal(target.dataset.id); break;
+      case 'integration.disconnect': {
+        const integration = (state.data?.integrations || []).find(item => item.id === target.dataset.id);
+        if (integration && confirm(`Desconectar ${integration.name} no LIFEOS?`)) mutate('integration.disconnect', { id:integration.id }, `${integration.name} desconectada.`, 'Integração');
+        break;
+      }
+      case 'integration.reconnect': {
+        const integration = (state.data?.integrations || []).find(item => item.id === target.dataset.id);
+        if (integration) mutate('integration.reconnect', { id:integration.id }, `${integration.name} reativada no LIFEOS, sem sincronização externa.`, 'Integração');
+        break;
+      }
       case 'workspace.create': openWorkspaceCreateModal(); break;
-      case 'workspace.open': toast('Abrindo workspace…', 'info', 'Workspace'); break;
+      case 'workspace.open': {
+        const workspace = (state.data?.workspaces || []).find(item => item.id === target.dataset.id);
+        if (!workspace) break;
+        state.selectedWorkspaceId = workspace.id;
+        state.workspaceTab = workspace.preferences?.defaultView || 'overview';
+        renderWorkspaces();
+        break;
+      }
+      case 'workspace.back': state.selectedWorkspaceId = null; state.workspaceTab = 'overview'; renderWorkspaces(); break;
+      case 'workspace.tab': state.workspaceTab = target.dataset.tab || 'overview'; renderWorkspaces(); break;
+      case 'workspace.member.add': {
+        const memberId = document.getElementById('workspace-member-select')?.value;
+        if (!memberId) { toast('Selecione um membro.', 'warning', 'Workspace'); break; }
+        mutate('workspace.member.add', { id: target.dataset.id, memberId }, 'Membro adicionado ao workspace.', 'Workspace');
+        break;
+      }
+      case 'workspace.member.remove': {
+        if (confirm('Remover este membro do workspace?')) mutate('workspace.member.remove', { id: target.dataset.id, memberId: target.dataset.memberId }, 'Membro removido do workspace.', 'Workspace');
+        break;
+      }
+      case 'workspace.preferences.save': {
+        const name = document.getElementById('workspace-name')?.value.trim();
+        if (!name) { toast('Nome é obrigatório.', 'error', 'Workspace'); break; }
+        mutate('workspace.update', {
+          id: target.dataset.id,
+          name,
+          description: document.getElementById('workspace-description')?.value.trim(),
+          preferences: {
+            defaultView: document.getElementById('workspace-default-view')?.value,
+            notifications: Boolean(document.getElementById('workspace-notifications')?.checked),
+          },
+        }, 'Preferências do workspace salvas.', 'Workspace');
+        break;
+      }
+      case 'workspace.delete.prompt': {
+        const workspace = (state.data?.workspaces || []).find(item => item.id === target.dataset.id);
+        if (workspace) openWorkspaceDeleteModal(workspace);
+        break;
+      }
       case 'device.revoke': {
         const id = target.dataset.id;
         if (confirm('Revogar esta sessão?')) mutate('device.revoke', {id}, 'Sessão revogada.', 'Segurança');
         break;
       }
       case 'intelligence.resolve': mutate('intelligence.resolve', {id: target.dataset.id, status: target.dataset.status}, 'Insight tratado.', 'Companion'); break;
+      case 'notifications.filter': state.notificationFilter = target.dataset.filter || 'unread'; renderNotifications(); break;
+      case 'notifications.preferences.open': openNotificationPreferencesModal(); break;
+      case 'notifications.preferences.save': {
+        const preferences = Object.keys(notificationCategories).reduce((result, category) => {
+          result[category] = Boolean(document.getElementById(`notification-pref-${category}`)?.checked);
+          return result;
+        }, {});
+        mutate('notifications.preferences.update', { preferences }, 'Preferências atualizadas.', 'Notificações');
+        break;
+      }
       case 'notifications.markAll': mutate('notifications.markAll', {}, 'Todas as notificações marcadas como lidas.', 'Notificações'); break;
       case 'notification.read': mutate('notification.read', {id: target.dataset.id}, 'Notificação lida.', ''); break;
       case 'profile.save': toast('Perfil salvo com sucesso.', 'success', 'Perfil'); break;
@@ -2088,9 +2373,8 @@
       const badge = document.getElementById('nav-intelligence-count');
       if (openInsights > 0 && badge) { badge.textContent = openInsights; badge.style.display = 'flex'; }
 
-      // Notification dot
-      const unread = (state.data?.notifications||[]).filter(n=>!n.read).length;
-      if (unread > 0) document.getElementById('notif-dot').style.display = 'block';
+      // Notification indicators
+      syncNotificationIndicators();
 
       // Navigate to hash or default
       const hash = location.hash.slice(1);

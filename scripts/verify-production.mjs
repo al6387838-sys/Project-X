@@ -55,6 +55,7 @@ const index = await readFile(resolve(dist, 'index.html'), 'utf8');
 const app = await readFile(resolve(dist, 'app/index.html'), 'utf8');
 const login = await readFile(resolve(dist, 'login/index.html'), 'utf8');
 const admin = await readFile(resolve(dist, 'admin/index.html'), 'utf8');
+const enterprise = await readFile(resolve(dist, 'enterprise/index.html'), 'utf8');
 check('Landing pública', index.includes('LifeOS') && index.includes('name="viewport"'));
 check('Aplicação principal', app.includes('id="page-dashboard"') && app.includes('LifeOS'));
 check('Login administrativo', login.includes('/api/login') && login.includes('/api/session'));
@@ -65,6 +66,9 @@ check('Viewport responsivo', app.includes('name="viewport"') && admin.includes('
 const provisionalPattern = /\b(coming soon|dados simulados|mock(?:s|ado|ada)?|placeholder UI)\b/i;
 check('Sem fluxos provisórios na aplicação', !provisionalPattern.test(app));
 check('Sem fluxos provisórios no Admin Center', !provisionalPattern.test(admin));
+check('Sem fluxos provisórios no Enterprise', !provisionalPattern.test(enterprise));
+const unsupportedEnterpriseTelemetry = /Métricas em tempo real|Últimos 30 dias|C40,120 C80,100/i;
+check('Sem telemetria ou séries históricas estimadas no Enterprise', !unsupportedEnterpriseTelemetry.test(enterprise));
 
 const files = await walk(dist);
 const htmlFiles = files.filter(file => extname(file) === '.html');

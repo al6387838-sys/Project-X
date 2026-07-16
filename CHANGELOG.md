@@ -2,6 +2,25 @@
 
 All notable changes to LifeOS will be documented in this file.
 
+## [17.5.0] — 2026-07-16
+
+### Release: LIFEOS ENTERPRISE v17.5.0 — Phases 163–171
+
+A v17.5 conclui as auditorias de experiência Enterprise e entrega gestão persistente de Workspaces, uma Central de Integrações com estados verificáveis, permissões e histórico, e uma Central unificada de Notificações alimentada por eventos operacionais reais. Métricas aleatórias, tendências sem série histórica e conexões externas simuladas foram removidas ou substituídas por estados explícitos de indisponibilidade.
+
+| Controle | Resultado |
+|---|---:|
+| Gate de produção | 267 / 267 |
+| QA responsivo | 60 / 60 |
+| QA funcional | 17 / 17 |
+| Regressão v11 | 8 / 8 |
+| Erros JavaScript autenticados | 0 |
+| Respostas HTTP 4xx/5xx autenticadas | 0 |
+
+Os detalhes completos estão em [`RELEASE_NOTES_v17.5.0.md`](RELEASE_NOTES_v17.5.0.md), a auditoria consolidada em [`audit/phase-166-visual-data-audit.md`](audit/phase-166-visual-data-audit.md) e o estado retomável em [`CHECKPOINT_v17_5_0.md`](CHECKPOINT_v17_5_0.md).
+
+---
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 

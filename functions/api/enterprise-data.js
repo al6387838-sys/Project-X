@@ -10,7 +10,7 @@ const KV_KEY = 'lifeos-enterprise-state-v22';
 function seedState() {
   const now = new Date().toISOString();
   return {
-    version: 4,
+    version: 6,
     organization: {
       id: 'org_lifeos',
       name: 'LifeOS Enterprise',
@@ -54,10 +54,12 @@ function seedState() {
       { id: 'INV-2026-005', date: '2026-05-01', amount: 2490, status: 'paid', url: '#invoice-2026-005' },
     ],
     integrations: [
-      { id: 'google', name: 'Google Workspace', category: 'Produtividade', connected: true, lastSyncAt: now },
-      { id: 'slack', name: 'Slack', category: 'Comunicação', connected: true, lastSyncAt: now },
-      { id: 'notion', name: 'Notion', category: 'Conhecimento', connected: false, lastSyncAt: null },
-      { id: 'github', name: 'GitHub', category: 'Engenharia', connected: true, lastSyncAt: now },
+      { id: 'google', name: 'Google Workspace', category: 'Produtividade', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
+      { id: 'slack', name: 'Slack', category: 'Comunicação', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
+      { id: 'notion', name: 'Notion', category: 'Conhecimento', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
+      { id: 'github', name: 'GitHub', category: 'Engenharia', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
+      { id: 'jira', name: 'Jira', category: 'Gestão', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
+      { id: 'salesforce', name: 'Salesforce', category: 'Vendas', configured: false, connected: false, status: 'not_configured', config: { accountLabel: '', endpoint: '' }, permissions: [], history: [], configuredAt: null, updatedAt: now, lastConnectionAt: null, lastSyncAt: null, lastFailureAt: null, lastError: '' },
     ],
     devices: [
       { id: 'dev_web', name: 'Chrome · Linux', location: 'São Paulo, BR', trusted: true, current: true, lastActiveAt: now },
@@ -125,16 +127,20 @@ function seedState() {
       },
     ],
     workspaces: [
-      { id: 'ws_001', name: 'Estratégia Corporativa', type: 'strategy', description: 'Planejamento estratégico e OKRs da organização.', status: 'active', members: ['usr_owner'], createdAt: now },
-      { id: 'ws_002', name: 'Operações', type: 'operations', description: 'Processos operacionais e indicadores.', status: 'active', members: ['usr_ops'], createdAt: now },
-      { id: 'ws_003', name: 'Produto & Tecnologia', type: 'product', description: 'Roadmap, sprints e entregas de produto.', status: 'active', members: ['usr_product'], createdAt: now },
+      { id: 'ws_001', name: 'Estratégia Corporativa', type: 'strategy', description: 'Planejamento estratégico e OKRs da organização.', status: 'active', members: ['usr_owner'], preferences: { notifications: true, defaultView: 'overview' }, activity: [], protected: true, createdAt: now, updatedAt: now },
+      { id: 'ws_002', name: 'Operações', type: 'operations', description: 'Processos operacionais e indicadores.', status: 'active', members: ['usr_ops'], preferences: { notifications: true, defaultView: 'overview' }, activity: [], protected: false, createdAt: now, updatedAt: now },
+      { id: 'ws_003', name: 'Produto & Tecnologia', type: 'product', description: 'Roadmap, sprints e entregas de produto.', status: 'active', members: ['usr_product'], preferences: { notifications: true, defaultView: 'overview' }, activity: [], protected: false, createdAt: now, updatedAt: now },
     ],
-    notifications: [
-      { id: 'ntf_001', icon: '🛡️', title: 'Alerta de segurança', message: '2 membros ainda não ativaram MFA. Recomendamos ação imediata.', read: false, createdAt: now },
-      { id: 'ntf_002', icon: '💳', title: 'Fatura disponível', message: 'Fatura de julho/2026 no valor de R$ 2.490,00 está disponível.', read: false, createdAt: now },
-      { id: 'ntf_003', icon: '👥', title: 'Novo membro', message: 'Rafael Lima entrou na organização como Gestor.', read: true, createdAt: now },
-      { id: 'ntf_004', icon: '🧠', title: 'Insight do Companion', message: 'Capacidade disponível para 22 novos membros. Considere expansão.', read: true, createdAt: now },
-    ],
+    notifications: [],
+    notificationPreferences: {
+      security: true,
+      billing: true,
+      people: true,
+      workspaces: true,
+      integrations: true,
+      intelligence: true,
+      system: true,
+    },
     mfa: {
       enabled: true,
       totp: true,
@@ -142,23 +148,26 @@ function seedState() {
       fido2: false,
       backupCodes: 8,
     },
-    healthScore: 94,
+    healthScore: null,
     system: {
-      status: 'operational',
+      status: 'not_monitored',
       version: '16.5.0',
       environment: 'production',
       lastCheckedAt: now,
-      uptime: '99.98',
-      region: 'sa-east-1',
-      apiP95: '42',
-      errorRate: '0.02',
-      activeSessions: '1',
-      cpu: '23',
-      memory: '41',
-      disk: '18',
-      network: '12',
-      healthScore: '94',
-      lastBackupAt: now,
+      telemetryAvailable: false,
+      telemetryReason: 'Telemetria de infraestrutura não configurada.',
+      uptime: null,
+      region: 'cloudflare-pages',
+      apiP95: null,
+      errorRate: null,
+      activeSessions: null,
+      activeMembers: 1,
+      cpu: null,
+      memory: null,
+      disk: null,
+      network: null,
+      healthScore: null,
+      lastBackupAt: null,
     },
   };
 }
@@ -169,14 +178,26 @@ async function loadState(kv) {
     const raw = await kv.get(KV_KEY);
     if (!raw) return seedState();
     const parsed = JSON.parse(raw);
-    // Migração: garantir campos novos se estado antigo existir
-    if (!parsed.system.apiP95) {
-      parsed.system.apiP95 = '42';
-      parsed.system.errorRate = '0.02';
-      parsed.system.activeSessions = '1';
-      parsed.system.lastBackupAt = new Date().toISOString();
-      parsed.system.version = '16.5.0';
-    }
+    // Migração v17.5: retirar métricas históricas sem fonte observável.
+    parsed.system = {
+      ...(parsed.system || {}),
+      status: 'not_monitored',
+      telemetryAvailable: false,
+      telemetryReason: 'Telemetria de infraestrutura não configurada.',
+      uptime: null,
+      apiP95: null,
+      errorRate: null,
+      activeSessions: null,
+      activeMembers: (parsed.members || []).filter(member => member.status === 'active').length,
+      cpu: null,
+      memory: null,
+      disk: null,
+      network: null,
+      healthScore: null,
+      lastBackupAt: parsed.system?.lastBackupAt || null,
+      version: parsed.system?.version || '16.5.0',
+    };
+    parsed.healthScore = null;
     // Migração: normalizar auditLog (timestamp → createdAt, description → detail)
     if (parsed.auditLog) {
       parsed.auditLog = parsed.auditLog.map(log => ({
@@ -195,6 +216,78 @@ async function loadState(kv) {
         ...ins,
       }));
     }
+    // Migração v17: estrutura corporativa persistente de Workspaces.
+    const migratedAt = new Date().toISOString();
+    parsed.workspaces = Array.isArray(parsed.workspaces) ? parsed.workspaces.map((workspace, index) => {
+      const members = Array.isArray(workspace.members) ? workspace.members.map(reference => {
+        const member = (parsed.members || []).find(item => item.id === reference || item.email === reference);
+        return member?.id || String(reference || '');
+      }).filter(Boolean) : [];
+      return {
+        ...workspace,
+        members,
+        preferences: { notifications: true, defaultView: 'overview', ...(workspace.preferences || {}) },
+        activity: Array.isArray(workspace.activity) ? workspace.activity : [],
+        protected: typeof workspace.protected === 'boolean' ? workspace.protected : index === 0,
+        updatedAt: workspace.updatedAt || workspace.createdAt || migratedAt,
+      };
+    }) : [];
+    // Migração v17.5: estados de Integrações baseados apenas em configuração persistida.
+    const integrationCatalog = [
+      { id: 'google', name: 'Google Workspace', category: 'Produtividade' },
+      { id: 'slack', name: 'Slack', category: 'Comunicação' },
+      { id: 'notion', name: 'Notion', category: 'Conhecimento' },
+      { id: 'github', name: 'GitHub', category: 'Engenharia' },
+      { id: 'jira', name: 'Jira', category: 'Gestão' },
+      { id: 'salesforce', name: 'Salesforce', category: 'Vendas' },
+    ];
+    parsed.integrations = integrationCatalog.map(catalogItem => {
+      const current = (parsed.integrations || []).find(item => item.id === catalogItem.id) || {};
+      const configured = current.configured === true || Boolean(current.configuredAt || current.config?.accountLabel);
+      const connected = configured && current.connected === true;
+      const status = current.status === 'failed' ? 'failed' : connected ? 'active' : configured ? 'disconnected' : 'not_configured';
+      return {
+        ...catalogItem,
+        ...current,
+        configured,
+        connected,
+        status,
+        config: { accountLabel: '', endpoint: '', ...(current.config || {}) },
+        permissions: Array.isArray(current.permissions) ? current.permissions.map(String).slice(0, 30) : [],
+        history: Array.isArray(current.history) ? current.history.slice(0, 100) : [],
+        configuredAt: configured ? (current.configuredAt || current.updatedAt || migratedAt) : null,
+        updatedAt: current.updatedAt || migratedAt,
+        lastConnectionAt: current.lastConnectionAt || null,
+        lastSyncAt: configured ? (current.lastSyncAt || null) : null,
+        lastFailureAt: current.lastFailureAt || null,
+        lastError: configured ? normalizeText(current.lastError || '', 300) : '',
+      };
+    });
+    // Migração v17.5: Central unificada de Notificações sem conteúdo de demonstração.
+    const notificationCategories = ['security', 'billing', 'people', 'workspaces', 'integrations', 'intelligence', 'system'];
+    const legacySeedIds = new Set(['ntf_001', 'ntf_002', 'ntf_003', 'ntf_004']);
+    parsed.notifications = (Array.isArray(parsed.notifications) ? parsed.notifications : [])
+      .filter(notification => !legacySeedIds.has(notification.id))
+      .map(notification => ({
+        ...notification,
+        category: notificationCategories.includes(notification.category) ? notification.category : 'system',
+        read: notification.read === true,
+        readAt: notification.read === true ? (notification.readAt || notification.createdAt || migratedAt) : null,
+        sourceAction: normalizeText(notification.sourceAction || '', 100),
+        createdAt: notification.createdAt || migratedAt,
+      }))
+      .slice(0, 200);
+    parsed.notificationPreferences = {
+      security: true,
+      billing: true,
+      people: true,
+      workspaces: true,
+      integrations: true,
+      intelligence: true,
+      system: true,
+      ...(parsed.notificationPreferences || {}),
+    };
+    parsed.version = Math.max(Number(parsed.version) || 0, 7);
     return parsed;
   } catch {
     return seedState();
@@ -227,6 +320,41 @@ function audit(state, actor, action, resourceId, detail) {
   if (state.auditLog.length > 500) state.auditLog = state.auditLog.slice(0, 500);
 }
 
+function recordWorkspaceActivity(state, workspace, actor, action, detail) {
+  if (!Array.isArray(workspace.activity)) workspace.activity = [];
+  workspace.activity.unshift({ id: generateId(), actor, action, detail, createdAt: new Date().toISOString() });
+  if (workspace.activity.length > 100) workspace.activity = workspace.activity.slice(0, 100);
+  workspace.updatedAt = new Date().toISOString();
+  audit(state, actor, action, workspace.id, detail);
+}
+
+function recordIntegrationEvent(state, integration, actor, action, status, detail) {
+  const now = new Date().toISOString();
+  if (!Array.isArray(integration.history)) integration.history = [];
+  integration.history.unshift({ id: generateId(), actor, action, status, detail, createdAt: now });
+  if (integration.history.length > 100) integration.history = integration.history.slice(0, 100);
+  integration.updatedAt = now;
+  audit(state, actor, action, integration.id, detail);
+}
+
+function createNotification(state, { category = 'system', title, message, sourceAction = '' }) {
+  const allowed = ['security', 'billing', 'people', 'workspaces', 'integrations', 'intelligence', 'system'];
+  const normalizedCategory = allowed.includes(category) ? category : 'system';
+  if (state.notificationPreferences?.[normalizedCategory] === false) return;
+  if (!Array.isArray(state.notifications)) state.notifications = [];
+  state.notifications.unshift({
+    id: generateId(),
+    category: normalizedCategory,
+    title: normalizeText(title, 160) || 'Atualização do LIFEOS',
+    message: normalizeText(message, 500),
+    sourceAction: normalizeText(sourceAction, 100),
+    read: false,
+    readAt: null,
+    createdAt: new Date().toISOString(),
+  });
+  if (state.notifications.length > 200) state.notifications = state.notifications.slice(0, 200);
+}
+
 function applyAction(state, action, payload, actor) {
   if (action === 'organization.update') {
     const name = normalizeText(payload.name, 120);
@@ -246,6 +374,7 @@ function applyAction(state, action, payload, actor) {
     const member = { id: generateId(), name, email, roleId, team: normalizeText(payload.team, 80) || 'Geral', status: 'invited', lastActiveAt: new Date().toISOString() };
     state.members.push(member);
     audit(state, actor, action, member.id, `Convite enviado para ${email}.`);
+    createNotification(state, { category: 'people', title: 'Convite de membro enviado', message: `${name} foi convidado para a organização como ${roleId}.`, sourceAction: action });
   } else if (action === 'member.update') {
     const member = state.members.find(m => m.id === payload.id);
     if (!member) throw new Error('Membro não encontrado.');
@@ -264,6 +393,7 @@ function applyAction(state, action, payload, actor) {
     if (member.roleId === 'owner') throw new Error('Owner não pode ser removido.');
     state.members = state.members.filter(m => m.id !== payload.id);
     audit(state, actor, action, String(payload.id), `Membro ${member.email} removido.`);
+    createNotification(state, { category: 'people', title: 'Membro removido', message: `${member.name} foi removido da organização.`, sourceAction: action });
   } else if (action === 'role.create') {
     const role = { id: generateId(), name: normalizeText(payload.name, 80), description: normalizeText(payload.description), permissions: Array.isArray(payload.permissions) ? payload.permissions.map(String).slice(0, 50) : [] };
     if (!role.name) throw new Error('Nome do perfil é obrigatório.');
@@ -286,20 +416,66 @@ function applyAction(state, action, payload, actor) {
     if (!['Essentials', 'Business', 'Enterprise'].includes(plan)) throw new Error('Plano inválido.');
     state.subscription = { ...state.subscription, plan, status: 'active', updatedAt: new Date().toISOString() };
     audit(state, actor, action, 'subscription', `Plano alterado para ${plan}.`);
+    createNotification(state, { category: 'billing', title: 'Plano atualizado', message: `O plano da organização foi alterado para ${plan}.`, sourceAction: action });
   } else if (action === 'plan.cancel') {
     state.subscription = { ...state.subscription, status: 'cancel_at_period_end', cancellationReason: normalizeText(payload.reason), updatedAt: new Date().toISOString() };
     audit(state, actor, action, 'subscription', 'Cancelamento programado para o fim do ciclo.');
-  } else if (action === 'integration.toggle') {
-    const integration = state.integrations.find(i => i.id === payload.id);
+    createNotification(state, { category: 'billing', title: 'Cancelamento programado', message: 'A assinatura será encerrada ao fim do ciclo vigente.', sourceAction: action });
+  } else if (action === 'integration.configure') {
+    const integration = (state.integrations || []).find(item => item.id === payload.id);
     if (!integration) throw new Error('Integração não encontrada.');
+    const accountLabel = normalizeText(payload.accountLabel, 120);
+    if (!accountLabel) throw new Error('Identificação da conta ou ambiente é obrigatória.');
+    const permissions = Array.isArray(payload.permissions)
+      ? [...new Set(payload.permissions.map(value => normalizeText(String(value), 80)).filter(value => /^[a-z0-9.*:_-]+$/i.test(value)))].slice(0, 30)
+      : [];
+    integration.config = { accountLabel, endpoint: normalizeText(payload.endpoint, 500) };
+    integration.permissions = permissions;
+    integration.configured = true;
+    integration.connected = false;
+    integration.status = 'disconnected';
+    integration.configuredAt = integration.configuredAt || new Date().toISOString();
+    integration.lastError = '';
+    recordIntegrationEvent(state, integration, actor, action, 'configured', `${integration.name} configurada para "${accountLabel}"; nenhuma sincronização externa foi executada.`);
+    createNotification(state, { category: 'integrations', title: `${integration.name} configurada`, message: `A configuração administrativa de "${accountLabel}" foi salva sem executar sincronização externa.`, sourceAction: action });
+  } else if (action === 'integration.disconnect') {
+    const integration = (state.integrations || []).find(item => item.id === payload.id);
+    if (!integration?.configured) throw new Error('Configure a integração antes de alterar a conexão.');
+    integration.connected = false;
+    integration.status = 'disconnected';
+    recordIntegrationEvent(state, integration, actor, action, 'disconnected', `${integration.name} desconectada administrativamente.`);
+    createNotification(state, { category: 'integrations', title: `${integration.name} desconectada`, message: 'A conexão administrativa foi desativada no LIFEOS.', sourceAction: action });
+  } else if (action === 'integration.reconnect') {
+    const integration = (state.integrations || []).find(item => item.id === payload.id);
+    if (!integration?.configured || !integration.config?.accountLabel) throw new Error('Configure a integração antes de reconectar.');
+    integration.connected = true;
+    integration.status = 'active';
+    integration.lastConnectionAt = new Date().toISOString();
+    integration.lastError = '';
+    recordIntegrationEvent(state, integration, actor, action, 'active', `${integration.name} reativada no LIFEOS; nenhuma sincronização externa foi executada.`);
+    createNotification(state, { category: 'integrations', title: `${integration.name} reativada`, message: 'A conexão administrativa foi reativada sem executar sincronização externa.', sourceAction: action });
+  } else if (action === 'integration.connection.fail') {
+    const integration = (state.integrations || []).find(item => item.id === payload.id);
+    if (!integration?.configured) throw new Error('Integração não configurada.');
+    integration.connected = false;
+    integration.status = 'failed';
+    integration.lastFailureAt = new Date().toISOString();
+    integration.lastError = normalizeText(payload.error, 300) || 'Falha de conexão registrada.';
+    recordIntegrationEvent(state, integration, actor, action, 'failed', `${integration.name}: ${integration.lastError}`);
+    createNotification(state, { category: 'integrations', title: `Falha em ${integration.name}`, message: integration.lastError, sourceAction: action });
+  } else if (action === 'integration.toggle') {
+    const integration = (state.integrations || []).find(item => item.id === payload.id);
+    if (!integration?.configured) throw new Error('Configure a integração antes de ativá-la.');
     integration.connected = !integration.connected;
-    integration.lastSyncAt = integration.connected ? new Date().toISOString() : null;
-    audit(state, actor, action, String(payload.id), `${integration.name}: ${integration.connected ? 'conectada' : 'desconectada'}.`);
+    integration.status = integration.connected ? 'active' : 'disconnected';
+    if (integration.connected) integration.lastConnectionAt = new Date().toISOString();
+    recordIntegrationEvent(state, integration, actor, action, integration.status, `${integration.name} ${integration.connected ? 'reativada no LIFEOS' : 'desconectada administrativamente'}; nenhuma sincronização externa foi executada.`);
   } else if (action === 'device.revoke') {
     const device = state.devices.find(d => d.id === payload.id);
     if (!device || device.current) throw new Error('Dispositivo atual não pode ser revogado.');
     state.devices = state.devices.filter(d => d.id !== payload.id);
     audit(state, actor, action, String(payload.id), `Dispositivo ${device.name} revogado.`);
+    createNotification(state, { category: 'security', title: 'Sessão revogada', message: `A sessão de ${device.name} foi revogada.`, sourceAction: action });
   } else if (action === 'policy.update') {
     state.policies = { ...state.policies, ...payload, updatedAt: new Date().toISOString() };
     audit(state, actor, action, 'security-policy', 'Políticas de segurança atualizadas.');
@@ -312,13 +488,22 @@ function applyAction(state, action, payload, actor) {
   } else if (action === 'system.refresh') {
     state.system = {
       ...state.system,
+      status: 'not_monitored',
       lastCheckedAt: new Date().toISOString(),
-      apiP95: String(Math.floor(35 + Math.random() * 20)),
-      activeSessions: String(state.members.filter(m => m.status === 'active').length),
-      cpu: String(Math.floor(15 + Math.random() * 30)),
-      memory: String(Math.floor(30 + Math.random() * 25)),
+      telemetryAvailable: false,
+      telemetryReason: 'Telemetria de infraestrutura não configurada.',
+      uptime: null,
+      apiP95: null,
+      errorRate: null,
+      activeSessions: null,
+      activeMembers: state.members.filter(member => member.status === 'active').length,
+      cpu: null,
+      memory: null,
+      disk: null,
+      network: null,
+      healthScore: null,
     };
-    audit(state, actor, action, 'system', 'Diagnóstico operacional atualizado.');
+    audit(state, actor, action, 'system', 'Disponibilidade da telemetria verificada; métricas de infraestrutura não configuradas.');
   } else if (action === 'org.update' || action === 'organization.update') {
     const name = normalizeText(payload.name, 120);
     const domain = normalizeText(payload.domain, 120);
@@ -333,20 +518,86 @@ function applyAction(state, action, payload, actor) {
     if (!member) throw new Error('Membro não encontrado.');
     member.status = member.status === 'suspended' ? 'active' : 'suspended';
     audit(state, actor, action, member.id, `Membro ${member.email} ${member.status === 'suspended' ? 'suspenso' : 'reativado'}.`);
+    createNotification(state, { category: 'people', title: member.status === 'suspended' ? 'Membro suspenso' : 'Membro reativado', message: `${member.name} foi ${member.status === 'suspended' ? 'suspenso' : 'reativado'} na organização.`, sourceAction: action });
   } else if (action === 'workspace.create') {
-    if (!state.workspaces) state.workspaces = [];
-    const ws = { id: 'ws_' + Date.now(), name: normalizeText(payload.name, 120) || 'Novo Workspace', type: payload.type || 'general', description: normalizeText(payload.description, 300) || '', status: 'active', members: [actor], createdAt: new Date().toISOString() };
-    state.workspaces.push(ws);
-    audit(state, actor, action, ws.id, `Workspace "${ws.name}" criado.`);
+    if (!Array.isArray(state.workspaces)) state.workspaces = [];
+    const name = normalizeText(payload.name, 120);
+    if (!name) throw new Error('Nome do workspace é obrigatório.');
+    const actorMember = (state.members || []).find(member => member.email === actor || member.id === actor);
+    const now = new Date().toISOString();
+    const workspace = {
+      id: 'ws_' + Date.now(),
+      name,
+      type: ['strategy', 'operations', 'product', 'engineering', 'general'].includes(payload.type) ? payload.type : 'general',
+      description: normalizeText(payload.description, 300),
+      status: 'active',
+      members: actorMember ? [actorMember.id] : [],
+      preferences: { notifications: true, defaultView: 'overview' },
+      activity: [],
+      protected: false,
+      createdAt: now,
+      updatedAt: now,
+    };
+    state.workspaces.push(workspace);
+    recordWorkspaceActivity(state, workspace, actor, action, `Workspace "${workspace.name}" criado.`);
+    createNotification(state, { category: 'workspaces', title: 'Workspace criado', message: `O workspace "${workspace.name}" está disponível para a organização.`, sourceAction: action });
+  } else if (action === 'workspace.update') {
+    const workspace = (state.workspaces || []).find(item => item.id === payload.id);
+    if (!workspace) throw new Error('Workspace não encontrado.');
+    const name = normalizeText(payload.name, 120);
+    if (name) workspace.name = name;
+    if (typeof payload.description === 'string') workspace.description = normalizeText(payload.description, 300);
+    if (['active', 'archived'].includes(payload.status)) workspace.status = payload.status;
+    if (payload.preferences && typeof payload.preferences === 'object') {
+      const defaultView = ['overview', 'members', 'activity', 'preferences'].includes(payload.preferences.defaultView) ? payload.preferences.defaultView : (workspace.preferences?.defaultView || 'overview');
+      workspace.preferences = { notifications: payload.preferences.notifications !== false, defaultView };
+    }
+    recordWorkspaceActivity(state, workspace, actor, action, `Workspace "${workspace.name}" atualizado.`);
+  } else if (action === 'workspace.member.add') {
+    const workspace = (state.workspaces || []).find(item => item.id === payload.id);
+    const member = (state.members || []).find(item => item.id === payload.memberId);
+    if (!workspace || !member) throw new Error('Workspace ou membro não encontrado.');
+    if (!Array.isArray(workspace.members)) workspace.members = [];
+    if (!workspace.members.includes(member.id)) workspace.members.push(member.id);
+    recordWorkspaceActivity(state, workspace, actor, action, `${member.name} adicionado ao workspace.`);
+    createNotification(state, { category: 'workspaces', title: 'Membro adicionado ao workspace', message: `${member.name} foi adicionado a "${workspace.name}".`, sourceAction: action });
+  } else if (action === 'workspace.member.remove') {
+    const workspace = (state.workspaces || []).find(item => item.id === payload.id);
+    const member = (state.members || []).find(item => item.id === payload.memberId);
+    if (!workspace || !member) throw new Error('Workspace ou membro não encontrado.');
+    if ((workspace.members || []).length <= 1) throw new Error('O workspace deve manter ao menos um membro.');
+    workspace.members = workspace.members.filter(memberId => memberId !== member.id);
+    recordWorkspaceActivity(state, workspace, actor, action, `${member.name} removido do workspace.`);
+    createNotification(state, { category: 'workspaces', title: 'Membro removido do workspace', message: `${member.name} foi removido de "${workspace.name}".`, sourceAction: action });
+  } else if (action === 'workspace.delete') {
+    const workspace = (state.workspaces || []).find(item => item.id === payload.id);
+    if (!workspace) throw new Error('Workspace não encontrado.');
+    if (workspace.protected) throw new Error('Este workspace é protegido e não pode ser excluído.');
+    if (normalizeText(payload.confirmName, 120) !== workspace.name) throw new Error('Digite o nome exato do workspace para confirmar.');
+    if ((state.workspaces || []).length <= 1) throw new Error('A organização deve manter ao menos um workspace.');
+    state.workspaces = state.workspaces.filter(item => item.id !== workspace.id);
+    audit(state, actor, action, workspace.id, `Workspace "${workspace.name}" excluído.`);
+    createNotification(state, { category: 'workspaces', title: 'Workspace excluído', message: `O workspace "${workspace.name}" foi excluído.`, sourceAction: action });
   } else if (action === 'notification.read') {
     if (!state.notifications) state.notifications = [];
     const notif = state.notifications.find(n => n.id === payload.id);
-    if (notif) { notif.read = true; notif.readAt = new Date().toISOString(); }
+    if (!notif) throw new Error('Notificação não encontrada.');
+    notif.read = true;
+    notif.readAt = new Date().toISOString();
     audit(state, actor, action, String(payload.id), 'Notificação marcada como lida.');
   } else if (action === 'notifications.markAll') {
     if (!state.notifications) state.notifications = [];
-    state.notifications.forEach(n => { n.read = true; n.readAt = new Date().toISOString(); });
+    const readAt = new Date().toISOString();
+    state.notifications.forEach(n => { n.read = true; n.readAt = n.readAt || readAt; });
     audit(state, actor, action, 'notifications', 'Todas as notificações marcadas como lidas.');
+  } else if (action === 'notifications.preferences.update') {
+    const categories = ['security', 'billing', 'people', 'workspaces', 'integrations', 'intelligence', 'system'];
+    state.notificationPreferences = categories.reduce((preferences, category) => {
+      preferences[category] = payload.preferences?.[category] !== false;
+      return preferences;
+    }, {});
+    audit(state, actor, action, 'notification-preferences', 'Preferências de categorias de notificação atualizadas.');
+    createNotification(state, { category: 'system', title: 'Preferências atualizadas', message: 'As categorias da Central de Notificações foram atualizadas.', sourceAction: action });
   } else if (action === 'mfa.update') {
     if (!state.mfa) state.mfa = {};
     state.mfa = { ...state.mfa, ...payload, updatedAt: new Date().toISOString() };
