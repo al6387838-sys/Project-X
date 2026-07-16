@@ -1,10 +1,28 @@
-// LifeOS Enterprise — Password Reset API v16.5
+// LifeOS Enterprise — Password Reset API v18.0
 import { randomToken, revokeAllSessions } from '../_account.js';
 import { json, passwordDigest } from '../_auth.js';
 import { emailServiceReady, passwordResetEmail, sendTransactionalEmail } from '../_email.js';
 
 const TOKEN_TTL = 3600;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+const MAX_RESET_ATTEMPTS = 5;
+const RESET_WINDOW_SECONDS = 3600;
+
+async function checkRateLimit(kv, ip) {
+  if (!kv) return { allowed: true };
+  const key = `rl:reset:${ip}`;
+  try {
+    const raw = await kv.get(key);
+    const data = raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + RESET_WINDOW_SECONDS * 1000 };
+    if (Date.now() > data.resetAt) {
+      data.count = 0;
+      data.resetAt = Date.now() + RESET_WINDOW_SECONDS * 1000;
+    }
+    data.count += 1;
+    await kv.put(key, JSON.stringify(data), { expirationTtl: RESET_WINDOW_SECONDS });
+    return { allowed: data.count <= MAX_RESET_ATTEMPTS };
+  } catch { return { allowed: true }; }
+}
 
 function validReset(resetData, user) {
   if (!resetData || resetData.used || Date.parse(resetData.expiresAt) <= Date.now()) return false;
@@ -14,6 +32,11 @@ function validReset(resetData, user) {
 
 export async function onRequestPost({ request, env }) {
   if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço de recuperação indisponível' });
+  const clientIP = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown';
+  const rateLimit = await checkRateLimit(env.LIFEOS_KV, clientIP);
+  if (!rateLimit.allowed) {
+    return json(429, { ok: false, error: 'Muitas tentativas. Aguarde 1 hora antes de tentar novamente.' }, { 'retry-after': String(RESET_WINDOW_SECONDS) });
+  }
   let input;
   try { input = await request.json(); } catch { return json(400, { ok: false, error: 'Requisição inválida' }); }
   const action = String(input.action || 'request');

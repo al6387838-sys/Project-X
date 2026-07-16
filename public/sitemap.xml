@@ -4,20 +4,48 @@
     <loc>https://lifeos-enterprise.pages.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://lifeos-enterprise.pages.dev/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://lifeos-enterprise.pages.dev/register</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://lifeos-enterprise.pages.dev/forgot-password</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://lifeos-enterprise.pages.dev/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://lifeos-enterprise.pages.dev/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://lifeos-enterprise.pages.dev/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://lifeos-enterprise.pages.dev/status</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.4</priority>
+    <lastmod>2026-07-16</lastmod>
   </url>
 </urlset>
