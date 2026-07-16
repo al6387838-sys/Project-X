@@ -120,7 +120,7 @@ function seedState() {
         actor: 'admin@lifeos.app',
         action: 'system.init',
         resourceId: 'system',
-        detail: 'Sistema inicializado em produção — v9.2.0.',
+        detail: 'Sistema inicializado em produção — v16.5.0.',
         createdAt: now,
       },
     ],
@@ -145,7 +145,7 @@ function seedState() {
     healthScore: 94,
     system: {
       status: 'operational',
-      version: '9.2.0',
+      version: '16.5.0',
       environment: 'production',
       lastCheckedAt: now,
       uptime: '99.98',
@@ -175,7 +175,7 @@ async function loadState(kv) {
       parsed.system.errorRate = '0.02';
       parsed.system.activeSessions = '1';
       parsed.system.lastBackupAt = new Date().toISOString();
-      parsed.system.version = '7.0.0';
+      parsed.system.version = '16.5.0';
     }
     // Migração: normalizar auditLog (timestamp → createdAt, description → detail)
     if (parsed.auditLog) {

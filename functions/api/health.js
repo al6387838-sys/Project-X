@@ -5,7 +5,7 @@ export async function onRequestGet() {
   return new Response(JSON.stringify({
     ok: true,
     service: 'lifeos-enterprise',
-    version: '9.2.0',
+    version: '16.5.0',
     environment: 'production',
     timestamp: new Date().toISOString(),
   }), {
