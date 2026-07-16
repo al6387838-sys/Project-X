@@ -75,8 +75,10 @@ for (const file of htmlFiles) {
     if (/^(?:https?:|data:|mailto:|tel:|javascript:)/.test(link)) continue;
     const target = link.startsWith('/') ? resolve(dist, link.slice(1)) : resolve(file, '..', link);
     const targetExists = await exists(target) || await exists(`${target}.html`) || await exists(resolve(target, 'index.html'));
-    const publishedRoute = link.startsWith('/') && metadata.routes.includes(link.replace(/\/$/, '') || '/');
-    check(`Asset ${relative(dist, file)} -> ${link}`, targetExists || publishedRoute);
+    const normalizedLink = link.replace(/\/$/, '') || '/';
+    const publishedRoute = link.startsWith('/') && metadata.routes.includes(normalizedLink);
+    const publishedApi = link.startsWith('/api/') && Array.isArray(metadata.apis) && metadata.apis.includes(normalizedLink);
+    check(`Asset ${relative(dist, file)} -> ${link}`, targetExists || publishedRoute || publishedApi);
   }
 }
 

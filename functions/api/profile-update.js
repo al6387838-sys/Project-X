@@ -1,69 +1,50 @@
-// LifeOS Enterprise — Profile Update API v7.0
-// Cloudflare Pages Function: POST /api/profile-update
-// Permite ao usuário atualizar nome, fuso horário e preferências
+// LifeOS Enterprise — Profile Update API v16.5
+import { revokeAllSessions } from '../_account.js';
 import { getCookie, json, passwordDigest, safeEqual, verifySession } from '../_auth.js';
 
 export async function onRequestPost({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  if (!env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
+  const session = await verifySession(getCookie(request.headers.get('cookie')), env.LIFEOS_SESSION_SECRET, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  if (session.role === 'admin') return json(403, { ok: false, error: 'Use a configuração administrativa para esta conta' });
 
-  let input = {};
+  let input;
   try { input = await request.json(); } catch { return json(400, { ok: false, error: 'Requisição inválida' }); }
-
   const action = String(input.action || 'profile.update');
+  const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
+  if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
+  const user = JSON.parse(raw);
 
   if (action === 'profile.update') {
-    const name = String(input.name || '').trim();
-    const timezone = String(input.timezone || '').trim();
-    if (name && name.length < 2) return json(400, { ok: false, error: 'Nome deve ter pelo menos 2 caracteres' });
-
-    if (env.LIFEOS_KV && session.role === 'user') {
-      try {
-        const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-        if (raw) {
-          const userData = JSON.parse(raw);
-          if (name) userData.name = name;
-          if (timezone) userData.timezone = timezone;
-          userData.updatedAt = new Date().toISOString();
-          await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(userData));
-        }
-      } catch (_) { /* KV error */ }
-    }
-    return json(200, { ok: true, message: 'Perfil atualizado com sucesso' });
+    const name = String(input.name ?? user.name ?? '').trim();
+    const timezone = String(input.timezone ?? user.timezone ?? '').trim();
+    if (name.length < 2 || name.length > 100) return json(400, { ok: false, error: 'Nome deve ter entre 2 e 100 caracteres' });
+    if (!timezone || timezone.length > 100) return json(400, { ok: false, error: 'Fuso horário inválido' });
+    user.name = name;
+    user.timezone = timezone;
+    user.updatedAt = new Date().toISOString();
+    await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(user));
+    const { passwordHash, ...profile } = user;
+    return json(200, { ok: true, message: 'Perfil atualizado com sucesso', profile });
   }
 
   if (action === 'password.change') {
     const currentPassword = String(input.currentPassword || '');
     const newPassword = String(input.newPassword || '');
     if (!currentPassword || !newPassword) return json(400, { ok: false, error: 'Senhas obrigatórias' });
-    if (newPassword.length < 8) return json(400, { ok: false, error: 'Nova senha deve ter pelo menos 8 caracteres' });
+    if (newPassword.length < 8 || newPassword.length > 128) return json(400, { ok: false, error: 'Nova senha deve ter entre 8 e 128 caracteres' });
+    const currentHash = await passwordDigest(currentPassword);
+    if (!safeEqual(currentHash, user.passwordHash)) return json(401, { ok: false, error: 'Senha atual incorreta' });
+    const newHash = await passwordDigest(newPassword);
+    if (safeEqual(newHash, user.passwordHash)) return json(400, { ok: false, error: 'A nova senha deve ser diferente da senha atual' });
 
-    if (env.LIFEOS_KV && session.role === 'user') {
-      try {
-        const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-        if (raw) {
-          const userData = JSON.parse(raw);
-          const currentHash = await passwordDigest(currentPassword);
-          if (!safeEqual(currentHash, userData.passwordHash)) {
-            return json(401, { ok: false, error: 'Senha atual incorreta' });
-          }
-          userData.passwordHash = await passwordDigest(newPassword);
-          userData.updatedAt = new Date().toISOString();
-          await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(userData));
-          return json(200, { ok: true, message: 'Senha alterada com sucesso' });
-        }
-      } catch (_) { /* KV error */ }
-    }
-    // Admin password change
-    if (session.role === 'admin') {
-      return json(200, { ok: true, message: 'Senha de administrador deve ser alterada via variáveis de ambiente' });
-    }
-    return json(200, { ok: true, message: 'Senha atualizada' });
+    const now = new Date().toISOString();
+    user.passwordHash = newHash;
+    user.passwordChangedAt = now;
+    user.updatedAt = now;
+    await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(user));
+    await revokeAllSessions(env.LIFEOS_KV, session.sub, session.jti);
+    return json(200, { ok: true, message: 'Senha alterada. As outras sessões foram encerradas.' });
   }
 
   return json(400, { ok: false, error: 'Ação inválida' });

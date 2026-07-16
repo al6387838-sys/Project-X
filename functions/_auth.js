@@ -79,7 +79,7 @@ export async function createSession(username, role, secret) {
   return `${payload}.${sig}`;
 }
 
-export async function verifySession(token, secret) {
+export async function verifySession(token, secret, kv = null) {
   if (!token || typeof token !== 'string') return null;
   // Sanitizar: apenas chars válidos de base64url + ponto
   if (!/^[A-Za-z0-9\-_=]+\.[A-Za-z0-9\-_=]+$/.test(token)) return null;
@@ -92,8 +92,10 @@ export async function verifySession(token, secret) {
   try {
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
     const data = JSON.parse(decoded);
-    if (!data.sub || !data.role || !data.exp) return null;
-    return data.exp > Date.now() ? data : null;
+    if (!data.sub || !data.role || !data.exp || !data.jti) return null;
+    if (data.exp <= Date.now()) return null;
+    if (kv && await kv.get(`revoked-session:${data.jti}`)) return null;
+    return data;
   } catch {
     return null;
   }

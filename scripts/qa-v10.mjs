@@ -37,7 +37,7 @@ function findPreviewEnvironment() {
 
 function createSession(username, secret) {
   const payload = Buffer.from(
-    JSON.stringify({ sub: username, role: 'admin', exp: Date.now() + 60 * 60 * 1000 }),
+    JSON.stringify({ sub: username, role: 'admin', jti: `qa-v10-${Date.now()}`, iat: Date.now(), exp: Date.now() + 60 * 60 * 1000 }),
     'utf8',
   ).toString('base64url');
   const signature = createHmac('sha256', secret).update(payload).digest('base64url');

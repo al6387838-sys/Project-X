@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 16.0.0 (Phases 153-160 — Production Readiness, UX, Account Lifecycle, Admin, Commercial, Security, RC, Deploy)
+// Version: 16.5.0 (Phases 161-162 — Account Lifecycle Completion & Production Candidate Final)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -102,6 +102,7 @@ await copyHtml('forgot_password.html', 'forgot-password/index.html');
 await copyHtml('app_dashboard.html', 'app/index.html');
 await copyHtml('admin_panel.html', 'admin/index.html');
 await copyHtml('reset_password.html', 'reset-password/index.html');
+await copyHtml('confirm_email.html', 'confirm-email/index.html');
 await copyHtml('accept_invite.html', 'accept-invite/index.html');
 await copy('admin/master_admin.html', 'admin/master.html');
 await copy('enterprise/enterprise_premium.html', 'enterprise/index.html');
@@ -122,13 +123,14 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml']) {
 }
 
 const redirects = [
-  '# LifeOS Enterprise v16.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v16.5.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
   '/register           /register/index.html        200',
   '/forgot-password    /forgot-password/index.html 200',
   '/reset-password     /reset-password/index.html  200',
+  '/confirm-email      /confirm-email/index.html   200',
   '/accept-invite      /accept-invite/index.html   200',
   '/api/auth/google    /api/auth/google            200',
   '/api/auth/apple     /api/auth/apple             200',
@@ -141,7 +143,24 @@ const redirects = [
   '/admin              /admin/index.html           200',
   '/admin/*            /admin/index.html           200',
   '',
-  '# v15.0 module routes',
+  '# Internal module routes',
+  '/life-hub           /app/index.html             200',
+  '/ai-copilot         /app/index.html             200',
+  '/marketplace        /app/index.html             200',
+  '/integrations       /app/index.html             200',
+  '/companion          /app/index.html             200',
+  '/missions           /app/index.html             200',
+  '/timeline           /app/index.html             200',
+  '/lifegraph          /app/index.html             200',
+  '/briefing           /app/index.html             200',
+  '/analytics          /app/index.html             200',
+  '/profile            /app/index.html             200',
+  '/settings           /app/index.html             200',
+  '/communication-hub  /app/index.html             200',
+  '/finance-hub        /app/index.html             200',
+  '/document-center    /app/index.html             200',
+  '/ai-orchestrator    /app/index.html             200',
+  '/security           /app/index.html             200',
   '/payments           /app/index.html             200',
   '/collaboration      /app/index.html             200',
   '/api-platform       /app/index.html             200',
@@ -164,14 +183,14 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v16.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v16.5.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
   '/enterprise', '/memory-center', '/life-hub', '/ai-copilot',
   '/marketplace', '/integrations', '/dashboard', '/companion',
   '/missions', '/timeline', '/lifegraph', '/briefing', '/analytics',
-  '/profile', '/settings', '/reset-password', '/accept-invite',
+  '/profile', '/settings', '/reset-password', '/confirm-email', '/accept-invite',
   '/communication-hub', '/finance-hub', '/document-center',
   '/ai-orchestrator', '/security', '/payments', '/collaboration', '/api-platform',
 ];
@@ -179,14 +198,14 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '16.0.0',
+  version: '16.5.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   architecture: 'multi-page-rbac-modules-oauth2-openfinance-enterprise-ai-orchestrator-security-payments-collaboration-api',
   phases: [
     '093-100','101-108','109','111-115','119',
-    '131-138','139-146','147-152',
+    '131-138','139-146','147-152','153-160','161-162',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -203,7 +222,8 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/finance/hub','/api/documents','/api/ai/orchestrator','/api/security',
     '/api/payments','/api/payments/webhook','/api/collaboration','/api/platform',
     '/api/auth/google','/api/auth/apple','/api/login','/api/logout','/api/register',
-    '/api/session','/api/profile','/api/settings','/api/notifications','/api/workspaces',
+    '/api/email-confirmation','/api/password-reset','/api/session','/api/profile',
+    '/api/profile-update','/api/sessions','/api/settings','/api/notifications','/api/workspaces',
   ],
   commit,
   builtAt,
@@ -213,7 +233,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '16.0.0',
+  version: '16.5.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -223,7 +243,8 @@ await writeFile(resolve(dist, 'health.json'), JSON.stringify({
 
 const required = [
   'index.html', 'login/index.html', 'register/index.html',
-  'forgot-password/index.html', 'app/index.html', 'admin/index.html',
+  'forgot-password/index.html', 'reset-password/index.html', 'confirm-email/index.html',
+  'app/index.html', 'admin/index.html',
   '_redirects', 'robots.txt', 'sitemap.xml',
 ];
 
@@ -241,12 +262,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v16.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v16.5.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 16.0.0`);
+console.log(`  Version       : 16.5.0`);
 console.log(`  Build ID      : ${buildId}`);
-  console.log(`  Phases        : 153-160 Production Readiness | UX | Account | Admin | Commercial | Security | RC | Deploy`);
+console.log(`  Phases        : 161-162 Account Lifecycle Completion | Production Candidate Final`);
 console.log(`  Modules       : 32 total`);
 console.log(`  APIs          : 20+ endpoints`);
 console.log(`  Commit        : ${commit}`);

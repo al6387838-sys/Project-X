@@ -1,38 +1,39 @@
-// LifeOS Enterprise — Login Unificado v7.0
-// Cloudflare Pages Function: POST /api/login
-// RBAC: redireciona ADMIN → /admin, USER → /app
-// Rate limiting: máx 10 tentativas/min por IP
-import { createSession, json, passwordDigest, safeEqual, sessionCookie } from '../_auth.js';
+// LifeOS Enterprise — Login Unificado v16.5
+import { recordSession } from '../_account.js';
+import { createSession, json, passwordDigest, safeEqual, sessionCookie, verifySession } from '../_auth.js';
 
 const MAX_LOGIN_ATTEMPTS = 10;
 const WINDOW_SECONDS = 60;
 
 async function checkRateLimit(kv, ip) {
-  if (!kv) return { allowed: true };
-  try {
-    const rlKey = `rl:login:${ip}`;
-    const raw = await kv.get(rlKey);
-    const data = raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + WINDOW_SECONDS * 1000 };
-    if (Date.now() > data.resetAt) { data.count = 0; data.resetAt = Date.now() + WINDOW_SECONDS * 1000; }
-    data.count += 1;
-    await kv.put(rlKey, JSON.stringify(data), { expirationTtl: WINDOW_SECONDS });
-    return { allowed: data.count <= MAX_LOGIN_ATTEMPTS, remaining: Math.max(0, MAX_LOGIN_ATTEMPTS - data.count) };
-  } catch (_) { return { allowed: true }; }
+  if (!kv) return { allowed: false, remaining: 0 };
+  const key = `rl:login:${ip}`;
+  const raw = await kv.get(key);
+  const data = raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + WINDOW_SECONDS * 1000 };
+  if (Date.now() > data.resetAt) {
+    data.count = 0;
+    data.resetAt = Date.now() + WINDOW_SECONDS * 1000;
+  }
+  data.count += 1;
+  await kv.put(key, JSON.stringify(data), { expirationTtl: WINDOW_SECONDS });
+  return { allowed: data.count <= MAX_LOGIN_ATTEMPTS, remaining: Math.max(0, MAX_LOGIN_ATTEMPTS - data.count) };
+}
+
+async function issueSession(request, env, email, role) {
+  const token = await createSession(email, role, env.LIFEOS_SESSION_SECRET);
+  const session = await verifySession(token, env.LIFEOS_SESSION_SECRET);
+  await recordSession(env.LIFEOS_KV, session, request);
+  return token;
 }
 
 export async function onRequestPost({ request, env }) {
-  const configuredAdminUser = env.LIFEOS_ADMIN_USER;
-  const configuredAdminHash = env.LIFEOS_ADMIN_PASSWORD_HASH;
-  const sessionSecret = env.LIFEOS_SESSION_SECRET;
-
-  if (!configuredAdminUser || !configuredAdminHash || !sessionSecret) {
+  if (!env.LIFEOS_ADMIN_USER || !env.LIFEOS_ADMIN_PASSWORD_HASH || !env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) {
     return json(503, { ok: false, error: 'Autenticação ainda não configurada' });
   }
 
-  // Rate limiting por IP
   const clientIP = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown';
-  const rl = await checkRateLimit(env.LIFEOS_KV, clientIP);
-  if (!rl.allowed) {
+  const rateLimit = await checkRateLimit(env.LIFEOS_KV, clientIP);
+  if (!rateLimit.allowed) {
     return json(429, { ok: false, error: 'Muitas tentativas. Aguarde 1 minuto antes de tentar novamente.' }, {
       'retry-after': String(WINDOW_SECONDS),
       'x-ratelimit-limit': String(MAX_LOGIN_ATTEMPTS),
@@ -40,61 +41,52 @@ export async function onRequestPost({ request, env }) {
     });
   }
 
-  let input = {};
+  let input;
   try { input = await request.json(); } catch { return json(400, { ok: false, error: 'Requisição inválida' }); }
-
   const username = String(input.email || input.username || '').trim().toLowerCase();
   const password = String(input.password || '');
-
-  if (!username || !password) {
-    return json(400, { ok: false, error: 'E-mail e senha são obrigatórios' });
-  }
+  if (!username || !password) return json(400, { ok: false, error: 'E-mail e senha são obrigatórios' });
 
   const inputHash = await passwordDigest(password);
-
-  // Verificar admin
-  const isAdmin =
-    safeEqual(username, configuredAdminUser.toLowerCase()) &&
-    safeEqual(inputHash, configuredAdminHash);
-
+  const isAdmin = safeEqual(username, env.LIFEOS_ADMIN_USER.toLowerCase())
+    && safeEqual(inputHash, env.LIFEOS_ADMIN_PASSWORD_HASH);
   if (isAdmin) {
-    const token = await createSession(configuredAdminUser, 'admin', sessionSecret);
+    const token = await issueSession(request, env, env.LIFEOS_ADMIN_USER, 'admin');
     return json(200, {
       ok: true,
-      user: { username: configuredAdminUser, role: 'admin', name: 'Administrador' },
+      user: { username: env.LIFEOS_ADMIN_USER, role: 'admin', name: 'Administrador' },
       redirect: '/admin',
     }, { 'set-cookie': sessionCookie(token) });
   }
 
-  // Verificar usuários comuns (KV Store)
-  if (env.LIFEOS_KV) {
-    try {
-      const userKey = `user:${username}`;
-      const userDataRaw = await env.LIFEOS_KV.get(userKey);
-      if (userDataRaw) {
-        const userData = JSON.parse(userDataRaw);
-        const userHash = await passwordDigest(password);
-        if (safeEqual(userHash, userData.passwordHash)) {
-          const token = await createSession(userData.email, 'user', sessionSecret);
-          return json(200, {
-            ok: true,
-            user: { username: userData.email, role: 'user', name: userData.name },
-            redirect: userData.onboarded ? '/app' : '/app?onboarding=true',
-          }, { 'set-cookie': sessionCookie(token) });
-        }
-      }
-    } catch (_) { /* KV error — continuar */ }
+  const userRaw = await env.LIFEOS_KV.get(`user:${username}`);
+  if (!userRaw) return json(401, { ok: false, error: 'Credenciais inválidas. Verifique e tente novamente.' });
+  const user = JSON.parse(userRaw);
+  if (!safeEqual(inputHash, user.passwordHash)) {
+    return json(401, { ok: false, error: 'Credenciais inválidas. Verifique e tente novamente.' });
+  }
+  if (!user.emailVerified) {
+    return json(403, {
+      ok: false,
+      code: 'EMAIL_CONFIRMATION_REQUIRED',
+      error: 'Confirme seu e-mail antes de entrar.',
+      confirmationEmail: user.email,
+    });
+  }
+  if (user.status && user.status !== 'active') {
+    return json(403, { ok: false, error: 'Esta conta não está ativa.' });
   }
 
-    return json(401, { ok: false, error: 'Credenciais inválidas. Verifique e tente novamente.' });
-}
-
-export async function onRequestOptions() {
-  return new Response(null, { status: 204, headers: { allow: 'POST, OPTIONS' } });
+  const token = await issueSession(request, env, user.email, user.role || 'user');
+  return json(200, {
+    ok: true,
+    user: { username: user.email, role: user.role || 'user', name: user.name },
+    redirect: user.onboarded ? '/app' : '/app?onboarding=true',
+  }, { 'set-cookie': sessionCookie(token) });
 }
 
 export async function onRequest({ request, env }) {
   if (request.method === 'POST') return onRequestPost({ request, env });
-  if (request.method === 'OPTIONS') return onRequestOptions();
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'POST' });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { allow: 'POST, OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'POST, OPTIONS' });
 }

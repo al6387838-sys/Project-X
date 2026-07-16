@@ -1743,6 +1743,28 @@
     initializeEnterpriseOnboarding(user);
   }
 
+  function applyProfileUpdate(profile) {
+    if (!profile) return;
+    currentUser = { ...(currentUser || {}), ...profile, username: profile.email || currentUser?.username };
+    const name = profile.name || currentUser?.name || currentUser?.username?.split('@')[0] || 'Usuário';
+    const email = profile.email || currentUser?.username || '';
+    const initials = name.slice(0, 2).toUpperCase();
+    document.getElementById('sidebar-name').textContent = name;
+    document.getElementById('sidebar-avatar').textContent = initials;
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('profile-avatar').textContent = initials;
+    document.getElementById('profile-email').textContent = email;
+    const profileInputs = document.querySelectorAll('#page-profile input');
+    if (profileInputs[0]) profileInputs[0].value = name;
+    if (profileInputs[1]) profileInputs[1].value = email;
+    if (profileInputs[2] && profile.timezone) profileInputs[2].value = profile.timezone;
+  }
+
+  window.addEventListener('lifeos:profile-updated', event => applyProfileUpdate(event.detail));
+  window.addEventListener('message', event => {
+    if (event.origin === location.origin && event.data?.type === 'lifeos:profile-updated') applyProfileUpdate(event.data.profile);
+  });
+
   // ── Notification Center Loader (Phase 090) ─────────────────────────────
   let notifCenterLoaded = false;
   async function loadNotificationCenter() {
@@ -1989,11 +2011,7 @@
       const d = await r.json();
       if (d.ok) {
         showToast('Perfil atualizado com sucesso!', 'success');
-        document.getElementById('profile-name').textContent = name;
-        document.getElementById('sidebar-name').textContent = name;
-        const initials = name.slice(0,2).toUpperCase();
-        document.getElementById('profile-avatar').textContent = initials;
-        document.getElementById('sidebar-avatar').textContent = initials;
+        applyProfileUpdate(d.profile || { name, timezone });
       } else { showToast(d.error || 'Erro ao salvar', 'error'); }
     } catch (_) { showToast('Erro de conexão', 'error'); }
   });
@@ -2001,9 +2019,9 @@
   // ─── Settings buttons ─────────────────────────────────────────
   document.querySelectorAll('#page-settings .btn-ghost').forEach(btn => {
     const text = btn.textContent.trim();
-    if (text.includes('Alterar senha')) btn.onclick = () => openModal('modal-change-password');
-    else if (text.includes('Ativar MFA')) btn.onclick = () => showToast('MFA será configurado via e-mail. Verifique sua caixa de entrada.', 'info');
-    else if (text.includes('Ver sessões')) btn.onclick = () => showToast('Sessão atual: Chrome · ' + new Date().toLocaleDateString('pt-BR'), 'info');
+    if (text.includes('Alterar senha')) btn.onclick = () => showPage('settings-account');
+    else if (text.includes('Ativar MFA')) btn.onclick = () => showPage('settings-security');
+    else if (text.includes('Ver sessões')) btn.onclick = () => showPage('settings-sessions');
     else if (text.includes('Exportar dados')) btn.onclick = () => showToast('Exportação iniciada. Você receberá um e-mail em breve.', 'success');
     else if (text.includes('Importar dados')) btn.onclick = () => { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json,.csv'; inp.onchange = e => showToast('Importando ' + e.target.files[0].name + '...', 'info'); inp.click(); };
   });
@@ -2484,6 +2502,7 @@
     'settings-theme': 'module-enterprise-settings-container',
     'settings-integrations': 'module-enterprise-settings-container',
     'settings-security': 'module-enterprise-settings-container',
+    'settings-account': 'module-enterprise-settings-container',
     'settings-sessions': 'module-enterprise-settings-container',
     'settings-devices': 'module-enterprise-settings-container',
     'settings-apikeys': 'module-enterprise-settings-container',
@@ -2584,7 +2603,10 @@
       if (activeModule) activeModule.hidden = false;
     }
     _origShowPage(_routeAliases[id] || id);
-    if (_routeAliases[id]) history.replaceState({}, '', `#${id}`);
+    if (id.startsWith('settings-') && typeof window.switchSettings === 'function') {
+      window.switchSettings(id.slice('settings-'.length));
+    }
+    if (_routeAliases[id] || id.startsWith('settings-')) history.replaceState({}, '', `#${id}`);
   };
 
   // ═══ FINANCE FUNCTIONS ═══

@@ -1,158 +1,107 @@
-// LifeOS Enterprise — Profile API v1.0
-// Cloudflare Pages Function: GET/POST /api/profile
-// Phase 131 — Real Data Foundation
-// Perfil completo persistido no Cloudflare KV
-import { getCookie, json, passwordDigest, safeEqual, verifySession } from '../_auth.js';
+// LifeOS Enterprise — Profile & Account Lifecycle API v16.5
+import {
+  deleteAccountTokens,
+  deleteUserKeys,
+  EMAIL_CHANGE_TTL_SECONDS,
+  randomToken,
+  revokeAllSessions,
+} from '../_account.js';
+import {
+  expiredSessionCookie,
+  getCookie,
+  json,
+  passwordDigest,
+  safeEqual,
+  verifySession,
+} from '../_auth.js';
+import { emailChangeEmail, sendTransactionalEmail } from '../_email.js';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
+async function authenticate(request, env) {
+  if (!env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) return null;
+  return verifySession(getCookie(request.headers.get('cookie')), env.LIFEOS_SESSION_SECRET, env.LIFEOS_KV);
+}
+
 export async function onRequestGet({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await authenticate(request, env);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
-
-  let profile = {
-    email: session.sub,
-    name: session.sub.split('@')[0],
-    role: session.role,
-    plan: 'free',
-    avatar: null,
-    bio: '',
-    phone: '',
-    timezone: 'America/Sao_Paulo',
-    language: 'pt-BR',
-    onboarded: false,
-    createdAt: null,
-    updatedAt: null,
-  };
-
-  if (env.LIFEOS_KV && session.role !== 'admin') {
-    try {
-      const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-      if (raw) {
-        const kv = JSON.parse(raw);
-        const { passwordHash, ...safeKv } = kv;
-        profile = { ...profile, ...safeKv };
-      }
-    } catch (_) { /* KV indisponível */ }
+  if (session.role === 'admin') {
+    const profile = { email: session.sub, name: 'Administrador', role: 'admin', status: 'active', emailVerified: true };
+    return json(200, { ok: true, profile, user: profile });
   }
-
-  return json(200, { ok: true, profile });
+  const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
+  if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
+  const user = JSON.parse(raw);
+  const { passwordHash, ...profile } = user;
+  return json(200, { ok: true, profile, user: profile });
 }
 
 export async function onRequestPost({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await authenticate(request, env);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  if (session.role === 'admin') return json(403, { ok: false, error: 'Operação indisponível para a conta administrativa' });
 
-  let input = {};
+  let input;
   try { input = await request.json(); } catch { return json(400, { ok: false, error: 'Requisição inválida' }); }
+  const action = String(input.action || '');
+  const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
+  if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
+  const user = JSON.parse(raw);
 
-  if (!env.LIFEOS_KV) {
-    return json(503, { ok: false, error: 'Armazenamento não disponível' });
+  if (action === 'email.change' || action === 'change_email') {
+    const newEmail = String(input.newEmail || input.email || '').trim().toLowerCase();
+    const currentPassword = String(input.currentPassword || input.password || '');
+    if (!EMAIL_REGEX.test(newEmail) || newEmail.length > 254) return json(400, { ok: false, error: 'Novo e-mail inválido' });
+    if (newEmail === session.sub) return json(400, { ok: false, error: 'O novo e-mail deve ser diferente do atual' });
+    if (await env.LIFEOS_KV.get(`user:${newEmail}`)) return json(409, { ok: false, error: 'Este e-mail já está em uso' });
+    const currentHash = await passwordDigest(currentPassword);
+    if (!safeEqual(currentHash, user.passwordHash)) return json(401, { ok: false, error: 'Senha atual incorreta' });
+
+    await deleteAccountTokens(env.LIFEOS_KV, session.sub, ['email-change:']);
+    const token = randomToken();
+    await env.LIFEOS_KV.put(`email-change:${token}`, JSON.stringify({
+      oldEmail: session.sub,
+      newEmail,
+      createdAt: new Date().toISOString(),
+    }), { expirationTtl: EMAIL_CHANGE_TTL_SECONDS });
+    const origin = new URL(request.url).origin;
+    const delivery = await sendTransactionalEmail(env, emailChangeEmail(newEmail, `${origin}/confirm-email?token=${token}`));
+    if (!delivery.ok) {
+      await env.LIFEOS_KV.delete(`email-change:${token}`);
+      return json(503, { ok: false, code: delivery.error, error: 'Serviço de e-mail não configurado ou indisponível.' });
+    }
+    return json(200, { ok: true, pendingEmail: newEmail, message: 'Enviamos um link de confirmação ao novo endereço.' });
   }
 
-  const action = String(input.action || 'update');
+  if (action === 'account.delete' || action === 'delete_account') {
+    const password = String(input.password || input.currentPassword || '');
+    const confirmation = String(input.confirmation || input.confirmText || '').trim().toUpperCase();
+    if (confirmation && confirmation !== 'EXCLUIR' && confirmation !== 'EXCLUIR MINHA CONTA') {
+      return json(400, { ok: false, error: 'Confirmação de exclusão inválida' });
+    }
+    const suppliedHash = await passwordDigest(password);
+    if (!safeEqual(suppliedHash, user.passwordHash)) return json(401, { ok: false, error: 'Senha incorreta' });
+
+    await revokeAllSessions(env.LIFEOS_KV, session.sub);
+    await deleteUserKeys(env.LIFEOS_KV, session.sub);
+    return json(200, { ok: true, message: 'Conta e dados associados excluídos permanentemente', redirect: '/login?account_deleted=1' }, {
+      'set-cookie': expiredSessionCookie(),
+    });
+  }
 
   if (action === 'update') {
     const allowedFields = ['name', 'bio', 'phone', 'timezone', 'language', 'avatar'];
-    const updates = {};
-
     for (const field of allowedFields) {
-      if (input[field] !== undefined) {
-        updates[field] = String(input[field]).trim();
-      }
+      if (input[field] !== undefined) user[field] = String(input[field]).trim();
     }
-
-    if (updates.name && (updates.name.length < 2 || updates.name.length > 100)) {
+    if (user.name && (user.name.length < 2 || user.name.length > 100)) {
       return json(400, { ok: false, error: 'Nome deve ter entre 2 e 100 caracteres' });
     }
-
-    try {
-      const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-      if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
-
-      const userData = JSON.parse(raw);
-      const updated = { ...userData, ...updates, updatedAt: new Date().toISOString() };
-      await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(updated));
-
-      const { passwordHash, ...safeUpdated } = updated;
-      return json(200, { ok: true, message: 'Perfil atualizado', profile: safeUpdated });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao atualizar perfil' });
-    }
-  }
-
-  if (action === 'change_email') {
-    const newEmail = String(input.email || '').trim().toLowerCase();
-    const password = String(input.password || '');
-
-    if (!newEmail || !EMAIL_REGEX.test(newEmail)) {
-      return json(400, { ok: false, error: 'E-mail inválido' });
-    }
-    if (!password) return json(400, { ok: false, error: 'Senha obrigatória para alterar e-mail' });
-
-    try {
-      // Verificar se novo e-mail já existe
-      const existing = await env.LIFEOS_KV.get(`user:${newEmail}`);
-      if (existing) return json(409, { ok: false, error: 'Este e-mail já está em uso' });
-
-      const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-      if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
-
-      const userData = JSON.parse(raw);
-      const passwordHash = await passwordDigest(password);
-      if (!safeEqual(passwordHash, userData.passwordHash)) {
-        return json(401, { ok: false, error: 'Senha incorreta' });
-      }
-
-      // Migrar dados para nova chave
-      const updatedUser = { ...userData, email: newEmail, updatedAt: new Date().toISOString() };
-      await env.LIFEOS_KV.put(`user:${newEmail}`, JSON.stringify(updatedUser));
-      await env.LIFEOS_KV.delete(`user:${session.sub}`);
-
-      return json(200, { ok: true, message: 'E-mail alterado. Faça login novamente com o novo e-mail.' });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao alterar e-mail' });
-    }
-  }
-
-  if (action === 'delete_account') {
-    const password = String(input.password || '');
-    const confirmation = String(input.confirmation || '');
-
-    if (confirmation !== 'EXCLUIR MINHA CONTA') {
-      return json(400, { ok: false, error: 'Confirmação inválida. Digite: EXCLUIR MINHA CONTA' });
-    }
-
-    try {
-      const raw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-      if (!raw) return json(404, { ok: false, error: 'Usuário não encontrado' });
-
-      const userData = JSON.parse(raw);
-      const passwordHash = await passwordDigest(password);
-      if (!safeEqual(passwordHash, userData.passwordHash)) {
-        return json(401, { ok: false, error: 'Senha incorreta' });
-      }
-
-      // Remover todos os dados do usuário
-      await env.LIFEOS_KV.delete(`user:${session.sub}`);
-      await env.LIFEOS_KV.delete(`settings:${session.sub}`);
-      await env.LIFEOS_KV.delete(`notifications:${session.sub}`);
-      await env.LIFEOS_KV.delete(`workspaces:${session.sub}`);
-
-      return json(200, { ok: true, message: 'Conta excluída com sucesso' });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao excluir conta' });
-    }
+    user.updatedAt = new Date().toISOString();
+    await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(user));
+    const { passwordHash, ...profile } = user;
+    return json(200, { ok: true, message: 'Perfil atualizado', profile, user: profile });
   }
 
   return json(400, { ok: false, error: 'Ação inválida' });

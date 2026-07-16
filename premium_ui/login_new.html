@@ -395,7 +395,7 @@
           <div class="form-group" style="margin-bottom:20px">
             <label class="form-checkbox">
               <input type="checkbox" id="terms" required />
-              Concordo com os <a href="#" class="form-link">Termos de Uso</a> e <a href="#" class="form-link">Privacidade</a>
+              Concordo com os <a href="/terms" class="form-link">Termos de Uso</a> e <a href="/privacy" class="form-link">Privacidade</a>
             </label>
           </div>
           <button type="submit" class="btn-submit" id="register-btn">Criar conta grátis</button>
@@ -521,7 +521,15 @@
           body: JSON.stringify({ email, password }),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Credenciais inválidas.');
+        if (!res.ok) {
+          if (data.code === 'EMAIL_CONFIRMATION_REQUIRED') {
+            showStatus('login-status', 'info', 'Confirme seu e-mail para continuar. Redirecionando para o reenvio…');
+            setLoading('login-btn', false);
+            setTimeout(() => location.href = '/confirm-email?email=' + encodeURIComponent(data.confirmationEmail || email), 900);
+            return;
+          }
+          throw new Error(data.error || 'Credenciais inválidas.');
+        }
         showStatus('login-status', 'success', '\u{2713} Autenticado! Redirecionando...');
         setTimeout(() => location.replace(data.redirect || '/app'), 800);
       } catch (err) {
@@ -552,8 +560,8 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Erro ao criar conta.');
-        showStatus('register-status', 'success', '\u{2713} Conta criada! Redirecionando...');
-        setTimeout(() => location.replace(data.redirect || '/app'), 800);
+        showStatus('register-status', 'success', '\u{2713} Conta criada. Verifique seu e-mail para ativar o acesso.');
+        setTimeout(() => location.replace(data.redirect || ('/confirm-email?email=' + encodeURIComponent(email))), 1000);
       } catch (err) {
         showStatus('register-status', 'error', err.message);
         setLoading('register-btn', false);

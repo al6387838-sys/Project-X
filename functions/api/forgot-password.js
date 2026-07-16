@@ -1,26 +1,21 @@
-// LifeOS Enterprise — Forgot Password v6.0
-// Cloudflare Pages Function: POST /api/forgot-password
+// LifeOS Enterprise — Forgot Password compatibility route v16.5
 import { json } from '../_auth.js';
+import { onRequestPost as passwordResetRequest } from './password-reset.js';
 
 export async function onRequestPost({ request, env }) {
-  let input = {};
+  let input;
   try {
     input = await request.json();
   } catch {
     return json(400, { ok: false, error: 'Requisição inválida' });
   }
 
-  const email = String(input.email || '').trim().toLowerCase();
-  if (!email || !email.includes('@')) {
-    return json(400, { ok: false, error: 'E-mail inválido' });
-  }
-
-  // Sempre retornar sucesso por segurança (não revelar se e-mail existe)
-  // Em produção: enviar e-mail de recuperação via SendGrid/Mailgun
-  return json(200, {
-    ok: true,
-    message: 'Se este e-mail estiver cadastrado, você receberá as instruções de recuperação em breve.',
+  const forwardedRequest = new Request(request.url, {
+    method: 'POST',
+    headers: request.headers,
+    body: JSON.stringify({ action: 'request', email: input.email }),
   });
+  return passwordResetRequest({ request: forwardedRequest, env });
 }
 
 export async function onRequest({ request, env }) {

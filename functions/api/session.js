@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Session Check v6.0
+// LifeOS Enterprise — Session Check v16.5
 // Cloudflare Pages Function: GET /api/session
 // Retorna dados da sessão atual (admin ou user)
 import { getCookie, json, verifySession } from '../_auth.js';
@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env }) {
 
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
 
   if (!session) {
     const optional = new URL(request.url).searchParams.get('optional') === '1';

@@ -1,4 +1,7 @@
-// LifeOS Enterprise — Global Security Middleware v7.0
+// LifeOS Enterprise — Global Security Middleware v16.5
+// Aplica headers de segurança enterprise e invalidação central de sessões
+import { getCookie, json, verifySession } from './_auth.js';
+
 // Aplica headers de segurança enterprise em todas as rotas
 // HSTS, CSP, CORS, X-Frame-Options, etc.
 
@@ -31,7 +34,7 @@ const SECURITY_HEADERS = {
   ].join('; '),
 };
 
-export async function onRequest({ request, next }) {
+export async function onRequest({ request, env, next }) {
   const url = new URL(request.url);
 
   // Bloquear métodos não permitidos em rotas de API
@@ -46,6 +49,22 @@ export async function onRequest({ request, next }) {
           ...SECURITY_HEADERS,
         },
       });
+    }
+
+    // Sessões revogadas são rejeitadas antes de alcançar os handlers protegidos.
+    const protectedAccountRoutes = [
+      '/api/profile', '/api/profile-update', '/api/sessions', '/api/security',
+      '/api/settings', '/api/user-data', '/api/onboarding', '/api/workspaces',
+      '/api/notifications', '/api/invite', '/api/logout',
+    ];
+    if (request.method !== 'OPTIONS' && protectedAccountRoutes.some((route) => url.pathname === route || url.pathname.startsWith(`${route}/`))) {
+      const secret = env.LIFEOS_SESSION_SECRET;
+      const session = secret
+        ? await verifySession(getCookie(request.headers.get('cookie')), secret, env.LIFEOS_KV)
+        : null;
+      if (!session) {
+        return json(401, { ok: false, error: 'Sessão inválida, expirada ou revogada' });
+      }
     }
 
     // CORS: apenas mesma origem para APIs
