@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS Enterprise — Onboarding</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141B28;
+      --text-primary: #F0F4FF;
+      --text-secondary: #94A3B8;
+      --border: rgba(255,255,255,0.1);
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      --t-fast: 0.2s;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', -apple-system, sans-serif; overflow-x: hidden; }
+    .onboarding-container { min-height: 100vh; display: flex; flex-direction: column; }
+    .onboarding-header { background: linear-gradient(180deg, rgba(99,102,241,0.1) 0%, rgba(10,10,10,0) 100%); border-bottom: 1px solid var(--border); padding: 20px 28px; }
+    .onboarding-header h1 { font-size: 28px; font-weight: 900; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+    .onboarding-header p { font-size: 14px; color: var(--text-secondary); }
+    .onboarding-content { flex: 1; display: grid; grid-template-columns: 1fr 2fr; gap: 0; }
+    .onboarding-sidebar { background: var(--bg-secondary); border-right: 1px solid var(--border); padding: 28px 20px; overflow-y: auto; }
+    .onboarding-main { padding: 40px; overflow-y: auto; }
+    .step-item { padding: 12px 16px; margin-bottom: 8px; border-radius: 10px; cursor: pointer; transition: all var(--t-fast); border-left: 3px solid transparent; }
+    .step-item.pending { color: var(--text-secondary); border-left-color: var(--border); }
+    .step-item.pending:hover { background: rgba(255,255,255,0.03); }
+    .step-item.active { background: rgba(99,102,241,0.15); border-left-color: #6366F1; color: var(--text-primary); }
+    .step-item.completed { color: #10B981; border-left-color: #10B981; }
+    .step-item-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .step-item-desc { font-size: 11px; color: inherit; opacity: 0.8; }
+    .step-item-icon { display: inline-block; width: 16px; height: 16px; margin-right: 8px; text-align: center; font-size: 12px; }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--gradient-success); transition: width 0.5s ease; }
+    .step-content { display: none; }
+    .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .step-title { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    .step-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+    .step-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+    .form-input { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 13px; transition: all var(--t-fast); }
+    .form-input:focus { outline: none; border-color: #6366F1; background: rgba(99,102,241,0.05); }
+    .form-checkbox { display: flex; align-items: center; gap: 8px; }
+    .form-checkbox input { width: 16px; height: 16px; cursor: pointer; }
+    .form-checkbox label { font-size: 13px; cursor: pointer; flex: 1; }
+    .step-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all var(--t-fast); display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: var(--gradient-primary); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.3); }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
+    .step-info { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 14px; font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
+    .step-info i { margin-right: 6px; color: #6366F1; }
+    .completion-message { text-align: center; padding: 40px 20px; }
+    .completion-icon { font-size: 64px; color: #10B981; margin-bottom: 16px; }
+    .completion-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+    .completion-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+    @media (max-width: 768px) {
+      .onboarding-content { grid-template-columns: 1fr; }
+      .onboarding-sidebar { display: none; }
+      .onboarding-main { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="onboarding-container">
+    <div class="onboarding-header">
+      <h1>Bem-vindo ao LifeOS Enterprise</h1>
+      <p>Configure sua plataforma em 8 passos simples</p>
+    </div>
+    
+    <div class="onboarding-content">
+      <div class="onboarding-sidebar">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div id="steps-list"></div>
+      </div>
+      
+      <div class="onboarding-main">
+        <div id="steps-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STEPS = [
+      { id: 'account', title: 'Criar Conta', description: 'Registre-se com seu e-mail', content: 'Sua conta foi criada automaticamente ao fazer login.' },
+      { id: 'email-confirm', title: 'Confirmar E-mail', description: 'Verifique seu endereço de e-mail', content: 'Verifique seu e-mail para confirmar sua conta.' },
+      { id: 'organization', title: 'Criar Organização', description: 'Configure sua empresa ou workspace', content: 'Crie sua primeira organização.' },
+      { id: 'workspace', title: 'Criar Workspace', description: 'Crie seu primeiro espaço de trabalho', content: 'Workspaces permitem organizar projetos e equipes.' },
+      { id: 'profile', title: 'Configurar Perfil', description: 'Complete seu perfil pessoal', content: 'Adicione foto, bio e informações de contato.' },
+      { id: 'integrations', title: 'Conectar Integrações', description: 'Configure serviços desejados', content: 'Conecte Gmail, Stripe, OpenAI e outros.' },
+      { id: 'first-document', title: 'Primeiro Documento', description: 'Faça upload do seu primeiro arquivo', content: 'Teste o sistema de upload e gerenciamento de arquivos.' },
+      { id: 'complete', title: 'Concluído', description: 'Bem-vindo ao LifeOS Enterprise!', content: 'Parabéns! Você está pronto para começar.' },
+    ];
+
+    let currentStep = 0;
+    let onboardingData = { completedSteps: [], progress: 0 };
+
+    async function loadOnboarding() {
+      try {
+        const res = await fetch('/api/enterprise/onboarding');
+        const data = await res.json();
+        if (data.ok) {
+          onboardingData = data.onboarding;
+          currentStep = STEPS.findIndex(s => s.id === data.onboarding.currentStep);
+          if (currentStep === -1) currentStep = 0;
+          render();
+        }
+      } catch (e) {
+        console.error('Erro ao carregar onboarding:', e);
+      }
+    }
+
+    function render() {
+      renderSteps();
+      renderContent();
+      updateProgress();
+    }
+
+    function renderSteps() {
+      const list = document.getElementById('steps-list');
+      list.innerHTML = STEPS.map((step, idx) => {
+        const isCompleted = onboardingData.completedSteps.includes(step.id);
+        const isActive = idx === currentStep;
+        const icon = isCompleted ? '✓' : (isActive ? '→' : '•');
+        const status = isCompleted ? 'completed' : (isActive ? 'active' : 'pending');
+        
+        return `
+          <div class="step-item ${status}" onclick="goToStep(${idx})">
+            <div class="step-item-title">
+              <span class="step-item-icon">${icon}</span> ${step.title}
+            </div>
+            <div class="step-item-desc">${step.description}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderContent() {
+      const step = STEPS[currentStep];
+      const content = document.getElementById('steps-content');
+      const isCompleted = onboardingData.completedSteps.includes(step.id);
+      const isLastStep = currentStep === STEPS.length - 1;
+
+      if (isLastStep && onboardingData.completed) {
+        content.innerHTML = `
+          <div class="completion-message">
+            <div class="completion-icon">🎉</div>
+            <div class="completion-title">Parabéns!</div>
+            <div class="completion-subtitle">Você completou o onboarding e está pronto para usar o LifeOS Enterprise.</div>
+            <button class="btn btn-primary" onclick="window.location.href='/app'">
+              <i class="ri-arrow-right-line"></i> Ir para o Dashboard
+            </button>
+          </div>
+        `;
+      } else {
+        content.innerHTML = `
+          <div class="step-content active">
+            <h2 class="step-title">${step.title}</h2>
+            <p class="step-subtitle">${step.description}</p>
+            <div class="step-info">
+              <i class="ri-information-line"></i>
+              ${step.content}
+            </div>
+            <div class="step-form">
+              <div class="form-group">
+                <label class="form-label">Status do Step</label>
+                <div style="font-size: 13px; color: var(--text-secondary);">
+                  ${isCompleted ? '✓ Completado' : '○ Pendente'}
+                </div>
+              </div>
+            </div>
+            <div class="step-actions">
+              ${currentStep > 0 ? `<button class="btn btn-secondary" onclick="previousStep()"><i class="ri-arrow-left-line"></i> Anterior</button>` : ''}
+              ${!isCompleted ? `<button class="btn btn-primary" onclick="completeStep()"><i class="ri-check-line"></i> Completar</button>` : ''}
+              ${currentStep < STEPS.length - 1 ? `<button class="btn btn-secondary" onclick="nextStep()">Próximo <i class="ri-arrow-right-line"></i></button>` : ''}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function updateProgress() {
+      const progress = Math.round((onboardingData.completedSteps.length / STEPS.length) * 100);
+      document.getElementById('progress-fill').style.width = progress + '%';
+    }
+
+    async function completeStep() {
+      const step = STEPS[currentStep];
+      try {
+        const res = await fetch('/api/enterprise/onboarding', {
+          method: 'POST',
+          body: JSON.stringify({ action: 'complete-step', stepId: step.id })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          onboardingData = data.onboarding;
+          if (currentStep < STEPS.length - 1) {
+            currentStep++;
+          }
+          render();
+        }
+      } catch (e) {
+        console.error('Erro ao completar step:', e);
+      }
+    }
+
+    function goToStep(idx) {
+      currentStep = idx;
+      render();
+    }
+
+    function nextStep() {
+      if (currentStep < STEPS.length - 1) {
+        currentStep++;
+        render();
+      }
+    }
+
+    function previousStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        render();
+      }
+    }
+
+    loadOnboarding();
+  </script>
+</body>
+</html>

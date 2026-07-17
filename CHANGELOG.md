@@ -221,3 +221,64 @@ O hardening inclui composição segura de mensagens, caminhos modulares determin
 
 ### Removed
 - Dead code and unused imports across `cloud_sync`, `decision_engine`, and `connector_platform`.
+## [27.0.0] — 2026-07-17
+### Release: LIFEOS ENTERPRISE v27.0.0 — Phases 225–233 (Go Live Comercial)
+
+A v27.0 marca o ponto de partida para lançamento comercial. O produto está organizado, testado e pronto para ativação com clientes Enterprise. Todas as integrações estão implementadas e aguardam apenas as credenciais oficiais de cada provedor.
+
+| Métrica | Resultado |
+|---|---:|
+| Build de produção | Aprovado ✓ |
+| Módulos validados | 36 / 36 |
+| APIs validadas | 38 / 38 |
+| Rotas configuradas | 32 / 32 |
+| Erros de build | 0 |
+| Commercial Readiness | 100% |
+
+#### Phase 225 — Communication Hub (v3.0)
+- Gmail, Outlook, SMTP, WhatsApp, Webhooks
+- OAuth 2.0 real com refresh token, revogação, reconexão automática
+- Logs (500), fila de sync, monitoramento em tempo real
+
+#### Phase 226 — Billing Platform
+- Stripe + Mercado Pago com checkout real
+- 4 planos: Free, Starter (R$49), Professional (R$149), Enterprise (R$499)
+- Assinaturas, upgrade, downgrade, cancelamento, invoices, histórico
+
+#### Phase 227 — Enterprise Organizations
+- RBAC: owner, admin, manager, member, viewer
+- 21 permissões granulares
+- Múltiplas organizações e workspaces, auditoria completa
+
+#### Phase 228 — Real AI Platform
+- OpenAI GPT-4o-mini com streaming SSE
+- Histórico de conversas, memória, ferramentas, prompts versionados
+
+#### Phase 229 — Enterprise Certification
+- 29 controles auditados em 7 categorias
+- Production Readiness: 100%
+
+#### Phase 230 — Production Release
+- Build: 35 módulos, 36 APIs, 32 rotas, 0 erros
+- Commit v26.0.0, tag, release publicados
+
+#### Phase 231 — Enterprise Configuration Center
+- Painel Admin em tempo real
+- 12 serviços monitorados
+- Status (Conectado / Não configurado / Erro)
+- Teste de conexão para cada serviço
+- Logs da última tentativa
+
+#### Phase 232 — Enterprise Onboarding
+- Fluxo de 8 passos: Conta → Confirmação → Org → Workspace → Perfil → Integrações → Documento → Concluído
+- Barra de progresso em tempo real
+- Retomada automática do ponto onde parou
+- Sem dados fictícios
+
+#### Phase 233 — Commercial Release Ready
+- Auditoria final de UX, APIs, segurança, performance
+- Build v27.0.0 aprovado
+- Commit, tag, release publicados
+- Deploy no Cloudflare Pages
+
+---

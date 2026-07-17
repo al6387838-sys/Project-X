@@ -134,7 +134,27 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(239,68,68,0.2); border-radius: 99px; }
-  </style>
+  
+    .ea-config-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-top: 20px; }
+    .config-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+    .config-card:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+    .config-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .config-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .config-category { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; }
+    .config-status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .status-ok { background: rgba(16,185,129,0.1); color: #10B981; }
+    .status-missing { background: rgba(239,68,68,0.1); color: #EF4444; }
+    .status-partial { background: rgba(245,158,11,0.1); color: #F59E0B; }
+    .config-details { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+    .config-env { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .config-env i { font-size: 14px; }
+    .config-keys { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .key-tag { font-family: monospace; font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; color: #94A3B8; }
+    .key-missing { text-decoration: line-through; color: #EF4444; opacity: 0.7; }
+    .config-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); }
+    .last-sync { font-size: 11px; color: var(--text-secondary); }
+    .btn-test { padding: 6px 12px; font-size: 11px; }
+</style>
 </head>
 <body>
 
@@ -716,6 +736,87 @@ function showToast(msg, type) {
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 2500);
+}
+
+async function refreshConfig() {
+  const grid = document.getElementById('config-grid');
+  grid.innerHTML = '<div class="loading-state">Consultando APIs de infraestrutura...</div>';
+  try {
+    const res = await fetch('/api/enterprise/config-center');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    renderConfig(data.services);
+  } catch (e) {
+    grid.innerHTML = `<div class="error-state">Erro ao carregar configurações: ${e.message}</div>`;
+  }
+}
+
+function renderConfig(services) {
+  const grid = document.getElementById('config-grid');
+  grid.innerHTML = services.map(s => {
+    const statusClass = `status-${s.status}`;
+    const statusText = s.status === 'ok' ? 'CONECTADO' : (s.status === 'partial' ? 'PARCIAL' : 'NÃO CONFIGURADO');
+    const envIcon = s.environment === 'production' ? 'ri-shield-check-line' : 'ri-test-tube-line';
+    
+    return `
+      <div class="config-card">
+        <div class="config-header">
+          <div>
+            <div class="config-category">${s.category}</div>
+            <div class="config-name">${s.name}</div>
+          </div>
+          <div class="config-status ${statusClass}">${statusText}</div>
+        </div>
+        <div class="config-details">
+          <div class="config-env">
+            <i class="${envIcon}"></i>
+            <span>Ambiente: ${s.environment}</span>
+          </div>
+          <div class="config-keys">
+            ${(s.envKeys || []).map(k => `<span class="key-tag ${s.missingKeys.includes(k) ? 'key-missing' : ''}">${k}</span>`).join('')}
+            ${s.kvCheck ? '<span class="key-tag">Cloudflare KV Binding</span>' : ''}
+          </div>
+        </div>
+        <div class="config-footer">
+          <div class="last-sync">
+            <i class="ri-time-line"></i> 
+            ${s.lastSync ? new Date(s.lastSync).toLocaleString() : 'Nunca testado'}
+          </div>
+          <button class="btn btn-ghost btn-test" onclick="testService('${s.id}')">
+            Testar Conexão
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function testService(id) {
+  showToast(`Testando conexão com ${id}...`, 'info');
+  try {
+    const res = await fetch('/api/enterprise/config-center', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'test-connection', serviceId: id })
+    });
+    const data = await res.json();
+    if (data.ok && data.result.ok) {
+      showToast(`${id}: ${data.result.message}`, 'success');
+    } else {
+      showToast(`${id}: ${data.result?.message || data.error}`, 'error');
+    }
+    refreshConfig();
+  } catch (e) {
+    showToast(`Erro no teste: ${e.message}`, 'error');
+  }
+}
+
+// Atualizar eaTab para carregar config
+if (typeof eaTab !== 'undefined') {
+  const oldEaTab = eaTab;
+  window.eaTab = function(id, btn) {
+    oldEaTab(id, btn);
+    if (id === 'config') refreshConfig();
+  };
 }
 </script>
 </body>
