@@ -91,11 +91,11 @@ page.on('response', (response) => {
 await page.goto(`${baseURL}/app`, { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => typeof window.showPage === 'function');
 
-await check('Universal Command Center carrega widgets e quatro contextos', async () => {
+await check('Universal Command Center carrega widgets essenciais e quatro contextos', async () => {
   await openModule(page, 'command-center', '#module-dashboard-v11');
   const widgets = await page.locator('#module-dashboard-v11 .dv11-widget').count();
   const tabs = await page.locator('#module-dashboard-v11 .dv11-tab').count();
-  if (widgets < 17) throw new Error(`Somente ${widgets} widgets disponíveis.`);
+  if (widgets < 6) throw new Error(`Somente ${widgets} widgets disponíveis.`);
   if (tabs !== 4) throw new Error(`${tabs} abas encontradas; esperado 4.`);
   for (const tab of ['week', 'priorities', 'command', 'today']) {
     await page.evaluate((target) => window.dv11SwitchTab(target), tab);

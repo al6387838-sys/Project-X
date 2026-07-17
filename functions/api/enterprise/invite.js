@@ -1,248 +1,155 @@
-// LifeOS Enterprise — User Invite API v1.0
-// Cloudflare Pages Function: POST /api/enterprise/invite
-// Phase 135 — Enterprise User Management
-// Convite de usuários para organizações/workspaces
+// LifeOS Enterprise — convite de organização e workspace v32.1
+// Cloudflare Pages Function: GET/POST /api/enterprise/invite
+// Compartilha o modelo RBAC de funções/_enterprise.js.
+
 import { getCookie, json, verifySession } from '../../_auth.js';
-
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-const INVITE_TTL = 7 * 24 * 3600; // 7 dias
-const VALID_ROLES = ['admin', 'manager', 'member', 'viewer'];
-
-function generateInviteToken() {
-  const arr = new Uint8Array(32);
-  crypto.getRandomValues(arr);
-  return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
-}
+import {
+  ENTERPRISE_ROLES,
+  acceptOrganizationInvite,
+  assertPermission,
+  assertWorkspacePermission,
+  canInviteRole,
+  createOrganizationInvite,
+  getMembership,
+  listOrganizationsForUser,
+  loadOrganization,
+  normalizeText,
+  readJson,
+  revokeOrganizationInvite,
+} from '../../_enterprise.js';
 
 async function sendInviteEmail(toEmail, inviterName, orgName, token, origin, env) {
-  const inviteUrl = `${origin}/accept-invite?token=${token}`;
-
-  if (env.RESEND_API_KEY) {
-    try {
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: env.EMAIL_FROM || 'LifeOS <noreply@lifeos.app>',
-          to: [toEmail],
-          subject: `${inviterName} convidou você para ${orgName} no LifeOS Enterprise`,
-          html: `
-            <div style="font-family:Inter,sans-serif;max-width:480px;margin:0 auto;padding:32px;background:#0a0a0a;color:#fff;border-radius:12px">
-              <h1 style="font-size:24px;font-weight:700;margin-bottom:8px">Você foi convidado!</h1>
-              <p style="color:#999;margin-bottom:8px"><strong>${inviterName}</strong> convidou você para participar de <strong>${orgName}</strong> no LifeOS Enterprise.</p>
-              <p style="color:#999;margin-bottom:24px">Clique no botão abaixo para aceitar o convite e criar sua conta.</p>
-              <a href="${inviteUrl}" style="display:inline-block;background:#3B82F6;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">Aceitar Convite</a>
-              <p style="color:#666;font-size:12px;margin-top:24px">Este convite expira em 7 dias. Se você não esperava este convite, ignore este e-mail.</p>
-            </div>
-          `,
-        }),
-      });
-      return true;
-    } catch (_) { return false; }
+  if (!env.RESEND_API_KEY) return false;
+  const inviteUrl = `${origin}/accept-invite?token=${encodeURIComponent(token)}`;
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: env.EMAIL_FROM || 'LifeOS <noreply@lifeos.app>',
+        to: [toEmail],
+        subject: `${inviterName} convidou você para ${orgName} no LifeOS Enterprise`,
+        html: `<div style="font-family:Inter,Arial,sans-serif;max-width:480px;margin:0 auto;padding:32px;background:#0a0a0a;color:#fff;border-radius:12px"><h1 style="font-size:24px;font-weight:700">Você foi convidado</h1><p style="color:#bbb"><strong>${inviterName}</strong> convidou você para participar de <strong>${orgName}</strong> no LifeOS Enterprise.</p><p style="margin:24px 0"><a href="${inviteUrl}" style="display:inline-block;background:#3B82F6;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600">Aceitar convite</a></p><p style="color:#777;font-size:12px">Este convite expira em sete dias.</p></div>`,
+      }),
+    });
+    return response.ok;
+  } catch {
+    return false;
   }
+}
 
-  return false;
+async function authenticate(request, env) {
+  if (!env.LIFEOS_SESSION_SECRET) {
+    const error = new Error('Serviço indisponível');
+    error.status = 503;
+    throw error;
+  }
+  if (!env.LIFEOS_KV) {
+    const error = new Error('Armazenamento Cloudflare KV indisponível');
+    error.status = 503;
+    throw error;
+  }
+  const session = await verifySession(getCookie(request.headers.get('cookie')), env.LIFEOS_SESSION_SECRET);
+  if (!session) {
+    const error = new Error('Não autenticado');
+    error.status = 401;
+    throw error;
+  }
+  return { actor: session.sub, kv: env.LIFEOS_KV };
+}
+
+async function getOrganizationForActor(kv, actor, requestedOrgId = '') {
+  const summaries = await listOrganizationsForUser(kv, actor);
+  const normalizedId = normalizeText(requestedOrgId, 80);
+  const summary = normalizedId ? summaries.find((item) => item.id === normalizedId) : summaries[0];
+  if (!summary) throw new Error('Sem acesso à organização solicitada.');
+  const organization = await loadOrganization(kv, summary.id);
+  const membership = getMembership(organization, actor);
+  if (!organization || !membership || membership.status !== 'active') throw new Error('Sem acesso à organização solicitada.');
+  return { organization, membership };
+}
+
+function roleFromInput(value) {
+  const raw = normalizeText(value, 40).toLowerCase();
+  const aliases = { member: 'employee', viewer: 'guest' };
+  const role = aliases[raw] || raw;
+  if (!ENTERPRISE_ROLES[role]) throw new Error('Cargo inválido. Use: owner, admin, manager, employee ou guest.');
+  return role;
+}
+
+function publicInvite(invite) {
+  return {
+    token: invite.token,
+    orgId: invite.orgId,
+    orgName: invite.orgName,
+    workspaceId: invite.workspaceId || null,
+    workspaceName: invite.workspaceName || null,
+    email: invite.email,
+    role: invite.role,
+    invitedBy: invite.invitedBy,
+    status: invite.status,
+    createdAt: invite.createdAt,
+    expiresAt: invite.expiresAt,
+    acceptedAt: invite.acceptedAt || null,
+    revokedAt: invite.revokedAt || null,
+  };
 }
 
 export async function onRequestGet({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
-  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
-
-  const url = new URL(request.url);
-  const inviteToken = url.searchParams.get('token');
-
-  if (inviteToken) {
-    // Verificar convite específico
-    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
-    try {
-      const raw = await env.LIFEOS_KV.get(`invite:${inviteToken}`);
-      if (!raw) return json(404, { ok: false, error: 'Convite não encontrado ou expirado' });
-      const invite = JSON.parse(raw);
-      if (invite.status !== 'pending') return json(400, { ok: false, error: `Convite já ${invite.status}` });
-      if (new Date(invite.expiresAt) < new Date()) return json(400, { ok: false, error: 'Convite expirado' });
-      return json(200, { ok: true, invite: { ...invite, token: inviteToken } });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao verificar convite' });
-    }
-  }
-
-  // Listar convites enviados pelo usuário
-  if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
   try {
-    const raw = await env.LIFEOS_KV.get(`invites:sent:${session.sub}`);
-    const invites = raw ? JSON.parse(raw) : [];
-    return json(200, { ok: true, invites });
-  } catch (_) {
-    return json(500, { ok: false, error: 'Erro ao carregar convites' });
+    const { actor, kv } = await authenticate(request, env);
+    const token = normalizeText(new URL(request.url).searchParams.get('token'), 200);
+    if (token) {
+      const invite = await readJson(kv, `invite:${token}`, null);
+      if (!invite) return json(404, { ok: false, error: 'Convite não encontrado ou expirado' });
+      if (normalizeText(invite.email, 254).toLowerCase() !== normalizeText(actor, 254).toLowerCase()) return json(403, { ok: false, error: 'Este convite não é para sua conta' });
+      if (invite.status !== 'pending') return json(400, { ok: false, error: `Convite já ${invite.status}` });
+      if (Date.parse(invite.expiresAt) < Date.now()) return json(400, { ok: false, error: 'Convite expirado' });
+      return json(200, { ok: true, invite: publicInvite(invite) });
+    }
+    const sent = await readJson(kv, `invites:sent:${actor}`, []);
+    const fresh = [];
+    for (const item of Array.isArray(sent) ? sent : []) {
+      const invite = await readJson(kv, `invite:${item.token}`, item);
+      if (invite) fresh.push(publicInvite(invite));
+    }
+    return json(200, { ok: true, invites: fresh });
+  } catch (error) {
+    return json(error?.status || 400, { ok: false, error: error instanceof Error ? error.message : 'Erro ao verificar convite' });
   }
 }
 
 export async function onRequestPost({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
-  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
-
-  let input = {};
-  try { input = await request.json(); } catch { return json(400, { ok: false, error: 'Requisição inválida' }); }
-
-  const action = String(input.action || 'send');
-  const url = new URL(request.url);
-
-  if (action === 'send') {
-    const email = String(input.email || '').trim().toLowerCase();
-    const role = String(input.role || 'member').toLowerCase();
-    const orgName = String(input.orgName || 'LifeOS Enterprise').trim();
-    const workspaceId = String(input.workspaceId || '').trim();
-
-    if (!email || !EMAIL_REGEX.test(email)) {
-      return json(400, { ok: false, error: 'E-mail inválido' });
+  try {
+    const { actor, kv } = await authenticate(request, env);
+    const input = await request.json().catch(() => null);
+    if (!input || typeof input !== 'object') return json(400, { ok: false, error: 'Requisição inválida' });
+    const action = normalizeText(input.action || 'send', 40);
+    if (action === 'send') {
+      const { organization, membership } = await getOrganizationForActor(kv, actor, input.orgId);
+      assertPermission(organization, actor, 'members.invite', organization.roles || []);
+      const role = roleFromInput(input.role);
+      if (!canInviteRole(membership.role, role)) throw new Error('Sem permissão para convidar com este cargo.');
+      const workspaceId = normalizeText(input.workspaceId, 80) || null;
+      if (workspaceId) assertWorkspacePermission(organization, actor, workspaceId, 'workspace.members', organization.roles || []);
+      const origin = new URL(request.url).origin;
+      const invite = await createOrganizationInvite(kv, { organization, inviter: actor, email: input.email, role, workspaceId, origin });
+      const emailSent = await sendInviteEmail(invite.email, actor, organization.name, invite.token, origin, env);
+      return json(201, { ok: true, invite: publicInvite(invite), emailSent, message: emailSent ? `Convite enviado para ${invite.email}` : 'Convite criado com link de aceite seguro.', inviteUrl: invite.inviteUrl });
     }
-    if (!VALID_ROLES.includes(role)) {
-      return json(400, { ok: false, error: `Papel inválido. Use: ${VALID_ROLES.join(', ')}` });
+    if (action === 'accept') {
+      const accepted = await acceptOrganizationInvite(kv, actor, normalizeText(input.token, 200));
+      return json(200, { ok: true, invite: publicInvite(accepted.invite), organization: { id: accepted.organization.id, name: accepted.organization.name }, message: 'Convite aceito com sucesso.' });
     }
-
-    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-    // Verificar se já existe convite pendente para este e-mail
-    try {
-      const existingRaw = await env.LIFEOS_KV.get(`invites:sent:${session.sub}`);
-      const existing = existingRaw ? JSON.parse(existingRaw) : [];
-      const pending = existing.find(i => i.email === email && i.status === 'pending' && new Date(i.expiresAt) > new Date());
-      if (pending) {
-        return json(409, { ok: false, error: 'Já existe um convite pendente para este e-mail' });
-      }
-    } catch (_) { /* ignorar */ }
-
-    // Obter dados do usuário convidante
-    let inviterName = session.sub;
-    try {
-      const userRaw = await env.LIFEOS_KV.get(`user:${session.sub}`);
-      if (userRaw) {
-        const userData = JSON.parse(userRaw);
-        inviterName = userData.name || session.sub;
-      }
-    } catch (_) { /* ignorar */ }
-
-    const inviteToken = generateInviteToken();
-    const invite = {
-      token: inviteToken,
-      email,
-      role,
-      orgName,
-      workspaceId,
-      invitedBy: session.sub,
-      inviterName,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + INVITE_TTL * 1000).toISOString(),
-    };
-
-    try {
-      // Salvar convite
-      await env.LIFEOS_KV.put(`invite:${inviteToken}`, JSON.stringify(invite), { expirationTtl: INVITE_TTL });
-
-      // Atualizar lista de convites enviados
-      const sentRaw = await env.LIFEOS_KV.get(`invites:sent:${session.sub}`);
-      const sent = sentRaw ? JSON.parse(sentRaw) : [];
-      sent.unshift({ ...invite, token: inviteToken });
-      await env.LIFEOS_KV.put(`invites:sent:${session.sub}`, JSON.stringify(sent.slice(0, 100)));
-
-      // Enviar e-mail
-      const emailSent = await sendInviteEmail(email, inviterName, orgName, inviteToken, url.origin, env);
-
-      return json(201, {
-        ok: true,
-        invite,
-        emailSent,
-        message: emailSent
-          ? `Convite enviado para ${email}`
-          : `Convite criado. Configure RESEND_API_KEY para envio automático de e-mails.`,
-        inviteUrl: `${url.origin}/accept-invite?token=${inviteToken}`,
-      });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao criar convite' });
+    if (action === 'revoke') {
+      const invite = await revokeOrganizationInvite(kv, actor, normalizeText(input.token, 200));
+      return json(200, { ok: true, invite: publicInvite(invite), message: 'Convite revogado.' });
     }
+    return json(400, { ok: false, error: 'Ação inválida. Use: send, accept, revoke' });
+  } catch (error) {
+    const status = error?.status || (/Sem acesso|Sem permissão|não é para sua conta/i.test(error?.message || '') ? 403 : 400);
+    return json(status, { ok: false, error: error instanceof Error ? error.message : 'Erro ao processar convite' });
   }
-
-  if (action === 'accept') {
-    const inviteToken = String(input.token || '').trim();
-    if (!inviteToken) return json(400, { ok: false, error: 'Token de convite obrigatório' });
-
-    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-    try {
-      const raw = await env.LIFEOS_KV.get(`invite:${inviteToken}`);
-      if (!raw) return json(404, { ok: false, error: 'Convite não encontrado ou expirado' });
-
-      const invite = JSON.parse(raw);
-      if (invite.status !== 'pending') return json(400, { ok: false, error: `Convite já ${invite.status}` });
-      if (new Date(invite.expiresAt) < new Date()) return json(400, { ok: false, error: 'Convite expirado' });
-
-      // Verificar se o usuário logado é o destinatário
-      if (session.sub !== invite.email) {
-        return json(403, { ok: false, error: 'Este convite não é para sua conta' });
-      }
-
-      // Aceitar convite
-      invite.status = 'accepted';
-      invite.acceptedAt = new Date().toISOString();
-      await env.LIFEOS_KV.put(`invite:${inviteToken}`, JSON.stringify(invite), { expirationTtl: 86400 });
-
-      // Adicionar usuário ao workspace/org
-      if (invite.workspaceId) {
-        const wsRaw = await env.LIFEOS_KV.get(`workspace:${invite.workspaceId}`);
-        if (wsRaw) {
-          const ws = JSON.parse(wsRaw);
-          ws.members = ws.members || [];
-          if (!ws.members.find(m => m.email === session.sub)) {
-            ws.members.push({ email: session.sub, role: invite.role, joinedAt: new Date().toISOString() });
-            await env.LIFEOS_KV.put(`workspace:${invite.workspaceId}`, JSON.stringify(ws));
-          }
-        }
-      }
-
-      return json(200, { ok: true, invite, message: 'Convite aceito com sucesso!' });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao aceitar convite' });
-    }
-  }
-
-  if (action === 'revoke') {
-    const inviteToken = String(input.token || '').trim();
-    if (!inviteToken) return json(400, { ok: false, error: 'Token de convite obrigatório' });
-
-    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-    try {
-      const raw = await env.LIFEOS_KV.get(`invite:${inviteToken}`);
-      if (!raw) return json(404, { ok: false, error: 'Convite não encontrado' });
-
-      const invite = JSON.parse(raw);
-      if (invite.invitedBy !== session.sub) return json(403, { ok: false, error: 'Sem permissão para revogar este convite' });
-
-      invite.status = 'revoked';
-      invite.revokedAt = new Date().toISOString();
-      await env.LIFEOS_KV.put(`invite:${inviteToken}`, JSON.stringify(invite), { expirationTtl: 86400 });
-
-      return json(200, { ok: true, message: 'Convite revogado' });
-    } catch (_) {
-      return json(500, { ok: false, error: 'Erro ao revogar convite' });
-    }
-  }
-
-  return json(400, { ok: false, error: 'Ação inválida. Use: send, accept, revoke' });
 }
 
 export async function onRequest({ request, env }) {

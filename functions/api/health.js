@@ -1,10 +1,10 @@
-// LifeOS Enterprise — Health Check v31.0
+// LifeOS Enterprise — Health Check v32.1
 // Cloudflare Pages Function: GET /api/health
 export async function onRequestGet({ env } = {}) {
   return new Response(JSON.stringify({
     ok: true,
     service: 'lifeos-enterprise',
-    version: (env && env.LIFEOS_VERSION) || '31.0.0',
+    version: (env && env.LIFEOS_VERSION) || '32.1.0',
     environment: 'production',
     platform: 'cloudflare-pages',
     timestamp: new Date().toISOString(),

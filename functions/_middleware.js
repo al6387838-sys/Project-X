@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Global Security Middleware v31.0 (Phases 250-254 — Version Synchronization)
+// LifeOS Enterprise — Global Security Middleware v32.1 (Phases 250-254 — Version Synchronization)
 // Production Hardening: CSP, HSTS, CSRF, XSS, Rate Limiting, RBAC, Audit, Session Validation
 // Security audit: headers, CSP, HSTS, CSRF, XSS, SQL Injection prevention, Rate Limiting,
 // RBAC, sessions, tokens, secrets, Cloudflare Workers, KV
@@ -172,7 +172,7 @@ export async function onRequest({ request, env, next }) {
 
     // Session validation for protected routes
     if (request.method !== 'OPTIONS' && PROTECTED_ROUTES.some(r => url.pathname === r || url.pathname.startsWith(r + '/'))) {
-      const session = await verifySession(getCookie(request.headers.get('cookie') || '', 'lifeos_session'), env.LIFEOS_KV);
+      const session = await verifySession(getCookie(request.headers.get('cookie') || '', 'lifeos_session'), env.LIFEOS_SESSION_SECRET, env.LIFEOS_KV);
       if (!session) return json(401, { ok: false, error: 'Sessão inválida, expirada ou revogada' });
     }
 
@@ -216,7 +216,7 @@ export async function onRequest({ request, env, next }) {
   }
 
   // Security version header
-  newHeaders.set('x-lifeos-security', 'v31.0');
+  newHeaders.set('x-lifeos-security', 'v32.1');
 
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers: newHeaders });
 }

@@ -841,6 +841,7 @@
   const API = '/api/enterprise-data';
   const state = {
     data: null,
+    organizationId: new URLSearchParams(location.search).get('orgId') || '',
     view: 'command',
     busy: false,
     query: '',
@@ -860,6 +861,10 @@
     const map = {active:'success',paid:'success',operational:'success',suspended:'danger',cancel_at_period_end:'danger',pending:'warning',trial:'warning'};
     const cls = map[s] || 'neutral';
     return `<span class="badge badge-${cls}">${esc(s)}</span>`;
+  };
+  const hasEnterprisePermission = permission => {
+    const permissions = state.data?.permissions || [];
+    return permissions.includes('*') || permissions.includes(permission);
   };
 
   function syncNotificationIndicators() {
@@ -904,14 +909,17 @@
 
   // ── API ──
   async function request(action, payload={}) {
+    const scopedPayload = action ? { ...payload, orgId: payload.orgId || state.organizationId || undefined } : payload;
+    const endpoint = state.organizationId ? `${API}?orgId=${encodeURIComponent(state.organizationId)}` : API;
     const opts = action
-      ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,payload}),credentials:'same-origin'}
+      ? {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,payload:scopedPayload}),credentials:'same-origin'}
       : {method:'GET',credentials:'same-origin'};
-    const res = await fetch(API, opts);
+    const res = await fetch(endpoint, opts);
     if (res.status === 401) { location.replace('/login?next=' + encodeURIComponent('/enterprise')); throw new Error('Sessão expirada.'); }
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.ok) throw new Error(data.error || 'Operação falhou.');
     state.data = data.data;
+    if (data.data?.organization?.id) state.organizationId = data.data.organization.id;
     return data.data;
   }
 
@@ -1220,6 +1228,13 @@
   // ── ORGANIZATION ──
   function renderOrganization() {
     const org = state.data?.organization || {};
+    if (!org.id) {
+      document.getElementById('organization-content').innerHTML = `
+        <div class="page-header"><h1 class="page-title">Organização</h1><p class="page-subtitle">Crie sua organização para começar a colaborar com dados persistidos.</p></div>
+        <div class="empty-state" style="padding:56px 24px"><div class="empty-state-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Nenhuma organização criada</div><div class="empty-state-desc">A primeira organização cria também o workspace protegido Principal e registra a atividade no histórico.</div><button class="btn btn-primary" data-action="organization.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar organização</button></div>`;
+      if (window.lucide) window.lucide.createIcons();
+      return;
+    }
     document.getElementById('organization-content').innerHTML = `
       <div class="page-header">
         <h1 class="page-title">Organização</h1>
@@ -1227,7 +1242,7 @@
       </div>
       <div class="grid-2">
         <div class="card">
-          <div class="card-header"><div class="card-title">Informações</div><button class="btn btn-sm btn-secondary" data-action="org.edit" type="button">\u{270F} Editar</button></div>
+          <div class="card-header"><div class="card-title">Informações</div>${hasEnterprisePermission('org.update') ? '<button class="btn btn-sm btn-secondary" data-action="org.edit" type="button">\u{270F} Editar</button>' : ''}</div>
           <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
             <div>
               <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px">Nome</div>
@@ -1282,7 +1297,7 @@
           <h1 class="page-title">Membros & Convites</h1>
           <p class="page-subtitle">${members.length} membro${members.length!==1?'s':''} na organização.</p>
         </div>
-        <button class="btn btn-primary" data-action="member.invite" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Convidar membro</button>
+        ${hasEnterprisePermission('members.invite') ? '<button class="btn btn-primary" data-action="member.invite" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Convidar membro</button>' : ''}
       </div>
       <div class="card">
         <div class="card-header">
@@ -1305,8 +1320,8 @@
                   <td>${statusBadge(m.status||'active')}</td>
                   <td>${fmtDate(m.lastActiveAt, true)}</td>
                   <td><div style="display:flex;gap:4px">
-                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.edit" data-id="${esc(m.id)}" type="button" title="Editar">\u{270F}</button>
-                    <button class="btn btn-sm btn-ghost btn-icon" data-action="member.remove" data-id="${esc(m.id)}" type="button" title="Remover" style="color:#F43F5E">\u{1F5D1}</button>
+                    ${hasEnterprisePermission('members.roles') ? `<button class="btn btn-sm btn-ghost btn-icon" data-action="member.edit" data-id="${esc(m.id)}" type="button" title="Editar">\u{270F}</button>` : ''}
+                    ${hasEnterprisePermission('members.remove') ? `<button class="btn btn-sm btn-ghost btn-icon" data-action="member.remove" data-id="${esc(m.id)}" type="button" title="Remover" style="color:#F43F5E">\u{1F5D1}</button>` : ''}
                   </div></td>
                 </tr>
               `).join('') : `<tr><td colspan="7"><div class="empty-state" style="padding:32px"><div class="empty-state-icon">\u{1F465}</div><div class="empty-state-title">Nenhum membro encontrado</div></div></td></tr>`}
@@ -1330,7 +1345,7 @@
           <h1 class="page-title">Perfis & RBAC</h1>
           <p class="page-subtitle">Controle de acesso baseado em funções.</p>
         </div>
-        <button class="btn btn-primary" data-action="role.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo perfil</button>
+        <span class="badge badge-neutral">5 perfis Enterprise de sistema</span>
       </div>
       <div class="grid-2">
         ${roles.map(r => `
@@ -1374,7 +1389,7 @@
           <h1 class="page-title">Workspaces</h1>
           <p class="page-subtitle">${workspaces.length} workspace${workspaces.length!==1?'s':''} configurado${workspaces.length!==1?'s':''} e persistido${workspaces.length!==1?'s':''}.</p>
         </div>
-        <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo workspace</button>
+        ${hasEnterprisePermission('workspaces.create') ? '<button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo workspace</button>' : ''}
       </div>
       ${workspaces.length ? `
       <div class="grid-2">
@@ -1404,7 +1419,7 @@
         <div class="empty-state-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>
         <div class="empty-state-title">Nenhum workspace</div>
         <div class="empty-state-desc">Crie um workspace para organizar membros, preferências e atividades.</div>
-        <button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar workspace</button>
+        ${hasEnterprisePermission('workspaces.create') ? '<button class="btn btn-primary" data-action="workspace.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar workspace</button>' : ''}
       </div>`}
     `;
   }
@@ -1446,9 +1461,9 @@
         <section class="card">
           <div class="card-header" style="gap:16px;align-items:flex-end;flex-wrap:wrap">
             <div><div class="card-title">Membros do workspace</div><div class="card-subtitle">${members.length} membro${members.length!==1?'s':''} com acesso</div></div>
-            ${availableMembers.length ? `<div style="display:flex;gap:8px;margin-left:auto"><select class="form-select" id="workspace-member-select" aria-label="Selecionar membro"><option value="">Selecionar membro</option>${availableMembers.map(member => `<option value="${esc(member.id)}">${esc(member.name)} · ${esc(roleName(member.roleId))}</option>`).join('')}</select><button class="btn btn-primary btn-sm" data-action="workspace.member.add" data-id="${esc(workspace.id)}" type="button">Adicionar</button></div>` : `<span class="badge badge-neutral">Todos adicionados</span>`}
+            ${hasEnterprisePermission('workspace.members') && availableMembers.length ? `<div style="display:flex;gap:8px;margin-left:auto"><select class="form-select" id="workspace-member-select" aria-label="Selecionar membro"><option value="">Selecionar membro</option>${availableMembers.map(member => `<option value="${esc(member.id)}">${esc(member.name)} · ${esc(roleName(member.roleId))}</option>`).join('')}</select><button class="btn btn-primary btn-sm" data-action="workspace.member.add" data-id="${esc(workspace.id)}" type="button">Adicionar</button></div>` : `<span class="badge badge-neutral">${availableMembers.length ? 'Acesso de gestão não autorizado' : 'Todos adicionados'}</span>`}
           </div>
-          <div class="table-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th>Perfil</th><th>Status</th><th aria-label="Ações"></th></tr></thead><tbody>${members.map(member => `<tr><td><div style="display:flex;align-items:center;gap:10px"><span class="avatar avatar-sm">${esc((member.name||'M').charAt(0).toUpperCase())}</span><div><div style="font-weight:600">${esc(member.name)}</div><div style="font-size:11px;color:var(--text-tertiary)">${esc(member.email)}</div></div></div></td><td>${esc(member.team||'Geral')}</td><td>${esc(roleName(member.roleId))}</td><td>${statusBadge(member.status||'active')}</td><td style="text-align:right"><button class="btn btn-sm btn-ghost" data-action="workspace.member.remove" data-id="${esc(workspace.id)}" data-member-id="${esc(member.id)}" ${members.length<=1?'disabled':''} type="button">Remover</button></td></tr>`).join('')}</tbody></table></div>
+          <div class="table-wrap"><table><thead><tr><th>Membro</th><th>Equipe</th><th>Perfil</th><th>Status</th><th aria-label="Ações"></th></tr></thead><tbody>${members.map(member => `<tr><td><div style="display:flex;align-items:center;gap:10px"><span class="avatar avatar-sm">${esc((member.name||'M').charAt(0).toUpperCase())}</span><div><div style="font-weight:600">${esc(member.name)}</div><div style="font-size:11px;color:var(--text-tertiary)">${esc(member.email)}</div></div></div></td><td>${esc(member.team||'Geral')}</td><td>${esc(roleName(member.roleId))}</td><td>${statusBadge(member.status||'active')}</td><td style="text-align:right">${hasEnterprisePermission('workspace.members') ? `<button class="btn btn-sm btn-ghost" data-action="workspace.member.remove" data-id="${esc(workspace.id)}" data-member-id="${esc(member.id)}" ${members.length<=1?'disabled':''} type="button">Remover</button>` : ''}</td></tr>`).join('')}</tbody></table></div>
         </section>`;
     } else if (tab === 'activity') {
       content = `
@@ -1467,12 +1482,12 @@
               <div class="form-group"><label class="form-label" for="workspace-description">Descrição</label><textarea class="form-input" id="workspace-description" rows="4" style="height:auto;resize:vertical">${esc(workspace.description||'')}</textarea></div>
               <div class="form-group"><label class="form-label" for="workspace-default-view">Tela inicial</label><select class="form-select" id="workspace-default-view">${tabs.map(item => `<option value="${item[0]}" ${preferences.defaultView===item[0]?'selected':''}>${item[1]}</option>`).join('')}</select></div>
               <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);margin-bottom:20px"><input id="workspace-notifications" type="checkbox" ${preferences.notifications!==false?'checked':''} style="accent-color:#6366F1"> Receber notificações deste workspace</label>
-              <button class="btn btn-primary" data-action="workspace.preferences.save" data-id="${esc(workspace.id)}" type="button">Salvar preferências</button>
+              ${hasEnterprisePermission('workspaces.update') ? `<button class="btn btn-primary" data-action="workspace.preferences.save" data-id="${esc(workspace.id)}" type="button">Salvar preferências</button>` : '<span class="badge badge-neutral">Somente leitura</span>'}
             </div>
           </section>
           <section class="card" style="border-color:rgba(239,68,68,.22)">
             <div class="card-header"><div><div class="card-title">Zona de risco</div><div class="card-subtitle">Ações administrativas irreversíveis</div></div></div>
-            <div class="card-body"><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-top:0">A exclusão remove este workspace e seu histórico interno. O log global de auditoria permanece preservado.</p>${workspace.protected?`<div class="alert-banner" style="margin:0"><span class="alert-text"><strong>Workspace protegido.</strong> A organização deve manter este workspace.</span></div>`:`<button class="btn btn-danger" data-action="workspace.delete.prompt" data-id="${esc(workspace.id)}" type="button">Excluir workspace</button>`}</div>
+            <div class="card-body"><p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-top:0">A exclusão remove este workspace e seu histórico interno. O log global de auditoria permanece preservado.</p>${workspace.protected?`<div class="alert-banner" style="margin:0"><span class="alert-text"><strong>Workspace protegido.</strong> A organização deve manter este workspace.</span></div>`:hasEnterprisePermission('workspaces.delete')?`<button class="btn btn-danger" data-action="workspace.delete.prompt" data-id="${esc(workspace.id)}" type="button">Excluir workspace</button>`:''}</div>
           </section>
         </div>`;
     }
@@ -2022,6 +2037,41 @@
     });
   }
 
+  function openMemberEditModal(member) {
+    const roles = state.data?.roles || [];
+    openModal('Alterar cargo do membro', `
+      <div class="form-group"><label class="form-label">Membro</label><div class="form-input" style="display:flex;align-items:center;min-height:40px;background:rgba(255,255,255,.03)">${esc(member.name || member.email)} · ${esc(member.email)}</div></div>
+      <div class="form-group"><label class="form-label" for="member-role">Cargo Enterprise</label><select class="form-select" id="member-role">${roles.map(role => `<option value="${esc(role.id)}" ${role.id === member.roleId ? 'selected' : ''}>${esc(role.name)}</option>`).join('')}</select></div>
+      <p class="form-hint">A política de hierarquia é validada novamente pela API antes de persistir a alteração.</p>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-member-role-submit" type="button">Salvar cargo</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-member-role-submit')?.addEventListener('click', () => {
+      const roleId = document.getElementById('member-role')?.value;
+      if (!roleId) { toast('Selecione um cargo.', 'error', 'Cargo'); return; }
+      mutate('member.update', { id: member.id, roleId }, `Cargo de ${member.email} atualizado.`, 'Cargo atualizado');
+    });
+  }
+
+  function openOrganizationCreateModal() {
+    openModal('Criar organização', `
+      <div class="form-group"><label class="form-label" for="organization-name">Nome da organização</label><input class="form-input" id="organization-name" type="text" maxlength="120" placeholder="Ex: Acme Ltda." required></div>
+      <div class="form-group"><label class="form-label" for="organization-description">Descrição <span class="text-muted">(opcional)</span></label><textarea class="form-input" id="organization-description" rows="3" maxlength="500" placeholder="Descreva o objetivo da organização." style="height:auto;resize:vertical"></textarea></div>
+      <p class="form-hint">O cadastro cria seu workspace protegido Principal no Cloudflare KV.</p>
+    `, `
+      <button class="btn btn-secondary" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modal-organization-create" type="button">Criar organização</button>
+    `);
+    document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+    document.getElementById('modal-organization-create')?.addEventListener('click', () => {
+      const name = document.getElementById('organization-name')?.value.trim();
+      if (!name) { toast('Informe o nome da organização.', 'error', 'Organização'); return; }
+      mutate('organization.create', { name, description: document.getElementById('organization-description')?.value.trim() }, `Organização ${name} criada.`, 'Organização criada');
+    });
+  }
+
   function openRoleCreateModal() {
     const permissions = ['org.read','org.update','members.read','members.*','teams.*','analytics.read','billing.read','billing.*','security.*','intelligence.read','intelligence.*','workspace.*'];
     openModal('Novo Perfil', `
@@ -2171,7 +2221,12 @@
         if (confirm('Remover este membro da organização?')) mutate('member.remove', {id}, 'Membro removido.', 'Removido');
         break;
       }
-      case 'member.edit': toast('Edição de membro disponível em breve.', 'info', 'Em breve'); break;
+      case 'member.edit': {
+        const member = (state.data?.members || []).find(item => item.id === target.dataset.id);
+        if (member) openMemberEditModal(member);
+        break;
+      }
+      case 'organization.create': openOrganizationCreateModal(); break;
       case 'role.create': openRoleCreateModal(); break;
       case 'role.edit': toast('Edição de perfil disponível em breve.', 'info', 'Em breve'); break;
       case 'org.edit': openOrgEditModal(); break;

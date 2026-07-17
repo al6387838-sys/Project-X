@@ -161,86 +161,19 @@
   </div>
 </div>
 
-<!-- ─── CRM ─── -->
+<!-- ─── CRM ENTERPRISE v32.1 ─── -->
 <div class="page" id="page-crm">
-  <div class="page-header">
-    <div>
-      <div class="page-title"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> CRM</div>
-      <div class="page-subtitle">Gestão de relacionamentos e pipeline</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('crm-pipeline')">Pipeline</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-contact')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Contato</button>
-    </div>
-  </div>
-  <div class="grid-4" style="margin-bottom:20px">
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">142</div><div class="kpi-label">Contatos</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">28</div><div class="kpi-label">Oportunidades</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">R$ 480k</div><div class="kpi-label">Pipeline Total</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">R$ 120k</div><div class="kpi-label">Fechado no Mês</div></div>
-  </div>
-  <div class="card">
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <input type="text" class="form-input" placeholder=" Buscar contatos..." style="flex:1" />
-      <select class="form-input" style="width:auto">
-        <option>Todos os status</option>
-        <option>Lead</option>
-        <option>Prospect</option>
-        <option>Cliente</option>
-        <option>Inativo</option>
-      </select>
-    </div>
-    <table style="width:100%;border-collapse:collapse">
-      <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Nome</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Empresa</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Status</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Valor</th><th style="text-align:left;padding:8px;font-size:12px;color:var(--text-muted)">Último Contato</th><th style="padding:8px"></th></tr></thead>
-      <tbody>
-        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
-          <td style="padding:10px 8px"><div style="font-weight:600">Membro da equipe</div><div style="font-size:11px;color:var(--text-muted)">ana@empresa.com</div></td>
-          <td style="padding:10px 8px;font-size:13px">Empresa ABC</td>
-          <td style="padding:10px 8px"><span style="background:rgba(16,185,129,0.15);color:var(--green);padding:3px 8px;border-radius:4px;font-size:11px">Cliente</span></td>
-          <td style="padding:10px 8px;font-weight:600;color:var(--green)">R$ 45.000</td>
-          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">Hoje</td>
-          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
-          <td style="padding:10px 8px"><div style="font-weight:600">Carlos Mendes</div><div style="font-size:11px;color:var(--text-muted)">carlos@startup.io</div></td>
-          <td style="padding:10px 8px;font-size:13px">Startup XYZ</td>
-          <td style="padding:10px 8px"><span style="background:rgba(245,158,11,0.15);color:var(--amber);padding:3px 8px;border-radius:4px;font-size:11px">Prospect</span></td>
-          <td style="padding:10px 8px;font-weight:600;color:var(--amber)">R$ 28.000</td>
-          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">Ontem</td>
-          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg-elevated)'" onmouseout="this.style.background=''">
-          <td style="padding:10px 8px"><div style="font-weight:600">João Silva</div><div style="font-size:11px;color:var(--text-muted)">joao@corp.com.br</div></td>
-          <td style="padding:10px 8px;font-size:13px">Corp Brasil</td>
-          <td style="padding:10px 8px"><span style="background:rgba(99,102,241,0.15);color:var(--accent);padding:3px 8px;border-radius:4px;font-size:11px">Lead</span></td>
-          <td style="padding:10px 8px;font-weight:600;color:var(--accent)">R$ 80.000</td>
-          <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">3 dias</td>
-          <td style="padding:10px 8px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="showToast('Abrindo contato...','info')">Ver</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div id="crm-client-view" aria-live="polite"></div>
 </div>
 
-<!-- ─── PIPELINE ─── -->
+<!-- ─── PIPELINE COMERCIAL ─── -->
 <div class="page" id="page-crm-pipeline">
-  <div class="page-header">
-    <div>
-      <div class="page-title"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Pipeline de Vendas</div>
-      <div class="page-subtitle">Acompanhe suas oportunidades</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('crm')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> CRM</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-opportunity')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Oportunidade</button>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;height:calc(100vh - 180px);overflow-x:auto">
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#6366F1"><span><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Lead</span><span class="kanban-count">8</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Corp Brasil — Sistema ERP</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 80.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">João Silva</span><span style="font-size:11px;color:var(--text-muted)">20%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#F59E0B"><span><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i> Contato</span><span class="kanban-count">5</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Startup XYZ — App Mobile</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 28.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Carlos Mendes</span><span style="font-size:11px;color:var(--text-muted)">40%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#06B6D4"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Proposta</span><span class="kanban-count">7</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Tech Corp — Consultoria</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 55.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Maria Santos</span><span style="font-size:11px;color:var(--text-muted)">60%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#8B5CF6"><span><i data-lucide="handshake" class="pg-icon" aria-hidden="true"></i> Negociação</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card"><div class="kanban-card-title">Empresa ABC — Licença</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 45.000</div><div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Responsável</span><span style="font-size:11px;color:var(--text-muted)">80%</span></div></div></div></div>
-    <div class="kanban-col"><div class="kanban-col-header" style="border-top-color:#10B981"><span><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i> Fechado</span><span class="kanban-count">4</span></div><div class="kanban-cards"><div class="kanban-card done"><div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Global Inc — Plataforma</div><div style="font-size:12px;color:var(--green);font-weight:600">R$ 120.000</div></div></div></div>
-  </div>
+  <div id="crm-pipeline-view" aria-live="polite"></div>
+</div>
+
+<!-- ─── AGENDA COMERCIAL ─── -->
+<div class="page" id="page-crm-agenda">
+  <div id="crm-agenda-view" aria-live="polite"></div>
 </div>
 
 <!-- ─── WIKI / BASE DE CONHECIMENTO ─── -->
@@ -299,4 +232,5 @@
 </div>
 
 </div>
+<script src="/modules/crm-live.js"></script>
 <!-- END module-productivity -->

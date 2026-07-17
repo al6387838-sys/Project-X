@@ -1,7 +1,7 @@
-// LifeOS Enterprise — Version Endpoint v31.0
+// LifeOS Enterprise — Version Endpoint v32.1
 // Cloudflare Pages Function: GET /api/version
 export async function onRequestGet({ env } = {}) {
-  const version = (env && env.LIFEOS_VERSION) || '31.0.0';
+  const version = (env && env.LIFEOS_VERSION) || '32.1.0';
   return new Response(JSON.stringify({
     ok: true,
     application: 'LifeOS Enterprise',
