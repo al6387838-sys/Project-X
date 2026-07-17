@@ -1,15 +1,19 @@
-// LifeOS Enterprise — Health Check v31.0
-// Cloudflare Pages Function: GET /api/health
+// LifeOS Enterprise — Version Endpoint v31.0
+// Cloudflare Pages Function: GET /api/version
 export async function onRequestGet({ env } = {}) {
+  const version = (env && env.LIFEOS_VERSION) || '31.0.0';
   return new Response(JSON.stringify({
     ok: true,
+    application: 'LifeOS Enterprise',
     service: 'lifeos-enterprise',
-    version: (env && env.LIFEOS_VERSION) || '31.0.0',
+    version,
+    releaseVersion: `v${version}`,
+    buildId: `lifeos-v${version}-production`,
     environment: 'production',
     platform: 'cloudflare-pages',
+    phases: '250-254',
     timestamp: new Date().toISOString(),
     status: 'operational',
-    phases: '250-254',
   }), {
     status: 200,
     headers: {

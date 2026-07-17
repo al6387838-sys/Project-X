@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 24.5.0 (Phases 210-217 — Observability, Audit, Performance, A11y, Hardening, Report & Deploy)
+// Version: 31.0.0 (Phases 210-217 — Observability, Audit, Performance, A11y, Hardening, Report & Deploy)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -187,7 +187,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v30.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v31.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -202,7 +202,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '30.0.0',
+  version: '31.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -210,7 +210,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   phases: [
     '093-100','101-108','109','111-115','119',
     '131-138','139-146','147-152','153-160','161-162','163-171',
-    '172-177','225-233','245-249',
+    '172-177','225-233','250-254',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -241,13 +241,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '30.0.0',
+  version: '31.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
-  phases: '245-249',
+  phases: '250-254',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -272,12 +272,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v30.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v31.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 30.0.0`);
+console.log(`  Version       : 31.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Phases        : 245-249 — Gold Master Release`);
+console.log(`  Phases        : 250-254 — Gold Master Release`);
 console.log(`  Modules       : 36 total`);
 console.log(`  APIs          : 38 endpoints`);
 console.log(`  Commit        : ${commit}`);
