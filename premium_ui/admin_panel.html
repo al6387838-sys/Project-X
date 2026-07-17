@@ -882,7 +882,7 @@
 
   function triggerDeploy() {
     if (confirm('Iniciar novo deploy para produção?')) {
-      alert('Deploy iniciado! Acompanhe o progresso na aba Deploys.');
+      showToast && showToast('Deploy iniciado. Acompanhe no painel Cloudflare.', 'info');
     }
   }
 
@@ -901,10 +901,10 @@
     const plan = document.getElementById('admin-plan-filter')?.value || 'Todos os planos';
     document.querySelectorAll('#admin-users-body tr').forEach(row => { row.style.display = row.textContent.toLowerCase().includes(q) && (plan === 'Todos os planos' || row.textContent.includes(plan)) ? '' : 'none'; });
   }
-  function adminInviteUser() { adminAudit('Convite de usuário iniciado'); alert('Fluxo de convite preparado para o provedor de identidade.'); }
-  function adminCreateTenant() { adminAudit('Criação de tenant iniciada'); alert('Assistente de criação de tenant preparado.'); }
-  function adminOpenUser(button) { const name = adminEntityName(button); adminAudit('Perfil de usuário consultado: ' + name); alert('Gerenciando usuário: ' + name); }
-  function adminOpenTenant(button) { const name = adminEntityName(button); adminAudit('Tenant consultado: ' + name); alert('Detalhes operacionais de ' + name); }
+  function adminInviteUser() { adminAudit('Convite de usuário iniciado'); location.href = '/admin#members'; }
+  function adminCreateTenant() { adminAudit('Criação de tenant iniciada'); location.href = '/admin#organizations'; }
+  function adminOpenUser(button) { const name = adminEntityName(button); adminAudit('Perfil de usuário consultado: ' + name); location.href = '/admin#members'; }
+  function adminOpenTenant(button) { const name = adminEntityName(button); adminAudit('Tenant consultado: ' + name); location.href = '/admin#organizations'; }
   function adminSuspendUser(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(3) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Usuário reativado: ' : 'Usuário suspenso: ') + name); }
   function adminSuspendTenant(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(5) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Tenant reativado: ' : 'Tenant suspenso: ') + name); }
 
@@ -915,6 +915,14 @@
     location.replace('/login');
   }
 </script>
-  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite"></script>
+  <script src="/precision_graphite.js?v=11.2.0" defer data-visual-system="precision-graphite">
+  function showToast(msg, type) {
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#fff;background:' + (type==='error'?'#F43F5E':type==='success'?'#10B981':'#6366F1') + ';box-shadow:0 4px 20px rgba(0,0,0,0.3);animation:fadeIn 0.2s ease';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+</script>
 </body>
 </html>

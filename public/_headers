@@ -6,11 +6,11 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), accelerometer=(), autoplay=(), clipboard-write=(self), display-capture=(), encrypted-media=(), fullscreen=(self), gyroscope=(), magnetometer=(), picture-in-picture=(), publickey-credentials-get=(self), screen-wake-lock=(), sync-xhr=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-DNS-Prefetch-Control: on
   X-Permitted-Cross-Domain-Policies: none
-  Server: LifeOS-Enterprise/19.0
+  Server: LifeOS-Enterprise/30.0
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate

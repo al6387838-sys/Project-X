@@ -541,7 +541,7 @@
         updateStats();
         
         // Mostrar notificação
-        alert(`\u{2705} ${selectedIntegration.name} conectado com sucesso!\n\nToken armazenado de forma criptografada.`);
+        console.info('Integration connected:', selectedIntegration.name);
       }, 2000);
     }
 
@@ -563,7 +563,7 @@
       if (!integration) return;
 
       const tokenData = JSON.parse(localStorage.getItem(`integration_${integrationId}`) || '{}');
-      alert(`${integration.name} - Detalhes da Conexão\n\nStatus: ${integration.status}\nÚltima sincronização: ${integration.lastSync}\nScopes: ${integration.scopes.join(', ')}\n\nToken: ${tokenData.accessToken ? '\u{2705} Armazenado' : '\u{274C} Não encontrado'}`);
+      console.info('Integration details:', integration.name, integration.status);
     }
 
     function updateStats() {

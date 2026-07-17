@@ -345,7 +345,7 @@
         <div class="card">
           <div class="card-header"><span class="card-title">Saúde do Sistema</span>${statusBadge('operational')}</div>
           <div class="card-body">
-            ${[['CPU',sys.cpu||23,'#6366F1'],['Memória',sys.memory||41,'#8B5CF6'],['Disco',sys.disk||18,'#10B981'],['Rede',sys.network||12,'#F59E0B']].map(([l,v,c]) => `
+            ${[['CPU',sys.cpu||0,'#6366F1'],['Memória',sys.memory||0,'#8B5CF6'],['Disco',sys.disk||0,'#10B981'],['Rede',sys.network||0,'#F59E0B']].map(([l,v,c]) => `
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
                 <span style="font-size:11px;color:var(--text-secondary);width:60px">${l}</span>
                 <div class="progress" style="flex:1"><div class="progress-bar" style="width:${v}%;background:${c}"></div></div>
@@ -526,20 +526,20 @@
       <div class="page-header"><h1 class="page-title">Diagnóstico do Sistema</h1></div>
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${sys.uptime||99.9}%</div><div class="kpi-label">Uptime</div></div>
-        <div class="kpi-card"><div class="kpi-val">${sys.cpu||23}%</div><div class="kpi-label">CPU</div></div>
-        <div class="kpi-card"><div class="kpi-val">${sys.memory||41}%</div><div class="kpi-label">Memória</div></div>
-        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
-        <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||12}</div><div class="kpi-label">Sessões</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.cpu||0}%</div><div class="kpi-label">CPU</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.memory||0}%</div><div class="kpi-label">Memória</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||0}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||0}</div><div class="kpi-label">Sessões</div></div>
       </div>
       <div class="grid-2">
         <div class="card">
           <div class="card-header"><span class="card-title">Score de Saúde</span></div>
           <div class="card-body">
             <div style="text-align:center;margin-bottom:16px">
-              <div style="font-size:48px;font-weight:700;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.healthScore||94}</div>
+              <div style="font-size:48px;font-weight:700;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${sys.healthScore||100}</div>
               <div style="font-size:12px;color:var(--text-tertiary)">de 100 pontos</div>
             </div>
-            <div class="progress"><div class="progress-bar" style="width:${sys.healthScore||94}%"></div></div>
+            <div class="progress"><div class="progress-bar" style="width:${sys.healthScore||100}%"></div></div>
           </div>
         </div>
         <div class="card">
@@ -591,7 +591,7 @@
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-val">${members.length}</div><div class="kpi-label">Usuários ativos</div></div>
         <div class="kpi-card"><div class="kpi-val" style="color:#10B981">${sys.uptime||99.9}%</div><div class="kpi-label">Uptime</div></div>
-        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||48}ms</div><div class="kpi-label">Latência p95</div></div>
+        <div class="kpi-card"><div class="kpi-val">${sys.apiP95||0}ms</div><div class="kpi-label">Latência p95</div></div>
         <div class="kpi-card"><div class="kpi-val" style="color:#818CF8">${money(sub.monthlyValue||0)}</div><div class="kpi-label">MRR</div></div>
         <div class="kpi-card"><div class="kpi-val">${sys.activeSessions||0}</div><div class="kpi-label">Sessões ativas</div></div>
       </div>
@@ -599,7 +599,7 @@
         <div class="card">
           <div class="card-header"><span class="card-title">Uso de Recursos</span></div>
           <div class="card-body">
-            ${[['CPU',sys.cpu||23,'#6366F1'],['Memória',sys.memory||41,'#8B5CF6'],['Disco',sys.disk||18,'#10B981'],['Rede',sys.network||12,'#F59E0B'],['KV Reads',sys.kvReads||67,'#06B6D4']].map(([l,v,c]) => `
+            ${[['CPU',sys.cpu||0,'#6366F1'],['Memória',sys.memory||0,'#8B5CF6'],['Disco',sys.disk||0,'#10B981'],['Rede',sys.network||0,'#F59E0B'],['KV Reads',sys.kvReads||0,'#06B6D4']].map(([l,v,c]) => `
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
                 <span style="font-size:11px;color:var(--text-secondary);width:80px">${l}</span>
                 <div class="progress" style="flex:1"><div class="progress-bar" style="width:${v}%;background:${c}"></div></div>
@@ -624,7 +624,7 @@
     document.getElementById('content').innerHTML = `
       <div class="page-header"><h1 class="page-title">Gerenciamento de Planos</h1><p class="page-sub">Configure os planos disponíveis na plataforma.</p></div>
       <div class="card">
-        <div class="card-header"><span class="card-title">Planos Ativos</span><button class="btn btn-primary" type="button" onclick="alert('Configure planos via Stripe Dashboard')">+ Novo Plano</button></div>
+        <div class="card-header"><span class="card-title">Planos Ativos</span><a class="btn btn-secondary" href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer">Stripe Dashboard ↗</a></div>
         <div class="table-wrap">
           <table class="table">
             <thead><tr><th>Plano</th><th>Preço/mês</th><th>Usuários</th><th>Recursos</th><th>Status</th></tr></thead>
@@ -640,15 +640,7 @@
   }
 
   function renderQueue() {
-    const integrations = state.data?.integrations || [];
-    const now = new Date();
-    const tasks = [
-      { id: 'task_001', name: 'Sync Google Calendar', status: 'running', started: new Date(now - 30000).toISOString(), retries: 0 },
-      { id: 'task_002', name: 'AI Insights Generation', status: 'queued', started: null, retries: 0 },
-      { id: 'task_003', name: 'Audit Log Cleanup', status: 'completed', started: new Date(now - 300000).toISOString(), retries: 0 },
-      { id: 'task_004', name: 'Email Notification Batch', status: 'failed', started: new Date(now - 600000).toISOString(), retries: 3 },
-      { id: 'task_005', name: 'KV Backup Snapshot', status: 'completed', started: new Date(now - 900000).toISOString(), retries: 0 },
-    ];
+    const tasks = state.data?.tasks || [];
     document.getElementById('content').innerHTML = `
       <div class="page-header"><h1 class="page-title">Fila de Tarefas</h1><p class="page-sub">Monitoramento de jobs e processos em background.</p></div>
       <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
@@ -688,7 +680,7 @@
               <td><span class="badge badge-neutral">${esc(i.category||'—')}</span></td>
               <td>${statusBadge(i.connected ? 'active' : 'inactive')}</td>
               <td>${i.lastSyncAt ? fmtDate(i.lastSyncAt, true) : '<span style="color:var(--text-tertiary)">Nunca</span>'}</td>
-              <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button" onclick="alert('Configure credenciais no Cloudflare Dashboard')">Configurar</button></td>
+              <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button" data-action="integration.configure" data-id="${esc(i.id)}">Configurar</button></td>
             </tr>`).join('') : '<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">🔌</div><div class="empty-state-title">Nenhuma integração configurada</div></div></td></tr>'}</tbody>
           </table>
         </div>

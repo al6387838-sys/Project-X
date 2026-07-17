@@ -2747,7 +2747,47 @@
 
   // ═══ DOCUMENTS FUNCTIONS ═══
   function docsView(mode) { showToast('Vista: ' + mode, 'info'); }
-  function docsUpload() { const inp = document.createElement('input'); inp.type='file'; inp.multiple=true; inp.onchange = e => { Array.from(e.target.files).forEach(f => showToast('Enviando: ' + f.name, 'info')); }; inp.click(); }
+  function docsUpload() {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.multiple = true;
+    inp.onchange = async (e) => {
+      const files = Array.from(e.target.files);
+      for (const file of files) {
+        try {
+          showToast('Enviando: ' + file.name, 'info');
+          const reader = new FileReader();
+          const content = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+          const res = await fetch('/api/documents', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              action: 'upload',
+              name: file.name,
+              mimeType: file.type || 'application/octet-stream',
+              size: file.size,
+              content: content,
+              folderId: 'root',
+            }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            showToast(file.name + ' enviado com sucesso', 'success');
+          } else {
+            showToast('Erro ao enviar ' + file.name + ': ' + (data.error || 'Falha'), 'error');
+          }
+        } catch (err) {
+          showToast('Erro ao enviar ' + file.name, 'error');
+        }
+      }
+    };
+    inp.click();
+  }
   function docsGoRoot() { showToast('Raiz dos documentos', 'info'); }
   function docsOpenFolder(name) { showToast('Abrindo pasta: ' + name, 'info'); }
   function docsOpenFile(name) { showPage('document-viewer'); }

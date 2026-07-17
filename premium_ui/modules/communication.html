@@ -531,7 +531,7 @@ async function loadCommunicationConnectors() {
 
 function showConnectorSetup(connector) {
   const msg = connector.setupInstructions || 'Configure as credenciais nas variáveis de ambiente do Cloudflare Pages.';
-  alert(`${connector.name} — Configuração necessária:\n\n${msg}`);
+  console.info('Setup required:', connector.name, msg); const n = document.createElement('div'); n.style.cssText='position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;border-radius:10px;background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);color:#F1F5F9;font-size:12px;max-width:320px;box-shadow:0 8px 30px rgba(0,0,0,0.4)'; n.textContent = connector.name + ' — Configure as credenciais no Cloudflare Dashboard'; document.body.appendChild(n); setTimeout(()=>n.remove(),4000);
 }
 
 async function connectCommunication(provider) {

@@ -67,7 +67,7 @@
       });
       const data = await res.json();
       if (data.setup_required) {
-        alert(`Open Finance Brasil — Configuração necessária:\n\n${data.instructions}`);
+        console.info('Open Finance setup required:', data.instructions);
         return;
       }
       if (data.authUrl) {

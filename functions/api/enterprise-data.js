@@ -116,6 +116,7 @@ function seedState() {
         createdAt: now,
       },
     ],
+    tasks: [],
     auditLog: [
       {
         id: 'aud_001',

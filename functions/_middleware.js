@@ -99,7 +99,7 @@ function validateCsrf(request, url) {
 function detectMaliciousInput(url) {
   const query = url.search + url.pathname;
   const sqlPatterns = /(\bunion\b|\bselect\b|\binsert\b|\bdelete\b|\bdrop\b|\bexec\b|\bxp_\b)/i;
-  const xssPatterns = /<script|javascript:|on\w+\s*=|<iframe|<object|<embed/i;
+  const xssPatterns = /<script|javascript:|(?:^|[\s"'<])on\w+\s*=|<iframe|<object|<embed/i;
   return sqlPatterns.test(query) || xssPatterns.test(query);
 }
 
