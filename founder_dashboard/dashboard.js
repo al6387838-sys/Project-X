@@ -1547,6 +1547,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 60000);
 
-  console.log('%c LifeOS Founder Dashboard V1 ', 'background:#6366F1;color:#fff;font-weight:bold;padding:4px 8px;border-radius:4px;');
-  console.log('%c EXECUTION-004 | PROJECT-X PHASE 5 ', 'color:#818CF8;font-size:11px');
+  
+  
 });

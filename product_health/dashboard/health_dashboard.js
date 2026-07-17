@@ -96,12 +96,12 @@ function generateMockHistory() {
         const d = new Date();
         d.setDate(d.getDate() - (days - i));
         const label = d.toISOString().split('T')[0];
-        result.product.push({ label, value: 82 + Math.random() * 12 });
-        result.platform.push({ label, value: 70 + Math.random() * 12 });
-        result.ai.push({ label, value: 63 + Math.random() * 12 });
-        result.sig.push({ label, value: 72 + Math.random() * 10 });
-        result.business.push({ label, value: 78 + Math.random() * 10 });
-        result.security.push({ label, value: 90 + Math.random() * 8 });
+        result.product.push({ label, value: 88 });
+        result.platform.push({ label, value: 76 });
+        result.ai.push({ label, value: 69 });
+        result.sig.push({ label, value: 77 });
+        result.business.push({ label, value: 83 });
+        result.security.push({ label, value: 95 });
     }
     return result;
 }

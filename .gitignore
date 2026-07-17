@@ -9,3 +9,4 @@ deploy_checkpoint_findings.md
 qa-artifacts/
 qa_visual_notes.md
 deno.lock
+functions/api/observability.js.bak

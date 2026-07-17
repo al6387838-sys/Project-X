@@ -1,18 +1,23 @@
-// LifeOS Enterprise — Observability API v1.1 (Phase 185)
-// Cloudflare Pages Function: GET /api/observability
-// 100% dados reais do Cloudflare KV — zero mock data
+// LifeOS Enterprise — Observability API v2.0 (Phase 211 — Enterprise Observability)
+// Cloudflare Pages Function: GET/POST /api/observability
+// Enterprise Observability: structured logs, error tracking, alerts, performance monitoring,
+// event audit, user action history, system health panel
+// ZERO mock data — all data from Cloudflare KV
 import { getCookie, json, verifySession } from '../_auth.js';
 
 const SERVICES = [
-  { id: 'api',        name: 'API Gateway',       icon: '⚡' },
-  { id: 'auth',       name: 'Auth Service',       icon: '🔐' },
-  { id: 'database',   name: 'Database',           icon: '🗄️' },
-  { id: 'cdn',        name: 'CDN / Edge',         icon: '🌐' },
-  { id: 'kv',         name: 'KV Store',           icon: '💾' },
-  { id: 'email',      name: 'Email Service',      icon: '📧' },
-  { id: 'payments',   name: 'Payments',           icon: '💳' },
-  { id: 'ai',         name: 'AI Orchestrator',    icon: '🤖' },
+  { id: 'api',        name: 'API Gateway',       icon: 'zap' },
+  { id: 'auth',       name: 'Auth Service',       icon: 'lock' },
+  { id: 'database',   name: 'KV Store',           icon: 'database' },
+  { id: 'cdn',        name: 'CDN / Edge',         icon: 'globe' },
+  { id: 'email',      name: 'Email Service',      icon: 'mail' },
+  { id: 'payments',   name: 'Payments',           icon: 'credit-card' },
+  { id: 'ai',         name: 'AI Orchestrator',    icon: 'cpu' },
+  { id: 'security',   name: 'Security Layer',     icon: 'shield' },
 ];
+
+const LOG_LEVELS = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL'];
+const ALERT_SEVERITIES = ['low', 'medium', 'high', 'critical'];
 
 async function getServiceMetrics(kv, service) {
   if (!kv) return null;
@@ -78,6 +83,50 @@ async function getAlerts(kv) {
   }
 }
 
+async function getUserActionHistory(kv, userId, limit = 30) {
+  if (!kv || !userId) return [];
+  try {
+    const raw = await kv.get(`audit:user:${userId}`);
+    if (!raw) return [];
+    const actions = JSON.parse(raw);
+    return actions.slice(-limit).reverse();
+  } catch (_) {
+    return [];
+  }
+}
+
+async function getEventAuditLog(kv, limit = 50) {
+  if (!kv) return [];
+  try {
+    const raw = await kv.get('audit:events');
+    if (!raw) return [];
+    const events = JSON.parse(raw);
+    return events.slice(-limit).reverse();
+  } catch (_) {
+    return [];
+  }
+}
+
+async function ingestLog(kv, entry) {
+  if (!kv) return;
+  try {
+    const raw = await kv.get('observability:logs');
+    const logs = raw ? JSON.parse(raw) : [];
+    logs.push({ id: crypto.randomUUID(), ...entry, timestamp: new Date().toISOString() });
+    await kv.put('observability:logs', JSON.stringify(logs.slice(-500)));
+  } catch (_) {}
+}
+
+async function ingestAlert(kv, alert) {
+  if (!kv) return;
+  try {
+    const raw = await kv.get('observability:alerts');
+    const alerts = raw ? JSON.parse(raw) : [];
+    alerts.push({ id: crypto.randomUUID(), ...alert, status: 'open', createdAt: new Date().toISOString(), resolvedAt: null });
+    await kv.put('observability:alerts', JSON.stringify(alerts.slice(-200)));
+  } catch (_) {}
+}
+
 async function getOrgConsumption(kv) {
   if (!kv) return [];
   try {
@@ -90,18 +139,77 @@ async function getOrgConsumption(kv) {
   }
 }
 
-export async function onRequestGet({ request, env }) {
-  const secret = env.LIFEOS_SESSION_SECRET;
-  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
-
-  const cookieHeader = request.headers.get('cookie');
-  const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+export async function onRequestPost({ request, env }) {
+  const kv = env?.LIFEOS_KV || null;
+  const cookieHeader = request.headers.get('cookie') || '';
+  const token = getCookie(cookieHeader, 'lifeos_session');
+  const session = token ? await verifySession(token, kv) : null;
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
-  if (session.role !== 'admin') return json(403, { ok: false, error: 'Acesso negado' });
+
+  let body;
+  try { body = await request.json(); } catch (_) { return json(400, { ok: false, error: 'JSON inválido' }); }
+
+  const { type, level, message, service, metadata, severity, title, description } = body;
+
+  if (type === 'log') {
+    if (!LOG_LEVELS.includes(level)) return json(400, { ok: false, error: 'level inválido' });
+    if (!message) return json(400, { ok: false, error: 'message obrigatório' });
+    await ingestLog(kv, { level, message, service: service || 'unknown', metadata: metadata || {}, userId: session.userId });
+    return json(201, { ok: true, ingested: 'log' });
+  }
+
+  if (type === 'alert') {
+    if (!ALERT_SEVERITIES.includes(severity)) return json(400, { ok: false, error: 'severity inválido' });
+    if (!title) return json(400, { ok: false, error: 'title obrigatório' });
+    await ingestAlert(kv, { severity, title, description: description || '', service: service || 'unknown' });
+    return json(201, { ok: true, ingested: 'alert' });
+  }
+
+  return json(400, { ok: false, error: 'type deve ser log ou alert' });
+}
+
+export async function onRequestGet({ request, env }) {
+  const kv = env?.LIFEOS_KV || null;
+  const url = new URL(request.url);
+  const view = url.searchParams.get('view') || 'full';
+  const cookieHeader = request.headers.get('cookie') || '';
+  const token = getCookie(cookieHeader, 'lifeos_session');
+  const session = token ? await verifySession(token, kv) : null;
+
+  // Health view is public for monitoring tools
+  if (view === 'health') {
+    const services = await Promise.all(SERVICES.map(svc => getServiceMetrics(kv, svc)));
+    const healthy = services.filter(s => s.status === 'healthy').length;
+    const degraded = services.filter(s => s.status === 'degraded').length;
+    const down = services.filter(s => s.status === 'down').length;
+    return json(200, {
+      ok: true,
+      overallStatus: down > 0 ? 'incident' : degraded > 0 ? 'degraded' : 'operational',
+      healthy, degraded, down, total: services.length,
+      avgUptime: Math.round(services.reduce((a, s) => a + s.uptime, 0) / services.length * 100) / 100,
+      services,
+      checkedAt: new Date().toISOString(),
+    });
+  }
+
+  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+
+  // User action history
+  if (view === 'user-history') {
+    const limit = Math.min(parseInt(url.searchParams.get('limit') || '30', 10), 100);
+    const history = await getUserActionHistory(kv, session.userId, limit);
+    return json(200, { ok: true, history, count: history.length, userId: session.userId });
+  }
+
+  // Audit event log (admin only)
+  if (view === 'audit') {
+    if (session.role !== 'admin') return json(403, { ok: false, error: 'Acesso negado' });
+    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50', 10), 200);
+    const events = await getEventAuditLog(kv, limit);
+    return json(200, { ok: true, events, count: events.length });
+  }
 
   const now = Date.now();
-  const kv = env.LIFEOS_KV;
 
   // Obter métricas de todos os serviços do KV
   const services = await Promise.all(
@@ -165,5 +273,6 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequest({ request, env }) {
   if (request.method === 'GET') return onRequestGet({ request, env });
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET' });
+  if (request.method === 'POST') return onRequestPost({ request, env });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
 }
