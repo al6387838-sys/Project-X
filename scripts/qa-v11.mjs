@@ -132,28 +132,40 @@ await check('Digital Identity Center alterna cinco áreas de segurança', async 
   return `${tabs} áreas de identidade e segurança`;
 });
 
-await check('Enterprise File Center oferece busca, visualizações e arquivos', async () => {
+await check('Enterprise File Center exibe documentos persistidos ou estado vazio profissional', async () => {
   await openModule(page, 'file-center', '#module-file-center');
-  await page.locator('#fc-search').fill('Deploy');
-  await page.waitForTimeout(120);
+  await page.waitForFunction(() => {
+    const content = document.getElementById('fc-content');
+    return content && !content.textContent.includes('Carregando documentos persistidos...');
+  });
   const content = await page.locator('#page-file-center').innerText();
-  if (!content.includes('Deploy Checklist')) throw new Error('Busca não manteve o arquivo correspondente visível.');
+  const cards = await page.locator('#fc-content article').count();
+  const emptyState = content.includes('Nenhum documento registrado.');
+  if (!emptyState && cards === 0) throw new Error('Nenhum documento persistido ou estado vazio profissional foi exibido.');
   await page.locator('#fc-btn-list').click();
   await page.locator('#fc-btn-grid').click();
-  const actions = await page.locator('#page-file-center [ondblclick*="fcOpenFile"]').count();
-  if (!actions) throw new Error('Nenhuma ação de abertura de arquivo disponível.');
-  return `${actions} arquivos com abertura disponível`;
+  if (cards > 0) {
+    await page.locator('#fc-content article').first().dblclick();
+    await page.locator('#page-file-viewer').waitFor({ state: 'visible' });
+  }
+  return emptyState ? 'estado vazio profissional validado' : `${cards} documentos persistidos disponíveis`;
 });
 
-await check('Automation Studio expõe fluxos, scheduler e templates', async () => {
+await check('Automation Studio exibe dados persistidos ou estado vazio profissional', async () => {
   await openModule(page, 'automation', '#module-automation');
-  const toggles = await page.locator('#page-automation [onclick*="autoToggleFlow"]').count();
-  if (toggles !== 5) throw new Error(`${toggles} fluxos encontrados; esperado 5.`);
-  for (const tab of ['scheduler', 'templates', 'flows']) {
-    await page.locator(`#page-automation [onclick="autoTab('${tab}')"]`).click();
-    await page.locator(`#auto-${tab}-tab`).waitFor({ state: 'visible' });
+  await page.waitForFunction(() => {
+    const container = document.getElementById('automation-list-container');
+    return container && !container.textContent.includes('Carregando automações...');
+  });
+  const listText = await page.locator('#automation-list-container').innerText();
+  const controls = await page.locator('#automation-list-container [onclick*="automationExecute"], #automation-list-container [onclick*="automationToggle"]').count();
+  const emptyState = listText.includes('Nenhuma automacao criada');
+  if (!emptyState && controls === 0) throw new Error('Nenhum dado persistido ou estado vazio profissional foi exibido.');
+  for (const tab of ['list', 'logs', 'types']) {
+    await page.locator(`#auto-tab-${tab}`).click();
+    await page.waitForFunction((targetTab) => document.getElementById(`auto-tab-content-${targetTab}`)?.style.display !== 'none', tab);
   }
-  return `${toggles} fluxos e 3 áreas operacionais`;
+  return emptyState ? 'estado vazio profissional validado' : `${controls} controles de automações persistidas`;
 });
 
 await check('Analytics Center alterna cinco dashboards executivos', async () => {

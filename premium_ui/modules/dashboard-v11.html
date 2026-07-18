@@ -1,867 +1,135 @@
-<!-- LifeOS Enterprise v11.0 — Universal Command Center (Phase 111) -->
+<!-- LifeOS Enterprise — Universal Command Center -->
 <div id="module-dashboard-v11" style="display:none">
-<style>
-  /* ── Dashboard v11 Styles ── */
-  .dv11-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
-  .dv11-greeting { font-size:24px; font-weight:900; letter-spacing:-0.5px; }
-  .dv11-date { font-size:13px; color:var(--text-secondary); margin-top:4px; }
-  .dv11-actions { display:flex; gap:8px; align-items:center; }
-  .dv11-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:var(--radius-md); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; border:1px solid; }
-  .dv11-btn-primary { background:var(--gradient-primary); color:#fff; border-color:transparent; box-shadow:0 2px 10px rgba(99,102,241,0.3); }
-  .dv11-btn-primary:hover { box-shadow:0 4px 16px rgba(99,102,241,0.5); transform:translateY(-1px); }
-  .dv11-btn-ghost { background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--text-secondary); }
-  .dv11-btn-ghost:hover { background:rgba(255,255,255,0.07); color:var(--text-primary); }
-  .dv11-btn-icon { background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--text-secondary); padding:8px 10px; }
-  .dv11-btn-icon:hover { background:rgba(255,255,255,0.07); color:var(--text-primary); }
-  .dv11-badge { background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:var(--amber); font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; }
-  .dv11-badge-edit { display:none; }
-  .dv11-badge-edit.visible { display:inline-flex; }
+  <style>
+    #module-dashboard-v11 .dv11-header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+    #module-dashboard-v11 .dv11-greeting{font-size:24px;font-weight:900;letter-spacing:-.5px}
+    #module-dashboard-v11 .dv11-date{font-size:13px;color:var(--text-secondary);margin-top:4px}
+    #module-dashboard-v11 .dv11-actions,#module-dashboard-v11 .dv11-shortcuts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    #module-dashboard-v11 .dv11-btn,#module-dashboard-v11 .dv11-shortcut{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary)}
+    #module-dashboard-v11 .dv11-btn:hover,#module-dashboard-v11 .dv11-shortcut:hover{border-color:var(--accent);color:var(--accent-light)}
+    #module-dashboard-v11 .dv11-btn-primary{background:var(--gradient-primary);color:#fff;border-color:transparent}
+    #module-dashboard-v11 .dv11-badge{display:none;font-size:11px;font-weight:700;color:var(--amber);padding:4px 9px;border-radius:20px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.28)}
+    #module-dashboard-v11 .dv11-badge.visible{display:inline-flex}
+    #module-dashboard-v11 .dv11-tabs{display:flex;gap:4px;margin:18px 0;border-bottom:1px solid var(--border);overflow:auto}
+    #module-dashboard-v11 .dv11-tab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;border:0;border-bottom:2px solid transparent;background:transparent;white-space:nowrap}
+    #module-dashboard-v11 .dv11-tab.active{color:var(--accent-light);border-bottom-color:var(--accent)}
+    #module-dashboard-v11 .dv11-panel{display:none}#module-dashboard-v11 .dv11-panel.active{display:block}
+    #module-dashboard-v11 .dv11-widget-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+    #module-dashboard-v11 .dv11-widget{grid-column:span 4;position:relative;padding:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    #module-dashboard-v11 .dv11-widget.dv11-w6{grid-column:span 6}#module-dashboard-v11 .dv11-widget.dv11-w8{grid-column:span 8}#module-dashboard-v11 .dv11-widget.dv11-w12{grid-column:span 12}
+    #module-dashboard-v11 .dv11-widget.hidden{display:none}#module-dashboard-v11 .dv11-widget-grid.edit-mode .dv11-widget{outline:1px dashed rgba(245,158,11,.6);cursor:grab}
+    #module-dashboard-v11 .dv11-widget-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}#module-dashboard-v11 .dv11-widget-title{font-size:14px;font-weight:800}
+    #module-dashboard-v11 .dv11-widget-action{font-size:12px;color:var(--accent-light);cursor:pointer}#module-dashboard-v11 .dv11-remove-btn{display:none;position:absolute;right:10px;top:10px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.12);color:var(--red);border-radius:6px;width:24px;height:24px;cursor:pointer}
+    #module-dashboard-v11 .dv11-widget-grid.edit-mode .dv11-remove-btn{display:block}
+    #module-dashboard-v11 .dv11-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0}
+    #module-dashboard-v11 .dv11-kpi{padding:15px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)}#module-dashboard-v11 .dv11-kpi-value{font-size:23px;font-weight:900;margin-top:6px}#module-dashboard-v11 .dv11-kpi-label{font-size:11px;color:var(--text-muted)}#module-dashboard-v11 .dv11-kpi-trend{font-size:11px;color:var(--text-secondary);margin-top:5px}
+    #module-dashboard-v11 .dv11-list{display:grid;gap:8px}#module-dashboard-v11 .dv11-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}#module-dashboard-v11 .dv11-row:last-child{border:0}
+    #module-dashboard-v11 .dv11-row-main{font-weight:650}#module-dashboard-v11 .dv11-row-meta{font-size:11px;color:var(--text-muted);margin-top:3px}#module-dashboard-v11 .dv11-empty{font-size:13px;color:var(--text-muted);padding:14px 0;line-height:1.5}
+    #module-dashboard-v11 .dv11-status{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}#module-dashboard-v11 .dv11-pill{font-size:11px;font-weight:600;padding:6px 9px;border-radius:999px;color:var(--text-secondary);background:rgba(255,255,255,.03);border:1px solid var(--border)}
+    #module-dashboard-v11 .dv11-catalog-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:18px}#module-dashboard-v11 .dv11-catalog-overlay.open{display:flex}#module-dashboard-v11 .dv11-catalog{width:min(620px,100%);max-height:80vh;overflow:auto;padding:22px;border-radius:var(--radius-xl);background:var(--bg-elevated);border:1px solid var(--border)}#module-dashboard-v11 .dv11-catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:14px}#module-dashboard-v11 .dv11-catalog-item{padding:11px;border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;font-size:13px}#module-dashboard-v11 .dv11-catalog-item.added{border-color:var(--green)}
+    @media(max-width:900px){#module-dashboard-v11 .dv11-widget,#module-dashboard-v11 .dv11-widget.dv11-w6,#module-dashboard-v11 .dv11-widget.dv11-w8{grid-column:span 12}}
+  </style>
 
-  /* ── TAB PANELS ── */
-  .dv11-tabs { display:flex; gap:4px; margin-bottom:20px; border-bottom:1px solid var(--border); }
-  .dv11-tab { padding:9px 16px; font-size:13px; font-weight:600; color:var(--text-secondary); cursor:pointer; border:none; background:transparent; transition:all 0.15s; border-bottom:2px solid transparent; margin-bottom:-1px; }
-  .dv11-tab:hover { color:var(--text-primary); }
-  .dv11-tab.active { color:var(--accent-light); border-bottom-color:var(--accent); }
-
-  /* ── PANEL ── */
-  .dv11-panel { display:none; }
-  .dv11-panel.active { display:block; animation:fadeIn 0.3s ease; }
-
-  /* ── WIDGET GRID v11 ── */
-  .dv11-widget-grid {
-    display:grid; grid-template-columns:repeat(12,1fr); gap:16px;
-  }
-  .dv11-widget {
-    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
-    padding:18px; transition:all 0.25s cubic-bezier(0.4,0,0.2,1); position:relative; overflow:hidden;
-  }
-  .dv11-widget::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);
-  }
-  .dv11-widget:hover { border-color:rgba(99,102,241,0.15); box-shadow:0 4px 20px rgba(0,0,0,0.3); }
-  .dv11-w3 { grid-column:span 3; }
-  .dv11-w4 { grid-column:span 4; }
-  .dv11-w6 { grid-column:span 6; }
-  .dv11-w8 { grid-column:span 8; }
-  .dv11-w12 { grid-column:span 12; }
-  @media(max-width:1200px) { .dv11-w3,.dv11-w4{grid-column:span 6;} .dv11-w8{grid-column:span 12;} }
-  @media(max-width:768px) { .dv11-widget-grid{grid-template-columns:1fr;} .dv11-w3,.dv11-w4,.dv11-w6,.dv11-w8,.dv11-w12{grid-column:span 1;} }
-
-  /* Edit mode */
-  .dv11-widget-grid.edit-mode .dv11-widget { border-color:rgba(245,158,11,0.25); cursor:grab; }
-  .dv11-widget-grid.edit-mode .dv11-widget:hover { border-color:rgba(245,158,11,0.5); box-shadow:0 0 0 2px rgba(245,158,11,0.15); }
-  .dv11-widget-grid.edit-mode .dv11-widget.dragging { opacity:0.5; cursor:grabbing; }
-  .dv11-widget-grid.edit-mode .dv11-widget.drag-over { border-color:rgba(99,102,241,0.6); background:rgba(99,102,241,0.06); }
-  .dv11-drag-handle {
-    position:absolute; top:10px; right:10px; width:24px; height:24px;
-    background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3);
-    border-radius:6px; display:none; align-items:center; justify-content:center;
-    cursor:grab; font-size:12px; color:var(--amber);
-  }
-  .dv11-widget-grid.edit-mode .dv11-drag-handle { display:flex; }
-  .dv11-remove-btn {
-    position:absolute; top:10px; right:40px; width:24px; height:24px;
-    background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3);
-    border-radius:6px; display:none; align-items:center; justify-content:center;
-    cursor:pointer; font-size:12px; color:var(--red);
-  }
-  .dv11-widget-grid.edit-mode .dv11-remove-btn { display:flex; }
-  .dv11-widget.hidden { display:none; }
-
-  .dv11-widget-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-  .dv11-widget-title { font-size:14px; font-weight:700; }
-  .dv11-widget-action { font-size:12px; color:var(--accent-light); cursor:pointer; text-decoration:none; }
-  .dv11-widget-action:hover { text-decoration:underline; }
-
-  /* ── QUICK SHORTCUTS ── */
-  .dv11-shortcuts { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-  .dv11-shortcut {
-    display:flex; align-items:center; gap:8px; padding:10px 14px;
-    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md);
-    font-size:13px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:all 0.2s;
-  }
-  .dv11-shortcut:hover { border-color:var(--accent); color:var(--accent-light); background:var(--accent-glow); }
-  .dv11-shortcut-icon { font-size:18px; }
-
-  /* ── KPI ROW ── */
-  .dv11-kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:20px; }
-  .dv11-kpi {
-    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md);
-    padding:16px; display:flex; align-items:center; gap:14px;
-  }
-  .dv11-kpi-icon { width:40px; height:40px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-  .dv11-kpi-value { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
-  .dv11-kpi-label { font-size:11px; color:var(--text-muted); margin-top:2px; }
-  .dv11-kpi-trend { font-size:11px; font-weight:600; margin-top:4px; }
-  .dv11-trend-up { color:var(--green); }
-  .dv11-trend-down { color:var(--red); }
-
-  /* ── PRIORITY ITEMS ── */
-  .dv11-priority-item { display:flex; align-items:center; gap:12px; padding:12px; border-bottom:1px solid rgba(255,255,255,0.03); transition:background 0.15s; }
-  .dv11-priority-item:hover { background:rgba(255,255,255,0.03); }
-  .dv11-priority-item:last-child { border-bottom:none; }
-  .dv11-priority-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .dv11-priority-info { flex:1; }
-  .dv11-priority-title { font-size:13px; font-weight:600; }
-  .dv11-priority-meta { font-size:11px; color:var(--text-muted); margin-top:2px; }
-  .dv11-priority-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; }
-  .dv11-badge-critical { background:rgba(239,68,68,0.15); color:var(--red); }
-  .dv11-badge-high { background:rgba(245,158,11,0.15); color:var(--amber); }
-  .dv11-badge-medium { background:rgba(99,102,241,0.15); color:var(--accent-light); }
-  .dv11-badge-low { background:rgba(16,185,129,0.15); color:var(--green); }
-
-  /* ── HABIT CHECKLIST ── */
-  .dv11-habit-item { display:flex; align-items:center; gap:10px; padding:8px 0; }
-  .dv11-habit-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; font-size:11px; flex-shrink:0; }
-  .dv11-habit-check.checked { background:var(--green); border-color:var(--green); color:#fff; }
-  .dv11-habit-name { font-size:13px; }
-  .dv11-habit-streak { font-size:11px; color:var(--amber); font-weight:600; margin-left:auto; }
-
-  /* ── AGENDA ITEM ── */
-  .dv11-agenda-item { display:flex; gap:12px; align-items:center; padding:10px 0; }
-  .dv11-agenda-time { font-size:12px; color:var(--text-muted); font-family:'JetBrains Mono',monospace; width:50px; flex-shrink:0; }
-  .dv11-agenda-info { flex:1; }
-  .dv11-agenda-title { font-size:13px; font-weight:600; }
-  .dv11-agenda-desc { font-size:11px; color:var(--text-secondary); margin-top:1px; }
-  .dv11-agenda-bar { width:4px; height:36px; border-radius:2px; flex-shrink:0; }
-
-  /* ── PROGRESS RING ── */
-  .dv11-ring-container { display:flex; align-items:center; justify-content:center; position:relative; width:100px; height:100px; margin:0 auto; }
-  .dv11-ring-svg { transform:rotate(-90deg); }
-  .dv11-ring-text { position:absolute; font-size:22px; font-weight:800; }
-  .dv11-ring-label { font-size:11px; color:var(--text-muted); text-align:center; margin-top:6px; }
-
-  /* ── WIDGET CATALOG ── */
-  .dv11-catalog-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
-    z-index:1000; display:none; align-items:center; justify-content:center;
-  }
-  .dv11-catalog-overlay.open { display:flex; }
-  .dv11-catalog {
-    background:var(--bg-elevated); border:1px solid rgba(255,255,255,0.08);
-    border-radius:var(--radius-xl); padding:28px; width:600px; max-width:95vw;
-    max-height:80vh; overflow-y:auto; box-shadow:0 24px 64px rgba(0,0,0,0.6);
-    animation:scaleIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
-  }
-  .dv11-catalog-title { font-size:18px; font-weight:800; margin-bottom:6px; }
-  .dv11-catalog-desc { font-size:13px; color:var(--text-secondary); margin-bottom:20px; }
-  .dv11-catalog-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-  .dv11-catalog-item {
-    display:flex; align-items:center; gap:12px; padding:12px;
-    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md);
-    cursor:pointer; transition:all 0.2s;
-  }
-  .dv11-catalog-item:hover { border-color:var(--accent); }
-  .dv11-catalog-item.added { border-color:var(--green); background:rgba(16,185,129,0.05); }
-  .dv11-catalog-item-icon { font-size:24px; }
-  .dv11-catalog-item-name { font-size:13px; font-weight:600; }
-  .dv11-catalog-item-desc { font-size:11px; color:var(--text-muted); }
-  .dv11-catalog-item-status { font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
-  .dv11-catalog-item-status.active { background:rgba(16,185,129,0.15); color:var(--green); }
-  .dv11-catalog-item-status.inactive { background:rgba(255,255,255,0.05); color:var(--text-muted); }
-
-  /* ── COMM STATUS ── */
-  .dv11-comm-status { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
-  .dv11-comm-pill {
-    display:inline-flex; align-items:center; gap:7px; padding:7px 10px;
-    border:1px solid var(--border); border-radius:999px;
-    background:rgba(255,255,255,0.025); color:var(--text-secondary); font-size:11px; font-weight:600;
-  }
-  .dv11-comm-pill strong { color:var(--text-primary); }
-  .dv11-led { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px rgba(16,185,129,.7); }
-
-  /* ── COMMUNICATION ITEMS ── */
-  .dv11-comm-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-  .dv11-comm-item:last-child { border-bottom:none; }
-  .dv11-comm-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
-  .dv11-comm-info { flex:1; min-width:0; }
-  .dv11-comm-name { font-size:13px; font-weight:600; }
-  .dv11-comm-preview { font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
-  .dv11-comm-meta { display:flex; flex-direction:column; align-items:flex-end; gap:3px; flex-shrink:0; }
-  .dv11-comm-time { font-size:10px; color:var(--text-muted); }
-  .dv11-comm-unread { background:var(--accent); color:#fff; font-size:9px; font-weight:700; padding:1px 5px; border-radius:8px; }
-
-  /* ── FINANCE SUMMARY ── */
-  .dv11-fin-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-  .dv11-fin-row:last-child { border-bottom:none; }
-  .dv11-fin-label { font-size:12px; color:var(--text-muted); }
-  .dv11-fin-value { font-size:14px; font-weight:700; }
-  .dv11-fin-positive { color:var(--green); }
-  .dv11-fin-negative { color:var(--red); }
-
-  /* ── ACTIVITY ITEM ── */
-  .dv11-activity-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-  .dv11-activity-item:last-child { border-bottom:none; }
-  .dv11-activity-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
-  .dv11-activity-content { flex:1; }
-  .dv11-activity-title { font-size:13px; font-weight:500; }
-  .dv11-activity-time { font-size:11px; color:var(--text-muted); margin-top:2px; }
-
-  /* ── AI COMPANION ── */
-  .dv11-ai-msg { background:var(--bg-elevated); border-radius:var(--radius-md); padding:12px; margin-bottom:10px; border-left:3px solid var(--accent); }
-  .dv11-ai-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-  .dv11-ai-avatar { width:28px; height:28px; border-radius:50%; background:var(--gradient-primary); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
-  .dv11-ai-name { font-size:12px; font-weight:700; color:var(--accent-light); }
-  .dv11-ai-text { font-size:13px; line-height:1.6; color:var(--text-secondary); }
-  .dv11-ai-input { display:flex; gap:8px; margin-top:10px; }
-  .dv11-ai-field { flex:1; background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius-md); padding:8px 12px; font-size:13px; color:var(--text-primary); font-family:inherit; outline:none; transition:border-color 0.2s; }
-  .dv11-ai-field:focus { border-color:var(--border-accent); }
-  .dv11-ai-send { background:var(--gradient-primary); color:#fff; border:none; border-radius:var(--radius-md); padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer; }
-
-  /* ── HEALTH ── */
-  .dv11-health-item { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.035); }
-  .dv11-health-item:last-child { border-bottom:0; }
-  .dv11-health-item span { color:var(--text-secondary); font-size:12px; }
-  .dv11-health-item b { color:var(--green); font-size:11px; }
-
-  /* ── PRODUCTIVITY KPIs ── */
-  .dv11-prod-kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  .dv11-prod-kpi { padding:12px; border-radius:var(--radius-md); background:var(--bg-elevated); }
-  .dv11-prod-kpi-label { font-size:11px; color:var(--text-muted); }
-  .dv11-prod-kpi strong { display:block; font-size:20px; margin-top:5px; }
-
-  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes scaleIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
-</style>
-
-<!-- HEADER -->
-<div class="dv11-header">
-  <div>
-    <div class="dv11-greeting" id="d11-greeting">Carregando...</div>
-    <div class="dv11-date" id="d11-date"></div>
+  <div class="dv11-header">
+    <div><div id="d11-greeting" class="dv11-greeting">Seu Command Center</div><div id="d11-date" class="dv11-date"></div></div>
+    <div class="dv11-actions"><span id="dv11-edit-badge" class="dv11-badge">Modo de edição</span><button class="dv11-btn" type="button" onclick="dv11ToggleEdit()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button><button class="dv11-btn" type="button" onclick="dv11OpenCatalog()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Widgets</button><button class="dv11-btn dv11-btn-primary" type="button" onclick="dv11SaveLayout()"><i data-lucide="save" class="pg-icon" aria-hidden="true"></i> Salvar layout</button></div>
   </div>
-  <div class="dv11-actions">
-    <span class="dv11-badge dv11-badge-edit" id="dv11-edit-badge"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Modo de edição</span>
-    <button class="dv11-btn dv11-btn-icon" onclick="dv11ToggleEdit()" title="Editar layout"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
-    <button class="dv11-btn dv11-btn-ghost" onclick="dv11OpenCatalog()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Widget</button>
-    <button class="dv11-btn dv11-btn-primary" onclick="dv11SaveLayout()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Salvar Layout</button>
-  </div>
-</div>
+  <div id="dv11-status" class="dv11-status"><span class="dv11-pill">Carregando dados persistidos...</span></div>
+  <div class="dv11-shortcuts" style="margin-bottom:16px"><button class="dv11-shortcut" type="button" onclick="showPage('agenda')"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Agenda</button><button class="dv11-shortcut" type="button" onclick="showPage('finance')"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</button><button class="dv11-shortcut" type="button" onclick="showPage('kanban')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Kanban</button><button class="dv11-shortcut" type="button" onclick="showPage('documents')"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Documentos</button></div>
+  <div id="dv11-kpis" class="dv11-kpi-row"><div class="dv11-kpi"><div class="dv11-kpi-label">Indicadores</div><div class="dv11-kpi-trend">Carregando dados persistidos...</div></div></div>
 
-<!-- STATUS PILLS -->
-<div class="dv11-comm-status">
-  <span class="dv11-comm-pill"><i class="dv11-led"></i><strong>Plataforma</strong> operacional</span>
-  <span class="dv11-comm-pill"><i class="dv11-led"></i><strong>Autenticação</strong> saudável</span>
-  <span class="dv11-comm-pill"><i class="dv11-led"></i><strong>Dados</strong> sincronizados</span>
-  <span class="dv11-comm-pill"><strong>Uptime</strong> 99,98%</span>
-  <span class="dv11-comm-pill"><strong>Latência</strong> 42 ms</span>
-  <span class="dv11-comm-pill"><strong>Integrações</strong> 7 conectadas</span>
-</div>
+  <div class="dv11-tabs" role="tablist"><button class="dv11-tab active" type="button" onclick="dv11SwitchTab('today')">Hoje</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('week')">Esta semana</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('priorities')">Prioridades</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('command')">Command Center</button></div>
 
-<!-- QUICK SHORTCUTS -->
-<div class="dv11-shortcuts">
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('agenda')"><span class="dv11-shortcut-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span>Agenda</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('finance')"><span class="dv11-shortcut-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></span>Finanças</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('kanban')"><span class="dv11-shortcut-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span>Kanban</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('companion-ai')"><span class="dv11-shortcut-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></span>AI Copilot</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('integrations')"><span class="dv11-shortcut-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span>Integrações</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('documents')"><span class="dv11-shortcut-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></span>Documentos</div>
-  <div class="dv11-shortcut" onclick="window.parent?.showPage?.('enterprise-admin')"><span class="dv11-shortcut-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>Admin</div>
-</div>
+  <section id="panel-today" class="dv11-panel active"><div id="todayGrid" class="dv11-widget-grid">
+    <article id="w11-today-summary" class="dv11-widget dv11-w12" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-summary')" aria-label="Ocultar resumo">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Resumo do dia</div><span class="dv11-widget-action" onclick="showPage('agenda')">Abrir agenda</span></div><div id="dv11-today-summary" class="dv11-kpi-row"></div></article>
+    <article id="w11-today-agenda" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-agenda')" aria-label="Ocultar agenda">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Agenda de hoje</div></div><div id="dv11-agenda" class="dv11-list"></div></article>
+    <article id="w11-today-habits" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-habits')" aria-label="Ocultar hábitos">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Hábitos de hoje</div><span class="dv11-widget-action" onclick="showPage('habits')">Gerenciar</span></div><div id="dv11-habits-container" class="dv11-list"></div></article>
+    <article id="w11-today-ai" class="dv11-widget dv11-w12" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-ai')" aria-label="Ocultar insights">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Insights baseados em dados</div><span class="dv11-widget-action" onclick="showPage('ai')">Abrir IA</span></div><div id="dv11-insights" class="dv11-list"></div></article>
+  </div></section>
 
-<!-- KPI ROW -->
-<div class="dv11-kpi-row">
-  <div class="dv11-kpi">
-    <div class="dv11-kpi-icon" style="background:rgba(99,102,241,0.15)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
-    <div><div class="dv11-kpi-value">87</div><div class="dv11-kpi-label">Life Score</div><div class="dv11-kpi-trend dv11-trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +3 esta semana</div></div>
-  </div>
-  <div class="dv11-kpi">
-    <div class="dv11-kpi-icon" style="background:rgba(16,185,129,0.15)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
-    <div><div class="dv11-kpi-value">4/6</div><div class="dv11-kpi-label">Hábitos hoje</div><div class="dv11-kpi-trend dv11-trend-up">67% concluído</div></div>
-  </div>
-  <div class="dv11-kpi">
-    <div class="dv11-kpi-icon" style="background:rgba(245,158,11,0.15)"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-    <div><div class="dv11-kpi-value">R$ 4.2k</div><div class="dv11-kpi-label">Saldo</div><div class="dv11-kpi-trend dv11-trend-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +12% vs mês anterior</div></div>
-  </div>
-  <div class="dv11-kpi">
-    <div class="dv11-kpi-icon" style="background:rgba(139,92,246,0.15)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
-    <div><div class="dv11-kpi-value">2h40m</div><div class="dv11-kpi-label">Foco acumulado</div><div class="dv11-kpi-trend dv11-trend-down"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> 67% da meta</div></div>
-  </div>
-  <div class="dv11-kpi">
-    <div class="dv11-kpi-icon" style="background:rgba(6,182,212,0.15)"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></div>
-    <div><div class="dv11-kpi-value">3</div><div class="dv11-kpi-label">Pendentes</div><div class="dv11-kpi-trend dv11-trend-up">2 novas hoje</div></div>
-  </div>
-</div>
+  <section id="panel-week" class="dv11-panel"><div id="weekGrid" class="dv11-widget-grid">
+    <article id="w11-week-summary" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-week-summary')" aria-label="Ocultar indicadores">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Produtividade no período</div></div><div id="dv11-week-summary" class="dv11-kpi-row"></div></article>
+    <article id="w11-week-goals" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-week-goals')" aria-label="Ocultar metas">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Metas e hábitos</div></div><div id="dv11-goals-container" class="dv11-list"></div></article>
+  </div></section>
 
-<!-- TABS -->
-<div class="dv11-tabs">
-  <button class="dv11-tab active" onclick="dv11SwitchTab('today')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Hoje</button>
-  <button class="dv11-tab" onclick="dv11SwitchTab('week')"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Esta Semana</button>
-  <button class="dv11-tab" onclick="dv11SwitchTab('priorities')"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> Próximas Prioridades</button>
-  <button class="dv11-tab" onclick="dv11SwitchTab('command')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Command Center</button>
-</div>
+  <section id="panel-priorities" class="dv11-panel"><div id="prioritiesGrid" class="dv11-widget-grid">
+    <article id="w11-pri-list" class="dv11-widget dv11-w8" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-pri-list')" aria-label="Ocultar prioridades">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Próximas prioridades</div><span class="dv11-widget-action" onclick="showPage('tasks')">Ver tarefas</span></div><div id="dv11-priorities" class="dv11-list"></div></article>
+    <article id="w11-pri-timeline" class="dv11-widget dv11-w4" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-pri-timeline')" aria-label="Ocultar agenda">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Próximos compromissos</div></div><div id="dv11-timeline" class="dv11-list"></div></article>
+  </div></section>
 
-<!-- PANEL: HOJE -->
-<div class="dv11-panel active" id="panel-today">
-  <div class="dv11-widget-grid" id="todayGrid">
-    <div class="dv11-widget dv11-w12" id="w11-today-summary" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-summary')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header">
-        <div class="dv11-widget-title">Resumo do Dia</div>
-        <span class="dv11-widget-action" onclick="window.parent?.showPage?.('agenda')">Ver agenda <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></span>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Tarefas hoje</div>
-          <div style="font-size:20px;font-weight:800;color:var(--accent)">8</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">3 concluídas · 5 pendentes</div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Reuniões</div>
-          <div style="font-size:20px;font-weight:800;color:var(--cyan)">3</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Próxima: 14h30 · Daily</div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Hábitos</div>
-          <div style="font-size:20px;font-weight:800;color:var(--green)">4/6</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">67% concluído</div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Foco acumulado</div>
-          <div style="font-size:20px;font-weight:800;color:var(--purple)">2h40m</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">Meta: 4h diárias</div>
-        </div>
-      </div>
-    </div>
+  <section id="panel-command" class="dv11-panel"><div id="commandGrid" class="dv11-widget-grid">
+    <article id="w11-prod-kpis" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-prod-kpis')" aria-label="Ocultar produtividade">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Indicadores de produtividade</div><span class="dv11-widget-action" onclick="showPage('analytics')">Analytics</span></div><div id="dv11-productivity" class="dv11-kpi-row"></div></article>
+    <article id="w11-finance-widget" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-finance-widget')" aria-label="Ocultar finanças">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Resumo financeiro</div><span class="dv11-widget-action" onclick="showPage('finance')">Finance Hub</span></div><div id="dv11-finance" class="dv11-kpi-row"></div></article>
+  </div></section>
 
-    <div class="dv11-widget dv11-w6" id="w11-today-agenda" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-agenda')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Agenda de Hoje</div></div>
-      <div>
-        <div class="dv11-agenda-item">
-          <div class="dv11-agenda-time">09:00</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Evento 1</div><div class="dv11-agenda-desc">1h · Zoom · Team Alpha</div></div>
-          <div class="dv11-agenda-bar" style="background:var(--accent)"></div>
-        </div>
-        <div class="dv11-agenda-item">
-          <div class="dv11-agenda-time">11:00</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Evento 2</div><div class="dv11-agenda-desc">2h · Foco intenso</div></div>
-          <div class="dv11-agenda-bar" style="background:var(--green)"></div>
-        </div>
-        <div class="dv11-agenda-item">
-          <div class="dv11-agenda-time">14:30</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Daily standup</div><div class="dv11-agenda-desc">30min · Slack</div></div>
-          <div class="dv11-agenda-bar" style="background:var(--amber)"></div>
-        </div>
-        <div class="dv11-agenda-item">
-          <div class="dv11-agenda-time">16:00</div>
-          <div class="dv11-agenda-info"><div class="dv11-agenda-title">Review de código</div><div class="dv11-agenda-desc">1h · GitHub</div></div>
-          <div class="dv11-agenda-bar" style="background:var(--cyan)"></div>
-        </div>
-      </div>
-    </div>
+  <div id="dv11CatalogOverlay" class="dv11-catalog-overlay" onclick="if(event.target===this)dv11CloseCatalog()"><div class="dv11-catalog"><div style="font-size:17px;font-weight:800">Widgets disponíveis</div><div style="font-size:13px;color:var(--text-muted);margin-top:5px">Escolha quais visões persistidas devem aparecer no seu painel.</div><div id="dv11CatalogGrid" class="dv11-catalog-grid"></div><div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="dv11-btn" type="button" onclick="dv11CloseCatalog()">Fechar</button></div></div></div>
 
-    <div class="dv11-widget dv11-w6" id="w11-today-habits" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-habits')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Hábitos de Hoje</div></div>
-      <div>
-        <div id="dv11-habits-container"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando hábitos...</div></div>
-<span class="dv11-habit-name">Exercício físico</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 11 dias</span></div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Leitura 30min</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 8 dias</span></div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check checked" onclick="dv11ToggleHabit(this)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div><span class="dv11-habit-name">Jornal</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 6 dias</span></div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check" onclick="dv11ToggleHabit(this)"></div><span class="dv11-habit-name" style="color:var(--text-muted)">Água 2L</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 3 dias</span></div>
-        <div class="dv11-habit-item"><div class="dv11-habit-check" onclick="dv11ToggleHabit(this)"></div><span class="dv11-habit-name" style="color:var(--text-muted)">Meditação noturna</span><span class="dv11-habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> 2 dias</span></div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w4" id="w11-today-finance" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-finance')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Financeiro</div></div>
-      <div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Saldo disponível</span><span class="dv11-fin-value dv11-fin-positive">R$ 4.200</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Despesas hoje</span><span class="dv11-fin-value dv11-fin-negative">R$ 142</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Receita mês</span><span class="dv11-fin-value dv11-fin-positive">R$ 12.800</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Gasto mês</span><span class="dv11-fin-value dv11-fin-negative">R$ 8.600</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Economia</span><span class="dv11-fin-value" style="color:var(--accent-light)">33%</span></div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w4" id="w11-today-comm" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-comm')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Comunicação</div></div>
-      <div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:var(--gradient-primary)">CA</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">Carlos Andrade</div><div class="dv11-comm-preview">Preciso revisar o PR #142...</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">10m</span><span class="dv11-comm-unread">2</span></div>
-        </div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)">MS</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">Maria Santos</div><div class="dv11-comm-preview">Reunião confirmada para 14h30</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">1h</span></div>
-        </div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">JD</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">João Dias</div><div class="dv11-comm-preview">Deploy v11.0 agendado</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">2h</span><span class="dv11-comm-unread">1</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w4" id="w11-today-ai" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-today-ai')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">AI Companion</div></div>
-      <div class="dv11-ai-msg">
-        <div class="dv11-ai-header"><div class="dv11-ai-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="dv11-ai-name">LifeOS AI</div></div>
-        <div class="dv11-ai-text">Analisando seus dados reais... Carregando recomendações personalizadas.</div>
-      </div>
-      <div class="dv11-ai-input">
-        <input class="dv11-ai-field" placeholder="Pergunte algo à IA..." />
-        <button class="dv11-ai-send"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PANEL: ESTA SEMANA -->
-<div class="dv11-panel" id="panel-week">
-  <div class="dv11-widget-grid" id="weekGrid">
-    <div class="dv11-widget dv11-w12" id="w11-week-summary" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-week-summary')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Resumo da Semana</div></div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
-        <div style="padding:14px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Tarefas concluídas</div>
-          <div style="font-size:24px;font-weight:800;color:var(--green)">34</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">Meta: 40</div>
-        </div>
-        <div style="padding:14px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Horas de foco</div>
-          <div style="font-size:24px;font-weight:800;color:var(--accent)">18h</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">Meta: 20h</div>
-        </div>
-        <div style="padding:14px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Hábitos</div>
-          <div style="font-size:24px;font-weight:800;color:var(--purple)">85%</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">5/6 ativos</div>
-        </div>
-        <div style="padding:14px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Reuniões</div>
-          <div style="font-size:24px;font-weight:800;color:var(--cyan)">12</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">8h total</div>
-        </div>
-        <div style="padding:14px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">Life Score</div>
-          <div style="font-size:24px;font-weight:800;color:var(--amber)">+3</div>
-          <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">87 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 90</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-week-goals" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-week-goals')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Metas da Semana</div></div>
-      <div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
-          <div id="dv11-goals-container"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando metas...</div></div></div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600" id="dv11-goal-title-1">Meta ativa</span><span style="color:var(--accent-light);font-weight:700">72km</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600">Economizar R$ 3k</span><span style="color:var(--amber);font-weight:700">R$ 2.1k</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,var(--amber),var(--green))"></div></div>
-        </div>
-        <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="font-weight:600">Certificação AWS</span><span style="color:var(--text-secondary);font-weight:700">45%</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:45%;background:var(--purple)"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-week-activities" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-week-activities')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Atividades da Semana</div></div>
-      <div>
-        <div id="dv11-activity-container-1"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
-        <div id="dv11-activity-container-2"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
-        <div id="dv11-activity-container-3"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades...</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PANEL: PRÓXIMAS PRIORIDADES -->
-<div class="dv11-panel" id="panel-priorities">
-  <div class="dv11-widget-grid" id="prioritiesGrid">
-    <div class="dv11-widget dv11-w8" id="w11-pri-list" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-pri-list')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Próximas Prioridades</div></div>
-      <div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--red)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Deploy v11.0 — Production Release</div><div class="dv11-priority-meta">Entregar: 15 Jul · Responsável: Você</div></div>
-          <span class="dv11-priority-badge dv11-badge-critical">Crítica</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--red)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Universal Command Center — Phase 111</div><div class="dv11-priority-meta">Entregar: 15 Jul · Progresso: 80%</div></div>
-          <span class="dv11-priority-badge dv11-badge-critical">Crítica</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--amber)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Digital Identity Center — Phase 112</div><div class="dv11-priority-meta">Entregar: 16 Jul · Status: Pendente</div></div>
-          <span class="dv11-priority-badge dv11-badge-high">Alta</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--amber)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Enterprise File Center — Phase 113</div><div class="dv11-priority-meta">Entregar: 16 Jul · Status: Pendente</div></div>
-          <span class="dv11-priority-badge dv11-badge-high">Alta</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--accent)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Automation Studio — Phase 114</div><div class="dv11-priority-meta">Entregar: 17 Jul · Status: Pendente</div></div>
-          <span class="dv11-priority-badge dv11-badge-medium">Média</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--accent)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Analytics Center — Phase 115</div><div class="dv11-priority-meta">Entregar: 17 Jul · Status: Pendente</div></div>
-          <span class="dv11-priority-badge dv11-badge-medium">Média</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--green)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Enterprise Quality Audit — Phase 116</div><div class="dv11-priority-meta">Entregar: 18 Jul · Status: Pendente</div></div>
-          <span class="dv11-priority-badge dv11-badge-low">Normal</span>
-        </div>
-        <div class="dv11-priority-item">
-          <div class="dv11-priority-dot" style="background:var(--green)"></div>
-          <div class="dv11-priority-info"><div class="dv11-priority-title">Configurar credenciais OAuth 2.0 reais</div><div class="dv11-priority-meta">Entregar: 20 Jul · Status: Preparado</div></div>
-          <span class="dv11-priority-badge dv11-badge-low">Normal</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w4" id="w11-pri-timeline" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-pri-timeline')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Timeline de Entrega</div></div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:4px;flex-shrink:0"></div>
-          <div><div style="font-size:12px;font-weight:600">15 Jul — v11.0 RC</div><div style="font-size:11px;color:var(--text-muted)">Phases 111-112</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);margin-top:4px;flex-shrink:0"></div>
-          <div><div style="font-size:12px;font-weight:600">16 Jul — Phases 113-114</div><div style="font-size:11px;color:var(--text-muted)">File Center + Automation</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:4px;flex-shrink:0"></div>
-          <div><div style="font-size:12px;font-weight:600">17 Jul — Phase 115</div><div style="font-size:11px;color:var(--text-muted)">Analytics Center</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:4px;flex-shrink:0"></div>
-          <div><div style="font-size:12px;font-weight:600">18 Jul — Phases 116-118</div><div style="font-size:11px;color:var(--text-muted)">Quality + Release + Deploy</div></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--purple);margin-top:4px;flex-shrink:0"></div>
-          <div><div style="font-size:12px;font-weight:600">20 Jul — Integrações Reais</div><div style="font-size:11px;color:var(--text-muted)">OAuth production config</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PANEL: COMMAND CENTER -->
-<div class="dv11-panel" id="panel-command">
-  <div class="dv11-widget-grid" id="commandGrid">
-    <div class="dv11-widget dv11-w6" id="w11-prod-kpis" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-prod-kpis')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Produtividade</div></div>
-      <div class="dv11-prod-kpis">
-        <div class="dv11-prod-kpi"><div class="dv11-prod-kpi-label">Foco</div><strong style="color:var(--green)">78%</strong></div>
-        <div class="dv11-prod-kpi"><div class="dv11-prod-kpi-label">Entregas</div><strong style="color:var(--accent)">34/40</strong></div>
-        <div class="dv11-prod-kpi"><div class="dv11-prod-kpi-label">Capacidade</div><strong style="color:var(--cyan)">92%</strong></div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-health" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-health')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Saúde do Sistema</div></div>
-      <div>
-        <div class="dv11-health-item"><span><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i> Cloudflare Pages</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-        <div class="dv11-health-item"><span><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> OAuth Manager</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-        <div class="dv11-health-item"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> KV Storage</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-        <div class="dv11-health-item"><span><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> D1 Database</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-        <div class="dv11-health-item"><span><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Webhooks</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-        <div class="dv11-health-item"><span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> AI Engine</span><b><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online</b></div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-comm-widget" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-comm-widget')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Comunicação</div></div>
-      <div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:var(--gradient-primary)">CA</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">Carlos Andrade</div><div class="dv11-comm-preview">Preciso revisar o PR #142 antes do deploy</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">10m</span><span class="dv11-comm-unread">2</span></div>
-        </div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)">MS</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">Maria Santos</div><div class="dv11-comm-preview">Reunião confirmada para 14h30</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">1h</span></div>
-        </div>
-        <div class="dv11-comm-item">
-          <div class="dv11-comm-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">JD</div>
-          <div class="dv11-comm-info"><div class="dv11-comm-name">João Dias</div><div class="dv11-comm-preview">Deploy v11.0 agendado para amanhã</div></div>
-          <div class="dv11-comm-meta"><span class="dv11-comm-time">2h</span><span class="dv11-comm-unread">1</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-ai-widget" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-ai-widget')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">AI Companion</div></div>
-      <div class="dv11-ai-msg">
-        <div class="dv11-ai-header"><div class="dv11-ai-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="dv11-ai-name">LifeOS AI</div></div>
-        <div class="dv11-ai-text">Olá! Analisei seus padrões de produtividade. Seu melhor horário de foco é entre 9h-11h. Recomendo bloquear esse período para deep work.</div>
-      </div>
-      <div class="dv11-ai-msg">
-        <div class="dv11-ai-header"><div class="dv11-ai-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="dv11-ai-name">LifeOS AI</div></div>
-        <div class="dv11-ai-text">Olá! Sou seu assistente LifeOS. Como posso ajudar você hoje?</div>
-      </div>
-      <div class="dv11-ai-input">
-        <input class="dv11-ai-field" placeholder="Pergunte algo à IA..." />
-        <button class="dv11-ai-send"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-finance-widget" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-finance-widget')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Finance Hub</div></div>
-      <div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
-          <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)">Saldo</div>
-            <div style="font-size:20px;font-weight:800;color:var(--green)">R$ 4.2k</div>
-          </div>
-          <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)">Receita</div>
-            <div style="font-size:20px;font-weight:800;color:var(--green)">R$ 12.8k</div>
-          </div>
-          <div style="padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)">Gastos</div>
-            <div style="font-size:20px;font-weight:800;color:var(--red)">R$ 8.6k</div>
-          </div>
-        </div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Economia mensal</span><span class="dv11-fin-value" style="color:var(--accent-light)">R$ 4.2k (33%)</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Investimentos</span><span class="dv11-fin-value" style="color:var(--purple)">R$ 2.1k</span></div>
-        <div class="dv11-fin-row"><span class="dv11-fin-label">Subscrições</span><span class="dv11-fin-value dv11-fin-negative">R$ 298/mês</span></div>
-      </div>
-    </div>
-
-    <div class="dv11-widget dv11-w6" id="w11-activities-widget" draggable="true">
-      <div class="dv11-drag-handle">⠿</div>
-      <div class="dv11-remove-btn" onclick="dv11RemoveWidget('w11-activities-widget')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="dv11-widget-header"><div class="dv11-widget-title">Atividades Recentes</div></div>
-      <div>
-        <div id="dv11-activity-container-3"><div style="color:var(--text-muted);font-size:12px;padding:8px 0">Carregando atividades reais...</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- WIDGET CATALOG MODAL -->
-<div class="dv11-catalog-overlay" id="dv11CatalogOverlay" onclick="if(event.target===this)dv11CloseCatalog()">
-  <div class="dv11-catalog">
-    <div class="dv11-catalog-title">Catálogo de Widgets</div>
-    <div class="dv11-catalog-desc">Selecione os widgets que deseja exibir no seu dashboard</div>
-    <div class="dv11-catalog-grid" id="dv11CatalogGrid"></div>
-    <div style="margin-top:16px;display:flex;justify-content:flex-end">
-      <button class="dv11-btn dv11-btn-ghost" onclick="dv11CloseCatalog()">Fechar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-  // ── Personalização ──
-  var greeting = document.getElementById('d11-greeting');
-  var dateEl = document.getElementById('d11-date');
-  if(greeting){
-    var h = new Date().getHours();
-    var g = h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
-    greeting.textContent = g+', Usuário! \u{1F44B}';
-  }
-  if(dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-
-  // ── Tabs ──
-  window.dv11SwitchTab = function(tab){
-    document.querySelectorAll('.dv11-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.dv11-panel').forEach(p=>p.classList.remove('active'));
-    document.querySelector('.dv11-tab[onclick*="'+tab+'"]').classList.add('active');
-    var panel = document.getElementById('panel-'+tab);
-    if(panel) panel.classList.add('active');
-  };
-
-  // ── Edit Mode ──
-  var editMode = false;
-  window.dv11ToggleEdit = function(){
-    editMode = !editMode;
-    document.querySelectorAll('.dv11-widget-grid').forEach(g=>g.classList.toggle('edit-mode',editMode));
-    var badge = document.getElementById('dv11-edit-badge');
-    if(badge) badge.classList.toggle('visible',editMode);
-    if(editMode) initDragDrop();
-  };
-
-  // ── Drag & Drop ──
-  function initDragDrop(){
-    document.querySelectorAll('.dv11-widget-grid .dv11-widget').forEach(w=>{
-      w.addEventListener('dragstart',function(e){
-        this.classList.add('dragging');
-        e.dataTransfer.setData('text/plain',this.id);
-      });
-      w.addEventListener('dragend',function(){
-        this.classList.remove('dragging');
-        dv11SaveLayout();
-      });
-      w.addEventListener('dragover',function(e){
-        e.preventDefault();
-        var dragging = document.querySelector('.dv11-widget.dragging');
-        if(dragging && this !== dragging){
-          var rect = this.getBoundingClientRect();
-          var mid = rect.top + rect.height/2;
-          if(e.clientY < mid) this.parentNode.insertBefore(dragging, this);
-          else this.parentNode.insertBefore(dragging, this.nextSibling);
-        }
-      });
-    });
-  }
-
-  // ── Toggle Habit ──
-  window.dv11ToggleHabit = function(el){
-    el.classList.toggle('checked');
-    el.textContent = el.classList.contains('checked')?'\u{2713}':'';
-  };
-
-  // ── Remove Widget ──
-  window.dv11RemoveWidget = function(id){
-    var w = document.getElementById(id);
-    if(w){ w.classList.add('hidden'); dv11SaveLayout(); }
-  };
-
-  // ── Widget Catalog ──
-  var CATALOG = [
-    {id:'w11-today-summary',icon:'\u{1F4CB}',name:'Resumo do Dia',desc:'Tarefas, reuniões, hábitos e foco'},
-    {id:'w11-today-agenda',icon:'\u{1F4C5}',name:'Agenda de Hoje',desc:'Compromissos e eventos do dia'},
-    {id:'w11-today-habits',icon:'\u{1F504}',name:'Hábitos',desc:'Checklist diário com streaks'},
-    {id:'w11-today-finance',icon:'\u{1F4B0}',name:'Financeiro',desc:'Saldo, receitas e gastos'},
-    {id:'w11-today-comm',icon:'\u{1F4AC}',name:'Comunicação',desc:'Mensagens recentes'},
-    {id:'w11-today-ai',icon:'\u{1F916}',name:'AI Companion',desc:'Insights e chat com IA'},
-    {id:'w11-week-summary',icon:'\u{1F4CA}',name:'Resumo Semanal',desc:'KPIs da semana'},
-    {id:'w11-week-goals',icon:'\u{1F3AF}',name:'Metas da Semana',desc:'Progresso de objetivos'},
-    {id:'w11-week-activities',icon:'\u{1F4CB}',name:'Atividades',desc:'Timeline de ações'},
-    {id:'w11-pri-list',icon:'\u{1F525}',name:'Prioridades',desc:'Próximas tarefas críticas'},
-    {id:'w11-pri-timeline',icon:'\u{23F1}',name:'Timeline',desc:'Entregas planejadas'},
-    {id:'w11-prod-kpis',icon:'\u{26A1}',name:'Produtividade',desc:'Foco, entregas e capacidade'},
-    {id:'w11-health',icon:'\u{1F6E1}',name:'Saúde do Sistema',desc:'Status dos serviços'},
-    {id:'w11-comm-widget',icon:'\u{1F4AC}',name:'Comunicação',desc:'Mensagens e alertas'},
-    {id:'w11-ai-widget',icon:'\u{1F916}',name:'AI Companion',desc:'Insights e assistente'},
-    {id:'w11-finance-widget',icon:'\u{1F4B0}',name:'Finance Hub',desc:'Resumo financeiro completo'},
-    {id:'w11-activities-widget',icon:'\u{1F4CB}',name:'Atividades Recentes',desc:'Timeline de ações'},
-  ];
-
-  window.dv11OpenCatalog = function(){
-    var grid = document.getElementById('dv11CatalogGrid');
-    grid.innerHTML = CATALOG.map(function(w){
-      var el = document.getElementById(w.id);
-      var visible = el && !el.classList.contains('hidden');
-      return '<div class="dv11-catalog-item'+(visible?' added':'')+'" onclick="dv11ToggleCatalogWidget(\''+w.id+'\',this)">'+
-        '<div class="dv11-catalog-item-icon">'+w.icon+'</div>'+
-        '<div><div class="dv11-catalog-item-name">'+w.name+'</div><div class="dv11-catalog-item-desc">'+w.desc+'</div></div>'+
-        '<span class="dv11-catalog-item-status '+(visible?'active':'inactive')+'">'+(visible?'\u{2713} Ativo':'+ Adicionar')+'</span>'+
-        '</div>';
-    }).join('');
-    document.getElementById('dv11CatalogOverlay').classList.add('open');
-  };
-  window.dv11CloseCatalog = function(){
-    document.getElementById('dv11CatalogOverlay').classList.remove('open');
-  };
-  window.dv11ToggleCatalogWidget = function(id,el){
-    var w = document.getElementById(id);
-    if(!w) return;
-    if(w.classList.contains('hidden')){
-      w.classList.remove('hidden');
-      w.style.animation='none';w.offsetHeight;w.style.animation='fadeIn 0.3s ease';
-      el.classList.add('added');
-      el.querySelector('.dv11-catalog-item-status').textContent='\u{2713} Ativo';
-      el.querySelector('.dv11-catalog-item-status').className='dv11-catalog-item-status active';
-    } else {
-      w.classList.add('hidden');
-      el.classList.remove('added');
-      el.querySelector('.dv11-catalog-item-status').textContent='+ Adicionar';
-      el.querySelector('.dv11-catalog-item-status').className='dv11-catalog-item-status inactive';
+  <script>
+  (() => {
+    'use strict';
+    if (window.LifeOSCommandCenter) return;
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[character]));
+    const integer = (value) => new Intl.NumberFormat('pt-BR').format(Number(value) || 0);
+    const money = (value) => value === null || value === undefined ? 'Não informado' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(value) || 0);
+    const empty = (text) => `<div class="dv11-empty">${esc(text)}</div>`;
+    const state = { briefing:null, analytics:null, finance:null, edit:false };
+    const widgetIds = ['w11-today-summary','w11-today-agenda','w11-today-habits','w11-today-ai','w11-week-summary','w11-week-goals','w11-pri-list','w11-pri-timeline','w11-prod-kpis','w11-finance-widget'];
+    const byId = (id) => document.getElementById(id);
+    const refreshIcons = () => { try { window.lucide?.createIcons?.(); } catch (_) {} };
+    const set = (id, markup) => { const node = byId(id); if (node) node.innerHTML = markup; };
+    const metrics = (items) => items.map((item) => `<div class="dv11-kpi"><div class="dv11-kpi-label">${esc(item.label)}</div><div class="dv11-kpi-value" style="color:${item.tone || 'var(--accent)'}">${esc(item.value)}</div>${item.detail ? `<div class="dv11-kpi-trend">${esc(item.detail)}</div>` : ''}</div>`).join('');
+    const rows = (items, title, meta) => items?.length ? items.map((item) => `<div class="dv11-row"><div><div class="dv11-row-main">${esc(title(item))}</div>${meta(item) ? `<div class="dv11-row-meta">${esc(meta(item))}</div>` : ''}</div></div>`).join('') : empty('Nenhum registro persistido para este período.');
+    const render = () => {
+      const briefing = state.briefing;
+      if (!briefing) { ['dv11-today-summary','dv11-agenda','dv11-habits-container','dv11-insights','dv11-week-summary','dv11-goals-container','dv11-priorities','dv11-timeline','dv11-productivity','dv11-finance'].forEach((id) => set(id, empty('Carregando dados persistidos...'))); return; }
+      const m = briefing.metrics || {};
+      set('dv11-status', `<span class="dv11-pill">Fonte: ${briefing.source === 'real' ? 'dados persistidos' : 'estado vazio'}</span><span class="dv11-pill">Atualizado: ${esc(new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}))}</span>`);
+      const today = [
+        {label:'Tarefas pendentes',value:integer(m.tasksToday),detail:`${integer(m.tasksCompleted)} concluída(s) hoje`,tone:'var(--accent)'},
+        {label:'Hábitos concluídos',value:`${integer(m.habitsCompleted)}/${integer(m.habitsActive)}`,detail:'Registros de hoje',tone:'var(--green)'},
+        {label:'Metas ativas',value:integer(m.goalsActive),detail:'Metas persistidas',tone:'var(--purple)'},
+        {label:'Maior sequência',value:`${integer(m.streak)} dia(s)`,detail:'Entre hábitos ativos',tone:'var(--amber)'}
+      ];
+      set('dv11-kpis', metrics(today)); set('dv11-today-summary', metrics(today));
+      set('dv11-agenda', rows(briefing.agenda, (item) => item.title, (item) => `${item.time || 'Sem horário'} · ${item.category || 'Geral'}`));
+      set('dv11-habits-container', rows(briefing.habits, (item) => item.name, (item) => `${item.done ? 'Concluído hoje' : 'Pendente hoje'} · sequência: ${integer(item.streak)} dia(s)`));
+      set('dv11-insights', rows(briefing.insights, (item) => item.text, () => 'Calculado a partir dos seus registros'));
+      const analytic = state.analytics || {}; const p = analytic.productivity?.kpis || {}; const f = analytic.finance?.kpis || {};
+      set('dv11-week-summary', metrics([{label:'Tarefas criadas',value:integer(p.totalTasks),tone:'var(--accent)'},{label:'Concluídas',value:integer(p.completedTasks),tone:'var(--green)'},{label:'Taxa de conclusão',value:`${integer(p.completionRate)}%`,tone:'var(--cyan)'},{label:'Em atraso',value:integer(p.overdueTasks),tone:p.overdueTasks ? 'var(--amber)' : 'var(--text-primary)'}]));
+      set('dv11-goals-container', rows([{title:'Metas ativas',value:integer(p.activeGoals)},{title:'Progresso médio das metas',value:`${integer(p.avgGoalProgress)}%`},{title:'Hábitos ativos',value:integer(p.activeHabits)}], (item) => item.title, (item) => item.value));
+      set('dv11-priorities', rows(briefing.priorities, (item) => item.title, (item) => item.meta));
+      set('dv11-timeline', rows(briefing.agenda, (item) => item.title, (item) => `${item.time || 'Sem horário'} · ${item.category || 'Geral'}`));
+      set('dv11-productivity', metrics([{label:'Tarefas concluídas',value:integer(p.completedTasks),tone:'var(--green)'},{label:'Conclusão',value:`${integer(p.completionRate)}%`,tone:'var(--cyan)'},{label:'Hábitos ativos',value:integer(p.activeHabits),tone:'var(--purple)'}]));
+      const summary = state.finance || {};
+      set('dv11-finance', metrics([{label:'Saldo',value:money(summary.totalBalance),tone:'var(--green)'},{label:'Receitas do período',value:money(summary.monthlyIncome ?? f.totalIncome),tone:'var(--accent)'},{label:'Despesas do período',value:money(summary.monthlyExpenses ?? f.totalExpenses),tone:'var(--red)'},{label:'Saldo do período',value:money(summary.netBalance ?? f.netBalance),tone:'var(--cyan)'}]));
+      refreshIcons();
+    };
+    window.dv11SwitchTab = (tab) => { document.querySelectorAll('#module-dashboard-v11 .dv11-tab').forEach((node) => node.classList.toggle('active', node.getAttribute('onclick') === `dv11SwitchTab('${tab}')`)); document.querySelectorAll('#module-dashboard-v11 .dv11-panel').forEach((node) => node.classList.toggle('active', node.id === `panel-${tab}`)); };
+    window.dv11SaveLayout = () => { const order = []; document.querySelectorAll('#module-dashboard-v11 .dv11-widget-grid').forEach((grid) => grid.querySelectorAll('.dv11-widget').forEach((widget) => order.push({id:widget.id,parent:grid.id}))); const hidden = [...document.querySelectorAll('#module-dashboard-v11 .dv11-widget.hidden')].map((widget) => widget.id); localStorage.setItem('lifeos_dv11_order', JSON.stringify(order)); localStorage.setItem('lifeos_dv11_hidden', JSON.stringify(hidden)); };
+    const restoreLayout = () => { try { const order = JSON.parse(localStorage.getItem('lifeos_dv11_order') || '[]'); const hidden = JSON.parse(localStorage.getItem('lifeos_dv11_hidden') || '[]'); order.forEach(({id,parent}) => { const widget = byId(id), grid = byId(parent); if (widget && grid) grid.appendChild(widget); }); hidden.forEach((id) => byId(id)?.classList.add('hidden')); } catch (_) {} };
+    window.dv11RemoveWidget = (id) => { byId(id)?.classList.add('hidden'); window.dv11SaveLayout(); };
+    window.dv11ToggleEdit = () => { state.edit = !state.edit; document.querySelectorAll('#module-dashboard-v11 .dv11-widget-grid').forEach((grid) => grid.classList.toggle('edit-mode', state.edit)); byId('dv11-edit-badge')?.classList.toggle('visible', state.edit); };
+    window.dv11OpenCatalog = () => { const grid = byId('dv11CatalogGrid'); if (grid) grid.innerHTML = widgetIds.map((id) => { const widget = byId(id); const visible = widget && !widget.classList.contains('hidden'); const title = widget?.querySelector('.dv11-widget-title')?.textContent || id; return `<button class="dv11-catalog-item${visible ? ' added' : ''}" type="button" onclick="dv11ToggleCatalogWidget('${id}')"><strong>${esc(title)}</strong><div style="font-size:11px;color:var(--text-muted);margin-top:4px">${visible ? 'Em exibição' : 'Adicionar ao painel'}</div></button>`; }).join(''); byId('dv11CatalogOverlay')?.classList.add('open'); };
+    window.dv11CloseCatalog = () => byId('dv11CatalogOverlay')?.classList.remove('open');
+    window.dv11ToggleCatalogWidget = (id) => { byId(id)?.classList.toggle('hidden'); window.dv11SaveLayout(); window.dv11OpenCatalog(); };
+    async function load() {
+      render();
+      try {
+        const [briefResponse, analyticsResponse, financeResponse] = await Promise.all([fetch('/api/briefing',{credentials:'same-origin'}),fetch('/api/analytics-pro?module=all&period=7d',{credentials:'same-origin'}),fetch('/api/finance/hub?view=summary',{credentials:'same-origin'})]);
+        const [briefResult, analyticsResult, financeResult] = await Promise.all([briefResponse.json().catch(() => ({})),analyticsResponse.json().catch(() => ({})),financeResponse.json().catch(() => ({}))]);
+        if (!briefResponse.ok || !briefResult.ok) throw new Error(briefResult.error || 'Não foi possível carregar o briefing.');
+        state.briefing = briefResult.briefing;
+        state.analytics = analyticsResponse.ok && analyticsResult.ok ? analyticsResult.data : null;
+        state.finance = financeResponse.ok && financeResult.ok ? (financeResult.summary || financeResult.data || {}) : {};
+      } catch (error) {
+        state.briefing = { source:'empty', metrics:{}, agenda:[], habits:[], insights:[], priorities:[] };
+        set('dv11-status', `<span class="dv11-pill">Dados indisponíveis no momento</span>`);
+      }
+      render();
     }
-    dv11SaveLayout();
-  };
-
-  // ── Save / Load Layout ──
-  window.dv11SaveLayout = function(){
-    var all = [];
-    document.querySelectorAll('.dv11-widget-grid').forEach(function(g){
-      g.querySelectorAll('.dv11-widget').forEach(function(w){
-        all.push({id:w.id,parent:g.id});
-      });
-    });
-    var hidden = [];
-    document.querySelectorAll('.dv11-widget.hidden').forEach(function(w){hidden.push(w.id);});
-    try{
-      localStorage.setItem('lifeos_dv11_order',JSON.stringify(all));
-      localStorage.setItem('lifeos_dv11_hidden',JSON.stringify(hidden));
-    }catch(e){}
-  };
-
-  function dv11LoadLayout(){
-    try{
-      var order = JSON.parse(localStorage.getItem('lifeos_dv11_order')||'[]');
-      var hidden = JSON.parse(localStorage.getItem('lifeos_dv11_hidden')||'[]');
-      order.forEach(function(item){
-        var el = document.getElementById(item.id);
-        if(el && item.parent){
-          var parent = document.getElementById(item.parent);
-          if(parent) parent.appendChild(el);
-        }
-      });
-      hidden.forEach(function(id){
-        var el = document.getElementById(id);
-        if(el) el.classList.add('hidden');
-      });
-    }catch(e){}
-  }
-  dv11LoadLayout();
-
-  // ── Keyboard ──
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape') dv11CloseCatalog();
-  });
-
-  // ── Toast ──
-  function dv11Toast(msg,type){
-    var colors={success:'#10B981',error:'#EF4444',info:'#6366F1',warning:'#F59E0B'};
-    var t=document.createElement('div');
-    t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:#1E293B;border:1px solid '+(colors[type]||'#6366F1')+';border-radius:12px;padding:12px 18px;font-size:13px;color:#F0F4FF;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeIn 0.3s ease;';
-    t.textContent=msg;
-    document.body.appendChild(t);
-    setTimeout(function(){t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(function(){t.remove();},300);},2500);
-  }
-})();
-</script>
+    restoreLayout(); window.LifeOSCommandCenter = { load, state }; window.setTimeout(load,0);
+    const date = byId('d11-date'); if (date) date.textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  })();
+  </script>
 </div>
 <!-- END module-dashboard-v11 -->

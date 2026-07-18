@@ -1970,7 +1970,7 @@
   });
 
   // ─── Billing buttons ───────────────────────────────────────────
-  document.querySelector('#page-billing .btn-primary')?.addEventListener('click', () => {
+  document.querySelector('#page-billing .btn-primary')?.addEventListener('click', async () => {
     showToast('Redirecionando para checkout Enterprise...', 'info');
     try {
       const r = await fetch('/api/billing/checkout', {
@@ -2490,19 +2490,19 @@
     'analytics-goals': 'module-analytics-container',
   };
   const _moduleFiles = {
-    'module-finance-container': 'modules/finance',
-    'module-communication-container': 'modules/communication',
-    'module-email-container': 'modules/email',
-    'module-calendar-container': 'modules/calendar',
-    'module-ai-center-container': 'modules/ai-center',
-    'module-documents-container': 'modules/documents',
-    'module-productivity-container': 'modules/productivity',
-    'module-marketplace-container': 'modules/marketplace',
-    'module-app-ecosystem-container': 'modules/app-ecosystem',
-    'module-integration-center-container': 'modules/integration-center',
-    'module-personal-hub-container': 'modules/personal-hub',
-    'module-enterprise-settings-container': 'modules/enterprise-settings',
-    'module-observability-container': 'modules/observability',
+    'module-finance-container': 'modules/live-surface',
+    'module-communication-container': 'modules/live-surface',
+    'module-email-container': 'modules/live-surface',
+    'module-calendar-container': 'modules/live-surface',
+    'module-ai-center-container': 'modules/live-surface',
+    'module-documents-container': 'modules/live-surface',
+    'module-productivity-container': 'modules/live-surface',
+    'module-marketplace-container': 'modules/live-surface',
+    'module-app-ecosystem-container': 'modules/live-surface',
+    'module-integration-center-container': 'modules/live-surface',
+    'module-personal-hub-container': 'modules/live-surface',
+    'module-enterprise-settings-container': 'modules/live-surface',
+    'module-observability-container': 'modules/live-surface',
     'module-command-center-container': 'modules/dashboard-v11',
     'module-identity-container': 'modules/identity',
     'module-file-center-container': 'modules/file-center',
@@ -2537,7 +2537,10 @@
         oldScript.replaceWith(script);
       });
       _loadedModules.add(containerId);
-      if (containerId === 'module-ai-center-container') setTimeout(aiLoadPreferences, 0);
+      if (containerId === 'module-ai-center-container' && file !== 'modules/live-surface') setTimeout(aiLoadPreferences, 0);
+      if (containerId === 'module-automation-container' && typeof window.automationInit === 'function') {
+        setTimeout(() => window.automationInit(), 0);
+      }
     } catch(e) { console.warn('Module load error:', containerId, e); }
   }
   // Override showPage to load modules on demand
