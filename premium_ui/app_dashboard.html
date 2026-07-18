@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Dashboard — LifeOS Enterprise v32.1</title>
+  <title>Dashboard — LifeOS Enterprise v36.0.0</title>
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -917,7 +917,7 @@
     .toggle-switch input:checked + .toggle-slider:before { transform:translateX(18px); }
     .active-filter { background:var(--accent) !important;color:#fff !important;border-color:var(--accent) !important; }
 
-    /* ═══ ENTERPRISE UX v32.1 — Microanimações e Refinamentos ═══ */
+    /* ═══ ENTERPRISE UX v36.0.0 — Microanimações e Refinamentos ═══ */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
@@ -979,7 +979,7 @@
     /* Loading skeleton */
     .skeleton { background: linear-gradient(90deg, var(--bg-elevated) 25%, rgba(99,102,241,0.08) 50%, var(--bg-elevated) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
 
-    /* ═══ ENTERPRISE ONBOARDING v32.1 — Phase 119 ═══ */
+    /* ═══ ENTERPRISE ONBOARDING v36.0.0 — Phase 119 ═══ */
     #modal-onboarding { z-index: 1200; }
     #modal-onboarding .modal-box { max-width: 760px; max-height: calc(100vh - 40px); overflow: auto; padding: 0; }
     .onboarding-shell { min-height: 520px; display: flex; flex-direction: column; }
@@ -1072,7 +1072,7 @@
       <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
       <div style="flex:1;min-width:0">
         <div class="sidebar-title">LifeOS</div>
-        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v32.1</div>
+        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v36.0.0</div>
       </div>
     </div>
     <nav class="sidebar-nav">
@@ -1182,7 +1182,7 @@
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <!-- ═══ ENTERPRISE v11 ═══ -->
-      <div class="nav-section-label">Enterprise v32.1</div>
+      <div class="nav-section-label">Enterprise v36.0.0</div>
       <div class="nav-item" onclick="showPage('command-center')">
         <div class="nav-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><span>Command Center</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
@@ -1222,7 +1222,7 @@
         <div class="user-avatar" id="sidebar-avatar" style="background:var(--gradient-primary);box-shadow:0 0 10px rgba(99,102,241,0.3)">U</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Carregando...</div>
-          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v32.1</div>
+          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v36.0.0</div>
         </div>
         <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);flex-shrink:0"></div>
       </div>
@@ -2050,7 +2050,7 @@
     el.textContent = msg;
   }
 
-  // ─── Enterprise Onboarding v32.1 — Phase 119 ─────────────────────────
+  // ─── Enterprise Onboarding v36.0.0 — Phase 119 ─────────────────────────
   const ONBOARDING_STORAGE_KEY = 'lifeos_enterprise_onboarding_v1';
   const ONBOARDING_STEPS = [
     { id: 'welcome', kicker: 'Configuração inicial', title: 'Bem-vindo ao seu LifeOS', copy: 'Em poucos minutos, vamos adaptar o ambiente ao seu perfil, às suas prioridades e ao seu modo de trabalhar.' },

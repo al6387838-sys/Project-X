@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 34.0.0 (Phases 264-269 — DB Optimization, Automation Engine, Comm Hub, Analytics, Security, Gold Release)
+// Version: 36.0.0 (Phases 264-269 — DB Optimization, Automation Engine, Comm Hub, Analytics, Security, Gold Release)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -187,7 +187,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v35.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v36.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -202,7 +202,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '34.0.0',
+  version: '36.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -242,7 +242,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '34.0.0',
+  version: '36.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -273,10 +273,10 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v35.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v36.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 34.0.0`);
+console.log(`  Version       : 36.0.0`);
 console.log(`  Build ID      : ${buildId}`);
 console.log(`  Phases        : 264-269 — DB Optimization, Automation Engine, Comm Hub, Analytics, Security, Gold Release`);
 console.log(`  Modules       : 39 total`);
