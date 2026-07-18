@@ -1,6 +1,6 @@
 {
   "name": "lifeos-enterprise",
-  "version": "35.0.0",
+  "version": "36.0.0",
   "private": true,
   "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance, integrações OAuth 2.0 e automação.",
   "scripts": {
