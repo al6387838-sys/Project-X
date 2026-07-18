@@ -1,283 +1,211 @@
-<!-- LifeOS Enterprise v11.0 — Automation Studio (Phase 114) -->
+<!-- LifeOS Enterprise v34.0 — Automation Engine (Phase 265) — Dados reais via /api/automations -->
 <div id="module-automation" style="display:none">
-
-<!-- ─── AUTOMATION STUDIO ─── -->
 <div class="page" id="page-automation">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Automation Studio</div>
-      <div class="page-subtitle">Fluxos de automação, gatilhos, condições e agendamento</div>
+      <div class="page-title"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Automation Engine</div>
+      <div class="page-subtitle">Centro de automações enterprise — gatilhos, regras, ações e agendamentos reais</div>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="autoTab('flows')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Fluxos</button>
-      <button class="btn btn-ghost" onclick="autoTab('scheduler')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Scheduler</button>
-      <button class="btn btn-ghost" onclick="autoTab('templates')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Templates</button>
-      <button class="btn btn-primary" onclick="autoNewFlow()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Fluxo</button>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-    <div style="padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
-      <div style="font-size:20px;font-weight:800;color:var(--accent)">7</div>
-      <div style="font-size:11px;color:var(--text-muted)">Fluxos ativos</div>
-    </div>
-    <div style="padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
-      <div style="font-size:20px;font-weight:800;color:var(--green)">142</div>
-      <div style="font-size:11px;color:var(--text-muted)">Execuções hoje</div>
-    </div>
-    <div style="padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
-      <div style="font-size:20px;font-weight:800;color:var(--purple)">98.2%</div>
-      <div style="font-size:11px;color:var(--text-muted)">Taxa de sucesso</div>
-    </div>
-    <div style="padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
-      <div style="font-size:20px;font-weight:800;color:var(--cyan)">3</div>
-      <div style="font-size:11px;color:var(--text-muted)">Aguardando</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="automationTab('logs')"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs</button>
+      <button class="btn btn-ghost" onclick="automationTab('types')"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i> Tipos</button>
+      <button class="btn btn-primary" onclick="automationOpenCreate()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Automação</button>
     </div>
   </div>
-
-  <!-- FLUXOS -->
-  <div id="auto-flows-tab">
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative">
-        <div style="position:absolute;top:16px;right:16px;width:32px;height:18px;border-radius:9px;background:var(--green);display:flex;align-items:center;padding:2px;cursor:pointer" onclick="autoToggleFlow(this,'notificar')">
-          <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700">Notificar reunião próxima</div>
-            <div style="font-size:12px;color:var(--text-muted)">Gatilho: 15min antes do evento no calendário</div>
-          </div>
-          <span style="font-size:10px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:700">ATIVO</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
-          <div><strong style="color:var(--text-primary)">Gatilho:</strong> Calendar event</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> Push + Email</div>
-          <div><strong style="color:var(--text-primary)">Último:</strong> Hoje 09:00</div>
-          <div><strong style="color:var(--text-primary)">Execuções:</strong> 24/mês</div>
-        </div>
-        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> evento calendário <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> tipo = reunião <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> enviar notificação 15min antes</div>
-        </div>
-      </div>
-
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative">
-        <div style="position:absolute;top:16px;right:16px;width:32px;height:18px;border-radius:9px;background:var(--green);display:flex;align-items:center;padding:2px;cursor:pointer" onclick="autoToggleFlow(this,'habits')">
-          <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700">Lembrete de hábitos pendentes</div>
-            <div style="font-size:12px;color:var(--text-muted)">Gatilho: Diariamente às 20h se hábito não completado</div>
-          </div>
-          <span style="font-size:10px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:700">ATIVO</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
-          <div><strong style="color:var(--text-primary)">Gatilho:</strong> Cron (20:00)</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> Notificação</div>
-          <div><strong style="color:var(--text-primary)">Último:</strong> Ontem 20:00</div>
-          <div><strong style="color:var(--text-primary)">Execuções:</strong> 30/mês</div>
-        </div>
-        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 20h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> hábito incompleto <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> enviar alerta</div>
-        </div>
-      </div>
-
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative">
-        <div style="position:absolute;top:16px;right:16px;width:32px;height:18px;border-radius:9px;background:var(--green);display:flex;align-items:center;padding:2px;cursor:pointer" onclick="autoToggleFlow(this,'backup')">
-          <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700">Backup automático semanal</div>
-            <div style="font-size:12px;color:var(--text-muted)">Gatilho: Todo domingo às 02:00</div>
-          </div>
-          <span style="font-size:10px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:700">ATIVO</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
-          <div><strong style="color:var(--text-primary)">Gatilho:</strong> Cron (dom 02:00)</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> Backup <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3</div>
-          <div><strong style="color:var(--text-primary)">Último:</strong> Dom 02:00</div>
-          <div><strong style="color:var(--text-primary)">Execuções:</strong> 4/mês</div>
-        </div>
-        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> dom 02h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> backup completo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> notificar</div>
-        </div>
-      </div>
-
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative">
-        <div style="position:absolute;top:16px;right:16px;width:32px;height:18px;border-radius:9px;background:var(--green);display:flex;align-items:center;padding:2px;cursor:pointer" onclick="autoToggleFlow(this,'finance')">
-          <div style="width:14px;height:14px;border-radius:50%;background:#fff;margin-left:auto;transition:0.2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700">Alerta de gasto acima do limite</div>
-            <div style="font-size:12px;color:var(--text-muted)">Gatilho: Quando gasto diário > R$ 500</div>
-          </div>
-          <span style="font-size:10px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:4px;font-weight:700">ATIVO</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
-          <div><strong style="color:var(--text-primary)">Gatilho:</strong> Evento financeiro</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> Alerta + Log</div>
-          <div><strong style="color:var(--text-primary)">Último:</strong> 2 dias atrás</div>
-          <div><strong style="color:var(--text-primary)">Execuções:</strong> 3/mês</div>
-        </div>
-        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> gasto registrado <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Se</strong> valor > R$500 <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> alerta push + log</div>
-        </div>
-      </div>
-
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;position:relative">
-        <div style="position:absolute;top:16px;right:16px;width:32px;height:18px;border-radius:9px;background:var(--border);display:flex;align-items:center;padding:2px;cursor:pointer" onclick="autoToggleFlow(this,'daily')">
-          <div style="width:14px;height:14px;border-radius:50%;background:#fff;transition:0.2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
-          <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700">Resumo diário via AI</div>
-            <div style="font-size:12px;color:var(--text-muted)">Gatilho: Diariamente às 07:00 — gerar resumo com IA</div>
-          </div>
-          <span style="font-size:10px;padding:3px 8px;background:rgba(255,255,255,0.05);color:var(--text-muted);border-radius:4px;font-weight:700">PAUSADO</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px;color:var(--text-secondary)">
-          <div><strong style="color:var(--text-primary)">Gatilho:</strong> Cron (07:00)</div>
-          <div><strong style="color:var(--text-primary)">Ação:</strong> AI resumo + Email</div>
-          <div><strong style="color:var(--text-primary)">Último:</strong> 3 dias atrás</div>
-          <div><strong style="color:var(--text-primary)">Execuções:</strong> 0/mês</div>
-        </div>
-        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:var(--radius-sm);font-size:12px">
-          <div style="color:var(--text-muted);margin-bottom:4px">Fluxo: <strong style="color:var(--text-primary)">Quando</strong> 07h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> <strong style="color:var(--text-primary)">Então</strong> AI gera resumo diário <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> enviar por email</div>
-        </div>
-      </div>
+  <!-- KPIs reais -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px">
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-total" style="font-size:22px;font-weight:800;color:var(--accent)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Total de automações</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-active" style="font-size:22px;font-weight:800;color:var(--green)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Ativas</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-executions" style="font-size:22px;font-weight:800;color:var(--purple)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Execuções totais</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-logs" style="font-size:22px;font-weight:800;color:var(--cyan)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Logs registrados</div>
     </div>
   </div>
-
-  <!-- SCHEDULER -->
-  <div id="auto-scheduler-tab" style="display:none">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Jobs Agendados</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
-            <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">07:00</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600">Resumo diário AI</div><div style="font-size:10px;color:var(--text-muted)">Diário · Pausado</div></div>
-            <label style="width:32px;height:16px;background:var(--border);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" style="opacity:0;width:0"/><span style="position:absolute;left:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
-          </div>
-          <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
-            <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">20:00</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600">Lembrete hábitos</div><div style="font-size:10px;color:var(--text-muted)">Diário · Ativo</div></div>
-            <label style="width:32px;height:16px;background:var(--green);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" checked style="opacity:0;width:0"/><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
-          </div>
-          <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
-            <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">Dom 02:00</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600">Backup semanal</div><div style="font-size:10px;color:var(--text-muted)">Semanal · Ativo</div></div>
-            <label style="width:32px;height:16px;background:var(--green);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" checked style="opacity:0;width:0"/><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
-          </div>
-          <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
-            <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">Seg 08:00</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600">Resumo semanal</div><div style="font-size:10px;color:var(--text-muted)">Semanal · Ativo</div></div>
-            <label style="width:32px;height:16px;background:var(--green);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" checked style="opacity:0;width:0"/><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
-          </div>
-          <div style="padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md);display:flex;align-items:center;gap:10px">
-            <div style="font-size:11px;color:var(--text-muted);width:70px;flex-shrink:0">1º/Mês</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600">Relatório financeiro</div><div style="font-size:10px;color:var(--text-muted)">Mensal · Ativo</div></div>
-            <label style="width:32px;height:16px;background:var(--green);border-radius:8px;display:inline-block;position:relative;cursor:pointer"><input type="checkbox" checked style="opacity:0;width:0"/><span style="position:absolute;right:2px;top:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s"></span></label>
-          </div>
-        </div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="autoNewSchedule()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Job</button>
-      </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Histórico de Execuções</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Hoje</span><span>Backup diário</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.3s</span>
-          </div>
-          <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Hoje</span><span>Lembrete hábitos</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.1s</span>
-          </div>
-          <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Ontem</span><span>Alerta financeiro</span><span style="color:var(--amber)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Skip</span><span style="color:var(--text-muted)">—</span>
-          </div>
-          <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
-            <span style="color:var(--text-muted)">Ontem</span><span>Reunião notificação</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">0.2s</span>
-          </div>
-          <div style="display:grid;grid-template-columns:80px 1fr 60px 80px;gap:8px;padding:8px;font-size:12px">
-            <span style="color:var(--text-muted)">2d atrás</span><span>Backup semanal</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</span><span style="color:var(--text-muted)">2.1s</span>
-          </div>
-        </div>
-      </div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border)">
+    <button id="auto-tab-list" class="dv11-tab active" onclick="automationTab('list')"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i> Automações</button>
+    <button id="auto-tab-logs" class="dv11-tab" onclick="automationTab('logs')"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs</button>
+    <button id="auto-tab-types" class="dv11-tab" onclick="automationTab('types')"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i> Tipos disponíveis</button>
+  </div>
+  <div id="auto-tab-content-list">
+    <div id="automation-list-container">
+      <div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando automações...</div>
     </div>
   </div>
-
-  <!-- TEMPLATES -->
-  <div id="auto-templates-tab" style="display:none">
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('notificar')">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Notificação de Eventos</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Notificar sobre reuniões e eventos com antecedência configurável</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Calendar · Ação: Push + Email</div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
+  <div id="auto-tab-content-logs" style="display:none">
+    <div id="automation-logs-container"><div style="text-align:center;padding:40px;color:var(--text-muted)">Clique em "Logs" para carregar</div></div>
+  </div>
+  <div id="auto-tab-content-types" style="display:none">
+    <div id="automation-types-container"><div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando tipos...</div></div>
+  </div>
+</div>
+<!-- Modal -->
+<div id="automation-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:700">Nova Automação</h3>
+      <button class="btn btn-ghost" onclick="automationCloseModal()" style="padding:4px 8px">X</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Nome *</label><input id="auto-form-name" class="input" placeholder="Ex: Notificar novo cliente" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Descricao</label><input id="auto-form-desc" class="input" placeholder="Descricao opcional" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Gatilho *</label>
+        <select id="auto-form-trigger" class="input" style="width:100%">
+          <option value="">Selecione o gatilho...</option>
+          <option value="new_client">Novo cliente criado</option>
+          <option value="new_document">Novo documento criado</option>
+          <option value="new_project">Novo projeto criado</option>
+          <option value="new_task">Nova tarefa criada</option>
+          <option value="task_completed">Tarefa concluida</option>
+          <option value="task_overdue">Tarefa em atraso</option>
+          <option value="pipeline_changed">Pipeline alterado</option>
+          <option value="due_date_approaching">Vencimento se aproximando</option>
+          <option value="goal_reached">Meta atingida</option>
+          <option value="habit_streak">Streak de habito alcancado</option>
+          <option value="schedule">Agendamento (cron)</option>
+          <option value="manual">Execucao manual</option>
+        </select>
       </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('backups')">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Backup Automático</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Backup agendado de dados e configurações para armazenamento seguro</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron · Ação: Backup <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> S3</div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Acao principal *</label>
+        <select id="auto-form-action" class="input" style="width:100%">
+          <option value="">Selecione a acao...</option>
+          <option value="send_notification">Enviar notificacao interna</option>
+          <option value="create_task">Criar tarefa</option>
+          <option value="create_note">Criar nota</option>
+          <option value="log_event">Registrar evento</option>
+          <option value="webhook_call">Chamar webhook externo</option>
+          <option value="send_email">Enviar e-mail (requer SMTP)</option>
+          <option value="send_whatsapp">Enviar WhatsApp (requer credenciais)</option>
+        </select>
       </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('habits')">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Lembrete de Hábitos</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Lembrar de completar hábitos pendentes ao final do dia</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron 20h · Ação: Notificação</div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Titulo da acao</label><input id="auto-form-action-title" class="input" placeholder="Ex: Nova tarefa criada automaticamente" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Mensagem / Corpo</label><textarea id="auto-form-action-message" class="input" rows="3" placeholder="Mensagem ou corpo da acao" style="width:100%;resize:vertical"></textarea></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Status inicial</label>
+        <select id="auto-form-status" class="input" style="width:100%"><option value="active">Ativa</option><option value="inactive">Inativa</option></select>
       </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('finance')">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Alerta Financeiro</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Alertar quando gastos ultrapassam limites configurados</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Evento · Ação: Alerta + Log</div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
-      </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer" onclick="autoUseTemplate('daily')">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Resumo Diário AI</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Gerar resumo diário personalizado com IA e enviar por email</div>
-        <div style="font-size:11px;color:var(--accent-light)">Gatilho: Cron 07h · Ação: AI + Email</div>
-        <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px">Usar Template</button>
-      </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;cursor:pointer;border-style:dashed" onclick="autoNewFlow()">
-        <div style="font-size:24px;margin-bottom:8px;opacity:0.5"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:4px;opacity:0.5">Criar Fluxo do Zero</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Defina gatilhos, condições e ações manualmente</div>
+      <div id="auto-form-error" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);color:#ef4444;font-size:12px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-ghost" onclick="automationCloseModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="automationCreate()">Criar Automacao</button>
       </div>
     </div>
   </div>
 </div>
-
+</div>
 <script>
 (function(){
-  window.autoTab=function(tab){
-    document.querySelectorAll('#page-automation .btn-ghost[onclick*="autoTab"]').forEach(b=>b.classList.remove('btn-primary'));
-    var tabs=['flows','scheduler','templates'];
-    tabs.forEach(function(t){var el=document.getElementById('auto-'+t+'-tab');if(el)el.style.display='none';});
-    event.target.classList.add('btn-primary');event.target.classList.remove('btn-ghost');
-    var target=document.getElementById('auto-'+tab+'-tab');if(target)target.style.display='block';
+  let _autoTypes=null;
+  async function autoFetch(p,o={}){const r=await fetch(p,{credentials:'same-origin',...o});return r.json();}
+  function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  window.automationInit=async function(){await automationLoadList();};
+  window.automationTab=function(tab){
+    ['list','logs','types'].forEach(t=>{
+      const b=document.getElementById('auto-tab-'+t);
+      const c=document.getElementById('auto-tab-content-'+t);
+      if(b)b.classList.toggle('active',t===tab);
+      if(c)c.style.display=t===tab?'':'none';
+    });
+    if(tab==='logs')automationLoadLogs();
+    if(tab==='types')automationLoadTypes();
   };
-  window.autoToggleFlow=function(el,name){
-    var isOn=el.style.background==='var(--green)';
-    el.style.background=isOn?'var(--border)':'var(--green)';
-    showToast('Fluxo '+(isOn?'pausado':'ativado')+'!',isOn?'info':'success');
+  window.automationLoadList=async function(){
+    const c=document.getElementById('automation-list-container');
+    try{
+      const d=await autoFetch('/api/automations');
+      const a=d.automations||[];
+      document.getElementById('auto-kpi-total').textContent=d.total||0;
+      document.getElementById('auto-kpi-active').textContent=a.filter(x=>x.status==='active').length;
+      document.getElementById('auto-kpi-executions').textContent=a.reduce((s,x)=>s+(x.executionCount||0),0);
+      autoFetch('/api/automations?action=logs&pageSize=1').then(ld=>{document.getElementById('auto-kpi-logs').textContent=ld.total||0;}).catch(()=>{});
+      if(a.length===0){c.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:40px;opacity:0.3">&#x1F916;</div><div style="margin-top:12px;font-size:14px">Nenhuma automacao criada</div><div style="font-size:12px;margin-top:4px">Clique em Nova Automacao para comecar</div></div>';return;}
+      c.innerHTML=a.map(x=>`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:38px;height:38px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700">${escH(x.name)}</div><div style="font-size:12px;color:var(--text-muted)">${escH(x.description||'Sem descricao')}</div></div>
+          <span style="font-size:10px;padding:3px 8px;background:${x.status==='active'?'rgba(16,185,129,0.15)':'rgba(107,114,128,0.15)'};color:${x.status==='active'?'var(--green)':'var(--text-muted)'};border-radius:4px;font-weight:700">${x.status==='active'?'ATIVA':'INATIVA'}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;font-size:11px;color:var(--text-secondary);margin-bottom:12px">
+          <div><strong style="color:var(--text-primary)">Gatilho:</strong> ${escH(x.trigger?.type||'—')}</div>
+          <div><strong style="color:var(--text-primary)">Acoes:</strong> ${(x.actions||[]).length}</div>
+          <div><strong style="color:var(--text-primary)">Execucoes:</strong> ${x.executionCount||0}</div>
+          <div><strong style="color:var(--text-primary)">Ultima:</strong> ${x.lastExecutedAt?new Date(x.lastExecutedAt).toLocaleString('pt-BR'):'Nunca'}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="automationExecute('${escH(x.id)}')">Executar</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="automationToggle('${escH(x.id)}','${x.status==='active'?'inactive':'active'}')">${x.status==='active'?'Desativar':'Ativar'}</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="automationDelete('${escH(x.id)}')">Remover</button>
+        </div>
+      </div>`).join('');
+      if(window.lucide)lucide.createIcons();
+    }catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
   };
-  window.autoNewFlow=function(){ showToast('Criar novo fluxo','info'); };
-  window.autoNewSchedule=function(){ showToast('Novo job agendado','info'); };
-  window.autoUseTemplate=function(tpl){ showToast('Template aplicado: '+tpl,'success'); };
+  window.automationLoadLogs=async function(){
+    const c=document.getElementById('automation-logs-container');
+    c.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted)">Carregando...</div>';
+    try{
+      const d=await autoFetch('/api/automations?action=logs&pageSize=30');
+      const l=d.logs||[];
+      if(l.length===0){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted)">Nenhum log registrado</div>';return;}
+      c.innerHTML='<div style="display:flex;flex-direction:column;gap:8px">'+l.map(x=>`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;font-size:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><strong>${escH(x.triggerType||'manual')}</strong><span style="color:var(--text-muted)">${new Date(x.timestamp).toLocaleString('pt-BR')}</span></div><div style="color:var(--text-secondary)">${escH(x.message||'')}</div></div>`).join('')+'</div>';
+    }catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
+  };
+  window.automationLoadTypes=async function(){
+    const c=document.getElementById('automation-types-container');
+    if(_autoTypes){renderTypes(c,_autoTypes);return;}
+    try{const d=await autoFetch('/api/automations?action=types');_autoTypes=d;renderTypes(c,d);}
+    catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
+  };
+  function renderTypes(c,d){
+    const t=Object.entries(d.triggers||[]);const a=Object.entries(d.actions||[]);
+    c.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div><h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent)">Gatilhos (${t.length})</h4>${t.map(([k,v])=>`<div style="padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12px"><strong>${escH(k)}</strong><br><span style="color:var(--text-muted)">${escH(v.label)}</span><span style="margin-left:8px;font-size:10px;padding:2px 6px;background:rgba(99,102,241,0.15);color:var(--accent);border-radius:3px">${escH(v.category)}</span></div>`).join('')}</div>
+      <div><h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--green)">Acoes (${a.length})</h4>${a.map(([k,v])=>`<div style="padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12px"><strong>${escH(k)}</strong><br><span style="color:var(--text-muted)">${escH(v.label)}</span>${v.requiresCredential?'<span style="margin-left:8px;font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:3px">requer credencial</span>':''}</div>`).join('')}</div>
+    </div>`;
+  }
+  window.automationOpenCreate=function(){const m=document.getElementById('automation-modal');if(m)m.style.display='flex';};
+  window.automationCloseModal=function(){const m=document.getElementById('automation-modal');if(m)m.style.display='none';const e=document.getElementById('auto-form-error');if(e)e.style.display='none';};
+  window.automationCreate=async function(){
+    const name=document.getElementById('auto-form-name')?.value?.trim();
+    const desc=document.getElementById('auto-form-desc')?.value?.trim();
+    const trig=document.getElementById('auto-form-trigger')?.value;
+    const act=document.getElementById('auto-form-action')?.value;
+    const actTitle=document.getElementById('auto-form-action-title')?.value?.trim();
+    const actMsg=document.getElementById('auto-form-action-message')?.value?.trim();
+    const status=document.getElementById('auto-form-status')?.value;
+    if(!name){showAutoErr('Nome obrigatorio');return;}
+    if(!trig){showAutoErr('Selecione um gatilho');return;}
+    if(!act){showAutoErr('Selecione uma acao');return;}
+    try{
+      const d=await autoFetch('/api/automations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,description:desc,trigger:{type:trig},actions:[{type:act,params:{title:actTitle,message:actMsg}}],status})});
+      if(!d.ok){showAutoErr(d.error||'Erro ao criar');return;}
+      automationCloseModal();await automationLoadList();
+      if(window.showToast)showToast('Automacao criada','success');
+    }catch(err){showAutoErr(err.message);}
+  };
+  function showAutoErr(m){const e=document.getElementById('auto-form-error');if(e){e.textContent=m;e.style.display='block';}}
+  window.automationExecute=async function(id){
+    try{const d=await autoFetch('/api/automations?action=execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({automationId:id})});
+    if(d.ok){if(window.showToast)showToast('Executada com sucesso','success');await automationLoadList();}
+    else{if(window.showToast)showToast(d.error||'Erro','error');}}catch(err){if(window.showToast)showToast(err.message,'error');}
+  };
+  window.automationToggle=async function(id,s){
+    try{const d=await autoFetch('/api/automations',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:s})});if(d.ok)await automationLoadList();}catch{}
+  };
+  window.automationDelete=async function(id){
+    if(!confirm('Remover esta automacao?'))return;
+    try{await autoFetch('/api/automations?id='+id,{method:'DELETE'});await automationLoadList();}catch{}
+  };
+  const obs=new MutationObserver(()=>{const el=document.getElementById('module-automation');if(el&&el.style.display!=='none'){obs.disconnect();automationInit();}});
+  const t=document.getElementById('module-automation');if(t)obs.observe(t,{attributes:true,attributeFilter:['style']});
 })();
 </script>
-</div>
-<!-- END module-automation -->

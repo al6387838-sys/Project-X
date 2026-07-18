@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 33.0.0 (Phases 259-262 — Zero Mock Certification, Button Audit, UX Validation, Admin Enterprise)
+// Version: 34.0.0 (Phases 264-269 — DB Optimization, Automation Engine, Comm Hub, Analytics, Security, Gold Release)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -187,7 +187,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v33.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v34.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -202,7 +202,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '33.0.0',
+  version: '34.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -232,6 +232,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/profile-update','/api/sessions','/api/settings','/api/notifications','/api/workspaces',
     '/api/observability','/api/health','/api/integrations','/api/operation-audit',
     '/api/enterprise/rbac','/api/enterprise/certification','/api/enterprise/invite','/api/enterprise/members','/api/enterprise/config-center','/api/enterprise/onboarding','/api/enterprise-data','/api/crm',
+    '/api/automations','/api/comm-hub','/api/analytics-pro','/api/db-optimize','/api/security-audit',
   ],
   commit,
   builtAt,
@@ -241,13 +242,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '33.0.0',
+  version: '34.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
-  phases: '259-262',
+  phases: '264-269',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -272,14 +273,14 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v33.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v34.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 33.0.0`);
+console.log(`  Version       : 34.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Phases        : 259-262 — Zero Mock Certification, Button Audit, UX Validation, Admin Enterprise`);
-console.log(`  Modules       : 36 total`);
-console.log(`  APIs          : 40 endpoints`);
+console.log(`  Phases        : 264-269 — DB Optimization, Automation Engine, Comm Hub, Analytics, Security, Gold Release`);
+console.log(`  Modules       : 39 total`);
+console.log(`  APIs          : 45 endpoints`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);
