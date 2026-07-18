@@ -187,7 +187,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-v34.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-v35.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -273,7 +273,7 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise v34.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise v35.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
 console.log(`  Version       : 34.0.0`);
