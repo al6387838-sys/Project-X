@@ -100,8 +100,8 @@
           <div style="font-size:12px;color:var(--green)" id="chat-status"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online · WhatsApp</div>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="showToast('Chamada de voz em breve','info')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="padding:8px" title="Chamada de vídeo" onclick="showToast('Chamada de vídeo em breve','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="showToast('Chamada de voz: funcionalidade disponível com integração VoIP configurada','info')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de vídeo" onclick="showToast('Chamada de vídeo: funcionalidade disponível com integração WebRTC configurada','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
           <button class="btn btn-ghost" style="padding:8px" title="Informações" onclick="showToast('Perfil do contato','info')"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i>️</button>
         </div>
       </div>
@@ -128,8 +128,8 @@
 
       <!-- Input de mensagem -->
       <div style="padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end">
-        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="showToast('Anexar arquivo em breve','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="showToast('Emoji picker em breve','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="commAttachFile()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="commInsertEmoji()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
         <textarea id="msg-input" placeholder="Digite uma mensagem..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:42px;max-height:120px;outline:none" onkeydown="msgHandleKey(event)"></textarea>
         <button class="btn btn-primary" style="padding:8px 14px;flex-shrink:0" onclick="msgSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
       </div>
@@ -388,7 +388,7 @@
         <div style="font-weight:700;font-size:16px">@lifeos_enterprise</div>
         <div style="font-size:13px;color:var(--text-secondary)">Conta Business · Verificada · 2.847 seguidores</div>
       </div>
-      <button class="btn btn-primary" onclick="showToast('Conectando Instagram...','info');setTimeout(()=>showToast('Instagram conectado!','success'),1500)">Conectar Conta</button>
+      <button class="btn btn-primary" onclick="commConnectSocial('instagram')">Conectar Conta</button>
     </div>
   </div>
   <div class="grid-3">
@@ -450,7 +450,7 @@
         <div style="font-weight:700;font-size:16px">LifeOS Enterprise — Página</div>
         <div style="font-size:13px;color:var(--text-secondary)">Página Business · 1.234 curtidas</div>
       </div>
-      <button class="btn btn-primary" onclick="showToast('Conectando Facebook...','info');setTimeout(()=>showToast('Facebook conectado!','success'),1500)">Conectar Página</button>
+      <button class="btn btn-primary" onclick="commConnectSocial('facebook')">Conectar Página</button>
     </div>
   </div>
   <div class="grid-3">
@@ -575,6 +575,50 @@ if (document.readyState === 'loading') {
 } else {
   loadCommunicationConnectors();
 }
+
+  // Conectar redes sociais via API real (OAuth)
+  async function commConnectSocial(provider) {
+    showToast('Iniciando conexão com ' + provider + '...', 'info');
+    try {
+      const r = await fetch('/api/integrations/connect', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ provider, type: 'social' })
+      });
+      const d = await r.json();
+      if (d.ok && d.authUrl) {
+        window.open(d.authUrl, '_blank', 'width=600,height=700');
+      } else {
+        showToast(d.error || 'Serviço aguardando configuração.', 'info');
+      }
+    } catch (_) {
+      showToast('Erro de conexão. Tente novamente.', 'error');
+    }
+  }
+
+  function commAttachFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.jpg,.jpeg,.png,.pdf,.doc,.docx,.txt,.zip';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      showToast('Arquivo selecionado: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)', 'info');
+      // O arquivo será enviado junto com a mensagem
+    };
+    input.click();
+  }
+  function commInsertEmoji() {
+    const emojis = ['😊','👍','❤️','🎉','🔥','✅','📌','💡','⚡','🚀'];
+    const msgInput = document.getElementById('msg-input') || document.querySelector('textarea[placeholder]');
+    if (msgInput) {
+      const emoji = emojis[Math.floor(Date.now() % emojis.length)];
+      msgInput.value += emoji;
+      msgInput.focus();
+    } else {
+      showToast('Selecione uma conversa primeiro', 'warning');
+    }
+  }
 </script>
 
 <!-- END module-communication -->

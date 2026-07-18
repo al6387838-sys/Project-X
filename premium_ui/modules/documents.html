@@ -140,7 +140,7 @@
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('documents')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
       <button class="btn btn-ghost" onclick="showToast('Download iniciado','info')">⬇️ Baixar</button>
-      <button class="btn btn-ghost" onclick="showToast('Compartilhamento em breve','info')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+      <button class="btn btn-ghost" onclick="docShare(currentDoc?.id)"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
       <button class="btn btn-primary" onclick="openModal('modal-sign-doc')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Assinar</button>
     </div>
   </div>

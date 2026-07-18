@@ -196,7 +196,7 @@ export async function onRequestPost({ request, env }) {
       if (!connections[provider]?.accessToken) return json(400, { ok: false, error: 'Serviço aguardando configuração.' });
       const queueRaw = await kv.get(`comm:queue:${session.sub}`);
       const queue = queueRaw ? JSON.parse(queueRaw) : [];
-      const jobId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      const jobId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Date.now().toString(36).slice(-6));
       queue.push({ id: jobId, provider, action: 'sync', status: 'pending', createdAt: new Date().toISOString() });
       await kv.put(`comm:queue:${session.sub}`, JSON.stringify(queue.slice(-100)));
       connections[provider].syncStatus = 'syncing'; connections[provider].lastSyncAttempt = new Date().toISOString();

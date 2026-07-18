@@ -454,6 +454,48 @@
         btn.classList.add('active');
       });
     });
+
+    // Carrega dados reais de observability via API
+    async function obsLoadRealData() {
+      try {
+        const r = await fetch('/api/observability', { credentials: 'same-origin' });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!d.ok) return;
+        // Atualizar health cards com dados reais
+        if (d.services && Array.isArray(d.services)) {
+          d.services.forEach(svc => {
+            const cards = document.querySelectorAll('.health-card');
+            cards.forEach(card => {
+              const nameEl = card.querySelector('.health-service');
+              if (nameEl && nameEl.textContent.trim().toLowerCase().includes(svc.id.toLowerCase())) {
+                const uptimeEl = card.querySelector('.health-uptime');
+                const dotEl = card.querySelector('.health-dot');
+                const barEl = card.querySelector('.health-bar-fill');
+                if (uptimeEl) uptimeEl.textContent = (svc.uptime || 100).toFixed(2) + '%';
+                if (dotEl) {
+                  dotEl.className = 'health-dot ' + (svc.status === 'healthy' ? 'up' : svc.status === 'degraded' ? 'degraded' : 'down');
+                }
+                if (barEl) {
+                  barEl.style.width = (svc.uptime || 100) + '%';
+                  barEl.style.background = svc.status === 'healthy' ? 'var(--green)' : svc.status === 'degraded' ? 'var(--amber)' : 'var(--red)';
+                }
+              }
+            });
+          });
+        }
+        // Atualizar métricas com dados reais
+        if (d.metrics) {
+          const m = d.metrics;
+          const vals = document.querySelectorAll('.metric-value');
+          if (vals[0] && m.requestsPerMin !== undefined) vals[0].textContent = m.requestsPerMin.toLocaleString('pt-BR');
+          if (vals[1] && m.p95Latency !== undefined) vals[1].textContent = m.p95Latency + 'ms';
+          if (vals[2] && m.errorRate !== undefined) vals[2].textContent = m.errorRate.toFixed(2) + '%';
+          if (vals[3] && m.activeSessions !== undefined) vals[3].textContent = m.activeSessions.toLocaleString('pt-BR');
+        }
+      } catch (_) { /* ignorar falhas */ }
+    }
+    obsLoadRealData();
   </script>
 </body>
 </html>

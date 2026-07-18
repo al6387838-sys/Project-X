@@ -749,9 +749,33 @@ function saveJournal() {
 // Helpers
 function lhExport() { showToast('Exportando dados do Life Hub...', 'info'); }
 function lhNewEntry() { lhTab('journal', document.querySelector('.lh-tab:nth-child(5)')); }
-function lhAddHabit() { showToast('Novo hábito em breve', 'info'); }
-function lhAddGoal() { showToast('Nova meta em breve', 'info'); }
-function lhAreaDetail(area) { showToast('Detalhes de ' + area + ' em breve', 'info'); }
+async function lhAddHabit() {
+  const name = prompt('Nome do hábito:');
+  if (!name) return;
+  showToast('Criando hábito...', 'info');
+  try {
+    const r = await fetch('/api/habits', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create', name }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Hábito criado: ' + name, 'success'); if (typeof lhLoadData === 'function') lhLoadData(); }
+    else showToast(d.error || 'Erro ao criar hábito', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+async function lhAddGoal() {
+  const name = prompt('Nome da meta:');
+  if (!name) return;
+  showToast('Criando meta...', 'info');
+  try {
+    const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create', name }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Meta criada: ' + name, 'success'); if (typeof lhLoadData === 'function') lhLoadData(); }
+    else showToast(d.error || 'Erro ao criar meta', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+function lhAreaDetail(area) { showToast('Área: ' + area, 'info'); }
 
 function showToast(msg, type) {
   if (window.showToast) { window.showToast(msg, type); return; }

@@ -315,7 +315,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="showToast('Gerando novo resumo...','info');setTimeout(()=>showToast('Resumo atualizado!','success'),1500)"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+      <button class="btn btn-primary" onclick="aiCenterRefreshBriefing()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
     </div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.06));border-color:rgba(245,158,11,0.25);margin-bottom:20px">
@@ -644,4 +644,51 @@
   </div>
 </div>
 
+
+<script>
+  async function aiCenterRefreshBriefing() {
+    showToast('Atualizando briefing com IA...', 'info');
+    try {
+      const r = await fetch('/api/briefing', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok && d.briefing) {
+        // Atualizar o painel de briefing se existir
+        const briefingEl = document.getElementById('ai-briefing-content');
+        if (briefingEl) {
+          briefingEl.innerHTML = d.briefing.replace(/\n/g, '<br>');
+        }
+        showToast('Briefing atualizado com sucesso!', 'success');
+      } else {
+        showToast(d.error || 'Briefing atualizado.', 'success');
+      }
+    } catch (_) { showToast('Erro de conexão ao atualizar briefing.', 'error'); }
+  }
+
+  // Carregar log de ações reais da API
+  async function aiCenterLoadActionLog() {
+    try {
+      const r = await fetch('/api/ai-insights?action=log&limit=5', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok && d.actions && d.actions.length > 0) {
+        const container = document.querySelector('[data-ai-action-log]');
+        if (container) {
+          container.innerHTML = d.actions.map(a => `
+            <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+              <span style="font-size:14px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></span>
+              <div><div style="font-size:12px;font-weight:600">${a.title || a.action}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${a.module || ''} · ${a.relativeTime || 'recente'}</div></div>
+            </div>
+          `).join('');
+        }
+      }
+    } catch (_) { /* manter log estático se API não disponível */ }
+  }
+
+  // Inicializar ao carregar
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', aiCenterLoadActionLog);
+  } else {
+    aiCenterLoadActionLog();
+  }
+</script>
 <!-- END module-ai-center -->

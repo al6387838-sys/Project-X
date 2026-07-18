@@ -614,36 +614,43 @@
 </div>
 
 <script>
-// Users data
-const usersData = [
-  { name: 'Administrador', email: 'admin@lifeos.app', tenant: 'LifeOS', role: 'Super Admin', lastAccess: 'Agora', status: 'active' },
-  { name: 'Marina Costa', email: 'marina@techcorp.com', tenant: 'TechCorp Brasil', role: 'Admin', lastAccess: 'há 2h', status: 'active' },
-  { name: 'Rafael Lima', email: 'rafael@techcorp.com', tenant: 'TechCorp Brasil', role: 'Membro', lastAccess: 'há 5h', status: 'active' },
-  { name: 'João Silva', email: 'joao@startupxyz.com', tenant: 'StartupXYZ', role: 'Admin', lastAccess: 'Ontem', status: 'active' },
-  { name: 'Ana Ferreira', email: 'ana@alpha.com', tenant: 'Consultoria Alpha', role: 'Admin', lastAccess: 'há 3h', status: 'active' },
-  { name: 'Carlos Mendes', email: 'carlos@medgroup.com', tenant: 'MedGroup', role: 'Admin', lastAccess: 'há 5 dias', status: 'suspended' },
-];
+// Dados carregados via API real — zero arrays estáticos
+let usersData = [];
+let auditData = [];
+let flagsData = [];
 
-const auditData = [
-  { time: '09:32:14', event: 'Tenant criado', actor: 'admin@lifeos.app', tenant: 'FinTech Pro', ip: '189.28.x.x', result: 'success' },
-  { time: '08:15:03', event: 'Alerta de uso', actor: 'Sistema', tenant: 'StartupXYZ', ip: '-', result: 'warning' },
-  { time: '07:44:22', event: 'Pagamento processado', actor: 'Stripe Webhook', tenant: 'TechCorp Brasil', ip: '-', result: 'success' },
-  { time: '06:20:45', event: 'IP bloqueado', actor: 'WAF', tenant: '-', ip: '185.220.101.45', result: 'blocked' },
-  { time: '05:12:08', event: 'Login admin', actor: 'admin@lifeos.app', tenant: 'LifeOS', ip: '177.92.x.x', result: 'success' },
-  { time: '04:30:00', event: 'Backup automático', actor: 'Sistema', tenant: 'Todos', ip: '-', result: 'success' },
-  { time: '03:00:00', event: 'Health check', actor: 'Monitor', tenant: '-', ip: '-', result: 'success' },
-  { time: 'Ontem 22:15', event: 'Deploy v10.0.0-rc.1', actor: 'CI/CD Pipeline', tenant: '-', ip: '-', result: 'success' },
-];
+async function eaLoadUsers() {
+  const tbody = document.getElementById('ea-users-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando usuários...</td></tr>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    usersData = (d.ok && Array.isArray(d.users)) ? d.users : [];
+  } catch (_) { usersData = []; }
+  renderUsers();
+}
 
-const flagsData = [
-  { name: 'ai_copilot_v2', desc: 'Nova versão do AI Copilot com GPT-4o', enabled: true, rollout: 100, env: 'production' },
-  { name: 'life_hub_v1', desc: 'Módulo Life Hub completo', enabled: true, rollout: 100, env: 'production' },
-  { name: 'integration_marketplace_v2', desc: 'Marketplace de integrações v2', enabled: true, rollout: 100, env: 'production' },
-  { name: 'enterprise_admin_v2', desc: 'Painel admin enterprise aprimorado', enabled: true, rollout: 100, env: 'production' },
-  { name: 'ai_voice_input', desc: 'Entrada por voz no AI Copilot', enabled: false, rollout: 0, env: 'staging' },
-  { name: 'real_time_collab', desc: 'Colaboração em tempo real', enabled: false, rollout: 10, env: 'staging' },
-  { name: 'mobile_app_v2', desc: 'App mobile v2 com React Native', enabled: false, rollout: 0, env: 'development' },
-];
+async function eaLoadAudit() {
+  const tbody = document.getElementById('ea-audit-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando auditoria...</td></tr>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    auditData = (d.ok && Array.isArray(d.recentAudit)) ? d.recentAudit : [];
+  } catch (_) { auditData = []; }
+  renderAudit();
+}
+
+async function eaLoadFlags() {
+  const el = document.getElementById('ea-flags-list');
+  if (el) el.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px">Carregando feature flags...</div>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    flagsData = (d.ok && Array.isArray(d.flags)) ? d.flags : [];
+  } catch (_) { flagsData = []; }
+  renderFlags();
+}
 
 function renderUsers() {
   const tbody = document.getElementById('ea-users-tbody');
@@ -706,25 +713,64 @@ function eaTab(id, btn) {
   document.querySelectorAll('.ea-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('ea-' + id).classList.add('active');
   if (btn) btn.classList.add('active');
-  if (id === 'users') renderUsers();
-  if (id === 'audit') renderAudit();
-  if (id === 'features') renderFlags();
+  // Carrega dados reais da API ao trocar de aba
+  if (id === 'users') eaLoadUsers();
+  if (id === 'audit') eaLoadAudit();
+  if (id === 'features') eaLoadFlags();
 }
 
 // Actions
 function eaExport() { showToast('Exportando relatório...', 'info'); }
 function eaEmergency() { if(confirm('Ativar modo de emergência?')) showToast('Modo de emergência ativado!', 'warning'); }
 function eaViewAlerts() { eaTab('security', document.querySelector('.ea-tab:nth-child(5)')); }
-function eaNewTenant() { showToast('Formulário de novo tenant em breve', 'info'); }
-function eaTenantDetail(name) { showToast('Detalhes de ' + name + ' em breve', 'info'); }
+async function eaNewTenant() {
+  const name = prompt('Nome do novo tenant:');
+  if (!name) return;
+  showToast('Criando tenant...', 'info');
+  try {
+    const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create_tenant', name }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Tenant criado: ' + name, 'success'); eaLoadData(); }
+    else showToast(d.error || 'Erro ao criar tenant', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+function eaTenantDetail(name) { showToast('Tenant: ' + name, 'info'); }
 function eaSuspend(name) { if(confirm('Suspender ' + name + '?')) showToast(name + ' suspenso', 'warning'); }
 function eaUpgrade(name) { showToast('Upgrade de ' + name + ' iniciado', 'success'); }
 function eaNotify(name) { showToast('Notificação enviada para ' + name, 'success'); }
-function eaNewUser() { showToast('Formulário de novo usuário em breve', 'info'); }
+async function eaNewUser() {
+  const email = prompt('E-mail do novo usuário:');
+  if (!email) return;
+  const role = prompt('Papel (admin/member):', 'member');
+  showToast('Convidando usuário...', 'info');
+  try {
+    const r = await fetch('/api/invite', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, role: role || 'member' }) });
+    const d = await r.json();
+    if (d.ok) showToast('Convite enviado para ' + email, 'success');
+    else showToast(d.error || 'Erro ao convidar usuário', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
 function eaEditUser(email) { showToast('Editando ' + email, 'info'); }
 function eaSuspendUser(email) { if(confirm('Suspender ' + email + '?')) showToast(email + ' suspenso', 'warning'); }
 function eaExportAudit() { showToast('Exportando log de auditoria...', 'info'); }
-function eaNewFlag() { showToast('Nova feature flag em breve', 'info'); }
+async function eaNewFlag() {
+  const key = prompt('Chave da feature flag (ex: beta_feature):');
+  if (!key) return;
+  const enabled = confirm('Ativar flag agora?');
+  showToast('Criando feature flag...', 'info');
+  try {
+    const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create_flag', key, enabled }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Flag criada: ' + key, 'success'); eaLoadData(); }
+    else showToast(d.error || 'Erro ao criar flag', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
 function eaRestartService() { if(confirm('Reiniciar serviços?')) showToast('Serviços reiniciados', 'success'); }
 function eaMaintenanceMode() { if(confirm('Ativar modo manutenção?')) showToast('Modo manutenção ativado', 'warning'); }
 

@@ -339,65 +339,7 @@ Se mantiver os hábitos atuais + adicionar journaling consistente, seu Life Scor
 let currentConv = 0;
 let isThinking = false;
 
-const aiResponses = [
-  `Ótima pergunta! Com base no seu contexto atual no LifeOS, posso analisar isso em detalhes.
-
-**Análise Personalizada**
-Considerando seus dados dos últimos 7 dias, identifiquei alguns padrões importantes que podem ajudar a responder sua pergunta.
-
-**Principais Insights:**
-- Seu desempenho está acima da média em 3 das 5 áreas de vida
-- Há uma correlação positiva entre seus hábitos matinais e produtividade diária
-- A consistência tem sido seu maior diferencial nas últimas 2 semanas
-
-**Recomendação:**
-Continue com a estratégia atual e considere adicionar uma revisão semanal aos domingos para consolidar os aprendizados.
-
-Posso aprofundar qualquer um desses pontos?`,
-
-  `Entendido! Vou criar um plano de ação personalizado para você.
-
-**Plano de Ação — Próximas 4 Semanas**
-
-**Semana 1-2: Consolidação**
-- Manter todos os hábitos existentes
-- Adicionar 5 minutos de planejamento noturno
-- Revisar metas toda segunda-feira
-
-**Semana 3-4: Expansão**
-- Introduzir novo hábito de journaling estruturado
-- Aumentar duração do exercício para 45 minutos
-- Iniciar prática de revisão mensal
-
-**KPIs para Acompanhar:**
-- Life Score: meta de 90+ em 30 dias
-- Taxa de conclusão de hábitos: 85%+
-- Progresso nas metas: 2 concluídas no período
-
-Quer que eu ajuste algum aspecto deste plano?`,
-
-  `Aqui está um exemplo de código para automatizar essa tarefa:
-
-\`\`\`javascript
-// LifeOS Automation Script
-async function analyzeHabits(userId) {
-  const habits = await lifeos.habits.getWeekly(userId);
-  const score = habits.reduce((acc, h) => {
-    return acc + (h.completed ? h.weight : 0);
-  }, 0);
-  
-  return {
-    score,
-    streak: habits.filter(h => h.completed).length,
-    recommendation: score > 80 ? 'Excelente!' : 'Pode melhorar'
-  };
-}
-\`\`\`
-
-Este script calcula automaticamente seu score semanal e gera recomendações. Posso adaptar para qualquer linguagem ou framework que você preferir.`,
-];
-
-let responseIdx = 0;
+// Respostas carregadas via API real — zero respostas estáticas
 
 function renderMessages() {
   const container = document.getElementById('ai-messages');
@@ -511,17 +453,17 @@ function aiSend() {
   input.style.height = 'auto';
   document.getElementById('ai-char-count').textContent = '0 / 4096';
   renderMessages();
-  showThinking();
+  showThinking(text);
 }
 
-function showThinking() {
+async function showThinking(userText) {
   isThinking = true;
   const container = document.getElementById('ai-messages');
   const thinkDiv = document.createElement('div');
   thinkDiv.className = 'ai-msg ai';
   thinkDiv.id = 'ai-thinking';
   thinkDiv.innerHTML = `
-    <div class="ai-msg-avatar ai-avatar-ai">\u{2726}</div>
+    <div class="ai-msg-avatar ai-avatar-ai">✦</div>
     <div class="ai-msg-content">
       <div class="ai-msg-bubble">
         <div class="ai-thinking">
@@ -534,16 +476,25 @@ function showThinking() {
   `;
   container.appendChild(thinkDiv);
   container.scrollTop = container.scrollHeight;
-
-  setTimeout(() => {
+  try {
+    const history = conversations[currentConv]?.messages?.slice(-10) || [];
+    const r = await fetch('/api/ai/platform', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'chat', message: userText, conversationId: conversations[currentConv]?.id || null })
+    });
+    const d = await r.json();
     thinkDiv.remove();
     const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-    const response = aiResponses[responseIdx % aiResponses.length];
-    responseIdx++;
+    const response = d.ok ? (d.reply || d.message || 'Sem resposta da IA.') : (d.error || 'Erro ao processar sua mensagem.');
     conversations[currentConv].messages.push({ role: 'ai', text: response, time: now });
-    isThinking = false;
-    renderMessages();
-  }, 1400);
+  } catch (_) {
+    thinkDiv.remove();
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    conversations[currentConv].messages.push({ role: 'ai', text: 'Erro de conexão com a IA. Verifique sua conexão e tente novamente.', time: now });
+  }
+  isThinking = false;
+  renderMessages();
 }
 
 function aiKeydown(e) {
@@ -579,10 +530,60 @@ function aiRegenerate() { showToast('Regenerando resposta...', 'info'); }
 function aiExport() { showToast('Exportando conversa...', 'info'); }
 function aiShare() { showToast('Link de compartilhamento copiado!', 'success'); }
 function aiClear() { if(confirm('Limpar conversa?')) { conversations[currentConv].messages = []; renderWelcome(); } }
-function aiAttach() { showToast('Anexar arquivo em breve', 'info'); }
-function aiContext() { showToast('Gerenciar contexto em breve', 'info'); }
-function aiVoice() { showToast('Entrada por voz em breve', 'info'); }
-function aiSelectModel() { showToast('Seletor de modelo em breve', 'info'); }
+async function aiAttach() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt,.pdf,.md,.csv,.json,.png,.jpg,.jpeg,.webp';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    showToast('Enviando arquivo: ' + file.name + '...', 'info');
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('context', 'ai_copilot');
+    try {
+      const r = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', body: fd });
+      const d = await r.json();
+      if (d.ok) showToast('Arquivo anexado: ' + file.name, 'success');
+      else showToast(d.error || 'Erro ao anexar arquivo', 'error');
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+  };
+  input.click();
+}
+function aiContext() {
+  const ctx = conversations[currentConv]?.messages?.length || 0;
+  showToast('Contexto atual: ' + ctx + ' mensagens', 'info');
+}
+function aiVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('Reconhecimento de voz não suportado neste navegador', 'warning');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.lang = 'pt-BR';
+  recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    const input = document.getElementById('ai-input');
+    if (input) { input.value = text; aiInputResize(input); }
+  };
+  recognition.onerror = () => showToast('Erro no reconhecimento de voz', 'error');
+  recognition.start();
+  showToast('Fale agora...', 'info');
+}
+async function aiSelectModel() {
+  showToast('Carregando modelos disponíveis...', 'info');
+  try {
+    const r = await fetch('/api/ai/platform?action=models', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok && d.models) {
+      const names = d.models.map(m => m.id).join(', ');
+      showToast('Modelos: ' + names, 'info');
+    } else {
+      showToast('Modelo padrão ativo', 'info');
+    }
+  } catch (_) { showToast('Modelo padrão ativo', 'info'); }
+}
 
 function showToast(msg, type) {
   if (window.showToast) { window.showToast(msg, type); return; }

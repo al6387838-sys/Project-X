@@ -481,7 +481,7 @@ function imToggle(id, btn) {
 function imSync(id) {
   const item = integrations.find(i => i.id === id);
   showToast('Sincronizando ' + item?.name + '...', 'info');
-  setTimeout(() => showToast('Sincronização concluída \u{2713}', 'success'), 1200);
+  fetch('/api/integrations/sync', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ integrationId: id }) }).then(r => r.json()).then(d => { if (d.ok) showToast('Sincroniza\u00e7\u00e3o conclu\u00edda \u2713', 'success'); else showToast(d.error || 'Erro ao sincronizar', 'error'); }).catch(() => showToast('Erro de conex\u00e3o', 'error'));
 }
 
 function imDisconnect(id) {
@@ -506,7 +506,7 @@ function imFilter(type, btn) {
   renderGrid('im-all-grid', filtered);
 }
 
-function imOpenDocs() { showToast('Documentação da API em breve', 'info'); }
+function imOpenDocs() { window.open('https://docs.lifeos.app/api', '_blank'); }
 function imRequestIntegration() { showToast('Solicitação enviada à equipe LifeOS', 'success'); }
 
 function showToast(msg, type) {

@@ -822,8 +822,9 @@
       if (data.user.role !== 'admin') { location.replace('/app'); return; }
       document.getElementById('admin-name').textContent = data.user.username;
       document.getElementById('admin-date').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      // Carregar métricas reais da API
+      // Carregar métricas e audit-log reais da API
       loadAdminMetrics();
+      loadAdminAuditLog();
     } catch (_) {
       location.replace('/login');
     }
@@ -854,6 +855,22 @@
       if (userSub && metrics.totalUsers) userSub.textContent = fmt(metrics.totalUsers) + ' usuários cadastrados';
     } catch (_) { /* API indisponível — manter valores exibidos */ }
   }
+  async function loadAdminAuditLog() {
+    try {
+      const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+      if (!r.ok) return;
+      const d = await r.json();
+      if (!d.ok || !d.recentAudit || d.recentAudit.length === 0) return;
+      const log = document.getElementById('audit-log');
+      if (!log) return;
+      // Substituir o log estático pelo real
+      log.innerHTML = d.recentAudit.map(entry => {
+        const icon = entry.action?.includes('login') ? '🔑' : entry.action?.includes('suspend') ? '🚫' : entry.action?.includes('create') ? '➕' : '📋';
+        const time = entry.at ? new Date(entry.at).toLocaleString('pt-BR') : 'Recente';
+        return `<div class="audit-item"><div class="audit-icon" style="background:rgba(99,102,241,0.15)">${icon}</div><div><div class="audit-action">${entry.action || 'Operação'}</div><div class="audit-detail">${entry.target || entry.detail || ''} · ${entry.by || 'admin'}</div><div class="audit-time">${time}</div></div></div>`;
+      }).join('');
+    } catch (_) { /* manter log estático se API indisponível */ }
+  }
 
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -866,18 +883,38 @@
     document.querySelector('.content').scrollTop = 0;
   }
 
-  function refreshData(btn) {
+  async function refreshData(btn) {
     if (!btn) return;
     btn.textContent = '↻ Atualizando...';
     btn.disabled = true;
-    setTimeout(() => { btn.textContent = '↻ Atualizar dados'; btn.disabled = false; }, 1500);
+    try {
+      const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) {
+        const m = d.metrics || {};
+        const fmt = v => v != null ? Number(v).toLocaleString('pt-BR') : '-';
+        const fmtCurrency = v => v != null ? 'R$ ' + Number(v / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-';
+        const kpiMap = { 'kpi-total-users': fmt(m.totalUsers), 'kpi-active-users': fmt(m.activeUsers), 'kpi-mrr': fmtCurrency(m.mrr), 'kpi-arr': fmtCurrency(m.arr), 'kpi-churn': m.churnRate != null ? m.churnRate + '%' : '-' };
+        for (const [id, val] of Object.entries(kpiMap)) { const el = document.getElementById(id); if (el) el.textContent = val; }
+        showToast && showToast('Dados atualizados com sucesso!', 'success');
+      } else { showToast && showToast(d.error || 'Erro ao atualizar dados.', 'error'); }
+    } catch (_) { showToast && showToast('Erro de conexão.', 'error'); }
+    btn.textContent = '↻ Atualizar dados';
+    btn.disabled = false;
   }
 
-  function refreshHealth(btn) {
+  async function refreshHealth(btn) {
     if (!btn) return;
     btn.textContent = '↻ Verificando...';
     btn.disabled = true;
-    setTimeout(() => { btn.textContent = '↻ Verificar agora'; btn.disabled = false; }, 2000);
+    try {
+      const r = await fetch('/api/observability', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) showToast && showToast('Saúde verificada: ' + (d.services?.filter(s => s.status === 'healthy').length || 0) + ' serviços saudáveis', 'success');
+      else showToast && showToast(d.error || 'Erro ao verificar saúde.', 'error');
+    } catch (_) { showToast && showToast('Erro de conexão.', 'error'); }
+    btn.textContent = '↻ Verificar agora';
+    btn.disabled = false;
   }
 
   function triggerDeploy() {
@@ -905,8 +942,42 @@
   function adminCreateTenant() { adminAudit('Criação de tenant iniciada'); location.href = '/admin#organizations'; }
   function adminOpenUser(button) { const name = adminEntityName(button); adminAudit('Perfil de usuário consultado: ' + name); location.href = '/admin#members'; }
   function adminOpenTenant(button) { const name = adminEntityName(button); adminAudit('Tenant consultado: ' + name); location.href = '/admin#organizations'; }
-  function adminSuspendUser(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(3) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Usuário reativado: ' : 'Usuário suspenso: ') + name); }
-  function adminSuspendTenant(button) { const name = adminEntityName(button); const reactivating = button.textContent.trim() === 'Reativar'; button.textContent = reactivating ? 'Suspender' : 'Reativar'; button.style.color = reactivating ? 'var(--red)' : ''; const badge = button.closest('tr')?.querySelector('td:nth-child(5) .badge'); if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); } adminAudit((reactivating ? 'Tenant reativado: ' : 'Tenant suspenso: ') + name); }
+  async function adminSuspendUser(button) {
+    const name = adminEntityName(button);
+    const reactivating = button.textContent.trim() === 'Reativar';
+    const action = reactivating ? 'activate' : 'suspend';
+    button.disabled = true;
+    try {
+      const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'user_status', userEmail: name, status: reactivating ? 'active' : 'suspended' }) });
+      const d = await r.json();
+      button.textContent = reactivating ? 'Suspender' : 'Reativar';
+      button.style.color = reactivating ? 'var(--red)' : '';
+      const badge = button.closest('tr')?.querySelector('td:nth-child(3) .badge');
+      if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); }
+      adminAudit((reactivating ? 'Usuário reativado: ' : 'Usuário suspenso: ') + name);
+      showToast && showToast((reactivating ? 'Usuário reativado: ' : 'Usuário suspenso: ') + name, 'success');
+    } catch (_) { showToast && showToast('Erro ao alterar status do usuário.', 'error'); }
+    button.disabled = false;
+  }
+  async function adminSuspendTenant(button) {
+    const name = adminEntityName(button);
+    const reactivating = button.textContent.trim() === 'Reativar';
+    button.disabled = true;
+    try {
+      const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'tenant_status', tenantName: name, status: reactivating ? 'active' : 'suspended' }) });
+      button.textContent = reactivating ? 'Suspender' : 'Reativar';
+      button.style.color = reactivating ? 'var(--red)' : '';
+      const badge = button.closest('tr')?.querySelector('td:nth-child(5) .badge');
+      if (badge) { badge.textContent = reactivating ? 'Ativo' : 'Suspenso'; badge.className = 'badge ' + (reactivating ? 'badge-green' : 'badge-red'); }
+      adminAudit((reactivating ? 'Tenant reativado: ' : 'Tenant suspenso: ') + name);
+      showToast && showToast((reactivating ? 'Tenant reativado: ' : 'Tenant suspenso: ') + name, 'success');
+    } catch (_) { showToast && showToast('Erro ao alterar status do tenant.', 'error'); }
+    button.disabled = false;
+  }
 
   async function doLogout() {
     try {

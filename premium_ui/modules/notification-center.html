@@ -72,7 +72,7 @@
     .nc-cat-icon { font-size: 14px; }
     .nc-cat-count { background: rgba(255,255,255,0.06); color: var(--text-muted); font-size: 10px; padding: 1px 6px; border-radius: 8px; }
 
-    /* ── TOAST SIMULATION ── */
+    /* ── TOAST ── */
     .nc-toast-badge {
       position: fixed; bottom: 24px; right: 24px; z-index: 999;
       background: var(--bg-card); border: 1px solid var(--border-accent);
@@ -91,6 +91,9 @@
     .nc-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .nc-empty-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
     .nc-empty-desc { font-size: 13px; color: var(--text-muted); }
+
+    /* ── LOADING ── */
+    .nc-loading { text-align: center; padding: 32px 20px; color: var(--text-muted); font-size: 13px; }
   </style>
 </head>
 <body>
@@ -130,7 +133,7 @@
   </div>
 
   <!-- NOTIFICATIONS LIST -->
-  <div id="nc-list"></div>
+  <div id="nc-list"><div class="nc-loading">Carregando notificações...</div></div>
 
   <!-- Empty state -->
   <div id="nc-empty" class="nc-empty" style="display:none">
@@ -140,28 +143,47 @@
   </div>
 
   <script>
-    // ── DATA ──
-    const NOTIFICATIONS = [
-      { id: 'n01', title: 'AI Engine timeout detectado', desc: 'Timeout de 30s no endpoint /api/ai/analyze. Retry automático agendado.', time: 'Hoje, 14:31', priority: 'critical', category: 'system', icon: '\u{1F534}', iconBg: 'rgba(239,68,68,0.12)', read: false },
-      { id: 'n02', title: 'Backup automático concluído', desc: 'Backup completo do banco de dados realizado com sucesso. 2.4 GB comprimido.', time: 'Hoje, 03:00', priority: 'low', category: 'system', icon: '\u{2705}', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n03', title: 'Streak de 14 dias!', desc: 'Parabéns! Você manteve seus hábitos por 14 dias consecutivos. Seu recorde anterior era 21 dias.', time: 'Hoje, 00:01', priority: 'medium', category: 'productivity', icon: '\u{1F525}', iconBg: 'rgba(245,158,11,0.12)', read: false },
-      { id: 'n04', title: 'Life Score aumentou para 87', desc: 'Seu Life Score subiu de 84 para 87. Hábitos e metas estão no caminho certo.', time: 'Ontem, 20:00', priority: 'medium', category: 'productivity', icon: '⭐', iconBg: 'rgba(139,92,246,0.12)', read: false },
-      { id: 'n05', title: 'Meta próxima do prazo', desc: '"Meta próxima do prazo" — verifique suas metas dias. Você está 58% completo (14/24). Considere acelerar.', time: 'Ontem, 09:00', priority: 'high', category: 'productivity', icon: '\u{23F0}', iconBg: 'rgba(245,158,11,0.12)', read: false },
-      { id: 'n06', title: 'Transação: R$2.847,00 recebido', desc: 'Depósito recebido na conta principal. Saldo atualizado: R$24.847,00.', time: 'Hoje, 06:00', priority: 'high', category: 'finance', icon: '\u{1F4B0}', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n07', title: 'Fatura processada com sucesso', desc: 'Pagamento de R$1.290,00 processado. Próxima fatura em 30 dias.', time: 'Ontem, 18:00', priority: 'low', category: 'finance', icon: '\u{1F9FE}', iconBg: 'rgba(16,185,129,0.12)', read: false },
-      { id: 'n08', title: 'Novo insight de IA disponível', desc: 'A IA identificou um padrão interessante na sua produtividade. Pico entre 9h–11h.', time: 'Ontem, 14:31', priority: 'medium', category: 'system', icon: '\u{1F916}', iconBg: 'rgba(99,102,241,0.12)', read: true },
-      { id: 'n09', title: 'Membro adicionado ao workspace', desc: 'Carlos Pereira foi adicionado ao Workspace Alpha como Editor.', time: 'Ontem, 11:20', priority: 'low', category: 'social', icon: '\u{1F464}', iconBg: 'rgba(6,182,212,0.12)', read: true },
-      { id: 'n10', title: 'Alerta de segurança: novo dispositivo', desc: 'Login detectado em Chrome · Windows · São Paulo, SP. Se não foi você, revogue a sessão.', time: '2 dias atrás', priority: 'critical', category: 'security', icon: '\u{1F510}', iconBg: 'rgba(239,68,68,0.12)', read: true },
-      { id: 'n11', title: 'API Key rotacionada com sucesso', desc: 'A chave API principal foi rotacionada. A chave antiga expira em 24h.', time: '2 dias atrás', priority: 'high', category: 'security', icon: '\u{1F511}', iconBg: 'rgba(245,158,11,0.12)', read: true },
-      { id: 'n12', title: 'Novo insight de IA disponível', desc: 'A IA identificou que você pode economizar R$420/mês ajustando assinaturas.', time: '3 dias atrás', priority: 'medium', category: 'system', icon: '\u{1F916}', iconBg: 'rgba(99,102,241,0.12)', read: true },
-      { id: 'n13', title: 'Meta concluída: Meditação 30d', desc: 'Parabéns! Você completou a meta de 30 dias de meditação consecutiva.', time: '3 dias atrás', priority: 'medium', category: 'productivity', icon: '\u{1F9D8}', iconBg: 'rgba(16,185,129,0.12)', read: true },
-      { id: 'n14', title: 'Webhook delivery falhou', desc: 'Webhook #3 falhou na entrega para https://api.example.com/hook. Retry em 5min.', time: '3 dias atrás', priority: 'high', category: 'system', icon: '\u{26A0}\u{FE0F}', iconBg: 'rgba(245,158,11,0.12)', read: true },
-      { id: 'n15', title: 'Relatório semanal pronto', desc: 'Seu relatório de produtividade semanal está disponível. Clique para ver.', time: '5 dias atrás', priority: 'low', category: 'productivity', icon: '\u{1F4CA}', iconBg: 'rgba(99,102,241,0.12)', read: true },
-    ];
-
+    // ── DATA (carregado via API real — zero dados estáticos) ──
+    let NOTIFICATIONS = [];
     let currentTab = 'all';
     let priorityFilter = 'all';
     let categoryFilter = 'all';
+
+    // Carrega notificações reais do backend (Cloudflare KV)
+    async function ncLoadFromAPI() {
+      try {
+        const r = await fetch('/api/notifications', { credentials: 'same-origin' });
+        if (!r.ok) throw new Error('API indisponível');
+        const data = await r.json();
+        NOTIFICATIONS = (data.ok && Array.isArray(data.notifications)) ? data.notifications : [];
+      } catch (_) {
+        NOTIFICATIONS = [];
+      }
+      updateStats();
+      renderNotifications();
+    }
+
+    // Persiste leitura no backend
+    async function ncPersistRead(id) {
+      try {
+        await fetch('/api/notifications', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'mark_read', id })
+        });
+      } catch (_) { /* ignorar */ }
+    }
+
+    // Persiste remoção no backend
+    async function ncPersistDelete(id) {
+      try {
+        await fetch('/api/notifications', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'dismiss', id })
+        });
+      } catch (_) { /* ignorar */ }
+    }
 
     function getFiltered() {
       let list = NOTIFICATIONS;
@@ -176,7 +198,7 @@
       const total = NOTIFICATIONS.length;
       const unread = NOTIFICATIONS.filter(n => !n.read).length;
       const critical = NOTIFICATIONS.filter(n => n.priority === 'critical').length;
-      const today = NOTIFICATIONS.filter(n => n.time.includes('Hoje')).length;
+      const today = NOTIFICATIONS.filter(n => n.time && n.time.includes('Hoje')).length;
       document.getElementById('nc-stat-total').textContent = total;
       document.getElementById('nc-stat-unread').textContent = unread;
       document.getElementById('nc-stat-critical').textContent = critical;
@@ -224,18 +246,20 @@
 
     function renderItem(n) {
       const priLabel = { critical: 'Crítica', high: 'Alta', medium: 'Média', low: 'Baixa' };
+      const iconBg = n.iconBg || 'rgba(99,102,241,0.12)';
+      const icon = n.icon || '\u{1F514}';
       return `<div class="nc-item ${n.read ? 'read' : 'unread'}" id="nc-${n.id}" onclick="ncToggleRead('${n.id}')">
-        <div class="nc-item-icon" style="background:${n.iconBg}">${n.icon}</div>
+        <div class="nc-item-icon" style="background:${iconBg}">${icon}</div>
         <div class="nc-item-content">
           <div class="nc-item-header">
             <span class="nc-item-title">${n.title}</span>
-            <span class="nc-item-priority ${n.priority}">${priLabel[n.priority]}</span>
+            <span class="nc-item-priority ${n.priority}">${priLabel[n.priority] || n.priority}</span>
           </div>
-          <div class="nc-item-desc">${n.desc}</div>
+          <div class="nc-item-desc">${n.desc || ''}</div>
           <div class="nc-item-meta">
-            <span class="nc-item-cat" style="color:${n.iconBg.includes('239') ? 'var(--red)' : n.iconBg.includes('245') ? 'var(--amber)' : n.iconBg.includes('16') ? 'var(--green)' : 'var(--accent-light)'}">${n.category}</span>
+            <span class="nc-item-cat" style="color:${iconBg.includes('239') ? 'var(--red)' : iconBg.includes('245') ? 'var(--amber)' : iconBg.includes('16') ? 'var(--green)' : 'var(--accent-light)'}">${n.category || 'system'}</span>
             <span>·</span>
-            <span class="nc-item-time">${n.time}</span>
+            <span class="nc-item-time">${n.time || ''}</span>
           </div>
         </div>
         <div class="nc-item-actions">
@@ -266,13 +290,20 @@
     }
     function ncToggleRead(id) {
       const n = NOTIFICATIONS.find(x => x.id === id);
-      if (n) { n.read = !n.read; renderNotifications(); updateStats(); }
+      if (n) {
+        n.read = !n.read;
+        renderNotifications();
+        updateStats();
+        ncPersistRead(n.read ? id : 'none');
+      }
     }
     function ncDelete(id) {
       const idx = NOTIFICATIONS.findIndex(x => x.id === id);
       if (idx >= 0) {
         NOTIFICATIONS.splice(idx, 1);
-        renderNotifications(); updateStats();
+        renderNotifications();
+        updateStats();
+        ncPersistDelete(id);
         showToastNC('Notificação removida', 'success');
       }
     }
@@ -280,14 +311,17 @@
     // ── GLOBAL FUNCTIONS (called from parent) ──
     window.ncMarkAllRead = function() {
       NOTIFICATIONS.forEach(n => n.read = true);
-      renderNotifications(); updateStats();
+      renderNotifications();
+      updateStats();
+      ncPersistRead('all');
       showToastNC('Todas marcadas como lidas', 'success');
     };
     window.ncClearHistory = function() {
       const unread = NOTIFICATIONS.filter(n => !n.read);
       NOTIFICATIONS.length = 0;
       NOTIFICATIONS.push(...unread);
-      renderNotifications(); updateStats();
+      renderNotifications();
+      updateStats();
       showToastNC('Histórico limpo. Não lidas preservadas.', 'info');
     };
 
@@ -300,35 +334,30 @@
       setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
     }
 
-    // ── SIMULATED REAL-TIME NOTIFICATION ──
-    function simulateRealTime() {
-      const newNotif = {
-        id: 'n' + Date.now(),
-        title: 'Nova atividade detectada',
-        desc: 'Um evento de sistema foi registrado. Verifique o painel de Observability.',
-        time: 'Agora',
-        priority: 'medium',
-        category: 'system',
-        icon: '\u{1F514}',
-        iconBg: 'rgba(99,102,241,0.12)',
-        read: false
-      };
-      NOTIFICATIONS.unshift(newNotif);
-      renderNotifications(); updateStats();
-      // Show toast
-      const badge = document.createElement('div');
-      badge.className = 'nc-toast-badge';
-      badge.innerHTML = `<span class="nc-toast-icon">\u{1F514}</span><div><div class="nc-toast-text">Nova notificação</div><div class="nc-toast-time">Agora · ${newNotif.title}</div></div>`;
-      badge.onclick = () => { badge.remove(); };
-      document.body.appendChild(badge);
-      setTimeout(() => { if (badge.parentNode) badge.remove(); }, 5000);
+    // ── POLLING REAL (substitui simulateRealTime) ──
+    // Recarrega notificações do backend a cada 60 segundos
+    function ncStartPolling() {
+      setInterval(async () => {
+        try {
+          const r = await fetch('/api/notifications', { credentials: 'same-origin' });
+          if (!r.ok) return;
+          const data = await r.json();
+          if (!data.ok || !Array.isArray(data.notifications)) return;
+          const prevUnread = NOTIFICATIONS.filter(n => !n.read).length;
+          NOTIFICATIONS = data.notifications;
+          const newUnread = NOTIFICATIONS.filter(n => !n.read).length;
+          updateStats();
+          renderNotifications();
+          if (newUnread > prevUnread) {
+            showToastNC(`${newUnread - prevUnread} nova(s) notificação(ões)`, 'info');
+          }
+        } catch (_) { /* ignorar falhas de polling */ }
+      }, 60000);
     }
 
     // ── INIT ──
-    updateStats();
-    renderNotifications();
-    // Simulate real-time after 10s
-    setTimeout(simulateRealTime, 10000);
+    ncLoadFromAPI();
+    ncStartPolling();
   </script>
 </body>
 </html>

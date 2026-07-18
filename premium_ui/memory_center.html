@@ -1185,7 +1185,31 @@ let currentInspecting = null;
 let searchFilter = 'all';
 
 // ── INIT ─────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Tentar carregar memórias reais da API
+  try {
+    const r = await fetch('/api/ai/platform?view=memory', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok && d.memory && d.memory.length > 0) {
+      // Converter formato da API para o formato do memory center
+      memories = d.memory.map((m, i) => ({
+        id: m.id || 'mem-' + i,
+        title: m.content?.slice(0, 60) || 'Memória ' + (i + 1),
+        content: m.content || '',
+        memory_type: m.type === 'conversation' ? 'episodic' : m.type === 'manual' ? 'long_term' : 'semantic',
+        priority: 'medium',
+        status: 'active',
+        domain: m.type || 'geral',
+        tags: m.tags || [],
+        entities: [],
+        strength: 0.75,
+        confidence: 1.0,
+        access_count: 1,
+        created_at: m.savedAt ? new Date(m.savedAt).getTime() : Date.now(),
+        metadata: {},
+      }));
+    }
+  } catch (_) { /* manter DEMO_MEMORIES se API indisponível */ }
   updateStats();
   renderOverview();
   renderTimeline();

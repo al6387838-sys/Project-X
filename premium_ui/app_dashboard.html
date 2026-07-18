@@ -1951,14 +1951,37 @@
     if (text.includes('Alterar senha')) btn.onclick = () => showPage('settings-account');
     else if (text.includes('Ativar MFA')) btn.onclick = () => showPage('settings-security');
     else if (text.includes('Ver sessões')) btn.onclick = () => showPage('settings-sessions');
-    else if (text.includes('Exportar dados')) btn.onclick = () => showToast('Exportação iniciada. Você receberá um e-mail em breve.', 'success');
+    else if (text.includes('Exportar dados')) btn.onclick = async () => {
+      showToast('Iniciando exportação de dados...', 'info');
+      try {
+        const r = await fetch('/api/user-data?action=export', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (d.ok && d.downloadUrl) {
+          window.open(d.downloadUrl, '_blank');
+          showToast('Exportação pronta! Download iniciado.', 'success');
+        } else if (d.ok) {
+          showToast('Exportação iniciada. Você receberá um e-mail em breve.', 'success');
+        } else {
+          showToast(d.error || 'Erro ao exportar dados', 'error');
+        }
+      } catch (_) { showToast('Erro de conexão', 'error'); }
+    };
     else if (text.includes('Importar dados')) btn.onclick = () => { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json,.csv'; inp.onchange = e => showToast('Importando ' + e.target.files[0].name + '...', 'info'); inp.click(); };
   });
 
   // ─── Billing buttons ───────────────────────────────────────────
   document.querySelector('#page-billing .btn-primary')?.addEventListener('click', () => {
     showToast('Redirecionando para checkout Enterprise...', 'info');
-    setTimeout(() => showToast('Entre em contato: sales@lifeos.app', 'success'), 1500);
+    try {
+      const r = await fetch('/api/billing/checkout', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ plan: 'enterprise' })
+      });
+      const d = await r.json();
+      if (d.ok && d.checkoutUrl) { window.location.href = d.checkoutUrl; }
+      else { showToast(d.error || 'Entre em contato: sales@lifeos.app', 'info'); }
+    } catch (_) { showToast('Entre em contato: sales@lifeos.app', 'info'); }
   });
   document.querySelector('#page-billing .btn-ghost')?.addEventListener('click', () => {
     showToast('Redirecionando para portal de pagamento...', 'info');
@@ -2630,12 +2653,36 @@
   function emailOpen(subject) { showToast('Abrindo: ' + subject, 'info'); }
   function emailCompose() { showPage('email-compose'); }
   function emailSend() { showToast('Email enviado!', 'success'); showPage('email'); }
-  function emailConnectAccount(provider) { showToast('Iniciando OAuth com ' + provider + '...', 'info'); setTimeout(() => showToast(provider + ' conectado com sucesso!', 'success'), 1500); }
+  async function emailConnectAccount(provider) {
+    showToast('Iniciando OAuth com ' + provider + '...', 'info');
+    try {
+      const r = await fetch('/api/integrations/connect', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ provider, type: 'email' })
+      });
+      const d = await r.json();
+      if (d.ok && d.authUrl) { window.open(d.authUrl, '_blank', 'width=600,height=700'); }
+      else { showToast(d.error || 'Erro ao iniciar OAuth com ' + provider, 'error'); }
+    } catch (_) { showToast('Erro de conexão. Tente novamente.', 'error'); }
+  }
 
   // ═══ CALENDAR FUNCTIONS ═══
   function calView(view) { showToast('Vista: ' + view, 'info'); }
   function calNewEvent() { openModal('modal-new-event'); }
-  function calConnect(provider) { showToast('Conectando ' + provider + '...', 'info'); setTimeout(() => showToast(provider + ' sincronizado!', 'success'), 1200); }
+  async function calConnect(provider) {
+    showToast('Conectando ' + provider + '...', 'info');
+    try {
+      const r = await fetch('/api/integrations/connect', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ provider, type: 'calendar' })
+      });
+      const d = await r.json();
+      if (d.ok && d.authUrl) { window.open(d.authUrl, '_blank', 'width=600,height=700'); }
+      else { showToast(d.error || 'Erro ao conectar ' + provider, 'error'); }
+    } catch (_) { showToast('Erro de conexão. Tente novamente.', 'error'); }
+  }
   function calSync() { showToast('Sincronizando calendários...', 'info'); }
 
   // ═══ COMPANION AI FUNCTIONS ═══

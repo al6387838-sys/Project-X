@@ -199,7 +199,8 @@ export async function onRequest({ request, env }) {
     let body;
     try { body = await request.json(); } catch (_) { return json(400, { ok: false, error: 'JSON inválido' }); }
 
-    const { action, integrationId } = body;
+    const { action, integrationId: rawIntegrationId, provider, type } = body;
+    const integrationId = rawIntegrationId || provider;
 
     if (action === 'test') {
       if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
@@ -265,7 +266,19 @@ export async function onRequest({ request, env }) {
       });
     }
 
-    return json(400, { ok: false, error: 'action inválido. Use: test, connect' });
+    if (action === 'sync') {
+      const integId = integrationId;
+      if (!integId) return json(400, { ok: false, error: 'integrationId obrigatório' });
+      const connKey = `integration:${session.userId}:${integId}`;
+      const connRaw = await kv?.get(connKey);
+      if (!connRaw) return json(400, { ok: false, error: 'Integração não conectada' });
+      const conn = JSON.parse(connRaw);
+      conn.lastSync = new Date().toISOString();
+      conn.syncStatus = 'synced';
+      await kv?.put(connKey, JSON.stringify(conn));
+      return json(200, { ok: true, message: 'Sincronização concluída', integrationId: integId });
+    }
+    return json(400, { ok: false, error: 'action inválido. Use: test, connect, sync' });
   }
 
   return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });

@@ -85,6 +85,25 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequest({ request, env }) {
-  if (request.method === 'GET') return onRequestGet({ request, env });
+  if (request.method === 'GET') {
+    const url = new URL(request.url);
+    const action = url.searchParams.get('action');
+    if (action === 'log') {
+      // Retornar log de ações de IA do KV
+      const secret = env.LIFEOS_SESSION_SECRET;
+      if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
+      const token = getCookie(request.headers.get('cookie'));
+      const session = await verifySession(token, secret);
+      if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+      const kv = env.LIFEOS_KV;
+      const limit = parseInt(url.searchParams.get('limit') || '5', 10);
+      try {
+        const raw = kv ? await kv.get(`ai:actions:${session.sub}`) : null;
+        const actions = raw ? JSON.parse(raw).slice(0, limit) : [];
+        return json(200, { ok: true, actions });
+      } catch { return json(200, { ok: true, actions: [] }); }
+    }
+    return onRequestGet({ request, env });
+  }
   return json(405, { ok: false, error: 'Método não permitido' });
 }

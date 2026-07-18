@@ -67,7 +67,56 @@ export async function onRequestGet({ request, env }) {
   return json(200, { ok: true, user: userData });
 }
 
+export async function onRequestGet_export({ request, env }) {
+  const secret = env.LIFEOS_SESSION_SECRET;
+  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
+  const session = await verifySession(getCookie(request.headers.get('cookie')), secret);
+  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  const kv = env.LIFEOS_KV;
+  if (!kv) return json(503, { ok: false, error: 'Armazenamento indisponível' });
+  // Coletar todos os dados do usuário para exportação
+  const keys = [
+    `user:${session.sub}`,
+    `tasks:${session.sub}`,
+    `habits:${session.sub}`,
+    `goals:${session.sub}`,
+    `notes:${session.sub}`,
+    `events:${session.sub}`,
+    `crm:contacts:${session.sub}`,
+    `crm:deals:${session.sub}`,
+    `docs:${session.sub}`,
+    `timeline:${session.sub}`,
+  ];
+  const exportData = { exportedAt: new Date().toISOString(), userId: session.sub, data: {} };
+  for (const key of keys) {
+    try {
+      const raw = await kv.get(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const category = key.split(':')[0];
+        // Remover dados sensíveis
+        if (category === 'user') { const { passwordHash, ...safe } = parsed; exportData.data.profile = safe; }
+        else { exportData.data[category] = parsed; }
+      }
+    } catch (_) { /* ignorar erros de KV */ }
+  }
+  // Gerar JSON para download
+  const json_str = JSON.stringify(exportData, null, 2);
+  return new Response(json_str, {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+      'content-disposition': `attachment; filename="lifeos-export-${new Date().toISOString().slice(0,10)}.json"`,
+      'cache-control': 'no-store',
+    },
+  });
+}
+
 export async function onRequest({ request, env }) {
-  if (request.method === 'GET') return onRequestGet({ request, env });
+  if (request.method === 'GET') {
+    const url = new URL(request.url);
+    if (url.searchParams.get('action') === 'export') return onRequestGet_export({ request, env });
+    return onRequestGet({ request, env });
+  }
   return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET' });
 }
