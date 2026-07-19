@@ -12,3 +12,5 @@ Data da verificação: 2026-07-19 (GMT-3).
 - A API oficial de R2 respondeu `403` / código `10042` com a mensagem de que R2 precisa ser habilitado pelo painel Cloudflare. Portanto, não existe bucket R2 habilitado no momento da verificação nem binding R2 associado ao ambiente de produção.
 
 A implementação v43.0 detecta os bindings `LIFEOS_R2`, `LIFEOS_FILES` ou `R2_BUCKET` de maneira compatível. Enquanto R2 não estiver habilitado e vinculado, os controles de conteúdo binário retornam o estado profissional `Pronto para ativação.` sem deixar ações inertes.
+
+- Em 2026-07-19 (GMT-3), a sessão autenticada no painel Cloudflare foi reconfirmada para a conta acima; o projeto `lifeos-enterprise` permanece acessível na área de Compute/Workers & Pages.
