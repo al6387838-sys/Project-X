@@ -215,6 +215,7 @@ export function normalizeOrganization(raw) {
     name: normalizeText(raw.name, 120),
     description: normalizeText(raw.description, 500),
     plan: normalizeText(raw.plan, 40) || 'Unassigned',
+    status: ['active', 'suspended', 'archived'].includes(raw.status) ? raw.status : 'active',
     ownerId: normalizeText(raw.ownerId, 254),
     members,
     workspaces,

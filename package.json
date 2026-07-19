@@ -1,6 +1,6 @@
 {
   "name": "lifeos-enterprise",
-  "version": "37.0.0",
+  "version": "43.0.0",
   "private": true,
   "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance, integrações OAuth 2.0 e automação.",
   "scripts": {
@@ -11,7 +11,10 @@
     "test:responsive": "node scripts/qa-enterprise-responsive.mjs",
     "test:functional": "node scripts/qa-enterprise-functional.mjs",
     "test:v11": "node scripts/qa-v11.mjs",
-    "test:enterprise": "npm run build && npm run test:responsive && npm run test:functional && npm run test:v11"
+    "test:admin": "node scripts/qa-admin-control-plane.mjs && node scripts/qa-admin-ui.mjs",
+    "test:documents": "node scripts/qa-document-workflows.mjs",
+    "test:user": "node scripts/qa-user-completion-ui.mjs",
+    "test:enterprise": "npm run build && npm run test:responsive && npm run test:functional && npm run test:v11 && npm run test:admin && npm run test:user && npm run test:documents"
   },
   "devDependencies": {
     "html-minifier-terser": "^7.2.0",

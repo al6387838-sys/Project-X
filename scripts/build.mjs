@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 37.0.0 (Phases 279-281 — Enterprise Final QA, Zero Fake Data Audit, Cloudflare Deploy)
+// Version: 43.0.0 (Phases 303-306 — Enterprise Admin Completion, User Experience Completion, Enterprise Workflow, Release)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -57,7 +57,7 @@ const productionAssets = [
   'beta/beta-manager.js', 'beta/analytics-engine.js',
   'beta/feedback-center.js', 'beta/feature-flags.js',
   'enterprise/enterprise_app.css', 'enterprise/enterprise_app.js',
-  'enterprise/executive_dashboard.html', 'admin/master_admin.html',
+  'enterprise/executive_dashboard.html', 'admin/master_admin.html', 'admin_completion.js', 'user_completion.js',
 ];
 
 // Copiar módulos v9.2–v11
@@ -127,7 +127,7 @@ try {
 } catch { }
 
 const redirects = [
-  '# LifeOS Enterprise v22.1.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v43.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -141,11 +141,9 @@ const redirects = [
   '',
   '# App routes',
   '/app                /app/index.html             200',
-  '/app/*              /app/index.html             200',
   '',
   '# Admin routes',
   '/admin              /admin/index.html           200',
-  '/admin/*            /admin/index.html           200',
   '',
   '# Internal module routes',
   '/life-hub           /app/index.html             200',
@@ -179,7 +177,6 @@ const redirects = [
   '/terms              /terms/index.html           200',
   '/contact            /contact/index.html         200',
   '/status             /status/index.html          200',
-  '/*                  /index.html                 200',
   '',
 ].join('\n');
 
@@ -187,7 +184,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-41.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-43.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -202,7 +199,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '37.0.0',
+  version: '43.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -210,7 +207,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   phases: [
     '093-100','101-108','109','111-115','119',
     '131-138','139-146','147-152','153-160','161-162','163-171',
-    '172-177','225-233','250-254','255','257-258',    '259-262','279-281',
+    '172-177','225-233','250-254','255','257-258','259-262','279-281','303-306',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -221,6 +218,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     'integrations-manager','dashboard-v11','identity','file-center','automation','analytics',
     'communication-hub','finance-hub','document-center','onboarding-flow',
     'system-health','structured-logs','alerts','org-usage',
+    'enterprise-admin-control-plane','user-experience-completion','document-workflow-r2',
   ],
   apis: [
     '/api/dashboard','/api/tasks','/api/habits','/api/goals',
@@ -232,7 +230,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/profile-update','/api/sessions','/api/settings','/api/notifications','/api/workspaces',
     '/api/observability','/api/health','/api/integrations','/api/operation-audit',
     '/api/enterprise/rbac','/api/enterprise/certification','/api/enterprise/invite','/api/enterprise/members','/api/enterprise/config-center','/api/enterprise/onboarding','/api/enterprise-data','/api/crm',
-    '/api/automations','/api/comm-hub','/api/analytics-pro','/api/db-optimize','/api/security-audit',
+    '/api/automations','/api/comm-hub','/api/analytics-pro','/api/db-optimize','/api/security-audit','/api/admin-data',
   ],
   commit,
   builtAt,
@@ -242,13 +240,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '37.0.0',
+  version: '43.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
-  phases: '279-281',
+  phases: '303-306',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -273,14 +271,14 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise 41.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise 43.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-console.log(`  Version       : 37.0.0`);
+console.log(`  Version       : 43.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-console.log(`  Phases        : 279-281 — Enterprise Final QA, Zero Fake Data Audit, Cloudflare Deploy`);
-console.log(`  Modules       : 39 total`);
-console.log(`  APIs          : 45 endpoints`);
+console.log(`  Phases        : 303-306 — Enterprise Admin, User Experience, Workflows, Release`);
+console.log(`  Modules       : 37 total`);
+console.log(`  APIs          : 46 endpoints`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);

@@ -43,15 +43,20 @@ export async function onRequestPost({ request, env }) {
   if (password.length < 8 || password.length > 128) return json(400, { ok: false, error: 'Senha deve ter entre 8 e 128 caracteres' });
 
   const existingRaw = await env.LIFEOS_KV.get(`user:${email}`);
+  let invitedAccount = null;
   if (existingRaw) {
     const existing = JSON.parse(existingRaw);
-    return json(409, {
-      ok: false,
-      code: existing.emailVerified ? 'EMAIL_ALREADY_REGISTERED' : 'EMAIL_CONFIRMATION_REQUIRED',
-      error: existing.emailVerified
-        ? 'Este e-mail já está cadastrado'
-        : 'Conta criada, mas o e-mail ainda não foi confirmado. Solicite um novo link.',
-    });
+    if (existing.status === 'invited' && !existing.emailVerified) {
+      invitedAccount = existing;
+    } else {
+      return json(409, {
+        ok: false,
+        code: existing.emailVerified ? 'EMAIL_ALREADY_REGISTERED' : 'EMAIL_CONFIRMATION_REQUIRED',
+        error: existing.emailVerified
+          ? 'Este e-mail já está cadastrado'
+          : 'Conta criada, mas o e-mail ainda não foi confirmado. Solicite um novo link.',
+      });
+    }
   }
 
   const now = new Date().toISOString();
@@ -59,16 +64,19 @@ export async function onRequestPost({ request, env }) {
     email,
     name,
     passwordHash: await passwordDigest(password),
-    role: 'user',
-    plan: 'free',
+    role: invitedAccount?.role || 'user',
+    plan: invitedAccount?.plan || 'free',
     status: 'pending_verification',
     emailVerified: false,
     emailVerifiedAt: null,
     onboarded: false,
-    createdAt: now,
+    invitationId: invitedAccount?.invitationId || null,
+    invitedAt: invitedAccount?.invitedAt || null,
+    invitedBy: invitedAccount?.invitedBy || null,
+    createdAt: invitedAccount?.createdAt || now,
     updatedAt: now,
-    lifeScore: 0,
-    timezone: 'America/Sao_Paulo',
+    lifeScore: invitedAccount?.lifeScore || 0,
+    timezone: invitedAccount?.timezone || 'America/Sao_Paulo',
   };
   await env.LIFEOS_KV.put(`user:${email}`, JSON.stringify(userData));
 
