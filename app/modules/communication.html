@@ -1,0 +1,621 @@
+<!-- LifeOS Enterprise — Módulo Comunicação v8.0 -->
+<div id="module-communication" style="display:none">
+
+<!-- ─── CENTRAL DE MENSAGENS ─── -->
+<div class="page" id="page-messages">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i> Mensagens</div>
+      <div class="page-subtitle">Central unificada de comunicação</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('messages-integrations')">Integrações</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-message')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Mensagem</button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:0;height:calc(100vh - 160px);background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
+    <!-- Sidebar de conversas -->
+    <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
+      <!-- Filtros de canal -->
+      <div style="padding:12px;border-bottom:1px solid var(--border)">
+        <input type="text" class="form-input" placeholder=" Buscar conversa..." style="width:100%;margin-bottom:8px" />
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <button class="msg-filter active" onclick="msgFilter('all',this)">Todos</button>
+          <button class="msg-filter" onclick="msgFilter('whatsapp',this)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i> WA</button>
+          <button class="msg-filter" onclick="msgFilter('telegram',this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> TG</button>
+          <button class="msg-filter" onclick="msgFilter('slack',this)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> SL</button>
+          <button class="msg-filter" onclick="msgFilter('discord',this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> DC</button>
+          <button class="msg-filter" onclick="msgFilter('teams',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> MS</button>
+        </div>
+      </div>
+      <!-- Lista de conversas — carregada dinamicamente -->
+      <div style="flex:1;overflow-y:auto" id="msg-conv-list">
+        <div style="color:var(--text-muted);font-size:13px;padding:16px">Carregando conversas...</div>
+      </div>
+    </div>
+
+    <!-- Área de chat -->
+    <div style="display:flex;flex-direction:column">
+      <!-- Header do chat -->
+      <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+        <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#25D366,#128C7E);width:40px;height:40px;font-size:14px" id="chat-avatar">JS</div>
+        <div style="flex:1">
+          <div style="font-weight:700" id="chat-name">Selecione uma conversa</div>
+          <div style="font-size:12px;color:var(--text-muted)" id="chat-status">Selecione uma conversa para iniciar</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="showToast('Chamada de voz: funcionalidade disponível com integração VoIP configurada','info')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de vídeo" onclick="showToast('Chamada de vídeo: funcionalidade disponível com integração WebRTC configurada','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Informações" onclick="showToast('Perfil do contato','info')"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i>️</button>
+        </div>
+      </div>
+
+      <!-- Mensagens -->
+      <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px" id="chat-messages">
+        <div class="msg-bubble received">
+          <div class="msg-bubble-text">Oi! Você viu o relatório que enviei ontem?</div>
+          <div class="msg-bubble-time">09:30</div>
+        </div>
+        <div class="msg-bubble sent">
+          <div class="msg-bubble-text">Sim, estou analisando agora. Ficou muito bom!</div>
+          <div class="msg-bubble-time">09:31</div>
+        </div>
+        <div class="msg-bubble received">
+          <div class="msg-bubble-text">Ótimo! Você acha que conseguimos apresentar na sexta?</div>
+          <div class="msg-bubble-time">09:32</div>
+        </div>
+        <div class="msg-bubble received">
+          <div class="msg-bubble-text">Preciso confirmar com a equipe antes</div>
+          <div class="msg-bubble-time">09:32</div>
+        </div>
+      </div>
+
+      <!-- Input de mensagem -->
+      <div style="padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end">
+        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="commAttachFile()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px;flex-shrink:0" onclick="commInsertEmoji()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+        <textarea id="msg-input" placeholder="Digite uma mensagem..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:42px;max-height:120px;outline:none" onkeydown="msgHandleKey(event)"></textarea>
+        <button class="btn btn-primary" style="padding:8px 14px;flex-shrink:0" onclick="msgSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── INTEGRAÇÕES DE COMUNICAÇÃO ─── -->
+<div class="page" id="page-messages-integrations">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Integrações de Comunicação</div>
+      <div class="page-subtitle">Conecte seus canais de mensagens</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-3">
+    <div class="integration-card" id="card-whatsapp" style="border-color:rgba(37,211,102,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">WhatsApp Business</div>
+      <div class="integration-desc">Mensagens empresariais via WhatsApp Business API oficial</div>
+      <div class="integration-status pending" id="status-whatsapp"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Verificando...</div>
+      <button class="btn btn-primary" id="btn-whatsapp" style="width:100%;margin-top:8px" onclick="connectCommunication('whatsapp')">Conectar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(0,136,204,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#0088CC,#229ED9)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Telegram</div>
+      <div class="integration-desc">Grupos, canais e mensagens diretas via Telegram Bot API</div>
+      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-telegram')">Configurar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(74,21,75,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#4A154B,#7C3085)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Slack</div>
+      <div class="integration-desc">Canais, DMs e integrações de workspace via Slack API</div>
+      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-slack')">Configurar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(88,101,242,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#5865F2,#7289DA)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Discord</div>
+      <div class="integration-desc">Servidores, canais e DMs via Discord Bot API</div>
+      <div class="integration-status pending"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showToast('Conectando Discord...','info')">Conectar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(98,100,167,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#6264A7,#464775)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Microsoft Teams</div>
+      <div class="integration-desc">Canais e chats corporativos via Microsoft Graph API</div>
+      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="showPage('comm-teams')">Configurar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(225,48,108,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Instagram</div>
+      <div class="integration-desc">DMs e comentários via Instagram Graph API</div>
+      <div class="integration-status pending"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showPage('comm-instagram')">Conectar</button>
+    </div>
+    <div class="integration-card" style="border-color:rgba(24,119,242,0.3)">
+      <div class="integration-icon" style="background:linear-gradient(135deg,#1877F2,#0D6EFD)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-name">Facebook Messenger</div>
+      <div class="integration-desc">Mensagens de páginas e perfis via Messenger API</div>
+      <div class="integration-status pending"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showPage('comm-facebook')">Conectar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ─── CONFIGURAÇÃO WHATSAPP ─── -->
+<div class="page" id="page-comm-whatsapp">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div> WhatsApp Business</div>
+      <div class="page-subtitle">Configuração e gestão da integração WhatsApp</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(37,211,102,0.08);border-radius:10px;border:1px solid rgba(37,211,102,0.2);margin-bottom:16px">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(37,211,102,0.6)"></div>
+        <div>
+          <div style="font-weight:700">Conectado via WhatsApp Business API</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Número: +55 (11) 99999-0000 · Verificado</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Mensagens hoje</span>
+          <span style="font-weight:700">47</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Conversas ativas</span>
+          <span style="font-weight:700">12</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <span style="font-size:13px;color:var(--text-secondary)">Taxa de resposta</span>
+          <span style="font-weight:700;color:var(--green)">94%</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Configurações</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Respostas Automáticas</div><div style="font-size:11px;color:var(--text-muted)">Responder mensagens fora do horário</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Respostas automáticas ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Notificações Push</div><div style="font-size:11px;color:var(--text-muted)">Alertas de novas mensagens</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Notificações ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Sincronização de Contatos</div><div style="font-size:11px;color:var(--text-muted)">Importar contatos do WhatsApp</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Sincronização ' + (this.checked ? 'ativada' : 'desativada'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px">Webhook Ativo</div><div style="font-size:11px;color:var(--text-muted)">Receber eventos em tempo real</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Webhook ' + (this.checked ? 'ativado' : 'desativado'), 'info')"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title" style="margin-bottom:16px">Templates de Mensagem</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Boas-vindas</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Olá {{nome}}! Bem-vindo ao nosso serviço. Como posso ajudar?</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Confirmação de Reunião</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Confirmando nossa reunião em {{data}} às {{hora}}. Até lá!</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+      <div style="padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px">Follow-up</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">Oi {{nome}}, passando para verificar como está o andamento do projeto.</div>
+        <button class="btn btn-ghost" style="font-size:11px;width:100%" onclick="showToast('Template copiado!','success')">Usar Template</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO TELEGRAM ─── -->
+<div class="page" id="page-comm-telegram">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0088CC,#229ED9);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div> Telegram</div>
+      <div class="page-subtitle">Grupos, canais e mensagens via Telegram Bot API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Grupos</div><div style="font-size:24px;font-weight:800;color:var(--cyan)">8</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--accent)">3</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Mensagens/dia</div><div style="font-size:24px;font-weight:800;color:var(--green)">156</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Bot Configurado</div>
+      <div style="padding:16px;background:rgba(0,136,204,0.08);border-radius:10px;border:1px solid rgba(0,136,204,0.2);margin-bottom:16px">
+        <div style="font-weight:700;margin-bottom:4px">@LifeOS_Bot</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Token: ****...****abc123 · Ativo</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Abrindo configurações do bot...','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurar Comandos</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Webhook configurado!','success')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Configurar Webhook</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Testando bot...','info')"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Testar Bot</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Grupos e Canais</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Equipe Dev</div><div style="font-size:11px;color:var(--text-muted)">12 membros</div></div>
+          <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px"><i data-lucide="megaphone" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Atualizações LifeOS</div><div style="font-size:11px;color:var(--text-muted)">Canal · 847 inscritos</div></div>
+          <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,136,204,0.2);display:flex;align-items:center;justify-content:center;font-size:14px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Família</div><div style="font-size:11px;color:var(--text-muted)">6 membros</div></div>
+          <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO SLACK ─── -->
+<div class="page" id="page-comm-slack">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#4A154B,#7C3085);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div> Slack</div>
+      <div class="page-subtitle">Canais e workspaces via Slack API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Workspaces</div><div style="font-size:24px;font-weight:800;color:var(--purple)">2</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--accent)">18</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Membros</div><div style="font-size:24px;font-weight:800;color:var(--green)">47</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Workspaces Conectados</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#4A154B,#7C3085);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff">A</div>
+        <div style="flex:1">
+          <div style="font-weight:700">Acme Corp</div>
+          <div style="font-size:12px;color:var(--text-secondary)">32 membros · 12 canais · Plano Pro</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack Acme Corp','info')">Configurar</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7C3085,#9B59B6);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff">P</div>
+        <div style="flex:1">
+          <div style="font-weight:700">Pessoal</div>
+          <div style="font-size:12px;color:var(--text-secondary)">15 membros · 6 canais · Plano Free</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack Pessoal','info')">Configurar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO INSTAGRAM ─── -->
+<div class="page" id="page-comm-instagram">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div> Instagram</div>
+      <div class="page-subtitle">DMs e comentários via Instagram Graph API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(225,48,108,0.08),rgba(131,58,180,0.08));border-color:rgba(225,48,108,0.2);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D);display:flex;align-items:center;justify-content:center;font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">@lifeos_enterprise</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Conta Business · Verificada · 2.847 seguidores</div>
+      </div>
+      <button class="btn btn-primary" onclick="commConnectSocial('instagram')">Conectar Conta</button>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">DMs não lidas</div><div style="font-size:28px;font-weight:800;color:var(--pink)">24</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Comentários</div><div style="font-size:28px;font-weight:800;color:var(--purple)">87</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Menções</div><div style="font-size:28px;font-weight:800;color:var(--accent)">12</div></div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO MICROSOFT TEAMS ─── -->
+<div class="page" id="page-comm-teams">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div> Microsoft Teams</div>
+      <div class="page-subtitle">Canais corporativos via Microsoft Graph API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Equipes</div><div style="font-size:24px;font-weight:800;color:var(--accent)">3</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Canais</div><div style="font-size:24px;font-weight:800;color:var(--purple)">14</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Reuniões Hoje</div><div style="font-size:24px;font-weight:800;color:var(--cyan)">2</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Equipes Conectadas</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">P</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Canal de Equipe</div><div style="font-size:11px;color:var(--text-muted)">8 membros · 4 canais</div></div>
+        <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">E</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Engenharia</div><div style="font-size:11px;color:var(--text-muted)">24 membros · 7 canais</div></div>
+        <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">G</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Geral</div><div style="font-size:11px;color:var(--text-muted)">47 membros · 3 canais</div></div>
+        <span style="font-size:11px;color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CONFIGURAÇÃO FACEBOOK ─── -->
+<div class="page" id="page-comm-facebook">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1877F2,#0D6EFD);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div> Facebook Messenger</div>
+      <div class="page-subtitle">Mensagens de páginas via Messenger API</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(24,119,242,0.08),rgba(13,110,253,0.06));border-color:rgba(24,119,242,0.2);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1877F2,#0D6EFD);display:flex;align-items:center;justify-content:center;font-size:24px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">LifeOS Enterprise — Página</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Página Business · 1.234 curtidas</div>
+      </div>
+      <button class="btn btn-primary" onclick="commConnectSocial('facebook')">Conectar Página</button>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Mensagens</div><div style="font-size:28px;font-weight:800;color:var(--accent)">18</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Comentários</div><div style="font-size:28px;font-weight:800;color:var(--cyan)">43</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Avaliações</div><div style="font-size:28px;font-weight:800;color:var(--amber)">⭐ 4.8</div></div>
+  </div>
+</div>
+
+<!-- ─── GMAIL CONNECTOR PAGE ─── -->
+<div class="page" id="page-comm-gmail">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#EA4335,#FBBC05);display:flex;align-items:center;justify-content:center"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div> Gmail</div>
+      <div class="page-subtitle">E-mail via Gmail API oficial</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" id="gmail-status-card">
+    <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+    <div id="gmail-status-content" style="padding:16px;background:rgba(234,67,53,0.08);border-radius:10px;border:1px solid rgba(234,67,53,0.2)">
+      <div style="font-weight:600;margin-bottom:8px">Gmail não conectado</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Conecte sua conta Gmail para ler e enviar e-mails diretamente do LifeOS.</div>
+      <button class="btn btn-primary" onclick="connectCommunication('gmail')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar Gmail</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── OUTLOOK CONNECTOR PAGE ─── -->
+<div class="page" id="page-comm-outlook">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0078D4,#106EBE);display:flex;align-items:center;justify-content:center"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div> Microsoft Outlook</div>
+      <div class="page-subtitle">E-mail via Microsoft Graph API oficial</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" id="outlook-status-card">
+    <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
+    <div id="outlook-status-content" style="padding:16px;background:rgba(0,120,212,0.08);border-radius:10px;border:1px solid rgba(0,120,212,0.2)">
+      <div style="font-weight:600;margin-bottom:8px">Outlook não conectado</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Conecte sua conta Microsoft para ler e enviar e-mails via Outlook.</div>
+      <button class="btn btn-primary" onclick="connectCommunication('outlook')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar Outlook</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Phase 133 — Communication Connectors — Real API
+async function loadCommunicationConnectors() {
+  try {
+    const res = await fetch('/api/connectors/communication', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+    for (const connector of data.connectors) {
+      const statusEl = document.getElementById(`status-${connector.id}`);
+      const btnEl = document.getElementById(`btn-${connector.id}`);
+      if (statusEl) {
+        if (connector.connected) {
+          statusEl.className = 'integration-status connected';
+          statusEl.innerHTML = '<i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado';
+          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Configurar'; btnEl.onclick = () => showPage(`comm-${connector.id}`); }
+        } else if (connector.setupRequired) {
+          statusEl.className = 'integration-status pending';
+          statusEl.innerHTML = '<i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Requer configuração';
+          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Ver instruções'; btnEl.onclick = () => showConnectorSetup(connector); }
+        } else {
+          statusEl.className = 'integration-status pending';
+          statusEl.innerHTML = '<i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Não conectado';
+          if (btnEl) { btnEl.className = 'btn btn-primary'; btnEl.textContent = 'Conectar'; }
+        }
+      }
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (_) { /* ignorar */ }
+}
+
+function showConnectorSetup(connector) {
+  const msg = connector.setupInstructions || 'Configure as credenciais nas variáveis de ambiente do Cloudflare Pages.';
+  showToast(connector.name + ' — Configure as credenciais no Cloudflare Dashboard', 'warning');
+}
+
+async function connectCommunication(provider) {
+  try {
+    const res = await fetch('/api/connectors/communication', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ action: 'connect', provider }),
+    });
+    const data = await res.json();
+    if (data.setup_required) {
+      showConnectorSetup({ name: provider, setupInstructions: data.instructions });
+      return;
+    }
+    if (data.authUrl) {
+      window.location.href = data.authUrl;
+    } else {
+      if (typeof showToast === 'function') showToast('Erro ao iniciar conexão', 'error');
+    }
+  } catch (err) {
+    if (typeof showToast === 'function') showToast('Erro de conexão', 'error');
+  }
+}
+
+// Verificar resultado de callback OAuth
+const urlParams = new URLSearchParams(window.location.search);
+const connSuccess = urlParams.get('connector_success');
+const connError = urlParams.get('connector_error');
+if (connSuccess && typeof showToast === 'function') {
+  showToast(`${connSuccess} conectado com sucesso!`, 'success');
+  loadCommunicationConnectors();
+}
+if (connError && typeof showToast === 'function') {
+  showToast(`Erro ao conectar: ${connError}`, 'error');
+}
+
+// Carregar status ao inicializar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadCommunicationConnectors);
+} else {
+  loadCommunicationConnectors();
+}
+
+  // Conectar redes sociais via API real (OAuth)
+  async function commConnectSocial(provider) {
+    showToast('Iniciando conexão com ' + provider + '...', 'info');
+    try {
+      const r = await fetch('/api/integrations/connect', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ provider, type: 'social' })
+      });
+      const d = await r.json();
+      if (d.ok && d.authUrl) {
+        window.open(d.authUrl, '_blank', 'width=600,height=700');
+      } else {
+        showToast(d.error || 'Serviço aguardando configuração.', 'info');
+      }
+    } catch (_) {
+      showToast('Erro de conexão. Tente novamente.', 'error');
+    }
+  }
+
+  function commAttachFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.jpg,.jpeg,.png,.pdf,.doc,.docx,.txt,.zip';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      showToast('Arquivo selecionado: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)', 'info');
+      // O arquivo será enviado junto com a mensagem
+    };
+    input.click();
+  }
+  function commInsertEmoji() {
+    const emojis = ['😊','👍','❤️','🎉','🔥','✅','📌','💡','⚡','🚀'];
+    const msgInput = document.getElementById('msg-input') || document.querySelector('textarea[placeholder]');
+    if (msgInput) {
+      const emoji = emojis[Math.floor(Date.now() % emojis.length)];
+      msgInput.value += emoji;
+      msgInput.focus();
+    } else {
+      showToast('Selecione uma conversa primeiro', 'warning');
+    }
+  }
+
+  // ═══ Carregar conversas reais do /api/communication/hub ═══
+  async function loadConversations() {
+    const list = document.getElementById('msg-conv-list');
+    if (!list) return;
+    try {
+      const r = await fetch('/api/communication/hub', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (!r.ok || !d.ok || !d.providers || !d.providers.length) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor de comunicação para começar.</div>';
+        return;
+      }
+      const conversations = [];
+      for (const prov of d.providers) {
+        if (prov.connected && prov.conversations) {
+          for (const conv of prov.conversations) {
+            conversations.push({ ...conv, provider: prov.id, providerName: prov.name });
+          }
+        }
+      }
+      if (!conversations.length) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor para sincronizar conversas.</div>';
+        return;
+      }
+      list.innerHTML = conversations.map((c, i) => `
+        <div class="msg-conv-item ${i === 0 ? 'active' : ''}" onclick="msgOpenConv(this,'${escHtml(c.name || c.id)}','${escHtml(c.provider)}')">
+          <div class="msg-conv-avatar">${(c.name || c.id || '?').slice(0,2).toUpperCase()}</div>
+          <div class="msg-conv-info">
+            <div class="msg-conv-name">${escHtml(c.name || c.id)}</div>
+            <div class="msg-conv-preview">${escHtml(c.lastMessage || 'Sem mensagens')}</div>
+          </div>
+          <div class="msg-conv-meta">
+            <div class="msg-conv-time">${c.lastAt ? new Date(c.lastAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : ''}</div>
+            ${c.unread ? `<div class="msg-conv-unread">${c.unread}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    } catch (_) {
+      list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Erro ao carregar conversas.</div>';
+    }
+  }
+  function msgOpenConv(el, name, provider) {
+    document.querySelectorAll('.msg-conv-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('chat-name').textContent = name;
+    document.getElementById('chat-status').textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
+    const chatArea = document.getElementById('chat-messages');
+    if (chatArea) chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Selecione uma mensagem para ver a conversa.</div>';
+  }
+  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+  // Carregar conversas ao iniciar
+  loadConversations();
+</script>
+
+<!-- END module-communication -->

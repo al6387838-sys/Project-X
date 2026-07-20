@@ -1,0 +1,322 @@
+<!-- LifeOS Enterprise — Communication Hub v2.0 — Phase 140 -->
+<!-- Monitor de status, logs, fila de processamento, sincronização real -->
+<div id="module-communication-hub" style="display:none">
+
+<!-- ─── MONITOR DO HUB ─── -->
+<div class="page" id="page-comm-hub">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="radio" class="pg-icon" aria-hidden="true"></i> Communication Hub</div>
+      <div class="page-subtitle">Infraestrutura de comunicação — monitor em tempo real</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="commHubRefresh()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+      <button class="btn btn-ghost" onclick="showPage('comm-hub-logs')"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs</button>
+      <button class="btn btn-ghost" onclick="showPage('comm-hub-queue')"><i data-lucide="list-ordered" class="pg-icon" aria-hidden="true"></i> Fila</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid-4" style="margin-bottom:20px" id="comm-hub-kpis">
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="comm-kpi-connected">—</div>
+      <div class="kpi-label">Conectados</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="comm-kpi-configured">—</div>
+      <div class="kpi-label">Configurados</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="list-ordered" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="comm-kpi-queue">—</div>
+      <div class="kpi-label">Fila</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="clock" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="comm-kpi-lastcheck" style="font-size:13px">—</div>
+      <div class="kpi-label">Última verificação</div>
+    </div>
+  </div>
+
+  <!-- Providers -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title" style="margin-bottom:16px"><i data-lucide="network" class="pg-icon" aria-hidden="true"></i> Provedores de Comunicação</div>
+    <div id="comm-hub-providers" style="display:flex;flex-direction:column;gap:12px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)"><i data-lucide="loader" class="pg-icon" aria-hidden="true"></i> Carregando...</div>
+    </div>
+  </div>
+
+  <!-- Logs recentes -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="card-title" style="margin:0"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs Recentes</div>
+      <button class="btn btn-ghost" style="font-size:12px" onclick="showPage('comm-hub-logs')">Ver todos</button>
+    </div>
+    <div id="comm-hub-recent-logs" style="display:flex;flex-direction:column;gap:6px">
+      <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px">Nenhum log disponível</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LOGS COMPLETOS ─── -->
+<div class="page" id="page-comm-hub-logs">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs de Comunicação</div>
+      <div class="page-subtitle">Histórico completo de eventos</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('comm-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="comm-logs-full" style="display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando logs...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FILA DE PROCESSAMENTO ─── -->
+<div class="page" id="page-comm-hub-queue">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="list-ordered" class="pg-icon" aria-hidden="true"></i> Fila de Processamento</div>
+      <div class="page-subtitle">Jobs de sincronização pendentes e em execução</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('comm-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="comm-queue-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando fila...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Communication Hub v2.0 — Phase 140 ───
+const COMM_PROVIDER_COLORS = {
+  gmail: '#EA4335',
+  outlook: '#0078D4',
+  whatsapp: '#25D366',
+};
+
+async function commHubRefresh() {
+  await loadCommHubMonitor();
+  if (typeof showToast === 'function') showToast('Hub atualizado', 'success');
+}
+
+async function loadCommHubMonitor() {
+  try {
+    const res = await fetch('/api/communication/hub?view=monitor', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+
+    const m = data.monitor;
+
+    // KPIs
+    const el = id => document.getElementById(id);
+    if (el('comm-kpi-connected')) el('comm-kpi-connected').textContent = m.totalConnected;
+    if (el('comm-kpi-configured')) el('comm-kpi-configured').textContent = m.totalConfigured;
+    if (el('comm-kpi-queue')) el('comm-kpi-queue').textContent = m.queueSize;
+    if (el('comm-kpi-lastcheck')) {
+      const d = new Date(m.lastCheck);
+      el('comm-kpi-lastcheck').textContent = d.toLocaleTimeString('pt-BR');
+    }
+
+    // Providers
+    const providersEl = el('comm-hub-providers');
+    if (providersEl && m.providers) {
+      providersEl.innerHTML = m.providers.map(p => `
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg-elevated);border-radius:10px;border:1px solid var(--border)">
+          <div style="width:40px;height:40px;border-radius:10px;background:${COMM_PROVIDER_COLORS[p.id] || '#6366f1'}22;display:flex;align-items:center;justify-content:center;border:1px solid ${COMM_PROVIDER_COLORS[p.id] || '#6366f1'}44">
+            <i data-lucide="${p.icon}" style="color:${COMM_PROVIDER_COLORS[p.id] || '#6366f1'}" aria-hidden="true"></i>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:14px">${p.name}</div>
+            <div style="font-size:12px;color:var(--text-muted)">
+              ${p.connected ? `Conectado · Última sync: ${p.lastSync ? new Date(p.lastSync).toLocaleString('pt-BR') : 'nunca'}` :
+                p.setupRequired ? 'Requer configuração de credenciais' : 'Não conectado'}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${p.connected ? `
+              <span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Ativo</span>
+              <button class="btn btn-ghost" style="font-size:12px" onclick="commSync('${p.id}')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sync</button>
+              <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="commDisconnect('${p.id}')">Desconectar</button>
+            ` : p.setupRequired ? `
+              <span style="font-size:11px;color:var(--amber);display:flex;align-items:center;gap:4px"><i data-lucide="alert-triangle" class="pg-icon" aria-hidden="true"></i> Configurar</span>
+              <button class="btn btn-ghost" style="font-size:12px" onclick="showSetupInstructions(p.setupInstructions || 'Configure as variáveis de ambiente no Cloudflare Dashboard')">Instruções</button>
+            ` : `
+              <span style="font-size:11px;color:var(--text-muted)">Desconectado</span>
+              <button class="btn btn-primary" style="font-size:12px" onclick="commConnect('${p.id}')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar</button>
+            `}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Logs recentes
+    const logsEl = el('comm-hub-recent-logs');
+    if (logsEl && m.recentLogs) {
+      if (m.recentLogs.length === 0) {
+        logsEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px">Nenhum log disponível</div>';
+      } else {
+        logsEl.innerHTML = m.recentLogs.map(l => renderLogEntry(l)).join('');
+      }
+    }
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (e) {
+    console.error('Erro ao carregar Communication Hub:', e);
+  }
+}
+
+async function loadCommLogs() {
+  try {
+    const res = await fetch('/api/communication/hub?view=logs', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const el = document.getElementById('comm-logs-full');
+    if (!el) return;
+    if (!data.logs || data.logs.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Nenhum log registrado</div>';
+      return;
+    }
+    el.innerHTML = data.logs.map(l => renderLogEntry(l)).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch {}
+}
+
+async function loadCommQueue() {
+  try {
+    const res = await fetch('/api/communication/hub?view=queue', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const el = document.getElementById('comm-queue-list');
+    if (!el) return;
+    if (!data.queue || data.queue.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Fila vazia</div>';
+      return;
+    }
+    el.innerHTML = data.queue.map(j => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${j.status === 'pending' ? 'var(--amber)' : j.status === 'done' ? 'var(--green)' : 'var(--red)'}"></div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${j.provider} — ${j.action}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${new Date(j.createdAt).toLocaleString('pt-BR')} · Job ID: ${j.id}</div>
+        </div>
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:var(--bg-card)">${j.status}</span>
+      </div>
+    `).join('');
+  } catch {}
+}
+
+function renderLogEntry(l) {
+  const icons = {
+    connect_initiated: 'plug-zap',
+    connected: 'circle-check',
+    disconnected: 'plug',
+    sync_queued: 'list-ordered',
+    sync_done: 'check-circle',
+    error: 'alert-circle',
+  };
+  const colors = {
+    connect_initiated: 'var(--accent)',
+    connected: 'var(--green)',
+    disconnected: 'var(--text-muted)',
+    sync_queued: 'var(--amber)',
+    sync_done: 'var(--green)',
+    error: 'var(--red)',
+  };
+  const icon = icons[l.type] || 'info';
+  const color = colors[l.type] || 'var(--text-secondary)';
+  return `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;font-size:12px">
+      <i data-lucide="${icon}" style="color:${color};width:14px;height:14px" aria-hidden="true"></i>
+      <span style="color:${color};font-weight:600">${l.type}</span>
+      ${l.provider ? `<span style="color:var(--text-secondary)">${l.provider}</span>` : ''}
+      <span style="color:var(--text-muted);margin-left:auto">${new Date(l.timestamp).toLocaleString('pt-BR')}</span>
+    </div>
+  `;
+}
+
+async function commConnect(provider) {
+  try {
+    const res = await fetch('/api/communication/hub', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ action: 'connect', provider }),
+    });
+    const data = await res.json();
+    if (data.authUrl) {
+      window.location.href = data.authUrl;
+    } else if (data.error) {
+      if (typeof showToast === 'function') showToast(data.error, 'error');
+      if (data.setupInstructions) { const el = document.getElementById('setup-info'); if (el) { el.textContent = data.setupInstructions; el.style.display = 'block'; } }
+    }
+  } catch {
+    if (typeof showToast === 'function') showToast('Erro ao conectar', 'error');
+  }
+}
+
+async function commDisconnect(provider) {
+  if (!confirm(`Desconectar ${provider}?`)) return;
+  try {
+    const res = await fetch('/api/communication/hub', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ action: 'disconnect', provider }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast(`${provider} desconectado`, 'success');
+      await loadCommHubMonitor();
+    }
+  } catch {
+    if (typeof showToast === 'function') showToast('Erro ao desconectar', 'error');
+  }
+}
+
+async function commSync(provider) {
+  try {
+    const res = await fetch('/api/communication/hub', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ action: 'sync', provider }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast(`Sincronização de ${provider} enfileirada`, 'success');
+      await loadCommHubMonitor();
+    }
+  } catch {
+    if (typeof showToast === 'function') showToast('Erro ao sincronizar', 'error');
+  }
+}
+
+// Verificar resultado de callback OAuth
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const connected = p.get('connected');
+  const error = p.get('error');
+  if (connected && typeof showToast === 'function') {
+    showToast(`${connected} conectado com sucesso!`, 'success');
+  }
+  if (error && typeof showToast === 'function') {
+    showToast(`Erro OAuth: ${error}`, 'error');
+  }
+})();
+
+// Auto-carregar ao inicializar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadCommHubMonitor);
+} else {
+  loadCommHubMonitor();
+}
+</script>
+
+<!-- END module-communication-hub -->

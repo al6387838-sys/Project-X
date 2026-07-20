@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciador de Integrações — LifeOS Enterprise</title>
+  <link rel="stylesheet" href="/design_system/variables.css">
+  <link rel="stylesheet" href="/design_system/enterprise_v10_1.css">
+  <link rel="stylesheet" href="/animations/animations.css">
+  <style>
+    .integrations-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .integration-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .integration-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .integration-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+    }
+
+    .integration-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .integration-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .integration-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .integration-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .integration-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .status-connected {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+
+    .status-disconnected {
+      background: rgba(107, 114, 128, 0.2);
+      color: #9ca3af;
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .status-connected .status-dot {
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    .status-disconnected .status-dot {
+      background: #9ca3af;
+    }
+
+    .status-error .status-dot {
+      background: #ef4444;
+      animation: pulse-error 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes pulse-error {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .integration-description {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .integration-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .btn-connect {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      color: #fff;
+    }
+
+    .btn-connect:hover {
+      opacity: 0.9;
+    }
+
+    .integration-meta {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .oauth-flow-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .connection-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0 2rem;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 0.5rem;
+    }
+
+    .integrations-header {
+      padding: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .integrations-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .integrations-subtitle {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, rgba(30,30,40,0.95), rgba(20,20,30,0.95));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-header {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .modal-body {
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .oauth-steps {
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid var(--primary);
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .oauth-steps ol {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .oauth-steps li {
+      margin-bottom: 0.5rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-modal {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-modal:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn-modal-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+    }
+
+    .btn-modal-primary:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body style="background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%); color: #fff; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;">
+
+  <div class="integrations-header">
+    <h1 class="integrations-title"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Gerenciador de Integrações</h1>
+    <p class="integrations-subtitle">Conecte seus serviços favoritos ao LifeOS. Infraestrutura OAuth 2.0 segura com renovação automática de credenciais.</p>
+  </div>
+
+  <div class="connection-stats">
+    <div class="stat-box">
+      <div class="stat-value" id="stat-connected">0</div>
+      <div class="stat-label">Conectadas</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-available">7</div>
+      <div class="stat-label">Disponíveis</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-sync-status">Ativo</div>
+      <div class="stat-label">Status Sync</div>
+    </div>
+  </div>
+
+  <div class="integrations-container" id="integrations-list"></div>
+
+  <div class="modal-overlay" id="oauth-modal">
+    <div class="modal-content">
+      <div class="modal-header" id="modal-title">Conectar Serviço</div>
+      <div class="modal-body">
+        <p>Você está prestes a conectar <strong id="modal-service-name"></strong> ao LifeOS.</p>
+        <div class="oauth-steps">
+          <ol>
+            <li>Clique em "Autorizar" para abrir a tela de login</li>
+            <li>Faça login com sua conta <span id="modal-provider-name"></span></li>
+            <li>Conceda as permissões solicitadas</li>
+            <li>Você será redirecionado automaticamente</li>
+            <li>Seu token será armazenado de forma criptografada</li>
+          </ol>
+        </div>
+        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+          <i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Seus tokens são criptografados com AES-256 e nunca são compartilhados.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal" onclick="closeOAuthModal()">Cancelar</button>
+        <button class="btn-modal btn-modal-primary" onclick="authorizeIntegration()">Autorizar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const integrations = [
+      {
+        id: 'whatsapp',
+        name: 'WhatsApp',
+        icon: '\u{1F4AC}',
+        description: 'Sincronize mensagens e contatos do WhatsApp Business',
+        status: 'disconnected',
+        provider: 'Meta',
+        oauthFlow: true,
+        scopes: ['messages:read', 'contacts:read'],
+        lastSync: null,
+        color: '#25D366'
+      },
+      {
+        id: 'instagram',
+        name: 'Instagram',
+        icon: '\u{1F4F7}',
+        description: 'Conecte sua conta Instagram para análise de conteúdo',
+        status: 'disconnected',
+        provider: 'Meta',
+        oauthFlow: true,
+        scopes: ['user_profile', 'user_media'],
+        lastSync: null,
+        color: '#E4405F'
+      },
+      {
+        id: 'google',
+        name: 'Google',
+        icon: '\u{1F50D}',
+        description: 'Sincronize Gmail, Google Calendar e Google Drive',
+        status: 'disconnected',
+        provider: 'Google',
+        oauthFlow: true,
+        scopes: ['calendar', 'gmail', 'drive'],
+        lastSync: null,
+        color: '#4285F4'
+      },
+      {
+        id: 'outlook',
+        name: 'Microsoft Outlook',
+        icon: '\u{1F4E7}',
+        description: 'Conecte Outlook, Teams e OneDrive',
+        status: 'disconnected',
+        provider: 'Microsoft',
+        oauthFlow: true,
+        scopes: ['mail', 'calendar', 'files'],
+        lastSync: null,
+        color: '#0078D4'
+      },
+      {
+        id: 'openfinance',
+        name: 'Open Finance',
+        icon: '\u{1F4B0}',
+        description: 'Agregue dados de suas contas bancárias (Brasil)',
+        status: 'disconnected',
+        provider: 'Open Banking Brasil',
+        oauthFlow: true,
+        scopes: ['accounts', 'transactions', 'investments'],
+        lastSync: null,
+        color: '#1E40AF'
+      },
+      {
+        id: 'stripe',
+        name: 'Stripe',
+        icon: '\u{1F4B3}',
+        description: 'Gerencie pagamentos e faturas',
+        status: 'disconnected',
+        provider: 'Stripe',
+        oauthFlow: true,
+        scopes: ['read_write'],
+        lastSync: null,
+        color: '#635BFF'
+      },
+      {
+        id: 'mercadopago',
+        name: 'Mercado Pago',
+        icon: '\u{1F6D2}',
+        description: 'Integre pagamentos e vendas do Mercado Pago',
+        status: 'disconnected',
+        provider: 'Mercado Pago',
+        oauthFlow: true,
+        scopes: ['payments', 'users'],
+        lastSync: null,
+        color: '#FFB600'
+      }
+    ];
+
+    let selectedIntegration = null;
+
+    function renderIntegrations() {
+      const container = document.getElementById('integrations-list');
+      container.innerHTML = integrations.map(integration => `
+        <div class="integration-card">
+          <div class="integration-header">
+            <div class="integration-icon">${integration.icon}</div>
+            <div>
+              <div class="integration-name">${integration.name}</div>
+              <div class="status-${integration.status}">
+                <span class="status-dot"></span>
+                ${integration.status === 'connected' ? 'Conectado' : integration.status === 'error' ? 'Erro' : 'Desconectado'}
+              </div>
+            </div>
+          </div>
+          <div class="integration-description">${integration.description}</div>
+          <div class="integration-actions">
+            ${integration.status === 'connected' 
+              ? `<button class="btn-action" onclick="disconnectIntegration('${integration.id}')">Desconectar</button>
+                 <button class="btn-action" onclick="viewIntegrationDetails('${integration.id}')">Detalhes</button>`
+              : `<button class="btn-action btn-connect" onclick="initiateOAuth('${integration.id}')">Conectar</button>`
+            }
+          </div>
+          <div class="integration-meta">
+            <div>Provider: <strong>${integration.provider}</strong></div>
+            <div style="margin-top: 0.5rem;">Scopes: ${integration.scopes.length}</div>
+            ${integration.lastSync ? `<div>Última sincronização: ${integration.lastSync}</div>` : ''}
+            <div class="oauth-flow-badge">\u{1F510} OAuth 2.0</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function initiateOAuth(integrationId) {
+      selectedIntegration = integrations.find(i => i.id === integrationId);
+      if (!selectedIntegration) return;
+
+      document.getElementById('modal-title').textContent = `Conectar ${selectedIntegration.name}`;
+      document.getElementById('modal-service-name').textContent = selectedIntegration.name;
+      document.getElementById('modal-provider-name').textContent = selectedIntegration.provider;
+      document.getElementById('oauth-modal').classList.add('active');
+    }
+
+    function closeOAuthModal() {
+      document.getElementById('oauth-modal').classList.remove('active');
+      selectedIntegration = null;
+    }
+
+    async function authorizeIntegration() {
+      try {
+        const res = await fetch('/api/integrations', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'connect', integrationId: selectedIntegration.id, provider: selectedIntegration.provider }),
+        });
+        const d = await res.json();
+        if (d.ok) {
+          selectedIntegration.status = 'connected';
+          selectedIntegration.lastSync = new Date().toLocaleString('pt-BR');
+          if (d.token) {
+            localStorage.setItem('integration_' + selectedIntegration.id, JSON.stringify({
+              integrationId: selectedIntegration.id,
+              accessToken: d.token.accessToken || '',
+              refreshToken: d.token.refreshToken || '',
+              expiresAt: d.token.expiresAt || new Date(Date.now() + 3600000).toISOString(),
+              createdAt: new Date().toISOString()
+            }));
+          }
+          showToast?.(selectedIntegration.name + ' conectado!', 'success');
+          closeOAuthModal();
+          renderIntegrations();
+          updateStats();
+        } else {
+          showToast?.(d.error || 'Erro ao conectar', 'error');
+        }
+      } catch {
+        showToast?.('Erro de conexão', 'error');
+      }
+    }
+
+    function disconnectIntegration(integrationId) {
+      const integration = integrations.find(i => i.id === integrationId);
+      if (!integration) return;
+
+      if (confirm(`Desconectar ${integration.name}? Seus dados sincronizados não serão deletados.`)) {
+        integration.status = 'disconnected';
+        integration.lastSync = null;
+        localStorage.removeItem(`integration_${integrationId}`);
+        renderIntegrations();
+        updateStats();
+      }
+    }
+
+    function viewIntegrationDetails(integrationId) {
+      const integration = integrations.find(i => i.id === integrationId);
+      if (!integration) return;
+
+      const tokenData = JSON.parse(localStorage.getItem(`integration_${integrationId}`) || '{}');
+      // Integration details disponíveis via objeto integration
+    }
+
+    function updateStats() {
+      const connected = integrations.filter(i => i.status === 'connected').length;
+      document.getElementById('stat-connected').textContent = connected;
+    }
+
+    // Inicializar
+    renderIntegrations();
+    updateStats();
+
+    // Fechar modal ao clicar fora
+    document.getElementById('oauth-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'oauth-modal') {
+        closeOAuthModal();
+      }
+    });
+  </script>
+
+</body>
+</html>

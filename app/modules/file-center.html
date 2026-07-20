@@ -1,0 +1,124 @@
+<!-- LifeOS Enterprise — Enterprise File Center -->
+<div id="module-file-center" style="display:none">
+  <div class="page" id="page-file-center">
+    <div class="page-header">
+      <div>
+        <div class="page-title"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Enterprise File Center</div>
+        <div class="page-subtitle">Documentos persistidos, versões e compartilhamento</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-ghost" type="button" onclick="fcView('grid')" id="fc-btn-grid" aria-label="Visualização em grade"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" type="button" onclick="fcView('list')" id="fc-btn-list" aria-label="Visualização em lista"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-primary" type="button" onclick="fcUpload()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Registrar documento</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <input type="search" class="form-input" placeholder="Buscar arquivos, tags e descrições..." style="flex:1;min-width:220px" id="fc-search" aria-label="Buscar arquivos" />
+      <select class="form-input" style="width:auto" id="fc-type-filter" aria-label="Filtrar por tipo"><option value="">Todos os tipos</option><option value="application/pdf">PDF</option><option value="application/msword">Word</option><option value="application/vnd.ms-excel">Planilhas</option><option value="image/">Imagens</option></select>
+      <button class="btn btn-ghost" type="button" onclick="fcLoad()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:20px">
+      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><i data-lucide="files" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="fc-stat-total">—</div><div class="kpi-label">Documentos</div></div>
+      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="fc-stat-favorites">—</div><div class="kpi-label">Favoritos</div></div>
+      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><i data-lucide="hard-drive" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="fc-stat-size">—</div><div class="kpi-label">Armazenamento usado</div></div>
+      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(6,182,212,.15);color:var(--cyan)"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="fc-stat-shared">—</div><div class="kpi-label">Compartilhados</div></div>
+    </div>
+
+    <div class="card" id="fc-content" style="min-height:220px"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando documentos persistidos...</div></div>
+  </div>
+
+  <div class="page" id="page-file-viewer" style="display:none">
+    <div class="page-header">
+      <div><div class="page-title" id="fc-viewer-title">Documento</div><div class="page-subtitle" id="fc-viewer-subtitle">Informações do documento</div></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-ghost" type="button" onclick="fcBack()"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button><button class="btn btn-ghost" type="button" onclick="fcOpenVersions()"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i> Versões</button><button class="btn btn-primary" type="button" onclick="fcShare()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button></div>
+    </div>
+    <div class="card" id="fc-viewer-content" style="min-height:220px"></div>
+  </div>
+
+  <div class="modal" id="fc-upload-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-upload-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Registrar documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-upload-modal')">×</button></div><form id="fc-upload-form" style="display:grid;gap:12px;padding:20px"><label class="form-label">Nome do documento<input class="form-input" id="fc-upload-name" required maxlength="180" placeholder="Nome do documento" /></label><label class="form-label">Descrição (opcional)<input class="form-input" id="fc-upload-description" maxlength="500" placeholder="Descrição do documento" /></label><label class="form-label">Etiquetas (separadas por vírgula)<input class="form-input" id="fc-upload-tags" maxlength="300" placeholder="financeiro, contrato" /></label><label class="form-label">Tipo MIME<select class="form-input" id="fc-upload-mime"><option value="application/pdf">PDF</option><option value="application/msword">Word</option><option value="application/vnd.ms-excel">Planilha</option><option value="application/vnd.ms-powerpoint">Apresentação</option><option value="image/jpeg">Imagem</option><option value="text/plain">Texto</option></select></label><div id="fc-upload-error" style="display:none;color:var(--red);font-size:12px"></div><button class="btn btn-primary" type="submit">Registrar documento</button></form></div></div>
+
+  <div class="modal" id="fc-share-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-share-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Compartilhar documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-share-modal')">×</button></div><form id="fc-share-form" style="display:grid;gap:12px;padding:20px"><label class="form-label">E-mail da pessoa<input class="form-input" id="fc-share-email" type="email" required placeholder="usuario@empresa.com" /></label><label class="form-label">Permissão<select class="form-input" id="fc-share-permission"><option value="view">Visualizar</option><option value="edit">Editar</option></select></label><div id="fc-share-error" style="display:none;color:var(--red);font-size:12px"></div><button class="btn btn-primary" type="submit">Compartilhar</button></form></div></div>
+
+  <div class="modal" id="fc-versions-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-versions-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Versões do documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-versions-modal')">×</button></div><div id="fc-versions-content" style="display:grid;gap:8px;padding:20px"></div></div></div>
+
+<script>
+(() => {
+  'use strict';
+  if (window.LifeOSFileCenter) return;
+  const state = { documents: [], filtered: [], view: 'grid', active: null, stats: { total: 0, favorites: 0, totalSize: 0, shared: 0 } };
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  const size = (bytes) => { const value = Number(bytes) || 0; if (!value) return '0 B'; if (value < 1024) return `${value} B`; if (value < 1024 ** 2) return `${(value / 1024).toFixed(1)} KB`; return `${(value / 1024 ** 2).toFixed(2)} MB`; };
+  const formatDate = (value) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR'); };
+  const toast = (message, type = 'info') => { if (typeof window.showToast === 'function') window.showToast(message, type); else showToast?.(message, type); };
+  const icon = (mime) => mime?.includes('pdf') ? 'file-text' : mime?.includes('image') ? 'image' : mime?.includes('sheet') || mime?.includes('excel') ? 'file-spreadsheet' : mime?.includes('presentation') ? 'file-presentation' : 'file';
+
+  const refreshIcons = () => { try { window.lucide?.createIcons?.(); } catch (_) {} };
+  const updateStats = () => {
+    const set = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+    set('fc-stat-total', state.stats.total ?? state.documents.length);
+    set('fc-stat-favorites', state.stats.favorites ?? 0);
+    set('fc-stat-size', size(state.stats.totalSize));
+    set('fc-stat-shared', state.stats.shared ?? 0);
+  };
+  const applyFilters = () => {
+    const query = document.getElementById('fc-search')?.value?.trim().toLowerCase() || '';
+    const mime = document.getElementById('fc-type-filter')?.value || '';
+    state.filtered = state.documents.filter((document) => {
+      const haystack = [document.name, document.description, ...(document.tags || [])].join(' ').toLowerCase();
+      return (!query || haystack.includes(query)) && (!mime || String(document.mimeType || '').includes(mime));
+    });
+  };
+  const render = () => {
+    applyFilters();
+    const root = document.getElementById('fc-content');
+    if (!root) return;
+    if (!state.filtered.length) {
+      const filtered = state.documents.length > 0;
+      root.innerHTML = `<div style="padding:42px 20px;text-align:center"><i data-lucide="folder-open" style="width:32px;height:32px;color:var(--text-muted);margin-bottom:10px" aria-hidden="true"></i><div style="font-size:15px;font-weight:700;margin-bottom:7px">${filtered ? 'Nenhum documento corresponde aos filtros.' : 'Nenhum documento registrado.'}</div><div style="font-size:13px;color:var(--text-muted);margin:0 auto 16px;max-width:480px">${filtered ? 'Ajuste a busca ou os filtros para localizar documentos persistidos.' : 'Registre o primeiro documento para começar a organizar seu acervo.'}</div>${filtered ? '<button class="btn btn-ghost" type="button" onclick="fcClearFilters()">Limpar filtros</button>' : '<button class="btn btn-primary" type="button" onclick="fcUpload()">Registrar documento</button>'}</div>`;
+      refreshIcons(); return;
+    }
+    const cards = state.filtered.map((document) => `<article class="card" style="padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('${esc(document.id)}')"><div style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(99,102,241,.14);color:var(--accent)"><i data-lucide="${icon(document.mimeType)}" class="pg-icon" aria-hidden="true"></i></div><div style="min-width:0;flex:1"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(document.name)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px">${size(document.size)} · v${esc(document.version || 1)} · ${formatDate(document.updatedAt)}</div>${document.tags?.length ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${document.tags.map((tag) => `<span style="font-size:10px;padding:2px 6px;background:rgba(99,102,241,.12);border-radius:4px">${esc(tag)}</span>`).join('')}</div>` : ''}</div><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost" style="padding:4px 8px" onclick="event.stopPropagation();fcToggleFavorite('${esc(document.id)}')" aria-label="Alternar favorito"><i data-lucide="star" class="pg-icon" style="color:${document.favorite ? 'var(--amber)' : 'var(--text-muted)'}" aria-hidden="true"></i></button><button type="button" class="btn btn-ghost" style="padding:4px 8px" onclick="event.stopPropagation();fcOpenFile('${esc(document.id)}')" aria-label="Abrir documento"><i data-lucide="external-link" class="pg-icon" aria-hidden="true"></i></button></div></article>`).join('');
+    root.innerHTML = state.view === 'grid' ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">${cards}</div>` : `<div style="display:grid;gap:8px">${cards}</div>`;
+    refreshIcons();
+  };
+  const request = async (body) => {
+    const response = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.ok) throw new Error(data.error || 'Não foi possível concluir a operação.');
+    return data;
+  };
+  window.fcLoad = async () => {
+    const root = document.getElementById('fc-content'); if (root) root.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando documentos persistidos...</div>';
+    try {
+      const [listResponse, statsResponse, sharedResponse] = await Promise.all([fetch('/api/documents?view=list', { credentials: 'same-origin' }), fetch('/api/documents?view=stats', { credentials: 'same-origin' }), fetch('/api/documents?view=shared', { credentials: 'same-origin' })]);
+      const [list, stats, shared] = await Promise.all([listResponse.json(), statsResponse.json(), sharedResponse.json()]);
+      if (!listResponse.ok || !list.ok) throw new Error(list.error || 'Não foi possível carregar os documentos.');
+      state.documents = Array.isArray(list.documents) ? list.documents : [];
+      state.stats = stats.ok ? { ...(stats.stats || {}), shared: Array.isArray(shared.shared) ? shared.shared.length : 0 } : { total: state.documents.length, favorites: 0, totalSize: 0, shared: 0 };
+      updateStats(); render();
+    } catch (error) {
+      if (root) root.innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">${esc(error instanceof Error ? error.message : 'Não foi possível carregar os documentos.')}<div style="margin-top:12px"><button class="btn btn-ghost" type="button" onclick="fcLoad()">Tentar novamente</button></div></div>`;
+    }
+  };
+  window.fcView = (view) => { state.view = view === 'list' ? 'list' : 'grid'; document.getElementById('fc-btn-grid')?.classList.toggle('btn-primary', state.view === 'grid'); document.getElementById('fc-btn-list')?.classList.toggle('btn-primary', state.view === 'list'); render(); };
+  window.fcClearFilters = () => { const search = document.getElementById('fc-search'); const type = document.getElementById('fc-type-filter'); if (search) search.value = ''; if (type) type.value = ''; render(); };
+  window.fcOpenFile = (id) => { const record = state.documents.find((item) => item.id === id); if (!record) return; state.active = record; const main = document.getElementById('page-file-center'); const viewer = document.getElementById('page-file-viewer'); if (main) main.style.display = 'none'; if (viewer) viewer.style.display = 'block'; const title = document.getElementById('fc-viewer-title'); const subtitle = document.getElementById('fc-viewer-subtitle'); const content = document.getElementById('fc-viewer-content'); if (title) title.textContent = state.active.name; if (subtitle) subtitle.textContent = `${size(state.active.size)} · v${state.active.version || 1} · ${formatDate(state.active.updatedAt)}`; if (content) content.innerHTML = `<div style="display:grid;grid-template-columns:1fr minmax(240px,320px);gap:16px"><div style="min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--border);border-radius:10px;padding:24px"><div><i data-lucide="${icon(state.active.mimeType)}" style="width:52px;height:52px;color:var(--accent);margin-bottom:12px" aria-hidden="true"></i><div style="font-size:16px;font-weight:800">${esc(state.active.name)}</div><div style="font-size:13px;color:var(--text-muted);margin-top:8px">${esc(state.active.description || 'Nenhuma descrição fornecida.')}</div></div></div><aside class="card" style="padding:16px"><div style="font-size:13px;font-weight:800;margin-bottom:12px">Informações</div><div style="display:grid;gap:8px;font-size:12px"><div>Tipo: <strong>${esc(state.active.mimeType || 'Não informado')}</strong></div><div>Tamanho: <strong>${size(state.active.size)}</strong></div><div>Versão: <strong>v${esc(state.active.version || 1)}</strong></div><div>Atualizado: <strong>${formatDate(state.active.updatedAt)}</strong></div></div><div style="font-size:12px;font-weight:800;margin:16px 0 8px">Etiquetas</div>${state.active.tags?.length ? `<div style="display:flex;gap:5px;flex-wrap:wrap">${state.active.tags.map((tag) => `<span style="padding:3px 7px;background:rgba(99,102,241,.12);border-radius:4px;font-size:11px">${esc(tag)}</span>`).join('')}</div>` : '<div style="font-size:12px;color:var(--text-muted)">Sem etiquetas.</div>'}</aside></div>`; refreshIcons(); };
+  window.fcBack = () => { document.getElementById('page-file-viewer').style.display = 'none'; document.getElementById('page-file-center').style.display = 'block'; };
+  window.fcOpenModal = (id) => { const modal = document.getElementById(id); if (modal) modal.style.display = 'flex'; };
+  window.fcCloseModal = (id) => { const modal = document.getElementById(id); if (modal) modal.style.display = 'none'; };
+  window.fcUpload = () => window.fcOpenModal('fc-upload-modal');
+  window.fcShare = () => { if (!state.active) { toast('Abra um documento para compartilhá-lo.', 'info'); return; } window.fcOpenModal('fc-share-modal'); };
+  window.fcOpenVersions = async () => { if (!state.active) { toast('Abra um documento para consultar versões.', 'info'); return; } const root = document.getElementById('fc-versions-content'); root.innerHTML = '<div style="color:var(--text-muted)">Carregando versões...</div>'; window.fcOpenModal('fc-versions-modal'); try { const response = await fetch(`/api/documents?view=versions&docId=${encodeURIComponent(state.active.id)}`, { credentials: 'same-origin' }); const data = await response.json(); const versions = data.versions || []; root.innerHTML = versions.length ? versions.map((version, index) => `<div class="card" style="padding:12px"><strong>v${esc(version.version)}</strong>${index === 0 ? ' <span style="color:var(--green);font-size:11px">Atual</span>' : ''}<div style="font-size:12px;color:var(--text-muted);margin-top:4px">${esc(version.comment || 'Sem comentário')} · ${formatDate(version.uploadedAt)} · ${size(version.size)}</div></div>`).join('') : '<div style="color:var(--text-muted)">Nenhuma versão registrada.</div>'; } catch (_) { root.innerHTML = '<div style="color:var(--red)">Não foi possível carregar as versões.</div>'; } };
+  window.fcToggleFavorite = async (id) => { try { await request({ action: 'toggle-favorite', docId: id }); await window.fcLoad(); } catch (error) { toast(error.message, 'error'); } };
+  document.getElementById('fc-upload-form')?.addEventListener('submit', async (event) => { event.preventDefault(); const error = document.getElementById('fc-upload-error'); try { await request({ action: 'upload', name: document.getElementById('fc-upload-name').value.trim(), description: document.getElementById('fc-upload-description').value.trim(), tags: document.getElementById('fc-upload-tags').value.split(',').map((item) => item.trim()).filter(Boolean), mimeType: document.getElementById('fc-upload-mime').value }); window.fcCloseModal('fc-upload-modal'); event.currentTarget.reset(); await window.fcLoad(); toast('Documento registrado.', 'success'); } catch (exception) { error.textContent = exception.message; error.style.display = 'block'; } });
+  document.getElementById('fc-share-form')?.addEventListener('submit', async (event) => { event.preventDefault(); const error = document.getElementById('fc-share-error'); try { await request({ action: 'share', docId: state.active.id, targetUser: document.getElementById('fc-share-email').value.trim(), permission: document.getElementById('fc-share-permission').value }); window.fcCloseModal('fc-share-modal'); event.currentTarget.reset(); toast('Documento compartilhado.', 'success'); } catch (exception) { error.textContent = exception.message; error.style.display = 'block'; } });
+  document.getElementById('fc-search')?.addEventListener('input', render);
+  document.getElementById('fc-type-filter')?.addEventListener('change', render);
+  window.LifeOSFileCenter = { load: window.fcLoad, state };
+  window.setTimeout(window.fcLoad, 0);
+})();
+</script>
+</div>
+<!-- END module-file-center -->

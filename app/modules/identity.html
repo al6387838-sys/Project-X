@@ -1,0 +1,346 @@
+<!-- LifeOS Enterprise v11.0 — Digital Identity Center (Phase 112) -->
+<div id="module-identity" style="display:none">
+
+<!-- ─── DIGITAL IDENTITY CENTER ─── -->
+<div class="page" id="page-identity">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Identidade Digital</div>
+      <div class="page-subtitle">Gestão de perfis, autenticação, dispositivos e segurança</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="identityToggleView('grid')" aria-label="Visualização em grade"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" onclick="identityToggleView('list')" aria-label="Visualização em lista"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-primary" onclick="identityNewProfile()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Perfil</button>
+    </div>
+  </div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border)">
+    <button class="dv11-tab active" onclick="identityTab('profiles')">Perfis</button>
+    <button class="dv11-tab" onclick="identityTab('sessions')">Sessões</button>
+    <button class="dv11-tab" onclick="identityTab('devices')">Dispositivos</button>
+    <button class="dv11-tab" onclick="identityTab('mfa')">2FA / MFA</button>
+    <button class="dv11-tab" onclick="identityTab('audit')">Auditoria</button>
+  </div>
+
+  <!-- PERFIS -->
+  <div id="identity-profiles-tab">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      <div style="background:var(--bg-card);border:1px solid var(--border-accent);border-radius:var(--radius-lg);padding:20px;position:relative">
+        <div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:20px;font-size:10px;font-weight:700;color:var(--green)">ATIVO</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff">U</div>
+          <div>
+            <div style="font-size:16px;font-weight:700">Usuário Principal</div>
+            <div style="font-size:12px;color:var(--text-secondary)">usuario@lifeos.app</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Role</span><span style="color:var(--accent-light);font-weight:600">Admin</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">MFA</span><span style="color:var(--green);font-weight:600">Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último login</span><span>15 Jul 2026 09:32</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Sessões ativas</span><span>3</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Dispositivos</span><span>5</span></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="identityEditProfile()">Editar</button>
+          <button class="btn btn-ghost" style="flex:1;font-size:12px;color:var(--amber)" onclick="identityManageKeys()">Chaves</button>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative">
+        <div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:20px;font-size:10px;font-weight:700;color:var(--text-muted)">INATIVO</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#10B981,#06B6D4);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff">W</div>
+          <div>
+            <div style="font-size:16px;font-weight:700">Workspace — Dev Team</div>
+            <div style="font-size:12px;color:var(--text-secondary)">dev@lifeos.app</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Role</span><span style="font-weight:600">Contributor</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">MFA</span><span style="color:var(--green);font-weight:600">Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último login</span><span>14 Jul 2026 18:15</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Membros</span><span>4</span></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="identityActivateProfile('dev')">Ativar</button>
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="identityManageKeys()">Chaves</button>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative;cursor:pointer;border-style:dashed" onclick="identityNewProfile()">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:30px 0">
+          <div style="font-size:32px;opacity:0.5"><i data-lucide="user-round-plus" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-secondary)">Criar Novo Perfil</div>
+          <div style="font-size:12px;color:var(--text-muted);text-align:center">Adicione um perfil pessoal ou workspace</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SESSÕES -->
+  <div id="identity-sessions-tab" style="display:none">
+    <div style="margin-bottom:16px;display:flex;gap:8px;align-items:center">
+      <span class="dv11-comm-pill"><i class="dv11-led"></i><strong>3 sessões ativas</strong></span>
+      <button class="btn btn-ghost" style="font-size:12px;margin-left:auto;color:var(--red)" onclick="identityCloseAllSessions()">Encerrar todas</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:var(--bg-card);border:1px solid var(--border-accent);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600">MacBook Pro 16" <span style="color:var(--green);font-size:11px;margin-left:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Atual</span></div>
+          <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Chrome 125 · IP 192.168.1.42</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Iniciada em 15 Jul 2026 09:32 · Duração: 6h 28m</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="identityCloseSession('macbook')">Encerrar</button>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600">iPhone 15 Pro</div>
+          <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Safari iOS · IP 192.168.1.42</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Iniciada em 14 Jul 2026 07:15 · Duração: 28h</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="identityCloseSession('iphone')">Encerrar</button>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;display:flex;align-items:center;gap:16px">
+        <div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:18px"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600">iPad Air</div>
+          <div style="font-size:12px;color:var(--text-muted)">São Paulo, BR · Safari iPadOS · IP 192.168.1.55</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Iniciada em 13 Jul 2026 14:20 · Duração: 2 dias</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="identityCloseSession('ipad')">Encerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPOSITIVOS -->
+  <div id="identity-devices-tab" style="display:none">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:24px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div style="font-size:14px;font-weight:600">MacBook Pro 16"</div><div style="font-size:11px;color:var(--text-muted)">macOS Sonoma 14.5</div></div>
+          <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Fingerprint</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Registrado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--text-secondary)">Não configurado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>15 Jul 09:32</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:24px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div style="font-size:14px;font-weight:600">iPhone 15 Pro</div><div style="font-size:11px;color:var(--text-muted)">iOS 17.5</div></div>
+          <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Configurado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>14 Jul 07:15</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:24px"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div style="font-size:14px;font-weight:600">iPad Air</div><div style="font-size:11px;color:var(--text-muted)">iPadOS 17.5</div></div>
+          <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6)"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Face ID</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Configurado</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Push Notify</span><span style="color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Último acesso</span><span>13 Jul 14:20</span></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;cursor:pointer;border-style:dashed" onclick="identityRegisterDevice()">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px">
+          <div style="font-size:28px;opacity:0.5"><i data-lucide="monitor-smartphone" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary)">Registrar Dispositivo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2FA / MFA -->
+  <div id="identity-mfa-tab" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Métodos 2FA Ativos</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid rgba(16,185,129,0.3)">
+            <div style="font-size:24px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600">TOTP (Authenticator)</div><div style="font-size:11px;color:var(--text-muted)">Google Authenticator · Configurado</div></div>
+            <span style="font-size:11px;font-weight:700;color:var(--green);padding:3px 8px;background:rgba(16,185,129,0.15);border-radius:4px">ATIVO</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid rgba(16,185,129,0.3)">
+            <div style="font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600">Push Notification</div><div style="font-size:11px;color:var(--text-muted)">iPhone 15 Pro · Configurado</div></div>
+            <span style="font-size:11px;font-weight:700;color:var(--green);padding:3px 8px;background:rgba(16,185,129,0.15);border-radius:4px">ATIVO</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border)">
+            <div style="font-size:24px"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600">Security Key (FIDO2)</div><div style="font-size:11px;color:var(--text-muted)">Não configurado</div></div>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="identitySetupSecurityKey()">Configurar</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border)">
+            <div style="font-size:24px"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600">Backup Codes</div><div style="font-size:11px;color:var(--text-muted)">10 códigos restantes</div></div>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="identityViewBackupCodes()">Ver</button>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px">
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Configurações de Segurança</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div><div style="font-size:13px;font-weight:600">2FA Obrigatório</div><div style="font-size:11px;color:var(--text-muted)">Exigir 2FA para todos os logins</div></div>
+            <label style="position:relative;width:40px;height:22px;display:inline-block">
+              <input type="checkbox" checked style="opacity:0;width:0" onchange="identityToggleSetting(this,'2fa_required')"/>
+              <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--green);border-radius:11px;transition:0.3s"></span>
+              <span style="position:absolute;left:2px;bottom:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s;transform:translateX(18px)"></span>
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div><div style="font-size:13px;font-weight:600">Alerta de Login</div><div style="font-size:11px;color:var(--text-muted)">Notificar sobre novos logins</div></div>
+            <label style="position:relative;width:40px;height:22px;display:inline-block">
+              <input type="checkbox" checked style="opacity:0;width:0" onchange="identityToggleSetting(this,'login_alert')"/>
+              <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--green);border-radius:11px;transition:0.3s"></span>
+              <span style="position:absolute;left:2px;bottom:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s;transform:translateX(18px)"></span>
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div><div style="font-size:13px;font-weight:600">Geo-Bloqueio</div><div style="font-size:11px;color:var(--text-muted)">Bloquear logins de países não autorizados</div></div>
+            <label style="position:relative;width:40px;height:22px;display:inline-block">
+              <input type="checkbox" style="opacity:0;width:0" onchange="identityToggleSetting(this,'geo_block')"/>
+              <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--border);border-radius:11px;transition:0.3s"></span>
+              <span style="position:absolute;left:2px;bottom:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s;transform:translateX(0)"></span>
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+            <div><div style="font-size:13px;font-weight:600">Sessões simultâneas</div><div style="font-size:11px;color:var(--text-muted)">Máximo 3 sessões ativas</div></div>
+            <label style="position:relative;width:40px;height:22px;display:inline-block">
+              <input type="checkbox" checked style="opacity:0;width:0" onchange="identityToggleSetting(this,'max_sessions')"/>
+              <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--green);border-radius:11px;transition:0.3s"></span>
+              <span style="position:absolute;left:2px;bottom:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:0.3s;transform:translateX(18px)"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDITORIA -->
+  <div id="identity-audit-tab" style="display:none">
+    <div style="margin-bottom:16px;display:flex;gap:8px">
+      <input type="text" class="form-input" placeholder=" Filtrar auditoria..." style="flex:1;min-width:200px" />
+      <select class="form-input" style="width:auto">
+        <option>Todos os tipos</option>
+        <option>Login</option>
+        <option>Logout</option>
+        <option>Configuração</option>
+        <option>Dispositivo</option>
+        <option>2FA</option>
+      </select>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:11px;font-weight:700;color:var(--text-muted);border-bottom:1px solid var(--border)">
+        <div>Tempo</div><div>Evento</div><div>IP</div><div>Dispositivo</div><div>Status</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">09:32</div>
+        <div>Login bem-sucedido — MacBook Pro</div>
+        <div style="color:var(--text-muted)">192.168.1.42</div>
+        <div>MacBook Pro 16"</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">09:30</div>
+        <div>2FA verificado — TOTP</div>
+        <div style="color:var(--text-muted)">192.168.1.42</div>
+        <div>MacBook Pro 16"</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">Ontem</div>
+        <div>Acesso ao sistema</div>
+        <div style="color:var(--text-muted)">192.168.1.42</div>
+        <div>MacBook Pro 16"</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">2d</div>
+        <div>Device registrado — iPad Air</div>
+        <div style="color:var(--text-muted)">192.168.1.55</div>
+        <div>iPad Air</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">3d</div>
+        <div style="color:var(--amber)">Tentativa de login falha</div>
+        <div style="color:var(--text-muted)">200.145.33.12</div>
+        <div>Chrome 124</div>
+        <div style="color:var(--red);font-weight:600"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i> Falha</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <div style="color:var(--text-muted)">5d</div>
+        <div>Integração Google Calendar</div>
+        <div style="color:var(--text-muted)">192.168.1.42</div>
+        <div>MacBook Pro 16"</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 120px 120px 80px;gap:12px;padding:10px 16px;font-size:12px">
+        <div style="color:var(--text-muted)">7d</div>
+        <div>2FA ativado — Push Notification</div>
+        <div style="color:var(--text-muted)">192.168.1.42</div>
+        <div>iPhone 15 Pro</div>
+        <div style="color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> OK</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  window.identityTab = function(tab){
+    document.querySelectorAll('#page-identity .dv11-tab').forEach(t=>t.classList.remove('active'));
+    var tabs=['profiles','sessions','devices','mfa','audit'];
+    tabs.forEach(function(t){
+      var el=document.getElementById('identity-'+t+'-tab');
+      if(el) el.style.display='none';
+    });
+    event.target.classList.add('active');
+    var target=document.getElementById('identity-'+tab+'-tab');
+    if(target) target.style.display='block';
+  };
+  window.identityToggleView=function(v){ showToast('Visualização: '+v,'info'); };
+  window.identityNewProfile=function(){ openModal('modal-new-profile'); };
+  window.identityEditProfile=function(){ showToast('Edição de perfil','info'); };
+  window.identityManageKeys=function(){ showToast('Gerenciamento de chaves','info'); };
+  window.identityActivateProfile=function(id){
+    (async()=>{try{const r=await fetch('/api/enterprise-data',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'activate-profile',profileId:id})});const d=await r.json();if(d.ok)showToast('Perfil ativado: '+id,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao ativar perfil','error')}})();
+  };
+  window.identityCloseAllSessions=function(){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'update-policy',policy:{revokeAllDevices:true}})});const d=await r.json();if(d.ok)showToast('Todas as sessões encerradas','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao encerrar sessões','error')}})();
+  };
+  window.identityCloseSession=function(id){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'revoke-device',deviceId:id})});const d=await r.json();if(d.ok)showToast('Sessão encerrada: '+id,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao encerrar sessão','error')}})();
+  };
+  window.identityRegisterDevice=function(){
+    (async()=>{try{showToast('Registrando dispositivo...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'register-device'})});const d=await r.json();if(d.ok)showToast('Dispositivo registrado','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao registrar dispositivo','error')}})();
+  };
+  window.identitySetupSecurityKey=function(){
+    (async()=>{try{showToast('Iniciando registro FIDO2...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'mfa-setup',type:'security-key'})});const d=await r.json();if(d.ok)showToast('Security Key FIDO2 configurada','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao configurar FIDO2','error')}})();
+  };
+  window.identityViewBackupCodes=function(){
+    (async()=>{try{showToast('Gerando backup codes...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'mfa-setup',type:'backup-codes'})});const d=await r.json();if(d.ok)showToast('Backup codes gerados','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao gerar backup codes','error')}})();
+  };
+  window.identityToggleSetting=function(el,key){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'update-policy',policy:{[key]:el.checked}})});const d=await r.json();if(d.ok)showToast('Configuração atualizada: '+key,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao atualizar configuração','error')}})();
+  };
+})();
+</script>
+</div>
+<!-- END module-identity -->

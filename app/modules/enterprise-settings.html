@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise Settings — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25); --text-primary: #F0F4FF;
+      --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12); --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; display: flex; height: 100vh; overflow: hidden; }
+    /* Settings Layout */
+    .settings-sidebar { width: 220px; background: var(--bg-elevated); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; overflow-y: auto; }
+    .settings-sidebar-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; padding: 0 16px 10px; }
+    .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; color: var(--text-secondary); font-size: 13px; font-weight: 500; border-left: 2px solid transparent; }
+    .settings-nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
+    .settings-nav-item.active { background: var(--accent-glow); color: var(--accent-light); border-left-color: var(--accent); }
+    .settings-nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+    .settings-nav-sep { height: 1px; background: var(--border); margin: 10px 16px; }
+    .settings-content { flex: 1; overflow-y: auto; padding: 28px 32px; }
+    .settings-header { margin-bottom: 28px; }
+    .settings-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .settings-desc { font-size: 13px; color: var(--text-secondary); }
+    .settings-badge { display: inline-block; background: rgba(99,102,241,0.15); color: var(--accent-light); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+    .settings-panel { display: none; }
+    .settings-panel.active { display: block; }
+    /* Form Elements */
+    .settings-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 18px; }
+    .settings-section-title { font-size: 14px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .settings-section-title span { font-size: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .form-input { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; color: var(--text-primary); font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: var(--border-accent); }
+    .form-select { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; color: var(--text-primary); font-size: 13px; outline: none; cursor: pointer; }
+    .form-select:focus { border-color: var(--border-accent); }
+    /* Toggle */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .toggle-info { flex: 1; }
+    .toggle-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .toggle-desc { font-size: 12px; color: var(--text-secondary); }
+    .toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--border); border-radius: 24px; transition: 0.3s; }
+    .toggle-slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: var(--text-muted); border-radius: 50%; transition: 0.3s; }
+    .toggle input:checked + .toggle-slider { background: var(--accent); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); background: #fff; }
+    /* Theme Selector */
+    .theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .theme-option { border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .theme-option.active { border-color: var(--accent); }
+    .theme-option:hover { border-color: var(--border-accent); }
+    .theme-preview { height: 48px; border-radius: 6px; margin-bottom: 8px; }
+    .theme-name { font-size: 12px; font-weight: 600; }
+    /* Security */
+    .security-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .security-item:last-child { border-bottom: none; }
+    .security-info { display: flex; align-items: center; gap: 12px; }
+    .security-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .security-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .security-desc { font-size: 12px; color: var(--text-secondary); }
+    .security-status { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+    .security-status.enabled { background: rgba(16,185,129,0.12); color: var(--green); }
+    .security-status.disabled { background: rgba(239,68,68,0.1); color: var(--red); }
+    .security-status.warning { background: rgba(245,158,11,0.12); color: var(--amber); }
+    /* Sessions */
+    .session-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .session-device { display: flex; align-items: center; gap: 12px; }
+    .session-icon { font-size: 22px; }
+    .session-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .session-meta { font-size: 12px; color: var(--text-muted); }
+    .session-current { font-size: 11px; font-weight: 700; color: var(--green); background: rgba(16,185,129,0.1); padding: 2px 8px; border-radius: 4px; }
+    .session-revoke { font-size: 12px; color: var(--red); cursor: pointer; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); padding: 5px 10px; border-radius: 6px; }
+    /* API Keys */
+    .api-key-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .api-key-info { flex: 1; }
+    .api-key-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .api-key-value { font-family: monospace; font-size: 12px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 4px; display: inline-block; }
+    .api-key-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .api-key-actions { display: flex; gap: 8px; }
+    .btn-sm { font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; border: 1px solid; transition: all 0.2s; }
+    .btn-sm.copy { border-color: var(--border-accent); color: var(--accent-light); background: var(--accent-glow); }
+    .btn-sm.revoke { border-color: rgba(239,68,68,0.3); color: var(--red); background: rgba(239,68,68,0.06); }
+    /* Webhooks */
+    .webhook-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg-elevated); border-radius: var(--radius-md); margin-bottom: 10px; }
+    .webhook-url { font-family: monospace; font-size: 12px; color: var(--cyan); }
+    .webhook-events { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .webhook-event-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: rgba(6,182,212,0.1); color: var(--cyan); }
+    .btn-primary { background: var(--gradient-primary); color: #fff; font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-md); border: none; cursor: pointer; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-danger { background: rgba(239,68,68,0.1); color: var(--red); font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: var(--radius-md); border: 1px solid rgba(239,68,68,0.3); cursor: pointer; }
+    .form-actions { display: flex; gap: 10px; margin-top: 6px; }
+    .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .lang-option { border: 2px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
+    .lang-option.active { border-color: var(--accent); background: var(--accent-glow); }
+    .lang-option:hover:not(.active) { border-color: var(--border-accent); }
+    .lang-flag { font-size: 20px; }
+    .lang-name { font-size: 13px; font-weight: 600; }
+    .lang-native { font-size: 11px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="settings-sidebar">
+    <div class="settings-sidebar-title">Configurações</div>
+    <div class="settings-nav-item active" onclick="switchSettings('preferences')"><span class="nav-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></span>Preferências</div>
+    <div class="settings-nav-item" onclick="switchSettings('language')"><span class="nav-icon"><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></span>Idioma</div>
+    <div class="settings-nav-item" onclick="switchSettings('theme')"><span class="nav-icon"><i data-lucide="palette" class="pg-icon" aria-hidden="true"></i></span>Tema</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('integrations')"><span class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span>Integrações</div>
+    <div class="settings-nav-item" onclick="switchSettings('security')"><span class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span>Segurança</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('account')"><span class="nav-icon"><i data-lucide="user-cog" class="pg-icon" aria-hidden="true"></i></span>Conta</div>
+    <div class="settings-nav-item" onclick="switchSettings('sessions')"><span class="nav-icon"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span>Sessões</div>
+    <div class="settings-nav-item" onclick="switchSettings('devices')"><span class="nav-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span>Dispositivos</div>
+    <div class="settings-nav-sep"></div>
+    <div class="settings-nav-item" onclick="switchSettings('apikeys')"><span class="nav-icon"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></span>API Keys</div>
+    <div class="settings-nav-item" onclick="switchSettings('webhooks')"><span class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>Webhooks</div>
+  </div>
+
+  <div class="settings-content">
+
+    <!-- PREFERENCES -->
+    <div id="panel-preferences" class="settings-panel active">
+      <div class="settings-header">
+        <div class="settings-title">Preferências</div>
+        <div class="settings-desc">Personalize sua experiência no LifeOS Enterprise</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></span> Perfil</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Nome completo</label><input class="form-input" id="pref-name" placeholder="Seu nome" /></div>
+          <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" id="pref-email" placeholder="seu@email.com" readonly /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Cargo</label><input class="form-input" id="pref-role" placeholder="Seu cargo" /></div>
+          <div class="form-group"><label class="form-label">Fuso horário</label><select class="form-input" id="pref-timezone"><option value="America/Sao_Paulo">America/São Paulo (GMT-3)</option><option value="America/New_York">America/New York (GMT-5)</option><option value="Europe/London">Europe/London (GMT+0)</option><option value="America/Los_Angeles">America/Los Angeles (GMT-8)</option></select></div>
+        </div>
+        <div id="pref-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-actions"><button class="btn-primary" id="pref-save-btn" onclick="saveProfile()">Salvar Alterações</button></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></span> Notificações</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Notificações por e-mail</div><div class="toggle-desc">Receber resumos diários e alertas importantes</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Notificações push</div><div class="toggle-desc">Alertas em tempo real no navegador</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Resumo semanal</div><div class="toggle-desc">Relatório de produtividade toda segunda-feira</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Alertas financeiros</div><div class="toggle-desc">Notificações de movimentações acima do limite configurado</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></span> Interface</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Sidebar compacta</div><div class="toggle-desc">Exibir sidebar recolhida por padrão</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Animações premium</div><div class="toggle-desc">Transições e efeitos visuais avançados</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Modo compacto</div><div class="toggle-desc">Reduzir espaçamento para mais conteúdo</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANGUAGE -->
+    <div id="panel-language" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Idioma</div>
+        <div class="settings-desc">Selecione o idioma da interface do LifeOS</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="globe-2" class="pg-icon" aria-hidden="true"></i></span> Idioma da Interface</div>
+        <div class="lang-grid">
+          <div class="lang-option active"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Português</div><div class="lang-native">Português do Brasil</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">English</div><div class="lang-native">English (US)</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Español</div><div class="lang-native">Español (Latinoamérica)</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Français</div><div class="lang-native">Français</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">Deutsch</div><div class="lang-native">Deutsch</div></div></div>
+          <div class="lang-option"><div class="lang-flag"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div><div class="lang-name">日本語</div><div class="lang-native">Japanese</div></div></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span> Formatos Regionais</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Formato de data</label>
+            <select class="form-select"><option selected>DD/MM/AAAA</option><option>MM/DD/AAAA</option><option>AAAA-MM-DD</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Formato de hora</label>
+            <select class="form-select"><option selected>24h (14:30)</option><option>12h (2:30 PM)</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Moeda padrão</label>
+            <select class="form-select"><option selected>BRL — Real Brasileiro</option><option>USD — US Dollar</option><option>EUR — Euro</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Fuso horário</label>
+            <select class="form-select"><option selected>America/Sao_Paulo (GMT-3)</option><option>America/New_York (GMT-5)</option><option>Europe/London (GMT+0)</option></select>
+          </div>
+        </div>
+        <div class="form-actions"><button class="btn-primary">Salvar Preferências</button></div>
+      </div>
+    </div>
+
+    <!-- THEME -->
+    <div id="panel-theme" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Tema</div>
+        <div class="settings-desc">Personalize a aparência visual da plataforma</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="palette" class="pg-icon" aria-hidden="true"></i></span> Tema da Interface</div>
+        <div class="theme-grid">
+          <div class="theme-option active">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0A0E14,#141B28)"></div>
+            <div class="theme-name">Dark (Padrão)</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#F8FAFC,#E2E8F0)"></div>
+            <div class="theme-name" style="color:var(--text-secondary)">Light</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0D0D1A,#1A0A2E)"></div>
+            <div class="theme-name">Deep Purple</div>
+          </div>
+          <div class="theme-option">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0A1628,#0F2040)"></div>
+            <div class="theme-name">Ocean Blue</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="sparkles" class="pg-icon" aria-hidden="true"></i></span> Cor de Destaque</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);cursor:pointer;border:3px solid white;box-shadow:0 0 12px rgba(99,102,241,0.5)"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#06B6D4,#0891B2);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#10B981,#059669);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#D97706);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#DC2626);cursor:pointer;border:3px solid transparent"></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#DB2777);cursor:pointer;border:3px solid transparent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS -->
+    <div id="panel-integrations" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Integrações</div>
+        <div class="settings-desc">Gerencie conexões com serviços externos</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></span> Serviços Conectados</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Google Workspace</div><div class="toggle-desc">Gmail, Calendar, Drive e Meet</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Open Finance Brasil</div><div class="toggle-desc">Dados bancários via Open Banking</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">OpenAI GPT-4</div><div class="toggle-desc">Motor de IA para assistente e análises</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Stripe Payments</div><div class="toggle-desc">Processamento de pagamentos e assinaturas</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">GitHub</div><div class="toggle-desc">Deploy automático e CI/CD</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Slack</div><div class="toggle-desc">Notificações e comandos slash</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div id="panel-security" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Segurança</div>
+        <div class="settings-desc">Gerencie autenticação e controles de acesso</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></span> Autenticação</div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div>
+            <div><div class="security-name">Senha</div><div class="security-desc">Última alteração há 30 dias</div></div>
+          </div>
+          <span class="security-status enabled">Ativo</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(99,102,241,0.12)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+            <div><div class="security-name">Autenticação 2FA</div><div class="security-desc">Verificação em dois fatores via app</div></div>
+          </div>
+          <span class="security-status enabled">Ativo</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></div>
+            <div><div class="security-name">SSO Enterprise</div><div class="security-desc">Login único via SAML/OAuth</div></div>
+          </div>
+          <span class="security-status warning">Configurar</span>
+        </div>
+        <div class="security-item">
+          <div class="security-info">
+            <div class="security-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
+            <div><div class="security-name">Passkey / WebAuthn</div><div class="security-desc">Login sem senha via biometria</div></div>
+          </div>
+          <span class="security-status disabled">Inativo</span>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span> Políticas de Acesso</div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Bloqueio automático</div><div class="toggle-desc">Bloquear sessão após 30 min de inatividade</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Alertas de login</div><div class="toggle-desc">Notificar sobre novos acessos à conta</div></div>
+          <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><div class="toggle-label">Restrição por IP</div><div class="toggle-desc">Permitir acesso apenas de IPs autorizados</div></div>
+          <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT LIFECYCLE -->
+    <div id="panel-account" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Gerenciamento de Conta</div>
+        <div class="settings-desc">Altere sua senha, e-mail ou encerre sua conta</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></span> Alterar Senha</div>
+        <div id="pwd-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Senha atual</label><input type="password" class="form-input" id="pwd-current" placeholder="••••••••" /></div>
+          <div class="form-group"><label class="form-label">Nova senha</label><input type="password" class="form-input" id="pwd-new" placeholder="Mínimo 8 caracteres" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary" onclick="changePassword()">Alterar Senha</button></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span> Alterar E-mail</div>
+        <div id="email-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Novo e-mail</label><input type="email" class="form-input" id="new-email" placeholder="novo@email.com" /></div>
+          <div class="form-group"><label class="form-label">Confirme com sua senha</label><input type="password" class="form-input" id="email-pwd" placeholder="••••••••" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary" onclick="changeEmail()">Alterar E-mail</button></div>
+      </div>
+      <div class="settings-section" style="border-top:1px solid rgba(239,68,68,0.2);padding-top:20px">
+        <div class="settings-section-title" style="color:var(--red)"><span><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></span> Zona de Perigo</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">A exclusão da conta é permanente e irreversível. Todos os seus dados serão removidos imediatamente.</p>
+        <div id="delete-status" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Confirme sua senha</label><input type="password" class="form-input" id="delete-pwd" placeholder="••••••••" /></div>
+          <div class="form-group"><label class="form-label">Digite: EXCLUIR MINHA CONTA</label><input type="text" class="form-input" id="delete-confirm" placeholder="EXCLUIR MINHA CONTA" /></div>
+        </div>
+        <div class="form-actions"><button class="btn-danger" onclick="deleteAccount()">Excluir Minha Conta Permanentemente</button></div>
+      </div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div id="panel-sessions" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Sessões Ativas</div>
+        <div class="settings-desc">Gerencie todos os dispositivos com sessão ativa</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></span> Sessões</div>
+        <div id="sessions-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando sessões...</div></div>
+        <div style="margin-top:16px">
+          <button class="btn-danger" onclick="revokeAllSessions()">Revogar Todas as Outras Sessões</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVICES -->
+    <div id="panel-devices" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Dispositivos Conectados</div>
+        <div class="settings-desc">Dispositivos autorizados para acesso à conta</div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></span> Dispositivos</div>
+        <div id="devices-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando dispositivos...</div></div>
+      </div>
+    </div>
+
+    <!-- API KEYS -->
+    <div id="panel-apikeys" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">API Keys</div>
+        <div class="settings-desc">Gerencie chaves de acesso à API do LifeOS</div>
+      </div>
+      <div class="settings-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></span> Chaves de API</div>
+          <button class="btn-primary" onclick="openCreateKeyModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Gerar Nova Chave</button>
+        </div>
+        <div id="api-keys-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando chaves...</div></div>
+      </div>
+      <!-- Modal criar chave -->
+      <div id="create-key-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center">
+        <div style="background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);border-radius:16px;padding:32px;width:400px;max-width:90vw;box-shadow:0 16px 48px rgba(0,0,0,0.5)">
+          <h3 style="margin:0 0 16px;color:var(--text-primary)">Gerar Nova API Key</h3>
+          <input id="new-key-name" type="text" placeholder="Nome da chave (ex: Production)" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:12px" />
+          <div id="new-key-result" style="display:none;margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-ghost" onclick="closeCreateKeyModal()">Cancelar</button>
+            <button class="btn-primary" onclick="submitCreateKey()">Criar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEBHOOKS -->
+    <div id="panel-webhooks" class="settings-panel">
+      <div class="settings-header">
+        <div class="settings-title">Webhooks</div>
+        <div class="settings-desc">Configure endpoints para receber eventos em tempo real</div>
+      </div>
+      <div class="settings-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Endpoints Configurados</div>
+          <button class="btn-primary" onclick="openCreateWebhookModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Webhook</button>
+        </div>
+        <div id="webhooks-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando webhooks...</div></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-section-title"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span> Eventos Disponíveis</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.created</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">user.updated</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">transaction.created</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">payment.received</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">session.started</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">session.revoked</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">document.signed</div>
+          <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">alert.triggered</div>
+        </div>
+      </div>
+      <!-- Modal criar webhook -->
+      <div id="create-webhook-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center">
+        <div style="background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);border-radius:16px;padding:32px;width:440px;max-width:90vw;box-shadow:0 16px 48px rgba(0,0,0,0.5)">
+          <h3 style="margin:0 0 16px;color:var(--text-primary)">Registrar Webhook</h3>
+          <input id="new-webhook-url" type="url" placeholder="https://seu-endpoint.com/webhook" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:12px" />
+          <select id="new-webhook-events" multiple style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:13px;margin-bottom:12px;min-height:120px">
+            <option value="*" selected>Todos os eventos (*)</option>
+            <option value="user.created">user.created</option>
+            <option value="user.updated">user.updated</option>
+            <option value="transaction.created">transaction.created</option>
+            <option value="payment.received">payment.received</option>
+            <option value="session.started">session.started</option>
+            <option value="session.revoked">session.revoked</option>
+            <option value="document.signed">document.signed</option>
+            <option value="alert.triggered">alert.triggered</option>
+          </select>
+          <div id="new-webhook-result" style="display:none;margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-ghost" onclick="closeCreateWebhookModal()">Cancelar</button>
+            <button class="btn-primary" onclick="submitCreateWebhook()">Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    'use strict';
+
+    function switchSettings(panel, source = null) {
+      const items = [...document.querySelectorAll('.settings-nav-item')];
+      items.forEach(item => item.classList.remove('active'));
+      const selected = source || items.find(item => item.getAttribute('onclick')?.includes(`'${panel}'`));
+      if (selected) selected.classList.add('active');
+      document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('panel-' + panel);
+      if (target) target.classList.add('active');
+      if (panel === 'sessions') loadSessions();
+      if (panel === 'devices') loadDevices();
+      if (panel === 'apikeys') loadApiKeys();
+      if (panel === 'webhooks') loadWebhooks();
+    }
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+
+    // Load profile data
+    (async () => {
+      try {
+        const r = await fetch('/api/profile', { credentials: 'same-origin' });
+        if (r.ok) {
+          const d = await r.json();
+          if (d.ok && (d.user || d.profile)) {
+            const u = d.user || d.profile;
+            const nameEl = document.getElementById('pref-name');
+            const emailEl = document.getElementById('pref-email');
+            const tzEl = document.getElementById('pref-timezone');
+            if (nameEl) nameEl.value = u.name || '';
+            if (emailEl) emailEl.value = u.email || '';
+            if (tzEl && u.timezone) {
+              for (const opt of tzEl.options) { if (opt.value === u.timezone) { opt.selected = true; break; } }
+            }
+          }
+        }
+      } catch (_) {}
+    })();
+
+    function showMsg(id, type, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = 'block';
+      el.style.background = type === 'success' ? 'rgba(16,185,129,0.1)' : type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.1)';
+      el.style.border = type === 'success' ? '1px solid rgba(16,185,129,0.2)' : type === 'error' ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(99,102,241,0.2)';
+      el.style.color = type === 'success' ? '#6EE7B7' : type === 'error' ? '#FCA5A5' : '#818CF8';
+      el.textContent = msg;
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('pref-name').value.trim();
+      const timezone = document.getElementById('pref-timezone').value;
+      const btn = document.getElementById('pref-save-btn');
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/profile-update', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'profile.update', name, timezone })
+        });
+        const d = await r.json();
+        showMsg('pref-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro ao salvar');
+        if (r.ok && (d.user || d.profile)) {
+          const updated = d.user || d.profile;
+          window.dispatchEvent(new CustomEvent('lifeos:profile-updated', { detail: updated }));
+          if (window.parent !== window) window.parent.postMessage({ type: 'lifeos:profile-updated', profile: updated }, location.origin);
+        }
+      } catch (_) { showMsg('pref-status', 'error', 'Erro de conexão'); }
+      btn.disabled = false;
+    }
+
+    async function changePassword() {
+      const currentPassword = document.getElementById('pwd-current').value;
+      const newPassword = document.getElementById('pwd-new').value;
+      if (!currentPassword || !newPassword) { showMsg('pwd-status', 'error', 'Preencha todos os campos'); return; }
+      if (newPassword.length < 8) { showMsg('pwd-status', 'error', 'Nova senha deve ter pelo menos 8 caracteres'); return; }
+      try {
+        const r = await fetch('/api/profile-update', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'password.change', currentPassword, newPassword })
+        });
+        const d = await r.json();
+        showMsg('pwd-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) { document.getElementById('pwd-current').value = ''; document.getElementById('pwd-new').value = ''; }
+      } catch (_) { showMsg('pwd-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function changeEmail() {
+      const email = document.getElementById('new-email').value.trim();
+      const password = document.getElementById('email-pwd').value;
+      if (!email || !password) { showMsg('email-status', 'error', 'Preencha todos os campos'); return; }
+      try {
+        const r = await fetch('/api/profile', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'change_email', email, password })
+        });
+        const d = await r.json();
+        showMsg('email-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) {
+          document.getElementById('new-email').value = '';
+          document.getElementById('email-pwd').value = '';
+        }
+      } catch (_) { showMsg('email-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function deleteAccount() {
+      const password = document.getElementById('delete-pwd').value;
+      const confirmation = document.getElementById('delete-confirm').value;
+      if (!password || !confirmation) { showMsg('delete-status', 'error', 'Preencha todos os campos'); return; }
+      try {
+        const r = await fetch('/api/profile', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_account', password, confirmation })
+        });
+        const d = await r.json();
+        showMsg('delete-status', r.ok ? 'success' : 'error', d.message || d.error || 'Erro');
+        if (r.ok) setTimeout(() => location.replace(d.redirect || '/login?account_deleted=1'), 1200);
+      } catch (_) { showMsg('delete-status', 'error', 'Erro de conexão'); }
+    }
+
+    async function loadSessions() {
+      const list = document.getElementById('sessions-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/sessions', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.sessions || !d.sessions.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhuma sessão ativa encontrada.</div>';
+          return;
+        }
+        list.innerHTML = d.sessions.map(s => `
+          <div class="session-item">
+            <div class="session-device">
+              <div class="session-icon"><i data-lucide="monitor" class="pg-icon" aria-hidden="true"></i></div>
+              <div>
+                <div class="session-name">${escHtml(s.userAgent || 'Dispositivo desconhecido')} ${s.current ? '<span class="session-current">SESSÃO ATUAL</span>' : ''}</div>
+                <div class="session-meta">${escHtml(s.country || '')} · IP ${escHtml(s.ip || '')} · ${escHtml(new Date(s.lastActiveAt || s.createdAt).toLocaleString('pt-BR'))}</div>
+              </div>
+            </div>
+            ${!s.current ? `<button class="session-revoke" onclick="revokeSession('${escHtml(s.id)}')">Revogar</button>` : ''}
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar sessões.</div>'; }
+    }
+
+    async function loadDevices() {
+      const list = document.getElementById('devices-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/sessions', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.devices || !d.devices.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhum dispositivo registrado.</div>';
+          return;
+        }
+        list.innerHTML = d.devices.map(device => `
+          <div class="session-item">
+            <div class="session-device">
+              <div class="session-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+              <div>
+                <div class="session-name">${escHtml(device.name || 'Navegador web')} em ${escHtml(device.platform || 'Web')} ${device.current ? '<span class="session-current">ATUAL</span>' : ''}</div>
+                <div class="session-meta">${escHtml(device.city || device.country || '')} · IP ${escHtml(device.ip || '')} · Último acesso: ${escHtml(new Date(device.lastSeenAt || device.registeredAt).toLocaleString('pt-BR'))}</div>
+              </div>
+            </div>
+            <button class="session-revoke" onclick="removeDevice('${escHtml(device.id)}')">Remover</button>
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar dispositivos.</div>'; }
+    }
+
+    async function revokeSession(id) {
+      try {
+        await fetch('/api/sessions', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke', sessionId: id })
+        });
+        loadSessions();
+      } catch (_) {}
+    }
+
+    async function revokeAllSessions() {
+      try {
+        const response = await fetch('/api/sessions', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke_all' })
+        });
+        if (!response.ok) throw new Error('Não foi possível revogar as sessões');
+        loadSessions();
+      } catch (error) { showToast?.(error.message, "error"); }
+    }
+
+    async function removeDevice(deviceId) {
+      try {
+        const response = await fetch('/api/sessions', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'device.remove', deviceId })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Não foi possível remover o dispositivo');
+        if (data.currentRevoked) { location.replace('/login'); return; }
+        loadDevices();
+        loadSessions();
+      } catch (error) { showToast?.(error.message, "error"); }
+    }
+
+    // ═══ API KEYS — Real Backend ═══
+    async function loadApiKeys() {
+      const list = document.getElementById('api-keys-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/platform?view=keys', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.ok || !d.keys || !d.keys.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhuma chave de API configurada. Clique em "Gerar Nova Chave" para criar.</div>';
+          return;
+        }
+        list.innerHTML = d.keys.map(k => `
+          <div class="api-key-item">
+            <div class="api-key-info">
+              <div class="api-key-name">${escHtml(k.name)} ${k.revokedAt ? '<span style="font-size:10px;color:var(--red);margin-left:8px">REVOGADA</span>' : ''}</div>
+              <div class="api-key-value">${escHtml(k.key || '')}</div>
+              <div class="api-key-meta">Criada em ${escHtml(new Date(k.createdAt).toLocaleDateString('pt-BR'))} · Permissões: ${escHtml((k.scopes || []).join(', '))}${k.lastUsedAt ? ' · Último uso: ' + new Date(k.lastUsedAt).toLocaleDateString('pt-BR') : ''}</div>
+            </div>
+            <div class="api-key-actions">
+              ${k.revokedAt ? '' : `<button class="btn-sm" onclick="copyApiKey('${escHtml(k.key)}')">Copiar</button>`}
+              ${!k.revokedAt ? `<button class="btn-sm revoke" onclick="revokeApiKey('${escHtml(k.id)}')">Revogar</button>` : ''}
+            </div>
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar chaves.</div>'; }
+    }
+    function openCreateKeyModal() { document.getElementById('create-key-modal').style.display = 'flex'; }
+    function closeCreateKeyModal() { document.getElementById('create-key-modal').style.display = 'none'; }
+    async function submitCreateKey() {
+      const name = document.getElementById('new-key-name').value.trim();
+      if (!name) { showToast?.('Nome obrigatório', 'error'); return; }
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'create-key', name, scopes: ['read', 'write'] })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) {
+          closeCreateKeyModal();
+          document.getElementById('new-key-name').value = '';
+          showToast?.('Chave criada! Copie-a agora — não será exibida novamente.', 'success');
+          loadApiKeys();
+        } else {
+          showToast?.(d.error || 'Erro ao criar chave', 'error');
+        }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function copyApiKey(key) {
+      try { await navigator.clipboard.writeText(key); showToast?.('Chave copiada', 'success'); } catch (_) { showToast?.('Erro ao copiar', 'error'); }
+    }
+    async function revokeApiKey(keyId) {
+      if (!confirm('Revogar esta chave? Ela não poderá mais ser usada.')) return;
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke-key', keyId })
+        });
+        if (r.ok) { showToast?.('Chave revogada', 'success'); loadApiKeys(); }
+        else { showToast?.('Erro ao revogar', 'error'); }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+
+    // ═══ WEBHOOKS — Real Backend ═══
+    async function loadWebhooks() {
+      const list = document.getElementById('webhooks-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/platform?view=webhooks', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.ok || !d.webhooks || !d.webhooks.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhum webhook configurado. Clique em "Adicionar Webhook" para criar.</div>';
+          return;
+        }
+        list.innerHTML = d.webhooks.map(w => `
+          <div class="webhook-item">
+            <div style="flex:1">
+              <div class="api-key-name">${escHtml(w.id.slice(0,8))}... ${w.active ? '<span style="font-size:10px;color:var(--green)">ATIVO</span>' : '<span style="font-size:10px;color:var(--red)">INATIVO</span>'}</div>
+              <div class="webhook-url">${escHtml(w.url)}</div>
+              <div class="webhook-events">${(w.events || []).map(e => `<span class="webhook-event-tag">${escHtml(e)}</span>`).join('')}</div>
+              <div class="api-key-meta">Criado em ${escHtml(new Date(w.createdAt).toLocaleDateString('pt-BR'))} · Entregas: ${w.deliveries || 0} · Falhas: ${w.failures || 0}</div>
+            </div>
+            <div class="api-key-actions">
+              <button class="btn-sm" onclick="testWebhook('${escHtml(w.id)}')">Testar</button>
+              <button class="btn-sm revoke" onclick="deleteWebhook('${escHtml(w.id)}')">Remover</button>
+            </div>
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar webhooks.</div>'; }
+    }
+    function openCreateWebhookModal() { document.getElementById('create-webhook-modal').style.display = 'flex'; }
+    function closeCreateWebhookModal() { document.getElementById('create-webhook-modal').style.display = 'none'; }
+    async function submitCreateWebhook() {
+      const url = document.getElementById('new-webhook-url').value.trim();
+      if (!url) { showToast?.('URL obrigatória', 'error'); return; }
+      try { new URL(url); } catch { showToast?.('URL inválida', 'error'); return; }
+      const select = document.getElementById('new-webhook-events');
+      const events = Array.from(select.selectedOptions).map(o => o.value);
+      if (!events.length) { showToast?.('Selecione pelo menos um evento', 'error'); return; }
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'register-webhook', url, events })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) {
+          closeCreateWebhookModal();
+          document.getElementById('new-webhook-url').value = '';
+          showToast?.('Webhook registrado com sucesso', 'success');
+          loadWebhooks();
+        } else {
+          showToast?.(d.error || 'Erro ao registrar webhook', 'error');
+        }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function testWebhook(webhookId) {
+      showToast?.('Testando webhook...', 'info');
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'test-webhook', webhookId })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) { showToast?.('Webhook testado: ' + (d.success ? 'sucesso' : 'falha HTTP ' + d.status), d.success ? 'success' : 'warning'); }
+        else { showToast?.(d.error || 'Erro ao testar', 'error'); }
+        loadWebhooks();
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function deleteWebhook(webhookId) {
+      if (!confirm('Remover este webhook? Os eventos não serão mais entregues.')) return;
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete-webhook', webhookId })
+        });
+        if (r.ok) { showToast?.('Webhook removido', 'success'); loadWebhooks(); }
+        else { showToast?.('Erro ao remover', 'error'); }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+
+    function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+  </script>
+</body>
+</html>

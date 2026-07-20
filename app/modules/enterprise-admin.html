@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise Admin — LifeOS</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --border: rgba(255,255,255,0.06); --border-accent: rgba(239,68,68,0.2);
+      --text-primary: #F0F4FF; --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8; --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --gradient-danger: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+      --t-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; padding: 0; }
+
+    /* Header */
+    .ea-header { padding: 24px 28px 0; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .ea-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #FCA5A5; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .ea-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--gradient-danger); border-radius: 99px; }
+    .ea-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .ea-title span { background: var(--gradient-danger); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .ea-subtitle { font-size: 13px; color: var(--text-secondary); }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all var(--t-fast); }
+    .btn-danger { background: var(--gradient-danger); color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.3); }
+    .btn-danger:hover { box-shadow: 0 4px 16px rgba(239,68,68,0.5); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+    .btn-primary { background: var(--gradient-primary); color: #fff; }
+    .btn-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.4); transform: translateY(-1px); }
+
+    /* Alert banner */
+    .ea-alert { margin: 16px 28px 0; background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-md); padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .ea-alert-icon { font-size: 16px; }
+    .ea-alert-text { flex: 1; color: var(--text-secondary); }
+    .ea-alert-text strong { color: #FCA5A5; }
+    .ea-alert-action { font-size: 12px; font-weight: 600; color: #FCA5A5; cursor: pointer; text-decoration: underline; }
+
+    /* Tabs */
+    .ea-tabs { display: flex; gap: 4px; padding: 16px 28px 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .ea-tab { padding: 9px 16px; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; border: none; background: transparent; transition: all var(--t-fast); white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; border-radius: 8px 8px 0 0; }
+    .ea-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+    .ea-tab.active { color: #FCA5A5; border-bottom-color: var(--red); background: rgba(239,68,68,0.05); }
+
+    /* Content */
+    .ea-content { padding: 24px 28px; }
+    .ea-panel { display: none; }
+    .ea-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Grid */
+    .grid { display: grid; gap: 16px; }
+    .grid-4 { grid-template-columns: repeat(4,1fr); }
+    .grid-3 { grid-template-columns: repeat(3,1fr); }
+    .grid-2 { grid-template-columns: repeat(2,1fr); }
+    @media (max-width:1100px) { .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:640px) { .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;} }
+
+    /* Card */
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all var(--t-fast); }
+    .card:hover { border-color: rgba(255,255,255,0.1); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .card-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+
+    /* KPI */
+    .kpi-value { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+    .kpi-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    .kpi-delta { font-size: 11px; font-weight: 600; margin-top: 6px; display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 99px; }
+    .delta-up { background: rgba(16,185,129,0.1); color: var(--green); }
+    .delta-down { background: rgba(239,68,68,0.1); color: var(--red); }
+    .delta-flat { background: rgba(99,102,241,0.1); color: var(--accent-light); }
+
+    /* Table */
+    .ea-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .ea-table thead th { padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .ea-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background var(--t-fast); }
+    .ea-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+    .ea-table tbody td { padding: 11px 14px; color: var(--text-secondary); vertical-align: middle; }
+    .ea-table tbody td:first-child { color: var(--text-primary); font-weight: 500; }
+    .ea-table tbody tr:last-child { border-bottom: none; }
+
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .badge-green { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+    .badge-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+    .badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .badge-purple { background: rgba(139,92,246,0.12); color: var(--purple); border: 1px solid rgba(139,92,246,0.2); }
+    .badge-blue { background: rgba(99,102,241,0.12); color: var(--accent-light); border: 1px solid rgba(99,102,241,0.2); }
+    .badge-cyan { background: rgba(6,182,212,0.12); color: var(--cyan); border: 1px solid rgba(6,182,212,0.2); }
+
+    /* Progress */
+    .progress { height: 5px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 99px; background: var(--gradient-primary); }
+
+    /* Health indicator */
+    .health-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .health-ok { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,0.5); animation: pulse 2s ease infinite; }
+    .health-warn { background: var(--amber); }
+    .health-err { background: var(--red); animation: pulse 1s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* Form */
+    .form-group { margin-bottom: 16px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+    .form-input { width: 100%; background: rgba(15,21,32,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--text-primary); outline: none; transition: all var(--t-fast); font-family: inherit; }
+    .form-input:focus { border-color: rgba(99,102,241,0.4); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A5568' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
+
+    /* Toggle */
+    .toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .toggle-info { flex: 1; }
+    .toggle-name { font-size: 13px; font-weight: 600; }
+    .toggle-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .toggle { width: 40px; height: 22px; border-radius: 99px; background: rgba(255,255,255,0.1); cursor: pointer; position: relative; transition: all var(--t-fast); flex-shrink: 0; border: none; }
+    .toggle.on { background: var(--green); }
+    .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: all var(--t-fast); }
+    .toggle.on::after { left: 21px; }
+
+    /* Log item */
+    .log-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .log-item:last-child { border-bottom: none; }
+    .log-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .log-info { flex: 1; }
+    .log-action { font-size: 13px; font-weight: 500; }
+    .log-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .log-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(239,68,68,0.2); border-radius: 99px; }
+  
+    .ea-config-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-top: 20px; }
+    .config-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+    .config-card:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+    .config-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .config-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .config-category { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; }
+    .config-status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .status-ok { background: rgba(16,185,129,0.1); color: #10B981; }
+    .status-missing { background: rgba(239,68,68,0.1); color: #EF4444; }
+    .status-partial { background: rgba(245,158,11,0.1); color: #F59E0B; }
+    .config-details { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+    .config-env { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .config-env i { font-size: 14px; }
+    .config-keys { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .key-tag { font-family: monospace; font-size: 10px; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; color: #94A3B8; }
+    .key-missing { text-decoration: line-through; color: #EF4444; opacity: 0.7; }
+    .config-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); }
+    .last-sync { font-size: 11px; color: var(--text-secondary); }
+    .btn-test { padding: 6px 12px; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="ea-header">
+  <div>
+    <div class="ea-eyebrow"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Super Admin</div>
+    <h1 class="ea-title"><span>Enterprise</span> Admin</h1>
+    <p class="ea-subtitle">Gestão completa de tenants, usuários, billing e sistema</p>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost" onclick="eaExport()">⬇ Exportar</button>
+    <button class="btn btn-danger" onclick="eaEmergency()"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Emergência</button>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="ea-alert">
+  <span class="ea-alert-icon"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></span>
+  <div class="ea-alert-text"><strong>2 alertas ativos:</strong> Tenant "StartupXYZ" com uso acima de 90% do plano · Fatura vencida há 3 dias</div>
+  <span class="ea-alert-action" onclick="eaViewAlerts()">Ver alertas <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></span>
+</div>
+
+<!-- TABS -->
+<div class="ea-tabs">
+  <button class="ea-tab active" onclick="eaTab('overview',this)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Visão Geral</button>
+  <button class="ea-tab" onclick="eaTab('tenants',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Tenants</button>
+  <button class="ea-tab" onclick="eaTab('users',this)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Usuários</button>
+  <button class="ea-tab" onclick="eaTab('billing',this)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Billing</button>
+  <button class="ea-tab" onclick="eaTab('security',this)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Segurança</button>
+  <button class="ea-tab" onclick="eaTab('system',this)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Sistema</button>
+  <button class="ea-tab" onclick="eaTab('audit',this)"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
+  <button class="ea-tab" onclick="eaTab('features',this)"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Feature Flags</button>
+</div>
+
+<div class="ea-content">
+
+  <!-- OVERVIEW -->
+  <div class="ea-panel active" id="ea-overview">
+    <div class="grid grid-4" style="margin-bottom:20px">
+      <div class="card">
+        <div class="kpi-label">MRR</div>
+        <div class="kpi-value" style="color:#10B981">{revenue_value}</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Tenants Ativos</div>
+        <div class="kpi-value" style="color:#818CF8">156</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +5.2% este mês</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Usuários Totais</div>
+        <div class="kpi-value" style="color:#06B6D4">2.847</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% este mês</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Uptime (30d)</div>
+        <div class="kpi-value" style="color:#F59E0B">99.98%</div>
+        <div class="kpi-delta delta-flat"><i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> SLA: 99.9%</div>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <!-- System Health -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Saúde do Sistema</div>
+          <span class="badge badge-green">Operacional</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-ok"></span>API Gateway</span>
+            <span style="font-size:12px;color:var(--green)">45ms avg</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-ok"></span>Database Cluster</span>
+            <span style="font-size:12px;color:var(--green)">12ms avg</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-ok"></span>Cache (Redis)</span>
+            <span style="font-size:12px;color:var(--green)">2ms avg</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-warn"></span>AI Service</span>
+            <span style="font-size:12px;color:var(--amber)">320ms avg</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-ok"></span>CDN (Cloudflare)</span>
+            <span style="font-size:12px;color:var(--green)">8ms avg</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px">
+            <span><span class="health-dot health-ok"></span>Email Service</span>
+            <span style="font-size:12px;color:var(--green)">Operacional</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Atividade Recente</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTab('audit',document.querySelector('.ea-tab:nth-child(7)'))">Ver tudo</button>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Novo tenant criado: <strong>FinTech Pro</strong></div>
+            <div class="log-meta">Plano Enterprise · 50 licenças</div>
+          </div>
+          <div class="log-time">09:32</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Limite de uso atingido: <strong>StartupXYZ</strong></div>
+            <div class="log-meta">90% do plano Pro utilizado</div>
+          </div>
+          <div class="log-time">08:15</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(99,102,241,0.1)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Pagamento recebido: <strong>TechCorp Brasil</strong></div>
+            <div class="log-meta">{billing_description}</div>
+          </div>
+          <div class="log-time">07:44</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Tentativa de acesso bloqueada</div>
+            <div class="log-meta">IP: 185.220.101.x · Brute force detectado</div>
+          </div>
+          <div class="log-time">06:20</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(6,182,212,0.1)"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Deploy concluído: <strong>v10.1.0</strong></div>
+            <div class="log-meta">Cloudflare Pages · 0 erros · 2.1s</div>
+          </div>
+          <div class="log-time">Ontem</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENANTS -->
+  <div class="ea-panel" id="ea-tenants">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Gestão de Tenants</div>
+        <div style="display:flex;gap:8px">
+          <input type="text" class="form-input" placeholder=" Buscar tenant..." style="width:200px;padding:7px 12px" />
+          <button class="btn btn-primary" onclick="eaNewTenant()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Tenant</button>
+        </div>
+      </div>
+      <table class="ea-table">
+        <thead>
+          <tr>
+            <th>Tenant</th><th>Plano</th><th>Usuários</th><th>MRR</th><th>Uso</th><th>Status</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div>TechCorp Brasil</div><div style="font-size:11px;color:var(--text-muted)">techcorp.lifeos.app</div></td>
+            <td><span class="badge badge-purple">Enterprise</span></td>
+            <td>45 / 75</td>
+            <td style="color:var(--green)">{plan_price}</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:60%"></div></div><span style="font-size:11px">60%</span></div></td>
+            <td><span class="badge badge-green">Ativo</span></td>
+            <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('TechCorp')">Detalhes</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspend('TechCorp')">Suspender</button></div></td>
+          </tr>
+          <tr>
+            <td><div>StartupXYZ</div><div style="font-size:11px;color:var(--text-muted)">startupxyz.lifeos.app</div></td>
+            <td><span class="badge badge-blue">Pro</span></td>
+            <td>18 / 20</td>
+            <td style="color:var(--green)">{plan_price}</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:90%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div><span style="font-size:11px;color:var(--amber)">90%</span></div></td>
+            <td><span class="badge badge-amber"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Limite</span></td>
+            <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('StartupXYZ')">Detalhes</button><button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="eaUpgrade('StartupXYZ')">Upgrade</button></div></td>
+          </tr>
+          <tr>
+            <td><div>Consultoria Alpha</div><div style="font-size:11px;color:var(--text-muted)">alpha.lifeos.app</div></td>
+            <td><span class="badge badge-purple">Enterprise</span></td>
+            <td>28 / 50</td>
+            <td style="color:var(--green)">{plan_price}</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:56%"></div></div><span style="font-size:11px">56%</span></div></td>
+            <td><span class="badge badge-green">Ativo</span></td>
+            <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('Alpha')">Detalhes</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspend('Alpha')">Suspender</button></div></td>
+          </tr>
+          <tr>
+            <td><div>FinTech Pro</div><div style="font-size:11px;color:var(--text-muted)">fintech.lifeos.app</div></td>
+            <td><span class="badge badge-purple">Enterprise</span></td>
+            <td>2 / 50</td>
+            <td style="color:var(--green)">{plan_price}</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:4%"></div></div><span style="font-size:11px">4%</span></div></td>
+            <td><span class="badge badge-cyan"><i data-lucide="badge-plus" class="pg-icon" aria-hidden="true"></i> Novo</span></td>
+            <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('FinTech')">Detalhes</button></div></td>
+          </tr>
+          <tr>
+            <td><div>MedGroup</div><div style="font-size:11px;color:var(--text-muted)">medgroup.lifeos.app</div></td>
+            <td><span class="badge badge-blue">Pro</span></td>
+            <td>8 / 20</td>
+            <td style="color:var(--red)">Inadimplente</td>
+            <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:40%"></div></div><span style="font-size:11px">40%</span></div></td>
+            <td><span class="badge badge-red">Inadimplente</span></td>
+            <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--amber)" onclick="eaNotify('MedGroup')">Notificar</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspend('MedGroup')">Suspender</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="ea-panel" id="ea-users">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Usuários do Sistema</div>
+        <div style="display:flex;gap:8px">
+          <input type="text" class="form-input" placeholder=" Buscar usuário..." style="width:200px;padding:7px 12px" />
+          <button class="btn btn-primary" onclick="eaNewUser()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Usuário</button>
+        </div>
+      </div>
+      <table class="ea-table">
+        <thead>
+          <tr><th>Usuário</th><th>Tenant</th><th>Papel</th><th>Último acesso</th><th>Status</th><th>Ações</th></tr>
+        </thead>
+        <tbody id="ea-users-tbody">
+          <!-- Rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BILLING -->
+  <div class="ea-panel" id="ea-billing">
+    <div class="grid grid-3" style="margin-bottom:20px">
+      <div class="card">
+        <div class="kpi-label">MRR Total</div>
+        <div class="kpi-value" style="color:#10B981">{revenue_value}</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">ARR Projetado</div>
+        <div class="kpi-value" style="color:#818CF8">{mrr_value}</div>
+        <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +23% YoY</div>
+      </div>
+      <div class="card">
+        <div class="kpi-label">Churn Rate</div>
+        <div class="kpi-value" style="color:#F59E0B">2.1%</div>
+        <div class="kpi-delta delta-down"><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i> Meta: &lt;2%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Transações Recentes</div>
+        <span class="badge badge-green">Stripe conectado</span>
+      </div>
+      <table class="ea-table">
+        <thead><tr><th>Tenant</th><th>Plano</th><th>Valor</th><th>Data</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>TechCorp Brasil</td><td>Enterprise Anual</td><td style="color:var(--green)">{plan_price},00</td><td>15 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>Consultoria Alpha</td><td>Enterprise Mensal</td><td style="color:var(--green)">{plan_price},00</td><td>14 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>FinTech Pro</td><td>Enterprise Anual</td><td style="color:var(--green)">{plan_price},00</td><td>13 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>StartupXYZ</td><td>Pro Mensal</td><td style="color:var(--green)">{plan_price},00</td><td>10 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>MedGroup</td><td>Pro Mensal</td><td style="color:var(--red)">{plan_price},00</td><td>01 Jul 2026</td><td><span class="badge badge-red">Vencido</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECURITY -->
+  <div class="ea-panel" id="ea-security">
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Políticas de Segurança</div>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">Autenticação de 2 fatores obrigatória</div>
+            <div class="toggle-desc">Todos os usuários admin devem usar MFA</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">SSO Enterprise (SAML 2.0)</div>
+            <div class="toggle-desc">Login único para tenants Enterprise</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">Bloqueio por IP suspeito</div>
+            <div class="toggle-desc">Bloquear automaticamente IPs com comportamento anômalo</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">Audit log completo</div>
+            <div class="toggle-desc">Registrar todas as ações administrativas</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">Rate limiting por tenant</div>
+            <div class="toggle-desc">Limitar requisições por tenant para evitar abuso</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="toggle-wrap">
+          <div class="toggle-info">
+            <div class="toggle-name">Criptografia de dados em repouso</div>
+            <div class="toggle-desc">AES-256 para todos os dados armazenados</div>
+          </div>
+          <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Alertas de Segurança</div>
+          <span class="badge badge-amber">2 ativos</span>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(239,68,68,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Brute force detectado</div>
+            <div class="log-meta">IP: 185.220.101.45 · 47 tentativas · Bloqueado</div>
+          </div>
+          <div class="log-time">06:20</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Login de localização incomum</div>
+            <div class="log-meta">Usuário: admin@techcorp.com · País: Rússia</div>
+          </div>
+          <div class="log-time">Ontem</div>
+        </div>
+        <div class="log-item">
+          <div class="log-icon" style="background:rgba(16,185,129,0.1)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="log-info">
+            <div class="log-action">Pentest mensal concluído</div>
+            <div class="log-meta">15/15 vulnerabilidades corrigidas · Score: A+</div>
+          </div>
+          <div class="log-time">10 Jul</div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Certificações</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="badge badge-green">SOC 2 Type II</span>
+            <span class="badge badge-blue">ISO 27001</span>
+            <span class="badge badge-purple">LGPD Compliant</span>
+            <span class="badge badge-cyan">GDPR Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYSTEM -->
+  <div class="ea-panel" id="ea-system">
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurações do Sistema</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ambiente</label>
+          <select class="form-input form-select"><option>Production</option><option>Staging</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Versão atual</label>
+          <input class="form-input" value="v10.0.0-rc.1" readonly />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Plataforma de deploy</label>
+          <input class="form-input" value="Cloudflare Pages" readonly />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Região primária</label>
+          <select class="form-input form-select"><option>São Paulo (GRU)</option><option>US East</option><option>EU West</option></select>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-ghost" onclick="eaRestartService()">↻ Reiniciar Serviços</button>
+          <button class="btn btn-danger" onclick="eaMaintenanceMode()"><i data-lucide="wrench" class="pg-icon" aria-hidden="true"></i> Modo Manutenção</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Métricas de Sistema</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-secondary)">CPU Usage</span><span style="font-size:12px;font-weight:700;color:var(--green)">23%</span></div>
+            <div class="progress"><div class="progress-fill" style="width:23%;background:linear-gradient(135deg,#10B981,#06B6D4)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-secondary)">Memory Usage</span><span style="font-size:12px;font-weight:700;color:var(--amber)">67%</span></div>
+            <div class="progress"><div class="progress-fill" style="width:67%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-secondary)">Storage</span><span style="font-size:12px;font-weight:700;color:var(--accent-light)">41%</span></div>
+            <div class="progress"><div class="progress-fill" style="width:41%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-secondary)">Bandwidth (hoje)</span><span style="font-size:12px;font-weight:700;color:var(--cyan)">12.4 GB</span></div>
+            <div class="progress"><div class="progress-fill" style="width:31%;background:linear-gradient(135deg,#06B6D4,#8B5CF6)"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--text-secondary)">API Requests (hoje)</span><span style="font-size:12px;font-weight:700">2.4M</span></div>
+            <div class="progress"><div class="progress-fill" style="width:48%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIT -->
+  <div class="ea-panel" id="ea-audit">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Log de Auditoria</div>
+        <div style="display:flex;gap:8px">
+          <select class="form-input form-select" style="width:140px;padding:6px 12px;font-size:12px">
+            <option>Todos os eventos</option><option>Autenticação</option><option>Admin</option><option>Billing</option><option>Segurança</option>
+          </select>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px" onclick="eaExportAudit()">⬇ Exportar</button>
+        </div>
+      </div>
+      <table class="ea-table">
+        <thead><tr><th>Timestamp</th><th>Evento</th><th>Ator</th><th>Tenant</th><th>IP</th><th>Resultado</th></tr></thead>
+        <tbody id="ea-audit-tbody">
+          <!-- Rendered by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FEATURE FLAGS -->
+  <div class="ea-panel" id="ea-features">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Feature Flags</div>
+        <button class="btn btn-primary" onclick="eaNewFlag()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Flag</button>
+      </div>
+      <div id="ea-flags-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Dados carregados via API real — zero arrays estáticos
+let usersData = [];
+let auditData = [];
+let flagsData = [];
+
+async function eaLoadUsers() {
+  const tbody = document.getElementById('ea-users-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando usuários...</td></tr>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    usersData = (d.ok && Array.isArray(d.users)) ? d.users : [];
+  } catch (_) { usersData = []; }
+  renderUsers();
+}
+
+async function eaLoadAudit() {
+  const tbody = document.getElementById('ea-audit-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando auditoria...</td></tr>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    auditData = (d.ok && Array.isArray(d.recentAudit)) ? d.recentAudit : [];
+  } catch (_) { auditData = []; }
+  renderAudit();
+}
+
+async function eaLoadFlags() {
+  const el = document.getElementById('ea-flags-list');
+  if (el) el.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px">Carregando feature flags...</div>';
+  try {
+    const r = await fetch('/api/admin-data', { credentials: 'same-origin' });
+    const d = await r.json();
+    flagsData = (d.ok && Array.isArray(d.flags)) ? d.flags : [];
+  } catch (_) { flagsData = []; }
+  renderFlags();
+}
+
+function renderUsers() {
+  const tbody = document.getElementById('ea-users-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = usersData.map(u => `
+    <tr>
+      <td><div>${u.name}</div><div style="font-size:11px;color:var(--text-muted)">${u.email}</div></td>
+      <td>${u.tenant}</td>
+      <td><span class="badge ${u.role === 'Super Admin' ? 'badge-red' : u.role === 'Admin' ? 'badge-purple' : 'badge-blue'}">${u.role}</span></td>
+      <td>${u.lastAccess}</td>
+      <td><span class="badge ${u.status === 'active' ? 'badge-green' : 'badge-red'}">${u.status === 'active' ? 'Ativo' : 'Suspenso'}</span></td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaEditUser('${u.email}')">Editar</button>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspendUser('${u.email}')">Suspender</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderAudit() {
+  const tbody = document.getElementById('ea-audit-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = auditData.map(a => `
+    <tr>
+      <td style="font-family:monospace;font-size:12px;color:var(--text-muted)">${a.time}</td>
+      <td>${a.event}</td>
+      <td style="font-size:12px">${a.actor}</td>
+      <td style="font-size:12px">${a.tenant}</td>
+      <td style="font-family:monospace;font-size:11px;color:var(--text-muted)">${a.ip}</td>
+      <td><span class="badge ${a.result === 'success' ? 'badge-green' : a.result === 'warning' ? 'badge-amber' : a.result === 'blocked' ? 'badge-red' : 'badge-blue'}">${a.result}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderFlags() {
+  const el = document.getElementById('ea-flags-list');
+  if (!el) return;
+  el.innerHTML = flagsData.map((f, i) => `
+    <div class="toggle-wrap">
+      <div class="toggle-info">
+        <div class="toggle-name" style="font-family:monospace;font-size:12px">${f.name}</div>
+        <div class="toggle-desc">${f.desc} · <span style="color:var(--text-muted)">${f.env}</span> · Rollout: ${f.rollout}%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="badge ${f.env === 'production' ? 'badge-green' : f.env === 'staging' ? 'badge-amber' : 'badge-blue'}">${f.env}</span>
+        <button class="toggle ${f.enabled ? 'on' : ''}" onclick="toggleFlag(${i},this)"></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFlag(idx, btn) {
+  flagsData[idx].enabled = !flagsData[idx].enabled;
+  btn.classList.toggle('on');
+  showToast('Flag ' + flagsData[idx].name + (flagsData[idx].enabled ? ' ativada' : ' desativada'), 'info');
+}
+
+function eaTab(id, btn) {
+  document.querySelectorAll('.ea-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ea-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ea-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  // Carrega dados reais da API ao trocar de aba
+  if (id === 'users') eaLoadUsers();
+  if (id === 'audit') eaLoadAudit();
+  if (id === 'features') eaLoadFlags();
+}
+
+// Actions
+function eaExport() { showToast('Exportando relatório...', 'info'); }
+function eaEmergency() { if(confirm('Ativar modo de emergência?')) showToast('Modo de emergência ativado!', 'warning'); }
+function eaViewAlerts() { eaTab('security', document.querySelector('.ea-tab:nth-child(5)')); }
+async function eaNewTenant() {
+  const name = prompt('Nome do novo tenant:');
+  if (!name) return;
+  showToast('Criando tenant...', 'info');
+  try {
+    const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create_tenant', name }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Tenant criado: ' + name, 'success'); eaLoadData(); }
+    else showToast(d.error || 'Erro ao criar tenant', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+function eaTenantDetail(name) { showToast('Tenant: ' + name, 'info'); }
+function eaSuspend(name) { if(confirm('Suspender ' + name + '?')) showToast(name + ' suspenso', 'warning'); }
+function eaUpgrade(name) { showToast('Upgrade de ' + name + ' iniciado', 'success'); }
+function eaNotify(name) { showToast('Notificação enviada para ' + name, 'success'); }
+async function eaNewUser() {
+  const email = prompt('E-mail do novo usuário:');
+  if (!email) return;
+  const role = prompt('Papel (admin/member):', 'member');
+  showToast('Convidando usuário...', 'info');
+  try {
+    const r = await fetch('/api/invite', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, role: role || 'member' }) });
+    const d = await r.json();
+    if (d.ok) showToast('Convite enviado para ' + email, 'success');
+    else showToast(d.error || 'Erro ao convidar usuário', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+function eaEditUser(email) { showToast('Editando ' + email, 'info'); }
+function eaSuspendUser(email) { if(confirm('Suspender ' + email + '?')) showToast(email + ' suspenso', 'warning'); }
+function eaExportAudit() { showToast('Exportando log de auditoria...', 'info'); }
+async function eaNewFlag() {
+  const key = prompt('Chave da feature flag (ex: beta_feature):');
+  if (!key) return;
+  const enabled = confirm('Ativar flag agora?');
+  showToast('Criando feature flag...', 'info');
+  try {
+    const r = await fetch('/api/admin-data', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'create_flag', key, enabled }) });
+    const d = await r.json();
+    if (d.ok) { showToast('Flag criada: ' + key, 'success'); eaLoadData(); }
+    else showToast(d.error || 'Erro ao criar flag', 'error');
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+function eaRestartService() { if(confirm('Reiniciar serviços?')) showToast('Serviços reiniciados', 'success'); }
+function eaMaintenanceMode() { if(confirm('Ativar modo manutenção?')) showToast('Modo manutenção ativado', 'warning'); }
+
+function showToast(msg, type) {
+  if (window.showToast) { window.showToast(msg, type); return; }
+  const t = document.createElement('div');
+  const colors = { success: 'rgba(16,185,129,0.3)', warning: 'rgba(245,158,11,0.3)', info: 'rgba(99,102,241,0.3)', error: 'rgba(239,68,68,0.3)' };
+  t.style.cssText = `position:fixed;bottom:20px;right:20px;background:#141B28;border:1px solid ${colors[type]||colors.info};color:#F0F4FF;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.5)`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+async function refreshConfig() {
+  const grid = document.getElementById('config-grid');
+  grid.innerHTML = '<div class="loading-state">Consultando APIs de infraestrutura...</div>';
+  try {
+    const res = await fetch('/api/enterprise/config-center');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    renderConfig(data.services);
+  } catch (e) {
+    grid.innerHTML = `<div class="error-state">Erro ao carregar configurações: ${e.message}</div>`;
+  }
+}
+
+function renderConfig(services) {
+  const grid = document.getElementById('config-grid');
+  grid.innerHTML = services.map(s => {
+    const statusClass = `status-${s.status}`;
+    const statusText = s.status === 'ok' ? 'CONECTADO' : (s.status === 'partial' ? 'PARCIAL' : 'NÃO CONFIGURADO');
+    const envIcon = s.environment === 'production' ? 'ri-shield-check-line' : 'ri-test-tube-line';
+    
+    return `
+      <div class="config-card">
+        <div class="config-header">
+          <div>
+            <div class="config-category">${s.category}</div>
+            <div class="config-name">${s.name}</div>
+          </div>
+          <div class="config-status ${statusClass}">${statusText}</div>
+        </div>
+        <div class="config-details">
+          <div class="config-env">
+            <i class="${envIcon}"></i>
+            <span>Ambiente: ${s.environment}</span>
+          </div>
+          <div class="config-keys">
+            ${(s.envKeys || []).map(k => `<span class="key-tag ${s.missingKeys.includes(k) ? 'key-missing' : ''}">${k}</span>`).join('')}
+            ${s.kvCheck ? '<span class="key-tag">Cloudflare KV Binding</span>' : ''}
+          </div>
+        </div>
+        <div class="config-footer">
+          <div class="last-sync">
+            <i class="ri-time-line"></i> 
+            ${s.lastSync ? new Date(s.lastSync).toLocaleString() : 'Nunca testado'}
+          </div>
+          <button class="btn btn-ghost btn-test" onclick="testService('${s.id}')">
+            Testar Conexão
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function testService(id) {
+  showToast(`Testando conexão com ${id}...`, 'info');
+  try {
+    const res = await fetch('/api/enterprise/config-center', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'test-connection', serviceId: id })
+    });
+    const data = await res.json();
+    if (data.ok && data.result.ok) {
+      showToast(`${id}: ${data.result.message}`, 'success');
+    } else {
+      showToast(`${id}: ${data.result?.message || data.error}`, 'error');
+    }
+    refreshConfig();
+  } catch (e) {
+    showToast(`Erro no teste: ${e.message}`, 'error');
+  }
+}
+
+// Atualizar eaTab para carregar config
+if (typeof eaTab !== 'undefined') {
+  const oldEaTab = eaTab;
+  window.eaTab = function(id, btn) {
+    oldEaTab(id, btn);
+    if (id === 'config') refreshConfig();
+  };
+}
+</script>
+</body>
+</html>

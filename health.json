@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "service": "lifeos-enterprise",
+  "version": "v46.0.0",
+  "buildId": "lifeos-46.0.0-75d3e6a24e5a",
+  "environment": "production",
+  "platform": "cloudflare-pages",
+  "commit": "75d3e6a24e5a273c81ee5fda5a5ee23ed48c2d57",
+  "builtAt": "2026-07-20T22:29:57.500Z",
+  "phases": "304-308",
+  "status": "operational"
+}

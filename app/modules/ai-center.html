@@ -1,0 +1,709 @@
+<!-- LifeOS Enterprise — Módulo IA Center v8.0 -->
+<div id="module-ai-center" style="display:none">
+
+<!-- ─── AI CENTER ─── -->
+<div class="page" id="page-ai-center">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Companion AI</div>
+      <div class="page-subtitle">Assistente contextual para planejamento, recomendações e decisões do dia a dia</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-memory')">Memory Center</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-automations')">Automações</button>
+      <button class="btn btn-primary" onclick="showPage('ai-chat')">Abrir Companion</button>
+    </div>
+  </div>
+
+  <!-- Status da IA -->
+  <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));border-color:rgba(99,102,241,0.3);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.4)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">Companion AI — Contexto ativo</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Memory Center conectado · 847 memórias indexadas · Preferências aplicadas · Última análise: há 2 minutos</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="text-align:center;padding:8px 16px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
+          <div style="font-size:20px;font-weight:700;color:var(--green)">847</div>
+          <div style="font-size:10px;color:var(--text-muted)">Memórias</div>
+        </div>
+        <div style="text-align:center;padding:8px 16px;background:rgba(99,102,241,0.1);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
+          <div style="font-size:20px;font-weight:700;color:var(--accent)">12</div>
+          <div style="font-size:10px;color:var(--text-muted)">Insights</div>
+        </div>
+        <div style="text-align:center;padding:8px 16px;background:rgba(245,158,11,0.1);border-radius:8px;border:1px solid rgba(245,158,11,0.2)">
+          <div style="font-size:20px;font-weight:700;color:var(--amber)">5</div>
+          <div style="font-size:10px;color:var(--text-muted)">Automações</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div><div class="card-title" style="margin-bottom:3px">Preferências do Companion</div><div style="font-size:12px;color:var(--text-secondary)">Controle como recomendações e planos são apresentados.</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <select id="ai-tone" class="form-input" style="width:auto" onchange="aiSavePreferences()" aria-label="Tom das respostas"><option value="objective">Objetivo</option><option value="coach">Coach</option><option value="analytical">Analítico</option></select>
+        <select id="ai-detail" class="form-input" style="width:auto" onchange="aiSavePreferences()" aria-label="Nível de detalhe"><option value="concise">Conciso</option><option value="balanced">Equilibrado</option><option value="detailed">Detalhado</option></select>
+        <label style="display:flex;align-items:center;gap:7px;padding:0 10px;font-size:12px;color:var(--text-secondary)"><input id="ai-proactive" type="checkbox" checked onchange="aiSavePreferences()"> Recomendações proativas</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <!-- Insights do dia -->
+    <div class="card">
+      <div class="card-title"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Insights de Hoje</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="ai-insights-list">
+        <div class="ai-insight-item" style="border-left-color:var(--green)">
+          <div class="ai-insight-title">Produtividade em alta</div>
+          <div class="ai-insight-desc">Você completou 87% das tarefas nos últimos 7 dias. Seu melhor período foi entre 9h-12h.</div>
+          <button class="btn btn-ghost" style="font-size:11px;margin-top:6px" onclick="showToast('Insight aplicado às suas configurações','success')">Aplicar Sugestão</button>
+        </div>
+        <div class="ai-insight-item" style="border-left-color:var(--amber)">
+          <div class="ai-insight-title">Alerta financeiro</div>
+          <div class="ai-insight-desc">Seus gastos com alimentação aumentaram 23% este mês. Considere revisar o orçamento.</div>
+          <button class="btn btn-ghost" style="font-size:11px;margin-top:6px" onclick="showPage('finance-planning')">Ver Planejamento</button>
+        </div>
+        <div class="ai-insight-item" style="border-left-color:var(--accent)">
+          <div class="ai-insight-title">Meta próxima do prazo</div>
+          <div class="ai-insight-desc">Analisando suas metas reais...isa correr 28km ainda. Ritmo atual: ok.</div>
+          <button class="btn btn-ghost" style="font-size:11px;margin-top:6px" onclick="showPage('goals')">Ver Meta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarefas geradas por IA -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="card-title" style="margin:0"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Tarefas Sugeridas pela IA</div>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="aiGenerateTasks()">↻ Gerar</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px" id="ai-tasks-list">
+        <div class="ai-task-item">
+          <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">Pagar fatura do Nubank</div>
+            <div style="font-size:11px;color:var(--text-muted)">Baseado em: vencimento em 10/08 · Prioridade: Alta</div>
+          </div>
+          <span style="font-size:10px;background:rgba(239,68,68,0.15);color:var(--red);padding:2px 6px;border-radius:4px">Urgente</span>
+        </div>
+        <div class="ai-task-item">
+          <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">Responder emails pendentes</div>
+            <div style="font-size:11px;color:var(--text-muted)">Baseado em: email não respondido há 2 dias · Prioridade: Média</div>
+          </div>
+          <span style="font-size:10px;background:rgba(245,158,11,0.15);color:var(--amber);padding:2px 6px;border-radius:4px">Médio</span>
+        </div>
+        <div class="ai-task-item">
+          <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">Carregando tarefas reais...</div>
+            <div style="font-size:11px;color:var(--text-muted)">Baseado em: evento em 16/07 · Prioridade: Alta</div>
+          </div>
+          <span style="font-size:10px;background:rgba(239,68,68,0.15);color:var(--red);padding:2px 6px;border-radius:4px">Urgente</span>
+        </div>
+        <div class="ai-task-item">
+          <input type="checkbox" onchange="aiTaskDone(this)" style="flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">Revisar metas do mês</div>
+            <div style="font-size:11px;color:var(--text-muted)">Baseado em: rotina semanal · Prioridade: Baixa</div>
+          </div>
+          <span style="font-size:10px;background:rgba(16,185,129,0.15);color:var(--green);padding:2px 6px;border-radius:4px">Baixo</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:12px;font-size:13px" onclick="aiAddAllTasks()">Adicionar todas ao Kanban</button>
+    </div>
+  </div>
+
+  <!-- Recomendações -->
+  <div class="card">
+    <div class="card-title">Recomendações contextuais e planos sugeridos</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+      <div class="ai-rec-card" style="border-color:rgba(16,185,129,0.3)">
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-weight:600;margin-bottom:4px">Otimize seu treino</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Baseado no seu histórico, treinar às 7h aumenta sua produtividade em 34% no dia.</div>
+        <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showToast('Lembrete de treino configurado para 7h','success')">Configurar Lembrete</button>
+      </div>
+      <div class="ai-rec-card" style="border-color:rgba(99,102,241,0.3)">
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-weight:600;margin-bottom:4px">{savings}</div>
+        <div style="font-size:12px;color:var(--text-secondary)">{subscription_suggestion}</div>
+        <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showPage('finance-subscriptions')">Ver Assinaturas</button>
+      </div>
+      <div class="ai-rec-card" style="border-color:rgba(245,158,11,0.3)">
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-weight:600;margin-bottom:4px">Leitura recomendada</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Baseado nos seus dados reais de leitura e aprendizadoames Clear — alinhado com suas metas de hábitos.</div>
+        <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showToast('Livro adicionado à lista de leitura','success')">Adicionar à Lista</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MEMÓRIA PERMANENTE ─── -->
+<div class="page" id="page-ai-memory">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Memory Center</div>
+      <div class="page-subtitle">Memórias explicáveis, com origem, relevância e controle do usuário</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-memory')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Memória</button>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">847</div><div class="kpi-label">Total de Memórias</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">23</div><div class="kpi-label">Adicionadas hoje</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">156</div><div class="kpi-label">Consultadas hoje</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">94%</div><div class="kpi-label">Relevância média</div></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <input id="ai-memory-search" type="search" class="form-input" placeholder="Buscar memórias..." style="flex:1;min-width:200px" oninput="aiFilterMemories()" />
+      <select id="ai-memory-category" class="form-input" style="width:auto" onchange="aiFilterMemories()">
+        <option>Todas as categorias</option>
+        <option>Preferências</option>
+        <option>Hábitos</option>
+        <option>Financeiro</option>
+        <option>Trabalho</option>
+        <option>Saúde</option>
+        <option>Relacionamentos</option>
+      </select>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="ai-memory-list">
+      <div class="ai-memory-item" data-category="Preferências">
+        <div class="ai-memory-category" style="background:rgba(99,102,241,0.15);color:var(--accent)">Preferências</div>
+        <div class="ai-memory-content">Prefere trabalhar no período da manhã (9h-12h). Produtividade 40% maior nesse horário.</div>
+        <div class="ai-memory-meta">Adicionado: 10 Jul 2026 · Fonte: Análise de padrões · Relevância: 98%</div>
+        <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
+      </div>
+      <div class="ai-memory-item" data-category="Saúde">
+        <div class="ai-memory-category" style="background:rgba(16,185,129,0.15);color:var(--green)">Saúde</div>
+        <div class="ai-memory-content">Meta de exercícios: correr 3x por semana. Melhor desempenho em dias com sono de 7h+.</div>
+        <div class="ai-memory-meta">Adicionado: 05 Jul 2026 · Fonte: Hábitos · Relevância: 96%</div>
+        <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
+      </div>
+      <div class="ai-memory-item" data-category="Financeiro">
+        <div class="ai-memory-category" style="background:rgba(245,158,11,0.15);color:var(--amber)">Financeiro</div>
+        <div class="ai-memory-content">{finance_memory}</div>
+        <div class="ai-memory-meta">Adicionado: 01 Jul 2026 · Fonte: Finance · Relevância: 91%</div>
+        <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
+      </div>
+      <div class="ai-memory-item" data-category="Trabalho">
+        <div class="ai-memory-category" style="background:rgba(139,92,246,0.15);color:var(--purple)">Trabalho</div>
+        <div class="ai-memory-content">Trabalha como desenvolvedor full-stack. Projetos principais: Alpha, Beta. Reuniões: terças e quintas.</div>
+        <div class="ai-memory-meta">Adicionado: 28 Jun 2026 · Fonte: Calendário · Relevância: 89%</div>
+        <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CHAT IA ─── -->
+<div class="page" id="page-ai-chat">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Companion AI</div>
+      <div class="page-subtitle">Converse com contexto do seu calendário, metas, hábitos e memórias autorizadas</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-ghost" onclick="aiClearChat()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Limpar</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
+    <!-- Mensagens do chat -->
+    <div style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px" id="ai-chat-messages">
+      <div class="ai-chat-msg ai">
+        <div class="ai-chat-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-chat-bubble">
+          <p>Olá! Sou o Companion AI. Uso somente as fontes autorizadas no LifeOS e explico quais memórias influenciaram cada recomendação.</p>
+          <p style="margin-top:8px">Como posso ajudar você hoje?</p>
+          <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Qual é meu saldo total?')"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Saldo total</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Quais são meus próximos eventos?')"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Próximos eventos</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Gere tarefas para hoje')"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Gerar tarefas</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Analise meus hábitos')"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analisar hábitos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Input do chat -->
+    <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end">
+      <textarea id="ai-chat-input" placeholder="Peça um plano, uma recomendação ou uma análise contextual..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:48px;max-height:150px;outline:none;transition:border-color 0.2s" onkeydown="aiChatKey(event)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <button class="btn btn-primary" style="padding:12px 16px;flex-shrink:0" onclick="aiChatSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── AUTOMAÇÕES ─── -->
+<div class="page" id="page-ai-automations">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Automações</div>
+      <div class="page-subtitle">Fluxos automáticos inteligentes</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-automation')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Automação</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div class="automation-card active">
+      <div class="automation-status" style="background:var(--green)"></div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Tarefa automática</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quando receber email com "urgente" no assunto <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Criar tarefa de alta prioridade no Kanban</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 23 vezes · Última: há 2h</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="automation-card active">
+      <div class="automation-status" style="background:var(--green)"></div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Alerta de gastos</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quando gasto mensal ultrapassar 80% do orçamento <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Notificar e sugerir revisão</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 3 vezes · Última: 12 Jul</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="automation-card active">
+      <div class="automation-status" style="background:var(--green)"></div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Briefing diário</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Todo dia às 8h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Gerar resumo do dia: eventos, tarefas, finanças e insights</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 14 vezes · Última: hoje 08:00</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="automation-card">
+      <div class="automation-status" style="background:var(--text-muted)"></div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Lembrete de treino</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Seg, Qua e Sex às 6:30h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Notificar sobre treino programado</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Pausada · Última: 08 Jul</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="automation-card">
+      <div class="automation-status" style="background:var(--text-muted)"></div>
+      <div style="flex:1">
+        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Relatório semanal</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Todo domingo às 20h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Gerar relatório semanal de produtividade, finanças e saúde</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Pausada · Nunca executada</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ─── RESUMO DIÁRIO ─── -->
+<div class="page" id="page-ai-daily">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i> Resumo Diário</div>
+      <div class="page-subtitle">Briefing inteligente do seu dia — gerado pela IA</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-primary" onclick="aiCenterRefreshBriefing()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.06));border-color:rgba(245,158,11,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FCD34D);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
+      <div>
+        <div style="font-weight:700;font-size:16px">Bom dia! Seu briefing de hoje</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quarta-feira, 15 de Julho de 2026 · Gerado às 08:00</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="text-align:center;padding:12px;background:rgba(16,185,129,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--green)">87</div>
+        <div style="font-size:11px;color:var(--text-muted)">Life Score</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(99,102,241,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--accent)">6</div>
+        <div style="font-size:11px;color:var(--text-muted)">Tarefas hoje</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(6,182,212,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--cyan)">3</div>
+        <div style="font-size:11px;color:var(--text-muted)">Reuniões</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:rgba(239,68,68,0.1);border-radius:8px">
+        <div style="font-size:22px;font-weight:800;color:var(--red)">2</div>
+        <div style="font-size:11px;color:var(--text-muted)">Urgentes</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Prioridades do Dia</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Revisar proposta cliente XYZ</div><div style="font-size:11px;color:var(--text-muted)">Prazo: hoje 14h · Alta prioridade</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
+          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Reunião equipe dev — 10h</div><div style="font-size:11px;color:var(--text-muted)">Google Meet · 45 min</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
+          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">{bill_name}</div><div style="font-size:11px;color:var(--text-muted)">{bill_due}</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">Treino — 18h30</div><div style="font-size:11px;color:var(--text-muted)">Smart Fit · Musculação</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Insights da IA para Hoje</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Produtividade</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Seu pico de foco é entre 9h–11h. Reserve esse período para a proposta do cliente XYZ.</div>
+        </div>
+        <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Financeiro</div>
+          <div style="font-size:13px;color:var(--text-secondary)">{bill_reminder}</div>
+        </div>
+        <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Você dormiu 7h30 ontem. Hidratação: lembre-se de beber água a cada 2h para manter o foco.</div>
+        </div>
+        <div style="padding:12px;background:rgba(6,182,212,0.08);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
+          <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Hábitos</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Seu streak atual está sendo calculado...uebre hoje. Hábito crítico: meditação matinal ainda não registrada.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── RESUMO SEMANAL ─── -->
+<div class="page" id="page-ai-weekly">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Resumo Semanal</div>
+      <div class="page-subtitle">Análise completa da semana — gerada pela IA</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Exportando relatório...','info')"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar PDF</button>
+    </div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+      <div>
+        <div style="font-weight:700;font-size:16px">Semana 28 — 07 a 13 de Julho de 2026</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Análise gerada em 13/07 às 20:00 · 847 pontos de dados analisados</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+      <div style="text-align:center;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--green)">89%</div>
+        <div style="font-size:10px;color:var(--text-muted)">Hábitos</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(99,102,241,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--accent)">34/38</div>
+        <div style="font-size:10px;color:var(--text-muted)">Tarefas</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(6,182,212,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--cyan)">42h</div>
+        <div style="font-size:10px;color:var(--text-muted)">Foco</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--amber)">{savings_amount}</div>
+        <div style="font-size:10px;color:var(--text-muted)">Gastos</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:rgba(139,92,246,0.1);border-radius:8px">
+        <div style="font-size:20px;font-weight:800;color:var(--purple)">87</div>
+        <div style="font-size:10px;color:var(--text-muted)">Life Score</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Performance por Área</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-1-name">Saúde</span></span><span style="font-weight:700;color:var(--green)" id="ai-area-1-score">—</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:92%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-2-name">Produtividade</span></span><span style="font-weight:700;color:var(--accent)" id="ai-area-2-score">—</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:88%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-3-name">Finanças</span></span><span style="font-weight:700;color:var(--amber)" id="ai-area-3-score">—</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:74%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-4-name">Aprendizado</span></span><span style="font-weight:700;color:var(--cyan)" id="ai-area-4-score">—</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:81%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:4px"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Relacionamentos</span><span style="font-weight:700;color:var(--pink)">69%</span></div>
+          <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:69%;background:linear-gradient(90deg,var(--pink),#F9A8D4);border-radius:4px"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Recomendações da IA</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Continue assim</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Sua consistência nos hábitos de saúde está excelente. Mantenha o treino 3x por semana.</div>
+        </div>
+        <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Atenção necessária</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Gastos com lazer ultrapassaram o orçamento em 6%. Revise suas assinaturas na próxima semana.</div>
+        </div>
+        <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Oportunidade</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Você tem 3h livres na sexta-feira. Ideal para avançar no curso de Python que está parado há 2 semanas.</div>
+        </div>
+        <div style="padding:12px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Alerta</div>
+          <div style="font-size:12px;color:var(--text-secondary)">Meta "Viagem Europa" está 8% abaixo do ritmo necessário. Considere aumentar o aporte mensal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── RECOMENDAÇÕES INTELIGENTES ─── -->
+<div class="page" id="page-ai-recommendations">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Recomendações Inteligentes</div>
+      <div class="page-subtitle">Sugestões personalizadas baseadas nos seus padrões</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="grid-3" style="margin-bottom:20px">
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Recomendações Ativas</div><div style="font-size:28px;font-weight:800;color:var(--accent)">12</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Implementadas</div><div style="font-size:28px;font-weight:800;color:var(--green)">8</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Impacto Estimado</div><div style="font-size:28px;font-weight:800;color:var(--amber)">+23%</div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div class="card" style="border-color:rgba(16,185,129,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Adicionar caminhada matinal</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600">Saúde</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Baseado no seu histórico, uma caminhada de 20 min às 7h aumentaria seu Life Score em +4 pontos e melhoraria seu humor nas reuniões matinais.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Hábito adicionado: Caminhada matinal!','success')"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Adicionar hábito</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Cancelar assinatura subutilizada</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:20px;font-weight:600">Finanças</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">{subscription_unused} Cancelar economizaria {unused_savings}/mês = {unused_annual}/ano.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showPage('finance-subscriptions')">Ver assinaturas</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação adiada por 30 dias','info')">Adiar 30 dias</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(99,102,241,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Retomar curso de Python</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(99,102,241,0.15);color:var(--accent);border-radius:20px;font-weight:600">Aprendizado</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você tem 3h livres na sexta-feira. Completar o módulo de APIs do curso aumentaria sua empregabilidade em +15%.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Tarefa adicionada para sexta!','success')">Agendar para sexta</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(6,182,212,0.3)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="font-weight:700;font-size:15px">Conectar-se com contatos importantes</div>
+            <span style="font-size:10px;padding:2px 8px;background:rgba(6,182,212,0.15);color:var(--cyan);border-radius:20px;font-weight:600">Relacionamentos</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Mantenha contato com pessoas importantes. Um check-in rápido pode fortalecer seus relacionamentos.</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" style="font-size:12px" onclick="showPage('messages')">Enviar mensagem</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Lembrete criado para amanhã','info')">Lembrar amanhã</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ORGANIZAÇÃO AUTOMÁTICA ─── -->
+<div class="page" id="page-ai-organize">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Organização Automática</div>
+      <div class="page-subtitle">A IA organiza sua vida digital automaticamente</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));border-color:rgba(139,92,246,0.25);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#6366F1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(139,92,246,0.3)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:16px">Auto-Organização Ativa</div>
+        <div style="font-size:13px;color:var(--text-secondary)">A IA monitora e organiza continuamente seus dados · Última execução: há 3 min</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="text-align:center;padding:8px 14px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
+          <div style="font-size:18px;font-weight:700;color:var(--green)">247</div>
+          <div style="font-size:10px;color:var(--text-muted)">Ações hoje</div>
+        </div>
+        <div style="text-align:center;padding:8px 14px;background:rgba(99,102,241,0.1);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
+          <div style="font-size:18px;font-weight:700;color:var(--accent)">3.2h</div>
+          <div style="font-size:10px;color:var(--text-muted)">Economizadas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Regras de Organização</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Tarefa automática</div><div style="font-size:11px;color:var(--text-muted)">Emails com "urgente" viram tarefas</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Eventos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Blocos de foco</div><div style="font-size:11px;color:var(--text-muted)">Cria blocos de prep antes de reuniões</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Gastos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Categorização</div><div style="font-size:11px;color:var(--text-muted)">Categoriza transações automaticamente</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div><div style="font-weight:600;font-size:13px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Docs <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Pasta correta</div><div style="font-size:11px;color:var(--text-muted)">Organiza documentos por tipo e projeto</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Log de Ações Recentes</div>
+      <div style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto" data-ai-action-log>
+        <div style="color:var(--text-muted);font-size:12px;padding:8px">Carregando ações recentes...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  async function aiCenterRefreshBriefing() {
+    showToast('Atualizando briefing com IA...', 'info');
+    try {
+      const r = await fetch('/api/briefing', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok && d.briefing) {
+        // Atualizar o painel de briefing se existir
+        const briefingEl = document.getElementById('ai-briefing-content');
+        if (briefingEl) {
+          briefingEl.innerHTML = d.briefing.replace(/\n/g, '<br>');
+        }
+        showToast('Briefing atualizado com sucesso!', 'success');
+      } else {
+        showToast(d.error || 'Briefing atualizado.', 'success');
+      }
+    } catch (_) { showToast('Erro de conexão ao atualizar briefing.', 'error'); }
+  }
+
+  // Carregar log de ações reais da API
+  async function aiCenterLoadActionLog() {
+    try {
+      const r = await fetch('/api/ai-insights?action=log&limit=5', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok && d.actions && d.actions.length > 0) {
+        const container = document.querySelector('[data-ai-action-log]');
+        if (container) {
+          container.innerHTML = d.actions.map(a => `
+            <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
+              <span style="font-size:14px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></span>
+              <div><div style="font-size:12px;font-weight:600">${a.title || a.action}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${a.module || ''} · ${a.relativeTime || 'recente'}</div></div>
+            </div>
+          `).join('');
+        }
+      }
+    } catch (_) { /* manter log estático se API não disponível */ }
+  }
+
+  // Inicializar ao carregar
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', aiCenterLoadActionLog);
+  } else {
+    aiCenterLoadActionLog();
+  }
+
+// Load dynamic AI content from API
+(async function loadAIContent() {
+  try {
+    const r = await fetch('/api/ai-insights', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const el = id => document.getElementById(id);
+    // Replace placeholders with real data
+    if (data.savings) {
+      document.querySelectorAll('.ai-insight-item').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{savings}', data.savings);
+        item.innerHTML = item.innerHTML.replace('{subscription_suggestion}', data.subscriptionSuggestion || 'Revisão de assinaturas disponível');
+      });
+    }
+    if (data.financeMemory) {
+      document.querySelectorAll('.ai-memory-content').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{finance_memory}', data.financeMemory);
+      });
+    }
+    if (data.bills) {
+      document.querySelectorAll('.ai-bill-item').forEach((item, i) => {
+        const bill = data.bills[i] || {};
+        item.innerHTML = item.innerHTML.replace('{bill_name}', bill.name || 'Conta');
+        item.innerHTML = item.innerHTML.replace('{bill_due}', (bill.dueDate || '—') + ' · ' + (bill.amount || '0'));
+      });
+    }
+    if (data.reminder) {
+      document.querySelectorAll('.ai-reminder-text').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{bill_reminder}', data.reminder);
+      });
+    }
+  } catch {}
+})();
+</script>
+<!-- END module-ai-center -->

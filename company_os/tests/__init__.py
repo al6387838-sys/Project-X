@@ -1,1 +1,0 @@
-"""Company OS — Testes automatizados"""

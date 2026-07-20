@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Digital Hub — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25); --text-primary: #F0F4FF;
+      --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12); --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; padding: 24px; }
+    .hub-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .hub-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .hub-title span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hub-badge { background: rgba(99,102,241,0.15); color: var(--accent-light); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-accent); }
+    .hub-greeting { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05)); border: 1px solid var(--border-accent); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .greeting-text h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .greeting-text p { font-size: 13px; color: var(--text-secondary); }
+    .greeting-ai { display: flex; align-items: center; gap: 10px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); border-radius: var(--radius-md); padding: 10px 16px; }
+    .greeting-ai span { font-size: 13px; color: var(--purple); font-weight: 500; }
+    .quick-stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px; }
+    .qs-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .qs-card:hover { border-color: var(--border-accent); transform: translateY(-2px); }
+    .qs-icon { font-size: 22px; margin-bottom: 6px; }
+    .qs-value { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .qs-label { font-size: 11px; color: var(--text-muted); }
+    .hub-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .hub-grid-wide { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    .central-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all 0.2s; }
+    .central-card:hover { border-color: var(--border-accent); }
+    .central-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .central-title { display: flex; align-items: center; gap: 10px; }
+    .central-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .central-name { font-size: 14px; font-weight: 700; }
+    .central-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .central-link { font-size: 12px; color: var(--accent-light); cursor: pointer; text-decoration: none; }
+    .central-link:hover { text-decoration: underline; }
+    /* Finance Central */
+    .finance-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .fin-item { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px; }
+    .fin-item-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .fin-item-value { font-size: 18px; font-weight: 800; }
+    .fin-item-value.positive { color: var(--green); }
+    .fin-item-value.negative { color: var(--red); }
+    .fin-item-value.neutral { color: var(--cyan); }
+    .fin-chart-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin-top: 6px; }
+    .fin-chart-fill { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
+    .fin-transactions { list-style: none; }
+    .fin-tx { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .fin-tx:last-child { border-bottom: none; }
+    .fin-tx-name { font-size: 13px; }
+    .fin-tx-date { font-size: 11px; color: var(--text-muted); }
+    .fin-tx-amount { font-size: 13px; font-weight: 700; }
+    /* Communication Central */
+    .comm-list { list-style: none; }
+    .comm-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+    .comm-item:last-child { border-bottom: none; }
+    .comm-item:hover { opacity: 0.8; }
+    .comm-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .comm-info { flex: 1; min-width: 0; }
+    .comm-name { font-size: 13px; font-weight: 600; }
+    .comm-preview { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .comm-meta { text-align: right; }
+    .comm-time { font-size: 11px; color: var(--text-muted); }
+    .comm-badge { background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; margin-top: 3px; display: inline-block; }
+    /* Document Central */
+    .doc-list { list-style: none; }
+    .doc-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+    .doc-item:last-child { border-bottom: none; }
+    .doc-icon { font-size: 20px; flex-shrink: 0; }
+    .doc-name { font-size: 13px; font-weight: 600; }
+    .doc-meta { font-size: 11px; color: var(--text-muted); }
+    .doc-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-left: auto; }
+    .doc-tag.contract { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .doc-tag.report { background: rgba(6,182,212,0.1); color: var(--cyan); }
+    .doc-tag.proposal { background: rgba(99,102,241,0.12); color: var(--accent-light); }
+    /* Calendar Central */
+    .cal-today { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px; }
+    .cal-today-label { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .cal-event { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .cal-event:last-child { border-bottom: none; }
+    .cal-time { font-size: 12px; color: var(--text-muted); width: 48px; flex-shrink: 0; }
+    .cal-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .cal-event-name { font-size: 13px; font-weight: 500; }
+    .cal-event-sub { font-size: 11px; color: var(--text-muted); }
+    /* AI Central */
+    .ai-chat { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; }
+    .ai-msg { display: flex; gap: 10px; margin-bottom: 12px; }
+    .ai-msg:last-child { margin-bottom: 0; }
+    .ai-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .ai-avatar.bot { background: var(--gradient-primary); }
+    .ai-avatar.user { background: rgba(255,255,255,0.1); }
+    .ai-bubble { background: rgba(255,255,255,0.04); border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md); padding: 10px 12px; font-size: 13px; line-height: 1.5; max-width: 85%; }
+    .ai-bubble.user { background: rgba(99,102,241,0.12); border-radius: var(--radius-md) 0 var(--radius-md) var(--radius-md); }
+    .ai-input { display: flex; gap: 8px; }
+    .ai-input input { flex: 1; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 9px 12px; color: var(--text-primary); font-size: 13px; outline: none; }
+    .ai-input input:focus { border-color: var(--border-accent); }
+    .ai-send { background: var(--gradient-primary); border: none; border-radius: var(--radius-md); padding: 9px 14px; color: #fff; cursor: pointer; font-size: 14px; }
+    /* Productivity Central */
+    .prod-tasks { list-style: none; margin-bottom: 12px; }
+    .prod-task { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .prod-task:last-child { border-bottom: none; }
+    .prod-check { width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s; }
+    .prod-check.done { background: var(--green); border-color: var(--green); }
+    .prod-task-name { font-size: 13px; flex: 1; }
+    .prod-task-name.done { text-decoration: line-through; color: var(--text-muted); }
+    .prod-priority { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+    .prod-priority.high { background: rgba(239,68,68,0.12); color: var(--red); }
+    .prod-priority.med { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .prod-priority.low { background: rgba(16,185,129,0.1); color: var(--green); }
+    .prod-progress { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px; }
+    .prod-prog-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px; }
+    .prod-prog-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .prod-prog-fill { height: 100%; border-radius: 3px; background: var(--gradient-primary); }
+    .ai-shortcuts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ai-shortcut { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; cursor: pointer; transition: all 0.2s; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+    .ai-shortcut:hover { border-color: var(--border-accent); color: var(--text-primary); }
+  </style>
+</head>
+<body>
+  <div class="hub-header">
+    <div>
+      <div class="hub-title">Personal <span>Digital Hub</span></div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">Todas as suas centrais em um único lugar inteligente</div>
+    </div>
+    <div class="hub-badge">Phase 082 · v9.5</div>
+  </div>
+
+  <div class="hub-greeting">
+    <div class="greeting-text">
+      <h2>Bom dia! <i data-lucide="sun" class="pg-icon" aria-hidden="true"></i> Seu dia está organizado.</h2>
+      <p>{daily_summary}</p>
+    </div>
+    <div class="greeting-ai">
+      <span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></span>
+      <span>IA: "Sua produtividade está 18% acima da média semanal."</span>
+    </div>
+  </div>
+
+  <div class="quick-stats">
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--green)">{quick_stat}</div>
+      <div class="qs-label">Saldo Total</div>
+    </div>
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--accent)">24</div>
+      <div class="qs-label">Mensagens</div>
+    </div>
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--amber)">8</div>
+      <div class="qs-label">Documentos</div>
+    </div>
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--cyan)">3</div>
+      <div class="qs-label">Eventos Hoje</div>
+    </div>
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--purple)">12</div>
+      <div class="qs-label">Insights IA</div>
+    </div>
+    <div class="qs-card">
+      <div class="qs-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="qs-value" style="color:var(--red)">5</div>
+      <div class="qs-label">Tarefas Urgentes</div>
+    </div>
+  </div>
+
+  <div class="hub-grid">
+    <!-- CENTRAL FINANCEIRA -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#10B981,#059669)"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central Financeira</div><div class="central-sub">Atualizado há 2 min</div></div>
+        </div>
+        <a class="central-link" href="/modules/finance.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <div class="finance-summary">
+        <div class="fin-item">
+          <div class="fin-item-label">Receita (mês)</div>
+          <div class="fin-item-value positive">{income_value}</div>
+          <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:74%;background:var(--green)"></div></div>
+        </div>
+        <div class="fin-item">
+          <div class="fin-item-label">Despesas (mês)</div>
+          <div class="fin-item-value negative">{expense_value}</div>
+          <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:33%;background:var(--red)"></div></div>
+        </div>
+        <div class="fin-item">
+          <div class="fin-item-label">Investimentos</div>
+          <div class="fin-item-value neutral">{balance_value}</div>
+          <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:60%;background:var(--cyan)"></div></div>
+        </div>
+        <div class="fin-item">
+          <div class="fin-item-label">Patrimônio</div>
+          <div class="fin-item-value positive">{investments_value}</div>
+          <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:85%;background:var(--accent)"></div></div>
+        </div>
+      </div>
+      <ul class="fin-transactions">
+        <li class="fin-tx">
+          <div><div class="fin-tx-name">Salário recebido</div><div class="fin-tx-date">Hoje, 09:00</div></div>
+          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
+        </li>
+        <li class="fin-tx">
+          <div><div class="fin-tx-name">Aluguel</div><div class="fin-tx-date">Hoje, 10:30</div></div>
+          <div class="fin-tx-amount" style="color:var(--red)">-{tx_amount}</div>
+        </li>
+        <li class="fin-tx">
+          <div><div class="fin-tx-name">Dividendos ITSA4</div><div class="fin-tx-date">Ontem</div></div>
+          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CENTRAL DE COMUNICAÇÃO -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#06B6D4,#0891B2)"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central de Comunicação</div><div class="central-sub">24 não lidas</div></div>
+        </div>
+        <a class="central-link" href="/modules/communication.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <ul class="comm-list">
+        <li class="comm-item">
+          <div class="comm-avatar" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">A</div>
+          <div class="comm-info">
+            <div class="comm-name">Ana Lima</div>
+            <div class="comm-preview">Precisamos revisar o contrato antes de...</div>
+          </div>
+          <div class="comm-meta"><div class="comm-time">14:32</div><div class="comm-badge">3</div></div>
+        </li>
+        <li class="comm-item">
+          <div class="comm-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">C</div>
+          <div class="comm-info">
+            <div class="comm-name">Carlos Mendes</div>
+            <div class="comm-preview">Relatório Q2 está pronto para revisão</div>
+          </div>
+          <div class="comm-meta"><div class="comm-time">13:15</div><div class="comm-badge">1</div></div>
+        </li>
+        <li class="comm-item">
+          <div class="comm-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">M</div>
+          <div class="comm-info">
+            <div class="comm-name">Marketing Team</div>
+            <div class="comm-preview">Campanha aprovada! Lançamento amanhã às...</div>
+          </div>
+          <div class="comm-meta"><div class="comm-time">11:45</div><div class="comm-badge">7</div></div>
+        </li>
+        <li class="comm-item">
+          <div class="comm-avatar" style="background:linear-gradient(135deg,#EC4899,#DB2777)">R</div>
+          <div class="comm-info">
+            <div class="comm-name">Rafael Costa</div>
+            <div class="comm-preview">Confirma a reunião das 16h?</div>
+          </div>
+          <div class="comm-meta"><div class="comm-time">10:20</div><div class="comm-badge">2</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CENTRAL DE DOCUMENTOS -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706)"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central de Documentos</div><div class="central-sub">8 recentes</div></div>
+        </div>
+        <a class="central-link" href="/modules/documents.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <div class="doc-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="doc-name">Contrato Fornecedor XYZ</div><div class="doc-meta">Modificado hoje · 2.4 MB</div></div>
+          <span class="doc-tag contract">Contrato</span>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="doc-name">Relatório Financeiro Q2</div><div class="doc-meta">Ontem · 1.8 MB</div></div>
+          <span class="doc-tag report">Relatório</span>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="doc-name">Proposta Comercial 2026</div><div class="doc-meta">2 dias atrás · 3.1 MB</div></div>
+          <span class="doc-tag proposal">Proposta</span>
+        </li>
+        <li class="doc-item">
+          <div class="doc-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="doc-name">NDA — Parceria Estratégica</div><div class="doc-meta">3 dias atrás · 0.9 MB</div></div>
+          <span class="doc-tag contract">Contrato</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="hub-grid">
+    <!-- CENTRAL DE AGENDA -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#EF4444,#DC2626)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central de Agenda</div><div class="central-sub">3 eventos hoje</div></div>
+        </div>
+        <a class="central-link" href="/modules/calendar.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <div class="cal-today">
+        <div class="cal-today-label">Hoje — Terça, 15 Jul</div>
+        <div class="cal-event">
+          <div class="cal-time">09:00</div>
+          <div class="cal-event-dot" style="background:var(--accent)"></div>
+          <div><div class="cal-event-name">Daily Standup</div><div class="cal-event-sub">Google Meet · 30 min</div></div>
+        </div>
+        <div class="cal-event">
+          <div class="cal-time">14:00</div>
+          <div class="cal-event-dot" style="background:var(--green)"></div>
+          <div><div class="cal-event-name">Revisão de Contrato</div><div class="cal-event-sub">Sala 3 · 1h</div></div>
+        </div>
+        <div class="cal-event">
+          <div class="cal-time">16:00</div>
+          <div class="cal-event-dot" style="background:var(--amber)"></div>
+          <div><div class="cal-event-name">Reunião com Rafael</div><div class="cal-event-sub">Zoom · 45 min</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTRAL DE IA -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central de IA</div><div class="central-sub">Assistente ativo</div></div>
+        </div>
+        <a class="central-link" href="/modules/ai-center.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <div class="ai-chat">
+        <div class="ai-msg">
+          <div class="ai-avatar bot"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="ai-bubble">{ai_suggestion}</div>
+        </div>
+        <div class="ai-msg" style="flex-direction:row-reverse">
+          <div class="ai-avatar user"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="ai-bubble user">Sim, me mostre as opções de renda fixa.</div>
+        </div>
+      </div>
+      <div class="ai-shortcuts">
+        <div class="ai-shortcut"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analisar gastos</div>
+        <div class="ai-shortcut"><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i> Redigir e-mail</div>
+        <div class="ai-shortcut"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Otimizar agenda</div>
+        <div class="ai-shortcut"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i> Pesquisar docs</div>
+      </div>
+    </div>
+
+    <!-- CENTRAL DE PRODUTIVIDADE -->
+    <div class="central-card">
+      <div class="central-header">
+        <div class="central-title">
+          <div class="central-icon" style="background:linear-gradient(135deg,#6366F1,#4F46E5)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="central-name">Central de Produtividade</div><div class="central-sub">5 tarefas pendentes</div></div>
+        </div>
+        <a class="central-link" href="/modules/productivity.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
+      </div>
+      <ul class="prod-tasks">
+        <li class="prod-task">
+          <div class="prod-check done"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i></div>
+          <div class="prod-task-name done">Revisar proposta Q3</div>
+          <span class="prod-priority high">Alta</span>
+        </li>
+        <li class="prod-task">
+          <div class="prod-check"></div>
+          <div class="prod-task-name">Assinar contrato fornecedor</div>
+          <span class="prod-priority high">Alta</span>
+        </li>
+        <li class="prod-task">
+          <div class="prod-check"></div>
+          <div class="prod-task-name">Preparar relatório mensal</div>
+          <span class="prod-priority med">Média</span>
+        </li>
+        <li class="prod-task">
+          <div class="prod-check"></div>
+          <div class="prod-task-name">Atualizar OKRs do time</div>
+          <span class="prod-priority low">Baixa</span>
+        </li>
+      </ul>
+      <div class="prod-progress">
+        <div class="prod-prog-label">
+          <span>Progresso semanal</span>
+          <span style="color:var(--accent-light);font-weight:700">68%</span>
+        </div>
+        <div class="prod-prog-bar"><div class="prod-prog-fill" style="width:68%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.prod-check').forEach(check => {
+      check.addEventListener('click', () => {
+        check.classList.toggle('done');
+        if (check.classList.contains('done')) check.textContent = '\u{2713}';
+        else check.textContent = '';
+        const task = check.nextElementSibling;
+        task.classList.toggle('done');
+      });
+    });
+    document.querySelectorAll('.ai-shortcut').forEach(s => {
+      s.addEventListener('click', () => {
+        document.querySelector('.ai-input input').value = s.textContent.trim().replace(/^[^\s]+\s/,'');
+        document.querySelector('.ai-input input').focus();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!-- LifeOS Enterprise — Universal Command Center -->
+<div id="module-dashboard-v11" style="display:none">
+  <style>
+    #module-dashboard-v11 .dv11-header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+    #module-dashboard-v11 .dv11-greeting{font-size:24px;font-weight:900;letter-spacing:-.5px}
+    #module-dashboard-v11 .dv11-date{font-size:13px;color:var(--text-secondary);margin-top:4px}
+    #module-dashboard-v11 .dv11-actions,#module-dashboard-v11 .dv11-shortcuts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    #module-dashboard-v11 .dv11-btn,#module-dashboard-v11 .dv11-shortcut{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary)}
+    #module-dashboard-v11 .dv11-btn:hover,#module-dashboard-v11 .dv11-shortcut:hover{border-color:var(--accent);color:var(--accent-light)}
+    #module-dashboard-v11 .dv11-btn-primary{background:var(--gradient-primary);color:#fff;border-color:transparent}
+    #module-dashboard-v11 .dv11-badge{display:none;font-size:11px;font-weight:700;color:var(--amber);padding:4px 9px;border-radius:20px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.28)}
+    #module-dashboard-v11 .dv11-badge.visible{display:inline-flex}
+    #module-dashboard-v11 .dv11-tabs{display:flex;gap:4px;margin:18px 0;border-bottom:1px solid var(--border);overflow:auto}
+    #module-dashboard-v11 .dv11-tab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;border:0;border-bottom:2px solid transparent;background:transparent;white-space:nowrap}
+    #module-dashboard-v11 .dv11-tab.active{color:var(--accent-light);border-bottom-color:var(--accent)}
+    #module-dashboard-v11 .dv11-panel{display:none}#module-dashboard-v11 .dv11-panel.active{display:block}
+    #module-dashboard-v11 .dv11-widget-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+    #module-dashboard-v11 .dv11-widget{grid-column:span 4;position:relative;padding:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    #module-dashboard-v11 .dv11-widget.dv11-w6{grid-column:span 6}#module-dashboard-v11 .dv11-widget.dv11-w8{grid-column:span 8}#module-dashboard-v11 .dv11-widget.dv11-w12{grid-column:span 12}
+    #module-dashboard-v11 .dv11-widget.hidden{display:none}#module-dashboard-v11 .dv11-widget-grid.edit-mode .dv11-widget{outline:1px dashed rgba(245,158,11,.6);cursor:grab}
+    #module-dashboard-v11 .dv11-widget-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}#module-dashboard-v11 .dv11-widget-title{font-size:14px;font-weight:800}
+    #module-dashboard-v11 .dv11-widget-action{font-size:12px;color:var(--accent-light);cursor:pointer}#module-dashboard-v11 .dv11-remove-btn{display:none;position:absolute;right:10px;top:10px;border:1px solid rgba(239,68,68,.35);background:rgba(239,68,68,.12);color:var(--red);border-radius:6px;width:24px;height:24px;cursor:pointer}
+    #module-dashboard-v11 .dv11-widget-grid.edit-mode .dv11-remove-btn{display:block}
+    #module-dashboard-v11 .dv11-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0}
+    #module-dashboard-v11 .dv11-kpi{padding:15px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)}#module-dashboard-v11 .dv11-kpi-value{font-size:23px;font-weight:900;margin-top:6px}#module-dashboard-v11 .dv11-kpi-label{font-size:11px;color:var(--text-muted)}#module-dashboard-v11 .dv11-kpi-trend{font-size:11px;color:var(--text-secondary);margin-top:5px}
+    #module-dashboard-v11 .dv11-list{display:grid;gap:8px}#module-dashboard-v11 .dv11-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}#module-dashboard-v11 .dv11-row:last-child{border:0}
+    #module-dashboard-v11 .dv11-row-main{font-weight:650}#module-dashboard-v11 .dv11-row-meta{font-size:11px;color:var(--text-muted);margin-top:3px}#module-dashboard-v11 .dv11-empty{font-size:13px;color:var(--text-muted);padding:14px 0;line-height:1.5}
+    #module-dashboard-v11 .dv11-status{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}#module-dashboard-v11 .dv11-pill{font-size:11px;font-weight:600;padding:6px 9px;border-radius:999px;color:var(--text-secondary);background:rgba(255,255,255,.03);border:1px solid var(--border)}
+    #module-dashboard-v11 .dv11-catalog-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:18px}#module-dashboard-v11 .dv11-catalog-overlay.open{display:flex}#module-dashboard-v11 .dv11-catalog{width:min(620px,100%);max-height:80vh;overflow:auto;padding:22px;border-radius:var(--radius-xl);background:var(--bg-elevated);border:1px solid var(--border)}#module-dashboard-v11 .dv11-catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-top:14px}#module-dashboard-v11 .dv11-catalog-item{padding:11px;border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;font-size:13px}#module-dashboard-v11 .dv11-catalog-item.added{border-color:var(--green)}
+    @media(max-width:900px){#module-dashboard-v11 .dv11-widget,#module-dashboard-v11 .dv11-widget.dv11-w6,#module-dashboard-v11 .dv11-widget.dv11-w8{grid-column:span 12}}
+  </style>
+
+  <div class="dv11-header">
+    <div><div id="d11-greeting" class="dv11-greeting">Seu Command Center</div><div id="d11-date" class="dv11-date"></div></div>
+    <div class="dv11-actions"><span id="dv11-edit-badge" class="dv11-badge">Modo de edição</span><button class="dv11-btn" type="button" onclick="dv11ToggleEdit()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button><button class="dv11-btn" type="button" onclick="dv11OpenCatalog()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Widgets</button><button class="dv11-btn dv11-btn-primary" type="button" onclick="dv11SaveLayout()"><i data-lucide="save" class="pg-icon" aria-hidden="true"></i> Salvar layout</button></div>
+  </div>
+  <div id="dv11-status" class="dv11-status"><span class="dv11-pill">Carregando dados persistidos...</span></div>
+  <div class="dv11-shortcuts" style="margin-bottom:16px"><button class="dv11-shortcut" type="button" onclick="showPage('agenda')"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Agenda</button><button class="dv11-shortcut" type="button" onclick="showPage('finance')"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Finanças</button><button class="dv11-shortcut" type="button" onclick="showPage('kanban')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Kanban</button><button class="dv11-shortcut" type="button" onclick="showPage('documents')"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Documentos</button></div>
+  <div id="dv11-kpis" class="dv11-kpi-row"><div class="dv11-kpi"><div class="dv11-kpi-label">Indicadores</div><div class="dv11-kpi-trend">Carregando dados persistidos...</div></div></div>
+
+  <div class="dv11-tabs" role="tablist"><button class="dv11-tab active" type="button" onclick="dv11SwitchTab('today')">Hoje</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('week')">Esta semana</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('priorities')">Prioridades</button><button class="dv11-tab" type="button" onclick="dv11SwitchTab('command')">Command Center</button></div>
+
+  <section id="panel-today" class="dv11-panel active"><div id="todayGrid" class="dv11-widget-grid">
+    <article id="w11-today-summary" class="dv11-widget dv11-w12" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-summary')" aria-label="Ocultar resumo">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Resumo do dia</div><span class="dv11-widget-action" onclick="showPage('agenda')">Abrir agenda</span></div><div id="dv11-today-summary" class="dv11-kpi-row"></div></article>
+    <article id="w11-today-agenda" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-agenda')" aria-label="Ocultar agenda">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Agenda de hoje</div></div><div id="dv11-agenda" class="dv11-list"></div></article>
+    <article id="w11-today-habits" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-habits')" aria-label="Ocultar hábitos">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Hábitos de hoje</div><span class="dv11-widget-action" onclick="showPage('habits')">Gerenciar</span></div><div id="dv11-habits-container" class="dv11-list"></div></article>
+    <article id="w11-today-ai" class="dv11-widget dv11-w12" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-today-ai')" aria-label="Ocultar insights">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Insights baseados em dados</div><span class="dv11-widget-action" onclick="showPage('ai')">Abrir IA</span></div><div id="dv11-insights" class="dv11-list"></div></article>
+  </div></section>
+
+  <section id="panel-week" class="dv11-panel"><div id="weekGrid" class="dv11-widget-grid">
+    <article id="w11-week-summary" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-week-summary')" aria-label="Ocultar indicadores">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Produtividade no período</div></div><div id="dv11-week-summary" class="dv11-kpi-row"></div></article>
+    <article id="w11-week-goals" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-week-goals')" aria-label="Ocultar metas">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Metas e hábitos</div></div><div id="dv11-goals-container" class="dv11-list"></div></article>
+  </div></section>
+
+  <section id="panel-priorities" class="dv11-panel"><div id="prioritiesGrid" class="dv11-widget-grid">
+    <article id="w11-pri-list" class="dv11-widget dv11-w8" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-pri-list')" aria-label="Ocultar prioridades">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Próximas prioridades</div><span class="dv11-widget-action" onclick="showPage('tasks')">Ver tarefas</span></div><div id="dv11-priorities" class="dv11-list"></div></article>
+    <article id="w11-pri-timeline" class="dv11-widget dv11-w4" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-pri-timeline')" aria-label="Ocultar agenda">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Próximos compromissos</div></div><div id="dv11-timeline" class="dv11-list"></div></article>
+  </div></section>
+
+  <section id="panel-command" class="dv11-panel"><div id="commandGrid" class="dv11-widget-grid">
+    <article id="w11-prod-kpis" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-prod-kpis')" aria-label="Ocultar produtividade">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Indicadores de produtividade</div><span class="dv11-widget-action" onclick="showPage('analytics')">Analytics</span></div><div id="dv11-productivity" class="dv11-kpi-row"></div></article>
+    <article id="w11-finance-widget" class="dv11-widget dv11-w6" draggable="true"><button class="dv11-remove-btn" type="button" onclick="dv11RemoveWidget('w11-finance-widget')" aria-label="Ocultar finanças">×</button><div class="dv11-widget-header"><div class="dv11-widget-title">Resumo financeiro</div><span class="dv11-widget-action" onclick="showPage('finance')">Finance Hub</span></div><div id="dv11-finance" class="dv11-kpi-row"></div></article>
+  </div></section>
+
+  <div id="dv11CatalogOverlay" class="dv11-catalog-overlay" onclick="if(event.target===this)dv11CloseCatalog()"><div class="dv11-catalog"><div style="font-size:17px;font-weight:800">Widgets disponíveis</div><div style="font-size:13px;color:var(--text-muted);margin-top:5px">Escolha quais visões persistidas devem aparecer no seu painel.</div><div id="dv11CatalogGrid" class="dv11-catalog-grid"></div><div style="display:flex;justify-content:flex-end;margin-top:16px"><button class="dv11-btn" type="button" onclick="dv11CloseCatalog()">Fechar</button></div></div></div>
+
+  <script>
+  (() => {
+    'use strict';
+    if (window.LifeOSCommandCenter) return;
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[character]));
+    const integer = (value) => new Intl.NumberFormat('pt-BR').format(Number(value) || 0);
+    const money = (value) => value === null || value === undefined ? 'Não informado' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(value) || 0);
+    const empty = (text) => `<div class="dv11-empty">${esc(text)}</div>`;
+    const state = { briefing:null, analytics:null, finance:null, edit:false };
+    const widgetIds = ['w11-today-summary','w11-today-agenda','w11-today-habits','w11-today-ai','w11-week-summary','w11-week-goals','w11-pri-list','w11-pri-timeline','w11-prod-kpis','w11-finance-widget'];
+    const byId = (id) => document.getElementById(id);
+    const refreshIcons = () => { try { window.lucide?.createIcons?.(); } catch (_) {} };
+    const set = (id, markup) => { const node = byId(id); if (node) node.innerHTML = markup; };
+    const metrics = (items) => items.map((item) => `<div class="dv11-kpi"><div class="dv11-kpi-label">${esc(item.label)}</div><div class="dv11-kpi-value" style="color:${item.tone || 'var(--accent)'}">${esc(item.value)}</div>${item.detail ? `<div class="dv11-kpi-trend">${esc(item.detail)}</div>` : ''}</div>`).join('');
+    const rows = (items, title, meta) => items?.length ? items.map((item) => `<div class="dv11-row"><div><div class="dv11-row-main">${esc(title(item))}</div>${meta(item) ? `<div class="dv11-row-meta">${esc(meta(item))}</div>` : ''}</div></div>`).join('') : empty('Nenhum registro persistido para este período.');
+    const render = () => {
+      const briefing = state.briefing;
+      if (!briefing) { ['dv11-today-summary','dv11-agenda','dv11-habits-container','dv11-insights','dv11-week-summary','dv11-goals-container','dv11-priorities','dv11-timeline','dv11-productivity','dv11-finance'].forEach((id) => set(id, empty('Carregando dados persistidos...'))); return; }
+      const m = briefing.metrics || {};
+      set('dv11-status', `<span class="dv11-pill">Fonte: ${briefing.source === 'real' ? 'dados persistidos' : 'estado vazio'}</span><span class="dv11-pill">Atualizado: ${esc(new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}))}</span>`);
+      const today = [
+        {label:'Tarefas pendentes',value:integer(m.tasksToday),detail:`${integer(m.tasksCompleted)} concluída(s) hoje`,tone:'var(--accent)'},
+        {label:'Hábitos concluídos',value:`${integer(m.habitsCompleted)}/${integer(m.habitsActive)}`,detail:'Registros de hoje',tone:'var(--green)'},
+        {label:'Metas ativas',value:integer(m.goalsActive),detail:'Metas persistidas',tone:'var(--purple)'},
+        {label:'Maior sequência',value:`${integer(m.streak)} dia(s)`,detail:'Entre hábitos ativos',tone:'var(--amber)'}
+      ];
+      set('dv11-kpis', metrics(today)); set('dv11-today-summary', metrics(today));
+      set('dv11-agenda', rows(briefing.agenda, (item) => item.title, (item) => `${item.time || 'Sem horário'} · ${item.category || 'Geral'}`));
+      set('dv11-habits-container', rows(briefing.habits, (item) => item.name, (item) => `${item.done ? 'Concluído hoje' : 'Pendente hoje'} · sequência: ${integer(item.streak)} dia(s)`));
+      set('dv11-insights', rows(briefing.insights, (item) => item.text, () => 'Calculado a partir dos seus registros'));
+      const analytic = state.analytics || {}; const p = analytic.productivity?.kpis || {}; const f = analytic.finance?.kpis || {};
+      set('dv11-week-summary', metrics([{label:'Tarefas criadas',value:integer(p.totalTasks),tone:'var(--accent)'},{label:'Concluídas',value:integer(p.completedTasks),tone:'var(--green)'},{label:'Taxa de conclusão',value:`${integer(p.completionRate)}%`,tone:'var(--cyan)'},{label:'Em atraso',value:integer(p.overdueTasks),tone:p.overdueTasks ? 'var(--amber)' : 'var(--text-primary)'}]));
+      set('dv11-goals-container', rows([{title:'Metas ativas',value:integer(p.activeGoals)},{title:'Progresso médio das metas',value:`${integer(p.avgGoalProgress)}%`},{title:'Hábitos ativos',value:integer(p.activeHabits)}], (item) => item.title, (item) => item.value));
+      set('dv11-priorities', rows(briefing.priorities, (item) => item.title, (item) => item.meta));
+      set('dv11-timeline', rows(briefing.agenda, (item) => item.title, (item) => `${item.time || 'Sem horário'} · ${item.category || 'Geral'}`));
+      set('dv11-productivity', metrics([{label:'Tarefas concluídas',value:integer(p.completedTasks),tone:'var(--green)'},{label:'Conclusão',value:`${integer(p.completionRate)}%`,tone:'var(--cyan)'},{label:'Hábitos ativos',value:integer(p.activeHabits),tone:'var(--purple)'}]));
+      const summary = state.finance || {};
+      set('dv11-finance', metrics([{label:'Saldo',value:money(summary.totalBalance),tone:'var(--green)'},{label:'Receitas do período',value:money(summary.monthlyIncome ?? f.totalIncome),tone:'var(--accent)'},{label:'Despesas do período',value:money(summary.monthlyExpenses ?? f.totalExpenses),tone:'var(--red)'},{label:'Saldo do período',value:money(summary.netBalance ?? f.netBalance),tone:'var(--cyan)'}]));
+      refreshIcons();
+    };
+    window.dv11SwitchTab = (tab) => { document.querySelectorAll('#module-dashboard-v11 .dv11-tab').forEach((node) => node.classList.toggle('active', node.getAttribute('onclick') === `dv11SwitchTab('${tab}')`)); document.querySelectorAll('#module-dashboard-v11 .dv11-panel').forEach((node) => node.classList.toggle('active', node.id === `panel-${tab}`)); };
+    window.dv11SaveLayout = () => { const order = []; document.querySelectorAll('#module-dashboard-v11 .dv11-widget-grid').forEach((grid) => grid.querySelectorAll('.dv11-widget').forEach((widget) => order.push({id:widget.id,parent:grid.id}))); const hidden = [...document.querySelectorAll('#module-dashboard-v11 .dv11-widget.hidden')].map((widget) => widget.id); localStorage.setItem('lifeos_dv11_order', JSON.stringify(order)); localStorage.setItem('lifeos_dv11_hidden', JSON.stringify(hidden)); };
+    const restoreLayout = () => { try { const order = JSON.parse(localStorage.getItem('lifeos_dv11_order') || '[]'); const hidden = JSON.parse(localStorage.getItem('lifeos_dv11_hidden') || '[]'); order.forEach(({id,parent}) => { const widget = byId(id), grid = byId(parent); if (widget && grid) grid.appendChild(widget); }); hidden.forEach((id) => byId(id)?.classList.add('hidden')); } catch (_) {} };
+    window.dv11RemoveWidget = (id) => { byId(id)?.classList.add('hidden'); window.dv11SaveLayout(); };
+    window.dv11ToggleEdit = () => { state.edit = !state.edit; document.querySelectorAll('#module-dashboard-v11 .dv11-widget-grid').forEach((grid) => grid.classList.toggle('edit-mode', state.edit)); byId('dv11-edit-badge')?.classList.toggle('visible', state.edit); };
+    window.dv11OpenCatalog = () => { const grid = byId('dv11CatalogGrid'); if (grid) grid.innerHTML = widgetIds.map((id) => { const widget = byId(id); const visible = widget && !widget.classList.contains('hidden'); const title = widget?.querySelector('.dv11-widget-title')?.textContent || id; return `<button class="dv11-catalog-item${visible ? ' added' : ''}" type="button" onclick="dv11ToggleCatalogWidget('${id}')"><strong>${esc(title)}</strong><div style="font-size:11px;color:var(--text-muted);margin-top:4px">${visible ? 'Em exibição' : 'Adicionar ao painel'}</div></button>`; }).join(''); byId('dv11CatalogOverlay')?.classList.add('open'); };
+    window.dv11CloseCatalog = () => byId('dv11CatalogOverlay')?.classList.remove('open');
+    window.dv11ToggleCatalogWidget = (id) => { byId(id)?.classList.toggle('hidden'); window.dv11SaveLayout(); window.dv11OpenCatalog(); };
+    async function load() {
+      render();
+      try {
+        const [briefResponse, analyticsResponse, financeResponse] = await Promise.all([fetch('/api/briefing',{credentials:'same-origin'}),fetch('/api/analytics-pro?module=all&period=7d',{credentials:'same-origin'}),fetch('/api/finance/hub?view=summary',{credentials:'same-origin'})]);
+        const [briefResult, analyticsResult, financeResult] = await Promise.all([briefResponse.json().catch(() => ({})),analyticsResponse.json().catch(() => ({})),financeResponse.json().catch(() => ({}))]);
+        if (!briefResponse.ok || !briefResult.ok) throw new Error(briefResult.error || 'Não foi possível carregar o briefing.');
+        state.briefing = briefResult.briefing;
+        state.analytics = analyticsResponse.ok && analyticsResult.ok ? analyticsResult.data : null;
+        state.finance = financeResponse.ok && financeResult.ok ? (financeResult.summary || financeResult.data || {}) : {};
+      } catch (error) {
+        state.briefing = { source:'empty', metrics:{}, agenda:[], habits:[], insights:[], priorities:[] };
+        set('dv11-status', `<span class="dv11-pill">Dados indisponíveis no momento</span>`);
+      }
+      render();
+    }
+    restoreLayout(); window.LifeOSCommandCenter = { load, state }; window.setTimeout(load,0);
+    const date = byId('d11-date'); if (date) date.textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  })();
+  </script>
+</div>
+<!-- END module-dashboard-v11 -->

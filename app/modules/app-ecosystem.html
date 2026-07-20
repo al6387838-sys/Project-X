@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Ecosystem — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --bg-card-hover: #1A2235; --border: rgba(255,255,255,0.06);
+      --border-accent: rgba(99,102,241,0.25); --text-primary: #F0F4FF;
+      --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8;
+      --accent-glow: rgba(99,102,241,0.12); --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; padding: 24px; }
+    .eco-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .eco-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .eco-title span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .eco-badge { background: rgba(99,102,241,0.15); color: var(--accent-light); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border-accent); }
+    .eco-tabs { display: flex; gap: 4px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 4px; margin-bottom: 24px; width: fit-content; }
+    .eco-tab { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-secondary); transition: all 0.2s; border: none; background: none; }
+    .eco-tab.active { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(99,102,241,0.35); }
+    .eco-tab:hover:not(.active) { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+    .eco-panel { display: none; }
+    .eco-panel.active { display: block; }
+    /* Registry */
+    .registry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .app-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all 0.2s; cursor: pointer; }
+    .app-card:hover { border-color: var(--border-accent); background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .app-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .app-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .app-icon.finance { background: linear-gradient(135deg, #10B981, #059669); }
+    .app-icon.comm { background: linear-gradient(135deg, #06B6D4, #0891B2); }
+    .app-icon.ai { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
+    .app-icon.docs { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    .app-icon.calendar { background: linear-gradient(135deg, #EF4444, #DC2626); }
+    .app-icon.prod { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+    .app-icon.market { background: linear-gradient(135deg, #EC4899, #DB2777); }
+    .app-icon.obs { background: linear-gradient(135deg, #14B8A6, #0D9488); }
+    .app-name { font-size: 15px; font-weight: 700; }
+    .app-version { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .app-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .app-footer { display: flex; align-items: center; justify-content: space-between; }
+    .app-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .status-dot.inactive { background: var(--text-muted); }
+    .status-dot.beta { background: var(--amber); }
+    .app-action { background: rgba(99,102,241,0.12); border: 1px solid var(--border-accent); color: var(--accent-light); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .app-action:hover { background: var(--accent); color: #fff; }
+    /* Marketplace */
+    .market-search { display: flex; gap: 12px; margin-bottom: 20px; }
+    .market-search input { flex: 1; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px; color: var(--text-primary); font-size: 13px; outline: none; }
+    .market-search input:focus { border-color: var(--border-accent); }
+    .market-categories { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .market-cat { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); color: var(--text-secondary); background: none; transition: all 0.2s; }
+    .market-cat.active, .market-cat:hover { background: var(--accent-glow); border-color: var(--border-accent); color: var(--accent-light); }
+    .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .market-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; transition: all 0.2s; }
+    .market-card:hover { border-color: var(--border-accent); transform: translateY(-2px); }
+    .market-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .market-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .market-price { font-size: 12px; font-weight: 700; color: var(--green); background: rgba(16,185,129,0.1); padding: 3px 8px; border-radius: 4px; }
+    .market-price.free { color: var(--cyan); background: rgba(6,182,212,0.1); }
+    .market-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .market-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px; }
+    .market-meta { display: flex; align-items: center; justify-content: space-between; }
+    .market-rating { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--amber); }
+    .market-install { background: var(--gradient-primary); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; border: none; transition: opacity 0.2s; }
+    .market-install:hover { opacity: 0.85; }
+    /* Dependency Manager */
+    .dep-table { width: 100%; border-collapse: collapse; }
+    .dep-table th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .dep-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .dep-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .dep-name { font-weight: 600; }
+    .dep-version { font-family: monospace; font-size: 12px; color: var(--cyan); background: rgba(6,182,212,0.08); padding: 2px 8px; border-radius: 4px; }
+    .dep-latest { font-family: monospace; font-size: 12px; color: var(--green); }
+    .dep-status-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+    .dep-status-badge.ok { background: rgba(16,185,129,0.12); color: var(--green); }
+    .dep-status-badge.update { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .dep-status-badge.critical { background: rgba(239,68,68,0.12); color: var(--red); }
+    /* Version Manager */
+    .version-timeline { position: relative; padding-left: 28px; }
+    .version-timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .version-item { position: relative; margin-bottom: 24px; }
+    .version-dot { position: absolute; left: -22px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--bg-base); }
+    .version-dot.current { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+    .version-dot.stable { background: var(--green); }
+    .version-dot.old { background: var(--text-muted); }
+    .version-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .version-tag { font-size: 14px; font-weight: 800; font-family: monospace; }
+    .version-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .version-badge.current { background: rgba(99,102,241,0.15); color: var(--accent-light); }
+    .version-badge.stable { background: rgba(16,185,129,0.12); color: var(--green); }
+    .version-badge.deprecated { background: rgba(239,68,68,0.1); color: var(--red); }
+    .version-date { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+    .version-notes { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .version-notes li { margin-left: 16px; margin-bottom: 4px; }
+    /* Integration Catalog */
+    .integration-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .integration-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.2s; }
+    .integration-card:hover { border-color: var(--border-accent); }
+    .integration-header { display: flex; align-items: center; gap: 10px; }
+    .integration-logo { width: 36px; height: 36px; border-radius: 8px; background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .integration-name { font-size: 14px; font-weight: 700; }
+    .integration-category { font-size: 11px; color: var(--text-muted); }
+    .integration-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .integration-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .integration-connected { font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .integration-connected.yes { color: var(--green); }
+    .integration-connected.no { color: var(--text-muted); }
+    .integration-btn { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 5px; cursor: pointer; border: 1px solid; transition: all 0.2s; }
+    .integration-btn.connect { border-color: var(--border-accent); color: var(--accent-light); background: var(--accent-glow); }
+    .integration-btn.connected { border-color: rgba(16,185,129,0.3); color: var(--green); background: rgba(16,185,129,0.08); }
+    .section-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .section-toolbar h3 { font-size: 16px; font-weight: 700; }
+    .btn-primary { background: var(--gradient-primary); color: #fff; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: var(--radius-md); border: none; cursor: pointer; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.85; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; }
+    .stat-value { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="eco-header">
+    <div>
+      <div class="eco-title">App <span>Ecosystem</span></div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">Gerencie módulos, dependências e integrações da plataforma</div>
+    </div>
+    <div class="eco-badge">Phase 081 · v9.5</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent)">12</div>
+      <div class="stat-label">Apps Instalados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--green)">48</div>
+      <div class="stat-label">Disponíveis no Marketplace</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--cyan)">3</div>
+      <div class="stat-label">Atualizações Pendentes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--amber)">27</div>
+      <div class="stat-label">Integrações Ativas</div>
+    </div>
+  </div>
+
+  <div class="eco-tabs">
+    <button class="eco-tab active" onclick="switchTab('registry')">App Registry</button>
+    <button class="eco-tab" onclick="switchTab('marketplace')">Marketplace</button>
+    <button class="eco-tab" onclick="switchTab('dependencies')">Dependências</button>
+    <button class="eco-tab" onclick="switchTab('versions')">Versões</button>
+    <button class="eco-tab" onclick="switchTab('integrations')">Integrações</button>
+  </div>
+
+  <!-- APP REGISTRY -->
+  <div id="panel-registry" class="eco-panel active">
+    <div class="section-toolbar">
+      <h3>Apps Instalados</h3>
+      <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar App</button>
+    </div>
+    <div class="registry-grid">
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon finance"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Finance Hub</div><div class="app-version">v3.2.1 · Core</div></div>
+        </div>
+        <div class="app-desc">Central financeira completa com Open Finance, investimentos, orçamentos e análise preditiva.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon comm"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Communication Hub</div><div class="app-version">v2.8.0 · Core</div></div>
+        </div>
+        <div class="app-desc">Mensagens unificadas, e-mail, videoconferência e colaboração em tempo real.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon ai"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">AI Engine</div><div class="app-version">v4.1.0 · Core</div></div>
+        </div>
+        <div class="app-desc">Motor de inteligência artificial com assistente pessoal, análise preditiva e automação.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon docs"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Document Center</div><div class="app-version">v2.3.0 · Core</div></div>
+        </div>
+        <div class="app-desc">Gestão de documentos, contratos, assinatura digital e controle de versões.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon calendar"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Calendar Pro</div><div class="app-version">v1.9.2 · Core</div></div>
+        </div>
+        <div class="app-desc">Agenda inteligente com sincronização multi-calendário, lembretes e IA de agendamento.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon prod"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Productivity Suite</div><div class="app-version">v3.0.1 · Core</div></div>
+        </div>
+        <div class="app-desc">Tarefas, projetos, Kanban, OKRs e gestão de tempo com análise de produtividade.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon obs"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Observability</div><div class="app-version">v1.2.0 · Enterprise</div></div>
+        </div>
+        <div class="app-desc">Monitoramento, logs, métricas e alertas para toda a plataforma.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot beta"></div>Beta</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-icon market"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="app-name">Marketplace</div><div class="app-version">v1.0.0 · Platform</div></div>
+        </div>
+        <div class="app-desc">Loja de extensões, plugins e integrações para expandir o ecossistema.</div>
+        <div class="app-footer">
+          <div class="app-status"><div class="status-dot active"></div>Ativo</div>
+          <button class="app-action">Configurar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKETPLACE -->
+  <div id="panel-marketplace" class="eco-panel">
+    <div class="market-search">
+      <input type="text" placeholder="  Buscar apps, plugins e integrações..." />
+      <button class="btn-primary">Buscar</button>
+    </div>
+    <div class="market-categories">
+      <button class="market-cat active">Todos</button>
+      <button class="market-cat">Finanças</button>
+      <button class="market-cat">Produtividade</button>
+      <button class="market-cat">Comunicação</button>
+      <button class="market-cat">IA & Automação</button>
+      <button class="market-cat">Segurança</button>
+      <button class="market-cat">Analytics</button>
+      <button class="market-cat">Integrações</button>
+    </div>
+    <div class="market-grid">
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#10B981,#059669)"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price free">Grátis</span>
+        </div>
+        <div class="market-name">Advanced Analytics</div>
+        <div class="market-desc">Dashboards avançados com BI, relatórios customizados e exportação de dados.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">4.9</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#6366F1,#4F46E5)"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price">Pro</span>
+        </div>
+        <div class="market-name">Zero Trust Security</div>
+        <div class="market-desc">Segurança avançada com autenticação multi-fator, SSO e auditoria completa.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">4.8</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706)"><i data-lucide="handshake" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price free">Grátis</span>
+        </div>
+        <div class="market-name">CRM Connector</div>
+        <div class="market-desc">Integração com Salesforce, HubSpot e Pipedrive para gestão de relacionamentos.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">4.5</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#EC4899,#DB2777)"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price">Pro</span>
+        </div>
+        <div class="market-name">AI Copilot Pro</div>
+        <div class="market-desc">Assistente IA avançado com GPT-4, análise de documentos e geração de conteúdo.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">5.0</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#06B6D4,#0891B2)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price free">Grátis</span>
+        </div>
+        <div class="market-name">Mobile Sync</div>
+        <div class="market-desc">Sincronização perfeita entre desktop e mobile com suporte offline.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">4.6</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-card-top">
+          <div class="market-icon" style="background:linear-gradient(135deg,#14B8A6,#0D9488)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div>
+          <span class="market-price">Enterprise</span>
+        </div>
+        <div class="market-name">Workflow Automation</div>
+        <div class="market-desc">Automação de processos com triggers, condições e ações sem código.</div>
+        <div class="market-meta">
+          <div class="market-rating"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> <span style="color:var(--text-muted)">4.9</span></div>
+          <button class="market-install">Instalar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPENDENCY MANAGER -->
+  <div id="panel-dependencies" class="eco-panel">
+    <div class="section-toolbar">
+      <h3>Gerenciador de Dependências</h3>
+      <button class="btn-primary">Verificar Atualizações</button>
+    </div>
+    <table class="dep-table">
+      <thead>
+        <tr>
+          <th>Módulo / Dependência</th>
+          <th>Versão Atual</th>
+          <th>Última Versão</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="dep-name">Finance Hub</div><div style="font-size:11px;color:var(--text-muted)">Core Module</div></td>
+          <td><span class="dep-version">3.2.1</span></td>
+          <td><span class="dep-latest">3.2.1</span></td>
+          <td style="color:var(--text-secondary)">Core</td>
+          <td><span class="dep-status-badge ok"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Atualizado</span></td>
+          <td style="color:var(--text-muted);font-size:12px">—</td>
+        </tr>
+        <tr>
+          <td><div class="dep-name">AI Engine</div><div style="font-size:11px;color:var(--text-muted)">Core Module</div></td>
+          <td><span class="dep-version">4.0.2</span></td>
+          <td><span class="dep-latest">4.1.0</span></td>
+          <td style="color:var(--text-secondary)">Core</td>
+          <td><span class="dep-status-badge update"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Atualização</span></td>
+          <td><button class="app-action">Atualizar</button></td>
+        </tr>
+        <tr>
+          <td><div class="dep-name">Communication Hub</div><div style="font-size:11px;color:var(--text-muted)">Core Module</div></td>
+          <td><span class="dep-version">2.7.1</span></td>
+          <td><span class="dep-latest">2.8.0</span></td>
+          <td style="color:var(--text-secondary)">Core</td>
+          <td><span class="dep-status-badge update"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Atualização</span></td>
+          <td><button class="app-action">Atualizar</button></td>
+        </tr>
+        <tr>
+          <td><div class="dep-name">black_diamond.js</div><div style="font-size:11px;color:var(--text-muted)">Runtime Core</div></td>
+          <td><span class="dep-version">9.2.0</span></td>
+          <td><span class="dep-latest">9.5.0</span></td>
+          <td style="color:var(--text-secondary)">Runtime</td>
+          <td><span class="dep-status-badge update"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> Atualização</span></td>
+          <td><button class="app-action">Atualizar</button></td>
+        </tr>
+        <tr>
+          <td><div class="dep-name">Design System</div><div style="font-size:11px;color:var(--text-muted)">UI Framework</div></td>
+          <td><span class="dep-version">4.0.0</span></td>
+          <td><span class="dep-latest">4.0.0</span></td>
+          <td style="color:var(--text-secondary)">UI</td>
+          <td><span class="dep-status-badge ok"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Atualizado</span></td>
+          <td style="color:var(--text-muted);font-size:12px">—</td>
+        </tr>
+        <tr>
+          <td><div class="dep-name">Security Engine</div><div style="font-size:11px;color:var(--text-muted)">Security Layer</div></td>
+          <td><span class="dep-version">2.1.0</span></td>
+          <td><span class="dep-latest">2.1.0</span></td>
+          <td style="color:var(--text-secondary)">Security</td>
+          <td><span class="dep-status-badge ok"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Atualizado</span></td>
+          <td style="color:var(--text-muted);font-size:12px">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- VERSION MANAGER -->
+  <div id="panel-versions" class="eco-panel">
+    <div class="section-toolbar">
+      <h3>Gerenciador de Versões</h3>
+      <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Release</button>
+    </div>
+    <div class="version-timeline">
+      <div class="version-item">
+        <div class="version-dot current"></div>
+        <div class="version-header">
+          <span class="version-tag">v9.5.0</span>
+          <span class="version-badge current">ATUAL</span>
+          <span class="version-date">15 Jul 2026</span>
+        </div>
+        <ul class="version-notes">
+          <li>Phase 081: App Ecosystem — Registry, Marketplace, Dependency & Version Manager</li>
+          <li>Phase 082: Personal Digital Hub — 6 Centrais integradas</li>
+          <li>Phase 083: Enterprise Settings expandido</li>
+          <li>Phase 084: Observability Enterprise completo</li>
+          <li>Phase 085: Product Polish — visual Enterprise Premium</li>
+        </ul>
+      </div>
+      <div class="version-item">
+        <div class="version-dot stable"></div>
+        <div class="version-header">
+          <span class="version-tag">v9.2.0</span>
+          <span class="version-badge stable">ESTÁVEL</span>
+          <span class="version-date">10 Jul 2026</span>
+        </div>
+        <ul class="version-notes">
+          <li>Phase 065: Enterprise Hardening completo</li>
+          <li>Phase 064: AI Automation Engine</li>
+          <li>Phase 063: Communication Platform</li>
+          <li>Phase 062: Open Finance Foundation</li>
+        </ul>
+      </div>
+      <div class="version-item">
+        <div class="version-dot stable"></div>
+        <div class="version-header">
+          <span class="version-tag">v9.1.0</span>
+          <span class="version-badge stable">ESTÁVEL</span>
+          <span class="version-date">5 Jul 2026</span>
+        </div>
+        <ul class="version-notes">
+          <li>Phase 060: Enterprise Platform completo</li>
+          <li>Multi-tenant RBAC implementado</li>
+          <li>Billing & Subscription Engine</li>
+        </ul>
+      </div>
+      <div class="version-item">
+        <div class="version-dot old"></div>
+        <div class="version-header">
+          <span class="version-tag">v9.0.0</span>
+          <span class="version-badge deprecated">LEGADO</span>
+          <span class="version-date">1 Jul 2026</span>
+        </div>
+        <ul class="version-notes">
+          <li>Finance Hub + Communication Hub + AI Platform</li>
+          <li>Enterprise UX redesign</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEGRATION CATALOG -->
+  <div id="panel-integrations" class="eco-panel">
+    <div class="section-toolbar">
+      <h3>Catálogo de Integrações</h3>
+      <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Integração</button>
+    </div>
+    <div class="integration-grid">
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="landmark" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Open Banking</div><div class="integration-category">Finanças</div></div>
+        </div>
+        <div class="integration-desc">Conexão com bancos via Open Finance Brasil para dados financeiros em tempo real.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Google Workspace</div><div class="integration-category">Produtividade</div></div>
+        </div>
+        <div class="integration-desc">Gmail, Google Calendar, Drive e Meet integrados ao ecossistema LifeOS.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Microsoft 365</div><div class="integration-category">Produtividade</div></div>
+        </div>
+        <div class="integration-desc">Outlook, Teams, SharePoint e OneDrive para ambientes corporativos Microsoft.</div>
+        <div class="integration-footer">
+          <div class="integration-connected no"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Desconectado</div>
+          <button class="integration-btn connect">Conectar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">OpenAI / GPT-4</div><div class="integration-category">IA</div></div>
+        </div>
+        <div class="integration-desc">Modelos GPT-4 e GPT-4o para o AI Engine com análise e geração de conteúdo.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Stripe</div><div class="integration-category">Pagamentos</div></div>
+        </div>
+        <div class="integration-desc">Processamento de pagamentos, assinaturas e faturamento enterprise.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Slack</div><div class="integration-category">Comunicação</div></div>
+        </div>
+        <div class="integration-desc">Notificações, alertas e comandos slash direto no Slack da sua equipe.</div>
+        <div class="integration-footer">
+          <div class="integration-connected no"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Desconectado</div>
+          <button class="integration-btn connect">Conectar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="github" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">GitHub</div><div class="integration-category">Desenvolvimento</div></div>
+        </div>
+        <div class="integration-desc">Deploy automático, CI/CD e rastreamento de issues integrados ao LifeOS.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+      <div class="integration-card">
+        <div class="integration-header">
+          <div class="integration-logo"><i data-lucide="cloud" class="pg-icon" aria-hidden="true"></i></div>
+          <div><div class="integration-name">Cloudflare</div><div class="integration-category">Infraestrutura</div></div>
+        </div>
+        <div class="integration-desc">CDN, Pages, Workers e KV para deploy e performance global da plataforma.</div>
+        <div class="integration-footer">
+          <div class="integration-connected yes"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
+          <button class="integration-btn connected">Gerenciar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.eco-tab').forEach((t, i) => {
+        const tabs = ['registry','marketplace','dependencies','versions','integrations'];
+        t.classList.toggle('active', tabs[i] === tab);
+      });
+      document.querySelectorAll('.eco-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+    document.querySelectorAll('.market-cat').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.market-cat').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

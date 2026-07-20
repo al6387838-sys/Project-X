@@ -1,4 +1,0 @@
-analyzers
-engines
-managers
-models

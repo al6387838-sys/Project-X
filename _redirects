@@ -1,0 +1,50 @@
+# LifeOS Enterprise v46.0.0 — Cloudflare Pages Redirects
+
+# Auth routes
+/login              /login/index.html           200
+/register           /register/index.html        200
+/forgot-password    /forgot-password/index.html 200
+/reset-password     /reset-password/index.html  200
+/confirm-email      /confirm-email/index.html   200
+/accept-invite      /accept-invite/index.html   200
+/api/auth/google    /api/auth/google            200
+/api/auth/apple     /api/auth/apple             200
+
+# App routes
+/app                /app/index.html             200
+
+# Admin routes
+/admin              /admin/index.html           200
+
+# Internal module routes
+/life-hub           /app/index.html             200
+/ai-copilot         /app/index.html             200
+/marketplace        /app/index.html             200
+/integrations       /app/index.html             200
+/companion          /app/index.html             200
+/missions           /app/index.html             200
+/timeline           /app/index.html             200
+/lifegraph          /app/index.html             200
+/briefing           /app/index.html             200
+/analytics          /app/index.html             200
+/profile            /app/index.html             200
+/settings           /app/index.html             200
+/communication-hub  /app/index.html             200
+/finance-hub        /app/index.html             200
+/document-center    /app/index.html             200
+/ai-orchestrator    /app/index.html             200
+/security           /app/index.html             200
+/payments           /app/index.html             200
+/collaboration      /app/index.html             200
+/api-platform       /app/index.html             200
+
+# Legacy routes
+/enterprise         /enterprise/index.html      200
+/memory-center      /memory-center/index.html   200
+/dashboard          /app/index.html             200
+
+# Public commercial pages
+/privacy            /privacy/index.html         200
+/terms              /terms/index.html           200
+/contact            /contact/index.html         200
+/status             /status/index.html          200

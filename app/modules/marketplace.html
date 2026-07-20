@@ -1,0 +1,283 @@
+<!-- LifeOS Enterprise — Módulo Marketplace v8.0 -->
+<div id="module-marketplace" style="display:none">
+
+<!-- ─── MARKETPLACE ─── -->
+<div class="page" id="page-marketplace">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Marketplace</div>
+      <div class="page-subtitle">Apps, plugins e integrações para o seu LifeOS</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('marketplace-installed')">Instalados</button>
+      <button class="btn btn-ghost" onclick="showPage('marketplace-api')">APIs</button>
+      <button class="btn btn-primary" onclick="mktPublishApp()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Publicar App</button>
+    </div>
+  </div>
+
+  <!-- Busca e filtros -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+    <input type="text" class="form-input" placeholder=" Buscar apps, plugins e integrações..." style="flex:1;min-width:200px" />
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-ghost active-filter" onclick="mktFilter('all',this)">Todos</button>
+      <button class="btn btn-ghost" onclick="mktFilter('productivity',this)">Produtividade</button>
+      <button class="btn btn-ghost" onclick="mktFilter('finance',this)">Finanças</button>
+      <button class="btn btn-ghost" onclick="mktFilter('communication',this)">Comunicação</button>
+      <button class="btn btn-ghost" onclick="mktFilter('ai',this)">IA</button>
+      <button class="btn btn-ghost" onclick="mktFilter('health',this)">Saúde</button>
+    </div>
+  </div>
+
+  <!-- Destaque -->
+  <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.15));border-color:rgba(99,102,241,0.4);margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:20px">
+      <div style="font-size:48px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-size:11px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px">Em Destaque</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:6px">LifeOS AI Pro</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Expanda as capacidades da IA com modelos avançados, memória ilimitada, análise preditiva e automações complexas.</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0">
+        <div style="font-size:24px;font-weight:800;color:var(--accent)">{app_price}</div>
+        <button class="btn btn-primary" style="margin-top:8px;padding:10px 24px" onclick="mktSubscribe('ai-pro')">Assinar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de apps -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px" id="mkt-apps-grid">
+    <!-- Produtividade -->
+    <div class="mkt-app-card" data-category="productivity">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">Notion Sync</div>
+          <div class="mkt-app-author">by LifeOS Team</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.8</div>
+      </div>
+      <div class="mkt-app-desc">Sincronize suas páginas do Notion com o Wiki e Kanban do LifeOS bidirecionalmente.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'Notion Sync')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="productivity">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#10B981,#059669)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">Trello Import</div>
+          <div class="mkt-app-author">by Community</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.5</div>
+      </div>
+      <div class="mkt-app-desc">Importe seus boards do Trello para o Kanban do LifeOS com um clique.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'Trello Import')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card installed" data-category="communication">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">WhatsApp Business</div>
+          <div class="mkt-app-author">by LifeOS Team</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.9</div>
+      </div>
+      <div class="mkt-app-desc">Integração completa com WhatsApp Business API para central de mensagens.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <span style="font-size:12px;color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Instalado</span>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="finance">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">B3 Investimentos</div>
+          <div class="mkt-app-author">by LifeOS Team</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.7</div>
+      </div>
+      <div class="mkt-app-desc">Acompanhe sua carteira de ações da B3 em tempo real com cotações e alertas.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price paid">{app_price}</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'B3 Investimentos')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="health">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#EF4444,#DC2626)"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">Apple Health Sync</div>
+          <div class="mkt-app-author">by Community</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.6</div>
+      </div>
+      <div class="mkt-app-desc">Sincronize dados de saúde do Apple Health com seus hábitos e metas do LifeOS.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'Apple Health')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="ai">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#0EA5E9,#0284C7)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">OpenAI GPT-4o</div>
+          <div class="mkt-app-author">by OpenAI</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 5.0</div>
+      </div>
+      <div class="mkt-app-desc">Conecte sua chave de API da OpenAI para usar GPT-4o no chat e automações do LifeOS.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis (API key própria)</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'OpenAI GPT-4o')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="finance">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#FF6B00,#FF8C00)"><i data-lucide="landmark" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">Open Finance BR</div>
+          <div class="mkt-app-author">by LifeOS Team</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.8</div>
+      </div>
+      <div class="mkt-app-desc">Conecte automaticamente todos os seus bancos via Open Finance do Banco Central do Brasil.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'Open Finance BR')">Instalar</button>
+      </div>
+    </div>
+
+    <div class="mkt-app-card" data-category="productivity">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px">
+        <div class="mkt-app-icon" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div class="mkt-app-name">Calendly Integration</div>
+          <div class="mkt-app-author">by Community</div>
+        </div>
+        <div class="mkt-app-rating">⭐ 4.4</div>
+      </div>
+      <div class="mkt-app-desc">Sincronize agendamentos do Calendly com seu calendário e CRM do LifeOS.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span class="mkt-app-price free">Grátis</span>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'Calendly')">Instalar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── APPS INSTALADOS ─── -->
+<div class="page" id="page-marketplace-installed">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Apps Instalados</div>
+      <div class="page-subtitle">Gerencie suas integrações ativas</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('marketplace')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Marketplace</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px" id="mkt-installed-list">
+    <div class="mkt-installed-item">
+      <div class="mkt-app-icon" style="background:linear-gradient(135deg,#25D366,#128C7E);width:40px;height:40px;font-size:16px"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700">WhatsApp Business</div>
+        <div style="font-size:12px;color:var(--text-muted)">Comunicação · Instalado em 10 Jul 2026</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'WhatsApp')"><span class="toggle-slider"></span></label>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do WhatsApp','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="mkt-installed-item">
+      <div class="mkt-app-icon" style="background:linear-gradient(135deg,#0088CC,#229ED9);width:40px;height:40px;font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700">Telegram</div>
+        <div style="font-size:12px;color:var(--text-muted)">Comunicação · Instalado em 10 Jul 2026</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'Telegram')"><span class="toggle-slider"></span></label>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Telegram','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="mkt-installed-item">
+      <div class="mkt-app-icon" style="background:linear-gradient(135deg,#4A154B,#7C3085);width:40px;height:40px;font-size:16px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:700">Slack</div>
+        <div style="font-size:12px;color:var(--text-muted)">Comunicação · Instalado em 11 Jul 2026</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'Slack')"><span class="toggle-slider"></span></label>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── API KEYS ─── -->
+<div class="page" id="page-marketplace-api">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i> API Keys</div>
+      <div class="page-subtitle">Gerencie suas chaves de API externas</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('marketplace')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Marketplace</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-api-key')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova API Key</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:24px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="font-weight:700">OpenAI API Key</div>
+          <div style="font-size:12px;color:var(--text-muted)">sk-...•••••••••••••••••••••••••••••••••••••••••••••••</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:12px;color:var(--green);font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativa</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Chave copiada','success')">Copiar</button>
+          <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('Chave removida','warning')">Remover</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-size:24px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="flex:1">
+          <div style="font-weight:700">Cloudflare API Token</div>
+          <div style="font-size:12px;color:var(--text-muted)">cf_...•••••••••••••••••••••••••••••••••••••••••••••••</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <span style="font-size:12px;color:var(--green);font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativa</span>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Chave copiada','success')">Copiar</button>
+          <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('Chave removida','warning')">Remover</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer" onclick="openModal('modal-new-api-key')">
+      <div style="text-align:center">
+        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-size:13px;font-weight:600">Adicionar Nova API Key</div>
+        <div style="font-size:11px;color:var(--text-muted)">OpenAI, Google, Stripe, Twilio e mais</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END module-marketplace -->

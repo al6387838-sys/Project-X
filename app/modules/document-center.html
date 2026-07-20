@@ -1,0 +1,590 @@
+<!-- LifeOS Enterprise — Document Center v2.0 — Phase 142 -->
+<!-- Upload, versionamento, busca, compartilhamento, favoritos, histórico, permissões, auditoria -->
+<div id="module-document-center" style="display:none">
+
+<!-- ─── DOCUMENT CENTER PRINCIPAL ─── -->
+<div class="page" id="page-document-center">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="folder-open" class="pg-icon" aria-hidden="true"></i> Document Center</div>
+      <div class="page-subtitle">Gestão completa de documentos — versionamento e auditoria</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('document-center-favorites')"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Favoritos</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-shared')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhados</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-audit')"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
+      <button class="btn btn-primary" onclick="openModal('modal-doc-upload')"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload</button>
+    </div>
+  </div>
+
+  <!-- Busca e filtros -->
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+    <div style="flex:1;min-width:200px;position:relative">
+      <i data-lucide="search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:16px;height:16px" aria-hidden="true"></i>
+      <input type="text" class="form-input" id="doc-search-input" placeholder="Buscar documentos, tags, conteúdo..." style="padding-left:34px" oninput="dcSearch(this.value)" />
+    </div>
+    <select class="form-input" id="doc-filter-type" style="width:auto" onchange="dcLoadList()">
+      <option value="">Todos os tipos</option>
+      <option value="pdf">PDF</option>
+      <option value="doc">Word/Docs</option>
+      <option value="xls">Excel/Sheets</option>
+      <option value="ppt">Apresentação</option>
+      <option value="jpg">Imagem</option>
+    </select>
+    <div style="display:flex;gap:4px">
+      <button class="btn btn-ghost" id="dc-view-grid" onclick="dcSetView('grid')"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" id="dc-view-list" onclick="dcSetView('list')"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="files" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="dc-stat-total">—</div>
+      <div class="kpi-label">Total de Documentos</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="dc-stat-favs">—</div>
+      <div class="kpi-label">Favoritos</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="hard-drive" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="dc-stat-size">—</div>
+      <div class="kpi-label">Armazenamento Usado</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-value" id="dc-stat-shared">—</div>
+      <div class="kpi-label">Compartilhados</div>
+    </div>
+  </div>
+
+  <!-- Lista de documentos -->
+  <div class="card">
+    <div id="dc-doc-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando documentos...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FAVORITOS ─── -->
+<div class="page" id="page-document-center-favorites">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Documentos Favoritos</div>
+      <div class="page-subtitle">Seus documentos marcados como favoritos</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="dc-favorites-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── COMPARTILHADOS COMIGO ─── -->
+<div class="page" id="page-document-center-shared">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhados Comigo</div>
+      <div class="page-subtitle">Documentos que outros usuários compartilharam com você</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="dc-shared-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── AUDITORIA ─── -->
+<div class="page" id="page-document-center-audit">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria de Documentos</div>
+      <div class="page-subtitle">Histórico completo de alterações e acessos</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="dc-audit-list" style="display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando auditoria...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── VERSÕES DO DOCUMENTO ─── -->
+<div class="page" id="page-document-versions">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i> Versões do Documento</div>
+      <div class="page-subtitle" id="dc-versions-subtitle">Histórico de versões</div>
+    </div>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+  </div>
+  <div class="card">
+    <div id="dc-versions-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:var(--text-muted)">Carregando versões...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Upload de Documento -->
+<div class="modal" id="modal-doc-upload" style="display:none">
+  <div class="modal-overlay" onclick="closeModal('modal-doc-upload')"></div>
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload de Documento</div><button class="modal-close" onclick="closeModal('modal-doc-upload')">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
+      <div>
+        <label class="form-label">Nome do documento</label>
+        <input type="text" class="form-input" id="doc-upload-name" placeholder="Ex: Contrato_2026.pdf" />
+      </div>
+      <div>
+        <label class="form-label">Descrição (opcional)</label>
+        <input type="text" class="form-input" id="doc-upload-desc" placeholder="Breve descrição do documento" />
+      </div>
+      <div>
+        <label class="form-label">Tags (separadas por vírgula)</label>
+        <input type="text" class="form-input" id="doc-upload-tags" placeholder="contrato, 2026, jurídico" />
+      </div>
+      <div>
+        <label class="form-label">Tipo MIME</label>
+        <select class="form-input" id="doc-upload-mime">
+          <option value="application/pdf">PDF</option>
+          <option value="application/msword">Word</option>
+          <option value="application/vnd.ms-excel">Excel</option>
+          <option value="application/vnd.ms-powerpoint">PowerPoint</option>
+          <option value="image/jpeg">Imagem JPEG</option>
+          <option value="image/png">Imagem PNG</option>
+          <option value="text/plain">Texto</option>
+          <option value="application/octet-stream">Outro</option>
+        </select>
+      </div>
+      <div style="padding:24px;border:2px dashed var(--border);border-radius:10px;text-align:center;color:var(--text-muted)">
+        <i data-lucide="cloud-upload" style="width:32px;height:32px;margin-bottom:8px" aria-hidden="true"></i>
+        <div style="font-size:13px">Arraste arquivos aqui ou clique para selecionar</div>
+        <div style="font-size:11px;margin-top:4px">Máx. 10 MB · PDF, Word, Excel, Imagens</div>
+      </div>
+      <button class="btn btn-primary" onclick="dcUploadDocument()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Registrar Documento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Compartilhar Documento -->
+<div class="modal" id="modal-doc-share" style="display:none">
+  <div class="modal-overlay" onclick="closeModal('modal-doc-share')"></div>
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar Documento</div><button class="modal-close" onclick="closeModal('modal-doc-share')">×</button></div>
+    <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
+      <input type="hidden" id="share-doc-id" />
+      <div><label class="form-label">Usuário (e-mail)</label><input type="email" class="form-input" id="share-target-user" placeholder="usuario@empresa.com" /></div>
+      <div><label class="form-label">Permissão</label>
+        <select class="form-input" id="share-permission">
+          <option value="view">Visualizar</option>
+          <option value="edit">Editar</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="dcShareDocument()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Document Center v2.0 — Phase 142 ───
+let dcCurrentView = 'list';
+let dcSearchTimeout = null;
+
+const DC_MIME_ICONS = {
+  'application/pdf': { icon: 'file-text', color: '#EF4444' },
+  'application/msword': { icon: 'file-text', color: '#2563EB' },
+  'application/vnd.ms-excel': { icon: 'file-spreadsheet', color: '#16A34A' },
+  'application/vnd.ms-powerpoint': { icon: 'file-presentation', color: '#EA580C' },
+  'image/jpeg': { icon: 'image', color: '#7C3AED' },
+  'image/png': { icon: 'image', color: '#7C3AED' },
+  'text/plain': { icon: 'file', color: '#6B7280' },
+};
+
+function dcGetIcon(mimeType) {
+  return DC_MIME_ICONS[mimeType] || { icon: 'file', color: '#6B7280' };
+}
+
+function dcFmtSize(bytes) {
+  if (!bytes) return '—';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function dcSetView(v) {
+  dcCurrentView = v;
+  dcLoadList();
+}
+
+function dcSearch(q) {
+  clearTimeout(dcSearchTimeout);
+  dcSearchTimeout = setTimeout(async () => {
+    if (!q || q.length < 2) { dcLoadList(); return; }
+    try {
+      const res = await fetch(`/api/documents?view=search&q=${encodeURIComponent(q)}`, { credentials: 'same-origin' });
+      const data = await res.json();
+      if (data.ok) renderDocList('dc-doc-list', data.documents);
+    } catch {}
+  }, 400);
+}
+
+async function dcLoadList() {
+  try {
+    const res = await fetch('/api/documents?view=list', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    renderDocList('dc-doc-list', data.documents || []);
+  } catch (e) { console.error('DC list error:', e); }
+}
+
+async function dcLoadStats() {
+  try {
+    const res = await fetch('/api/documents?view=stats', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.ok) return;
+    const s = data.stats;
+    const el = id => document.getElementById(id);
+    if (el('dc-stat-total')) el('dc-stat-total').textContent = s.total;
+    if (el('dc-stat-favs')) el('dc-stat-favs').textContent = s.favorites;
+    if (el('dc-stat-size')) el('dc-stat-size').textContent = dcFmtSize(s.totalSize);
+  } catch {}
+}
+
+async function dcLoadFavorites() {
+  try {
+    const res = await fetch('/api/documents?view=favorites', { credentials: 'same-origin' });
+    const data = await res.json();
+    renderDocList('dc-favorites-list', data.documents || []);
+  } catch {}
+}
+
+async function dcLoadShared() {
+  try {
+    const res = await fetch('/api/documents?view=shared', { credentials: 'same-origin' });
+    const data = await res.json();
+    const el = document.getElementById('dc-shared-list');
+    if (!el) return;
+    const shared = data.shared || [];
+    if (shared.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Nenhum documento compartilhado com você</div>';
+      return;
+    }
+    el.innerHTML = shared.map(s => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <i data-lucide="file" style="color:var(--accent)" aria-hidden="true"></i>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${s.docName}</div>
+          <div style="font-size:11px;color:var(--text-muted)">Por ${s.ownerId} · ${new Date(s.sharedAt).toLocaleDateString('pt-BR')} · ${s.permission === 'edit' ? 'Pode editar' : 'Somente visualizar'}</div>
+        </div>
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:${s.permission === 'edit' ? 'rgba(16,185,129,0.15)' : 'rgba(99,102,241,0.15)'}">
+          ${s.permission === 'edit' ? 'Editor' : 'Visualizador'}
+        </span>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch {}
+}
+
+async function dcLoadAudit() {
+  try {
+    const res = await fetch('/api/documents?view=audit', { credentials: 'same-origin' });
+    const data = await res.json();
+    const el = document.getElementById('dc-audit-list');
+    if (!el) return;
+    if (!data.ok) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Sem permissão para ver auditoria</div>';
+      return;
+    }
+    const audit = data.audit || [];
+    if (audit.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Nenhum evento de auditoria</div>';
+      return;
+    }
+    const actionColors = {
+      upload: 'var(--green)', 'new-version': 'var(--accent)', deleted: 'var(--red)',
+      favorited: 'var(--amber)', shared: 'var(--cyan)', 'permissions-updated': 'var(--purple)',
+    };
+    el.innerHTML = audit.map(a => `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg-elevated);border-radius:6px;font-size:12px">
+        <span style="color:${actionColors[a.action] || 'var(--text-secondary)'};font-weight:600;min-width:120px">${a.action}</span>
+        <span style="color:var(--text-secondary);flex:1">${a.documentId}</span>
+        <span style="color:var(--text-muted)">${new Date(a.timestamp).toLocaleString('pt-BR')}</span>
+      </div>
+    `).join('');
+  } catch {}
+}
+
+async function dcLoadVersions(docId, docName) {
+  document.getElementById('dc-versions-subtitle').textContent = docName || docId;
+  try {
+    const res = await fetch(`/api/documents?view=versions&docId=${docId}`, { credentials: 'same-origin' });
+    const data = await res.json();
+    const el = document.getElementById('dc-versions-list');
+    if (!el) return;
+    const versions = data.versions || [];
+    if (versions.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Nenhuma versão registrada</div>';
+      return;
+    }
+    el.innerHTML = versions.map((v, i) => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <div style="width:32px;height:32px;border-radius:8px;background:${i === 0 ? 'rgba(16,185,129,0.15)' : 'rgba(99,102,241,0.1)'};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:${i === 0 ? 'var(--green)' : 'var(--accent)'}">v${v.version}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${v.comment || `Versão ${v.version}`}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${new Date(v.uploadedAt).toLocaleString('pt-BR')} · ${v.uploadedBy} · ${dcFmtSize(v.size)}</div>
+        </div>
+        ${i === 0 ? '<span style="font-size:11px;color:var(--green)">Atual</span>' : ''}
+      </div>
+    `).join('');
+  } catch {}
+  showPage('document-versions');
+}
+
+function renderDocList(containerId, docs) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!docs || docs.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Nenhum documento encontrado</div>';
+    return;
+  }
+  el.innerHTML = docs.map(d => {
+    const { icon, color } = dcGetIcon(d.mimeType);
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border)">
+        <div style="width:40px;height:40px;border-radius:8px;background:${color}22;display:flex;align-items:center;justify-content:center;border:1px solid ${color}44">
+          <i data-lucide="${icon}" style="color:${color}" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${d.name}</div>
+          <div style="font-size:11px;color:var(--text-muted)">
+            ${dcFmtSize(d.size)} · v${d.version} · ${new Date(d.updatedAt).toLocaleDateString('pt-BR')}
+            ${d.tags?.length ? ' · ' + d.tags.map(t => `<span style="background:rgba(99,102,241,0.1);padding:1px 6px;border-radius:4px">${t}</span>`).join(' ') : ''}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcToggleFavorite('${d.id}')" title="${d.favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}">
+            <i data-lucide="${d.favorite ? 'star' : 'star'}" style="color:${d.favorite ? 'var(--amber)' : 'var(--text-muted)'}" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcLoadVersions('${d.id}','${d.name.replace(/'/g, "\\'")}')"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcOpenShare('${d.id}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcDeleteDoc('${d.id}')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+async function dcUploadDocument() {
+  const name = document.getElementById('doc-upload-name')?.value?.trim();
+  const description = document.getElementById('doc-upload-desc')?.value?.trim();
+  const tagsRaw = document.getElementById('doc-upload-tags')?.value?.trim();
+  const mimeType = document.getElementById('doc-upload-mime')?.value;
+  if (!name) { if (typeof showToast === 'function') showToast('Nome obrigatório', 'error'); return; }
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'upload', name, description, tags, mimeType }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Documento registrado!', 'success');
+      if (typeof closeModal === 'function') closeModal('modal-doc-upload');
+      document.getElementById('doc-upload-name').value = '';
+      document.getElementById('doc-upload-desc').value = '';
+      document.getElementById('doc-upload-tags').value = '';
+      await dcLoadList();
+      await dcLoadStats();
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao registrar documento', 'error'); }
+}
+
+async function dcToggleFavorite(docId) {
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'toggle-favorite', docId }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast(data.favorite ? 'Adicionado aos favoritos' : 'Removido dos favoritos', 'success');
+      await dcLoadList();
+      await dcLoadStats();
+    }
+  } catch {}
+}
+
+function dcOpenShare(docId) {
+  document.getElementById('share-doc-id').value = docId;
+  if (typeof openModal === 'function') openModal('modal-doc-share');
+}
+
+async function dcShareDocument() {
+  const docId = document.getElementById('share-doc-id')?.value;
+  const targetUserId = document.getElementById('share-target-user')?.value?.trim();
+  const permission = document.getElementById('share-permission')?.value;
+  if (!targetUserId) { if (typeof showToast === 'function') showToast('E-mail do usuário obrigatório', 'error'); return; }
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'share', docId, targetUserId, permission }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Documento compartilhado!', 'success');
+      if (typeof closeModal === 'function') closeModal('modal-doc-share');
+    } else {
+      if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
+    }
+  } catch { if (typeof showToast === 'function') showToast('Erro ao compartilhar', 'error'); }
+}
+
+async function dcDeleteDoc(docId) {
+  if (!confirm('Excluir este documento?')) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'delete', docId }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (typeof showToast === 'function') showToast('Documento excluído', 'success');
+      await dcLoadList();
+      await dcLoadStats();
+    }
+  } catch {}
+}
+
+
+async function dcRenameDoc(docId) {
+  const doc = (window.__dcDocs || []).find(d => d.id === docId);
+  const newName = prompt('Novo nome:', doc?.name || '');
+  if (!newName) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'rename', docId, name: newName }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento renomeado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao renomear', 'error'); }
+}
+async function dcMoveDoc(docId) {
+  const folderId = prompt('ID da pasta destino:', 'root');
+  if (!folderId) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'move', docId, folderId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento movido!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao mover', 'error'); }
+}
+async function dcCopyDoc(docId) {
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'copy', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento copiado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao copiar', 'error'); }
+}
+async function dcRestoreDoc(docId) {
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'restore', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento restaurado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao restaurar', 'error'); }
+}
+async function dcDownloadDoc(docId) {
+  try {
+    const res = await fetch(`/api/documents?view=download&docId=${docId}`, { credentials: 'same-origin' });
+    const d = await res.json();
+    if (d.ok && d.downloadUrl) {
+      const a = document.createElement('a');
+      a.href = d.downloadUrl;
+      a.download = d.name || 'documento';
+      a.click();
+      showToast?.('Download iniciado!', 'success');
+    } else {
+      showToast?.(d.error || 'Erro ao baixar', 'error');
+    }
+  } catch { showToast?.('Erro ao baixar', 'error'); }
+}
+// Store docs for context actions
+(async function() {
+  try {
+    const res = await fetch('/api/documents?view=all', { credentials: 'same-origin' });
+    const d = await res.json();
+    window.__dcDocs = d.documents || [];
+  } catch {}
+})();
+
+async function dcLoadTrash() {
+  try {
+    const res = await fetch('/api/documents?view=trash', { credentials: 'same-origin' });
+    const data = await res.json();
+    const el = document.getElementById('dc-trash-list');
+    if (!el) return;
+    const docs = data.documents || [];
+    if (docs.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Lixeira vazia</div>';
+      return;
+    }
+    el.innerHTML = docs.map(d => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <i data-lucide="${dcGetIcon(d.mimeType)}" style="color:var(--text-muted)" aria-hidden="true"></i>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${d.name}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${dcFmtSize(d.size)} · ${new Date(d.deletedAt || d.updatedAt).toLocaleString('pt-BR')}</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:11px" onclick="dcRestoreDoc('${d.id}')">Restaurar</button>
+        <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcPermanentDelete('${d.id}')">Excluir</button>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch {}
+}
+async function dcPermanentDelete(docId) {
+  if (!confirm('Excluir permanentemente? Esta ação não pode ser desfeita.')) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'permanent-delete', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Excluído permanentemente', 'success'); await dcLoadTrash(); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao excluir', 'error'); }
+}
+// Auto-carregar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { dcLoadList(); dcLoadStats(); });
+} else {
+  dcLoadList();
+  dcLoadStats();
+}
+</script>
+
+<!-- END module-document-center -->

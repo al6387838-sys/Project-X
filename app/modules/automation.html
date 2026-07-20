@@ -1,0 +1,211 @@
+<!-- LifeOS Enterprise v46.0.0 — Automation Engine (Phase 265) — Dados reais via /api/automations -->
+<div id="module-automation" style="display:none">
+<div class="page" id="page-automation">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Automation Engine</div>
+      <div class="page-subtitle">Centro de automações enterprise — gatilhos, regras, ações e agendamentos reais</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="automationTab('logs')"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs</button>
+      <button class="btn btn-ghost" onclick="automationTab('types')"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i> Tipos</button>
+      <button class="btn btn-primary" onclick="automationOpenCreate()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Automação</button>
+    </div>
+  </div>
+  <!-- KPIs reais -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px">
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-total" style="font-size:22px;font-weight:800;color:var(--accent)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Total de automações</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-active" style="font-size:22px;font-weight:800;color:var(--green)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Ativas</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-executions" style="font-size:22px;font-weight:800;color:var(--purple)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Execuções totais</div>
+    </div>
+    <div style="padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div id="auto-kpi-logs" style="font-size:22px;font-weight:800;color:var(--cyan)">—</div>
+      <div style="font-size:11px;color:var(--text-muted)">Logs registrados</div>
+    </div>
+  </div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border)">
+    <button id="auto-tab-list" class="dv11-tab active" onclick="automationTab('list')"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i> Automações</button>
+    <button id="auto-tab-logs" class="dv11-tab" onclick="automationTab('logs')"><i data-lucide="scroll-text" class="pg-icon" aria-hidden="true"></i> Logs</button>
+    <button id="auto-tab-types" class="dv11-tab" onclick="automationTab('types')"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i> Tipos disponíveis</button>
+  </div>
+  <div id="auto-tab-content-list">
+    <div id="automation-list-container">
+      <div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando automações...</div>
+    </div>
+  </div>
+  <div id="auto-tab-content-logs" style="display:none">
+    <div id="automation-logs-container"><div style="text-align:center;padding:40px;color:var(--text-muted)">Clique em "Logs" para carregar</div></div>
+  </div>
+  <div id="auto-tab-content-types" style="display:none">
+    <div id="automation-types-container"><div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando tipos...</div></div>
+  </div>
+</div>
+<!-- Modal -->
+<div id="automation-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 style="font-size:16px;font-weight:700">Nova Automação</h3>
+      <button class="btn btn-ghost" onclick="automationCloseModal()" style="padding:4px 8px">X</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Nome *</label><input id="auto-form-name" class="input" placeholder="Ex: Notificar novo cliente" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Descricao</label><input id="auto-form-desc" class="input" placeholder="Descricao opcional" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Gatilho *</label>
+        <select id="auto-form-trigger" class="input" style="width:100%">
+          <option value="">Selecione o gatilho...</option>
+          <option value="new_client">Novo cliente criado</option>
+          <option value="new_document">Novo documento criado</option>
+          <option value="new_project">Novo projeto criado</option>
+          <option value="new_task">Nova tarefa criada</option>
+          <option value="task_completed">Tarefa concluida</option>
+          <option value="task_overdue">Tarefa em atraso</option>
+          <option value="pipeline_changed">Pipeline alterado</option>
+          <option value="due_date_approaching">Vencimento se aproximando</option>
+          <option value="goal_reached">Meta atingida</option>
+          <option value="habit_streak">Streak de habito alcancado</option>
+          <option value="schedule">Agendamento (cron)</option>
+          <option value="manual">Execucao manual</option>
+        </select>
+      </div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Acao principal *</label>
+        <select id="auto-form-action" class="input" style="width:100%">
+          <option value="">Selecione a acao...</option>
+          <option value="send_notification">Enviar notificacao interna</option>
+          <option value="create_task">Criar tarefa</option>
+          <option value="create_note">Criar nota</option>
+          <option value="log_event">Registrar evento</option>
+          <option value="webhook_call">Chamar webhook externo</option>
+          <option value="send_email">Enviar e-mail (requer SMTP)</option>
+          <option value="send_whatsapp">Enviar WhatsApp (requer credenciais)</option>
+        </select>
+      </div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Titulo da acao</label><input id="auto-form-action-title" class="input" placeholder="Ex: Nova tarefa criada automaticamente" style="width:100%"></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Mensagem / Corpo</label><textarea id="auto-form-action-message" class="input" rows="3" placeholder="Mensagem ou corpo da acao" style="width:100%;resize:vertical"></textarea></div>
+      <div><label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">Status inicial</label>
+        <select id="auto-form-status" class="input" style="width:100%"><option value="active">Ativa</option><option value="inactive">Inativa</option></select>
+      </div>
+      <div id="auto-form-error" style="display:none;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);color:#ef4444;font-size:12px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-ghost" onclick="automationCloseModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="automationCreate()">Criar Automacao</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+  let _autoTypes=null;
+  async function autoFetch(p,o={}){const r=await fetch(p,{credentials:'same-origin',...o});return r.json();}
+  function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  window.automationInit=async function(){await automationLoadList();};
+  window.automationTab=function(tab){
+    ['list','logs','types'].forEach(t=>{
+      const b=document.getElementById('auto-tab-'+t);
+      const c=document.getElementById('auto-tab-content-'+t);
+      if(b)b.classList.toggle('active',t===tab);
+      if(c)c.style.display=t===tab?'':'none';
+    });
+    if(tab==='logs')automationLoadLogs();
+    if(tab==='types')automationLoadTypes();
+  };
+  window.automationLoadList=async function(){
+    const c=document.getElementById('automation-list-container');
+    try{
+      const d=await autoFetch('/api/automations');
+      const a=d.automations||[];
+      document.getElementById('auto-kpi-total').textContent=d.total||0;
+      document.getElementById('auto-kpi-active').textContent=a.filter(x=>x.status==='active').length;
+      document.getElementById('auto-kpi-executions').textContent=a.reduce((s,x)=>s+(x.executionCount||0),0);
+      autoFetch('/api/automations?action=logs&pageSize=1').then(ld=>{document.getElementById('auto-kpi-logs').textContent=ld.total||0;}).catch(()=>{});
+      if(a.length===0){c.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:40px;opacity:0.3">&#x1F916;</div><div style="margin-top:12px;font-size:14px">Nenhuma automacao criada</div><div style="font-size:12px;margin-top:4px">Clique em Nova Automacao para comecar</div></div>';return;}
+      c.innerHTML=a.map(x=>`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:38px;height:38px;border-radius:var(--radius-md);background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700">${escH(x.name)}</div><div style="font-size:12px;color:var(--text-muted)">${escH(x.description||'Sem descricao')}</div></div>
+          <span style="font-size:10px;padding:3px 8px;background:${x.status==='active'?'rgba(16,185,129,0.15)':'rgba(107,114,128,0.15)'};color:${x.status==='active'?'var(--green)':'var(--text-muted)'};border-radius:4px;font-weight:700">${x.status==='active'?'ATIVA':'INATIVA'}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;font-size:11px;color:var(--text-secondary);margin-bottom:12px">
+          <div><strong style="color:var(--text-primary)">Gatilho:</strong> ${escH(x.trigger?.type||'—')}</div>
+          <div><strong style="color:var(--text-primary)">Acoes:</strong> ${(x.actions||[]).length}</div>
+          <div><strong style="color:var(--text-primary)">Execucoes:</strong> ${x.executionCount||0}</div>
+          <div><strong style="color:var(--text-primary)">Ultima:</strong> ${x.lastExecutedAt?new Date(x.lastExecutedAt).toLocaleString('pt-BR'):'Nunca'}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="automationExecute('${escH(x.id)}')">Executar</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="automationToggle('${escH(x.id)}','${x.status==='active'?'inactive':'active'}')">${x.status==='active'?'Desativar':'Ativar'}</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="automationDelete('${escH(x.id)}')">Remover</button>
+        </div>
+      </div>`).join('');
+      if(window.lucide)lucide.createIcons();
+    }catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
+  };
+  window.automationLoadLogs=async function(){
+    const c=document.getElementById('automation-logs-container');
+    c.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted)">Carregando...</div>';
+    try{
+      const d=await autoFetch('/api/automations?action=logs&pageSize=30');
+      const l=d.logs||[];
+      if(l.length===0){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted)">Nenhum log registrado</div>';return;}
+      c.innerHTML='<div style="display:flex;flex-direction:column;gap:8px">'+l.map(x=>`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;font-size:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><strong>${escH(x.triggerType||'manual')}</strong><span style="color:var(--text-muted)">${new Date(x.timestamp).toLocaleString('pt-BR')}</span></div><div style="color:var(--text-secondary)">${escH(x.message||'')}</div></div>`).join('')+'</div>';
+    }catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
+  };
+  window.automationLoadTypes=async function(){
+    const c=document.getElementById('automation-types-container');
+    if(_autoTypes){renderTypes(c,_autoTypes);return;}
+    try{const d=await autoFetch('/api/automations?action=types');_autoTypes=d;renderTypes(c,d);}
+    catch(err){c.innerHTML='<div style="padding:20px;color:var(--red)">Erro: '+err.message+'</div>';}
+  };
+  function renderTypes(c,d){
+    const t=Object.entries(d.triggers||[]);const a=Object.entries(d.actions||[]);
+    c.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div><h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--accent)">Gatilhos (${t.length})</h4>${t.map(([k,v])=>`<div style="padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12px"><strong>${escH(k)}</strong><br><span style="color:var(--text-muted)">${escH(v.label)}</span><span style="margin-left:8px;font-size:10px;padding:2px 6px;background:rgba(99,102,241,0.15);color:var(--accent);border-radius:3px">${escH(v.category)}</span></div>`).join('')}</div>
+      <div><h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--green)">Acoes (${a.length})</h4>${a.map(([k,v])=>`<div style="padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;font-size:12px"><strong>${escH(k)}</strong><br><span style="color:var(--text-muted)">${escH(v.label)}</span>${v.requiresCredential?'<span style="margin-left:8px;font-size:10px;padding:2px 6px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:3px">requer credencial</span>':''}</div>`).join('')}</div>
+    </div>`;
+  }
+  window.automationOpenCreate=function(){const m=document.getElementById('automation-modal');if(m)m.style.display='flex';};
+  window.automationCloseModal=function(){const m=document.getElementById('automation-modal');if(m)m.style.display='none';const e=document.getElementById('auto-form-error');if(e)e.style.display='none';};
+  window.automationCreate=async function(){
+    const name=document.getElementById('auto-form-name')?.value?.trim();
+    const desc=document.getElementById('auto-form-desc')?.value?.trim();
+    const trig=document.getElementById('auto-form-trigger')?.value;
+    const act=document.getElementById('auto-form-action')?.value;
+    const actTitle=document.getElementById('auto-form-action-title')?.value?.trim();
+    const actMsg=document.getElementById('auto-form-action-message')?.value?.trim();
+    const status=document.getElementById('auto-form-status')?.value;
+    if(!name){showAutoErr('Nome obrigatorio');return;}
+    if(!trig){showAutoErr('Selecione um gatilho');return;}
+    if(!act){showAutoErr('Selecione uma acao');return;}
+    try{
+      const d=await autoFetch('/api/automations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,description:desc,trigger:{type:trig},actions:[{type:act,params:{title:actTitle,message:actMsg}}],status})});
+      if(!d.ok){showAutoErr(d.error||'Erro ao criar');return;}
+      automationCloseModal();await automationLoadList();
+      if(window.showToast)showToast('Automacao criada','success');
+    }catch(err){showAutoErr(err.message);}
+  };
+  function showAutoErr(m){const e=document.getElementById('auto-form-error');if(e){e.textContent=m;e.style.display='block';}}
+  window.automationExecute=async function(id){
+    try{const d=await autoFetch('/api/automations?action=execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({automationId:id})});
+    if(d.ok){if(window.showToast)showToast('Executada com sucesso','success');await automationLoadList();}
+    else{if(window.showToast)showToast(d.error||'Erro','error');}}catch(err){if(window.showToast)showToast(err.message,'error');}
+  };
+  window.automationToggle=async function(id,s){
+    try{const d=await autoFetch('/api/automations',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status:s})});if(d.ok)await automationLoadList();}catch{}
+  };
+  window.automationDelete=async function(id){
+    if(!confirm('Remover esta automacao?'))return;
+    try{await autoFetch('/api/automations?id='+id,{method:'DELETE'});await automationLoadList();}catch{}
+  };
+  const obs=new MutationObserver(()=>{const el=document.getElementById('module-automation');if(el&&el.style.display!=='none'){obs.disconnect();automationInit();}});
+  const t=document.getElementById('module-automation');if(t)obs.observe(t,{attributes:true,attributeFilter:['style']});
+})();
+</script>

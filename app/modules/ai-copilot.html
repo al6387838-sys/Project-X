@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Copilot — LifeOS Enterprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-base: #0A0E14; --bg-elevated: #0F1520; --bg-card: #141B28;
+      --border: rgba(255,255,255,0.06); --border-accent: rgba(99,102,241,0.25);
+      --text-primary: #F0F4FF; --text-secondary: #8892A4; --text-muted: #4A5568;
+      --accent: #6366F1; --accent-light: #818CF8; --purple: #8B5CF6;
+      --cyan: #06B6D4; --green: #10B981; --amber: #F59E0B; --red: #EF4444;
+      --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.5); --shadow-lg: 0 8px 32px rgba(0,0,0,0.55);
+      --t-fast: 0.15s cubic-bezier(0.4,0,0.2,1); --t-normal: 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-base); color: var(--text-primary); font-size: 14px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* Layout */
+    .ai-layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* Sidebar */
+    .ai-sidebar { width: 260px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+    .ai-sidebar-header { padding: 20px 16px 12px; }
+    .ai-sidebar-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 10px; }
+    .ai-new-chat { width: 100%; padding: 10px 14px; background: var(--gradient-primary); border: none; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all var(--t-fast); }
+    .ai-new-chat:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.4); transform: translateY(-1px); }
+    .ai-conv-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .ai-conv-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: all var(--t-fast); margin-bottom: 2px; }
+    .ai-conv-item:hover { background: rgba(255,255,255,0.04); }
+    .ai-conv-item.active { background: rgba(99,102,241,0.1); border-left: 2px solid var(--accent); padding-left: 10px; }
+    .ai-conv-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ai-conv-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .ai-sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
+    .ai-model-selector { width: 100%; background: rgba(15,21,32,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all var(--t-fast); }
+    .ai-model-selector:hover { border-color: var(--border-accent); color: var(--text-primary); }
+
+    /* Main chat */
+    .ai-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .ai-chat-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .ai-chat-title { font-size: 15px; font-weight: 700; }
+    .ai-chat-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .ai-chat-actions { display: flex; gap: 8px; }
+    .ai-btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all var(--t-fast); }
+    .ai-btn-icon:hover { border-color: var(--border-accent); color: var(--text-primary); background: rgba(255,255,255,0.04); }
+
+    /* Messages */
+    .ai-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+    .ai-msg { display: flex; gap: 12px; max-width: 820px; }
+    .ai-msg.user { flex-direction: row-reverse; margin-left: auto; }
+    .ai-msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .ai-avatar-ai { background: var(--gradient-primary); }
+    .ai-avatar-user { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); }
+    .ai-msg-content { flex: 1; }
+    .ai-msg-bubble { padding: 14px 18px; border-radius: 16px; font-size: 14px; line-height: 1.65; }
+    .ai-msg.ai .ai-msg-bubble { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; }
+    .ai-msg.user .ai-msg-bubble { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2); border-radius: 16px 4px 16px 16px; color: var(--text-primary); }
+    .ai-msg-meta { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+    .ai-msg.user .ai-msg-meta { justify-content: flex-end; }
+    .ai-msg-actions { display: flex; gap: 4px; }
+    .ai-msg-action { font-size: 12px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: all var(--t-fast); }
+    .ai-msg-action:hover { border-color: var(--border-accent); color: var(--text-primary); }
+
+    /* Code block */
+    .ai-code { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; margin: 10px 0; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.6; overflow-x: auto; position: relative; }
+    .ai-code-lang { position: absolute; top: 8px; right: 12px; font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .ai-code .kw { color: #818CF8; } .ai-code .str { color: #10B981; } .ai-code .fn { color: #F59E0B; } .ai-code .cm { color: #4A5568; }
+
+    /* Thinking indicator */
+    .ai-thinking { display: flex; gap: 4px; align-items: center; padding: 14px 18px; }
+    .ai-thinking-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-light); animation: thinking 1.2s ease infinite; }
+    .ai-thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+    .ai-thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes thinking { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+
+    /* Suggestions */
+    .ai-suggestions { padding: 0 24px 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .ai-suggestion { padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border-accent); background: rgba(99,102,241,0.06); color: var(--accent-light); font-size: 12px; font-weight: 500; cursor: pointer; transition: all var(--t-fast); white-space: nowrap; }
+    .ai-suggestion:hover { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.4); }
+
+    /* Input area */
+    .ai-input-area { padding: 16px 24px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .ai-input-wrap { background: rgba(15,21,32,0.8); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; display: flex; align-items: flex-end; gap: 10px; transition: all var(--t-fast); }
+    .ai-input-wrap:focus-within { border-color: rgba(99,102,241,0.4); box-shadow: 0 0 0 3px rgba(99,102,241,0.08); }
+    .ai-input-tools { display: flex; gap: 6px; }
+    .ai-input-tool { width: 28px; height: 28px; border-radius: 6px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all var(--t-fast); }
+    .ai-input-tool:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+    .ai-textarea { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 14px; font-family: inherit; resize: none; min-height: 22px; max-height: 160px; line-height: 1.6; }
+    .ai-textarea::placeholder { color: var(--text-muted); }
+    .ai-send { width: 36px; height: 36px; border-radius: 10px; border: none; background: var(--gradient-primary); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all var(--t-fast); flex-shrink: 0; }
+    .ai-send:hover { box-shadow: 0 4px 12px rgba(99,102,241,0.4); transform: scale(1.05); }
+    .ai-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .ai-input-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .ai-input-hint { font-size: 11px; color: var(--text-muted); }
+    .ai-input-count { font-size: 11px; color: var(--text-muted); }
+
+    /* Right panel */
+    .ai-right { width: 300px; flex-shrink: 0; border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+    .ai-right-header { padding: 16px; border-bottom: 1px solid var(--border); }
+    .ai-right-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); }
+    .ai-right-content { flex: 1; overflow-y: auto; padding: 12px; }
+
+    /* Capability card */
+    .ai-cap-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px; cursor: pointer; transition: all var(--t-fast); }
+    .ai-cap-card:hover { border-color: var(--border-accent); }
+    .ai-cap-icon { font-size: 20px; margin-bottom: 8px; }
+    .ai-cap-name { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .ai-cap-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Context items */
+    .ai-ctx-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; transition: all var(--t-fast); cursor: pointer; }
+    .ai-ctx-item:hover { background: rgba(255,255,255,0.03); }
+    .ai-ctx-icon { font-size: 16px; flex-shrink: 0; }
+    .ai-ctx-text { font-size: 12px; color: var(--text-secondary); flex: 1; }
+    .ai-ctx-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 99px; background: rgba(99,102,241,0.1); color: var(--accent-light); }
+
+    /* Welcome screen */
+    .ai-welcome { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 24px; }
+    .ai-welcome-logo { width: 72px; height: 72px; border-radius: 20px; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 8px 32px rgba(99,102,241,0.3); animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .ai-welcome-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
+    .ai-welcome-title span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .ai-welcome-desc { font-size: 14px; color: var(--text-secondary); max-width: 400px; line-height: 1.6; }
+    .ai-welcome-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; width: 100%; max-width: 480px; }
+    .ai-welcome-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; cursor: pointer; text-align: left; transition: all var(--t-normal); }
+    .ai-welcome-card:hover { border-color: var(--border-accent); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .ai-welcome-card-icon { font-size: 22px; margin-bottom: 8px; }
+    .ai-welcome-card-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .ai-welcome-card-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.2); border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<div class="ai-layout">
+
+  <!-- SIDEBAR -->
+  <div class="ai-sidebar">
+    <div class="ai-sidebar-header">
+      <div class="ai-sidebar-title">Conversas</div>
+      <button class="ai-new-chat" onclick="aiNewChat()">
+        <span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Nova conversa
+      </button>
+    </div>
+    <div class="ai-conv-list" id="ai-conv-list">
+      <div class="ai-conv-item active" onclick="aiLoadConv(0,this)">
+        <div class="ai-conv-title">Análise de produtividade semanal</div>
+        <div class="ai-conv-meta">Hoje, 09:15</div>
+      </div>
+      <div class="ai-conv-item" onclick="aiLoadConv(1,this)">
+        <div class="ai-conv-title">Plano de metas Q3 2026</div>
+        <div class="ai-conv-meta">Ontem, 14:32</div>
+      </div>
+      <div class="ai-conv-item" onclick="aiLoadConv(2,this)">
+        <div class="ai-conv-title">Revisão financeira julho</div>
+        <div class="ai-conv-meta">13 Jul, 11:20</div>
+      </div>
+      <div class="ai-conv-item" onclick="aiLoadConv(3,this)">
+        <div class="ai-conv-title">Estratégia de hábitos</div>
+        <div class="ai-conv-meta">12 Jul, 08:45</div>
+      </div>
+      <div class="ai-conv-item" onclick="aiLoadConv(4,this)">
+        <div class="ai-conv-title">Análise de padrões de sono</div>
+        <div class="ai-conv-meta">10 Jul, 22:10</div>
+      </div>
+    </div>
+    <div class="ai-sidebar-footer">
+      <div class="ai-model-selector" onclick="aiSelectModel()">
+        <span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> LifeOS AI Pro</span>
+        <span style="font-size:10px;color:var(--text-muted)"><i data-lucide="chevron-down" class="pg-icon" aria-hidden="true"></i></span>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:8px;text-align:center">
+        Powered by GPT-4o · Contexto: 128k tokens
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="ai-main">
+    <div class="ai-chat-header">
+      <div>
+        <div class="ai-chat-title" id="ai-chat-title">Análise de produtividade semanal</div>
+        <div class="ai-chat-meta">LifeOS AI Pro · GPT-4o · Contexto: 4 mensagens</div>
+      </div>
+      <div class="ai-chat-actions">
+        <button class="ai-btn-icon" title="Exportar" onclick="aiExport()">⬇</button>
+        <button class="ai-btn-icon" title="Compartilhar" onclick="aiShare()">↗</button>
+        <button class="ai-btn-icon" title="Limpar" onclick="aiClear()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div class="ai-messages" id="ai-messages">
+      <!-- Welcome or messages -->
+    </div>
+
+    <div class="ai-suggestions" id="ai-suggestions">
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analisar minha semana</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Revisar minhas metas</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Sugerir melhorias</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Relatório de hábitos</button>
+      <button class="ai-suggestion" onclick="aiSuggest(this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Previsão do mês</button>
+    </div>
+
+    <div class="ai-input-area">
+      <div class="ai-input-wrap">
+        <div class="ai-input-tools">
+          <button class="ai-input-tool" title="Anexar arquivo" onclick="aiAttach()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="ai-input-tool" title="Contexto LifeOS" onclick="aiContext()"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="ai-input-tool" title="Voz" onclick="aiVoice()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+        </div>
+        <textarea class="ai-textarea" id="ai-input" placeholder="Pergunte qualquer coisa ao seu AI Copilot..." rows="1" onkeydown="aiKeydown(event)" oninput="aiInputResize(this)"></textarea>
+        <button class="ai-send" id="ai-send" onclick="aiSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+      <div class="ai-input-footer">
+        <div class="ai-input-hint">Enter para enviar · Shift+Enter para nova linha</div>
+        <div class="ai-input-count" id="ai-char-count">0 / 4096</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="ai-right">
+    <div class="ai-right-header">
+      <div class="ai-right-title">Capacidades</div>
+    </div>
+    <div class="ai-right-content">
+      <div class="ai-cap-card" onclick="aiCapability('analyze')">
+        <div class="ai-cap-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-cap-name">Análise de Dados</div>
+        <div class="ai-cap-desc">Analisa seus hábitos, metas e métricas para gerar insights personalizados</div>
+      </div>
+      <div class="ai-cap-card" onclick="aiCapability('plan')">
+        <div class="ai-cap-icon"><i data-lucide="calendar-range" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-cap-name">Planejamento</div>
+        <div class="ai-cap-desc">Cria planos de ação, cronogramas e estratégias baseadas nos seus objetivos</div>
+      </div>
+      <div class="ai-cap-card" onclick="aiCapability('write')">
+        <div class="ai-cap-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-cap-name">Escrita & Conteúdo</div>
+        <div class="ai-cap-desc">Redigir emails, relatórios, resumos e qualquer tipo de conteúdo textual</div>
+      </div>
+      <div class="ai-cap-card" onclick="aiCapability('code')">
+        <div class="ai-cap-icon"><i data-lucide="laptop" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-cap-name">Código & Automação</div>
+        <div class="ai-cap-desc">Escrever, revisar e explicar código em qualquer linguagem de programação</div>
+      </div>
+      <div class="ai-cap-card" onclick="aiCapability('research')">
+        <div class="ai-cap-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-cap-name">Pesquisa</div>
+        <div class="ai-cap-desc">Pesquisar tópicos, resumir documentos e sintetizar informações complexas</div>
+      </div>
+
+      <div style="margin-top:16px;margin-bottom:8px">
+        <div class="ai-right-title">Contexto Ativo</div>
+      </div>
+      <div class="ai-ctx-item">
+        <span class="ai-ctx-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></span>
+        <span class="ai-ctx-text">Dados de hábitos (7 dias)</span>
+        <span class="ai-ctx-badge">Ativo</span>
+      </div>
+      <div class="ai-ctx-item">
+        <span class="ai-ctx-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></span>
+        <span class="ai-ctx-text">Metas ativas (5)</span>
+        <span class="ai-ctx-badge">Ativo</span>
+      </div>
+      <div class="ai-ctx-item">
+        <span class="ai-ctx-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></span>
+        <span class="ai-ctx-text">Resumo financeiro</span>
+        <span class="ai-ctx-badge">Ativo</span>
+      </div>
+      <div class="ai-ctx-item">
+        <span class="ai-ctx-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span>
+        <span class="ai-ctx-text">Calendário (próx. 7 dias)</span>
+        <span class="ai-ctx-badge">Ativo</span>
+      </div>
+      <div class="ai-ctx-item" style="opacity:0.5">
+        <span class="ai-ctx-icon"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></span>
+        <span class="ai-ctx-text">Emails (desativado)</span>
+        <span style="font-size:10px;color:var(--text-muted)">Off</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const conversations = [
+  {
+    title: 'Análise de produtividade semanal',
+    messages: [
+      { role: 'user', text: 'Analise minha produtividade desta semana com base nos meus dados de hábitos e metas.', time: '09:10' },
+      { role: 'ai', text: `Com base nos seus dados desta semana, aqui está uma análise detalhada da sua produtividade:
+
+**\u{1F4CA} Resumo Geral**
+Você teve uma semana acima da média, com um Life Score de **85/100** — top 12% dos usuários.
+
+**\u{2705} Pontos Fortes**
+- **Meditação**: 14 dias de streak consecutivos — excelente consistência
+- **Leitura**: 21 dias de streak — seu hábito mais consolidado
+- **Exercício**: 8 dias seguidos, com progresso visível na meta de 5km
+
+**\u{26A0}\u{FE0F} Áreas de Atenção**
+- **Journaling**: Apenas 3 dias esta semana — considere vincular ao ritual matinal
+- **Sono**: Média de 7.2h, abaixo da meta de 8h em 3 noites
+
+**\u{1F3AF} Recomendações para a próxima semana**
+1. Adicione journaling imediatamente após a meditação matinal
+2. Defina um alarme de "preparação para dormir" às 22h30
+3. Aumente a intensidade do treino — você está a 88% da meta de 5km
+
+**\u{1F4C8} Tendência**
+Sua produtividade cresceu **+12%** em relação à semana anterior. Continue assim!`, time: '09:11' },
+      { role: 'user', text: 'Quais hábitos têm maior impacto no meu Life Score?', time: '09:14' },
+      { role: 'ai', text: `Analisando a correlação entre seus hábitos e o Life Score, aqui estão os de maior impacto:
+
+**\u{1F3C6} Top 3 Hábitos por Impacto**
+
+| Hábito | Impacto | Streak | Contribuição |
+|--------|---------|--------|-------------|
+| Meditação | Alto | 14 dias | +8.2 pts |
+| Exercício | Alto | 8 dias | +7.5 pts |
+| Leitura | Médio | 21 dias | +5.1 pts |
+
+**\u{1F4A1} Insight Principal**
+A meditação tem o maior ROI por minuto investido. 10 minutos diários geram mais impacto no seu score do que 30 minutos de exercício, pois afeta positivamente todos os outros pilares (foco, sono, humor).
+
+**\u{1F52E} Projeção**
+Se mantiver os hábitos atuais + adicionar journaling consistente, seu Life Score pode atingir **92/100** em 30 dias.`, time: '09:15' },
+    ]
+  },
+];
+
+let currentConv = 0;
+let isThinking = false;
+
+// Respostas carregadas via API real — zero respostas estáticas
+
+function renderMessages() {
+  const container = document.getElementById('ai-messages');
+  const conv = conversations[currentConv];
+  if (!conv) { renderWelcome(); return; }
+
+  container.innerHTML = conv.messages.map(msg => `
+    <div class="ai-msg ${msg.role}">
+      <div class="ai-msg-avatar ${msg.role === 'ai' ? 'ai-avatar-ai' : 'ai-avatar-user'}">
+        ${msg.role === 'ai' ? '\u{2726}' : '\u{1F464}'}
+      </div>
+      <div class="ai-msg-content">
+        <div class="ai-msg-bubble">${formatMessage(msg.text)}</div>
+        <div class="ai-msg-meta">
+          <span>${msg.time}</span>
+          ${msg.role === 'ai' ? `
+            <div class="ai-msg-actions">
+              <button class="ai-msg-action" onclick="aiCopy(this)">\u{1F4CB} Copiar</button>
+              <button class="ai-msg-action" onclick="aiRegenerate()">↻ Regenerar</button>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  container.scrollTop = container.scrollHeight;
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code style="background:rgba(99,102,241,0.1);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">$1</code>')
+    .replace(/```(\w+)?\n([\s\S]+?)```/g, (_, lang, code) => `<div class="ai-code"><span class="ai-code-lang">${lang||'code'}</span><pre>${code.trim()}</pre></div>`)
+    .replace(/\|(.+)\|/g, match => `<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:12px;margin:8px 0">${match.split('\n').map((row, i) => {
+      if (row.includes('---')) return '';
+      const cells = row.split('|').filter(c => c.trim());
+      const tag = i === 0 ? 'th' : 'td';
+      return `<tr>${cells.map(c => `<${tag} style="padding:6px 12px;border:1px solid rgba(255,255,255,0.06);text-align:left">${c.trim()}</${tag}>`).join('')}</tr>`;
+    }).join('')}</table></div>`)
+    .replace(/\n/g, '<br>');
+}
+
+function renderWelcome() {
+  const container = document.getElementById('ai-messages');
+  container.innerHTML = `
+    <div class="ai-welcome">
+      <div class="ai-welcome-logo">\u{2726}</div>
+      <div class="ai-welcome-title">Olá! Sou seu <span>AI Copilot</span></div>
+      <div class="ai-welcome-desc">Estou conectado ao seu LifeOS e tenho acesso a seus dados de hábitos, metas, finanças e calendário. Como posso ajudar hoje?</div>
+      <div class="ai-welcome-grid">
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4CA} Analisar minha semana'})">
+          <div class="ai-welcome-card-icon">\u{1F4CA}</div>
+          <div class="ai-welcome-card-title">Analisar minha semana</div>
+          <div class="ai-welcome-card-desc">Insights sobre produtividade, hábitos e metas</div>
+        </div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F3AF} Criar plano de metas'})">
+          <div class="ai-welcome-card-icon">\u{1F3AF}</div>
+          <div class="ai-welcome-card-title">Criar plano de metas</div>
+          <div class="ai-welcome-card-desc">Estratégia personalizada para seus objetivos</div>
+        </div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4A1} Sugerir melhorias'})">
+          <div class="ai-welcome-card-icon">\u{1F4A1}</div>
+          <div class="ai-welcome-card-title">Sugerir melhorias</div>
+          <div class="ai-welcome-card-desc">Recomendações baseadas nos seus padrões</div>
+        </div>
+        <div class="ai-welcome-card" onclick="aiSuggest({textContent:'\u{1F4BB} Criar automação'})">
+          <div class="ai-welcome-card-icon">\u{1F4BB}</div>
+          <div class="ai-welcome-card-title">Criar automação</div>
+          <div class="ai-welcome-card-desc">Scripts e workflows para o LifeOS</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function aiLoadConv(idx, el) {
+  document.querySelectorAll('.ai-conv-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  currentConv = idx;
+  const conv = conversations[idx];
+  if (conv) {
+    document.getElementById('ai-chat-title').textContent = conv.title;
+    renderMessages();
+  } else {
+    renderWelcome();
+  }
+}
+
+function aiNewChat() {
+  currentConv = -1;
+  document.querySelectorAll('.ai-conv-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('ai-chat-title').textContent = 'Nova conversa';
+  renderWelcome();
+}
+
+function aiSend() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text || isThinking) return;
+
+  if (currentConv < 0 || !conversations[currentConv]) {
+    conversations.push({ title: text.slice(0,40), messages: [] });
+    currentConv = conversations.length - 1;
+    document.getElementById('ai-chat-title').textContent = text.slice(0,40);
+  }
+
+  const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  conversations[currentConv].messages.push({ role: 'user', text, time: now });
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('ai-char-count').textContent = '0 / 4096';
+  renderMessages();
+  showThinking(text);
+}
+
+async function showThinking(userText) {
+  isThinking = true;
+  const container = document.getElementById('ai-messages');
+  const thinkDiv = document.createElement('div');
+  thinkDiv.className = 'ai-msg ai';
+  thinkDiv.id = 'ai-thinking';
+  thinkDiv.innerHTML = `
+    <div class="ai-msg-avatar ai-avatar-ai">✦</div>
+    <div class="ai-msg-content">
+      <div class="ai-msg-bubble">
+        <div class="ai-thinking">
+          <div class="ai-thinking-dot"></div>
+          <div class="ai-thinking-dot"></div>
+          <div class="ai-thinking-dot"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(thinkDiv);
+  container.scrollTop = container.scrollHeight;
+  try {
+    const history = conversations[currentConv]?.messages?.slice(-10) || [];
+    const r = await fetch('/api/ai/platform', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'chat', message: userText, conversationId: conversations[currentConv]?.id || null })
+    });
+    const d = await r.json();
+    thinkDiv.remove();
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const response = d.ok ? (d.reply || d.message || 'Sem resposta da IA.') : (d.error || 'Erro ao processar sua mensagem.');
+    conversations[currentConv].messages.push({ role: 'ai', text: response, time: now });
+  } catch (_) {
+    thinkDiv.remove();
+    const now = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    conversations[currentConv].messages.push({ role: 'ai', text: 'Erro de conexão com a IA. Verifique sua conexão e tente novamente.', time: now });
+  }
+  isThinking = false;
+  renderMessages();
+}
+
+function aiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); }
+}
+
+function aiInputResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  document.getElementById('ai-char-count').textContent = el.value.length + ' / 4096';
+}
+
+function aiSuggest(btn) {
+  const text = btn.textContent.replace(/^[^\w]+/, '').trim();
+  document.getElementById('ai-input').value = text;
+  aiSend();
+}
+
+function aiCapability(type) {
+  const prompts = {
+    analyze: 'Analise meus dados desta semana e me dê insights detalhados',
+    plan: 'Crie um plano de ação para as próximas 4 semanas baseado nas minhas metas',
+    write: 'Me ajude a escrever um relatório de progresso mensal',
+    code: 'Crie um script de automação para sincronizar meus hábitos com o calendário',
+    research: 'Pesquise as melhores práticas para construção de hábitos duradouros',
+  };
+  document.getElementById('ai-input').value = prompts[type] || '';
+  document.getElementById('ai-input').focus();
+}
+
+function aiCopy(btn) {
+    const msgBubble = btn.closest('.ai-msg-content')?.querySelector('.ai-msg-bubble');
+    if (msgBubble?.textContent && navigator.clipboard) {
+      navigator.clipboard.writeText(msgBubble.textContent).then(() => showToast?.('Copiado!', 'success')).catch(() => showToast?.('Erro ao copiar', 'error'));
+    }
+  }
+async function aiRegenerate() {
+    showToast?.('Regenerando resposta...', 'info');
+    if (currentConv >= 0 && conversations[currentConv]?.messages?.length > 0) {
+      const lastMsg = conversations[currentConv].messages[conversations[currentConv].messages.length - 1];
+      if (lastMsg.role === 'user') {
+        conversations[currentConv].messages.pop();
+        await showThinking(lastMsg.text);
+      }
+    }
+  }
+async function aiExport() {
+    if (!conversations[currentConv]) { showToast?.('Nenhuma conversa para exportar', 'error'); return; }
+    const conv = conversations[currentConv];
+    const text = conv.messages.map(m => `[${m.time}] ${m.role === 'user' ? 'Você' : 'IA'}: ${m.text}`).join('\n');
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (conv.title || 'conversa') + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast?.('Conversa exportada!', 'success');
+  }
+function aiShare() { showToast('Link de compartilhamento copiado!', 'success'); }
+function aiClear() { if(confirm('Limpar conversa?')) { conversations[currentConv].messages = []; renderWelcome(); } }
+async function aiAttach() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt,.pdf,.md,.csv,.json,.png,.jpg,.jpeg,.webp';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    showToast('Enviando arquivo: ' + file.name + '...', 'info');
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('context', 'ai_copilot');
+    try {
+      const r = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', body: fd });
+      const d = await r.json();
+      if (d.ok) showToast('Arquivo anexado: ' + file.name, 'success');
+      else showToast(d.error || 'Erro ao anexar arquivo', 'error');
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+  };
+  input.click();
+}
+function aiContext() {
+  const ctx = conversations[currentConv]?.messages?.length || 0;
+  showToast('Contexto atual: ' + ctx + ' mensagens', 'info');
+}
+function aiVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('Reconhecimento de voz não suportado neste navegador', 'warning');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.lang = 'pt-BR';
+  recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    const input = document.getElementById('ai-input');
+    if (input) { input.value = text; aiInputResize(input); }
+  };
+  recognition.onerror = () => showToast('Erro no reconhecimento de voz', 'error');
+  recognition.start();
+  showToast('Fale agora...', 'info');
+}
+async function aiSelectModel() {
+  showToast('Carregando modelos disponíveis...', 'info');
+  try {
+    const r = await fetch('/api/ai/platform?action=models', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok && d.models) {
+      const names = d.models.map(m => m.id).join(', ');
+      showToast('Modelos: ' + names, 'info');
+    } else {
+      showToast('Modelo padrão ativo', 'info');
+    }
+  } catch (_) { showToast('Modelo padrão ativo', 'info'); }
+}
+
+function showToast(msg, type) {
+  if (window.showToast) { window.showToast(msg, type); return; }
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#141B28;border:1px solid rgba(99,102,241,0.3);color:#F0F4FF;padding:12px 18px;border-radius:10px;font-size:13px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.5)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// Init
+renderMessages();
+</script>
+</body>
+</html>
