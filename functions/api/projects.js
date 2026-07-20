@@ -3,6 +3,33 @@
 // Phase 200 — Real Data Migration (zero mocks)
 import { getCookie, json, verifySession } from '../_auth.js';
 
+const MAX_STRING_LENGTH = 2000;
+const MAX_TITLE_LENGTH = 200;
+const MAX_DESCRIPTION_LENGTH = 5000;
+function sanitizeInput(value) {
+  if (typeof value !== 'string') return '';
+  // Strip potentially dangerous HTML/JS
+  return value
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/javascript\s*:/gi, '')
+    .slice(0, MAX_STRING_LENGTH);
+}
+function validateTitle(title) {
+  if (!title || typeof title !== 'string') return { valid: false, error: 'Título obrigatório' };
+  const trimmed = title.trim();
+  if (trimmed.length < 1) return { valid: false, error: 'Título não pode ser vazio' };
+  if (trimmed.length > MAX_TITLE_LENGTH) return { valid: false, error: 'Título deve ter no máximo ' + MAX_TITLE_LENGTH + ' caracteres' };
+  return { valid: true, value: trimmed };
+}
+function validateDescription(desc) {
+  if (!desc) return { valid: true, value: '' };
+  if (typeof desc !== 'string') return { valid: false, error: 'Descrição inválida' };
+  const trimmed = desc.trim();
+  if (trimmed.length > MAX_DESCRIPTION_LENGTH) return { valid: false, error: 'Descrição deve ter no máximo ' + MAX_DESCRIPTION_LENGTH + ' caracteres' };
+  return { valid: true, value: sanitizeInput(trimmed) };
+}
+
 function generateId() {
   return crypto.randomUUID().replace(/-/g,'').slice(0,16);
 }

@@ -10,7 +10,6 @@
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-DNS-Prefetch-Control: on
   X-Permitted-Cross-Domain-Policies: none
-  Server: LifeOS-Enterprise/30.0
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
@@ -83,3 +82,6 @@
 
 /api/health
   Cache-Control: public, max-age=30, s-maxage=30
+
+/.well-known/security.txt
+  Cache-Control: public, max-age=86400

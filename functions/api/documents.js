@@ -3,6 +3,20 @@
 // Persistência: Cloudflare KV (metadados/auditoria) + R2 oficial (conteúdo binário).
 import { getCookie, json, verifySession, hasPermission } from '../_auth.js';
 
+function lifeosLogError(env, operation, error, details = {}) {
+  try {
+    if (!env?.LIFEOS_KV) return;
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      operation,
+      error: error?.message || String(error),
+      stack: error?.stack?.split('\n').slice(0, 3).join(' | '),
+      ...details,
+    };
+    env.LIFEOS_KV.put('error-logs', JSON.stringify([logEntry, ...JSON.parse(env.LIFEOS_KV.get('error-logs') || '[]').slice(0, 99)]));
+  } catch { /* silent */ }
+}
+
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const MAX_AUDIT = 500;
 

@@ -1,0 +1,46 @@
+{
+  "version": "45.0.1",
+  "appliedAt": "2026-07-20T21:22:14.944Z",
+  "commit": "eb07472",
+  "problemsFound": 16,
+  "problemsFixed": 16,
+  "problemsRemaining": 0,
+  "fixes": [
+    "Added 12 missing CSS link tags to app_dashboard.html",
+    "Removed Server version header to prevent fingerprinting",
+    "Added security.txt cache policy",
+    "Added role=\"main\" to admin content in premium_ui/admin_panel.html",
+    "Added offline detection and safeFetch wrapper to user_completion.js",
+    "Added input validation to api/tasks.js",
+    "Added input validation to api/habits.js",
+    "Added input validation to api/goals.js",
+    "Added input validation to api/notes.js",
+    "Added input validation to api/projects.js",
+    "Added input validation to api/events.js",
+    "Added error logging to api/documents.js",
+    "Added error logging to api/integrations.js",
+    "Added error logging to api/payments/index.js",
+    "Added themes.css to app_dashboard.html",
+    "Created .well-known/security.txt for responsible disclosure"
+  ],
+  "categories": {
+    "security": [
+      "Server header removal",
+      "Security.txt",
+      "Input validation",
+      "Error logging"
+    ],
+    "accessibility": [
+      "Admin ARIA labels",
+      "Admin roles",
+      "Offline toast ARIA"
+    ],
+    "observability": [
+      "Error logging",
+      "Offline detection"
+    ],
+    "responsiveness": [
+      "CSS loading fix"
+    ]
+  }
+}

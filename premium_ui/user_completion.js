@@ -5,6 +5,54 @@
 (function () {
   'use strict';
 
+/* ═══ Offline Detection & Error Recovery ═══ */
+let lifeosOffline = false;
+window.addEventListener('online', () => {
+  lifeosOffline = false;
+  const toast = document.getElementById('lifeos-offline-toast');
+  if (toast) toast.style.display = 'none';
+  console.info('[LifeOS] Connection restored');
+});
+window.addEventListener('offline', () => {
+  lifeosOffline = true;
+  showOfflineToast();
+  console.warn('[LifeOS] Connection lost');
+});
+function showOfflineToast() {
+  let toast = document.getElementById('lifeos-offline-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'lifeos-offline-toast';
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-label', 'Aviso de conexão offline');
+    toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#F59E0B;color:#1E293B;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px';
+    toast.innerHTML = '<span style="font-size:20px">⚠</span><span>Você está offline. Dados serão sincronizados ao reconectar.</span>';
+    document.body.appendChild(toast);
+  }
+  toast.style.display = 'flex';
+}
+function safeFetch(url, opts = {}) {
+  if (lifeosOffline) {
+    return Promise.reject(new Error('Sem conexão com a internet'));
+  }
+  return fetch(url, opts).catch(err => {
+    if (!lifeosOffline) showOfflineToast();
+    return Promise.reject(err);
+  });
+}
+// Monkey-patch fetch for graceful offline handling
+const origFetch = window.fetch;
+window.fetch = function(url, opts) {
+  return origFetch(url, opts).catch(err => {
+    if (err.name === 'TypeError' && !lifeosOffline) {
+      showOfflineToast();
+    }
+    throw err;
+  });
+};
+
+
   const ROUTES = {
     dashboard: 'dashboard',
     agenda: 'agenda',

@@ -125,6 +125,10 @@ for (const publicFile of ['_headers', 'robots.txt', 'sitemap.xml', 'manifest.web
 try {
   await cp(resolve(publicDir, 'icons'), resolve(dist, 'icons'), { recursive: true });
 } catch { }
+// Copiar .well-known (security.txt)
+try {
+  await cp(resolve(publicDir, '.well-known'), resolve(dist, '.well-known'), { recursive: true });
+} catch { }
 
 const redirects = [
   '# LifeOS Enterprise v45.0.0 — Cloudflare Pages Redirects',
