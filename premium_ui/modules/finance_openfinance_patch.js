@@ -67,7 +67,7 @@
       });
       const data = await res.json();
       if (data.setup_required) {
-        console.info('Open Finance setup required:', data.instructions);
+        if (typeof showToast === 'function') showToast('Configure as credenciais Open Finance no Cloudflare Dashboard', 'warning');
         return;
       }
       if (data.authUrl) {

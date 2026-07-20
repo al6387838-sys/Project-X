@@ -1,4 +1,4 @@
-<!-- LifeOS Enterprise — Módulo Calendário v8.0 -->
+<!-- LifeOS Enterprise — Módulo Calendário v8.0 (API-Driven, Zero Mocks) -->
 <div id="module-calendar" style="display:none">
 
 <!-- ─── CALENDÁRIO UNIFICADO ─── -->
@@ -6,7 +6,7 @@
   <div class="page-header">
     <div>
       <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Calendário</div>
-      <div class="page-subtitle">Google Calendar · Outlook · Apple Calendar</div>
+      <div class="page-subtitle">Eventos sincronizados em tempo real</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="calView('month')" id="cal-btn-month">Mês</button>
@@ -24,61 +24,27 @@
       <div class="card" style="padding:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(-1)">‹</button>
-          <div style="font-size:13px;font-weight:700" id="cal-mini-title">Julho 2026</div>
+          <div style="font-size:13px;font-weight:700" id="cal-mini-title">Carregando...</div>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(1)">›</button>
         </div>
         <div class="cal-mini-grid" id="cal-mini-grid">
           <div class="cal-mini-dow">D</div><div class="cal-mini-dow">S</div><div class="cal-mini-dow">T</div><div class="cal-mini-dow">Q</div><div class="cal-mini-dow">Q</div><div class="cal-mini-dow">S</div><div class="cal-mini-dow">S</div>
-          <!-- Dias preenchidos via JS -->
         </div>
       </div>
 
       <!-- Calendários ativos -->
       <div class="card" style="padding:12px">
         <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text-muted);text-transform:uppercase">Meus Calendários</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <label class="cal-check-item"><input type="checkbox" checked onchange="calToggle('personal',this)"><span style="width:10px;height:10px;border-radius:2px;background:#6366F1;flex-shrink:0"></span><span>Pessoal</span></label>
-          <label class="cal-check-item"><input type="checkbox" checked onchange="calToggle('work',this)"><span style="width:10px;height:10px;border-radius:2px;background:#10B981;flex-shrink:0"></span><span>Trabalho</span></label>
-          <label class="cal-check-item"><input type="checkbox" checked onchange="calToggle('family',this)"><span style="width:10px;height:10px;border-radius:2px;background:#F59E0B;flex-shrink:0"></span><span>Família</span></label>
-          <label class="cal-check-item"><input type="checkbox" onchange="calToggle('holidays',this)"><span style="width:10px;height:10px;border-radius:2px;background:#EC4899;flex-shrink:0"></span><span>Feriados</span></label>
-        </div>
-        <div style="font-size:12px;font-weight:700;margin:12px 0 8px;color:var(--text-muted);text-transform:uppercase">Outros Calendários</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <label class="cal-check-item"><input type="checkbox" checked onchange="calToggle('google',this)"><span style="width:10px;height:10px;border-radius:2px;background:#EA4335;flex-shrink:0"></span><span>Google Calendar</span></label>
-          <label class="cal-check-item"><input type="checkbox" checked onchange="calToggle('outlook',this)"><span style="width:10px;height:10px;border-radius:2px;background:#0078D4;flex-shrink:0"></span><span>Outlook Calendar</span></label>
-          <label class="cal-check-item"><input type="checkbox" onchange="calToggle('apple',this)"><span style="width:10px;height:10px;border-radius:2px;background:#555;flex-shrink:0"></span><span>Apple Calendar</span></label>
-        </div>
+        <div id="cal-my-calendars"><div style="color:var(--text-muted);font-size:12px">Carregando...</div></div>
+        <div style="font-size:12px;font-weight:700;margin:12px 0 8px;color:var(--text-muted);text-transform:uppercase">Calendários Externos</div>
+        <div id="cal-external-calendars"><div style="color:var(--text-muted);font-size:12px">Carregando...</div></div>
       </div>
 
       <!-- Próximos eventos -->
       <div class="card" style="padding:12px;flex:1;overflow-y:auto">
         <div style="font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text-muted);text-transform:uppercase">Próximos Eventos</div>
         <div style="display:flex;flex-direction:column;gap:8px" id="cal-upcoming">
-          <div class="cal-upcoming-item" style="border-left-color:#6366F1">
-            <div style="font-size:11px;color:var(--text-muted)">Hoje · 14:00</div>
-            <div style="font-size:13px;font-weight:600">Evento do calendário</div>
-            <div style="font-size:11px;color:var(--text-muted)">Google Meet · 1h</div>
-          </div>
-          <div class="cal-upcoming-item" style="border-left-color:#10B981">
-            <div style="font-size:11px;color:var(--text-muted)">Hoje · 16:30</div>
-            <div style="font-size:13px;font-weight:600">Review de Código</div>
-            <div style="font-size:11px;color:var(--text-muted)">Teams · 30min</div>
-          </div>
-          <div class="cal-upcoming-item" style="border-left-color:#F59E0B">
-            <div style="font-size:11px;color:var(--text-muted)">Amanhã · 09:00</div>
-            <div style="font-size:13px;font-weight:600">Dentista</div>
-            <div style="font-size:11px;color:var(--text-muted)">Clínica Central · 1h</div>
-          </div>
-          <div class="cal-upcoming-item" style="border-left-color:#EA4335">
-            <div style="font-size:11px;color:var(--text-muted)">16 Jul · 10:00</div>
-            <div style="font-size:13px;font-weight:600">Apresentação</div>
-            <div style="font-size:11px;color:var(--text-muted)">Sala de Reuniões A · 2h</div>
-          </div>
-          <div class="cal-upcoming-item" style="border-left-color:#8B5CF6">
-            <div style="font-size:11px;color:var(--text-muted)">18 Jul · 19:00</div>
-            <div style="font-size:13px;font-weight:600">Jantar Aniversário</div>
-            <div style="font-size:11px;color:var(--text-muted)">Restaurante Fogo de Chão</div>
-          </div>
+          <div style="color:var(--text-muted);font-size:12px;padding:12px 0">Carregando eventos...</div>
         </div>
       </div>
     </div>
@@ -92,9 +58,9 @@
           <button class="btn btn-ghost" style="padding:6px 10px" onclick="calGoToday()">Hoje</button>
           <button class="btn btn-ghost" style="padding:6px 10px" onclick="calNavMonth(1)">Próximo ›</button>
         </div>
-        <div style="font-size:18px;font-weight:700" id="cal-main-title">Julho 2026</div>
+        <div style="font-size:18px;font-weight:700" id="cal-main-title">Carregando...</div>
         <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost" style="font-size:12px;padding:6px 10px" onclick="showToast('Sincronizando calendários...','info')">↻ Sincronizar</button>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 10px" id="cal-sync-btn" onclick="calSyncAll()">↻ Sincronizar</button>
         </div>
       </div>
 
@@ -109,9 +75,7 @@
           <div class="cal-grid-dow">Sex</div>
           <div class="cal-grid-dow">Sáb</div>
         </div>
-        <div class="cal-grid-body" id="cal-grid-body">
-          <!-- Gerado via JS -->
-        </div>
+        <div class="cal-grid-body" id="cal-grid-body"></div>
       </div>
     </div>
   </div>
@@ -122,43 +86,196 @@
   <div class="page-header">
     <div>
       <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Calendários Conectados</div>
-      <div class="page-subtitle">Sincronização bidirecional</div>
+      <div class="page-subtitle">Sincronização bidirecional via API</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('calendar')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="calAddCalendar()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="btn btn-primary" onclick="calConnect('google')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Conectar Google</button>
     </div>
   </div>
-  <div class="grid-3">
-    <div class="integration-card" style="border-color:rgba(234,67,53,0.3)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#EA4335,#FBBC04)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="integration-name">Google Calendar</div>
-      <div class="integration-desc">Sincronização bidirecional em tempo real com todos os seus calendários Google</div>
-      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado · Sync: há 2 min</div>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Google Calendar...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="integration-card" style="border-color:rgba(0,120,212,0.3)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#0078D4,#00B4FF)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="integration-name">Outlook Calendar</div>
-      <div class="integration-desc">Integração com Microsoft 365 e Exchange para calendários corporativos</div>
-      <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado · Sync: há 5 min</div>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Sincronizando Outlook...','info')">↻ Sincronizar</button>
-        <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="showToast('Configurações','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="integration-card" style="border-color:rgba(255,255,255,0.1)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#555,#333)"><i data-lucide="heart-pulse" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="integration-name">Apple Calendar</div>
-      <div class="integration-desc">Sincronização com iCloud Calendar via CalDAV</div>
-      <div class="integration-status pending"><i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Configurar</div>
-      <button class="btn btn-primary" style="width:100%;margin-top:12px;font-size:12px" onclick="showToast('Conectando Apple Calendar via CalDAV...','info')">Conectar</button>
+  <div class="grid-3" id="cal-integration-cards">
+    <div style="color:var(--text-muted);font-size:13px;padding:24px">Carregando integrações de calendário...</div>
+  </div>
+</div>
+
+
+<!-- Modal novo evento -->
+<div id="modal-new-event" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeModal('modal-new-event')">
+  <div class="modal-dialog" style="width:420px;max-width:90vw">
+    <h3 style="margin:0 0 16px">Novo Evento</h3>
+    <input id="evt-title" type="text" placeholder="Título do evento" style="width:100%;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:10px" />
+    <input id="evt-date" type="date" style="width:100%;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:10px" />
+    <input id="evt-time" type="time" value="09:00" style="width:100%;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:10px" />
+    <input id="evt-duration" type="text" placeholder="Duração (ex: 1h)" value="1h" style="width:100%;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:10px" />
+    <input id="evt-location" type="text" placeholder="Local (opcional)" style="width:100%;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:10px" />
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-event')">Cancelar</button>
+      <button class="btn btn-primary" onclick="calSaveEvent()">Salvar</button>
     </div>
   </div>
 </div>
 
+<script>
+// ═══ CALENDAR MODULE — Real API ═══
+(async function initCalendar() {
+  await calLoadEvents();
+  await calLoadIntegrations();
+})();
+
+async function calLoadEvents() {
+  try {
+    const r = await fetch('/api/events', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok) {
+      window._calEvents = d.all || d.events || [];
+      calRenderUpcoming();
+      calRenderGrid();
+    } else {
+      window._calEvents = [];
+    }
+  } catch (_) { window._calEvents = []; }
+}
+
+function calRenderUpcoming() {
+  const el = document.getElementById('cal-upcoming');
+  if (!el) return;
+  const today = new Date().toISOString().split('T')[0];
+  const upcoming = (window._calEvents || []).filter(e => e.date >= today).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 5);
+  if (!upcoming.length) {
+    el.innerHTML = '<div style="color:var(--text-muted);font-size:12px;padding:12px 0">Nenhum evento agendado. Clique em "Evento" para criar.</div>';
+    return;
+  }
+  el.innerHTML = upcoming.map(e => {
+    const dateStr = e.date === today ? 'Hoje' : new Date(e.date + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+    return `<div class="cal-upcoming-item" style="border-left-color:${e.color || '#6366F1'}">
+      <div style="font-size:11px;color:var(--text-muted)">${dateStr} · ${e.time || '09:00'}</div>
+      <div style="font-size:13px;font-weight:600">${escHtml(e.title)}</div>
+      <div style="font-size:11px;color:var(--text-muted)">${escHtml(e.location || e.duration || '')}</div>
+    </div>`;
+  }).join('');
+}
+
+function calRenderGrid() {
+  const grid = document.getElementById('cal-grid-body');
+  if (!grid) return;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const title = document.getElementById('cal-main-title');
+  if (title) title.textContent = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  const miniTitle = document.getElementById('cal-mini-title');
+  if (miniTitle) miniTitle.textContent = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  grid.innerHTML = '';
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayStr = new Date().toISOString().split('T')[0];
+  for (let i = 0; i < firstDay; i++) {
+    grid.innerHTML += '<div class="cal-grid-cell empty"></div>';
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const dayEvents = (window._calEvents || []).filter(e => e.date === dateStr);
+    const isToday = dateStr === todayStr;
+    grid.innerHTML += `<div class="cal-grid-cell ${isToday ? 'today' : ''}" onclick="calDayClick('${dateStr}')">
+      <div style="font-size:11px;font-weight:${isToday ? '800' : '600'};color:${isToday ? 'var(--accent)' : 'var(--text-primary)'}">${d}</div>
+      ${dayEvents.slice(0, 3).map(e => `<div style="font-size:9px;padding:1px 4px;border-radius:3px;background:${e.color || 'rgba(99,102,241,0.2)'};color:var(--text-primary);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(e.title)}</div>`).join('')}
+    </div>`;
+  }
+}
+
+function calDayClick(dateStr) {
+  document.getElementById('evt-date').value = dateStr;
+  openModal('modal-new-event');
+}
+
+async function calSaveEvent() {
+  const title = document.getElementById('evt-title').value.trim();
+  const date = document.getElementById('evt-date').value;
+  if (!title) { showToast('Título obrigatório', 'error'); return; }
+  if (!date) { showToast('Data obrigatória', 'error'); return; }
+  try {
+    const r = await fetch('/api/events', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        title,
+        date,
+        time: document.getElementById('evt-time').value || '09:00',
+        duration: document.getElementById('evt-duration').value || '1h',
+        location: document.getElementById('evt-location').value.trim() || ''
+      })
+    });
+    const d = await r.json();
+    if (r.ok && d.ok) {
+      closeModal('modal-new-event');
+      document.getElementById('evt-title').value = '';
+      showToast('Evento criado com sucesso', 'success');
+      await calLoadEvents();
+    } else {
+      showToast(d.error || 'Erro ao criar evento', 'error');
+    }
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+
+async function calLoadIntegrations() {
+  // Carregar status das integrações de calendário
+  try {
+    const r = await fetch('/api/integrations', { credentials: 'same-origin' });
+    const d = await r.json();
+    const cards = document.getElementById('cal-integration-cards');
+    if (!cards) return;
+    if (!d.ok || !d.categories) {
+      cards.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:24px">Nenhuma integração de calendário disponível. Use "Conectar Google" para iniciar.</div>';
+      return;
+    }
+    const calIntegs = [];
+    for (const cat of Object.values(d.categories)) {
+      if (cat.integrations) calIntegs.push(...cat.integrations.filter(i => i.category?.toLowerCase().includes('calendar') || i.name?.toLowerCase().includes('calendar')));
+    }
+    if (!calIntegs.length) {
+      cards.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:24px">Nenhuma integração de calendário configurada. Configure as variáveis de ambiente (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET) para ativar Google Calendar.</div>';
+      return;
+    }
+    cards.innerHTML = calIntegs.map(i => `
+      <div class="integration-card">
+        <div class="integration-icon" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="integration-name">${escHtml(i.name)}</div>
+        <div class="integration-desc">${escHtml(i.description || '')}</div>
+        <div class="integration-status ${i.status === 'connected' ? 'connected' : i.status === 'pending' ? 'pending' : ''}">${i.status === 'connected' ? '<i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado' : i.status === 'pending' ? '<i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Requer configuração' : '<i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Desconectado'}</div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="calSyncIntegration('${i.id}')">Sincronizar</button>
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="calConnect('${i.id}')">${i.status === 'connected' ? 'Gerenciar' : 'Conectar'}</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (_) {
+    const cards = document.getElementById('cal-integration-cards');
+    if (cards) cards.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:24px">Erro ao carregar integrações.</div>';
+  }
+}
+
+async function calSyncIntegration(id) {
+  showToast('Sincronizando...', 'info');
+  try {
+    const r = await fetch('/api/integrations', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'sync', integrationId: id })
+    });
+    const d = await r.json();
+    if (d.ok) { showToast('Sincronização concluída', 'success'); await calLoadEvents(); }
+    else { showToast(d.error || 'Erro na sincronização', 'error'); }
+  } catch (_) { showToast('Erro de conexão', 'error'); }
+}
+
+function calToggle(name, el) {
+  // Toggle visibility de calendário - persiste via localStorage
+  const key = 'cal_visibility_' + name;
+  localStorage.setItem(key, el.checked ? '1' : '0');
+  calRenderUpcoming();
+}
+
+function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+</script>
 </div>
 <!-- END module-calendar -->

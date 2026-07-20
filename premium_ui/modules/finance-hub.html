@@ -509,7 +509,7 @@ async function fhConnectBank(institutionId) {
     if (data.authUrl) {
       window.location.href = data.authUrl;
     } else if (data.setupInstructions) {
-      console.info('Finance setup:', data.setupInstructions);
+      if (typeof showToast === 'function') showToast('Configure as credenciais Open Finance no Cloudflare Dashboard', 'warning');
     } else {
       if (typeof showToast === 'function') showToast(data.error || 'Erro', 'error');
     }

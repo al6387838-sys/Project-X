@@ -29,64 +29,9 @@
           <button class="msg-filter" onclick="msgFilter('teams',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> MS</button>
         </div>
       </div>
-      <!-- Lista de conversas -->
+      <!-- Lista de conversas — carregada dinamicamente -->
       <div style="flex:1;overflow-y:auto" id="msg-conv-list">
-        <div class="msg-conv-item active" onclick="msgOpenConv(this,'João Silva','whatsapp')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#25D366,#128C7E)">JS</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">João Silva <span class="msg-badge" style="background:#25D366">WA</span></div>
-            <div class="msg-conv-preview">Oi! Você viu o relatório?</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">09:32</div><div class="msg-conv-unread">3</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'#geral','slack')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#4A154B,#7C3085)">#</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">#geral <span class="msg-badge" style="background:#4A154B">SL</span></div>
-            <div class="msg-conv-preview">Maria: Deploy feito com sucesso!</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">08:45</div><div class="msg-conv-unread">12</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'Equipe Dev','telegram')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#0088CC,#229ED9)">ED</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">Equipe Dev <span class="msg-badge" style="background:#0088CC">TG</span></div>
-            <div class="msg-conv-preview">Carlos: Reunião às 15h confirmada</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">Ontem</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'Canal de Equipe','teams')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#6264A7,#464775)">PA</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">Canal de Equipe <span class="msg-badge" style="background:#6264A7">MS</span></div>
-            <div class="msg-conv-preview">Ana: Documentação atualizada</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">Ontem</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'Gaming Server','discord')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#5865F2,#7289DA)">GS</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">Gaming Server <span class="msg-badge" style="background:#5865F2">DC</span></div>
-            <div class="msg-conv-preview">Pedro: Partida às 20h?</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">Ter</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'Contato','whatsapp')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#25D366,#128C7E)">AC</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">Contato <span class="msg-badge" style="background:#25D366">WA</span></div>
-            <div class="msg-conv-preview">Tudo certo para amanhã!</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">Seg</div></div>
-        </div>
-        <div class="msg-conv-item" onclick="msgOpenConv(this,'Instagram DMs','instagram')">
-          <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#E1306C,#833AB4,#FD1D1D)">IG</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">Instagram DMs <span class="msg-badge" style="background:#E1306C">IG</span></div>
-            <div class="msg-conv-preview">@user: Adorei o post!</div>
-          </div>
-          <div class="msg-conv-meta"><div class="msg-conv-time">Dom</div><div class="msg-conv-unread">5</div></div>
-        </div>
+        <div style="color:var(--text-muted);font-size:13px;padding:16px">Carregando conversas...</div>
       </div>
     </div>
 
@@ -96,8 +41,8 @@
       <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
         <div class="msg-conv-avatar" style="background:linear-gradient(135deg,#25D366,#128C7E);width:40px;height:40px;font-size:14px" id="chat-avatar">JS</div>
         <div style="flex:1">
-          <div style="font-weight:700" id="chat-name">João Silva</div>
-          <div style="font-size:12px;color:var(--green)" id="chat-status"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Online · WhatsApp</div>
+          <div style="font-weight:700" id="chat-name">Selecione uma conversa</div>
+          <div style="font-size:12px;color:var(--text-muted)" id="chat-status">Selecione uma conversa para iniciar</div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="showToast('Chamada de voz: funcionalidade disponível com integração VoIP configurada','info')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
@@ -531,7 +476,7 @@ async function loadCommunicationConnectors() {
 
 function showConnectorSetup(connector) {
   const msg = connector.setupInstructions || 'Configure as credenciais nas variáveis de ambiente do Cloudflare Pages.';
-  console.info('Setup required:', connector.name, msg); const n = document.createElement('div'); n.style.cssText='position:fixed;top:16px;right:16px;z-index:9999;padding:12px 18px;border-radius:10px;background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);color:#F1F5F9;font-size:12px;max-width:320px;box-shadow:0 8px 30px rgba(0,0,0,0.4)'; n.textContent = connector.name + ' — Configure as credenciais no Cloudflare Dashboard'; document.body.appendChild(n); setTimeout(()=>n.remove(),4000);
+  showToast(connector.name + ' — Configure as credenciais no Cloudflare Dashboard', 'warning');
 }
 
 async function connectCommunication(provider) {
@@ -619,6 +564,58 @@ if (document.readyState === 'loading') {
       showToast('Selecione uma conversa primeiro', 'warning');
     }
   }
+
+  // ═══ Carregar conversas reais do /api/communication/hub ═══
+  async function loadConversations() {
+    const list = document.getElementById('msg-conv-list');
+    if (!list) return;
+    try {
+      const r = await fetch('/api/communication/hub', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (!r.ok || !d.ok || !d.providers || !d.providers.length) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor de comunicação para começar.</div>';
+        return;
+      }
+      const conversations = [];
+      for (const prov of d.providers) {
+        if (prov.connected && prov.conversations) {
+          for (const conv of prov.conversations) {
+            conversations.push({ ...conv, provider: prov.id, providerName: prov.name });
+          }
+        }
+      }
+      if (!conversations.length) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor para sincronizar conversas.</div>';
+        return;
+      }
+      list.innerHTML = conversations.map((c, i) => `
+        <div class="msg-conv-item ${i === 0 ? 'active' : ''}" onclick="msgOpenConv(this,'${escHtml(c.name || c.id)}','${escHtml(c.provider)}')">
+          <div class="msg-conv-avatar">${(c.name || c.id || '?').slice(0,2).toUpperCase()}</div>
+          <div class="msg-conv-info">
+            <div class="msg-conv-name">${escHtml(c.name || c.id)}</div>
+            <div class="msg-conv-preview">${escHtml(c.lastMessage || 'Sem mensagens')}</div>
+          </div>
+          <div class="msg-conv-meta">
+            <div class="msg-conv-time">${c.lastAt ? new Date(c.lastAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : ''}</div>
+            ${c.unread ? `<div class="msg-conv-unread">${c.unread}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    } catch (_) {
+      list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Erro ao carregar conversas.</div>';
+    }
+  }
+  function msgOpenConv(el, name, provider) {
+    document.querySelectorAll('.msg-conv-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('chat-name').textContent = name;
+    document.getElementById('chat-status').textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
+    const chatArea = document.getElementById('chat-messages');
+    if (chatArea) chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Selecione uma mensagem para ver a conversa.</div>';
+  }
+  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+  // Carregar conversas ao iniciar
+  loadConversations();
 </script>
 
 <!-- END module-communication -->

@@ -3024,7 +3024,7 @@
   }
 
   // ═══ CALENDAR FUNCTIONS ═══
-  function calView(view) { showToast('Vista: ' + view, 'info'); }
+  function calView(view) { window._calView = view; calRenderGrid(); showToast('Vista: ' + view, 'info'); }
   function calNewEvent() { openModal('modal-new-event'); }
   async function calConnect(provider) {
     showToast('Conectando ' + provider + '...', 'info');
@@ -3039,7 +3039,18 @@
       else { showToast(d.error || 'Erro ao conectar ' + provider, 'error'); }
     } catch (_) { showToast('Erro de conexão. Tente novamente.', 'error'); }
   }
-    function calSync() { showToast('Sincronizando calendários...', 'info'); }
+  async function calSync() {
+    const btn = document.getElementById('cal-sync-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sincronizando...'; }
+    try {
+      const r = await fetch('/api/events', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) { window._calEvents = d.events || []; calRenderUpcoming(); calRenderGrid(); showToast(d.total + ' eventos sincronizados', 'success'); }
+      else { showToast('Erro ao sincronizar', 'error'); }
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Sincronizar'; }
+  }
+  async function calSyncAll() { await calSync(); await calLoadIntegrations(); }
   function calNavMonth(dir) {
     const calEl = document.getElementById('calendar-grid');
     if (!calEl) return;

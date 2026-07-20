@@ -426,39 +426,19 @@
       <div class="settings-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i></span> Chaves de API</div>
-          <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Gerar Nova Chave</button>
+          <button class="btn-primary" onclick="openCreateKeyModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Gerar Nova Chave</button>
         </div>
-        <div class="api-key-item">
-          <div class="api-key-info">
-            <div class="api-key-name">Production Key</div>
-            <div class="api-key-value">leos_prod_••••••••••••••••••••••••••••••••</div>
-            <div class="api-key-meta">Criada em 01 Jan 2026 · Último uso: hoje · Permissões: read, write</div>
-          </div>
-          <div class="api-key-actions">
-            <button class="btn-sm copy">Copiar</button>
-            <button class="btn-sm revoke">Revogar</button>
-          </div>
-        </div>
-        <div class="api-key-item">
-          <div class="api-key-info">
-            <div class="api-key-name">Development Key</div>
-            <div class="api-key-value">leos_dev_••••••••••••••••••••••••••••••••</div>
-            <div class="api-key-meta">Criada em 15 Mar 2026 · Último uso: ontem · Permissões: read</div>
-          </div>
-          <div class="api-key-actions">
-            <button class="btn-sm copy">Copiar</button>
-            <button class="btn-sm revoke">Revogar</button>
-          </div>
-        </div>
-        <div class="api-key-item">
-          <div class="api-key-info">
-            <div class="api-key-name">Webhook Secret</div>
-            <div class="api-key-value">whsec_••••••••••••••••••••••••••••••••••</div>
-            <div class="api-key-meta">Criada em 10 Jun 2026 · Último uso: há 2h · Permissões: webhook</div>
-          </div>
-          <div class="api-key-actions">
-            <button class="btn-sm copy">Copiar</button>
-            <button class="btn-sm revoke">Revogar</button>
+        <div id="api-keys-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando chaves...</div></div>
+      </div>
+      <!-- Modal criar chave -->
+      <div id="create-key-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center">
+        <div style="background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);border-radius:16px;padding:32px;width:400px;max-width:90vw;box-shadow:0 16px 48px rgba(0,0,0,0.5)">
+          <h3 style="margin:0 0 16px;color:var(--text-primary)">Gerar Nova API Key</h3>
+          <input id="new-key-name" type="text" placeholder="Nome da chave (ex: Production)" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:12px" />
+          <div id="new-key-result" style="display:none;margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-ghost" onclick="closeCreateKeyModal()">Cancelar</button>
+            <button class="btn-primary" onclick="submitCreateKey()">Criar</button>
           </div>
         </div>
       </div>
@@ -473,37 +453,9 @@
       <div class="settings-section">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <div class="settings-section-title" style="margin-bottom:0"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span> Endpoints Configurados</div>
-          <button class="btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Webhook</button>
+          <button class="btn-primary" onclick="openCreateWebhookModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Webhook</button>
         </div>
-        <div class="webhook-item">
-          <div style="flex:1">
-            <div class="api-key-name">Notificações Financeiras</div>
-            <div class="webhook-url">https://api.empresa.com/webhooks/finance</div>
-            <div class="webhook-events">
-              <span class="webhook-event-tag">transaction.created</span>
-              <span class="webhook-event-tag">payment.received</span>
-              <span class="webhook-event-tag">invoice.paid</span>
-            </div>
-          </div>
-          <div class="api-key-actions">
-            <span class="security-status enabled" style="font-size:11px">Ativo</span>
-            <button class="btn-sm revoke">Remover</button>
-          </div>
-        </div>
-        <div class="webhook-item">
-          <div style="flex:1">
-            <div class="api-key-name">Alertas de Segurança</div>
-            <div class="webhook-url">https://api.empresa.com/webhooks/security</div>
-            <div class="webhook-events">
-              <span class="webhook-event-tag">login.new_device</span>
-              <span class="webhook-event-tag">session.revoked</span>
-            </div>
-          </div>
-          <div class="api-key-actions">
-            <span class="security-status enabled" style="font-size:11px">Ativo</span>
-            <button class="btn-sm revoke">Remover</button>
-          </div>
-        </div>
+        <div id="webhooks-list"><div style="color:var(--text-muted);font-size:13px;padding:16px 0">Carregando webhooks...</div></div>
       </div>
       <div class="settings-section">
         <div class="settings-section-title"><span><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span> Eventos Disponíveis</div>
@@ -516,6 +468,29 @@
           <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">session.revoked</div>
           <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">document.signed</div>
           <div style="font-size:12px;color:var(--text-secondary);padding:6px 10px;background:var(--bg-elevated);border-radius:6px">alert.triggered</div>
+        </div>
+      </div>
+      <!-- Modal criar webhook -->
+      <div id="create-webhook-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center">
+        <div style="background:#0D0D1A;border:1px solid rgba(99,102,241,0.3);border-radius:16px;padding:32px;width:440px;max-width:90vw;box-shadow:0 16px 48px rgba(0,0,0,0.5)">
+          <h3 style="margin:0 0 16px;color:var(--text-primary)">Registrar Webhook</h3>
+          <input id="new-webhook-url" type="url" placeholder="https://seu-endpoint.com/webhook" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:14px;margin-bottom:12px" />
+          <select id="new-webhook-events" multiple style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text-primary);font-size:13px;margin-bottom:12px;min-height:120px">
+            <option value="*" selected>Todos os eventos (*)</option>
+            <option value="user.created">user.created</option>
+            <option value="user.updated">user.updated</option>
+            <option value="transaction.created">transaction.created</option>
+            <option value="payment.received">payment.received</option>
+            <option value="session.started">session.started</option>
+            <option value="session.revoked">session.revoked</option>
+            <option value="document.signed">document.signed</option>
+            <option value="alert.triggered">alert.triggered</option>
+          </select>
+          <div id="new-webhook-result" style="display:none;margin-bottom:12px"></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-ghost" onclick="closeCreateWebhookModal()">Cancelar</button>
+            <button class="btn-primary" onclick="submitCreateWebhook()">Registrar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -535,6 +510,8 @@
       if (target) target.classList.add('active');
       if (panel === 'sessions') loadSessions();
       if (panel === 'devices') loadDevices();
+      if (panel === 'apikeys') loadApiKeys();
+      if (panel === 'webhooks') loadWebhooks();
     }
     document.querySelectorAll('.lang-option').forEach(opt => {
       opt.addEventListener('click', () => {
@@ -740,6 +717,150 @@
         loadDevices();
         loadSessions();
       } catch (error) { showToast?.(error.message, "error"); }
+    }
+
+    // ═══ API KEYS — Real Backend ═══
+    async function loadApiKeys() {
+      const list = document.getElementById('api-keys-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/platform?view=keys', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.ok || !d.keys || !d.keys.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhuma chave de API configurada. Clique em "Gerar Nova Chave" para criar.</div>';
+          return;
+        }
+        list.innerHTML = d.keys.map(k => `
+          <div class="api-key-item">
+            <div class="api-key-info">
+              <div class="api-key-name">${escHtml(k.name)} ${k.revokedAt ? '<span style="font-size:10px;color:var(--red);margin-left:8px">REVOGADA</span>' : ''}</div>
+              <div class="api-key-value">${escHtml(k.key || '')}</div>
+              <div class="api-key-meta">Criada em ${escHtml(new Date(k.createdAt).toLocaleDateString('pt-BR'))} · Permissões: ${escHtml((k.scopes || []).join(', '))}${k.lastUsedAt ? ' · Último uso: ' + new Date(k.lastUsedAt).toLocaleDateString('pt-BR') : ''}</div>
+            </div>
+            <div class="api-key-actions">
+              ${k.revokedAt ? '' : `<button class="btn-sm" onclick="copyApiKey('${escHtml(k.key)}')">Copiar</button>`}
+              ${!k.revokedAt ? `<button class="btn-sm revoke" onclick="revokeApiKey('${escHtml(k.id)}')">Revogar</button>` : ''}
+            </div>
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar chaves.</div>'; }
+    }
+    function openCreateKeyModal() { document.getElementById('create-key-modal').style.display = 'flex'; }
+    function closeCreateKeyModal() { document.getElementById('create-key-modal').style.display = 'none'; }
+    async function submitCreateKey() {
+      const name = document.getElementById('new-key-name').value.trim();
+      if (!name) { showToast?.('Nome obrigatório', 'error'); return; }
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'create-key', name, scopes: ['read', 'write'] })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) {
+          closeCreateKeyModal();
+          document.getElementById('new-key-name').value = '';
+          showToast?.('Chave criada! Copie-a agora — não será exibida novamente.', 'success');
+          loadApiKeys();
+        } else {
+          showToast?.(d.error || 'Erro ao criar chave', 'error');
+        }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function copyApiKey(key) {
+      try { await navigator.clipboard.writeText(key); showToast?.('Chave copiada', 'success'); } catch (_) { showToast?.('Erro ao copiar', 'error'); }
+    }
+    async function revokeApiKey(keyId) {
+      if (!confirm('Revogar esta chave? Ela não poderá mais ser usada.')) return;
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'revoke-key', keyId })
+        });
+        if (r.ok) { showToast?.('Chave revogada', 'success'); loadApiKeys(); }
+        else { showToast?.('Erro ao revogar', 'error'); }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+
+    // ═══ WEBHOOKS — Real Backend ═══
+    async function loadWebhooks() {
+      const list = document.getElementById('webhooks-list');
+      if (!list) return;
+      try {
+        const r = await fetch('/api/platform?view=webhooks', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (!r.ok || !d.ok || !d.webhooks || !d.webhooks.length) {
+          list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Nenhum webhook configurado. Clique em "Adicionar Webhook" para criar.</div>';
+          return;
+        }
+        list.innerHTML = d.webhooks.map(w => `
+          <div class="webhook-item">
+            <div style="flex:1">
+              <div class="api-key-name">${escHtml(w.id.slice(0,8))}... ${w.active ? '<span style="font-size:10px;color:var(--green)">ATIVO</span>' : '<span style="font-size:10px;color:var(--red)">INATIVO</span>'}</div>
+              <div class="webhook-url">${escHtml(w.url)}</div>
+              <div class="webhook-events">${(w.events || []).map(e => `<span class="webhook-event-tag">${escHtml(e)}</span>`).join('')}</div>
+              <div class="api-key-meta">Criado em ${escHtml(new Date(w.createdAt).toLocaleDateString('pt-BR'))} · Entregas: ${w.deliveries || 0} · Falhas: ${w.failures || 0}</div>
+            </div>
+            <div class="api-key-actions">
+              <button class="btn-sm" onclick="testWebhook('${escHtml(w.id)}')">Testar</button>
+              <button class="btn-sm revoke" onclick="deleteWebhook('${escHtml(w.id)}')">Remover</button>
+            </div>
+          </div>`).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } catch (_) { list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0">Erro ao carregar webhooks.</div>'; }
+    }
+    function openCreateWebhookModal() { document.getElementById('create-webhook-modal').style.display = 'flex'; }
+    function closeCreateWebhookModal() { document.getElementById('create-webhook-modal').style.display = 'none'; }
+    async function submitCreateWebhook() {
+      const url = document.getElementById('new-webhook-url').value.trim();
+      if (!url) { showToast?.('URL obrigatória', 'error'); return; }
+      try { new URL(url); } catch { showToast?.('URL inválida', 'error'); return; }
+      const select = document.getElementById('new-webhook-events');
+      const events = Array.from(select.selectedOptions).map(o => o.value);
+      if (!events.length) { showToast?.('Selecione pelo menos um evento', 'error'); return; }
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'register-webhook', url, events })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) {
+          closeCreateWebhookModal();
+          document.getElementById('new-webhook-url').value = '';
+          showToast?.('Webhook registrado com sucesso', 'success');
+          loadWebhooks();
+        } else {
+          showToast?.(d.error || 'Erro ao registrar webhook', 'error');
+        }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function testWebhook(webhookId) {
+      showToast?.('Testando webhook...', 'info');
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'test-webhook', webhookId })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) { showToast?.('Webhook testado: ' + (d.success ? 'sucesso' : 'falha HTTP ' + d.status), d.success ? 'success' : 'warning'); }
+        else { showToast?.(d.error || 'Erro ao testar', 'error'); }
+        loadWebhooks();
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+    async function deleteWebhook(webhookId) {
+      if (!confirm('Remover este webhook? Os eventos não serão mais entregues.')) return;
+      try {
+        const r = await fetch('/api/platform', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete-webhook', webhookId })
+        });
+        if (r.ok) { showToast?.('Webhook removido', 'success'); loadWebhooks(); }
+        else { showToast?.('Erro ao remover', 'error'); }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
     }
 
     function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }

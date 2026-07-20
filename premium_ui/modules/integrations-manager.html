@@ -561,7 +561,7 @@
       if (!integration) return;
 
       const tokenData = JSON.parse(localStorage.getItem(`integration_${integrationId}`) || '{}');
-      console.info('Integration details:', integration.name, integration.status);
+      // Integration details disponíveis via objeto integration
     }
 
     function updateStats() {

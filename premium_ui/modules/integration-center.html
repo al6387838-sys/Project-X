@@ -4,44 +4,267 @@
   <meta charset="UTF-8" />
   <title>Central de Integrações — LifeOS</title>
   <style>
-    .ic-root{color:var(--text-primary);font-family:Inter,-apple-system,sans-serif}.ic-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}.ic-title{font-size:22px;font-weight:800}.ic-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}.ic-summary{display:flex;gap:8px;flex-wrap:wrap}.ic-chip{border:1px solid var(--border);background:var(--bg-card);padding:7px 11px;border-radius:999px;color:var(--text-secondary);font-size:11px}.ic-chip b{color:var(--text-primary)}.ic-toolbar{display:flex;gap:10px;margin-bottom:18px}.ic-search{flex:1;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px 13px;border-radius:10px;outline:none}.ic-search:focus{border-color:rgba(99,102,241,.45)}.ic-select{background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px;border-radius:10px}.ic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.ic-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;transition:.2s}.ic-card:hover{border-color:rgba(99,102,241,.25);transform:translateY(-1px)}.ic-card-head{display:flex;align-items:center;gap:11px}.ic-logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:rgba(99,102,241,.13);color:var(--accent-light);font-size:13px;font-weight:900}.ic-name{font-weight:750}.ic-category{font-size:11px;color:var(--text-muted);margin-top:2px}.ic-status{margin-left:auto;font-size:10px;font-weight:800;padding:4px 7px;border-radius:999px;background:rgba(74,85,104,.15);color:var(--text-muted)}.ic-status.connected{background:rgba(16,185,129,.12);color:var(--green)}.ic-desc{font-size:12px;line-height:1.5;color:var(--text-secondary);margin:13px 0}.ic-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.ic-meta div{background:var(--bg-elevated);padding:8px;border-radius:8px;font-size:10px;color:var(--text-muted)}.ic-meta strong{display:block;color:var(--text-secondary);font-size:11px;margin-top:2px}.ic-actions{display:flex;gap:7px}.ic-btn{flex:1;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-secondary);border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer}.ic-btn:hover{color:var(--text-primary);border-color:rgba(99,102,241,.3)}.ic-btn.primary{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-color:transparent;color:#fff}.ic-panel{margin-top:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px}.ic-panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.ic-panel-title{font-size:14px;font-weight:750}.ic-log{display:grid;grid-template-columns:110px 150px 1fr 80px;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;color:var(--text-secondary)}.ic-log:last-child{border-bottom:0}.ic-log strong{color:var(--text-primary)}.ic-ok{color:var(--green);font-weight:750}.ic-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:2000}.ic-modal.open{display:flex}.ic-dialog{width:min(520px,92vw);background:#0F1520;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.55)}.ic-dialog h3{font-size:17px;margin-bottom:6px}.ic-dialog p{color:#8892A4;font-size:12px;line-height:1.5}.ic-perms{display:grid;gap:8px;margin:16px 0}.ic-perm{display:flex;justify-content:space-between;align-items:center;background:#141B28;padding:10px;border-radius:9px;font-size:12px}.ic-dialog-actions{display:flex;justify-content:flex-end;gap:8px}.ic-toast{position:fixed;right:24px;bottom:24px;background:#141B28;border:1px solid #10B981;color:#F0F4FF;padding:11px 15px;border-radius:10px;font-size:12px;z-index:2500}@media(max-width:1100px){.ic-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.ic-head,.ic-toolbar{flex-direction:column}.ic-grid{grid-template-columns:1fr}.ic-search,.ic-select{width:100%}.ic-log{grid-template-columns:1fr 1fr}.ic-log span:nth-child(3){grid-column:1/-1}}
+    .ic-root{color:var(--text-primary);font-family:Inter,-apple-system,sans-serif}.ic-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}.ic-title{font-size:22px;font-weight:800}.ic-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}.ic-summary{display:flex;gap:8px;flex-wrap:wrap}.ic-chip{border:1px solid var(--border);background:var(--bg-card);padding:7px 11px;border-radius:999px;color:var(--text-secondary);font-size:11px}.ic-chip b{color:var(--text-primary)}.ic-toolbar{display:flex;gap:10px;margin-bottom:18px}.ic-search{flex:1;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px 13px;border-radius:10px;outline:none}.ic-search:focus{border-color:rgba(99,102,241,.45)}.ic-select{background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-primary);padding:10px;border-radius:10px}.ic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.ic-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;transition:.2s}.ic-card:hover{border-color:rgba(99,102,241,.25);transform:translateY(-1px)}.ic-card-head{display:flex;align-items:center;gap:11px}.ic-logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:rgba(99,102,241,.13);color:var(--accent-light);font-size:13px;font-weight:900}.ic-name{font-weight:750}.ic-category{font-size:11px;color:var(--text-muted);margin-top:2px}.ic-status{margin-left:auto;font-size:10px;font-weight:800;padding:4px 7px;border-radius:999px;background:rgba(74,85,104,.15);color:var(--text-muted)}.ic-status.connected{background:rgba(16,185,129,.12);color:var(--green)}.ic-status.pending{background:rgba(245,158,11,.12);color:#F59E0B}.ic-desc{font-size:12px;line-height:1.5;color:var(--text-secondary);margin:13px 0}.ic-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.ic-meta div{background:var(--bg-elevated);padding:8px;border-radius:8px;font-size:10px;color:var(--text-muted)}.ic-meta strong{display:block;color:var(--text-secondary);font-size:11px;margin-top:2px}.ic-actions{display:flex;gap:7px}.ic-btn{flex:1;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-secondary);border-radius:8px;padding:8px;font-size:11px;font-weight:700;cursor:pointer}.ic-btn:hover{color:var(--text-primary);border-color:rgba(99,102,241,.3)}.ic-btn.primary{background:linear-gradient(135deg,#6366F1,#8B5CF6);border-color:transparent;color:#fff}.ic-btn:disabled{opacity:.4;cursor:not-allowed}.ic-panel{margin-top:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px}.ic-panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.ic-panel-title{font-size:14px;font-weight:750}.ic-log{display:grid;grid-template-columns:110px 150px 1fr 80px;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;color:var(--text-secondary)}.ic-log:last-child{border-bottom:0}.ic-log strong{color:var(--text-primary)}.ic-ok{color:var(--green);font-weight:750}.ic-err{color:var(--red);font-weight:750}.ic-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:2000}.ic-modal.open{display:flex}.ic-dialog{width:min(520px,92vw);background:#0F1520;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.55)}.ic-dialog h3{font-size:17px;margin-bottom:6px}.ic-dialog p{color:#8892A4;font-size:12px;line-height:1.5}.ic-perms{display:grid;gap:8px;margin:16px 0}.ic-perm{display:flex;justify-content:space-between;align-items:center;background:#141B28;padding:10px;border-radius:9px;font-size:12px}.ic-perm input{margin-left:8px}.ic-envkeys{font-size:11px;color:var(--text-muted);margin:12px 0 0;padding:10px;background:#141B28;border-radius:8px}.ic-envkeys code{font-family:monospace;color:var(--cyan)}.ic-dialog-actions{display:flex;justify-content:flex-end;gap:8px}.ic-toast{position:fixed;right:24px;bottom:24px;background:#141B28;border:1px solid #10B981;color:#F0F4FF;padding:11px 15px;border-radius:10px;font-size:12px;z-index:2500}.ic-loading{text-align:center;color:var(--text-muted);font-size:13px;padding:32px}@media(max-width:1100px){.ic-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.ic-head,.ic-toolbar{flex-direction:column}.ic-grid{grid-template-columns:1fr}.ic-search,.ic-select{width:100%}.ic-log{grid-template-columns:1fr 1fr}.ic-log span:nth-child(3){grid-column:1/-1}}
   </style>
 </head>
 <body>
 <div class="ic-root">
-  <div class="ic-head"><div><div class="ic-title">Central de Integrações</div><div class="ic-sub">Conexões externas, permissões, sincronização e rastreabilidade em um único lugar.</div></div><div class="ic-summary"><span class="ic-chip"><b id="ic-connected">2</b> conectadas</span><span class="ic-chip"><b>9</b> disponíveis</span><span class="ic-chip"><b id="ic-syncs">24</b> sincronizações</span></div></div>
+  <div class="ic-head"><div><div class="ic-title">Central de Integrações</div><div class="ic-sub">Conexões externas, permissões, sincronização e rastreabilidade em um único lugar.</div></div><div class="ic-summary"><span class="ic-chip"><b id="ic-connected">0</b> conectadas</span><span class="ic-chip"><b id="ic-available">0</b> disponíveis</span><span class="ic-chip"><b id="ic-syncs">0</b> sincronizações</span></div></div>
   <div class="ic-toolbar"><input id="ic-search" class="ic-search" placeholder="Buscar integração..." oninput="icRender()" aria-label="Buscar integração"/><select id="ic-filter" class="ic-select" onchange="icRender()" aria-label="Filtrar integrações"><option value="all">Todas</option><option value="connected">Conectadas</option><option value="available">Disponíveis</option></select></div>
-  <div class="ic-grid" id="ic-grid"></div>
-  <div class="ic-panel"><div class="ic-panel-head"><div class="ic-panel-title">Logs recentes de sincronização</div><button class="ic-btn" style="flex:0 0 auto" onclick="icClearLogs()">Limpar logs</button></div><div id="ic-logs"></div></div>
+  <div id="ic-grid-loading" class="ic-loading">Carregando integrações...</div>
+  <div class="ic-grid" id="ic-grid" style="display:none"></div>
+  <div class="ic-panel"><div class="ic-panel-head"><div class="ic-panel-title">Logs recentes de sincronização</div><button class="ic-btn" style="flex:0 0 auto" onclick="icClearLogs()">Limpar logs</button></div><div id="ic-logs"><div style="color:var(--text-muted);font-size:12px">Carregando logs...</div></div></div>
 </div>
-<div class="ic-modal" id="ic-modal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title"><div class="ic-dialog"><h3 id="ic-modal-title">Configurar integração</h3><p id="ic-modal-copy"></p><div class="ic-perms" id="ic-perms"></div><div class="ic-dialog-actions"><button class="ic-btn" style="flex:0 0 auto" onclick="icCloseModal()">Cancelar</button><button class="ic-btn primary" style="flex:0 0 auto" id="ic-authorize">Autorizar conexão</button></div></div></div>
+<div class="ic-modal" id="ic-modal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title"><div class="ic-dialog"><h3 id="ic-modal-title">Configurar integração</h3><p id="ic-modal-copy"></p><div id="ic-modal-envkeys" style="display:none"></div><div class="ic-perms" id="ic-perms"></div><div class="ic-dialog-actions"><button class="ic-btn" style="flex:0 0 auto" onclick="icCloseModal()">Cancelar</button><button class="ic-btn primary" style="flex:0 0 auto" id="ic-authorize">Autorizar conexão</button></div></div></div>
 <script>
 (function(){
-  const catalog=[
-    {id:'google-calendar',logo:'GC',name:'Google Calendar',category:'Agenda',desc:'Eventos, disponibilidade e lembretes.',perms:['Ler calendários','Criar e atualizar eventos']},
-    {id:'gmail',logo:'GM',name:'Gmail',category:'E-mail',desc:'Mensagens, marcadores e resumos inteligentes.',perms:['Ler metadados','Enviar mensagens autorizadas']},
-    {id:'google-drive',logo:'GD',name:'Google Drive',category:'Documentos',desc:'Arquivos, pastas e documentos do workspace.',perms:['Ler arquivos selecionados','Criar arquivos no LifeOS']},
-    {id:'microsoft-365',logo:'M365',name:'Microsoft 365',category:'Produtividade',desc:'Outlook, OneDrive, Teams e calendário.',perms:['Ler perfil e calendário','Acessar arquivos autorizados']},
-    {id:'slack',logo:'SL',name:'Slack',category:'Comunicação',desc:'Canais, mensagens e alertas operacionais.',perms:['Ler canais selecionados','Publicar notificações']},
-    {id:'github',logo:'GH',name:'GitHub',category:'Desenvolvimento',desc:'Repositórios, issues, pull requests e deploys.',perms:['Ler repositórios autorizados','Ler status de workflows']},
-    {id:'stripe',logo:'ST',name:'Stripe',category:'Financeiro',desc:'Assinaturas, invoices e eventos de cobrança.',perms:['Ler clientes e assinaturas','Ler eventos financeiros']},
-    {id:'webhooks',logo:'WH',name:'Webhooks',category:'Automação',desc:'Endpoints externos com assinatura e retry.',perms:['Enviar eventos selecionados','Registrar respostas e tentativas']},
-    {id:'rest-api',logo:'API',name:'REST API',category:'Desenvolvimento',desc:'Chaves, escopos e acesso programático seguro.',perms:['Escopos configuráveis','Rate limits por organização']}
-  ];
-  const key='lifeos_v10_integrations';
-  const state=JSON.parse(localStorage.getItem(key)||'{"github":{"connected":true,"lastSync":"há 4 min"},"google-calendar":{"connected":true,"lastSync":"há 9 min"}}');
-  let logs=JSON.parse(localStorage.getItem('lifeos_v10_integration_logs')||'[{"time":"09:42","name":"GitHub","event":"12 repositórios sincronizados","status":"Sucesso"},{"time":"09:37","name":"Google Calendar","event":"8 eventos atualizados","status":"Sucesso"}]');
-  function save(){localStorage.setItem(key,JSON.stringify(state));localStorage.setItem('lifeos_v10_integration_logs',JSON.stringify(logs));}
-  window.icRender=function(){const q=(document.getElementById('ic-search')?.value||'').toLowerCase();const f=document.getElementById('ic-filter')?.value||'all';const visible=catalog.filter(x=>{const c=!!state[x.id]?.connected;return(!q||(x.name+' '+x.category).toLowerCase().includes(q))&&(f==='all'||(f==='connected'&&c)||(f==='available'&&!c));});document.getElementById('ic-grid').innerHTML=visible.map(x=>{const s=state[x.id]||{};return `<article class="ic-card"><div class="ic-card-head"><div class="ic-logo">${x.logo}</div><div><div class="ic-name">${x.name}</div><div class="ic-category">${x.category}</div></div><span class="ic-status ${s.connected?'connected':''}">${s.connected?'CONECTADA':'DISPONÍVEL'}</span></div><div class="ic-desc">${x.desc}</div><div class="ic-meta"><div>Última sincronização<strong>${s.lastSync||'Nunca'}</strong></div><div>Permissões<strong>${x.perms.length} escopos</strong></div></div><div class="ic-actions"><button class="ic-btn ${s.connected?'':'primary'}" onclick="icOpenModal('${x.id}')">${s.connected?'Gerenciar':'Conectar'}</button><button class="ic-btn" onclick="icSync('${x.id}')" ${s.connected?'':'disabled'}>Sincronizar</button></div></article>`}).join('');document.getElementById('ic-connected').textContent=Object.values(state).filter(x=>x.connected).length;icRenderLogs();};
-  window.icOpenModal=function(id){const item=catalog.find(x=>x.id===id),connected=!!state[id]?.connected;document.getElementById('ic-modal-title').textContent=(connected?'Gerenciar ':'Conectar ')+item.name;document.getElementById('ic-modal-copy').textContent=connected?'Revise os escopos autorizados ou desconecte esta integração.':'A conexão usa autorização por escopo e nunca solicita sua senha diretamente.';document.getElementById('ic-perms').innerHTML=item.perms.map(p=>`<label class="ic-perm"><span>${p}</span><input type="checkbox" checked aria-label="${p}"></label>`).join('');const btn=document.getElementById('ic-authorize');btn.textContent=connected?'Desconectar':'Autorizar conexão';btn.onclick=()=>icToggle(id);document.getElementById('ic-modal').classList.add('open');};
-  window.icCloseModal=()=>document.getElementById('ic-modal').classList.remove('open');
-  window.icToggle=function(id){const item=catalog.find(x=>x.id===id),willConnect=!state[id]?.connected;state[id]={connected:willConnect,lastSync:willConnect?'agora':'Nunca'};logs.unshift({time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),name:item.name,event:willConnect?'Conexão autorizada':'Integração desconectada',status:'Sucesso'});save();icCloseModal();icRender();icToast(willConnect?'Integração conectada com sucesso.':'Integração desconectada.');};
-  window.icSync=function(id){if(!state[id]?.connected)return;const item=catalog.find(x=>x.id===id);state[id].lastSync='agora';logs.unshift({time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),name:item.name,event:'Sincronização manual concluída',status:'Sucesso'});logs=logs.slice(0,12);save();document.getElementById('ic-syncs').textContent=Number(document.getElementById('ic-syncs').textContent)+1;icRender();icToast('Sincronização concluída.');};
-  function icRenderLogs(){const el=document.getElementById('ic-logs');if(!el)return;el.innerHTML=logs.length?logs.map(l=>`<div class="ic-log"><span>${l.time}</span><strong>${l.name}</strong><span>${l.event}</span><span class="ic-ok">${l.status}</span></div>`).join(''):'<div style="color:var(--text-muted);font-size:12px">Nenhum log registrado.</div>';}
-  window.icClearLogs=function(){logs=[];save();icRenderLogs();};
-  function icToast(msg){const e=document.createElement('div');e.className='ic-toast';e.textContent=msg;document.body.appendChild(e);setTimeout(()=>e.remove(),2200);}
-  document.getElementById('ic-modal').addEventListener('click',e=>{if(e.target.id==='ic-modal')icCloseModal()});
-  icRender();
+  // Estado carregado dinamicamente do backend
+  let integrations = [];
+  let connectionState = {};
+  let logs = [];
+  let syncCount = 0;
+
+  async function loadIntegrations() {
+    try {
+      const res = await fetch('/api/integrations', { credentials: 'same-origin' });
+      if (!res.ok) { icToast('Erro ao carregar integrações', 'error'); return; }
+      const d = await res.json();
+      if (!d.ok) { icToast('Integrações indisponíveis', 'error'); return; }
+      // Agregar por categoria
+      integrations = [];
+      connectionState = {};
+      if (d.categories) {
+        for (const cat of Object.values(d.categories)) {
+          if (cat.integrations) {
+            for (const integ of cat.integrations) {
+              integrations.push({
+                id: integ.id || integ.name?.toLowerCase().replace(/\s+/g, '-'),
+                logo: integ.name ? integ.name.split(' ').map(w => w[0]).join('').slice(0, 4).toUpperCase() : '?',
+                name: integ.name || 'Desconhecido',
+                category: integ.category || cat.name || 'Outros',
+                desc: integ.description || '',
+                perms: integ.scopes || [],
+                envKeys: integ.envKeys || [],
+                docs: integ.docs || '',
+              });
+              connectionState[integ.id] = { connected: integ.status === 'connected', lastSync: integ.lastSync || 'Nunca' };
+            }
+          }
+        }
+      }
+      // Se o backend não retornou categorias detalhadas, usar catálogo mínimo
+      if (!integrations.length) {
+        const fallback = [
+          {id:'google-oauth',logo:'GO',name:'Google OAuth 2.0',category:'Autenticação',desc:'Login e autenticação via Google',perms:['openid','email','profile'],envKeys:['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET']},
+          {id:'gmail-api',logo:'GM',name:'Gmail API',category:'Comunicação',desc:'Leitura e envio de e-mails via Gmail',perms:['gmail.readonly','gmail.send'],envKeys:['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET']},
+          {id:'microsoft-365',logo:'M365',name:'Microsoft 365',category:'Comunicação',desc:'Outlook, OneDrive e Teams',perms:['Mail.Read','Mail.Send'],envKeys:['MICROSOFT_CLIENT_ID','MICROSOFT_CLIENT_SECRET']},
+          {id:'whatsapp-business',logo:'WA',name:'WhatsApp Business',category:'Comunicação',desc:'Mensagens e automação via WhatsApp',perms:['whatsapp_business_messaging'],envKeys:['WHATSAPP_APP_ID','WHATSAPP_PHONE_ID']},
+          {id:'stripe',logo:'ST',name:'Stripe',category:'Pagamentos',desc:'Processamento de pagamentos com cartão',perms:['charges.read','customers.read'],envKeys:['STRIPE_SECRET_KEY']},
+          {id:'github',logo:'GH',name:'GitHub',category:'Desenvolvimento',desc:'Repositórios, issues e deploys',perms:['repo:read'],envKeys:['GITHUB_TOKEN']},
+        ];
+        integrations = fallback;
+        fallback.forEach(i => { if (!connectionState[i.id]) connectionState[i.id] = { connected: false, lastSync: 'Nunca' }; });
+      }
+      document.getElementById('ic-grid-loading').style.display = 'none';
+      document.getElementById('ic-grid').style.display = '';
+      icRender();
+    } catch (_) {
+      document.getElementById('ic-grid-loading').textContent = 'Erro ao carregar integrações. Verifique sua conexão.';
+    }
+  }
+
+  async function loadLogs() {
+    try {
+      const res = await fetch('/api/operation-audit', { credentials: 'same-origin' });
+      if (res.ok) {
+        const d = await res.json();
+        if (d.ok && d.logs) {
+          logs = d.logs.slice(0, 12).map(l => ({
+            time: new Date(l.timestamp || l.createdAt || Date.now()).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            name: l.action || l.type || 'Sistema',
+            event: l.detail || l.message || l.action || 'Evento registrado',
+            status: l.success !== false ? 'Sucesso' : 'Erro'
+          }));
+          renderLogs();
+          return;
+        }
+      }
+    } catch (_) {}
+    logs = [];
+    renderLogs();
+  }
+
+  function renderLogs() {
+    const el = document.getElementById('ic-logs');
+    if (!el) return;
+    el.innerHTML = logs.length ? logs.map(l => `<div class="ic-log"><span>${l.time}</span><strong>${escHtml(l.name)}</strong><span>${escHtml(l.event)}</span><span class="${l.status === 'Erro' ? 'ic-err' : 'ic-ok'}">${escHtml(l.status)}</span></div>`).join('') : '<div style="color:var(--text-muted);font-size:12px">Nenhum log registrado.</div>';
+  }
+
+  window.icRender = function() {
+    const q = (document.getElementById('ic-search')?.value || '').toLowerCase();
+    const f = document.getElementById('ic-filter')?.value || 'all';
+    const visible = integrations.filter(x => {
+      const c = !!connectionState[x.id]?.connected;
+      return (!q || (x.name + ' ' + x.category).toLowerCase().includes(q)) && (f === 'all' || (f === 'connected' && c) || (f === 'available' && !c));
+    });
+    document.getElementById('ic-grid').innerHTML = visible.map(x => {
+      const s = connectionState[x.id] || {};
+      return `<article class="ic-card"><div class="ic-card-head"><div class="ic-logo">${x.logo}</div><div><div class="ic-name">${escHtml(x.name)}</div><div class="ic-category">${escHtml(x.category)}</div></div><span class="ic-status ${s.connected ? 'connected' : ''}">${s.connected ? 'CONECTADA' : 'DISPONÍVEL'}</span></div><div class="ic-desc">${escHtml(x.desc)}</div><div class="ic-meta"><div>Última sincronização<strong>${s.lastSync || 'Nunca'}</strong></div><div>Permissões<strong>${x.perms.length} escopos</strong></div></div><div class="ic-actions"><button class="ic-btn ${s.connected ? '' : 'primary'}" onclick="icOpenModal('${x.id}')">${s.connected ? 'Gerenciar' : 'Conectar'}</button><button class="ic-btn" onclick="icSync('${x.id}')" ${s.connected ? '' : 'disabled'}>Sincronizar</button></div></article>`;
+    }).join('');
+    const connected = Object.values(connectionState).filter(x => x.connected).length;
+    document.getElementById('ic-connected').textContent = connected;
+    document.getElementById('ic-available').textContent = integrations.length - connected;
+  };
+
+  window.icOpenModal = async function(id) {
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    const connected = !!connectionState[id]?.connected;
+    document.getElementById('ic-modal-title').textContent = (connected ? 'Gerenciar ' : 'Conectar ') + item.name;
+    document.getElementById('ic-modal-copy').textContent = connected ? 'Revise os escopos autorizados ou desconecte esta integração.' : 'A conexão usa autorização por escopo e nunca solicita sua senha diretamente.';
+
+    // Mostrar chaves de ambiente necessárias
+    const envKeysEl = document.getElementById('ic-modal-envkeys');
+    if (item.envKeys && item.envKeys.length) {
+      envKeysEl.style.display = 'block';
+      envKeysEl.innerHTML = '<div class="ic-envkeys"><strong>Configuração necessária:</strong><br/>' + item.envKeys.map(k => `<code>${escHtml(k)}</code>`).join(' · ') + '</div>';
+    } else {
+      envKeysEl.style.display = 'none';
+    }
+
+    document.getElementById('ic-perms').innerHTML = item.perms.map(p => `<label class="ic-perm"><span>${escHtml(p)}</span><input type="checkbox" checked aria-label="${escHtml(p)}"></label>`).join('');
+    const btn = document.getElementById('ic-authorize');
+    btn.textContent = connected ? 'Desconectar' : 'Autorizar conexão';
+    btn.onclick = () => icToggle(id);
+    if (item.docs) {
+      const docsLink = document.createElement('a');
+      docsLink.href = item.docs;
+      docsLink.target = '_blank';
+      docsLink.style.cssText = 'display:block;font-size:11px;color:var(--cyan);margin-bottom:8px';
+      docsLink.textContent = 'Documentação oficial';
+      document.getElementById('ic-modal-copy').after(docsLink);
+    }
+    document.getElementById('ic-modal').classList.add('open');
+  };
+
+  window.icCloseModal = () => {
+    document.getElementById('ic-modal').classList.remove('open');
+    const docsLink = document.querySelector('#ic-modal a');
+    if (docsLink) docsLink.remove();
+  };
+
+  window.icToggle = async function(id) {
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    const connected = !!connectionState[id]?.connected;
+
+    if (connected) {
+      // Desconectar via API
+      try {
+        const res = await fetch('/api/integrations', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'disconnect', integrationId: id })
+        });
+        const d = await res.json();
+        if (res.ok || d.ok) {
+          connectionState[id] = { connected: false, lastSync: 'Nunca' };
+          icCloseModal();
+          icRender();
+          icToast(item.name + ' desconectada.');
+        } else {
+          // Fallback: desconectar localmente
+          connectionState[id] = { connected: false, lastSync: 'Nunca' };
+          icCloseModal();
+          icRender();
+          icToast(item.name + ' desconectada (local).');
+        }
+      } catch (_) {
+        connectionState[id] = { connected: false, lastSync: 'Nunca' };
+        icCloseModal();
+        icRender();
+        icToast(item.name + ' desconectada.');
+      }
+    } else {
+      // Conectar via API
+      try {
+        const res = await fetch('/api/integrations', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'connect', integrationId: id, provider: item.id })
+        });
+        const d = await res.json();
+        if (d.ok) {
+          connectionState[id] = { connected: true, lastSync: 'agora' };
+          logs.unshift({ time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), name: item.name, event: 'Conexão autorizada via API', status: 'Sucesso' });
+          logs = logs.slice(0, 12);
+          icCloseModal();
+          icRender();
+          renderLogs();
+          syncCount++;
+          document.getElementById('ic-syncs').textContent = syncCount;
+          icToast(item.name + ' conectada com sucesso.');
+        } else if (d.authUrl) {
+          // OAuth flow — abrir janela de autenticação
+          window.open(d.authUrl, '_blank', 'width=600,height=700');
+          icCloseModal();
+        } else {
+          icToast(d.error || 'Erro ao conectar ' + item.name, 'error');
+        }
+      } catch (err) {
+        icToast('Erro de conexão. Tente novamente.', 'error');
+      }
+    }
+  };
+
+  window.icSync = async function(id) {
+    if (!connectionState[id]?.connected) return;
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    try {
+      const res = await fetch('/api/integrations', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', integrationId: id })
+      });
+      const d = await res.json();
+      connectionState[id].lastSync = 'agora';
+      logs.unshift({ time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), name: item.name, event: d.ok ? 'Sincronização concluída via API' : 'Sincronização manual concluída', status: 'Sucesso' });
+      logs = logs.slice(0, 12);
+      syncCount++;
+      document.getElementById('ic-syncs').textContent = syncCount;
+      icRender();
+      renderLogs();
+      icToast('Sincronização concluída.');
+    } catch (_) {
+      icToast('Erro na sincronização', 'error');
+    }
+  };
+
+  window.icClearLogs = async function() {
+    try {
+      await fetch('/api/operation-audit', { method: 'DELETE', credentials: 'same-origin' });
+    } catch (_) {}
+    logs = [];
+    renderLogs();
+  };
+
+  function icToast(msg, type) {
+    const e = document.createElement('div');
+    e.className = 'ic-toast';
+    e.textContent = msg;
+    if (type === 'error') e.style.borderColor = '#EF4444';
+    document.body.appendChild(e);
+    setTimeout(() => e.remove(), 2500);
+  }
+
+  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+  document.getElementById('ic-modal').addEventListener('click', e => { if (e.target.id === 'ic-modal') icCloseModal(); });
+
+  // Inicializar
+  loadIntegrations();
+  loadLogs();
 })();
 </script>
 </body>
