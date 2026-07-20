@@ -1,4 +1,4 @@
-// LifeOS Enterprise — convite de organização e workspace v32.1
+// LifeOS Enterprise — convite de organização e workspace v46.0.0
 // Cloudflare Pages Function: GET/POST /api/enterprise/invite
 // Compartilha o modelo RBAC de funções/_enterprise.js.
 

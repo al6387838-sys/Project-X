@@ -1,4 +1,4 @@
-// LifeOS Enterprise — CRM API v32.1
+// LifeOS Enterprise — CRM API v46.0.0
 // Cloudflare Pages Function: /api/crm
 // Clientes, pipeline, agenda comercial e histórico persistidos por organização/workspace.
 

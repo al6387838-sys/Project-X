@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Organizations, Workspaces & RBAC API v32.1
+// LifeOS Enterprise — Organizations, Workspaces & RBAC API v46.0.0
 // Cloudflare Pages Function: /api/enterprise/rbac
 // Controle de acesso por organização/workspace com persistência exclusiva em LIFEOS_KV.
 
