@@ -130,8 +130,8 @@
       </div>
       <div class="ai-rec-card" style="border-color:rgba(99,102,241,0.3)">
         <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-weight:600;margin-bottom:4px">Economize R$ 180/mês</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Você tem 3 assinaturas sobrepostas. Cancelar 2 delas economizaria R$ 180/mês sem impacto.</div>
+        <div style="font-weight:600;margin-bottom:4px">{savings}</div>
+        <div style="font-size:12px;color:var(--text-secondary)">{subscription_suggestion}</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showPage('finance-subscriptions')">Ver Assinaturas</button>
       </div>
       <div class="ai-rec-card" style="border-color:rgba(245,158,11,0.3)">
@@ -192,7 +192,7 @@
       </div>
       <div class="ai-memory-item" data-category="Financeiro">
         <div class="ai-memory-category" style="background:rgba(245,158,11,0.15);color:var(--amber)">Financeiro</div>
-        <div class="ai-memory-content">Orçamento mensal: R$ 8.000. Maior gasto recorrente: moradia (R$ 3.450). Meta de economia: 15% da renda.</div>
+        <div class="ai-memory-content">{finance_memory}</div>
         <div class="ai-memory-meta">Adicionado: 01 Jul 2026 · Fonte: Finance · Relevância: 91%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
@@ -359,7 +359,7 @@
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
           <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
-          <div style="flex:1"><div style="font-weight:600;font-size:13px">Pagar fatura Nubank</div><div style="font-size:11px;color:var(--text-muted)">Vence hoje · R$ 2.840</div></div>
+          <div style="flex:1"><div style="font-weight:600;font-size:13px">{bill_name}</div><div style="font-size:11px;color:var(--text-muted)">{bill_due}</div></div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
           <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
@@ -376,7 +376,7 @@
         </div>
         <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Financeiro</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Fatura do Nubank vence hoje. Saldo disponível: R$ 8.420. Pagamento recomendado antes das 18h.</div>
+          <div style="font-size:13px;color:var(--text-secondary)">{bill_reminder}</div>
         </div>
         <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</div>
@@ -425,7 +425,7 @@
         <div style="font-size:10px;color:var(--text-muted)">Foco</div>
       </div>
       <div style="text-align:center;padding:10px;background:rgba(245,158,11,0.1);border-radius:8px">
-        <div style="font-size:20px;font-weight:800;color:var(--amber)">R$ 1.240</div>
+        <div style="font-size:20px;font-weight:800;color:var(--amber)">{savings_amount}</div>
         <div style="font-size:10px;color:var(--text-muted)">Gastos</div>
       </div>
       <div style="text-align:center;padding:10px;background:rgba(139,92,246,0.1);border-radius:8px">
@@ -523,7 +523,7 @@
             <div style="font-weight:700;font-size:15px">Cancelar assinatura subutilizada</div>
             <span style="font-size:10px;padding:2px 8px;background:rgba(245,158,11,0.15);color:var(--amber);border-radius:20px;font-weight:600">Finanças</span>
           </div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você não usa o Adobe Creative Cloud há 23 dias. Cancelar economizaria R$ 89,90/mês = R$ 1.078,80/ano.</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">{subscription_unused} Cancelar economizaria {unused_savings}/mês = {unused_annual}/ano.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showPage('finance-subscriptions')">Ver assinaturas</button>
             <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação adiada por 30 dias','info')">Adiar 30 dias</button>
@@ -625,7 +625,7 @@
         </div>
         <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
           <span style="font-size:14px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></span>
-          <div><div style="font-size:12px;font-weight:600">Transação categorizada: Restaurante <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Alimentação</div><div style="font-size:11px;color:var(--text-muted)">R$ 87,50 · há 12 min</div></div>
+          <div><div style="font-size:12px;font-weight:600">Transação categorizada: {transaction_category}</div><div style="font-size:11px;color:var(--text-muted)">{transaction_amount} · {transaction_time}</div></div>
         </div>
         <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
           <span style="font-size:14px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></span>
@@ -690,5 +690,39 @@
   } else {
     aiCenterLoadActionLog();
   }
+
+// Load dynamic AI content from API
+(async function loadAIContent() {
+  try {
+    const r = await fetch('/api/ai-insights', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const el = id => document.getElementById(id);
+    // Replace placeholders with real data
+    if (data.savings) {
+      document.querySelectorAll('.ai-insight-item').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{savings}', data.savings);
+        item.innerHTML = item.innerHTML.replace('{subscription_suggestion}', data.subscriptionSuggestion || 'Revisão de assinaturas disponível');
+      });
+    }
+    if (data.financeMemory) {
+      document.querySelectorAll('.ai-memory-content').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{finance_memory}', data.financeMemory);
+      });
+    }
+    if (data.bills) {
+      document.querySelectorAll('.ai-bill-item').forEach((item, i) => {
+        const bill = data.bills[i] || {};
+        item.innerHTML = item.innerHTML.replace('{bill_name}', bill.name || 'Conta');
+        item.innerHTML = item.innerHTML.replace('{bill_due}', (bill.dueDate || '—') + ' · ' + (bill.amount || '0'));
+      });
+    }
+    if (data.reminder) {
+      document.querySelectorAll('.ai-reminder-text').forEach(item => {
+        item.innerHTML = item.innerHTML.replace('{bill_reminder}', data.reminder);
+      });
+    }
+  } catch {}
+})();
 </script>
 <!-- END module-ai-center -->

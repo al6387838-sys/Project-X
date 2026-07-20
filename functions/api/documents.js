@@ -366,6 +366,13 @@ export async function onRequestPost({ request, env }) {
       await auditLog(kv, session.sub, 'moved', document.id, { from: previousFolderId, to: folderId });
       return json(200, { ok: true, document: documentPayload(request, document) });
     }
+    if (action === 'copy') {
+      const copy = { ...document, id: generateId(), name: `${document.name} (cópia)`, favorite: false, createdAt: now(), updatedAt: now(), createdBy: session.sub, updatedBy: session.sub, version: 1 };
+      docs.unshift(copy);
+      await saveDocuments(kv, session.sub, docs);
+      await auditLog(kv, session.sub, 'copied', document.id, { newId: copy.id });
+      return json(200, { ok: true, document: documentPayload(request, copy) });
+    }
     if (action === 'toggle-favorite') {
       document.favorite = !document.favorite;
       document.updatedAt = now(); document.updatedBy = session.sub;

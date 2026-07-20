@@ -523,19 +523,19 @@
       </div>
       <div class="finance-summary-row">
         <span class="finance-summary-label">Saldo total</span>
-        <span class="finance-summary-value positive">R$ 24.847,00</span>
+        <span class="finance-summary-value positive" id="d2-fin-saldo">—</span>
       </div>
       <div class="finance-summary-row">
         <span class="finance-summary-label">Gastos este mês</span>
-        <span class="finance-summary-value negative">R$ 3.240,00</span>
+        <span class="finance-summary-value negative" id="d2-fin-gastos">—</span>
       </div>
       <div class="finance-summary-row">
         <span class="finance-summary-label">Investimentos</span>
-        <span class="finance-summary-value positive">R$ 18.500,00</span>
+        <span class="finance-summary-value positive" id="d2-fin-invest">—</span>
       </div>
       <div class="finance-summary-row">
         <span class="finance-summary-label">Meta de economia</span>
-        <span class="finance-summary-value neutral">45%</span>
+        <span class="finance-summary-value neutral" id="d2-fin-meta">—</span>
       </div>
       <div class="finance-mini-chart" id="d2-finance-chart"></div>
     </div>
@@ -560,7 +560,7 @@
       </div>
       <div class="comm-item">
         <div class="comm-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">CP</div>
-        <div class="comm-info"><div class="comm-name">Carlos Pereira</div><div class="comm-preview">Reunião confirmada para amanhã 10h</div></div>
+        <div class="comm-info" id="d2-comm-info"><div style="color:var(--text-muted);font-size:12px">Carregando comunicação...</div></div>
         <div class="comm-meta"><span class="comm-time">11:42</span><span class="comm-unread">1</span></div>
       </div>
       <div style="margin-top:10px;display:flex;gap:8px">
@@ -602,7 +602,7 @@
       </div>
       <div id="d2-activity-list"><div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Carregando atividades...</div></div>
 <div class="activity-content"><div class="activity-title">Meta atualizada <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> 72km</div><div class="activity-time">Hoje, 06:45</div></div></div>
-      <div class="activity-item"><div class="activity-dot" style="background:var(--cyan)"></div><div class="activity-content"><div class="activity-title">Transação registrada: R$2.847,00 recebido</div><div class="activity-time">Hoje, 06:00</div></div></div>
+
       <div class="activity-item"><div class="activity-dot" style="background:var(--amber)"></div><div class="activity-content"><div class="activity-title">Nota adicionada ao Memory Center</div><div class="activity-time">Ontem, 22:15</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--purple)"></div><div class="activity-content"><div class="activity-title">Life Score aumentou para 87 (+3)</div><div class="activity-time">Ontem, 20:00</div></div></div>
       <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-content"><div class="activity-title">Hábito concluído: Exercício físico</div><div class="activity-time">Ontem, 18:30</div></div></div>
@@ -942,6 +942,24 @@
         }
       } catch {}
     }
+    // Carregar finanças reais
+    (async function d2LoadFinance() {
+      try {
+        const r = await fetch('/api/finance/hub?view=summary', { credentials: 'same-origin' });
+        if (r.ok) {
+          const data = await r.json();
+          if (data.ok) {
+            const s = data.summary;
+            const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+            const el = id => document.getElementById(id);
+            if (el('d2-fin-saldo')) el('d2-fin-saldo').textContent = fmt(s.totalBalance);
+            if (el('d2-fin-gastos')) el('d2-fin-gastos').textContent = fmt(s.monthlyExpenses);
+            if (el('d2-fin-invest')) el('d2-fin-invest').textContent = fmt(s.investments);
+            if (el('d2-fin-meta')) el('d2-fin-meta').textContent = (s.savingsRate || 0) + '%';
+          }
+        }
+      } catch {}
+    })();
     // Carregar dados reais ao inicializar
     d2LoadRealData();
     // Carregar activity items reais

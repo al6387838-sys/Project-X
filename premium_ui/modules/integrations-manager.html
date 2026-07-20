@@ -511,38 +511,36 @@
       selectedIntegration = null;
     }
 
-    function authorizeIntegration() {
-      if (!selectedIntegration) return;
-
-      // Simular OAuth flow
-      // [removed]
-      
-      // Em produção, isso redirecionaria para o endpoint OAuth do provedor
-      // Exemplo: https://oauth.provider.com/authorize?client_id=...&redirect_uri=...&scope=...
-      
-      // Simular sucesso após 2 segundos
-      setTimeout(() => {
-        selectedIntegration.status = 'connected';
-        selectedIntegration.lastSync = new Date().toLocaleString('pt-BR');
-        
-        // Armazenar token criptografado (em produção, seria no backend)
-        const tokenData = {
-          integrationId: selectedIntegration.id,
-          accessToken: 'pending_oauth_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,16) : Date.now().toString(36)),
-          refreshToken: 'pending_refresh_' + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g,'').slice(0,16) : Date.now().toString(36)),
-          expiresAt: new Date(Date.now() + 3600000).toISOString(),
-          createdAt: new Date().toISOString()
-        };
-        
-        localStorage.setItem(`integration_${selectedIntegration.id}`, JSON.stringify(tokenData));
-        
-        closeOAuthModal();
-        renderIntegrations();
-        updateStats();
-        
-        // Mostrar notificação
-        console.info('Integration connected:', selectedIntegration.name);
-      }, 2000);
+    async function authorizeIntegration() {
+      try {
+        const res = await fetch('/api/integrations', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'connect', integrationId: selectedIntegration.id, provider: selectedIntegration.provider }),
+        });
+        const d = await res.json();
+        if (d.ok) {
+          selectedIntegration.status = 'connected';
+          selectedIntegration.lastSync = new Date().toLocaleString('pt-BR');
+          if (d.token) {
+            localStorage.setItem('integration_' + selectedIntegration.id, JSON.stringify({
+              integrationId: selectedIntegration.id,
+              accessToken: d.token.accessToken || '',
+              refreshToken: d.token.refreshToken || '',
+              expiresAt: d.token.expiresAt || new Date(Date.now() + 3600000).toISOString(),
+              createdAt: new Date().toISOString()
+            }));
+          }
+          showToast?.(selectedIntegration.name + ' conectado!', 'success');
+          closeOAuthModal();
+          renderIntegrations();
+          updateStats();
+        } else {
+          showToast?.(d.error || 'Erro ao conectar', 'error');
+        }
+      } catch {
+        showToast?.('Erro de conexão', 'error');
+      }
     }
 
     function disconnectIntegration(integrationId) {

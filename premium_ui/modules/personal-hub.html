@@ -138,7 +138,7 @@
   <div class="hub-greeting">
     <div class="greeting-text">
       <h2>Bom dia! <i data-lucide="sun" class="pg-icon" aria-hidden="true"></i> Seu dia está organizado.</h2>
-      <p>Você tem 3 reuniões, 5 tarefas pendentes e R$ 2.847 em movimentações hoje.</p>
+      <p>{daily_summary}</p>
     </div>
     <div class="greeting-ai">
       <span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></span>
@@ -149,7 +149,7 @@
   <div class="quick-stats">
     <div class="qs-card">
       <div class="qs-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="qs-value" style="color:var(--green)">R$12.4k</div>
+      <div class="qs-value" style="color:var(--green)">{quick_stat}</div>
       <div class="qs-label">Saldo Total</div>
     </div>
     <div class="qs-card">
@@ -192,37 +192,37 @@
       <div class="finance-summary">
         <div class="fin-item">
           <div class="fin-item-label">Receita (mês)</div>
-          <div class="fin-item-value positive">R$ 18.500</div>
+          <div class="fin-item-value positive">{income_value}</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:74%;background:var(--green)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Despesas (mês)</div>
-          <div class="fin-item-value negative">R$ 6.120</div>
+          <div class="fin-item-value negative">{expense_value}</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:33%;background:var(--red)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Investimentos</div>
-          <div class="fin-item-value neutral">R$ 45.200</div>
+          <div class="fin-item-value neutral">{balance_value}</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:60%;background:var(--cyan)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Patrimônio</div>
-          <div class="fin-item-value positive">R$ 127k</div>
+          <div class="fin-item-value positive">{investments_value}</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:85%;background:var(--accent)"></div></div>
         </div>
       </div>
       <ul class="fin-transactions">
         <li class="fin-tx">
           <div><div class="fin-tx-name">Salário recebido</div><div class="fin-tx-date">Hoje, 09:00</div></div>
-          <div class="fin-tx-amount" style="color:var(--green)">+R$ 8.500</div>
+          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
         </li>
         <li class="fin-tx">
           <div><div class="fin-tx-name">Aluguel</div><div class="fin-tx-date">Hoje, 10:30</div></div>
-          <div class="fin-tx-amount" style="color:var(--red)">-R$ 2.200</div>
+          <div class="fin-tx-amount" style="color:var(--red)">-{tx_amount}</div>
         </li>
         <li class="fin-tx">
           <div><div class="fin-tx-name">Dividendos ITSA4</div><div class="fin-tx-date">Ontem</div></div>
-          <div class="fin-tx-amount" style="color:var(--green)">+R$ 347</div>
+          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
         </li>
       </ul>
     </div>
@@ -348,7 +348,7 @@
       <div class="ai-chat">
         <div class="ai-msg">
           <div class="ai-avatar bot"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="ai-bubble">Olá! Analisei sua agenda e finanças. Você tem R$12.380 livres este mês. Posso sugerir uma alocação em investimentos?</div>
+          <div class="ai-bubble">{ai_suggestion}</div>
         </div>
         <div class="ai-msg" style="flex-direction:row-reverse">
           <div class="ai-avatar user"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div>

@@ -233,4 +233,98 @@
 
 </div>
 <script src="/app/modules/crm-live.js"></script>
+
+<!-- ─── MODAL: Nova Tarefa ─── -->
+<div class="modal-overlay" id="modal-new-task" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa</div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Título</label>
+      <input type="text" class="form-input" id="task-title" placeholder="Título da tarefa" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <input type="text" class="form-input" id="task-desc" placeholder="Descrição (opcional)" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-input" id="task-status">
+        <option value="backlog">Backlog</option>
+        <option value="todo">A Fazer</option>
+        <option value="doing">Em Progresso</option>
+        <option value="done">Concluída</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitNewTask()">Criar Tarefa</button>
+  </div>
+</div>
+<!-- ─── MODAL: Nova Página Wiki ─── -->
+<div class="modal-overlay" id="modal-new-wiki-page" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página Wiki</div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Título</label>
+      <input type="text" class="form-input" id="wiki-title" placeholder="Título da página" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Conteúdo</label>
+      <textarea class="form-input" id="wiki-content" rows="6" placeholder="Conteúdo da página..."></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitNewWiki()">Criar Página</button>
+  </div>
+</div>
+<script>
+async function submitNewTask() {
+  const title = document.getElementById('task-title')?.value?.trim();
+  if (!title) { showToast?.('Título obrigatório', 'error'); return; }
+  const description = document.getElementById('task-desc')?.value?.trim() || '';
+  const status = document.getElementById('task-status')?.value || 'todo';
+  try {
+    const r = await fetch('/api/tasks', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, description, status }),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast?.('Tarefa criada!', 'success');
+      closeModal();
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-desc').value = '';
+      // Reload productivity module
+      window.loadModuleForPage?.('productivity');
+    } else {
+      showToast?.(d.error || 'Erro', 'error');
+    }
+  } catch { showToast?.('Erro ao criar tarefa', 'error'); }
+}
+async function submitNewWiki() {
+  const title = document.getElementById('wiki-title')?.value?.trim();
+  if (!title) { showToast?.('Título obrigatório', 'error'); return; }
+  const content = document.getElementById('wiki-content')?.value?.trim() || '';
+  try {
+    const r = await fetch('/api/documents', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'upload', name: title, description: content, tags: ['wiki'], mimeType: 'text/markdown' }),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast?.('Página wiki criada!', 'success');
+      closeModal();
+    } else {
+      showToast?.(d.error || 'Erro', 'error');
+    }
+  } catch { showToast?.('Erro ao criar página', 'error'); }
+}
+function wikiOpen(page) {
+  showToast?.(`Abrindo ${page}...`, 'info');
+}
+</script>
 <!-- END module-productivity -->

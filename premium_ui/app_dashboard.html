@@ -1284,7 +1284,7 @@
       <div class="page" id="page-habits">
         <div class="page-header">
           <div><div class="page-title">Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
-          <button class="btn btn-primary"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
+          <button class="btn btn-primary" onclick="openNewHabitModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
         </div>
         <div class="grid-4" style="margin-bottom:20px" id="habits-stats-grid">
           <div class="card"><div class="card-title">Streak Atual</div><div class="card-value" id="h-streak">—</div><div class="card-trend trend-up" id="h-streak-label" style="display:none"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> <span id="h-streak-text"></span></div></div>
@@ -1559,6 +1559,271 @@
       <div id="module-automation-container"></div>
       <!-- ═══ MÓDULO ANALYTICS v11 (Phase 115) ═══ -->
       <div id="module-analytics-container"></div>
+    
+      <div class="page" id="page-ai-center" data-module="ai-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-analytics" data-module="analytics">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-app-ecosystem" data-module="app-ecosystem">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-automation" data-module="automation">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-calendar" data-module="calendar">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-command-center" data-module="dashboard-v2">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-crm" data-module="crm-live">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-document-viewer" data-module="document-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-documents" data-module="documents">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-email" data-module="email">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-email-compose" data-module="email">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-file-center" data-module="file-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance-budget" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance-cashflow" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance-goals" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance-openfinance" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-finance-pix" data-module="finance">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-gantt" data-module="productivity">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-identity" data-module="identity">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-integration-center" data-module="integration-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-kanban" data-module="productivity">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-marketplace" data-module="marketplace">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-messages" data-module="communication">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-observability" data-module="observability">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-personal-hub" data-module="personal-hub">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-settings-account" data-module="enterprise-settings">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-settings-security" data-module="enterprise-settings">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-settings-sessions" data-module="enterprise-settings">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-wiki" data-module="documents">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-ai-daily" data-module="ai-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-ai-weekly" data-module="ai-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
+      <div class="page" id="page-ai-recommendations" data-module="ai-center">
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:var(--text-muted)">
+          <div style="text-align:center">
+            <i data-lucide="loader" style="width:32px;height:32px;margin-bottom:12px;color:var(--accent)" class="pg-icon" aria-hidden="true"></i>
+            <div style="font-size:13px">Carregando módulo...</div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </div>
@@ -1791,7 +2056,67 @@
   }
 
   // Navigation
+  // ─── Dynamic Module Loader ───
+  const _loadedModules = new Set();
+  const _modulePageMap = {
+    'ai-center': 'ai-center',
+    'analytics': 'analytics',
+    'app-ecosystem': 'app-ecosystem',
+    'automation': 'automation',
+    'calendar': 'calendar',
+    'command-center': 'dashboard-v2',
+    'crm': 'crm-live',
+    'document-viewer': 'document-center',
+    'documents': 'documents',
+    'email': 'email',
+    'email-compose': 'email',
+    'file-center': 'file-center',
+    'finance': 'finance',
+    'finance-budget': 'finance',
+    'finance-cashflow': 'finance',
+    'finance-goals': 'finance',
+    'finance-openfinance': 'finance',
+    'finance-pix': 'finance',
+    'gantt': 'productivity',
+    'identity': 'identity',
+    'integration-center': 'integration-center',
+    'kanban': 'productivity',
+    'marketplace': 'marketplace',
+    'messages': 'communication',
+    'observability': 'observability',
+    'personal-hub': 'personal-hub',
+    'settings-account': 'enterprise-settings',
+    'settings-security': 'enterprise-settings',
+    'settings-sessions': 'enterprise-settings',
+    'wiki': 'documents',
+    'ai-daily': 'ai-center',
+    'ai-weekly': 'ai-center',
+    'ai-recommendations': 'ai-center',
+  };
+
+  async function loadModuleForPage(pageId) {
+    const moduleName = _modulePageMap[pageId];
+    if (!moduleName || _loadedModules.has(pageId)) return;
+    try {
+      const res = await fetch(`/app/modules/${moduleName}.html`, { credentials: 'same-origin' });
+      if (!res.ok) { _loadedModules.add(pageId); return; }
+      const html = await res.text();
+      const page = document.getElementById('page-' + pageId);
+      if (page) {
+        page.innerHTML = html;
+        _loadedModules.add(pageId);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    } catch (e) {
+      console.warn(`Module load failed for ${pageId}:`, e);
+      _loadedModules.add(pageId);
+    }
+  }
   function showPage(id) {
+    // Load module if needed
+    if (_modulePageMap[id] && !_loadedModules.has(id)) {
+      loadModuleForPage(id);
+    }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const page = document.getElementById('page-' + id);
@@ -2370,6 +2695,33 @@
     panel?.classList.remove('open');
     panel?.setAttribute('aria-hidden', 'true');
   }
+
+  async function ncMarkAllRead() {
+    try {
+      await fetch('/api/notifications', {
+        method: 'PUT', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'markAllRead' }),
+      });
+      document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+      document.getElementById('notif-count').style.display = 'none';
+      document.getElementById('notif-dot').style.display = 'none';
+      showToast('Todas marcadas como lidas', 'success');
+    } catch { showToast('Erro ao marcar', 'error'); }
+  }
+  async function ncClearHistory() {
+    try {
+      await fetch('/api/notifications', {
+        method: 'DELETE', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'clearHistory' }),
+      });
+      const list = document.getElementById('notif-list');
+      if (list) list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px">Nenhuma notificação</div>';
+      showToast('Histórico limpo', 'success');
+    } catch { showToast('Erro ao limpar', 'error'); }
+  }
+
 
   async function updateFirstStep(id, checked) {
     if (!(id in onboardingState.checklist)) return;
@@ -3389,7 +3741,17 @@
   }
 
   function openNewHabitModal() {
-    showPage('habits');
+    const title = prompt('Título do hábito:');
+    if (!title) return;
+    const frequency = prompt('Frequência (ex: daily, weekly):', 'daily') || 'daily';
+    fetch('/api/habits', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, frequency }),
+    }).then(r => r.json()).then(d => {
+      if (d.ok) { showToast('Hábito criado!', 'success'); showPage('habits'); loadHabits(); }
+      else showToast(d.error || 'Erro ao criar hábito', 'error');
+    }).catch(() => showToast('Erro ao criar hábito', 'error'));
   }
 
   // ── Override showPage para carregar dados reais por página ────────────

@@ -10,3 +10,5 @@ qa-artifacts/
 qa_visual_notes.md
 deno.lock
 functions/api/observability.js.bak
+fix_*.py
+.env.local

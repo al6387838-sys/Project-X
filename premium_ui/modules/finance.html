@@ -19,27 +19,27 @@
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="banknote" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value" id="fin-saldo-total">R$ 24.850,00</div>
+      <div class="kpi-value" id="fin-saldo-total">—</div>
       <div class="kpi-label">Saldo Total</div>
-      <div class="kpi-trend up">+3,2% este mês</div>
+      <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value" id="fin-despesas">R$ 4.320,00</div>
+      <div class="kpi-value" id="fin-despesas">—</div>
       <div class="kpi-label">Despesas do Mês</div>
-      <div class="kpi-trend down">+8,1% vs mês anterior</div>
+      <div class="kpi-trend down">Carregando...</div>
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value" id="fin-receitas">R$ 12.500,00</div>
+      <div class="kpi-value" id="fin-receitas">—</div>
       <div class="kpi-label">Receitas do Mês</div>
-      <div class="kpi-trend up">+5,0% vs mês anterior</div>
+      <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value" id="fin-investimentos">R$ 48.200,00</div>
+      <div class="kpi-value" id="fin-investimentos">—</div>
       <div class="kpi-label">Investimentos</div>
-      <div class="kpi-trend up">+12,4% no ano</div>
+      <div class="kpi-trend up">Carregando...</div>
     </div>
   </div>
 
@@ -51,30 +51,7 @@
         <button class="btn btn-ghost" onclick="showPage('finance-accounts')" style="font-size:12px">Ver todas</button>
       </div>
       <div id="fin-accounts-list">
-        <div class="fin-account-item" onclick="showPage('finance-extract')">
-          <div class="fin-account-icon" style="background:linear-gradient(135deg,#FF6B00,#FF8C00)">N</div>
-          <div class="fin-account-info">
-            <div class="fin-account-name">Nubank</div>
-            <div class="fin-account-num">•••• 4521</div>
-          </div>
-          <div class="fin-account-balance" style="color:var(--green)">R$ 8.420,00</div>
-        </div>
-        <div class="fin-account-item" onclick="showPage('finance-extract')">
-          <div class="fin-account-icon" style="background:linear-gradient(135deg,#003087,#0070E0)">I</div>
-          <div class="fin-account-info">
-            <div class="fin-account-name">Itaú</div>
-            <div class="fin-account-num">•••• 7832</div>
-          </div>
-          <div class="fin-account-balance" style="color:var(--green)">R$ 12.130,00</div>
-        </div>
-        <div class="fin-account-item" onclick="showPage('finance-extract')">
-          <div class="fin-account-icon" style="background:linear-gradient(135deg,#00A859,#00C96B)">B</div>
-          <div class="fin-account-info">
-            <div class="fin-account-name">Bradesco</div>
-            <div class="fin-account-num">•••• 1190</div>
-          </div>
-          <div class="fin-account-balance" style="color:var(--green)">R$ 4.300,00</div>
-        </div>
+        <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando contas...</div>
       </div>
       <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Conta</button>
     </div>
@@ -86,30 +63,7 @@
         <button class="btn btn-ghost" onclick="showPage('finance-cards')" style="font-size:12px">Ver todos</button>
       </div>
       <div id="fin-cards-list">
-        <div class="fin-card-item" onclick="showPage('finance-invoice')">
-          <div class="fin-card-visual" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">
-            <div class="fin-card-brand">VISA</div>
-            <div class="fin-card-num">•••• 1234</div>
-          </div>
-          <div class="fin-card-details">
-            <div style="font-size:13px;font-weight:600">Nubank Ultravioleta</div>
-            <div style="font-size:11px;color:var(--text-muted)">Fatura: R$ 2.840,00</div>
-            <div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:57%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:4px">R$ 2.840 / R$ 5.000 limite</div>
-          </div>
-        </div>
-        <div class="fin-card-item" onclick="showPage('finance-invoice')">
-          <div class="fin-card-visual" style="background:linear-gradient(135deg,#F59E0B,#D97706)">
-            <div class="fin-card-brand">MASTER</div>
-            <div class="fin-card-num">•••• 5678</div>
-          </div>
-          <div class="fin-card-details">
-            <div style="font-size:13px;font-weight:600">Itaú Personnalité</div>
-            <div style="font-size:11px;color:var(--text-muted)">Fatura: R$ 1.480,00</div>
-            <div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:30%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:4px">R$ 1.480 / R$ 5.000 limite</div>
-          </div>
-        </div>
+        <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando cartões...</div>
       </div>
     </div>
   </div>
@@ -121,36 +75,9 @@
         <div class="card-title" style="margin:0">Contas a Pagar</div>
         <button class="btn btn-ghost" onclick="showPage('finance-bills')" style="font-size:12px">Ver todas</button>
       </div>
-      <div id="fin-bills-list">
-        <div class="fin-bill-item overdue">
-          <div class="fin-bill-status" style="background:var(--red)"></div>
-          <div class="fin-bill-info">
-            <div class="fin-bill-name">Aluguel</div>
-            <div class="fin-bill-date">Venceu: 10/07</div>
-          </div>
-          <div class="fin-bill-amount" style="color:var(--red)">R$ 2.800,00</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="finPayBill(this,'Aluguel')">Pagar</button>
-        </div>
-        <div class="fin-bill-item">
-          <div class="fin-bill-status" style="background:var(--amber)"></div>
-          <div class="fin-bill-info">
-            <div class="fin-bill-name">Internet Vivo</div>
-            <div class="fin-bill-date">Vence: 15/07</div>
-          </div>
-          <div class="fin-bill-amount">R$ 149,90</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="finPayBill(this,'Internet')">Pagar</button>
-        </div>
-        <div class="fin-bill-item">
-          <div class="fin-bill-status" style="background:var(--green)"></div>
-          <div class="fin-bill-info">
-            <div class="fin-bill-name">Energia Elétrica</div>
-            <div class="fin-bill-date">Vence: 20/07</div>
-          </div>
-          <div class="fin-bill-amount">R$ 280,00</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="finPayBill(this,'Energia')">Pagar</button>
-        </div>
-      </div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-bill')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Conta</button>
+      <div <div id="fin-bills-list">
+        <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando contas a pagar...</div>
+      </div>><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Conta</button>
     </div>
 
     <!-- Assinaturas Recorrentes -->
@@ -159,36 +86,13 @@
         <div class="card-title" style="margin:0">Assinaturas</div>
         <button class="btn btn-ghost" onclick="showPage('finance-subscriptions')" style="font-size:12px">Ver todas</button>
       </div>
-      <div id="fin-subs-list">
-        <div class="fin-sub-item">
-          <div class="fin-sub-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="fin-sub-info"><div class="fin-sub-name">Spotify</div><div class="fin-sub-cycle">Mensal · Próx: 01/08</div></div>
-          <div class="fin-sub-amount">R$ 21,90</div>
-        </div>
-        <div class="fin-sub-item">
-          <div class="fin-sub-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="fin-sub-info"><div class="fin-sub-name">Netflix</div><div class="fin-sub-cycle">Mensal · Próx: 05/08</div></div>
-          <div class="fin-sub-amount">R$ 55,90</div>
-        </div>
-        <div class="fin-sub-item">
-          <div class="fin-sub-icon"><i data-lucide="cloud" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="fin-sub-info"><div class="fin-sub-name">iCloud 200GB</div><div class="fin-sub-cycle">Mensal · Próx: 12/08</div></div>
-          <div class="fin-sub-amount">R$ 9,90</div>
-        </div>
-        <div class="fin-sub-item">
-          <div class="fin-sub-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="fin-sub-info"><div class="fin-sub-name">ChatGPT Plus</div><div class="fin-sub-cycle">Mensal · Próx: 18/08</div></div>
-          <div class="fin-sub-amount">R$ 100,00</div>
-        </div>
-        <div class="fin-sub-item">
-          <div class="fin-sub-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="fin-sub-info"><div class="fin-sub-name">Academia</div><div class="fin-sub-cycle">Mensal · Próx: 01/08</div></div>
-          <div class="fin-sub-amount">R$ 120,00</div>
-        </div>
+      <div <div id="fin-subs-list">
+        <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando assinaturas...</div>
+      </div>
       </div>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
         <span style="color:var(--text-muted)">Total mensal</span>
-        <span style="font-weight:700;color:var(--amber)">R$ 307,70</span>
+        <span style="font-weight:700;color:var(--amber)">—</span>
       </div>
     </div>
   </div>
@@ -210,7 +114,7 @@
     <div class="fin-bank-card" style="background:linear-gradient(135deg,#FF6B00,#FF8C00)">
       <div class="fin-bank-logo">Nubank</div>
       <div class="fin-bank-num">•••• 4521</div>
-      <div class="fin-bank-balance">R$ 8.420,00</div>
+      <div class="fin-bank-balance">—</div>
       <div class="fin-bank-actions">
         <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
         <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
@@ -220,7 +124,7 @@
     <div class="fin-bank-card" style="background:linear-gradient(135deg,#003087,#0070E0)">
       <div class="fin-bank-logo">Itaú</div>
       <div class="fin-bank-num">•••• 7832</div>
-      <div class="fin-bank-balance">R$ 12.130,00</div>
+      <div class="fin-bank-balance">—</div>
       <div class="fin-bank-actions">
         <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
         <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
@@ -230,7 +134,7 @@
     <div class="fin-bank-card" style="background:linear-gradient(135deg,#00A859,#00C96B)">
       <div class="fin-bank-logo">Bradesco</div>
       <div class="fin-bank-num">•••• 1190</div>
-      <div class="fin-bank-balance">R$ 4.300,00</div>
+      <div class="fin-bank-balance">—</div>
       <div class="fin-bank-actions">
         <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
         <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
@@ -269,7 +173,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Valor</label>
-        <input type="text" class="form-input" id="pix-amount" placeholder="R$ 0,00" oninput="finFormatCurrency(this)" />
+        <input type="text" class="form-input" id="pix-amount" placeholder="—" oninput="finFormatCurrency(this)" />
       </div>
       <div class="form-group">
         <label class="form-label">Descrição (opcional)</label>
@@ -278,9 +182,9 @@
       <div class="form-group">
         <label class="form-label">Conta de Origem</label>
         <select class="form-input" id="pix-from">
-          <option>Nubank •••• 4521 — R$ 8.420,00</option>
-          <option>Itaú •••• 7832 — R$ 12.130,00</option>
-          <option>Bradesco •••• 1190 — R$ 4.300,00</option>
+          <option>Nubank •••• 4521 — —</option>
+          <option>Itaú •••• 7832 — —</option>
+          <option>Bradesco •••• 1190 — —</option>
         </select>
       </div>
       <button class="btn btn-primary" style="width:100%" onclick="finSendPix()">Confirmar PIX <i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></button>
@@ -309,11 +213,11 @@
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-size:13px;font-weight:600">João Silva</div><div style="font-size:11px;color:var(--text-muted)">Hoje, 09:32</div></div>
-          <div style="color:var(--red);font-weight:600">-R$ 150,00</div>
+          <div style="color:var(--red);font-weight:600">-—</div>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-size:13px;font-weight:600">Maria Santos</div><div style="font-size:11px;color:var(--text-muted)">Ontem, 14:15</div></div>
-          <div style="color:var(--green);font-weight:600">+R$ 500,00</div>
+          <div style="color:var(--green);font-weight:600">+—</div>
         </div>
       </div>
     </div>
@@ -351,12 +255,12 @@
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="shopping-cart" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">Supermercado Extra</div><div class="fin-extract-cat">Alimentação · Débito</div></div>
-          <div class="fin-extract-amount out">-R$ 284,50</div>
+          <div class="fin-extract-amount out">-—</div>
         </div>
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">Salário — Empresa XYZ</div><div class="fin-extract-cat">Receita · Crédito</div></div>
-          <div class="fin-extract-amount in">+R$ 8.500,00</div>
+          <div class="fin-extract-amount in">+—</div>
         </div>
       </div>
       <div class="fin-extract-group">
@@ -364,17 +268,17 @@
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">PIX — João Silva</div><div class="fin-extract-cat">Transferência · PIX</div></div>
-          <div class="fin-extract-amount out">-R$ 150,00</div>
+          <div class="fin-extract-amount out">-—</div>
         </div>
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">Spotify Premium</div><div class="fin-extract-cat">Assinatura · Débito automático</div></div>
-          <div class="fin-extract-amount out">-R$ 21,90</div>
+          <div class="fin-extract-amount out">-—</div>
         </div>
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">Posto Shell</div><div class="fin-extract-cat">Transporte · Débito</div></div>
-          <div class="fin-extract-amount out">-R$ 180,00</div>
+          <div class="fin-extract-amount out">-—</div>
         </div>
       </div>
       <div class="fin-extract-group">
@@ -382,12 +286,12 @@
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">Aluguel recebido</div><div class="fin-extract-cat">Receita · Crédito</div></div>
-          <div class="fin-extract-amount in">+R$ 2.000,00</div>
+          <div class="fin-extract-amount in">+—</div>
         </div>
         <div class="fin-extract-item">
           <div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="fin-extract-info"><div class="fin-extract-desc">iFood — Restaurante</div><div class="fin-extract-cat">Alimentação · Cartão</div></div>
-          <div class="fin-extract-amount out">-R$ 68,90</div>
+          <div class="fin-extract-amount out">-—</div>
         </div>
       </div>
     </div>
@@ -413,9 +317,9 @@
       <div class="form-group">
         <label class="form-label">Conta de Origem</label>
         <select class="form-input">
-          <option>Nubank •••• 4521 — R$ 8.420,00</option>
-          <option>Itaú •••• 7832 — R$ 12.130,00</option>
-          <option>Bradesco •••• 1190 — R$ 4.300,00</option>
+          <option>Nubank •••• 4521 — —</option>
+          <option>Itaú •••• 7832 — —</option>
+          <option>Bradesco •••• 1190 — —</option>
         </select>
       </div>
       <div class="form-group">
@@ -450,7 +354,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Valor</label>
-        <input type="text" class="form-input" placeholder="R$ 0,00" oninput="finFormatCurrency(this)" />
+        <input type="text" class="form-input" placeholder="—" oninput="finFormatCurrency(this)" />
       </div>
       <div class="form-group">
         <label class="form-label">Data</label>
@@ -497,15 +401,15 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
           <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
             <div style="font-size:11px;color:var(--text-muted)">Fatura Atual</div>
-            <div style="font-size:18px;font-weight:700;color:var(--red)">R$ 2.840,00</div>
+            <div style="font-size:18px;font-weight:700;color:var(--red)">—</div>
           </div>
           <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
             <div style="font-size:11px;color:var(--text-muted)">Limite Disponível</div>
-            <div style="font-size:18px;font-weight:700;color:var(--green)">R$ 2.160,00</div>
+            <div style="font-size:18px;font-weight:700;color:var(--green)">—</div>
           </div>
           <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
             <div style="font-size:11px;color:var(--text-muted)">Limite Total</div>
-            <div style="font-size:18px;font-weight:700">R$ 5.000,00</div>
+            <div style="font-size:18px;font-weight:700">—</div>
           </div>
           <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
             <div style="font-size:11px;color:var(--text-muted)">Vencimento</div>
@@ -537,7 +441,7 @@
     <div class="card">
       <div style="text-align:center;padding:16px 0">
         <div style="font-size:13px;color:var(--text-muted)">Total da Fatura</div>
-        <div style="font-size:32px;font-weight:800;color:var(--red);margin:8px 0">R$ 2.840,00</div>
+        <div style="font-size:32px;font-weight:800;color:var(--red);margin:8px 0">—</div>
         <div style="font-size:12px;color:var(--text-muted)">Vencimento: 10/08/2026</div>
         <div style="margin:16px 0">
           <div class="progress-bar"><div class="progress-fill" style="width:57%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
@@ -551,15 +455,15 @@
     <div class="card">
       <div class="card-title">Lançamentos da Fatura</div>
       <div style="display:flex;flex-direction:column;gap:8px" id="fin-invoice-list">
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="shopping-cart" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Amazon — Compra</div><div class="fin-extract-cat">05/07 · Compras Online</div></div><div class="fin-extract-amount out">-R$ 489,90</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Restaurante Outback</div><div class="fin-extract-cat">08/07 · Alimentação</div></div><div class="fin-extract-amount out">-R$ 185,00</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">LATAM Airlines</div><div class="fin-extract-cat">10/07 · Viagem</div></div><div class="fin-extract-amount out">-R$ 1.240,00</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Netflix</div><div class="fin-extract-cat">12/07 · Assinatura</div></div><div class="fin-extract-amount out">-R$ 55,90</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Posto Ipiranga</div><div class="fin-extract-cat">13/07 · Transporte</div></div><div class="fin-extract-amount out">-R$ 200,00</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Farmácia Drogasil</div><div class="fin-extract-cat">14/07 · Saúde</div></div><div class="fin-extract-amount out">-R$ 89,20</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Smart Fit</div><div class="fin-extract-cat">01/07 · Saúde</div></div><div class="fin-extract-amount out">-R$ 120,00</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">OpenAI ChatGPT Plus</div><div class="fin-extract-cat">01/07 · Assinatura</div></div><div class="fin-extract-amount out">-R$ 100,00</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Mercado Livre</div><div class="fin-extract-cat">11/07 · Compras</div></div><div class="fin-extract-amount out">-R$ 360,00</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="shopping-cart" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Amazon — Compra</div><div class="fin-extract-cat">05/07 · Compras Online</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Restaurante Outback</div><div class="fin-extract-cat">08/07 · Alimentação</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">LATAM Airlines</div><div class="fin-extract-cat">10/07 · Viagem</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Netflix</div><div class="fin-extract-cat">12/07 · Assinatura</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Posto Ipiranga</div><div class="fin-extract-cat">13/07 · Transporte</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Farmácia Drogasil</div><div class="fin-extract-cat">14/07 · Saúde</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Smart Fit</div><div class="fin-extract-cat">01/07 · Saúde</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">OpenAI ChatGPT Plus</div><div class="fin-extract-cat">01/07 · Assinatura</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Mercado Livre</div><div class="fin-extract-cat">11/07 · Compras</div></div><div class="fin-extract-amount out">-—</div></div>
       </div>
     </div>
   </div>
@@ -580,17 +484,17 @@
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
     <div class="card" style="text-align:center;border-color:rgba(239,68,68,0.3)">
       <div style="font-size:11px;color:var(--text-muted)">Vencidas</div>
-      <div style="font-size:28px;font-weight:800;color:var(--red)">R$ 2.800,00</div>
+      <div style="font-size:28px;font-weight:800;color:var(--red)">—</div>
       <div style="font-size:11px;color:var(--red)">1 conta</div>
     </div>
     <div class="card" style="text-align:center;border-color:rgba(245,158,11,0.3)">
       <div style="font-size:11px;color:var(--text-muted)">Vence em 7 dias</div>
-      <div style="font-size:28px;font-weight:800;color:var(--amber)">R$ 429,90</div>
+      <div style="font-size:28px;font-weight:800;color:var(--amber)">—</div>
       <div style="font-size:11px;color:var(--amber)">2 contas</div>
     </div>
     <div class="card" style="text-align:center;border-color:rgba(16,185,129,0.3)">
       <div style="font-size:11px;color:var(--text-muted)">Pagas este mês</div>
-      <div style="font-size:28px;font-weight:800;color:var(--green)">R$ 1.240,00</div>
+      <div style="font-size:28px;font-weight:800;color:var(--green)">—</div>
       <div style="font-size:11px;color:var(--green)">5 contas</div>
     </div>
   </div>
@@ -599,25 +503,25 @@
       <div class="fin-bill-row overdue-row">
         <div class="fin-bill-status-dot" style="background:var(--red)"></div>
         <div style="flex:1"><div style="font-weight:600">Aluguel</div><div style="font-size:11px;color:var(--text-muted)">Venceu: 10/07/2026 · Recorrente mensal</div></div>
-        <div style="font-weight:700;color:var(--red);margin-right:16px">R$ 2.800,00</div>
+        <div style="font-weight:700;color:var(--red);margin-right:16px">—</div>
         <button class="btn btn-primary" style="font-size:12px" onclick="finPayBill(this,'Aluguel')">Pagar</button>
       </div>
       <div class="fin-bill-row">
         <div class="fin-bill-status-dot" style="background:var(--amber)"></div>
         <div style="flex:1"><div style="font-weight:600">Internet Vivo Fibra</div><div style="font-size:11px;color:var(--text-muted)">Vence: 15/07/2026 · Recorrente mensal</div></div>
-        <div style="font-weight:700;margin-right:16px">R$ 149,90</div>
+        <div style="font-weight:700;margin-right:16px">—</div>
         <button class="btn btn-ghost" style="font-size:12px" onclick="finPayBill(this,'Internet')">Pagar</button>
       </div>
       <div class="fin-bill-row">
         <div class="fin-bill-status-dot" style="background:var(--amber)"></div>
         <div style="flex:1"><div style="font-weight:600">Energia Elétrica</div><div style="font-size:11px;color:var(--text-muted)">Vence: 20/07/2026 · Recorrente mensal</div></div>
-        <div style="font-weight:700;margin-right:16px">R$ 280,00</div>
+        <div style="font-weight:700;margin-right:16px">—</div>
         <button class="btn btn-ghost" style="font-size:12px" onclick="finPayBill(this,'Energia')">Pagar</button>
       </div>
       <div class="fin-bill-row paid-row">
         <div class="fin-bill-status-dot" style="background:var(--green)"></div>
         <div style="flex:1"><div style="font-weight:600">Condomínio</div><div style="font-size:11px;color:var(--text-muted)">Pago: 05/07/2026 · Recorrente mensal</div></div>
-        <div style="font-weight:700;color:var(--green);margin-right:16px">R$ 650,00</div>
+        <div style="font-weight:700;color:var(--green);margin-right:16px">—</div>
         <span style="font-size:12px;color:var(--green);font-weight:600"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Pago</span>
       </div>
     </div>
@@ -639,15 +543,15 @@
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value">R$ 48.200,00</div>
+      <div class="kpi-value">—</div>
       <div class="kpi-label">Patrimônio Total</div>
-      <div class="kpi-trend up">+12,4% no ano</div>
+      <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value">R$ 5.980,00</div>
+      <div class="kpi-value">—</div>
       <div class="kpi-label">Rendimento 2026</div>
-      <div class="kpi-trend up">+R$ 5.980,00</div>
+      <div class="kpi-trend up">+—</div>
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="trophy" class="pg-icon" aria-hidden="true"></i></div>
@@ -657,29 +561,29 @@
     </div>
     <div class="card kpi-card">
       <div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="kpi-value">R$ 1.200,00</div>
+      <div class="kpi-value">—</div>
       <div class="kpi-label">Aporte Mensal</div>
-      <div class="kpi-trend up">Meta: R$ 1.500</div>
+      <div class="kpi-trend up">Meta: —</div>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div class="card">
       <div class="card-title">Distribuição da Carteira</div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Renda Fixa (CDB/LCI)</span><span style="font-weight:600;color:var(--green)">45% · R$ 21.690</span></div><div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Ações (B3)</span><span style="font-weight:600;color:var(--accent)">25% · R$ 12.050</span></div><div class="progress-bar"><div class="progress-fill" style="width:25%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">FIIs</span><span style="font-weight:600;color:var(--amber)">15% · R$ 7.230</span></div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Criptomoedas</span><span style="font-weight:600;color:var(--purple)">10% · R$ 4.820</span></div><div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,var(--purple),#A78BFA)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Tesouro Direto</span><span style="font-weight:600;color:var(--cyan)">5% · R$ 2.410</span></div><div class="progress-bar"><div class="progress-fill" style="width:5%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Renda Fixa (CDB/LCI)</span><span style="font-weight:600;color:var(--green)">45% · —</span></div><div class="progress-bar"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Ações (B3)</span><span style="font-weight:600;color:var(--accent)">25% · —</span></div><div class="progress-bar"><div class="progress-fill" style="width:25%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">FIIs</span><span style="font-weight:600;color:var(--amber)">15% · —</span></div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Criptomoedas</span><span style="font-weight:600;color:var(--purple)">10% · —</span></div><div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,var(--purple),#A78BFA)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px">Tesouro Direto</span><span style="font-weight:600;color:var(--cyan)">5% · —</span></div><div class="progress-bar"><div class="progress-fill" style="width:5%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Metas de Investimento</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Reserva de Emergência</span><span class="goal-pct">80%</span></div><div class="goal-desc">R$ 24.000 de R$ 30.000</div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Entrada Apartamento</span><span class="goal-pct">32%</span></div><div class="goal-desc">R$ 32.000 de R$ 100.000</div><div class="progress-bar"><div class="progress-fill" style="width:32%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Viagem Europa</span><span class="goal-pct">60%</span></div><div class="goal-desc">R$ 9.000 de R$ 15.000</div><div class="progress-bar"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> Pós-graduação</span><span class="goal-pct">15%</span></div><div class="goal-desc">R$ 3.000 de R$ 20.000</div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Reserva de Emergência</span><span class="goal-pct">80%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Entrada Apartamento</span><span class="goal-pct">32%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:32%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Viagem Europa</span><span class="goal-pct">60%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> Pós-graduação</span><span class="goal-pct">15%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
       </div>
     </div>
   </div>
@@ -698,34 +602,34 @@
     <div class="card">
       <div class="card-title">Orçamento Mensal — Julho 2026</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Moradia</span><span style="font-size:12px;color:var(--text-muted)">R$ 3.450 / R$ 3.500</span></div><div class="progress-bar"><div class="progress-fill" style="width:98%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Alimentação</span><span style="font-size:12px;color:var(--text-muted)">R$ 820 / R$ 1.200</span></div><div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Transporte</span><span style="font-size:12px;color:var(--text-muted)">R$ 380 / R$ 600</span></div><div class="progress-bar"><div class="progress-fill" style="width:63%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Lazer</span><span style="font-size:12px;color:var(--text-muted)">R$ 420 / R$ 400</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Saúde</span><span style="font-size:12px;color:var(--text-muted)">R$ 210 / R$ 500</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Educação</span><span style="font-size:12px;color:var(--text-muted)">R$ 0 / R$ 300</span></div><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--green)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Moradia</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:98%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Alimentação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Transporte</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:63%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Lazer</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Saúde</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Educação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--green)"></div></div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Fluxo de Caixa — Próximos 30 dias</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px;border-left:3px solid var(--green)">
-          <span><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Salário previsto</span><span style="color:var(--green);font-weight:700">+R$ 12.500,00</span>
+          <span><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Salário previsto</span><span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px;border-left:3px solid var(--green)">
-          <span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Aluguel recebido</span><span style="color:var(--green);font-weight:700">+R$ 2.000,00</span>
+          <span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Aluguel recebido</span><span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Aluguel pagar</span><span style="color:var(--red);font-weight:700">-R$ 2.800,00</span>
+          <span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Aluguel pagar</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Fatura Nubank</span><span style="color:var(--red);font-weight:700">-R$ 2.840,00</span>
+          <span><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Fatura Nubank</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Investimento</span><span style="color:var(--red);font-weight:700">-R$ 1.200,00</span>
+          <span><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Investimento</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border-accent);margin-top:8px">
-          <span style="font-weight:700">Saldo Projetado</span><span style="color:var(--green);font-weight:800;font-size:16px">+R$ 7.660,00</span>
+          <span style="font-weight:700">Saldo Projetado</span><span style="color:var(--green);font-weight:800;font-size:16px">—</span>
         </div>
       </div>
     </div>
@@ -745,17 +649,17 @@
     </div>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Mensal</div><div style="font-size:28px;font-weight:800;color:var(--amber)">R$ 307,70</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Anual</div><div style="font-size:28px;font-weight:800;color:var(--red)">R$ 3.692,40</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Mensal</div><div style="font-size:28px;font-weight:800;color:var(--amber)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Anual</div><div style="font-size:28px;font-weight:800;color:var(--red)">—</div></div>
     <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Assinaturas Ativas</div><div style="font-size:28px;font-weight:800;color:var(--green)">8</div></div>
   </div>
   <div class="card">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px" id="fin-subs-full">
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Spotify Premium</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">R$ 21,90/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Netflix Standard</div><div class="fin-sub-card-cycle">Mensal · Próx: 05/08</div></div><div class="fin-sub-card-amount">R$ 55,90/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="cloud" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">iCloud 200GB</div><div class="fin-sub-card-cycle">Mensal · Próx: 12/08</div></div><div class="fin-sub-card-amount">R$ 9,90/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">ChatGPT Plus</div><div class="fin-sub-card-cycle">Mensal · Próx: 18/08</div></div><div class="fin-sub-card-amount">R$ 100,00/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Smart Fit Black</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">R$ 120,00/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Spotify Premium</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Netflix Standard</div><div class="fin-sub-card-cycle">Mensal · Próx: 05/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="cloud" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">iCloud 200GB</div><div class="fin-sub-card-cycle">Mensal · Próx: 12/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">ChatGPT Plus</div><div class="fin-sub-card-cycle">Mensal · Próx: 18/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Smart Fit Black</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
     </div>
   </div>
 </div>
@@ -775,8 +679,8 @@
   </div>
   <div class="grid-3" style="margin-bottom:20px">
     <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Metas Ativas</div><div style="font-size:28px;font-weight:800;color:var(--accent)">4</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Acumulado</div><div style="font-size:28px;font-weight:800;color:var(--green)">R$ 38.400</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Meta Total</div><div style="font-size:28px;font-weight:800;color:var(--amber)">R$ 120.000</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Total Acumulado</div><div style="font-size:28px;font-weight:800;color:var(--green)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Meta Total</div><div style="font-size:28px;font-weight:800;color:var(--amber)">—</div></div>
   </div>
   <div style="display:flex;flex-direction:column;gap:16px">
     <div class="card">
@@ -789,15 +693,15 @@
           </div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800;color:var(--green)">R$ 18.000</div>
-          <div style="font-size:11px;color:var(--text-muted)">de R$ 50.000</div>
+          <div style="font-size:18px;font-weight:800;color:var(--green)">—</div>
+          <div style="font-size:11px;color:var(--text-muted)">de —</div>
         </div>
       </div>
       <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
         <div style="height:100%;width:36%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:8px;transition:width 0.6s ease"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
-        <span>36% concluído</span><span>Faltam R$ 32.000 · +R$ 4.571/mês</span>
+        <span>36% concluído</span><span>Faltam — · +—/mês</span>
       </div>
     </div>
     <div class="card">
@@ -810,15 +714,15 @@
           </div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800;color:var(--accent)">R$ 8.400</div>
-          <div style="font-size:11px;color:var(--text-muted)">de R$ 20.000</div>
+          <div style="font-size:18px;font-weight:800;color:var(--accent)">—</div>
+          <div style="font-size:11px;color:var(--text-muted)">de —</div>
         </div>
       </div>
       <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
         <div style="height:100%;width:42%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:8px;transition:width 0.6s ease"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
-        <span>42% concluído</span><span>Faltam R$ 11.600 · +R$ 966/mês</span>
+        <span>42% concluído</span><span>Faltam — · +—/mês</span>
       </div>
     </div>
     <div class="card">
@@ -831,15 +735,15 @@
           </div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800;color:var(--amber)">R$ 12.000</div>
-          <div style="font-size:11px;color:var(--text-muted)">de R$ 30.000</div>
+          <div style="font-size:18px;font-weight:800;color:var(--amber)">—</div>
+          <div style="font-size:11px;color:var(--text-muted)">de —</div>
         </div>
       </div>
       <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
         <div style="height:100%;width:40%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:8px;transition:width 0.6s ease"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
-        <span>40% concluído</span><span>Faltam R$ 18.000 · +R$ 2.250/mês</span>
+        <span>40% concluído</span><span>Faltam — · +—/mês</span>
       </div>
     </div>
     <div class="card">
@@ -852,15 +756,15 @@
           </div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800;color:var(--cyan)">R$ 0</div>
-          <div style="font-size:11px;color:var(--text-muted)">de R$ 20.000</div>
+          <div style="font-size:18px;font-weight:800;color:var(--cyan)">—</div>
+          <div style="font-size:11px;color:var(--text-muted)">de —</div>
         </div>
       </div>
       <div style="background:var(--bg-elevated);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px">
         <div style="height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:8px;transition:width 0.6s ease"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary)">
-        <span>0% concluído</span><span>Faltam R$ 20.000 · +R$ 1.176/mês</span>
+        <span>0% concluído</span><span>Faltam — · +—/mês</span>
       </div>
     </div>
   </div>
@@ -879,10 +783,10 @@
     </div>
   </div>
   <div class="grid-4" style="margin-bottom:20px">
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Entradas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--green)">R$ 14.500</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saídas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--red)">R$ 8.960</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saldo Líquido</div><div style="font-size:24px;font-weight:800;color:var(--accent)">R$ 5.540</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Projeção Agosto</div><div style="font-size:24px;font-weight:800;color:var(--amber)">R$ 6.200</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Entradas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--green)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saídas (Julho)</div><div style="font-size:24px;font-weight:800;color:var(--red)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Saldo Líquido</div><div style="font-size:24px;font-weight:800;color:var(--accent)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Projeção Agosto</div><div style="font-size:24px;font-weight:800;color:var(--amber)">—</div></div>
   </div>
   <div class="grid-2">
     <div class="card">
@@ -890,31 +794,31 @@
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
           <div><div style="font-weight:600;font-size:13px">Salário</div><div style="font-size:11px;color:var(--text-muted)">01/07 · Recorrente</div></div>
-          <span style="color:var(--green);font-weight:700">+R$ 12.500</span>
+          <span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
           <div><div style="font-weight:600;font-size:13px">Aluguel</div><div style="font-size:11px;color:var(--text-muted)">05/07 · Vencido</div></div>
-          <span style="color:var(--red);font-weight:700">-R$ 2.800</span>
+          <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
           <div><div style="font-weight:600;font-size:13px">Fatura Nubank</div><div style="font-size:11px;color:var(--text-muted)">10/07 · Pendente</div></div>
-          <span style="color:var(--red);font-weight:700">-R$ 2.840</span>
+          <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
           <div><div style="font-weight:600;font-size:13px">Freelance Design</div><div style="font-size:11px;color:var(--text-muted)">15/07 · Aguardando</div></div>
-          <span style="color:var(--green);font-weight:700">+R$ 2.000</span>
+          <span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
           <div><div style="font-weight:600;font-size:13px">Assinaturas</div><div style="font-size:11px;color:var(--text-muted)">Vários · Recorrente</div></div>
-          <span style="color:var(--red);font-weight:700">-R$ 307,70</span>
+          <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
           <div><div style="font-weight:600;font-size:13px">Investimento Mensal</div><div style="font-size:11px;color:var(--text-muted)">25/07 · Programado</div></div>
-          <span style="color:var(--red);font-weight:700">-R$ 1.200</span>
+          <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border-accent);margin-top:4px">
           <span style="font-weight:700">Saldo Projetado Final</span>
-          <span style="color:var(--green);font-weight:800;font-size:16px">+R$ 7.352,30</span>
+          <span style="color:var(--green);font-weight:800;font-size:16px">+—</span>
         </div>
       </div>
     </div>
@@ -924,43 +828,43 @@
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Jul</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:55%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 5.540</div>
+            <div style="height:100%;width:55%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Ago</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:62%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 6.200</div>
+            <div style="height:100%;width:62%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Set</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 5.800</div>
+            <div style="height:100%;width:58%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Out</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 7.000</div>
+            <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Nov</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 6.500</div>
+            <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Dez</div>
           <div style="flex:1;background:var(--bg-elevated);border-radius:4px;height:24px;overflow:hidden">
-            <div style="height:100%;width:45%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+R$ 4.500</div>
+            <div style="height:100%;width:45%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600">+—</div>
           </div>
         </div>
       </div>
       <div style="margin-top:16px;padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.2)">
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px">Acumulado Projetado (6 meses)</div>
-        <div style="font-size:22px;font-weight:800;color:var(--accent)">R$ 35.540</div>
+        <div style="font-size:22px;font-weight:800;color:var(--accent)">—</div>
       </div>
     </div>
   </div>
@@ -979,9 +883,9 @@
     </div>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Orçamento Total</div><div style="font-size:24px;font-weight:800;color:var(--text-primary)">R$ 10.000</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Gasto Até Agora</div><div style="font-size:24px;font-weight:800;color:var(--amber)">R$ 6.847</div></div>
-    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Disponível</div><div style="font-size:24px;font-weight:800;color:var(--green)">R$ 3.153</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Orçamento Total</div><div style="font-size:24px;font-weight:800;color:var(--text-primary)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Gasto Até Agora</div><div style="font-size:24px;font-weight:800;color:var(--amber)">—</div></div>
+    <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Disponível</div><div style="font-size:24px;font-weight:800;color:var(--green)">—</div></div>
   </div>
   <div class="card">
     <div class="card-title" style="margin-bottom:16px">Categorias de Orçamento — Julho 2026</div>
@@ -989,7 +893,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Moradia</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 2.800 / R$ 3.000 <span style="color:var(--amber)">(93%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--amber)">(93%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:93%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:6px"></div>
@@ -998,7 +902,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Alimentação</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 980 / R$ 1.500 <span style="color:var(--green)">(65%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(65%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
@@ -1007,7 +911,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Transporte</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 420 / R$ 600 <span style="color:var(--green)">(70%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(70%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
@@ -1016,7 +920,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Lazer e Entretenimento</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 847 / R$ 800 <span style="color:var(--red)">(106%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--red)">(106%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:100%;background:linear-gradient(90deg,var(--red),#F87171);border-radius:6px"></div>
@@ -1025,7 +929,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Saúde e Bem-estar</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 320 / R$ 500 <span style="color:var(--green)">(64%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(64%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:64%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:6px"></div>
@@ -1034,7 +938,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Educação</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 180 / R$ 400 <span style="color:var(--green)">(45%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(45%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:45%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:6px"></div>
@@ -1043,7 +947,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Assinaturas</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 307,70 / R$ 400 <span style="color:var(--green)">(77%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(77%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:77%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:6px"></div>
@@ -1052,7 +956,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <div style="display:flex;align-items:center;gap:8px"><span><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></span><span style="font-weight:600;font-size:13px">Investimentos</span></div>
-          <div style="font-size:12px;color:var(--text-secondary)">R$ 992,30 / R$ 1.800 <span style="color:var(--green)">(55%)</span></div>
+          <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(55%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
           <div style="height:100%;width:55%;background:linear-gradient(90deg,var(--purple),#A78BFA);border-radius:6px"></div>
@@ -1130,15 +1034,7 @@
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 15 min</div>
       <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Caixa...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
     </div>
-    <div class="card" style="border-color:rgba(0,100,200,0.3)">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#0064C8,#0078D4);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">X</div>
-        <div><div style="font-weight:700">XP Investimentos</div><div style="font-size:11px;color:var(--text-muted)">1 conta investimento</div></div>
-        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
-      </div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 1h</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando XP...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
-    </div>
+
     <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="showToast('Iniciando conexão Open Finance...','info')">
       <div style="font-size:32px;margin-bottom:8px"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       <div style="font-weight:600;font-size:14px">Adicionar Instituição</div>
@@ -1148,4 +1044,221 @@
 </div>
 
 </div>
+
+<script>
+
+// ─── Finance Action Functions ───
+function finConnectBank() {
+  const bank = prompt('Banco (ex: Nubank, Itaú, Bradesco):');
+  if (!bank) return;
+  const accountNum = prompt('Número da conta:') || '';
+  fetch('/api/finance/accounts', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: bank, accountNumber: accountNum }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Conta adicionada!', 'success'); window.loadModuleForPage?.('finance-accounts'); }
+    else showToast(d.error || 'Erro ao adicionar conta', 'error');
+  }).catch(() => showToast('Erro ao adicionar conta', 'error'));
+}
+function finSendPix() {
+  const key = prompt('Chave PIX:');
+  if (!key) return;
+  const amount = prompt('Valor (ex: 50.00):');
+  if (!amount) return;
+  fetch('/api/finance/pix', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, amount: parseFloat(amount) }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('PIX enviado!', 'success'); }
+    else showToast(d.error || 'Erro ao enviar PIX', 'error');
+  }).catch(() => showToast('Erro ao enviar PIX', 'error'));
+}
+function finCopyKey(key) {
+  navigator.clipboard.writeText(key).then(() => showToast('Chave copiada!', 'success'));
+}
+function finAddPixKey() {
+  const type = prompt('Tipo (email, cpf, phone, random):', 'email') || 'email';
+  const value = prompt('Valor da chave:');
+  if (!value) return;
+  fetch('/api/finance/pix-keys', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, value }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Chave PIX cadastrada!', 'success'); }
+    else showToast(d.error || 'Erro ao cadastrar chave', 'error');
+  }).catch(() => showToast('Erro ao cadastrar chave', 'error'));
+}
+function finFilterPeriod(period, el) {
+  document.querySelectorAll('.fin-filter-btn').forEach(b => b.classList.remove('active-filter'));
+  if (el) el.classList.add('active-filter');
+  fetch('/api/finance/hub?period=' + period + '&view=transactions', { credentials: 'same-origin' })
+    .then(r => r.json()).then(d => {
+      if (d.ok) {
+        const list = document.getElementById('fin-extract-list');
+        if (list && d.transactions) {
+          if (!d.transactions.length) {
+            list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Sem transações neste período</div>';
+          } else {
+            const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+            list.innerHTML = d.transactions.map(t => `
+              <div class="fin-extract-item">
+                <div class="fin-extract-icon" style="background:${t.type === 'income' ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'};color:${t.type === 'income' ? 'var(--green)' : 'var(--red)'}">
+                  <i data-lucide="${t.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}" class="pg-icon" aria-hidden="true"></i>
+                </div>
+                <div class="fin-extract-info"><div class="fin-extract-desc">${t.description || t.title}</div><div class="fin-extract-cat">${t.category || '—'} · ${t.date || '—'}</div></div>
+                <div class="fin-extract-amount ${t.type === 'income' ? 'in' : 'out'}">${t.type === 'income' ? '+' : '-'}${fmt(t.amount)}</div>
+              </div>
+            `).join('');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+          }
+        }
+      }
+    }).catch(() => {});
+}
+function finPayBill(el, name) {
+  const amount = prompt(`Valor para pagar ${name}:`);
+  if (!amount) return;
+  fetch('/api/finance/bills', {
+    method: 'PUT', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, amount: parseFloat(amount), action: 'pay' }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast(`${name} pago!`, 'success'); }
+    else showToast(d.error || 'Erro ao pagar', 'error');
+  }).catch(() => showToast('Erro ao pagar', 'error'));
+}
+function finAddAccount() {
+  const name = prompt('Nome da conta:');
+  if (!name) return;
+  const bank = prompt('Banco:');
+  if (!bank) return;
+  fetch('/api/finance/accounts', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, bank }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Conta adicionada!', 'success'); window.loadModuleForPage?.('finance-accounts'); }
+    else showToast(d.error || 'Erro', 'error');
+  }).catch(() => showToast('Erro', 'error'));
+}
+function finTransfer() {
+  const from = prompt('Conta de origem:');
+  if (!from) return;
+  const to = prompt('Conta destino:');
+  if (!to) return;
+  const amount = prompt('Valor:');
+  if (!amount) return;
+  fetch('/api/finance/transfer', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from, to, amount: parseFloat(amount) }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Transferência realizada!', 'success'); }
+    else showToast(d.error || 'Erro na transferência', 'error');
+  }).catch(() => showToast('Erro na transferência', 'error'));
+}
+function finAddSubscription() {
+  const name = prompt('Nome da assinatura:');
+  if (!name) return;
+  const price = prompt('Valor mensal:');
+  if (!price) return;
+  fetch('/api/finance/subscriptions', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, price: parseFloat(price) }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Assinatura adicionada!', 'success'); }
+    else showToast(d.error || 'Erro', 'error');
+  }).catch(() => showToast('Erro', 'error'));
+}
+function finAddBill() {
+  const name = prompt('Nome da conta:');
+  if (!name) return;
+  const amount = prompt('Valor:');
+  if (!amount) return;
+  const dueDate = prompt('Vencimento (ex: 2026-07-15):');
+  if (!dueDate) return;
+  fetch('/api/finance/bills', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, amount: parseFloat(amount), dueDate }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) { showToast('Conta adicionada!', 'success'); }
+    else showToast(d.error || 'Erro', 'error');
+  }).catch(() => showToast('Erro', 'error'));
+}
+
+// Finance Module v3 — Real API Loading
+(async function initFinance() {
+  try {
+    const r = await fetch('/api/finance/hub?view=summary', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!data.ok) return;
+    const s = data.summary;
+    const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+    const el = id => document.getElementById(id);
+    if (el('fin-saldo-total')) el('fin-saldo-total').textContent = fmt(s.totalBalance);
+    if (el('fin-despesas')) el('fin-despesas').textContent = fmt(s.monthlyExpenses);
+    if (el('fin-receitas')) el('fin-receitas').textContent = fmt(s.monthlyIncome);
+    if (el('fin-investimentos')) el('fin-investimentos').textContent = fmt(s.investments);
+    // Load accounts
+    const accR = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
+    if (accR.ok) {
+      const accData = await accR.json();
+      const accList = document.getElementById('fin-accounts-list');
+      if (accList) {
+        const accs = accData.accounts || [];
+        if (accs.length === 0) {
+          accList.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Nenhuma conta cadastrada</div>';
+        } else {
+          const colors = { Nubank: 'linear-gradient(135deg,#FF6B00,#FF8C00)', Itaú: 'linear-gradient(135deg,#003087,#0070E0)', Bradesco: 'linear-gradient(135deg,#00A859,#00C96B)' };
+          accList.innerHTML = accs.map(a => `
+            <div class="fin-account-item" onclick="showPage('finance-extract')">
+              <div class="fin-account-icon" style="background:${colors[a.name] || 'var(--gradient-primary)'}">${(a.name || '?')[0]}</div>
+              <div class="fin-account-info">
+                <div class="fin-account-name">${a.name || 'Conta'}</div>
+                <div class="fin-account-num">${a.lastFour ? '•••• ' + a.lastFour : '—'}</div>
+              </div>
+              <div class="fin-account-balance" style="color:var(--green)">${fmt(a.balance)}</div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+    // Load cards
+    const cardR = await fetch('/api/finance/hub?view=cards', { credentials: 'same-origin' });
+    if (cardR.ok) {
+      const cardData = await cardR.json();
+      const cardsList = document.getElementById('fin-cards-list');
+      if (cardsList) {
+        const cards = cardData.cards || [];
+        if (cards.length === 0) {
+          cardsList.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Nenhum cartão cadastrado</div>';
+        } else {
+          const cardColors = ['linear-gradient(135deg,#6366F1,#8B5CF6)', 'linear-gradient(135deg,#F59E0B,#D97706)', 'linear-gradient(135deg,#10B981,#059669)'];
+          cardsList.innerHTML = cards.map((c, i) => `
+            <div class="fin-card-item">
+              <div class="fin-card-visual" style="background:${cardColors[i % cardColors.length]}">
+                <div class="fin-card-brand">${c.brand || 'CARD'}</div>
+                <div class="fin-card-num">•••• ${c.lastFour || '0000'}</div>
+              </div>
+              <div class="fin-card-details">
+                <div style="font-size:13px;font-weight:600">${c.name || c.brand}</div>
+                <div style="font-size:11px;color:var(--text-muted)">Fatura: ${fmt(c.billAmount)}</div>
+                <div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:${c.utilization || 0}%;background:${cardColors[i % cardColors.length]}"></div></div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:4px">${fmt(c.billAmount)} / ${fmt(c.limit)} limite</div>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch (e) { console.error('Finance init error:', e); }
+})();
+</script>
 <!-- END module-finance -->

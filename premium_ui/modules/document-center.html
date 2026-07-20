@@ -467,6 +467,117 @@ async function dcDeleteDoc(docId) {
   } catch {}
 }
 
+
+async function dcRenameDoc(docId) {
+  const doc = (window.__dcDocs || []).find(d => d.id === docId);
+  const newName = prompt('Novo nome:', doc?.name || '');
+  if (!newName) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'rename', docId, name: newName }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento renomeado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao renomear', 'error'); }
+}
+async function dcMoveDoc(docId) {
+  const folderId = prompt('ID da pasta destino:', 'root');
+  if (!folderId) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'move', docId, folderId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento movido!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao mover', 'error'); }
+}
+async function dcCopyDoc(docId) {
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'copy', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento copiado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao copiar', 'error'); }
+}
+async function dcRestoreDoc(docId) {
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'restore', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Documento restaurado!', 'success'); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao restaurar', 'error'); }
+}
+async function dcDownloadDoc(docId) {
+  try {
+    const res = await fetch(`/api/documents?view=download&docId=${docId}`, { credentials: 'same-origin' });
+    const d = await res.json();
+    if (d.ok && d.downloadUrl) {
+      const a = document.createElement('a');
+      a.href = d.downloadUrl;
+      a.download = d.name || 'documento';
+      a.click();
+      showToast?.('Download iniciado!', 'success');
+    } else {
+      showToast?.(d.error || 'Erro ao baixar', 'error');
+    }
+  } catch { showToast?.('Erro ao baixar', 'error'); }
+}
+// Store docs for context actions
+(async function() {
+  try {
+    const res = await fetch('/api/documents?view=all', { credentials: 'same-origin' });
+    const d = await res.json();
+    window.__dcDocs = d.documents || [];
+  } catch {}
+})();
+
+async function dcLoadTrash() {
+  try {
+    const res = await fetch('/api/documents?view=trash', { credentials: 'same-origin' });
+    const data = await res.json();
+    const el = document.getElementById('dc-trash-list');
+    if (!el) return;
+    const docs = data.documents || [];
+    if (docs.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Lixeira vazia</div>';
+      return;
+    }
+    el.innerHTML = docs.map(d => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
+        <i data-lucide="${dcGetIcon(d.mimeType)}" style="color:var(--text-muted)" aria-hidden="true"></i>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${d.name}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${dcFmtSize(d.size)} · ${new Date(d.deletedAt || d.updatedAt).toLocaleString('pt-BR')}</div>
+        </div>
+        <button class="btn btn-ghost" style="font-size:11px" onclick="dcRestoreDoc('${d.id}')">Restaurar</button>
+        <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcPermanentDelete('${d.id}')">Excluir</button>
+      </div>
+    `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } catch {}
+}
+async function dcPermanentDelete(docId) {
+  if (!confirm('Excluir permanentemente? Esta ação não pode ser desfeita.')) return;
+  try {
+    const res = await fetch('/api/documents', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ action: 'permanent-delete', docId }),
+    });
+    const d = await res.json();
+    if (d.ok) { showToast?.('Excluído permanentemente', 'success'); await dcLoadTrash(); await dcLoadList(); }
+    else showToast?.(d.error || 'Erro', 'error');
+  } catch { showToast?.('Erro ao excluir', 'error'); }
+}
 // Auto-carregar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => { dcLoadList(); dcLoadStats(); });
