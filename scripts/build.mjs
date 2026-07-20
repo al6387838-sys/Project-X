@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 45.0.0 (Phases 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v45.0)
+// Version: 46.0.0 (Phases 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v46.0.0)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -131,7 +131,7 @@ try {
 } catch { }
 
 const redirects = [
-  '# LifeOS Enterprise v45.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v46.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -188,7 +188,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-45.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-46.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -203,7 +203,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: '45.0.0',
+  version: 'v46.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -244,7 +244,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: '45.0.0',
+  version: 'v46.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -275,12 +275,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise 45.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise 46.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-  console.log(`  Version       : 45.0.0`);
+  console.log(`  Version       : v46.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-  console.log(`  Phases        : 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v45.0`);
+  console.log(`  Phases        : 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v46.0.0`);
 console.log(`  Modules       : 37 total`);
 console.log(`  APIs          : 46 endpoints`);
 console.log(`  Commit        : ${commit}`);

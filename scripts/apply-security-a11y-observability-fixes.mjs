@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════╗
- * ║  LifeOS Enterprise v45.0.1 — Security, Accessibility &          ║
+ * ║  LifeOS Enterprise v46.0.0 — Security, Accessibility &          ║
  * ║  Observability Fixes                                            ║
  * ║  Applies all audit corrections without breaking existing code   ║
  * ╚══════════════════════════════════════════════════════════════════╝
@@ -411,7 +411,7 @@ const manifestPath = resolve(root, 'dist/security-a11y-fixes.json');
 import { writeFile, mkdir } from 'fs/promises';
 try { await mkdir(resolve(root, 'dist'), { recursive: true }); } catch {}
 await writeFile(resolve(root, 'security-a11y-fixes.json'), JSON.stringify({
-  version: '45.0.1',
+  version: '46.0.0',
   appliedAt: new Date().toISOString(),
   commit: 'eb07472',
   problemsFound,

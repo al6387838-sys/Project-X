@@ -1,4 +1,4 @@
-/* LIFEOS ENTERPRISE v43.0 — User Experience Completion
+/* LIFEOS ENTERPRISE v46.0.0 — User Experience Completion
  * Camada progressiva para as superfícies obrigatórias da Phase 304.
  * Reutiliza as APIs e rotas existentes sem substituir a arquitetura do dashboard.
  */

@@ -1,1 +1,6 @@
-{"version": "v41.0", "buildDate": "2026-07-18T18:24:30Z", "channel": "production"}
+{
+  "version": "v46.0.0",
+  "buildDate": "2026-07-20T21:37:38.990Z",
+  "channel": "production",
+  "commit": "local-dev"
+}

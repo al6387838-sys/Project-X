@@ -1,8 +1,8 @@
-// LifeOS Enterprise v43.0 — Health endpoint for Cloudflare Pages.
+// LifeOS Enterprise v46.0.0 — Health endpoint for Cloudflare Pages.
 export async function onRequest(context) {
-  const version = 'v43.0';
+  const version = 'v46.0.0';
   const commit = String(context.env.CF_PAGES_COMMIT_SHA || 'pending');
-  const buildId = `lifeos-43.0.0-${commit.slice(0, 12)}`;
+  const buildId = `lifeos-46.0.0-${commit.slice(0, 12)}`;
 
   return new Response(JSON.stringify({
     status: 'ok',
@@ -11,7 +11,7 @@ export async function onRequest(context) {
     commit,
     environment: context.env.LIFEOS_ENV || 'production',
     platform: 'cloudflare-pages',
-    phases: '303-306',
+    phases: '306-313',
     timestamp: new Date().toISOString(),
   }), {
     headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },

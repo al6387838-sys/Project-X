@@ -1,4 +1,4 @@
-/* LifeOS Enterprise — CRM UI v32.1
+/* LifeOS Enterprise — CRM UI v46.0.0
  * Superfícies CRM carregadas pelo módulo de produtividade.
  * Todas as leituras e mutações utilizam /api/crm, sem dados locais simulados.
  */
