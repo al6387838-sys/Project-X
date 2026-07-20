@@ -2138,6 +2138,7 @@
     // Lazy load modules
     if (id === 'search') loadSmartSearch();
     if (id === 'notifications') loadNotificationCenter();
+    if (id === 'documents') docsLoadCurrent();
     // Fechar sidebar no mobile
     if (window.innerWidth <= 768) {
       document.getElementById('sidebar').classList.remove('mobile-open');
@@ -3038,8 +3039,41 @@
       else { showToast(d.error || 'Erro ao conectar ' + provider, 'error'); }
     } catch (_) { showToast('Erro de conexão. Tente novamente.', 'error'); }
   }
-  function calSync() { showToast('Sincronizando calendários...', 'info'); }
-
+    function calSync() { showToast('Sincronizando calendários...', 'info'); }
+  function calNavMonth(dir) {
+    const calEl = document.getElementById('calendar-grid');
+    if (!calEl) return;
+    const current = new Date(calEl.dataset.month || new Date().toISOString().slice(0, 7) + '-01');
+    current.setMonth(current.getMonth() + dir);
+    calEl.dataset.month = current.toISOString().slice(0, 7);
+    const monthLabel = document.getElementById('calendar-month-label');
+    if (monthLabel) monthLabel.textContent = current.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    showToast('Navegando para ' + current.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }), 'info');
+  }
+  function calGoToday() {
+    const calEl = document.getElementById('calendar-grid');
+    if (!calEl) return;
+    const now = new Date();
+    calEl.dataset.month = now.toISOString().slice(0, 7);
+    const monthLabel = document.getElementById('calendar-month-label');
+    if (monthLabel) monthLabel.textContent = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    showToast('Navegando para hoje', 'info');
+  }
+  function calAddCalendar() {
+    const name = prompt('Nome do calendário:');
+    if (!name || !name.trim()) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/events', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'create-calendar', name: name.trim() }),
+        });
+        const data = await res.json();
+        if (data.ok) showToast('Calendário "' + name.trim() + '" criado', 'success');
+        else showToast('Erro: ' + (data.error || ''), 'error');
+      } catch (err) { showToast('Erro ao criar calendário', 'error'); }
+    })();
+  }
   // ═══ COMPANION AI FUNCTIONS ═══
   function aiShowTab(tab) {
     document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('active'));
@@ -3148,8 +3182,90 @@
   function aiAddMemory() { showToast('Memória adicionada ao Memory Center', 'success'); }
   function aiToggleAutomation(el, name) { showToast(el.checked ? name + ' ativada' : name + ' desativada', el.checked ? 'success' : 'info'); }
 
-  // ═══ DOCUMENTS FUNCTIONS ═══
-  function docsView(mode) { showToast('Vista: ' + mode, 'info'); }
+  // ═══ DOCUMENTS FUNCTIONS (v8.1 — 100% API-driven) ═══
+  let _docsState = { currentFolder: 'root', view: 'grid', allDocs: [], folders: [], currentDoc: null };
+
+  async function docsLoadCurrent() {
+    try {
+      const folderId = _docsState.currentFolder || 'root';
+      const [listRes, statsRes] = await Promise.all([
+        fetch('/api/documents?view=list&folderId=' + encodeURIComponent(folderId), { credentials: 'same-origin' }),
+        fetch('/api/documents?view=stats', { credentials: 'same-origin' }),
+      ]);
+      const listData = await listRes.json();
+      const statsData = await statsRes.json();
+      if (statsData.ok && statsData.stats) {
+        const s = statsData.stats;
+        const usedMB = (s.totalSize / (1024 * 1024)).toFixed(1);
+        const totalGB = 10;
+        const pct = Math.min(100, Math.round((s.totalSize / (totalGB * 1024 * 1024 * 1024)) * 100));
+        const kpiStorage = document.getElementById('docs-kpi-storage');
+        const kpiTotal = document.getElementById('docs-kpi-total');
+        const kpiFav = document.getElementById('docs-kpi-favorites');
+        const kpiTrash = document.getElementById('docs-kpi-trash');
+        if (kpiStorage) kpiStorage.textContent = usedMB + ' MB';
+        if (kpiTotal) kpiTotal.textContent = s.total || '0';
+        if (kpiFav) kpiFav.textContent = s.favorites || '0';
+        if (kpiTrash) kpiTrash.textContent = s.trash || '0';
+        const bar = document.getElementById('docs-storage-bar');
+        if (bar) bar.style.width = pct + '%';
+      }
+      const grid = document.getElementById('docs-grid');
+      if (!grid) return;
+      const allDocs = listData.documents || [];
+      const folderMap = {};
+      allDocs.forEach(d => {
+        const fid = d.folderId || 'root';
+        folderMap[fid] = (folderMap[fid] || 0) + 1;
+      });
+      let html = '';
+      Object.entries(folderMap).forEach(([folderName, count]) => {
+        html += '<div class="doc-folder-card" onclick="docsOpenFolder(\'' + escH(folderName) + '\')">';
+        html += '<div class="doc-folder-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>';
+        html += '<div class="doc-folder-name">' + escH(folderName) + '</div>';
+        html += '<div class="doc-folder-count">' + count + ' arquivo' + (count !== 1 ? 's' : '') + '</div>';
+        html += '</div>';
+      });
+      if (allDocs.length === 0 && Object.keys(folderMap).length === 0) {
+        html += '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">';
+        html += '<div style="font-size:32px;margin-bottom:8px"><i data-lucide="folder-open" class="pg-icon" aria-hidden="true"></i></div>';
+        html += '<div style="font-size:14px">Sem registros ainda. Faça upload de documentos.</div>';
+        html += '</div>';
+      } else {
+        allDocs.forEach(d => {
+          const ext = (d.mimeType || '').split('/').pop() || 'file';
+          const extLabel = ext.length > 3 ? ext.slice(0, 3).toUpperCase() : ext.toUpperCase();
+          const sizeLabel = d.size ? (d.size < 1024 ? d.size + ' B' : d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
+          const dateLabel = d.createdAt ? new Date(d.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '—';
+          const tagHtml = (d.tags || []).map(t => '<span class="doc-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">' + escH(t) + '</span>').join('');
+          html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')">';
+          html += '<div class="doc-file-icon" style="background:rgba(239,68,68,0.15);color:var(--red)">' + escH(extLabel) + '</div>';
+          html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
+          html += '<div class="doc-file-meta">' + sizeLabel + ' · ' + dateLabel + '</div>';
+          html += '<div class="doc-file-tags">' + tagHtml + '</div>';
+          html += '</div>';
+        });
+      }
+      html += '<div class="doc-upload-card" onclick="docsUpload()" id="docs-upload-zone">';
+      html += '<div style="font-size:32px;margin-bottom:8px">⬆️</div>';
+      html += '<div style="font-size:13px;font-weight:600">Upload</div>';
+      html += '<div style="font-size:11px;color:var(--text-muted)">Arraste ou clique</div>';
+      html += '</div>';
+      grid.innerHTML = html;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    } catch (err) {
+      const grid = document.getElementById('docs-grid');
+      if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--red)">Erro ao carregar documentos</div>';
+    }
+  }
+
+  function docsView(mode) {
+    _docsState.view = mode;
+    const grid = document.getElementById('docs-grid');
+    if (grid) grid.style.gridTemplateColumns = mode === 'list' ? '1fr' : 'repeat(auto-fill,minmax(160px,1fr))';
+    showToast('Vista: ' + mode, 'info');
+  }
+
   function docsUpload() {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -3159,28 +3275,21 @@
       for (const file of files) {
         try {
           showToast('Enviando: ' + file.name, 'info');
-          const reader = new FileReader();
-          const content = await new Promise((resolve, reject) => {
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
+          const fd = new FormData();
+          fd.append('action', 'upload');
+          fd.append('file', file);
+          fd.append('folderId', _docsState.currentFolder || 'root');
+          fd.append('name', file.name);
+          fd.append('mimeType', file.type || 'application/octet-stream');
           const res = await fetch('/api/documents', {
             method: 'POST',
             credentials: 'same-origin',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              action: 'upload',
-              name: file.name,
-              mimeType: file.type || 'application/octet-stream',
-              size: file.size,
-              content: content,
-              folderId: 'root',
-            }),
+            body: fd,
           });
           const data = await res.json();
           if (data.ok) {
             showToast(file.name + ' enviado com sucesso', 'success');
+            await docsLoadCurrent();
           } else {
             showToast('Erro ao enviar ' + file.name + ': ' + (data.error || 'Falha'), 'error');
           }
@@ -3191,11 +3300,186 @@
     };
     inp.click();
   }
-  function docsGoRoot() { showToast('Raiz dos documentos', 'info'); }
-  function docsOpenFolder(name) { showToast('Abrindo pasta: ' + name, 'info'); }
-  function docsOpenFile(name) { showPage('document-viewer'); }
 
-  // ═══ KANBAN FUNCTIONS ═══
+  async function docsGoRoot() {
+    _docsState.currentFolder = 'root';
+    const bc = document.getElementById('docs-breadcrumb-current');
+    if (bc) bc.textContent = 'Raiz';
+    await docsLoadCurrent();
+  }
+
+  async function docsOpenFolder(name) {
+    _docsState.currentFolder = name;
+    const bc = document.getElementById('docs-breadcrumb-current');
+    if (bc) bc.textContent = name;
+    await docsLoadCurrent();
+  }
+
+  async function docsOpenFile(docId) {
+    try {
+      const allRes = await fetch('/api/documents?view=all', { credentials: 'same-origin' });
+      const allData = await allRes.json();
+      const doc = (allData.documents || []).find(d => d.id === docId);
+      if (doc) {
+        _docsState.currentDoc = doc;
+        const titleEl = document.getElementById('doc-viewer-title');
+        const subEl = document.getElementById('doc-viewer-subtitle');
+        const nameEl = document.getElementById('doc-viewer-name-display');
+        const typeEl = document.getElementById('doc-viewer-type');
+        const sizeEl = document.getElementById('doc-viewer-size');
+        const createdEl = document.getElementById('doc-viewer-created');
+        const favEl = document.getElementById('doc-viewer-favorite');
+        if (titleEl) titleEl.textContent = doc.name;
+        if (subEl) subEl.textContent = ((doc.mimeType || '').split('/').pop() || '—') + ' · ' + (doc.size ? (doc.size / 1024).toFixed(0) + ' KB' : '—');
+        if (nameEl) nameEl.textContent = doc.name;
+        if (typeEl) typeEl.textContent = (doc.mimeType || '').split('/').pop() || '—';
+        if (sizeEl) sizeEl.textContent = doc.size ? (doc.size < 1048576 ? (doc.size / 1024).toFixed(0) + ' KB' : (doc.size / 1048576).toFixed(1) + ' MB') : '—';
+        if (createdEl) createdEl.textContent = doc.createdAt ? new Date(doc.createdAt).toLocaleDateString('pt-BR') : '—';
+        if (favEl) favEl.textContent = doc.favorite ? 'Sim' : 'Não';
+      }
+      showPage('document-viewer');
+    } catch (err) {
+      showToast('Erro ao carregar documento', 'error');
+    }
+  }
+
+  function docsCreateFolder() {
+    const name = prompt('Nome da nova pasta:');
+    if (!name || !name.trim()) return;
+    _docsState.currentFolder = name.trim();
+    const bc = document.getElementById('docs-breadcrumb-current');
+    if (bc) bc.textContent = name.trim();
+    showToast('Pasta "' + name.trim() + '" selecionada. Faça upload de arquivos para esta pasta.', 'success');
+  }
+
+  function docsSearch(event) {
+    if (event.key !== 'Enter') return;
+    const query = event.target.value.trim();
+    if (!query) { docsLoadCurrent(); return; }
+    (async () => {
+      try {
+        const res = await fetch('/api/documents?view=search&q=' + encodeURIComponent(query), { credentials: 'same-origin' });
+        const data = await res.json();
+        if (!data.ok) { showToast('Erro na busca', 'error'); return; }
+        const grid = document.getElementById('docs-grid');
+        if (!grid) return;
+        const docs = data.documents || [];
+        let html = '';
+        if (docs.length === 0) {
+          html = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Nenhum resultado para "' + escH(query) + '"</div></div>';
+        } else {
+          docs.forEach(d => {
+            const sizeLabel = d.size ? (d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
+            const dateLabel = d.createdAt ? new Date(d.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '—';
+            html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')">';
+            html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
+            html += '<div class="doc-file-meta">' + sizeLabel + ' · ' + dateLabel + '</div>';
+            html += '</div>';
+          });
+        }
+        grid.innerHTML = html;
+      } catch (err) { showToast('Erro na busca', 'error'); }
+    })();
+  }
+
+  function docDownloadViewer() {
+    const doc = _docsState.currentDoc;
+    if (!doc || !doc.downloadUrl) { showToast('URL de download não disponível', 'error'); return; }
+    window.open(doc.downloadUrl, '_blank');
+    showToast('Download iniciado: ' + doc.name, 'success');
+  }
+
+  function docShareViewer() {
+    if (!_docsState.currentDoc) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'share', docId: _docsState.currentDoc.id }),
+        });
+        const data = await res.json();
+        if (data.ok) showToast('Link de compartilhamento gerado', 'success');
+        else showToast('Erro ao compartilhar', 'error');
+      } catch (err) { showToast('Erro ao compartilhar', 'error'); }
+    })();
+  }
+
+  function docRenameViewer() {
+    if (!_docsState.currentDoc) return;
+    const name = prompt('Novo nome:', _docsState.currentDoc.name);
+    if (!name || !name.trim()) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'rename', docId: _docsState.currentDoc.id, name: name.trim() }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          _docsState.currentDoc.name = name.trim();
+          const titleEl = document.getElementById('doc-viewer-title');
+          const nameEl = document.getElementById('doc-viewer-name-display');
+          if (titleEl) titleEl.textContent = name.trim();
+          if (nameEl) nameEl.textContent = name.trim();
+          showToast('Documento renomeado', 'success');
+        } else showToast('Erro ao renomear: ' + (data.error || ''), 'error');
+      } catch (err) { showToast('Erro ao renomear', 'error'); }
+    })();
+  }
+
+  function docMoveViewer() {
+    if (!_docsState.currentDoc) return;
+    const folder = prompt('Pasta de destino:', _docsState.currentDoc.folderId || 'root');
+    if (!folder) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'move', docId: _docsState.currentDoc.id, folderId: folder.trim() }),
+        });
+        const data = await res.json();
+        if (data.ok) { _docsState.currentDoc.folderId = folder.trim(); showToast('Documento movido para "' + folder.trim() + '"', 'success'); }
+        else showToast('Erro ao mover: ' + (data.error || ''), 'error');
+      } catch (err) { showToast('Erro ao mover', 'error'); }
+    })();
+  }
+
+  function docToggleFavoriteViewer() {
+    if (!_docsState.currentDoc) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'toggle-favorite', docId: _docsState.currentDoc.id }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          _docsState.currentDoc.favorite = !_docsState.currentDoc.favorite;
+          const favEl = document.getElementById('doc-viewer-favorite');
+          if (favEl) favEl.textContent = _docsState.currentDoc.favorite ? 'Sim' : 'Não';
+          showToast(_docsState.currentDoc.favorite ? 'Adicionado aos favoritos' : 'Removido dos favoritos', 'success');
+        } else showToast('Erro ao favoritar', 'error');
+      } catch (err) { showToast('Erro ao favoritar', 'error'); }
+    })();
+  }
+
+  function docDeleteViewer() {
+    if (!_docsState.currentDoc) return;
+    if (!confirm('Excluir "' + _docsState.currentDoc.name + '"?')) return;
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete', docId: _docsState.currentDoc.id }),
+        });
+        const data = await res.json();
+        if (data.ok) { showToast('Documento excluído', 'success'); showPage('documents'); await docsLoadCurrent(); }
+        else showToast('Erro ao excluir: ' + (data.error || ''), 'error');
+      } catch (err) { showToast('Erro ao excluir', 'error'); }
+    })();
+  }
+
+    // ═══ KANBAN FUNCTIONS (persist via API) ═══
   let _draggedCard = null;
   function kanbanDragStart(e) { _draggedCard = e.target; e.dataTransfer.effectAllowed = 'move'; }
   function kanbanDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
@@ -3203,12 +3487,29 @@
     e.preventDefault();
     if (!_draggedCard) return;
     const target = document.getElementById('kanban-' + col);
-    if (target) { target.appendChild(_draggedCard); showToast('Tarefa movida para ' + col, 'success'); }
+    if (target) {
+      target.appendChild(_draggedCard);
+      showToast('Tarefa movida para ' + col, 'success');
+      // Persistir via API
+      const taskId = _draggedCard.getAttribute('data-id');
+      if (taskId) {
+        (async () => {
+          try {
+            await fetch('/api/tasks', {
+              method: 'PUT', credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: taskId, status: col }),
+            });
+          } catch (err) { /* não bloquear a UX */ }
+        })();
+      }
+    }
     _draggedCard = null;
   }
-
   // ═══ WIKI FUNCTIONS ═══
-  function wikiOpen(page) { showToast('Abrindo página: ' + page, 'info'); }
+  function wikiOpen(page) {
+    showToast('Abrindo página: ' + page, 'info');
+  }
 
   // ═══ MARKETPLACE FUNCTIONS ═══
   function mktFilter(category, btn) {
@@ -3222,12 +3523,25 @@
       }
     });
   }
-  function mktInstall(btn, name) {
-    btn.textContent = '\u{2713} Instalado';
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-    btn.closest('.mkt-app-card').classList.add('installed');
-    showToast(name + ' instalado com sucesso!', 'success');
+  async function mktInstall(btn, name) {
+    try {
+      const res = await fetch('/api/integrations', {
+        method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'install', integrationId: name.toLowerCase().replace(/\s+/g, '-'), name }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        btn.textContent = '\u2713 Instalado';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.closest('.mkt-app-card').classList.add('installed');
+        showToast(name + ' instalado com sucesso!', 'success');
+      } else {
+        showToast('Erro ao instalar ' + name + ': ' + (data.error || ''), 'error');
+      }
+    } catch (err) {
+      showToast('Erro ao instalar ' + name, 'error');
+    }
   }
   function mktToggleApp(el, name) {
     showToast(el.checked ? name + ' ativado' : name + ' desativado', el.checked ? 'success' : 'info');

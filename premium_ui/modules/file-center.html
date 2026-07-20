@@ -51,7 +51,7 @@
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const size = (bytes) => { const value = Number(bytes) || 0; if (!value) return '0 B'; if (value < 1024) return `${value} B`; if (value < 1024 ** 2) return `${(value / 1024).toFixed(1)} KB`; return `${(value / 1024 ** 2).toFixed(2)} MB`; };
   const formatDate = (value) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR'); };
-  const toast = (message, type = 'info') => { if (typeof window.showToast === 'function') window.showToast(message, type); else window.alert(message); };
+  const toast = (message, type = 'info') => { if (typeof window.showToast === 'function') window.showToast(message, type); else showToast?.(message, type); };
   const icon = (mime) => mime?.includes('pdf') ? 'file-text' : mime?.includes('image') ? 'image' : mime?.includes('sheet') || mime?.includes('excel') ? 'file-spreadsheet' : mime?.includes('presentation') ? 'file-presentation' : 'file';
 
   const refreshIcons = () => { try { window.lucide?.createIcons?.(); } catch (_) {} };

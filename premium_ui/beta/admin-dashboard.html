@@ -1083,20 +1083,20 @@
       const tier = ['standard', 'early-access', 'vip'].includes(selectedTier) ? selectedTier : 'standard';
       const invite = window.LifeOSBetaManager.generateInviteCode(email.trim().toLowerCase(), tier);
       loadInvitesData();
-      window.alert(`Convite ${invite.code} gerado com sucesso.`);
+      showToast?.("Convite " + invite.code + " gerado com sucesso.", "success");
     }
 
     function promoteWaitlist(email) {
       const result = window.LifeOSBetaManager.promoteFromWaitlist(email);
-      if (!result.success) return window.alert(result.message);
+      if (!result.success) return showToast?.(result.message, 'error');
       loadWaitlistData();
-      window.alert(`Convite ${result.inviteCode} gerado para ${email}.`);
+      showToast?.("Convite " + result.inviteCode + " gerado para " + email + ".", "success");
     }
 
     function manageUser(email) {
       const user = window.LifeOSBetaManager.getBetaUsers().find(item => item.email === email);
-      if (!user) return window.alert('Usuário não encontrado.');
-      window.alert(`${email}\nTier: ${user.tier}\nSessões: ${user.sessionCount || 0}\nFeedbacks: ${user.feedbackCount || 0}`);
+      if (!user) return showToast?.('Usuário não encontrado.', 'error');
+      showToast?.(`${email} | Tier: ${user.tier} | Sessões: ${user.sessionCount || 0} | Feedbacks: ${user.feedbackCount || 0}`, 'info');
     }
 
     // Inicializar dashboard

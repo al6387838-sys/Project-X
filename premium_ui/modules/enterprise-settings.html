@@ -724,7 +724,7 @@
         });
         if (!response.ok) throw new Error('Não foi possível revogar as sessões');
         loadSessions();
-      } catch (error) { window.alert(error.message); }
+      } catch (error) { showToast?.(error.message, "error"); }
     }
 
     async function removeDevice(deviceId) {
@@ -739,7 +739,7 @@
         if (data.currentRevoked) { location.replace('/login'); return; }
         loadDevices();
         loadSessions();
-      } catch (error) { window.alert(error.message); }
+      } catch (error) { showToast?.(error.message, "error"); }
     }
 
     function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }

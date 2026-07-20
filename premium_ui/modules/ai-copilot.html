@@ -525,9 +525,35 @@ function aiCapability(type) {
   document.getElementById('ai-input').focus();
 }
 
-function aiCopy(btn) { showToast('Copiado para a área de transferência', 'success'); }
-function aiRegenerate() { showToast('Regenerando resposta...', 'info'); }
-function aiExport() { showToast('Exportando conversa...', 'info'); }
+function aiCopy(btn) {
+    const msgBubble = btn.closest('.ai-msg-content')?.querySelector('.ai-msg-bubble');
+    if (msgBubble?.textContent && navigator.clipboard) {
+      navigator.clipboard.writeText(msgBubble.textContent).then(() => showToast?.('Copiado!', 'success')).catch(() => showToast?.('Erro ao copiar', 'error'));
+    }
+  }
+async function aiRegenerate() {
+    showToast?.('Regenerando resposta...', 'info');
+    if (currentConv >= 0 && conversations[currentConv]?.messages?.length > 0) {
+      const lastMsg = conversations[currentConv].messages[conversations[currentConv].messages.length - 1];
+      if (lastMsg.role === 'user') {
+        conversations[currentConv].messages.pop();
+        await showThinking(lastMsg.text);
+      }
+    }
+  }
+async function aiExport() {
+    if (!conversations[currentConv]) { showToast?.('Nenhuma conversa para exportar', 'error'); return; }
+    const conv = conversations[currentConv];
+    const text = conv.messages.map(m => `[${m.time}] ${m.role === 'user' ? 'Você' : 'IA'}: ${m.text}`).join('\n');
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (conv.title || 'conversa') + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast?.('Conversa exportada!', 'success');
+  }
 function aiShare() { showToast('Link de compartilhamento copiado!', 'success'); }
 function aiClear() { if(confirm('Limpar conversa?')) { conversations[currentConv].messages = []; renderWelcome(); } }
 async function aiAttach() {

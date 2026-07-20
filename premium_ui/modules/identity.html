@@ -319,13 +319,27 @@
   window.identityNewProfile=function(){ openModal('modal-new-profile'); };
   window.identityEditProfile=function(){ showToast('Edição de perfil','info'); };
   window.identityManageKeys=function(){ showToast('Gerenciamento de chaves','info'); };
-  window.identityActivateProfile=function(id){ showToast('Perfil ativado: '+id,'success'); };
-  window.identityCloseAllSessions=function(){ showToast('Todas as sessões encerradas','success'); };
-  window.identityCloseSession=function(id){ showToast('Sessão encerrada: '+id,'success'); };
-  window.identityRegisterDevice=function(){ showToast('Registrar novo dispositivo','info'); };
-  window.identitySetupSecurityKey=function(){ showToast('Configurar Security Key FIDO2','info'); };
-  window.identityViewBackupCodes=function(){ showToast('Backup codes gerados','success'); };
-  window.identityToggleSetting=function(el,key){ showToast('Configuração atualizada: '+key,'info'); };
+  window.identityActivateProfile=function(id){
+    (async()=>{try{const r=await fetch('/api/enterprise-data',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'activate-profile',profileId:id})});const d=await r.json();if(d.ok)showToast('Perfil ativado: '+id,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao ativar perfil','error')}})();
+  };
+  window.identityCloseAllSessions=function(){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'update-policy',policy:{revokeAllDevices:true}})});const d=await r.json();if(d.ok)showToast('Todas as sessões encerradas','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao encerrar sessões','error')}})();
+  };
+  window.identityCloseSession=function(id){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'revoke-device',deviceId:id})});const d=await r.json();if(d.ok)showToast('Sessão encerrada: '+id,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao encerrar sessão','error')}})();
+  };
+  window.identityRegisterDevice=function(){
+    (async()=>{try{showToast('Registrando dispositivo...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'register-device'})});const d=await r.json();if(d.ok)showToast('Dispositivo registrado','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao registrar dispositivo','error')}})();
+  };
+  window.identitySetupSecurityKey=function(){
+    (async()=>{try{showToast('Iniciando registro FIDO2...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'mfa-setup',type:'security-key'})});const d=await r.json();if(d.ok)showToast('Security Key FIDO2 configurada','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao configurar FIDO2','error')}})();
+  };
+  window.identityViewBackupCodes=function(){
+    (async()=>{try{showToast('Gerando backup codes...','info');const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'mfa-setup',type:'backup-codes'})});const d=await r.json();if(d.ok)showToast('Backup codes gerados','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao gerar backup codes','error')}})();
+  };
+  window.identityToggleSetting=function(el,key){
+    (async()=>{try{const r=await fetch('/api/security',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'update-policy',policy:{[key]:el.checked}})});const d=await r.json();if(d.ok)showToast('Configuração atualizada: '+key,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao atualizar configuração','error')}})();
+  };
 })();
 </script>
 </div>

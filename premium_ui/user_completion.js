@@ -72,7 +72,7 @@
       window.showToast(message, type || 'info');
       return;
     }
-    window.alert(message);
+    if (typeof window.showToast === "function") window.showToast(message, "error"); else console.warn(message);
   }
 
   function errorText(error) {
