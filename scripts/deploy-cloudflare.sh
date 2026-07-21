@@ -7,11 +7,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 PROJECT_NAME="lifeos-enterprise"
-VERSION="37.0.0"
+VERSION="46.0.0"
 
 echo ""
 echo "╔══════════════════════════════════════════════╗"
-echo "║   LifeOS Enterprise — Cloudflare Deploy     ║"
+echo "║   LifeOS Enterprise v46.0.0 — Cloudflare Deploy     ║"
 echo "╚══════════════════════════════════════════════╝"
 echo ""
 

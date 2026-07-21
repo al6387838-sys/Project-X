@@ -1,5 +1,8 @@
-# LifeOS Enterprise v44.0 — Cloudflare Pages Configuration
-# SECURITY: LIFEOS_SESSION_SECRET deve ser rotacionado via: wrangler secret put LIFEOS_SESSION_SECRET
+# LifeOS Enterprise v46.0.0 — Cloudflare Pages Configuration
+# HARDENING v46.0.0 (Fase 328):
+#   LIFEOS_SESSION_SECRET  → configurar via: wrangler secret put LIFEOS_SESSION_SECRET
+#   LIFEOS_ADMIN_PASSWORD_HASH → configurar via: wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
+#   Secrets NÃO devem constar em [vars] em produção — usar Cloudflare Pages Secrets
 name = "lifeos-enterprise"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
@@ -27,7 +30,9 @@ preview_bucket_name = "lifeos-storage-preview"
 
 [vars]
 LIFEOS_ADMIN_USER = "al6387838@gmail.com"
-LIFEOS_ADMIN_PASSWORD_HASH = "bef92275af9c19000a08f7faf5272822bc1c7c8590dbf7ce883eba7e5e87072e"
-LIFEOS_SESSION_SECRET = "XjWU3aYc8yOoRHwZ1pRzNKElnxsA_VgOHRe61fR0BFXp_LfRWOy8Z5HIPzDpfb_X"
+# LIFEOS_ADMIN_PASSWORD_HASH e LIFEOS_SESSION_SECRET devem ser configurados
+# como Cloudflare Pages Secrets (não como [vars]):
+#   npx wrangler secret put LIFEOS_SESSION_SECRET
+#   npx wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
 LIFEOS_VERSION = "v46.0.0"
 LIFEOS_ENV = "production"

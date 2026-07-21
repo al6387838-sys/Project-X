@@ -19,6 +19,28 @@ function lifeosLogError(env, operation, error, details = {}) {
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const MAX_AUDIT = 500;
+// Hardening v46.0.0 (Fase 328): allowlist de tipos MIME e extensões bloqueadas
+const ALLOWED_MIME_TYPES = new Set([
+  'application/pdf', 'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'text/plain', 'text/csv', 'text/markdown',
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+  'application/zip', 'application/json', 'application/octet-stream',
+]);
+const BLOCKED_EXTENSIONS = new Set([
+  'exe', 'sh', 'bat', 'cmd', 'ps1', 'vbs', 'jar', 'dll', 'so',
+  'dylib', 'msi', 'dmg', 'app', 'com', 'scr', 'pif', 'hta', 'wsf',
+]);
+function validateFileUpload(file) {
+  const ext = String(file.name || '').split('.').pop().toLowerCase();
+  if (BLOCKED_EXTENSIONS.has(ext)) throw new Error(`Tipo de arquivo não permitido: .${ext}`);
+  const mime = String(file.type || 'application/octet-stream').split(';')[0].trim().toLowerCase();
+  if (!ALLOWED_MIME_TYPES.has(mime)) throw new Error(`Tipo MIME não permitido: ${mime}`);
+}
 
 function generateId() {
   return crypto.randomUUID().replace(/-/g, '').slice(0, 16);
@@ -168,6 +190,7 @@ async function createDocumentFromFile({ request, kv, bucket, session, input }) {
   const file = form.get('file');
   if (!file || typeof file.arrayBuffer !== 'function' || !safeText(file.name)) throw new Error('Selecione um arquivo válido');
   if (Number(file.size || 0) > MAX_FILE_SIZE) throw new Error('O arquivo excede o limite de 25 MB');
+  validateFileUpload(file); // Hardening v46.0.0: validação de tipo MIME e extensão
   if (!bucket) throw new Error('Armazenamento R2 pronto para ativação. Configure o binding oficial de arquivos.');
 
   const docs = await getDocuments(kv, session.sub);
@@ -234,6 +257,7 @@ async function uploadNewVersion({ request, kv, bucket, session, input }) {
   if (!file || typeof file.arrayBuffer !== 'function' || !safeText(file.name)) throw new Error('Selecione um arquivo válido');
   if (!bucket) throw new Error('Armazenamento R2 pronto para ativação. Configure o binding oficial de arquivos.');
   if (Number(file.size || 0) > MAX_FILE_SIZE) throw new Error('O arquivo excede o limite de 25 MB');
+  validateFileUpload(file); // Hardening v46.0.0: validação de tipo MIME e extensão
   const docs = await getDocuments(kv, session.sub);
   const document = requireDocument(docs, docId);
   assertEditable(document, session);
