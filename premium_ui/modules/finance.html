@@ -110,37 +110,8 @@
       <button class="btn btn-primary" onclick="openModal('modal-add-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Conta</button>
     </div>
   </div>
-  <div class="grid-3" style="margin-bottom:20px">
-    <div class="fin-bank-card" style="background:linear-gradient(135deg,#FF6B00,#FF8C00)">
-      <div class="fin-bank-logo">Nubank</div>
-      <div class="fin-bank-num">•••• 4521</div>
-      <div class="fin-bank-balance">—</div>
-      <div class="fin-bank-actions">
-        <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
-        <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
-        <button onclick="showPage('finance-transfer')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Transferir</button>
-      </div>
-    </div>
-    <div class="fin-bank-card" style="background:linear-gradient(135deg,#003087,#0070E0)">
-      <div class="fin-bank-logo">Itaú</div>
-      <div class="fin-bank-num">•••• 7832</div>
-      <div class="fin-bank-balance">—</div>
-      <div class="fin-bank-actions">
-        <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
-        <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
-        <button onclick="showPage('finance-transfer')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Transferir</button>
-      </div>
-    </div>
-    <div class="fin-bank-card" style="background:linear-gradient(135deg,#00A859,#00C96B)">
-      <div class="fin-bank-logo">Bradesco</div>
-      <div class="fin-bank-num">•••• 1190</div>
-      <div class="fin-bank-balance">—</div>
-      <div class="fin-bank-actions">
-        <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
-        <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
-        <button onclick="showPage('finance-transfer')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Transferir</button>
-      </div>
-    </div>
+  <div id="fin-bank-cards-grid" class="grid-3" style="margin-bottom:20px">
+    <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando contas...</div>
   </div>
   <!-- Open Finance Banner -->
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));border-color:rgba(99,102,241,0.3)">
@@ -182,9 +153,7 @@
       <div class="form-group">
         <label class="form-label">Conta de Origem</label>
         <select class="form-input" id="pix-from">
-          <option>Nubank •••• 4521 — —</option>
-          <option>Itaú •••• 7832 — —</option>
-          <option>Bradesco •••• 1190 — —</option>
+          <option value="">Carregando contas...</option>
         </select>
       </div>
       <button class="btn btn-primary" style="width:100%" onclick="finSendPix()">Confirmar PIX <i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></button>
@@ -252,10 +221,8 @@
       </div>
       <div class="form-group">
         <label class="form-label">Conta de Origem</label>
-        <select class="form-input">
-          <option>Nubank •••• 4521 — —</option>
-          <option>Itaú •••• 7832 — —</option>
-          <option>Bradesco •••• 1190 — —</option>
+        <select class="form-input" id="transfer-from">
+          <option value="">Carregando contas...</option>
         </select>
       </div>
       <div class="form-group">
@@ -313,51 +280,8 @@
       <button class="btn btn-primary" onclick="openModal('modal-add-card')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Cartão</button>
     </div>
   </div>
-  <div class="grid-2" style="margin-bottom:20px">
-    <div class="fin-credit-card" style="background:linear-gradient(135deg,#6366F1 0%,#8B5CF6 50%,#A78BFA 100%)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div style="font-size:18px;font-weight:800;letter-spacing:1px">LifeOS</div>
-        <div style="font-size:14px;font-weight:700">VISA</div>
-      </div>
-      <div style="margin:20px 0;font-size:16px;letter-spacing:3px">•••• •••• •••• 1234</div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-end">
-        <div>
-          <div style="font-size:10px;opacity:0.7;text-transform:uppercase">Titular</div>
-          <div style="font-size:13px;font-weight:600">USUARIO LIFEOS</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;opacity:0.7;text-transform:uppercase">Validade</div>
-          <div style="font-size:13px;font-weight:600">12/28</div>
-        </div>
-      </div>
-    </div>
-    <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
-      <div>
-        <div class="card-title">Nubank Ultravioleta</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
-            <div style="font-size:11px;color:var(--text-muted)">Fatura Atual</div>
-            <div style="font-size:18px;font-weight:700;color:var(--red)">—</div>
-          </div>
-          <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
-            <div style="font-size:11px;color:var(--text-muted)">Limite Disponível</div>
-            <div style="font-size:18px;font-weight:700;color:var(--green)">—</div>
-          </div>
-          <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
-            <div style="font-size:11px;color:var(--text-muted)">Limite Total</div>
-            <div style="font-size:18px;font-weight:700">—</div>
-          </div>
-          <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
-            <div style="font-size:11px;color:var(--text-muted)">Vencimento</div>
-            <div style="font-size:18px;font-weight:700;color:var(--amber)">Dia 10</div>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" style="flex:1" onclick="showPage('finance-invoice')">Ver Fatura</button>
-        <button class="btn btn-ghost" style="flex:1" onclick="showToast('Bloqueio temporário ativado','warning')">Bloquear</button>
-      </div>
-    </div>
+  <div id="fin-cards-featured" class="grid-2" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:center;min-height:120px;color:var(--text-muted);font-size:13px">Carregando cartões...</div>
   </div>
 </div>
 
@@ -366,7 +290,7 @@
   <div class="page-header">
     <div>
       <div class="page-title"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Fatura</div>
-      <div class="page-subtitle">Nubank Ultravioleta — Julho 2026</div>
+      <div class="page-subtitle" id="fin-invoice-subtitle">Fatura do Cartão</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('finance-cards')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
@@ -378,10 +302,10 @@
       <div style="text-align:center;padding:16px 0">
         <div style="font-size:13px;color:var(--text-muted)">Total da Fatura</div>
         <div style="font-size:32px;font-weight:800;color:var(--red);margin:8px 0">—</div>
-        <div style="font-size:12px;color:var(--text-muted)">Vencimento: 10/08/2026</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="fin-invoice-due">Vencimento: —</div>
         <div style="margin:16px 0">
-          <div class="progress-bar"><div class="progress-fill" style="width:57%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">57% do limite utilizado</div>
+          <div class="progress-bar"><div class="progress-fill" id="fin-invoice-util-bar" style="width:0%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px" id="fin-invoice-util-text">0% do limite utilizado</div>
         </div>
         <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="showToast('Pagamento agendado!','success')">Pagar Total</button>
         <button class="btn btn-ghost" style="width:100%;margin-bottom:8px" onclick="openModal('modal-pay-minimum')">Pagar Mínimo</button>
@@ -391,15 +315,7 @@
     <div class="card">
       <div class="card-title">Lançamentos da Fatura</div>
       <div style="display:flex;flex-direction:column;gap:8px" id="fin-invoice-list">
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="shopping-cart" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Amazon — Compra</div><div class="fin-extract-cat">05/07 · Compras Online</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Restaurante Outback</div><div class="fin-extract-cat">08/07 · Alimentação</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">LATAM Airlines</div><div class="fin-extract-cat">10/07 · Viagem</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Netflix</div><div class="fin-extract-cat">12/07 · Assinatura</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Posto Ipiranga</div><div class="fin-extract-cat">13/07 · Transporte</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Farmácia Drogasil</div><div class="fin-extract-cat">14/07 · Saúde</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Smart Fit</div><div class="fin-extract-cat">01/07 · Saúde</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">OpenAI ChatGPT Plus</div><div class="fin-extract-cat">01/07 · Assinatura</div></div><div class="fin-extract-amount out">-—</div></div>
-        <div class="fin-extract-item"><div class="fin-extract-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><div class="fin-extract-info"><div class="fin-extract-desc">Mercado Livre</div><div class="fin-extract-cat">11/07 · Compras</div></div><div class="fin-extract-amount out">-—</div></div>
+        <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando lançamentos...</div>
       </div>
     </div>
   </div>
@@ -559,7 +475,7 @@
           <span><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Aluguel pagar</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Fatura Nubank</span><span style="color:var(--red);font-weight:700">-—</span>
+          <span><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Fatura Cartão</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
           <span><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Investimento</span><span style="color:var(--red);font-weight:700">-—</span>
@@ -737,7 +653,7 @@
           <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
-          <div><div style="font-weight:600;font-size:13px">Fatura Nubank</div><div style="font-size:11px;color:var(--text-muted)">10/07 · Pendente</div></div>
+          <div><div style="font-weight:600;font-size:13px">Fatura Cartão</div><div style="font-size:11px;color:var(--text-muted)">10/07 · Pendente</div></div>
           <span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
@@ -1145,16 +1061,18 @@ function finAddBill() {
     const accR = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
     if (accR.ok) {
       const accData = await accR.json();
+      const accs = accData.accounts || [];
+      const accColors = { Nubank: 'linear-gradient(135deg,#FF6B00,#FF8C00)', Itaú: 'linear-gradient(135deg,#003087,#0070E0)', Bradesco: 'linear-gradient(135deg,#00A859,#00C96B)' };
+      const defaultColors = ['linear-gradient(135deg,#6366F1,#8B5CF6)', 'linear-gradient(135deg,#06B6D4,#0891B2)', 'linear-gradient(135deg,#10B981,#059669)'];
+      // Render accounts list (sidebar)
       const accList = document.getElementById('fin-accounts-list');
       if (accList) {
-        const accs = accData.accounts || [];
         if (accs.length === 0) {
           accList.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Nenhuma conta cadastrada</div>';
         } else {
-          const colors = { Nubank: 'linear-gradient(135deg,#FF6B00,#FF8C00)', Itaú: 'linear-gradient(135deg,#003087,#0070E0)', Bradesco: 'linear-gradient(135deg,#00A859,#00C96B)' };
           accList.innerHTML = accs.map(a => `
             <div class="fin-account-item" onclick="showPage('finance-extract')">
-              <div class="fin-account-icon" style="background:${colors[a.name] || 'var(--gradient-primary)'}">${(a.name || '?')[0]}</div>
+              <div class="fin-account-icon" style="background:${accColors[a.name] || 'var(--gradient-primary)'}">${(a.name || '?')[0]}</div>
               <div class="fin-account-info">
                 <div class="fin-account-name">${a.name || 'Conta'}</div>
                 <div class="fin-account-num">${a.lastFour ? '•••• ' + a.lastFour : '—'}</div>
@@ -1164,18 +1082,54 @@ function finAddBill() {
           `).join('');
         }
       }
+      // Populate account selects (PIX and Transfer forms)
+      const accSelectIds = ['pix-from', 'transfer-from'];
+      accSelectIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel) {
+          if (accs.length === 0) {
+            sel.innerHTML = '<option value="">Nenhuma conta cadastrada</option>';
+          } else {
+            sel.innerHTML = accs.map(a =>
+              `<option value="${a.id || a.lastFour || ''}">${a.name || 'Conta'} ${a.lastFour ? '•••• ' + a.lastFour : ''} — ${fmt(a.balance)}</option>`
+            ).join('');
+          }
+        }
+      });
+      // Render bank cards grid (accounts page)
+      const bankGrid = document.getElementById('fin-bank-cards-grid');
+      if (bankGrid) {
+        if (accs.length === 0) {
+          bankGrid.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;grid-column:1/-1">Nenhuma conta bancária cadastrada. Conecte um banco via Open Finance.</div>';
+        } else {
+          bankGrid.innerHTML = accs.map((a, i) => {
+            const bg = accColors[a.name] || defaultColors[i % defaultColors.length];
+            return `<div class="fin-bank-card" style="background:${bg}">
+              <div class="fin-bank-logo">${a.name || 'Banco'}</div>
+              <div class="fin-bank-num">${a.lastFour ? '•••• ' + a.lastFour : '——'}</div>
+              <div class="fin-bank-balance">${fmt(a.balance)}</div>
+              <div class="fin-bank-actions">
+                <button onclick="showPage('finance-pix')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">PIX</button>
+                <button onclick="showPage('finance-extract')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Extrato</button>
+                <button onclick="showPage('finance-transfer')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">Transferir</button>
+              </div>
+            </div>`;
+          }).join('');
+        }
+      }
     }
     // Load cards
     const cardR = await fetch('/api/finance/hub?view=cards', { credentials: 'same-origin' });
     if (cardR.ok) {
       const cardData = await cardR.json();
+      const cards = cardData.cards || [];
+      const cardColors = ['linear-gradient(135deg,#6366F1,#8B5CF6)', 'linear-gradient(135deg,#F59E0B,#D97706)', 'linear-gradient(135deg,#10B981,#059669)'];
+      // Render cards list (sidebar)
       const cardsList = document.getElementById('fin-cards-list');
       if (cardsList) {
-        const cards = cardData.cards || [];
         if (cards.length === 0) {
           cardsList.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Nenhum cartão cadastrado</div>';
         } else {
-          const cardColors = ['linear-gradient(135deg,#6366F1,#8B5CF6)', 'linear-gradient(135deg,#F59E0B,#D97706)', 'linear-gradient(135deg,#10B981,#059669)'];
           cardsList.innerHTML = cards.map((c, i) => `
             <div class="fin-card-item">
               <div class="fin-card-visual" style="background:${cardColors[i % cardColors.length]}">
@@ -1190,6 +1144,61 @@ function finAddBill() {
               </div>
             </div>
           `).join('');
+        }
+      }
+      // Render featured card (cards page)
+      const featuredEl = document.getElementById('fin-cards-featured');
+      if (featuredEl) {
+        if (cards.length === 0) {
+          featuredEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhum cartão cadastrado. Adicione um cartão para começar.</div>';
+        } else {
+          const c = cards[0];
+          const color = cardColors[0];
+          featuredEl.innerHTML = `
+            <div class="fin-credit-card" style="background:${color}">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div style="font-size:18px;font-weight:800;letter-spacing:1px">LifeOS</div>
+                <div style="font-size:14px;font-weight:700">${c.brand || 'CARD'}</div>
+              </div>
+              <div style="margin:20px 0;font-size:16px;letter-spacing:3px">•••• •••• •••• ${c.lastFour || '——'}</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <div>
+                  <div style="font-size:10px;opacity:0.7;text-transform:uppercase">Titular</div>
+                  <div style="font-size:13px;font-weight:600">${(c.holderName || 'TITULAR').toUpperCase()}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:10px;opacity:0.7;text-transform:uppercase">Validade</div>
+                  <div style="font-size:13px;font-weight:600">${c.expiry || '——'}</div>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
+              <div>
+                <div class="card-title">${c.name || c.brand || 'Cartão'}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+                  <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
+                    <div style="font-size:11px;color:var(--text-muted)">Fatura Atual</div>
+                    <div style="font-size:18px;font-weight:700;color:var(--red)">${fmt(c.billAmount)}</div>
+                  </div>
+                  <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
+                    <div style="font-size:11px;color:var(--text-muted)">Limite Disponível</div>
+                    <div style="font-size:18px;font-weight:700;color:var(--green)">${fmt((c.limit || 0) - (c.billAmount || 0))}</div>
+                  </div>
+                  <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
+                    <div style="font-size:11px;color:var(--text-muted)">Limite Total</div>
+                    <div style="font-size:18px;font-weight:700">${fmt(c.limit)}</div>
+                  </div>
+                  <div style="background:var(--bg-elevated);padding:12px;border-radius:8px">
+                    <div style="font-size:11px;color:var(--text-muted)">Vencimento</div>
+                    <div style="font-size:18px;font-weight:700;color:var(--amber)">${c.dueDay ? 'Dia ' + c.dueDay : '—'}</div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-primary" style="flex:1" onclick="showPage('finance-invoice')">Ver Fatura</button>
+                <button class="btn btn-ghost" style="flex:1" onclick="showToast('Bloqueio temporário ativado','warning')">Bloquear</button>
+              </div>
+            </div>`;
         }
       }
     }

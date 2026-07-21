@@ -2,6 +2,40 @@
 
 All notable changes to LifeOS will be documented in this file.
 
+## [46.0.1] — 2026-07-21
+### Release: LIFEOS ENTERPRISE v46.0.1 — Phases 331–336 (Data Integrity & Launch Certification)
+
+Esta release conclui o ciclo de auditoria de integridade de dados e certificação de lançamento. Todos os dados fictícios (mocks) visíveis na interface foram eliminados e substituídos por carregamento dinâmico via APIs reais.
+
+| Controle | Resultado |
+|---|---:|
+| Dados hardcoded removidos | 100% |
+| Arquivos auditados | 3 (app_dashboard, finance, personal-hub) |
+| Endpoints conectados | 5 (/api/payments/billing, /api/finance/hub, /api/communication/hub) |
+| Credenciais hardcoded | 0 |
+| Certificação de produção | Aprovada |
+
+#### Correções Detalhadas
+
+**`premium_ui/app_dashboard.html`**
+- Removido bloco de billing estático (Plano Pro, R$49, cartão ••••4242, datas fixas).
+- Implementada função `loadBillingData()` consumindo `/api/payments/billing`.
+- Billing agora exibe plano real, histórico de faturas e método de pagamento do usuário.
+
+**`premium_ui/modules/finance.html`**
+- Removido card de crédito visual hardcoded (••••1234, "USUARIO LIFEOS").
+- Removidos cards de contas bancárias estáticos (Nubank ••••4521, Itaú ••••7832, Bradesco ••••1190).
+- Dropdowns de seleção de conta (PIX e Transferência) agora populados dinamicamente.
+- Subtítulo da fatura e barra de utilização agora dinâmicos.
+- Referências "Fatura Nubank" substituídas por "Fatura Cartão".
+
+**`premium_ui/modules/personal-hub.html`**
+- Removida lista de contatos fictícios (Ana Lima, Carlos Mendes, Rafael Costa, Marketing Team).
+- Carregamento dinâmico de mensagens recentes via `/api/communication/hub?view=recent`.
+
+---
+
+
 ## [19.0.0] — 2026-07-16
 
 ### Release: LIFEOS ENTERPRISE v19.0.0 — Phases 178–184

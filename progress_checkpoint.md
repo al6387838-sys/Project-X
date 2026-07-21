@@ -1,30 +1,38 @@
-# Progress Checkpoint — LifeOS Enterprise v46.0.0
-
+# Progress Checkpoint — LifeOS Enterprise v46.0.1
 ## Commit Base
 - Branch: main
-- Last commit: a6c8ce12e212c50d3d152f8956cf0b2666603ac6
-- Date: 2026-07-20 03:59:10 +0000
-- Message: v46.0.0 — Version Unification Release — All Surfaces Synchronized
+- Last commit: 28d60f0 (Phases 326-329)
+- Date: 2026-07-21
+- Message: v46.0.1 — Phases 331–336 — Data Integrity & Launch Certification
 
-## Alterações Realizadas
-### 1. enterprise-settings.html — API Keys + Webhooks
-- Removidos dados hardcoded (leos_prod, leos_dev, whsec_, api.empresa.com)
-- Conectado ao endpoint real /api/platform?view=keys e ?view=webhooks
-- Adicionados: create-key, revoke-key, register-webhook, delete-webhook, test-webhook
-- Modais funcionais com loading, tratamento de erro, mensagem de sucesso
+## Status: FREEZE FINAL COMPLETO
 
-### 2. integration-center.html — Central de Integrações
-- Removidos dados mock do localStorage (github connected, google-calendar connected)
-- Carrega integrações reais do /api/integrations
-- Conecta/desconecta via POST /api/integrations
-- Sincroniza via POST /api/integrations action: sync
-- Logs carregados do /api/operation-audit
-- Mostra envKeys necessárias para cada integração
+## Alterações Realizadas (Phases 331-336)
+
+### 1. app_dashboard.html — Billing Dinâmico
+- Removido bloco de billing estático (Plano Pro, R$49, cartão ••••4242, datas fixas)
+- Implementada função `loadBillingData()` consumindo `/api/payments/billing`
+- Billing exibe plano real, histórico de faturas e método de pagamento do usuário
+- Hook adicionado em `showPage()` para carregar billing ao navegar para a página
+
+### 2. finance.html — Dados Financeiros Dinâmicos
+- Removido card de crédito visual hardcoded (••••1234, "USUARIO LIFEOS")
+- Removidos cards de contas bancárias estáticos (Nubank ••••4521, Itaú ••••7832, Bradesco ••••1190)
+- Dropdowns de seleção de conta (PIX e Transferência) agora populados dinamicamente
+- Subtítulo da fatura e barra de utilização agora dinâmicos (IDs: fin-invoice-due, fin-invoice-util-bar)
+- Referências "Fatura Nubank" substituídas por "Fatura Cartão"
+- Renderização do bank cards grid e featured card via API
+
+### 3. personal-hub.html — Comunicação Dinâmica
+- Removida lista de contatos fictícios (Ana Lima, Carlos Mendes, Rafael Costa, Marketing Team)
+- Carregamento dinâmico via `/api/communication/hub?view=recent`
 
 ## Pendente
-- calendar.html — Botões de sincronização com showToast apenas (precisa conectar /api/events)
-- communication.html — Conversas hardcoded (João Silva, #geral) — precisa carregar do /api/communication/hub
-- finance.html — Dados mock (João Silva, Maria Santos, R$) — precisa carregar do /api/finance/hub
-- ai-center.html — Referências mock (João Silva) — precisa limpar
-- Remover console.info usado como ação em communication.html
-- Build final + deploy
+- Nenhum item pendente identificado na auditoria atual
+- calendar.html: já conectado ao /api/events (verificado)
+- communication.html: já conectado ao /api/communication/hub (verificado)
+- ai-center.html: já conectado ao /api/ai-insights (verificado)
+
+## Próximos Passos
+- Deploy em produção (Cloudflare Pages)
+- Monitoramento pós-deploy

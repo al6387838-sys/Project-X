@@ -236,39 +236,8 @@
         </div>
         <a class="central-link" href="/modules/communication.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
       </div>
-      <ul class="comm-list">
-        <li class="comm-item">
-          <div class="comm-avatar" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">A</div>
-          <div class="comm-info">
-            <div class="comm-name">Ana Lima</div>
-            <div class="comm-preview">Precisamos revisar o contrato antes de...</div>
-          </div>
-          <div class="comm-meta"><div class="comm-time">14:32</div><div class="comm-badge">3</div></div>
-        </li>
-        <li class="comm-item">
-          <div class="comm-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">C</div>
-          <div class="comm-info">
-            <div class="comm-name">Carlos Mendes</div>
-            <div class="comm-preview">Relatório Q2 está pronto para revisão</div>
-          </div>
-          <div class="comm-meta"><div class="comm-time">13:15</div><div class="comm-badge">1</div></div>
-        </li>
-        <li class="comm-item">
-          <div class="comm-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706)">M</div>
-          <div class="comm-info">
-            <div class="comm-name">Marketing Team</div>
-            <div class="comm-preview">Campanha aprovada! Lançamento amanhã às...</div>
-          </div>
-          <div class="comm-meta"><div class="comm-time">11:45</div><div class="comm-badge">7</div></div>
-        </li>
-        <li class="comm-item">
-          <div class="comm-avatar" style="background:linear-gradient(135deg,#EC4899,#DB2777)">R</div>
-          <div class="comm-info">
-            <div class="comm-name">Rafael Costa</div>
-            <div class="comm-preview">Confirma a reunião das 16h?</div>
-          </div>
-          <div class="comm-meta"><div class="comm-time">10:20</div><div class="comm-badge">2</div></div>
-        </li>
+      <ul class="comm-list" id="hub-comm-list">
+        <li class="comm-item" style="justify-content:center;color:var(--text-muted);font-size:12px">Carregando mensagens...</li>
       </ul>
     </div>
 
@@ -420,6 +389,39 @@
         document.querySelector('.ai-input input').focus();
       });
     });
+    // Load recent messages dynamically
+    (async () => {
+      const commList = document.getElementById('hub-comm-list');
+      if (!commList) return;
+      try {
+        const r = await fetch('/api/communication/hub?view=recent', { credentials: 'same-origin' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        const msgs = d.conversations || d.messages || [];
+        const colors = ['linear-gradient(135deg,#6366F1,#8B5CF6)', 'linear-gradient(135deg,#10B981,#059669)', 'linear-gradient(135deg,#F59E0B,#D97706)', 'linear-gradient(135deg,#EC4899,#DB2777)', 'linear-gradient(135deg,#06B6D4,#0891B2)'];
+        if (msgs.length === 0) {
+          commList.innerHTML = '<li class="comm-item" style="justify-content:center;color:var(--text-muted);font-size:12px">Nenhuma mensagem recente</li>';
+        } else {
+          commList.innerHTML = msgs.slice(0, 4).map((m, i) => {
+            const name = m.name || m.sender || m.contact || 'Contato';
+            const preview = m.preview || m.lastMessage || m.body || '';
+            const time = m.time || m.lastAt ? new Date(m.lastAt || m.time).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+            const unread = m.unread || m.unreadCount || 0;
+            const initial = name[0].toUpperCase();
+            return `<li class="comm-item">
+              <div class="comm-avatar" style="background:${colors[i % colors.length]}">${initial}</div>
+              <div class="comm-info">
+                <div class="comm-name">${name}</div>
+                <div class="comm-preview">${preview.length > 40 ? preview.slice(0, 40) + '...' : preview}</div>
+              </div>
+              <div class="comm-meta">${time ? '<div class="comm-time">' + time + '</div>' : ''}${unread > 0 ? '<div class="comm-badge">' + unread + '</div>' : ''}</div>
+            </li>`;
+          }).join('');
+        }
+      } catch (e) {
+        commList.innerHTML = '<li class="comm-item" style="justify-content:center;color:var(--text-muted);font-size:12px">Mensagens indisponíveis</li>';
+      }
+    })();
   </script>
 </body>
 </html>

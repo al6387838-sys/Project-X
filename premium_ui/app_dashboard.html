@@ -1535,24 +1535,24 @@
         <div class="page-header">
           <div><div class="page-title">Assinatura</div><div class="page-subtitle">Gerencie seu plano</div></div>
         </div>
-        <div class="plan-current">
+        <div id="billing-plan-section" class="plan-current">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
             <div>
               <div style="font-size:12px;color:var(--accent-light);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Plano Atual</div>
-              <div class="plan-name-big">Pro</div>
-              <div class="plan-price-big">R$49 <span>/mês</span></div>
-              <div style="font-size:13px;color:var(--text-secondary)">Próxima cobrança: 13 de Agosto, 2025</div>
+              <div class="plan-name-big" id="billing-plan-name">—</div>
+              <div class="plan-price-big" id="billing-plan-price"><span></span></div>
+              <div style="font-size:13px;color:var(--text-secondary)" id="billing-next-charge"></div>
             </div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <button class="btn btn-primary">Plano Enterprise Ativo</button>
-              <button class="btn btn-ghost">Gerenciar pagamento</button>
+              <button class="btn btn-primary" id="billing-upgrade-btn">Gerenciar Plano</button>
+              <button class="btn btn-ghost" id="billing-portal-btn">Gerenciar pagamento</button>
             </div>
           </div>
         </div>
         <div class="grid-3">
-          <div class="card"><div class="card-title">Uso do Mês</div><div style="display:flex;flex-direction:column;gap:10px;margin-top:8px"><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Hábitos</span><span>6 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Metas</span><span>3 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text-secondary)">Notas</span><span>47 / ∞</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div></div></div>
-          <div class="card"><div class="card-title">Histórico</div><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jul 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Jun 2025</span><span>R$49,00</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">Mai 2025</span><span>R$49,00</span></div></div></div>
-          <div class="card"><div class="card-title">Método de Pagamento</div><div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md)"><div style="font-size:24px"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:13px;font-weight:600">•••• •••• •••• 4242</div><div style="font-size:11px;color:var(--text-muted)">Expira 12/2027</div></div></div></div>
+          <div class="card"><div class="card-title">Uso do Mês</div><div id="billing-usage" style="display:flex;flex-direction:column;gap:10px;margin-top:8px"><div style="color:var(--text-muted);font-size:12px">Carregando...</div></div></div>
+          <div class="card"><div class="card-title">Histórico de Faturas</div><div id="billing-history" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="color:var(--text-muted);font-size:12px">Carregando...</div></div></div>
+          <div class="card"><div class="card-title">Método de Pagamento</div><div id="billing-payment-method" style="display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-md)"><div style="color:var(--text-muted);font-size:12px">Carregando...</div></div></div>
         </div>
       </div>
 
@@ -2200,6 +2200,7 @@
     if (id === 'search') loadSmartSearch();
     if (id === 'notifications') loadNotificationCenter();
     if (id === 'documents') docsLoadCurrent();
+    if (id === 'billing') loadBillingData();
     // Fechar sidebar no mobile
     if (window.innerWidth <= 768) {
       document.getElementById('sidebar').classList.remove('mobile-open');
@@ -2356,21 +2357,108 @@
     else if (text.includes('Importar dados')) btn.onclick = () => { const inp = document.createElement('input'); inp.type='file'; inp.accept='.json,.csv'; inp.onchange = e => showToast('Importando ' + e.target.files[0].name + '...', 'info'); inp.click(); };
   });
 
-  // ─── Billing buttons ───────────────────────────────────────────
-  document.querySelector('#page-billing .btn-primary')?.addEventListener('click', async () => {
-    showToast('Redirecionando para checkout Enterprise...', 'info');
+  // ─── Billing — carregamento dinâmico da API ─────────────────────
+  let _billingLoaded = false;
+  async function loadBillingData() {
+    if (_billingLoaded) return;
     try {
-      const r = await fetch('/api/billing/checkout', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ plan: 'enterprise' })
-      });
+      const r = await fetch('/api/payments/billing', { credentials: 'same-origin' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       const d = await r.json();
-      if (d.ok && d.checkoutUrl) { window.location.href = d.checkoutUrl; }
-      else { showToast(d.error || 'Entre em contato: sales@lifeos.app', 'info'); }
-    } catch (_) { showToast('Entre em contato: sales@lifeos.app', 'info'); }
-  });
-  document.querySelector('#page-billing .btn-ghost')?.addEventListener('click', () => {
+      if (!d.ok) throw new Error(d.error || 'Erro ao carregar billing');
+      _billingLoaded = true;
+      const sub = d.subscription || {};
+      const plan = d.plan || {};
+      const invoices = d.recentInvoices || [];
+      // Plan name & price
+      const nameEl = document.getElementById('billing-plan-name');
+      const priceEl = document.getElementById('billing-plan-price');
+      const nextEl = document.getElementById('billing-next-charge');
+      if (nameEl) nameEl.textContent = plan.name || sub.plan || 'Free';
+      if (priceEl) {
+        const price = plan.price?.brl;
+        priceEl.innerHTML = price ? `R$${(price/100).toFixed(0)} <span>/mês</span>` : '<span>Gratuito</span>';
+      }
+      if (nextEl && sub.renewalAt) {
+        const dt = new Date(sub.renewalAt);
+        nextEl.textContent = 'Próxima cobrança: ' + dt.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+      } else if (nextEl) {
+        nextEl.textContent = sub.status === 'active' ? 'Assinatura ativa' : (sub.status || '');
+      }
+      // Usage
+      const usageEl = document.getElementById('billing-usage');
+      if (usageEl) {
+        const limits = plan.limits || {};
+        const usageItems = [
+          { label: 'Usuários', used: '—', max: limits.users === -1 ? '∞' : (limits.users || '—') },
+          { label: 'Armazenamento', used: '—', max: limits.storage_gb ? limits.storage_gb + ' GB' : '—' },
+          { label: 'Chamadas API', used: '—', max: limits.api_calls === -1 ? '∞' : (limits.api_calls?.toLocaleString('pt-BR') || '—') },
+        ];
+        usageEl.innerHTML = usageItems.map(u => `
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+              <span style="color:var(--text-secondary)">${u.label}</span>
+              <span>${u.used} / ${u.max}</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${u.max === '∞' ? 100 : 0}%"></div></div>
+          </div>`).join('');
+      }
+      // Invoice history
+      const histEl = document.getElementById('billing-history');
+      if (histEl) {
+        if (invoices.length === 0) {
+          histEl.innerHTML = '<div style="color:var(--text-muted);font-size:12px">Nenhuma fatura encontrada</div>';
+        } else {
+          histEl.innerHTML = invoices.slice(0, 5).map(inv => {
+            const dt = inv.createdAt ? new Date(inv.createdAt).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }) : '—';
+            const amt = inv.amount ? 'R$' + (inv.amount / 100).toFixed(2).replace('.', ',') : '—';
+            const color = inv.status === 'paid' ? 'var(--green)' : 'var(--amber)';
+            return `<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text-secondary)">${dt}</span><span style="color:${color}">${amt}</span></div>`;
+          }).join('');
+        }
+      }
+      // Payment method
+      const pmEl = document.getElementById('billing-payment-method');
+      if (pmEl) {
+        if (d.billing?.stripeConfigured || d.billing?.mercadoPagoConfigured) {
+          pmEl.innerHTML = `<div style="font-size:24px"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><div><div style="font-size:13px;font-weight:600">Pagamento configurado</div><div style="font-size:11px;color:var(--text-muted)">${d.billing.stripeConfigured ? 'Stripe' : 'Mercado Pago'} ativo</div></div>`;
+        } else {
+          pmEl.innerHTML = `<div style="font-size:13px;color:var(--text-muted)">Nenhum método de pagamento configurado</div>`;
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+      // Upgrade button
+      const upgradeBtn = document.getElementById('billing-upgrade-btn');
+      if (upgradeBtn) {
+        const planId = sub.plan || 'free';
+        if (planId === 'enterprise') {
+          upgradeBtn.textContent = 'Plano Enterprise Ativo';
+          upgradeBtn.disabled = true;
+        } else {
+          upgradeBtn.textContent = 'Fazer Upgrade';
+          upgradeBtn.onclick = async () => {
+            showToast('Redirecionando para checkout...', 'info');
+            try {
+              const cr = await fetch('/api/payments/billing', {
+                method: 'POST', credentials: 'same-origin',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ action: 'checkout', plan: 'enterprise' })
+              });
+              const cd = await cr.json();
+              if (cd.ok && cd.checkoutUrl) window.location.href = cd.checkoutUrl;
+              else showToast(cd.error || 'Entre em contato: sales@lifeos.app', 'info');
+            } catch (_) { showToast('Entre em contato: sales@lifeos.app', 'info'); }
+          };
+        }
+      }
+    } catch (e) {
+      console.error('Billing load error:', e);
+      const nameEl = document.getElementById('billing-plan-name');
+      if (nameEl) nameEl.textContent = 'Erro ao carregar';
+    }
+  }
+  // Portal button
+  document.getElementById('billing-portal-btn')?.addEventListener('click', () => {
     showToast('Redirecionando para portal de pagamento...', 'info');
   });
 
