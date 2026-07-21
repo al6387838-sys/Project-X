@@ -1,6 +1,6 @@
-// LifeOS Enterprise — Admin Login v6.0 (compat)
+// LifeOS Enterprise — Admin Login v7.0
 // Cloudflare Pages Function: POST /api/admin-login
-
+// FASE 332 — Zero Block Login: mensagens de erro claras e acionáveis
 import { createSession, json, passwordDigest, safeEqual, sessionCookie } from '../_auth.js';
 
 export async function onRequestPost({ request, env }) {
@@ -8,8 +8,19 @@ export async function onRequestPost({ request, env }) {
   const configuredHash = env.LIFEOS_ADMIN_PASSWORD_HASH;
   const sessionSecret = env.LIFEOS_SESSION_SECRET;
 
-  if (!configuredUser || !configuredHash || !sessionSecret) {
-    return json(503, { ok: false, error: 'Autenticação ainda não configurada' });
+  if (!sessionSecret) {
+    return json(503, {
+      ok: false,
+      code: 'SESSION_SECRET_MISSING',
+      error: 'Serviço de autenticação indisponível. Configure LIFEOS_SESSION_SECRET no painel Cloudflare Pages → Settings → Environment Variables.',
+    });
+  }
+  if (!configuredUser || !configuredHash) {
+    return json(503, {
+      ok: false,
+      code: 'ADMIN_CREDENTIALS_MISSING',
+      error: 'Credenciais administrativas não configuradas. Configure LIFEOS_ADMIN_USER e LIFEOS_ADMIN_PASSWORD_HASH no painel Cloudflare Pages.',
+    });
   }
 
   let input = {};

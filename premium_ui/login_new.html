@@ -9,7 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <meta name="description" content="Acesso seguro à plataforma LifeOS Enterprise para gestão integrada de vida e negócios." />
-  <title>Entrar — LifeOS Enterprise v46.0.0</title>
+  <title>Entrar — LifeOS Enterprise v47.0.0</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -314,7 +314,7 @@
     .panel { display: none; }
     .panel.active { display: block; }
   </style>
-  <link rel="stylesheet" href="/precision_graphite.css?v=46.0.0" data-visual-system="precision-graphite" />
+  <link rel="stylesheet" href="/precision_graphite.css?v=47.0.0" data-visual-system="precision-graphite" />
 </head>
 <body>
   <div class="auth-container">
@@ -469,42 +469,89 @@
       btn.classList.toggle('loading', v);
     }
 
+    // ── FASE 332/333 — Auto-detect OAuth + Fallback Automático ─────────────
+    // Detecta via /api/auth/config quais provedores estão configurados.
+    // Botões são ocultados/desabilitados elegantemente se não configurados.
+    // Quando as variáveis aparecerem no Cloudflare, os botões reaparecem
+    // automaticamente — SEM alterar código.
+    (async function initOAuthButtons() {
+      let googleEnabled = false;
+      let appleEnabled = false;
+      try {
+        const r = await fetch('/api/auth/config', { credentials: 'same-origin' });
+        if (r.ok) {
+          const cfg = await r.json();
+          googleEnabled = Boolean(cfg.providers && cfg.providers.google);
+          appleEnabled = Boolean(cfg.providers && cfg.providers.apple);
+        }
+      } catch (_) {
+        // Se /api/auth/config falhar, manter botões visíveis mas com fallback
+        googleEnabled = false;
+        appleEnabled = false;
+      }
+
+      const googleBtn = document.querySelector('.sso-btn[onclick="showGoogleSignIn()"]');
+      const appleBtn = document.getElementById('sso-apple');
+      const ssoGrid = document.querySelector('.sso-grid');
+      const divider = document.querySelector('.divider');
+
+      if (!googleEnabled && googleBtn) {
+        googleBtn.disabled = true;
+        googleBtn.title = 'Google Login será ativado quando configurado';
+        googleBtn.style.opacity = '0.4';
+        googleBtn.style.cursor = 'not-allowed';
+        googleBtn.style.pointerEvents = 'none';
+      }
+      if (!appleEnabled && appleBtn) {
+        appleBtn.disabled = true;
+        appleBtn.title = 'Apple Login será ativado quando configurado';
+        appleBtn.style.opacity = '0.4';
+        appleBtn.style.cursor = 'not-allowed';
+        appleBtn.style.pointerEvents = 'none';
+      }
+      // Ocultar seção SSO inteira se nenhum provedor estiver configurado
+      if (!googleEnabled && !appleEnabled && ssoGrid && divider) {
+        ssoGrid.style.display = 'none';
+        divider.style.display = 'none';
+      }
+    })();
+
+    // Tratar redirecionamento de volta com ?oauth=*_unavailable
+    (function handleOAuthUnavailable() {
+      const params = new URLSearchParams(location.search);
+      const oauthParam = params.get('oauth');
+      if (oauthParam === 'google_unavailable') {
+        showStatus('login-status', 'info', 'Google Login ainda não está configurado. Use e-mail e senha para entrar.');
+        // Limpar o parâmetro da URL sem recarregar
+        const clean = location.pathname + (params.size > 1 ? '?' + [...params.entries()].filter(([k]) => k !== 'oauth').map(([k,v]) => k+'='+v).join('&') : '');
+        history.replaceState({}, '', clean);
+      } else if (oauthParam === 'apple_unavailable') {
+        showStatus('login-status', 'info', 'Apple Login ainda não está configurado. Use e-mail e senha para entrar.');
+        const clean = location.pathname + (params.size > 1 ? '?' + [...params.entries()].filter(([k]) => k !== 'oauth').map(([k,v]) => k+'='+v).join('&') : '');
+        history.replaceState({}, '', clean);
+      }
+    })();
+
     // Google Sign In — OAuth 2.0 real
     function showGoogleSignIn() {
       const btn = document.querySelector('.sso-btn[onclick="showGoogleSignIn()"]');
+      if (btn && btn.disabled) {
+        showStatus('login-status', 'info', 'Google Login será ativado automaticamente quando configurado no Cloudflare.');
+        return;
+      }
       if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
-      // Verificar se Google OAuth está configurado
-      fetch('/api/auth/google', { method: 'HEAD', redirect: 'manual' })
-        .then(res => {
-          if (res.status === 503) {
-            showStatus('login-status', 'info', 'Google OAuth requer configuração de credenciais no painel Cloudflare.');
-            if (btn) { btn.disabled = false; btn.style.opacity = ''; }
-          } else {
-            // Redirecionar para fluxo OAuth
-            window.location.href = '/api/auth/google';
-          }
-        })
-        .catch(() => {
-          window.location.href = '/api/auth/google';
-        });
+      window.location.href = '/api/auth/google';
     }
 
     // Apple Sign In — OAuth 2.0 / OpenID Connect real
     function showAppleSignIn() {
       const appleBtn = document.getElementById('sso-apple');
+      if (appleBtn && appleBtn.disabled) {
+        showStatus('login-status', 'info', 'Apple Login será ativado automaticamente quando configurado no Cloudflare.');
+        return;
+      }
       if (appleBtn) { appleBtn.disabled = true; appleBtn.style.opacity = '0.7'; }
-      fetch('/api/auth/apple', { method: 'HEAD', redirect: 'manual' })
-        .then(res => {
-          if (res.status === 503) {
-            showStatus('login-status', 'info', 'Apple Sign In requer configuração de credenciais no painel Cloudflare.');
-            if (appleBtn) { appleBtn.disabled = false; appleBtn.style.opacity = ''; }
-          } else {
-            window.location.href = '/api/auth/apple';
-          }
-        })
-        .catch(() => {
-          window.location.href = '/api/auth/apple';
-        });
+      window.location.href = '/api/auth/apple';
     }
 
     // LOGIN FORM
@@ -576,6 +623,6 @@
       el.addEventListener('input', () => el.classList.remove('error'));
     });
   </script>
-  <script src="/precision_graphite.js?v=46.0.0" defer data-visual-system="precision-graphite"></script>
+  <script src="/precision_graphite.js?v=47.0.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

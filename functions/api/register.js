@@ -9,7 +9,7 @@ const MAX_REGISTER_ATTEMPTS = 5;
 const WINDOW_SECONDS = 3600;
 
 async function checkRateLimit(kv, ip) {
-  if (!kv) return { allowed: false };
+  if (!kv) return { allowed: true }; // Sem KV: permitir (KV já verificado antes)
   const key = `rl:register:${ip}`;
   const raw = await kv.get(key);
   const data = raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + WINDOW_SECONDS * 1000 };
@@ -23,7 +23,11 @@ async function checkRateLimit(kv, ip) {
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Armazenamento não disponível' });
+  if (!env.LIFEOS_KV) return json(503, {
+    ok: false,
+    code: 'KV_MISSING',
+    error: 'Serviço de armazenamento temporariamente indisponível. Verifique o binding LIFEOS_KV no painel Cloudflare.',
+  });
 
   const clientIP = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown';
   const rateLimit = await checkRateLimit(env.LIFEOS_KV, clientIP);

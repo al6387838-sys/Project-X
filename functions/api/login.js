@@ -1,4 +1,8 @@
-// LifeOS Enterprise — Login Unificado v16.5
+// LifeOS Enterprise — Login Unificado v17.0
+// FASE 332 — Zero Block Login
+// - LIFEOS_SESSION_SECRET + LIFEOS_KV são obrigatórios para qualquer login
+// - LIFEOS_ADMIN_PASSWORD_HASH é necessário apenas para login admin
+// - Mensagens de erro claras e acionáveis — nunca JSON bruto sem contexto
 import { recordSession } from '../_account.js';
 import { createSession, json, passwordDigest, safeEqual, sessionCookie, verifySession } from '../_auth.js';
 
@@ -6,7 +10,7 @@ const MAX_LOGIN_ATTEMPTS = 10;
 const WINDOW_SECONDS = 60;
 
 async function checkRateLimit(kv, ip) {
-  if (!kv) return { allowed: false, remaining: 0 };
+  if (!kv) return { allowed: true, remaining: MAX_LOGIN_ATTEMPTS };
   const key = `rl:login:${ip}`;
   const raw = await kv.get(key);
   const data = raw ? JSON.parse(raw) : { count: 0, resetAt: Date.now() + WINDOW_SECONDS * 1000 };
@@ -27,8 +31,20 @@ async function issueSession(request, env, email, role) {
 }
 
 export async function onRequestPost({ request, env }) {
-  if (!env.LIFEOS_ADMIN_USER || !env.LIFEOS_ADMIN_PASSWORD_HASH || !env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) {
-    return json(503, { ok: false, error: 'Autenticação ainda não configurada' });
+  // Verificar variáveis obrigatórias para qualquer login
+  if (!env.LIFEOS_SESSION_SECRET) {
+    return json(503, {
+      ok: false,
+      code: 'SESSION_SECRET_MISSING',
+      error: 'Serviço de autenticação temporariamente indisponível. Configure LIFEOS_SESSION_SECRET no painel Cloudflare.',
+    });
+  }
+  if (!env.LIFEOS_KV) {
+    return json(503, {
+      ok: false,
+      code: 'KV_MISSING',
+      error: 'Serviço de armazenamento temporariamente indisponível. Verifique o binding LIFEOS_KV no painel Cloudflare.',
+    });
   }
 
   const clientIP = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown';
@@ -48,17 +64,22 @@ export async function onRequestPost({ request, env }) {
   if (!username || !password) return json(400, { ok: false, error: 'E-mail e senha são obrigatórios' });
 
   const inputHash = await passwordDigest(password);
-  const isAdmin = safeEqual(username, env.LIFEOS_ADMIN_USER.toLowerCase())
-    && safeEqual(inputHash, env.LIFEOS_ADMIN_PASSWORD_HASH);
-  if (isAdmin) {
-    const token = await issueSession(request, env, env.LIFEOS_ADMIN_USER, 'admin');
-    return json(200, {
-      ok: true,
-      user: { username: env.LIFEOS_ADMIN_USER, role: 'admin', name: 'Administrador' },
-      redirect: '/admin',
-    }, { 'set-cookie': sessionCookie(token) });
+
+  // Verificar login admin (apenas se LIFEOS_ADMIN_PASSWORD_HASH estiver configurado)
+  if (env.LIFEOS_ADMIN_USER && env.LIFEOS_ADMIN_PASSWORD_HASH) {
+    const isAdmin = safeEqual(username, env.LIFEOS_ADMIN_USER.toLowerCase())
+      && safeEqual(inputHash, env.LIFEOS_ADMIN_PASSWORD_HASH);
+    if (isAdmin) {
+      const token = await issueSession(request, env, env.LIFEOS_ADMIN_USER, 'admin');
+      return json(200, {
+        ok: true,
+        user: { username: env.LIFEOS_ADMIN_USER, role: 'admin', name: 'Administrador' },
+        redirect: '/admin',
+      }, { 'set-cookie': sessionCookie(token) });
+    }
   }
 
+  // Login de usuário regular via KV
   const userRaw = await env.LIFEOS_KV.get(`user:${username}`);
   if (!userRaw) return json(401, { ok: false, error: 'Credenciais inválidas. Verifique e tente novamente.' });
   const user = JSON.parse(userRaw);

@@ -1,8 +1,27 @@
-# LifeOS Enterprise v46.0.0 — Cloudflare Pages Configuration
-# HARDENING v46.0.0 (Fase 328):
+# LifeOS Enterprise v47.0.0 — Cloudflare Pages Configuration
+# HARDENING v47.0.0 (Fases 331-335):
 #   LIFEOS_SESSION_SECRET  → configurar via: wrangler secret put LIFEOS_SESSION_SECRET
 #   LIFEOS_ADMIN_PASSWORD_HASH → configurar via: wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
 #   Secrets NÃO devem constar em [vars] em produção — usar Cloudflare Pages Secrets
+#
+# ── VARIÁVEIS OPCIONAIS (OAuth) ──────────────────────────────────────────────
+# Google OAuth (opcional — Login Google será ativado automaticamente quando configurado):
+#   wrangler secret put GOOGLE_CLIENT_ID
+#   wrangler secret put GOOGLE_CLIENT_SECRET
+#
+# Apple Sign In (opcional — Login Apple será ativado automaticamente quando configurado):
+#   wrangler secret put APPLE_CLIENT_ID
+#   wrangler secret put APPLE_TEAM_ID
+#   wrangler secret put APPLE_KEY_ID
+#   wrangler secret put APPLE_PRIVATE_KEY
+#
+# Email (opcional — Cadastro/Recuperação de senha requerem um provedor):
+#   wrangler secret put RESEND_API_KEY   (recomendado)
+#   wrangler secret put EMAIL_FROM       (ex: "LifeOS <noreply@lifeos.app>")
+#   OU
+#   wrangler secret put SENDGRID_API_KEY
+#   wrangler secret put EMAIL_FROM
+# ─────────────────────────────────────────────────────────────────────────────
 name = "lifeos-enterprise"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
@@ -34,5 +53,5 @@ LIFEOS_ADMIN_USER = "al6387838@gmail.com"
 # como Cloudflare Pages Secrets (não como [vars]):
 #   npx wrangler secret put LIFEOS_SESSION_SECRET
 #   npx wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
-LIFEOS_VERSION = "v46.0.0"
+LIFEOS_VERSION = "v47.0.0"
 LIFEOS_ENV = "production"

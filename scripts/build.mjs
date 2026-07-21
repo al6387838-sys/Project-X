@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 46.0.0 (Phases 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v46.0.0)
+// Version: 47.0.0 (Phases 331-335 — Auth Recovery, Zero Block Login, OAuth Fallback, Auto-detect)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -131,7 +131,7 @@ try {
 } catch { }
 
 const redirects = [
-  '# LifeOS Enterprise v46.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v47.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -142,6 +142,7 @@ const redirects = [
   '/accept-invite      /accept-invite/index.html   200',
   '/api/auth/google    /api/auth/google            200',
   '/api/auth/apple     /api/auth/apple             200',
+  '/api/auth/config    /api/auth/config            200',
   '',
   '# App routes',
   '/app                /app/index.html             200',
@@ -229,7 +230,7 @@ await writeFile(resolve(dist, '_redirects'), redirects);
 
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 const builtAt = new Date().toISOString();
-const buildId = `lifeos-46.0.0-${commit.slice(0, 12)}`;
+const buildId = `lifeos-47.0.0-${commit.slice(0, 12)}`;
 
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
@@ -253,7 +254,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: 'v46.0.0',
+  version: 'v47.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -262,6 +263,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '093-100','101-108','109','111-115','119',
     '131-138','139-146','147-152','153-160','161-162','163-171',
     '172-177','225-233','250-254','255','257-258','259-262','279-281','303-306','304-308',
+    '331-335',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -279,7 +281,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/communication/hub','/api/communication/callback/[provider]',
     '/api/finance/hub','/api/documents','/api/ai/orchestrator','/api/ai/platform','/api/security',
     '/api/payments','/api/payments/webhook','/api/payments/billing','/api/collaboration','/api/platform',
-    '/api/auth/google','/api/auth/apple','/api/login','/api/logout','/api/register',
+    '/api/auth/google','/api/auth/apple','/api/auth/config','/api/login','/api/logout','/api/register',
     '/api/email-confirmation','/api/password-reset','/api/session','/api/profile',
     '/api/profile-update','/api/sessions','/api/settings','/api/notifications','/api/workspaces',
     '/api/observability','/api/health','/api/integrations','/api/operation-audit',
@@ -294,13 +296,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: 'v46.0.0',
+  version: 'v47.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
-  phases: '304-308',
+  phases: '331-335',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -325,12 +327,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise 46.0.0 — Build OK ✓               ║');
+console.log('║   LifeOS Enterprise 47.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-  console.log(`  Version       : v46.0.0`);
+  console.log(`  Version       : v47.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-  console.log(`  Phases        : 306-313 — Zero Mocks, API-Driven, Certificação Enterprise, Release v46.0.0`);
+  console.log(`  Phases        : 331-335 — Auth Recovery, Zero Block Login, OAuth Fallback, Auto-detect`);
 console.log(`  Modules       : 37 total`);
 console.log(`  APIs          : 46 endpoints`);
 console.log(`  Commit        : ${commit}`);
