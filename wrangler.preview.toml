@@ -1,0 +1,33 @@
+# LifeOS Enterprise v46.0.0 — Cloudflare Pages Preview Configuration
+# Este arquivo é usado para testes locais antes do deploy em produção.
+# NÃO usar em produção.
+
+name = "lifeos-enterprise"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[[kv_namespaces]]
+binding = "LIFEOS_KV"
+id = "preview-kv-id"
+preview_id = "preview-kv-id"
+
+[[r2_buckets]]
+binding = "LIFEOS_R2"
+bucket_name = "lifeos-files-preview"
+preview_bucket_name = "lifeos-files-preview"
+
+[[r2_buckets]]
+binding = "LIFEOS_FILES"
+bucket_name = "lifeos-documents-preview"
+preview_bucket_name = "lifeos-documents-preview"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "lifeos-storage-preview"
+preview_bucket_name = "lifeos-storage-preview"
+
+[vars]
+LIFEOS_ADMIN_USER = "al6387838@gmail.com"
+LIFEOS_VERSION = "v46.0.0"
+LIFEOS_ENV = "preview"

@@ -12,3 +12,12 @@ deno.lock
 functions/api/observability.js.bak
 fix_*.py
 .env.local
+*.pyc
+*.pyo
+.egg-info/
+build/
+*.egg
+.env
+sprint_progress_summary.txt
+security-a11y-fixes.json
+demo_execution*.py

@@ -288,6 +288,22 @@
     .page { display: none; }
     .page.active { display: block; }
 
+    /* ─── LOADING ─── */
+    .page-loading {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 200px; color: var(--text-muted); font-size: 13px;
+    }
+    .page-loading::before {
+      content: '';
+      width: 24px; height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* ─── CARDS ─── */
     .card {
       background: var(--bg-card);
@@ -702,6 +718,10 @@
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
       border-radius: var(--radius-md);
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
     /* Focus visible */
     :focus-visible {
@@ -2105,16 +2125,41 @@
     'ai-daily': 'ai-center',
     'ai-weekly': 'ai-center',
     'ai-recommendations': 'ai-center',
+    // Páginas inline (sem módulo externo)
+    'agenda': null,
+    'ai': null,
+    'billing': null,
+    'dashboard': null,
+    'goals': null,
+    'habits': null,
+    'lifescore': null,
+    'memory': null,
+    'notifications': null,
+    'profile': null,
+    'projects': null,
+    'search': null,
+    'settings': null,
+    'timeline': null,
   };
 
   async function loadModuleForPage(pageId) {
     const moduleName = _modulePageMap[pageId];
     if (!moduleName || _loadedModules.has(pageId)) return;
+    // Mostrar loading
+    const page = document.getElementById('page-' + pageId);
+    if (page) {
+      page.innerHTML = '<div class="page-loading">Carregando módulo...</div>';
+      page.classList.add('active');
+    }
     try {
-      const res = await fetch(`/app/modules/${moduleName}.html`, { credentials: 'same-origin' });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(`/app/modules/${moduleName}.html`, {
+        credentials: 'same-origin', signal: controller.signal
+      });
+      clearTimeout(timeout);
       if (!res.ok) { _loadedModules.add(pageId); return; }
       const html = await res.text();
-      const page = document.getElementById('page-' + pageId);
       if (page) {
         page.innerHTML = html;
         _loadedModules.add(pageId);
@@ -2123,6 +2168,9 @@
     } catch (e) {
       console.warn(`Module load failed for ${pageId}:`, e);
       _loadedModules.add(pageId);
+      if (page) {
+        page.innerHTML = '<div class="page-loading" style="color:var(--red)">Falha ao carregar módulo. Recarregue a página.</div>';
+      }
     }
   }
   function showPage(id) {
@@ -3577,11 +3625,25 @@
   // Todas as funções abaixo consomem exclusivamente APIs reais / KV / R2
   // ═══════════════════════════════════════════════════════════════════════
 
-  // ── Utilitário: fetch com auth ────────────────────────────────────────
+  // ── Utilitário: fetch com auth + timeout + fallback ──────────────────
   async function apiFetch(url, opts = {}) {
-    const r = await fetch(url, { credentials: 'same-origin', ...opts });
-    if (!r.ok) throw new Error(`API ${url} retornou ${r.status}`);
-    return r.json();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const r = await fetch(url, { credentials: 'same-origin', ...opts, signal: controller.signal });
+      clearTimeout(timeout);
+      if (!r.ok) {
+        const status = r.status;
+        if (status === 401) { location.replace('/login'); throw new Error('Sessão expirada'); }
+        if (status === 403) throw new Error('Acesso negado');
+        throw new Error(`API ${url} retornou ${status}`);
+      }
+      return r.json();
+    } catch (err) {
+      clearTimeout(timeout);
+      if (err.name === 'AbortError') throw new Error(`Timeout ao acessar ${url}`);
+      throw err;
+    }
   }
 
   // ── initTimeline: carrega eventos reais da API /api/timeline ─────────
@@ -4123,14 +4185,22 @@
   // Disparar evento quando o dashboard estiver pronto
   document.addEventListener('DOMContentLoaded', () => {
     // Aguardar autenticação e então carregar dados
+    let ready = false;
     const checkReady = setInterval(() => {
+      if (ready) return;
       if (typeof currentUser !== 'undefined' && currentUser) {
+        ready = true;
         clearInterval(checkReady);
         window.dispatchEvent(new Event('lifeos:dashboard-ready'));
       }
     }, 200);
-    // Timeout de segurança
-    setTimeout(() => clearInterval(checkReady), 10000);
+    // Timeout de segurança: redirecionar para login se não autenticado em 10s
+    setTimeout(() => {
+      clearInterval(checkReady);
+      if (!ready && typeof currentUser === 'undefined') {
+        location.replace('/login');
+      }
+    }, 10000);
   });
 
 </script>
