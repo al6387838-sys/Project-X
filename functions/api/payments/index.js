@@ -456,6 +456,39 @@ export async function onRequestPost({ request, env }) {
     return json(200, { ok: true, removed: methodId });
   }
 
+  // ─── Selecionar plano (onboarding — sem checkout imediato) ───
+  if (action === 'select-plan') {
+    const { planId } = body;
+    const plan = PLANS[planId];
+    if (!plan) return json(400, { ok: false, error: 'Plano inválido' });
+    const raw = await kv.get(`payments:subscription:${session.sub}`);
+    const sub = raw ? JSON.parse(raw) : {};
+    const updated = {
+      ...sub,
+      plan: planId,
+      status: plan.price.brl === 0 ? 'active' : 'pending_payment',
+      selectedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await kv.put(`payments:subscription:${session.sub}`, JSON.stringify(updated));
+    // Atualizar plano no perfil do usuário
+    const userRaw = await kv.get(`user:${session.sub}`);
+    if (userRaw) {
+      try {
+        const user = JSON.parse(userRaw);
+        user.plan = planId;
+        user.updatedAt = new Date().toISOString();
+        await kv.put(`user:${session.sub}`, JSON.stringify(user));
+      } catch { /* ignorar */ }
+    }
+    return json(200, {
+      ok: true,
+      subscription: updated,
+      message: `Plano ${plan.name} selecionado. ${plan.price.brl > 0 ? 'Configure o pagamento em Billing para ativar.' : 'Plano ativo.'}`,
+      requiresPayment: plan.price.brl > 0,
+    });
+  }
+
   return json(400, { ok: false, error: 'Ação inválida' });
 }
 

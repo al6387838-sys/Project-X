@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Dashboard — LifeOS Enterprise v46.0.0</title>
+  <title>Dashboard — LifeOS Enterprise v47.0.0</title>
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -937,7 +937,7 @@
     .toggle-switch input:checked + .toggle-slider:before { transform:translateX(18px); }
     .active-filter { background:var(--accent) !important;color:#fff !important;border-color:var(--accent) !important; }
 
-    /* ═══ ENTERPRISE UX v46.0.0 — Microanimações e Refinamentos ═══ */
+    /* ═══ ENTERPRISE UX v47.0.0 — Microanimações e Refinamentos ═══ */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
@@ -999,7 +999,7 @@
     /* Loading skeleton */
     .skeleton { background: linear-gradient(90deg, var(--bg-elevated) 25%, rgba(99,102,241,0.08) 50%, var(--bg-elevated) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
 
-    /* ═══ ENTERPRISE ONBOARDING v46.0.0 — Phase 119 ═══ */
+    /* ═══ ENTERPRISE ONBOARDING v47.0.0 — Phase 119 ═══ */
     #modal-onboarding { z-index: 1200; }
     #modal-onboarding .modal-box { max-width: 760px; max-height: calc(100vh - 40px); overflow: auto; padding: 0; }
     .onboarding-shell { min-height: 520px; display: flex; flex-direction: column; }
@@ -1094,7 +1094,7 @@
   <link rel="stylesheet" href="/components/components.css" />
   <link rel="stylesheet" href="/themes/themes.css" />
   <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
-<link rel="stylesheet" href="/precision_graphite.css?v=46.0.0" data-visual-system="precision-graphite" />
+<link rel="stylesheet" href="/precision_graphite.css?v=47.0.0" data-visual-system="precision-graphite" />
 </head>
 <body>
 <div class="app-shell">
@@ -1105,148 +1105,148 @@
       <div class="sidebar-logo" style="background:linear-gradient(135deg,#6366F1,#8B5CF6);box-shadow:0 0 16px rgba(99,102,241,0.4)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
       <div style="flex:1;min-width:0">
         <div class="sidebar-title">LifeOS</div>
-        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v46.0.0</div>
+        <div style="font-size:9px;color:var(--accent-light);font-weight:600;letter-spacing:0.5px;margin-top:1px">ENTERPRISE v47.0.0</div>
       </div>
     </div>
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label="Menu principal de navegação">
       <div class="nav-section-label">Principal</div>
-      <div class="nav-item active" onclick="showPage('dashboard')">
+      <div class="nav-item active" role="button" tabindex="0" onclick="showPage('dashboard')">
         <div class="nav-icon"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></div><span>Command Center</span>
       </div>
-      <div class="nav-item" onclick="showPage('agenda')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('agenda')">
         <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Agenda</span>
       </div>
-      <div class="nav-item" onclick="showPage('habits')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('habits')">
         <div class="nav-icon"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></div><span>Hábitos</span>
       </div>
-      <div class="nav-item" onclick="showPage('goals')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('goals')">
         <div class="nav-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><span>Metas</span>
       </div>
-      <div class="nav-item" onclick="showPage('projects')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('projects')">
         <div class="nav-icon"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><span>Projetos</span>
       </div>
 
       <div class="nav-section-label">Inteligência</div>
-      <div class="nav-item" onclick="showPage('ai')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('ai')">
         <div class="nav-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><span>IA Insights</span>
       </div>
-      <div class="nav-item" onclick="showPage('ai-daily')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('ai-daily')">
         <div class="nav-icon"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div><span>Resumo Diário</span>
       </div>
-      <div class="nav-item" onclick="showPage('ai-weekly')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('ai-weekly')">
         <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Resumo Semanal</span>
       </div>
-      <div class="nav-item" onclick="showPage('ai-recommendations')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('ai-recommendations')">
         <div class="nav-icon"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i></div><span>Recomendações</span>
       </div>
-      <div class="nav-item" onclick="showPage('lifescore')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('lifescore')">
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Life Score</span>
       </div>
-      <div class="nav-item" onclick="showPage('timeline')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('timeline')">
         <div class="nav-icon"><i data-lucide="timer" class="pg-icon" aria-hidden="true"></i></div><span>Timeline</span>
       </div>
-      <div class="nav-item" onclick="showPage('memory')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('memory')">
         <div class="nav-icon"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><span>Memory Center</span>
       </div>
 
       <div class="nav-section-label">Finanças</div>
-      <div class="nav-item" onclick="showPage('finance')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance')">
         <div class="nav-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div><span>Finance Hub</span>
       </div>
-      <div class="nav-item" onclick="showPage('finance-goals')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance-goals')">
         <div class="nav-icon"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i></div><span>Metas Financeiras</span>
       </div>
-      <div class="nav-item" onclick="showPage('finance-cashflow')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance-cashflow')">
         <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Fluxo de Caixa</span>
       </div>
-      <div class="nav-item" onclick="showPage('finance-budget')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance-budget')">
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Orçamento</span>
       </div>
-      <div class="nav-item" onclick="showPage('finance-openfinance')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance-openfinance')">
         <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Open Finance</span>
       </div>
       <div class="nav-section-label">Comunicação</div>
-      <div class="nav-item" onclick="showPage('messages')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('messages')">
         <div class="nav-icon"><i data-lucide="message-square-text" class="pg-icon" aria-hidden="true"></i></div><span>Mensagens</span>
       </div>
-      <div class="nav-item" onclick="showPage('email')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('email')">
         <div class="nav-icon"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i></div><span>Email</span>
       </div>
-      <div class="nav-item" onclick="showPage('calendar')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('calendar')">
         <div class="nav-icon"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><span>Calendário</span>
       </div>
       <div class="nav-section-label">Produtividade</div>
-      <div class="nav-item" onclick="showPage('kanban')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('kanban')">
         <div class="nav-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><span>Kanban</span>
       </div>
-      <div class="nav-item" onclick="showPage('gantt')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('gantt')">
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Gantt</span>
       </div>
-      <div class="nav-item" onclick="showPage('crm')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('crm')">
         <div class="nav-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div><span>CRM</span>
       </div>
-      <div class="nav-item" onclick="showPage('wiki')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('wiki')">
         <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Wiki</span>
       </div>
       <div class="nav-section-label">Ferramentas</div>
-      <div class="nav-item" onclick="showPage('documents')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('documents')">
         <div class="nav-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div><span>Documentos</span>
       </div>
-      <div class="nav-item" onclick="showPage('ai-center')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('ai-center')">
         <div class="nav-icon"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><span>IA Center</span>
       </div>
-      <div class="nav-item" onclick="showPage('marketplace')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('marketplace')">
         <div class="nav-icon"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div><span>Marketplace</span>
       </div>
       <div class="nav-section-label">Ecossistema v9.5</div>
-      <div class="nav-item" onclick="showPage('app-ecosystem')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('app-ecosystem')">
         <div class="nav-icon"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i></div><span>App Ecosystem</span>
       </div>
-      <div class="nav-item" onclick="showPage('integration-center')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('integration-center')">
         <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Central de Integrações</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
-      <div class="nav-item" onclick="showPage('personal-hub')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('personal-hub')">
         <div class="nav-icon"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i></div><span>Personal Hub</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
-      <div class="nav-item" onclick="showPage('observability')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('observability')">
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Observability</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
-      <!-- ═══ ENTERPRISE v46.0.0 ═══ -->
-      <div class="nav-section-label">Enterprise v46.0.0</div>
-      <div class="nav-item" onclick="showPage('command-center')">
+      <!-- ═══ ENTERPRISE v47.0.0 ═══ -->
+      <div class="nav-section-label">Enterprise v47.0.0</div>
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('command-center')">
         <div class="nav-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div><span>Command Center</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
-      <div class="nav-item" onclick="showPage('identity')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('identity')">
         <div class="nav-icon"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div><span>Identidade Digital</span>
       </div>
-      <div class="nav-item" onclick="showPage('file-center')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('file-center')">
         <div class="nav-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div><span>File Center</span>
       </div>
-      <div class="nav-item" onclick="showPage('automation')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('automation')">
         <div class="nav-icon"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div><span>Automation Studio</span>
       </div>
-      <div class="nav-item" onclick="showPage('analytics')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('analytics')">
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Analytics Center</span>
       </div>
       <div class="nav-section-label">Conta</div>
-      <div class="nav-item" onclick="showPage('notifications')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('notifications')">
         <div class="nav-icon"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i></div><span>Notificações</span>
         <span class="nav-badge" id="notif-count">3</span>
       </div>
-      <div class="nav-item" onclick="showPage('search')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('search')">
         <div class="nav-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div><span>Busca Global</span>
       </div>
-      <div class="nav-item" onclick="showPage('profile')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('profile')">
         <div class="nav-icon"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div><span>Perfil</span>
       </div>
-      <div class="nav-item" onclick="showPage('settings')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('settings')">
         <div class="nav-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><span>Configurações</span>
       </div>
-      <div class="nav-item" onclick="showPage('billing')">
+      <div class="nav-item" role="button" tabindex="0" onclick="showPage('billing')">
         <div class="nav-icon"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div><span>Assinatura</span>
       </div>
     </nav>
@@ -1255,7 +1255,7 @@
         <div class="user-avatar" id="sidebar-avatar" style="background:var(--gradient-primary);box-shadow:0 0 10px rgba(99,102,241,0.3)">U</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Carregando...</div>
-          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v46.0.0</div>
+          <div class="user-plan" id="sidebar-plan" style="color:var(--accent-light)">Enterprise v47.0.0</div>
         </div>
         <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(16,185,129,0.6);flex-shrink:0"></div>
       </div>
@@ -2148,7 +2148,17 @@
     // Mostrar loading
     const page = document.getElementById('page-' + pageId);
     if (page) {
-      page.innerHTML = '<div class="page-loading">Carregando módulo...</div>';
+      page.innerHTML = `<div class="page-loading" role="status" aria-label="Carregando módulo" style="display:block;padding:32px">
+        <div class="skeleton" style="height:28px;width:40%;margin-bottom:16px;border-radius:8px"></div>
+        <div class="skeleton" style="height:16px;width:70%;margin-bottom:10px;border-radius:6px"></div>
+        <div class="skeleton" style="height:16px;width:55%;margin-bottom:24px;border-radius:6px"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
+          <div class="skeleton" style="height:120px;border-radius:12px"></div>
+          <div class="skeleton" style="height:120px;border-radius:12px"></div>
+          <div class="skeleton" style="height:120px;border-radius:12px"></div>
+          <div class="skeleton" style="height:120px;border-radius:12px"></div>
+        </div>
+      </div>`;
       page.classList.add('active');
     }
     try {
@@ -2169,7 +2179,12 @@
       console.warn(`Module load failed for ${pageId}:`, e);
       _loadedModules.add(pageId);
       if (page) {
-        page.innerHTML = '<div class="page-loading" style="color:var(--red)">Falha ao carregar módulo. Recarregue a página.</div>';
+        page.innerHTML = `<div style="padding:48px;text-align:center">
+          <div style="font-size:36px;margin-bottom:14px">⚠️</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:8px">Falha ao carregar módulo</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:22px">Verifique sua conexão e tente novamente.</div>
+          <button onclick="location.reload()" style="padding:9px 20px;border-radius:9px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-primary);cursor:pointer;font-size:13px;font-family:inherit">Recarregar página</button>
+        </div>`;
       }
     }
   }
@@ -2284,6 +2299,16 @@
       setTimeout(() => document.getElementById('search-input').focus(), 100);
     }
     if (e.key === 'Escape') closeModal();
+  });
+
+  // ─── Acessibilidade: teclado nos nav items ─────────────────────
+  document.querySelectorAll('.nav-item[role="button"]').forEach(item => {
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        item.click();
+      }
+    });
   });
 
   // ─── Toast system ─────────────────────────────────────────────
@@ -2525,7 +2550,7 @@
     el.textContent = msg;
   }
 
-  // ─── Enterprise Onboarding v46.0.0 — Phase 119 ─────────────────────────
+  // ─── Enterprise Onboarding v47.0.0 — Phase 119 ─────────────────────────
   const ONBOARDING_STORAGE_KEY = 'lifeos_enterprise_onboarding_v1';
   const ONBOARDING_STEPS = [
     { id: 'welcome', kicker: 'Configuração inicial', title: 'Bem-vindo ao seu LifeOS', copy: 'Em poucos minutos, vamos adaptar o ambiente ao seu perfil, às suas prioridades e ao seu modo de trabalhar.' },
@@ -4293,7 +4318,7 @@
 
 </script>
   <script src="/enterprise/enterprise_app.js" defer></script>
-  <script src="/user_completion.js?v=46.0.0" defer></script>
-  <script src="/precision_graphite.js?v=46.0.0" defer data-visual-system="precision-graphite"></script>
+  <script src="/user_completion.js?v=47.0.0" defer></script>
+  <script src="/precision_graphite.js?v=47.0.0" defer data-visual-system="precision-graphite"></script>
 </body>
 </html>

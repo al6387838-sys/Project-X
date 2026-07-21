@@ -926,6 +926,26 @@
   function setBusy(v) {
     state.busy = v;
     document.querySelectorAll('[data-action], .btn').forEach(b => { if (!b.closest('#modal-footer') || v) b.disabled = v; });
+    // Indicador visual de loading no topbar
+    let indicator = document.getElementById('_lifeos_busy_indicator');
+    if (v) {
+      if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = '_lifeos_busy_indicator';
+        indicator.setAttribute('role', 'status');
+        indicator.setAttribute('aria-label', 'Processando');
+        indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366F1,#8B5CF6,#06B6D4);z-index:99999;animation:_busySlide 1.2s ease-in-out infinite';
+        document.body.appendChild(indicator);
+        if (!document.getElementById('_lifeos_busy_style')) {
+          const s = document.createElement('style');
+          s.id = '_lifeos_busy_style';
+          s.textContent = '@keyframes _busySlide{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}';
+          document.head.appendChild(s);
+        }
+      }
+    } else if (indicator) {
+      indicator.remove();
+    }
   }
 
   async function mutate(action, payload, successMsg, successTitle='') {

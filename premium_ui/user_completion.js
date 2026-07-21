@@ -1,4 +1,4 @@
-/* LIFEOS ENTERPRISE v46.0.0 — User Experience Completion
+/* LIFEOS ENTERPRISE v47.0.0 — User Experience Completion
  * Camada progressiva para as superfícies obrigatórias da Phase 304.
  * Reutiliza as APIs e rotas existentes sem substituir a arquitetura do dashboard.
  */
@@ -195,7 +195,12 @@ window.fetch = function(url, opts) {
   }
 
   function loading() {
-    return `<div class="l43-loading">Carregando dados operacionais...</div>`;
+    return `<div class="l43-loading" role="status" aria-label="Carregando" style="padding:0">
+      <div style="height:32px;width:45%;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(99,102,241,.08) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;margin-bottom:18px"></div>
+      <div class="l43-grid two" style="gap:14px">
+        ${Array.from({length:4}).map(()=>`<div style="height:100px;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(99,102,241,.08) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>`).join('')}
+      </div>
+    </div>`;
   }
 
   function renderError(route, error) {

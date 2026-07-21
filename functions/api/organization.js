@@ -1,6 +1,6 @@
-// LifeOS Enterprise — Organization API v1.0
+// LifeOS Enterprise — Organization API v2.0
 // Cloudflare Pages Function: GET/POST /api/organization
-// Phase 131 — Real Data Foundation
+// Phase 336 — Commercial Audit: qualquer usuário autenticado pode criar organização
 // Organização persistida no Cloudflare KV
 import { getCookie, json, verifySession } from '../_auth.js';
 
@@ -47,26 +47,35 @@ export async function onRequestPost({ request, env }) {
   const action = String(input.action || 'update');
 
   if (action === 'create') {
-    if (session.role !== 'admin') return json(403, { ok: false, error: 'Acesso negado' });
-
+    // FASE 336 FIX: qualquer usuário autenticado pode criar sua organização
     const name = String(input.name || '').trim();
     const domain = String(input.domain || '').trim();
-    if (!name || name.length < 2) return json(400, { ok: false, error: 'Nome inválido' });
-
+    const size = String(input.size || '6-25').trim();
+    if (!name || name.length < 2 || name.length > 100) {
+      return json(400, { ok: false, error: 'Nome deve ter entre 2 e 100 caracteres' });
+    }
+    // Admins usam org:default; usuários comuns usam org:user:<email>
+    const orgKey = session.role === 'admin'
+      ? 'org:default'
+      : `org:user:${session.sub}`;
     const org = {
       id: `org_${Date.now()}`,
       name,
       domain,
-      slug: name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      size,
+      slug: name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, ''),
       timezone: input.timezone || 'America/Sao_Paulo',
       locale: input.locale || 'pt-BR',
       ownerId: session.sub,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-
-    await env.LIFEOS_KV.put('org:default', JSON.stringify(org));
-    return json(201, { ok: true, organization: org });
+    try {
+      await env.LIFEOS_KV.put(orgKey, JSON.stringify(org));
+      return json(201, { ok: true, organization: org });
+    } catch (_) {
+      return json(500, { ok: false, error: 'Erro ao criar organização' });
+    }
   }
 
   if (action === 'update') {
@@ -91,5 +100,6 @@ export async function onRequestPost({ request, env }) {
 export async function onRequest({ request, env }) {
   if (request.method === 'GET') return onRequestGet({ request, env });
   if (request.method === 'POST') return onRequestPost({ request, env });
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { allow: 'GET, POST, OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST, OPTIONS' });
 }

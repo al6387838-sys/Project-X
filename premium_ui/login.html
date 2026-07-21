@@ -152,7 +152,7 @@
         </div>
         <div class="form-options">
           <label class="remember-label"><input type="checkbox" id="remember" name="remember"> Lembrar-me</label>
-          <a href="#" class="forgot-link" id="forgot-link">Esqueceu a senha?</a>
+          <a href="/forgot-password" class="forgot-link" id="forgot-link">Esqueceu a senha?</a>
         </div>
         <button type="submit" class="btn-submit" id="submit-btn">
           <span class="btn-text">Entrar no painel</span>
@@ -200,10 +200,7 @@
         pwdToggle.setAttribute('aria-label', isText ? 'Mostrar senha' : 'Ocultar senha');
       });
 
-      document.getElementById('forgot-link').addEventListener('click', (e) => {
-        e.preventDefault();
-        showStatus('info', 'Contate o administrador do sistema para redefinir sua senha.');
-      });
+      // forgot-link: navegação nativa para /forgot-password (sem interceptação necessária)
       document.getElementById('sso-google').addEventListener('click', () => {
         showStatus('info', 'SSO Google disponível no plano Enterprise+. Contate seu administrador.');
       });

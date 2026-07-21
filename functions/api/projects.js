@@ -120,9 +120,48 @@ export async function onRequestDelete({ request, env }) {
   }
 }
 
+export async function onRequestPut({ request, env }) {
+  const secret = env.LIFEOS_SESSION_SECRET;
+  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
+  const session = await verifySession(token, secret);
+  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  const kv = env.LIFEOS_KV;
+  if (!kv) return json(503, { ok: false, error: 'Armazenamento indisponível' });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false, error: 'JSON inválido' }); }
+  const { id, title, description, color, icon, status, progress } = body;
+  if (!id) return json(400, { ok: false, error: 'ID obrigatório' });
+  try {
+    const raw = await kv.get(`projects:${session.sub}`);
+    const projects = raw ? JSON.parse(raw) : [];
+    const idx = projects.findIndex(p => p.id === id);
+    if (idx === -1) return json(404, { ok: false, error: 'Projeto não encontrado' });
+    const existing = projects[idx];
+    const updated = {
+      ...existing,
+      title: title?.trim() || existing.title,
+      description: description?.trim() ?? existing.description,
+      color: color || existing.color,
+      icon: icon || existing.icon,
+      status: status || existing.status,
+      progress: typeof progress === 'number' ? Math.min(100, Math.max(0, progress)) : existing.progress,
+      updatedAt: new Date().toISOString(),
+    };
+    projects[idx] = updated;
+    await kv.put(`projects:${session.sub}`, JSON.stringify(projects));
+    return json(200, { ok: true, project: updated });
+  } catch {
+    return json(500, { ok: false, error: 'Erro ao atualizar projeto' });
+  }
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === 'GET') return onRequestGet({ request, env });
   if (request.method === 'POST') return onRequestPost({ request, env });
+  if (request.method === 'PUT') return onRequestPut({ request, env });
   if (request.method === 'DELETE') return onRequestDelete({ request, env });
-  return json(405, { ok: false, error: 'Método não permitido' });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { allow: 'GET, POST, PUT, DELETE, OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST, PUT, DELETE, OPTIONS' });
 }

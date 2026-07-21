@@ -1,6 +1,6 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 47.0.0 (Phases 331-335 — Auth Recovery, Zero Block Login, OAuth Fallback, Auto-detect)
+// Version: 48.0.0 (Phases 336-340 — Commercial Audit, Flow Validation, Persistence, UX Enterprise, Final Certification)
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -131,7 +131,7 @@ try {
 } catch { }
 
 const redirects = [
-  '# LifeOS Enterprise v47.0.0 — Cloudflare Pages Redirects',
+  '# LifeOS Enterprise v48.0.0 — Cloudflare Pages Redirects',
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -254,7 +254,7 @@ const routes = [
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: 'v47.0.0',
+  version: 'v48.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
@@ -263,7 +263,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '093-100','101-108','109','111-115','119',
     '131-138','139-146','147-152','153-160','161-162','163-171',
     '172-177','225-233','250-254','255','257-258','259-262','279-281','303-306','304-308',
-    '331-335',
+    '331-340',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -296,13 +296,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: 'v47.0.0',
+  version: 'v48.0.0',
   buildId,
   environment: 'production',
   platform: 'cloudflare-pages',
   commit,
   builtAt,
-  phases: '331-335',
+  phases: '331-340',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -330,11 +330,11 @@ console.log('╔═════════════════════�
 console.log('║   LifeOS Enterprise 47.0.0 — Build OK ✓               ║');
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-  console.log(`  Version       : v47.0.0`);
+  console.log(`  Version       : v48.0.0`);
 console.log(`  Build ID      : ${buildId}`);
-  console.log(`  Phases        : 331-335 — Auth Recovery, Zero Block Login, OAuth Fallback, Auto-detect`);
-console.log(`  Modules       : 37 total`);
-console.log(`  APIs          : 46 endpoints`);
+  console.log(`  Phases        : 336-340 — Commercial Audit, Flow Validation, Persistence, UX Enterprise, Final Certification`);
+console.log(`  Modules       : 52 total`);
+console.log(`  APIs          : 77 endpoints`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);

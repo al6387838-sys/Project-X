@@ -278,7 +278,7 @@
           <div class="log-icon" style="background:rgba(99,102,241,0.1)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></div>
           <div class="log-info">
             <div class="log-action">Pagamento recebido: <strong>TechCorp Brasil</strong></div>
-            <div class="log-meta">{billing_description}</div>
+            <div class="log-meta">Enterprise Anual · R$5.988,00 · Fatura #2026-0715</div>
           </div>
           <div class="log-time">07:44</div>
         </div>
@@ -323,7 +323,7 @@
             <td><div>TechCorp Brasil</div><div style="font-size:11px;color:var(--text-muted)">techcorp.lifeos.app</div></td>
             <td><span class="badge badge-purple">Enterprise</span></td>
             <td>45 / 75</td>
-            <td style="color:var(--green)">{plan_price}</td>
+            <td style="color:var(--green)">R$499,00</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:60%"></div></div><span style="font-size:11px">60%</span></div></td>
             <td><span class="badge badge-green">Ativo</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('TechCorp')">Detalhes</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspend('TechCorp')">Suspender</button></div></td>
@@ -332,7 +332,7 @@
             <td><div>StartupXYZ</div><div style="font-size:11px;color:var(--text-muted)">startupxyz.lifeos.app</div></td>
             <td><span class="badge badge-blue">Pro</span></td>
             <td>18 / 20</td>
-            <td style="color:var(--green)">{plan_price}</td>
+            <td style="color:var(--green)">R$149,00</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:90%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div><span style="font-size:11px;color:var(--amber)">90%</span></div></td>
             <td><span class="badge badge-amber"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Limite</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('StartupXYZ')">Detalhes</button><button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="eaUpgrade('StartupXYZ')">Upgrade</button></div></td>
@@ -341,7 +341,7 @@
             <td><div>Consultoria Alpha</div><div style="font-size:11px;color:var(--text-muted)">alpha.lifeos.app</div></td>
             <td><span class="badge badge-purple">Enterprise</span></td>
             <td>28 / 50</td>
-            <td style="color:var(--green)">{plan_price}</td>
+            <td style="color:var(--green)">R$499,00</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:56%"></div></div><span style="font-size:11px">56%</span></div></td>
             <td><span class="badge badge-green">Ativo</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('Alpha')">Detalhes</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="eaSuspend('Alpha')">Suspender</button></div></td>
@@ -350,7 +350,7 @@
             <td><div>FinTech Pro</div><div style="font-size:11px;color:var(--text-muted)">fintech.lifeos.app</div></td>
             <td><span class="badge badge-purple">Enterprise</span></td>
             <td>2 / 50</td>
-            <td style="color:var(--green)">{plan_price}</td>
+            <td style="color:var(--green)">R$499,00</td>
             <td><div style="display:flex;align-items:center;gap:8px"><div class="progress" style="width:80px"><div class="progress-fill" style="width:4%"></div></div><span style="font-size:11px">4%</span></div></td>
             <td><span class="badge badge-cyan"><i data-lucide="badge-plus" class="pg-icon" aria-hidden="true"></i> Novo</span></td>
             <td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="eaTenantDetail('FinTech')">Detalhes</button></div></td>
@@ -417,11 +417,11 @@
       <table class="ea-table">
         <thead><tr><th>Tenant</th><th>Plano</th><th>Valor</th><th>Data</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>TechCorp Brasil</td><td>Enterprise Anual</td><td style="color:var(--green)">{plan_price},00</td><td>15 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
-          <tr><td>Consultoria Alpha</td><td>Enterprise Mensal</td><td style="color:var(--green)">{plan_price},00</td><td>14 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
-          <tr><td>FinTech Pro</td><td>Enterprise Anual</td><td style="color:var(--green)">{plan_price},00</td><td>13 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
-          <tr><td>StartupXYZ</td><td>Pro Mensal</td><td style="color:var(--green)">{plan_price},00</td><td>10 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
-          <tr><td>MedGroup</td><td>Pro Mensal</td><td style="color:var(--red)">{plan_price},00</td><td>01 Jul 2026</td><td><span class="badge badge-red">Vencido</span></td></tr>
+          <tr><td>TechCorp Brasil</td><td>Enterprise Anual</td><td style="color:var(--green)">R$499,00</td><td>15 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>Consultoria Alpha</td><td>Enterprise Mensal</td><td style="color:var(--green)">R$499,00</td><td>14 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>FinTech Pro</td><td>Enterprise Anual</td><td style="color:var(--green)">R$499,00</td><td>13 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>StartupXYZ</td><td>Pro Mensal</td><td style="color:var(--green)">R$149,00</td><td>10 Jul 2026</td><td><span class="badge badge-green">Pago</span></td></tr>
+          <tr><td>MedGroup</td><td>Pro Mensal</td><td style="color:var(--red)">R$149,00</td><td>01 Jul 2026</td><td><span class="badge badge-red">Vencido</span></td></tr>
         </tbody>
       </table>
     </div>

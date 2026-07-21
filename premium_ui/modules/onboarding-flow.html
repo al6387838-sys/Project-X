@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeOS Enterprise — Onboarding</title>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <style>
     :root {
       --bg-primary: #0a0a0a;
@@ -43,23 +42,37 @@
     .step-form { display: flex; flex-direction: column; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
-    .form-input { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 13px; transition: all var(--t-fast); }
+    .form-input { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 13px; transition: all var(--t-fast); width: 100%; font-family: inherit; }
     .form-input:focus { outline: none; border-color: #6366F1; background: rgba(99,102,241,0.05); }
-    .form-checkbox { display: flex; align-items: center; gap: 8px; }
-    .form-checkbox input { width: 16px; height: 16px; cursor: pointer; }
-    .form-checkbox label { font-size: 13px; cursor: pointer; flex: 1; }
-    .step-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .form-select { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 13px; transition: all var(--t-fast); width: 100%; font-family: inherit; cursor: pointer; }
+    .form-select:focus { outline: none; border-color: #6366F1; }
+    .step-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
     .btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all var(--t-fast); display: inline-flex; align-items: center; gap: 6px; }
     .btn-primary { background: var(--gradient-primary); color: #fff; }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.3); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
     .btn-secondary:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
     .step-info { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 14px; font-size: 12px; color: var(--text-secondary); margin-bottom: 20px; }
-    .step-info i { margin-right: 6px; color: #6366F1; }
+    .step-status-msg { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; display: none; }
+    .step-status-msg.show { display: block; }
+    .step-status-msg.success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #34D399; }
+    .step-status-msg.error { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #FB7185; }
+    .step-status-msg.info { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #818CF8; }
     .completion-message { text-align: center; padding: 40px 20px; }
     .completion-icon { font-size: 64px; color: #10B981; margin-bottom: 16px; }
     .completion-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
     .completion-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+    .plan-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 8px; }
+    .plan-card { background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all var(--t-fast); }
+    .plan-card:hover { border-color: rgba(99,102,241,0.4); }
+    .plan-card.selected { border-color: #6366F1; background: rgba(99,102,241,0.1); }
+    .plan-card-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .plan-card-price { font-size: 20px; font-weight: 800; color: #818CF8; }
+    .plan-card-price span { font-size: 12px; font-weight: 400; color: var(--text-secondary); }
+    .plan-card-features { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+    .plan-card-feature { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+    .plan-card-feature::before { content: '✓'; color: #10B981; font-weight: 700; }
     @media (max-width: 768px) {
       .onboarding-content { grid-template-columns: 1fr; }
       .onboarding-sidebar { display: none; }
@@ -73,7 +86,6 @@
       <h1>Bem-vindo ao LifeOS Enterprise</h1>
       <p>Configure sua plataforma em 8 passos simples</p>
     </div>
-    
     <div class="onboarding-content">
       <div class="onboarding-sidebar">
         <div class="progress-bar">
@@ -81,7 +93,6 @@
         </div>
         <div id="steps-list"></div>
       </div>
-      
       <div class="onboarding-main">
         <div id="steps-content"></div>
       </div>
@@ -89,33 +100,35 @@
   </div>
 
   <script>
+    'use strict';
     const STEPS = [
-      { id: 'account', title: 'Criar Conta', description: 'Registre-se com seu e-mail', content: 'Sua conta foi criada automaticamente ao fazer login.' },
-      { id: 'email-confirm', title: 'Confirmar E-mail', description: 'Verifique seu endereço de e-mail', content: 'Verifique seu e-mail para confirmar sua conta.' },
-      { id: 'organization', title: 'Criar Organização', description: 'Configure sua empresa ou workspace', content: 'Crie sua primeira organização.' },
-      { id: 'workspace', title: 'Criar Workspace', description: 'Crie seu primeiro espaço de trabalho', content: 'Workspaces permitem organizar projetos e equipes.' },
-      { id: 'profile', title: 'Configurar Perfil', description: 'Complete seu perfil pessoal', content: 'Adicione foto, bio e informações de contato.' },
-      { id: 'integrations', title: 'Conectar Integrações', description: 'Configure serviços desejados', content: 'Conecte Gmail, Stripe, OpenAI e outros.' },
-      { id: 'first-document', title: 'Primeiro Documento', description: 'Faça upload do seu primeiro arquivo', content: 'Teste o sistema de upload e gerenciamento de arquivos.' },
-      { id: 'complete', title: 'Concluído', description: 'Bem-vindo ao LifeOS Enterprise!', content: 'Parabéns! Você está pronto para começar.' },
+      { id: 'account',        title: 'Criar Conta',           description: 'Registre-se com seu e-mail' },
+      { id: 'email-confirm',  title: 'Confirmar E-mail',      description: 'Verifique seu endereço de e-mail' },
+      { id: 'organization',   title: 'Criar Organização',     description: 'Configure sua empresa ou equipe' },
+      { id: 'workspace',      title: 'Criar Workspace',       description: 'Crie seu primeiro espaço de trabalho' },
+      { id: 'plan',           title: 'Escolher Plano',        description: 'Selecione o plano ideal para você' },
+      { id: 'profile',        title: 'Configurar Perfil',     description: 'Complete seu perfil pessoal' },
+      { id: 'integrations',   title: 'Conectar Integrações',  description: 'Configure serviços desejados' },
+      { id: 'complete',       title: 'Concluído',             description: 'Bem-vindo ao LifeOS Enterprise!' },
     ];
 
     let currentStep = 0;
-    let onboardingData = { completedSteps: [], progress: 0 };
+    let onboardingData = { completedSteps: [], progress: 0, completed: false };
+    let selectedPlan = 'starter';
 
     async function loadOnboarding() {
       try {
-        const res = await fetch('/api/enterprise/onboarding');
+        const res = await fetch('/api/enterprise/onboarding', { credentials: 'same-origin' });
         const data = await res.json();
-        if (data.ok) {
+        if (data.ok && data.onboarding) {
           onboardingData = data.onboarding;
-          currentStep = STEPS.findIndex(s => s.id === data.onboarding.currentStep);
-          if (currentStep === -1) currentStep = 0;
-          render();
+          const idx = STEPS.findIndex(s => s.id === data.onboarding.currentStep);
+          currentStep = idx >= 0 ? idx : 0;
         }
       } catch (e) {
-        console.error('Erro ao carregar onboarding:', e);
+        console.warn('Onboarding load error:', e);
       }
+      render();
     }
 
     function render() {
@@ -127,109 +140,374 @@
     function renderSteps() {
       const list = document.getElementById('steps-list');
       list.innerHTML = STEPS.map((step, idx) => {
-        const isCompleted = onboardingData.completedSteps.includes(step.id);
+        const isCompleted = onboardingData.completedSteps && onboardingData.completedSteps.includes(step.id);
         const isActive = idx === currentStep;
         const icon = isCompleted ? '✓' : (isActive ? '→' : '•');
         const status = isCompleted ? 'completed' : (isActive ? 'active' : 'pending');
-        
-        return `
-          <div class="step-item ${status}" onclick="goToStep(${idx})">
-            <div class="step-item-title">
-              <span class="step-item-icon">${icon}</span> ${step.title}
-            </div>
-            <div class="step-item-desc">${step.description}</div>
-          </div>
-        `;
+        return `<div class="step-item ${status}" onclick="goToStep(${idx})" role="button" tabindex="0">
+          <div class="step-item-title"><span class="step-item-icon">${icon}</span>${step.title}</div>
+          <div class="step-item-desc">${step.description}</div>
+        </div>`;
       }).join('');
+    }
+
+    function getStepForm(stepId, isCompleted) {
+      if (stepId === 'account') {
+        return `<div class="step-info">Sua conta foi criada automaticamente ao fazer login. Este passo está concluído.</div>
+          <div class="step-actions">
+            <button class="btn btn-primary" onclick="markComplete()">Continuar →</button>
+          </div>`;
+      }
+      if (stepId === 'email-confirm') {
+        return `<div class="step-info">Verifique sua caixa de entrada e clique no link de confirmação enviado para o seu e-mail.</div>
+          <div class="step-actions">
+            ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+            <button class="btn btn-primary" onclick="markComplete()">Já confirmei →</button>
+          </div>`;
+      }
+      if (stepId === 'organization') {
+        return `<div class="step-form">
+          <div class="form-group">
+            <label class="form-label" for="org-name">Nome da Organização *</label>
+            <input type="text" id="org-name" class="form-input" placeholder="Ex: Minha Empresa Ltda" maxlength="100" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="org-domain">Domínio (opcional)</label>
+            <input type="text" id="org-domain" class="form-input" placeholder="Ex: minhaempresa.com.br" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="org-size">Tamanho da Equipe</label>
+            <select id="org-size" class="form-select">
+              <option value="1-5">1–5 pessoas</option>
+              <option value="6-25" selected>6–25 pessoas</option>
+              <option value="26-100">26–100 pessoas</option>
+              <option value="100+">Mais de 100 pessoas</option>
+            </select>
+          </div>
+        </div>
+        <div id="org-status" class="step-status-msg"></div>
+        <div class="step-actions">
+          ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+          <button class="btn btn-primary" id="org-btn" onclick="submitOrganization()">Criar Organização →</button>
+        </div>`;
+      }
+      if (stepId === 'workspace') {
+        return `<div class="step-form">
+          <div class="form-group">
+            <label class="form-label" for="ws-name">Nome do Workspace *</label>
+            <input type="text" id="ws-name" class="form-input" placeholder="Ex: Projetos 2026" maxlength="100" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ws-desc">Descrição (opcional)</label>
+            <input type="text" id="ws-desc" class="form-input" placeholder="Descreva o propósito deste workspace" maxlength="200" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ws-type">Tipo</label>
+            <select id="ws-type" class="form-select">
+              <option value="general" selected>Geral</option>
+              <option value="projects">Projetos</option>
+              <option value="team">Equipe</option>
+              <option value="personal">Pessoal</option>
+            </select>
+          </div>
+        </div>
+        <div id="ws-status" class="step-status-msg"></div>
+        <div class="step-actions">
+          ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+          <button class="btn btn-primary" id="ws-btn" onclick="submitWorkspace()">Criar Workspace →</button>
+        </div>`;
+      }
+      if (stepId === 'plan') {
+        return `<div class="plan-cards" id="plan-cards">
+          <div class="plan-card ${selectedPlan === 'free' ? 'selected' : ''}" onclick="selectPlan('free')">
+            <div class="plan-card-name">Free</div>
+            <div class="plan-card-price">R$0<span>/mês</span></div>
+            <div class="plan-card-features">
+              <div class="plan-card-feature">1 usuário</div>
+              <div class="plan-card-feature">1 GB armazenamento</div>
+              <div class="plan-card-feature">Módulos básicos</div>
+            </div>
+          </div>
+          <div class="plan-card ${selectedPlan === 'starter' ? 'selected' : ''}" onclick="selectPlan('starter')">
+            <div class="plan-card-name">Starter</div>
+            <div class="plan-card-price">R$49<span>/mês</span></div>
+            <div class="plan-card-features">
+              <div class="plan-card-feature">5 usuários</div>
+              <div class="plan-card-feature">10 GB armazenamento</div>
+              <div class="plan-card-feature">Todos os módulos</div>
+              <div class="plan-card-feature">API básica</div>
+            </div>
+          </div>
+          <div class="plan-card ${selectedPlan === 'professional' ? 'selected' : ''}" onclick="selectPlan('professional')">
+            <div class="plan-card-name">Professional</div>
+            <div class="plan-card-price">R$149<span>/mês</span></div>
+            <div class="plan-card-features">
+              <div class="plan-card-feature">25 usuários</div>
+              <div class="plan-card-feature">100 GB armazenamento</div>
+              <div class="plan-card-feature">AI Orchestrator</div>
+              <div class="plan-card-feature">SLA 99.9%</div>
+            </div>
+          </div>
+          <div class="plan-card ${selectedPlan === 'enterprise' ? 'selected' : ''}" onclick="selectPlan('enterprise')">
+            <div class="plan-card-name">Enterprise</div>
+            <div class="plan-card-price">R$499<span>/mês</span></div>
+            <div class="plan-card-features">
+              <div class="plan-card-feature">Ilimitado</div>
+              <div class="plan-card-feature">1 TB armazenamento</div>
+              <div class="plan-card-feature">SSO/SAML</div>
+              <div class="plan-card-feature">Suporte dedicado</div>
+            </div>
+          </div>
+        </div>
+        <div id="plan-status" class="step-status-msg"></div>
+        <div class="step-actions">
+          ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+          <button class="btn btn-primary" id="plan-btn" onclick="submitPlan()">Confirmar Plano →</button>
+        </div>`;
+      }
+      if (stepId === 'profile') {
+        return `<div class="step-form">
+          <div class="form-group">
+            <label class="form-label" for="profile-bio">Bio (opcional)</label>
+            <input type="text" id="profile-bio" class="form-input" placeholder="Ex: Fundador, desenvolvedor, empreendedor..." maxlength="200" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profile-phone">Telefone (opcional)</label>
+            <input type="tel" id="profile-phone" class="form-input" placeholder="+55 11 99999-9999" maxlength="20" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="profile-timezone">Fuso Horário</label>
+            <select id="profile-timezone" class="form-select">
+              <option value="America/Sao_Paulo" selected>América/São Paulo (BRT)</option>
+              <option value="America/Manaus">América/Manaus (AMT)</option>
+              <option value="America/Belem">América/Belém (BRT)</option>
+              <option value="America/Fortaleza">América/Fortaleza (BRT)</option>
+              <option value="America/Recife">América/Recife (BRT)</option>
+              <option value="America/Porto_Velho">América/Porto Velho (AMT)</option>
+              <option value="America/Boa_Vista">América/Boa Vista (AMT)</option>
+              <option value="America/Rio_Branco">América/Rio Branco (ACT)</option>
+            </select>
+          </div>
+        </div>
+        <div id="profile-status" class="step-status-msg"></div>
+        <div class="step-actions">
+          ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+          <button class="btn btn-primary" id="profile-btn" onclick="submitProfile()">Salvar Perfil →</button>
+        </div>`;
+      }
+      if (stepId === 'integrations') {
+        return `<div class="step-info">Conecte integrações externas após o onboarding em Configurações → Integrações. Este passo pode ser pulado.</div>
+          <div class="step-actions">
+            ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+            <button class="btn btn-secondary" onclick="markComplete()">Pular por agora</button>
+            <button class="btn btn-primary" onclick="window.open('/app#integration-center','_blank');markComplete();">Configurar Integrações →</button>
+          </div>`;
+      }
+      if (stepId === 'complete') {
+        return `<div class="completion-message">
+          <div class="completion-icon">🎉</div>
+          <div class="completion-title">Configuração Concluída!</div>
+          <div class="completion-subtitle">Sua plataforma LifeOS Enterprise está pronta. Bem-vindo ao futuro da produtividade.</div>
+          <div class="step-actions" style="justify-content:center">
+            <button class="btn btn-primary" onclick="finishOnboarding()">Ir para o Dashboard →</button>
+          </div>
+        </div>`;
+      }
+      return `<div class="step-info">${STEPS[currentStep].description}</div>
+        <div class="step-actions">
+          ${currentStep > 0 ? '<button class="btn btn-secondary" onclick="previousStep()">← Anterior</button>' : ''}
+          <button class="btn btn-primary" onclick="markComplete()">Continuar →</button>
+        </div>`;
     }
 
     function renderContent() {
       const step = STEPS[currentStep];
       const content = document.getElementById('steps-content');
-      const isCompleted = onboardingData.completedSteps.includes(step.id);
+      const isCompleted = onboardingData.completedSteps && onboardingData.completedSteps.includes(step.id);
       const isLastStep = currentStep === STEPS.length - 1;
 
-      if (isLastStep && onboardingData.completed) {
-        content.innerHTML = `
-          <div class="completion-message">
-            <div class="completion-icon">🎉</div>
-            <div class="completion-title">Parabéns!</div>
-            <div class="completion-subtitle">Você completou o onboarding e está pronto para usar o LifeOS Enterprise.</div>
-            <button class="btn btn-primary" onclick="window.location.href='/app'">
-              <i class="ri-arrow-right-line"></i> Ir para o Dashboard
-            </button>
-          </div>
-        `;
-      } else {
-        content.innerHTML = `
-          <div class="step-content active">
-            <h2 class="step-title">${step.title}</h2>
-            <p class="step-subtitle">${step.description}</p>
-            <div class="step-info">
-              <i class="ri-information-line"></i>
-              ${step.content}
-            </div>
-            <div class="step-form">
-              <div class="form-group">
-                <label class="form-label">Status do Step</label>
-                <div style="font-size: 13px; color: var(--text-secondary);">
-                  ${isCompleted ? '✓ Completado' : '○ Pendente'}
-                </div>
-              </div>
-            </div>
-            <div class="step-actions">
-              ${currentStep > 0 ? `<button class="btn btn-secondary" onclick="previousStep()"><i class="ri-arrow-left-line"></i> Anterior</button>` : ''}
-              ${!isCompleted ? `<button class="btn btn-primary" onclick="completeStep()"><i class="ri-check-line"></i> Completar</button>` : ''}
-              ${currentStep < STEPS.length - 1 ? `<button class="btn btn-secondary" onclick="nextStep()">Próximo <i class="ri-arrow-right-line"></i></button>` : ''}
-            </div>
-          </div>
-        `;
+      if (isLastStep) {
+        content.innerHTML = `<div class="step-content active">${getStepForm('complete', isCompleted)}</div>`;
+        return;
       }
+
+      content.innerHTML = `<div class="step-content active">
+        <h2 class="step-title">${step.title}</h2>
+        <p class="step-subtitle">${step.description}</p>
+        ${isCompleted ? '<div class="step-status-msg show success">✓ Este passo já foi concluído. Você pode continuar ou revisitar.</div>' : ''}
+        ${getStepForm(step.id, isCompleted)}
+      </div>`;
     }
 
     function updateProgress() {
-      const progress = Math.round((onboardingData.completedSteps.length / STEPS.length) * 100);
+      const completed = onboardingData.completedSteps ? onboardingData.completedSteps.length : 0;
+      const progress = Math.round((completed / STEPS.length) * 100);
       document.getElementById('progress-fill').style.width = progress + '%';
     }
 
-    async function completeStep() {
-      const step = STEPS[currentStep];
+    function showStepMsg(id, type, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.className = `step-status-msg show ${type}`;
+      el.textContent = msg;
+    }
+
+    function selectPlan(planId) {
+      selectedPlan = planId;
+      document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+      const cards = document.querySelectorAll('.plan-card');
+      const plans = ['free','starter','professional','enterprise'];
+      const idx = plans.indexOf(planId);
+      if (cards[idx]) cards[idx].classList.add('selected');
+    }
+
+    async function submitOrganization() {
+      const name = (document.getElementById('org-name')?.value || '').trim();
+      const domain = (document.getElementById('org-domain')?.value || '').trim();
+      const size = document.getElementById('org-size')?.value || '6-25';
+      if (!name || name.length < 2) { showStepMsg('org-status', 'error', 'Informe o nome da organização (mínimo 2 caracteres).'); return; }
+      const btn = document.getElementById('org-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
       try {
-        const res = await fetch('/api/enterprise/onboarding', {
-          method: 'POST',
-          body: JSON.stringify({ action: 'complete-step', stepId: step.id })
+        const res = await fetch('/api/organization', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'create', name, domain, size })
         });
         const data = await res.json();
-        if (data.ok) {
-          onboardingData = data.onboarding;
-          if (currentStep < STEPS.length - 1) {
-            currentStep++;
-          }
-          render();
+        if (data.ok || res.status === 200) {
+          showStepMsg('org-status', 'success', '✓ Organização criada com sucesso!');
+          await persistStep('organization');
+          setTimeout(() => { currentStep++; render(); }, 800);
+        } else {
+          showStepMsg('org-status', 'error', data.error || 'Erro ao criar organização.');
+          if (btn) { btn.disabled = false; btn.textContent = 'Criar Organização →'; }
         }
       } catch (e) {
-        console.error('Erro ao completar step:', e);
+        showStepMsg('org-status', 'error', 'Erro de conexão. Tente novamente.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Criar Organização →'; }
       }
     }
 
-    function goToStep(idx) {
-      currentStep = idx;
-      render();
-    }
-
-    function nextStep() {
-      if (currentStep < STEPS.length - 1) {
-        currentStep++;
-        render();
+    async function submitWorkspace() {
+      const name = (document.getElementById('ws-name')?.value || '').trim();
+      const description = (document.getElementById('ws-desc')?.value || '').trim();
+      const type = document.getElementById('ws-type')?.value || 'general';
+      if (!name || name.length < 2) { showStepMsg('ws-status', 'error', 'Informe o nome do workspace (mínimo 2 caracteres).'); return; }
+      const btn = document.getElementById('ws-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
+      try {
+        const res = await fetch('/api/workspaces', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'create', name, description, type })
+        });
+        const data = await res.json();
+        if (data.ok || res.status === 200) {
+          showStepMsg('ws-status', 'success', '✓ Workspace criado com sucesso!');
+          await persistStep('workspace');
+          setTimeout(() => { currentStep++; render(); }, 800);
+        } else {
+          showStepMsg('ws-status', 'error', data.error || 'Erro ao criar workspace.');
+          if (btn) { btn.disabled = false; btn.textContent = 'Criar Workspace →'; }
+        }
+      } catch (e) {
+        showStepMsg('ws-status', 'error', 'Erro de conexão. Tente novamente.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Criar Workspace →'; }
       }
     }
 
-    function previousStep() {
-      if (currentStep > 0) {
-        currentStep--;
-        render();
+    async function submitPlan() {
+      const btn = document.getElementById('plan-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Confirmando...'; }
+      try {
+        const res = await fetch('/api/payments', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'select-plan', planId: selectedPlan })
+        });
+        const data = await res.json();
+        if (data.ok || res.status === 200) {
+          showStepMsg('plan-status', 'success', `✓ Plano ${selectedPlan} selecionado!`);
+          await persistStep('plan');
+          setTimeout(() => { currentStep++; render(); }, 800);
+        } else {
+          showStepMsg('plan-status', 'info', `Plano ${selectedPlan} registrado. Configuração de pagamento disponível em Billing.`);
+          await persistStep('plan');
+          setTimeout(() => { currentStep++; render(); }, 1200);
+        }
+      } catch (e) {
+        showStepMsg('plan-status', 'info', `Plano ${selectedPlan} selecionado. Configure o pagamento em Billing.`);
+        await persistStep('plan');
+        setTimeout(() => { currentStep++; render(); }, 1200);
       }
     }
+
+    async function submitProfile() {
+      const bio = (document.getElementById('profile-bio')?.value || '').trim();
+      const phone = (document.getElementById('profile-phone')?.value || '').trim();
+      const timezone = document.getElementById('profile-timezone')?.value || 'America/Sao_Paulo';
+      const btn = document.getElementById('profile-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+      try {
+        const res = await fetch('/api/profile-update', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ bio, phone, timezone })
+        });
+        const data = await res.json();
+        if (data.ok || res.status === 200) {
+          showStepMsg('profile-status', 'success', '✓ Perfil atualizado!');
+          await persistStep('profile');
+          setTimeout(() => { currentStep++; render(); }, 800);
+        } else {
+          showStepMsg('profile-status', 'error', data.error || 'Erro ao salvar perfil.');
+          if (btn) { btn.disabled = false; btn.textContent = 'Salvar Perfil →'; }
+        }
+      } catch (e) {
+        showStepMsg('profile-status', 'error', 'Erro de conexão. Tente novamente.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Salvar Perfil →'; }
+      }
+    }
+
+    async function markComplete() {
+      await persistStep(STEPS[currentStep].id);
+      if (currentStep < STEPS.length - 1) { currentStep++; render(); }
+    }
+
+    async function persistStep(stepId) {
+      try {
+        const res = await fetch('/api/enterprise/onboarding', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'complete-step', stepId })
+        });
+        const data = await res.json();
+        if (data.ok && data.onboarding) { onboardingData = data.onboarding; }
+        else if (!onboardingData.completedSteps) { onboardingData.completedSteps = []; }
+        if (!onboardingData.completedSteps.includes(stepId)) { onboardingData.completedSteps.push(stepId); }
+      } catch (e) {
+        if (!onboardingData.completedSteps) onboardingData.completedSteps = [];
+        if (!onboardingData.completedSteps.includes(stepId)) onboardingData.completedSteps.push(stepId);
+      }
+      updateProgress();
+      renderSteps();
+    }
+
+    async function finishOnboarding() {
+      try {
+        await fetch('/api/enterprise/onboarding', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'complete' })
+        });
+      } catch (_) {}
+      window.location.href = '/app';
+    }
+
+    function goToStep(idx) { currentStep = idx; render(); }
+    function nextStep() { if (currentStep < STEPS.length - 1) { currentStep++; render(); } }
+    function previousStep() { if (currentStep > 0) { currentStep--; render(); } }
 
     loadOnboarding();
   </script>

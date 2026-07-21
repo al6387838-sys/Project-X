@@ -17,11 +17,17 @@ export async function onRequestPost({ request, env }) {
 
   if (action === 'profile.update') {
     const name = String(input.name ?? user.name ?? '').trim();
-    const timezone = String(input.timezone ?? user.timezone ?? '').trim();
-    if (name.length < 2 || name.length > 100) return json(400, { ok: false, error: 'Nome deve ter entre 2 e 100 caracteres' });
-    if (!timezone || timezone.length > 100) return json(400, { ok: false, error: 'Fuso horário inválido' });
-    user.name = name;
-    user.timezone = timezone;
+    const timezone = String(input.timezone ?? user.timezone ?? 'America/Sao_Paulo').trim();
+    const bio = String(input.bio ?? user.bio ?? '').trim();
+    const phone = String(input.phone ?? user.phone ?? '').trim();
+    if (name && (name.length < 2 || name.length > 100)) return json(400, { ok: false, error: 'Nome deve ter entre 2 e 100 caracteres' });
+    if (timezone && timezone.length > 100) return json(400, { ok: false, error: 'Fuso horário inválido' });
+    if (bio.length > 500) return json(400, { ok: false, error: 'Bio deve ter no máximo 500 caracteres' });
+    if (phone.length > 30) return json(400, { ok: false, error: 'Telefone inválido' });
+    if (name) user.name = name;
+    if (timezone) user.timezone = timezone;
+    user.bio = bio;
+    user.phone = phone;
     user.updatedAt = new Date().toISOString();
     await env.LIFEOS_KV.put(`user:${session.sub}`, JSON.stringify(user));
     const { passwordHash, ...profile } = user;

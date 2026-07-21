@@ -121,9 +121,47 @@ export async function onRequestDelete({ request, env }) {
   }
 }
 
+export async function onRequestPut({ request, env }) {
+  const secret = env.LIFEOS_SESSION_SECRET;
+  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
+  const session = await verifySession(token, secret);
+  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  const kv = env.LIFEOS_KV;
+  if (!kv) return json(503, { ok: false, error: 'Armazenamento indisponível' });
+  let body;
+  try { body = await request.json(); } catch { return json(400, { ok: false, error: 'JSON inválido' }); }
+  const { id, title, content, category, icon, tags } = body;
+  if (!id) return json(400, { ok: false, error: 'ID obrigatório' });
+  try {
+    const raw = await kv.get(`notes:${session.sub}`);
+    const notes = raw ? JSON.parse(raw) : [];
+    const idx = notes.findIndex(n => n.id === id);
+    if (idx === -1) return json(404, { ok: false, error: 'Nota não encontrada' });
+    const existing = notes[idx];
+    const updated = {
+      ...existing,
+      title: title?.trim() || existing.title,
+      content: content?.trim() ?? existing.content,
+      category: category || existing.category,
+      icon: icon || existing.icon,
+      tags: Array.isArray(tags) ? tags : existing.tags,
+      updatedAt: new Date().toISOString(),
+    };
+    notes[idx] = updated;
+    await kv.put(`notes:${session.sub}`, JSON.stringify(notes));
+    return json(200, { ok: true, note: updated });
+  } catch {
+    return json(500, { ok: false, error: 'Erro ao atualizar nota' });
+  }
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === 'GET') return onRequestGet({ request, env });
   if (request.method === 'POST') return onRequestPost({ request, env });
+  if (request.method === 'PUT') return onRequestPut({ request, env });
   if (request.method === 'DELETE') return onRequestDelete({ request, env });
-  return json(405, { ok: false, error: 'Método não permitido' });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { allow: 'GET, POST, PUT, DELETE, OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST, PUT, DELETE, OPTIONS' });
 }
