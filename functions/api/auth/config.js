@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Auth Config Detector v47.0
+// LifeOS Enterprise — Auth Config Detector v48.0
 // Cloudflare Pages Function: GET /api/auth/config
 // FASE 333 — Auto-detect: retorna quais provedores OAuth estão configurados
 // SEM expor segredos. Frontend usa este endpoint para mostrar/ocultar botões.

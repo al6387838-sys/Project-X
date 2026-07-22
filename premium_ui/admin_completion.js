@@ -1,4 +1,4 @@
-/* LIFEOS Enterprise v47.0.0 — Admin Control Plane
+/* LIFEOS Enterprise v48.0.0 — Admin Control Plane
  * Phases 304-307: Layout Enterprise corrigido, auditoria visual completa,
  * funcionalidade total dos botões, UX Enterprise premium.
  * Camada progressiva sobre /admin — usa exclusivamente /api/admin-data.
