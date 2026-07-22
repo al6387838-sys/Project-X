@@ -360,6 +360,72 @@ export async function onRequestPost({ request, env }) {
     await kv.put(`comm:queue:${session.sub}`, JSON.stringify(queue));
     return json(200, { ok: true, processed, total: pending.length });
   }
-
+  // ─── DRAFT ──────────────────────────────────────────────────────────────────
+  if (action === 'draft-save') {
+    const { id: draftId, provider, to, subject, body: draftBody } = body;
+    const draftRaw = await kv.get(`comm:drafts:${session.sub}`);
+    const drafts = draftRaw ? JSON.parse(draftRaw) : [];
+    const ts = new Date().toISOString();
+    if (draftId) {
+      const idx = drafts.findIndex(d => d.id === draftId);
+      if (idx !== -1) {
+        drafts[idx] = { ...drafts[idx], provider, to, subject: subject || '', body: draftBody || '', updatedAt: ts };
+        await kv.put(`comm:drafts:${session.sub}`, JSON.stringify(drafts.slice(0, 200)));
+        return json(200, { ok: true, draft: drafts[idx] });
+      }
+    }
+    const draft = { id: generateId(), provider: provider || 'smtp', to: to || '', subject: subject || '', body: draftBody || '', status: 'draft', createdAt: ts, updatedAt: ts, createdBy: session.sub };
+    drafts.unshift(draft);
+    await kv.put(`comm:drafts:${session.sub}`, JSON.stringify(drafts.slice(0, 200)));
+    return json(201, { ok: true, draft });
+  }
+  if (action === 'draft-delete') {
+    const { id: delId } = body;
+    if (!delId) return json(400, { ok: false, error: 'ID obrigatório' });
+    const draftRaw = await kv.get(`comm:drafts:${session.sub}`);
+    const drafts = draftRaw ? JSON.parse(draftRaw) : [];
+    await kv.put(`comm:drafts:${session.sub}`, JSON.stringify(drafts.filter(d => d.id !== delId)));
+    return json(200, { ok: true, deleted: delId });
+  }
+  if (action === 'drafts') {
+    const draftRaw = await kv.get(`comm:drafts:${session.sub}`);
+    const drafts = draftRaw ? JSON.parse(draftRaw) : [];
+    return json(200, { ok: true, drafts });
+  }
+  // ─── REPLY / FORWARD ─────────────────────────────────────────────────────────
+  if (action === 'reply' || action === 'forward') {
+    const { originalId, provider, to, body: replyBody, subject } = body;
+    if (!to) return json(400, { ok: false, error: 'Destinatário obrigatório' });
+    if (!replyBody) return json(400, { ok: false, error: 'Corpo da mensagem obrigatório' });
+    const histRaw = await kv.get(`comm:history:${session.sub}`);
+    const history = histRaw ? JSON.parse(histRaw) : [];
+    const original = history.find(h => h.id === originalId);
+    const replySubject = subject || (original ? (action === 'reply' ? 'Re: ' : 'Fwd: ') + (original.subject || '') : '');
+    const replyProvider = provider || original?.provider || 'smtp';
+    const message = { provider: replyProvider, to, subject: replySubject, body: replyBody, sentBy: session.sub };
+    const result = await sendMessage(replyProvider, message, env);
+    const histEntry = {
+      id: generateId(), provider: replyProvider, to, subject: replySubject,
+      status: result.ok ? (result.status || 'sent') : 'failed',
+      error: result.error || null, sentAt: new Date().toISOString(), sentBy: session.sub,
+      type: action, originalId: originalId || null,
+    };
+    history.unshift(histEntry);
+    await kv.put(`comm:history:${session.sub}`, JSON.stringify(history.slice(0, 500)));
+    return json(200, { ok: true, result, historyId: histEntry.id, type: action });
+  }
+  // ─── SEARCH ──────────────────────────────────────────────────────────────────
+  if (action === 'search') {
+    const { q, provider: filterProvider, status: filterStatus } = body;
+    if (!q && !filterProvider && !filterStatus) return json(400, { ok: false, error: 'Critério de busca obrigatório (q, provider ou status)' });
+    const histRaw = await kv.get(`comm:history:${session.sub}`);
+    const history = histRaw ? JSON.parse(histRaw) : [];
+    const query = (q || '').toLowerCase();
+    let results = history;
+    if (query) results = results.filter(h => (h.subject || '').toLowerCase().includes(query) || (h.to || '').toLowerCase().includes(query));
+    if (filterProvider) results = results.filter(h => h.provider === filterProvider);
+    if (filterStatus) results = results.filter(h => h.status === filterStatus);
+    return json(200, { ok: true, results: results.slice(0, 100), total: results.length });
+  }
   return json(400, { ok: false, error: 'Ação desconhecida' });
 }

@@ -672,6 +672,47 @@
     aiCenterLoadActionLog();
   }
 
+// Carregar dados reais do briefing na página ai-daily
+async function loadDailyBriefingData() {
+  try {
+    const r = await fetch('/api/briefing', { credentials: 'same-origin' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const b = data.briefing || {};
+    const today = new Date();
+    const dias = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const dateStr = `${dias[today.getDay()]}, ${today.getDate()} de ${meses[today.getMonth()]} de ${today.getFullYear()} · Gerado às ${today.getHours()}:${String(today.getMinutes()).padStart(2,'0')}`;
+    const dailyPage = document.getElementById('page-ai-daily');
+    if (!dailyPage) return;
+    // Atualizar data no cabeçalho
+    const subtitleEl = dailyPage.querySelector('[data-briefing-date]');
+    if (subtitleEl) subtitleEl.textContent = dateStr;
+    // Atualizar métricas reais
+    if (b.metrics) {
+      const m = b.metrics;
+      dailyPage.querySelectorAll('[data-metric="tasksToday"]').forEach(el => { el.textContent = m.tasksToday || 0; });
+      dailyPage.querySelectorAll('[data-metric="habitsCompleted"]').forEach(el => { el.textContent = m.habitsCompleted || 0; });
+      dailyPage.querySelectorAll('[data-metric="goalsActive"]').forEach(el => { el.textContent = m.goalsActive || 0; });
+    }
+    // Atualizar prioridades reais
+    const prioContainer = dailyPage.querySelector('[data-briefing-priorities]');
+    if (prioContainer && b.priorities && b.priorities.length > 0) {
+      const colors = { high: 'var(--red)', medium: 'var(--amber)', low: 'var(--accent)' };
+      prioContainer.innerHTML = b.priorities.map(p => {
+        const color = colors[p.priority] || 'var(--accent)';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid ${color}"><span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><div style="flex:1"><div style="font-weight:600;font-size:13px">${p.title}</div><div style="font-size:11px;color:var(--text-muted)">${p.meta || ''}</div></div></div>`;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+  } catch (e) { console.warn('loadDailyBriefingData error:', e); }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadDailyBriefingData);
+} else {
+  loadDailyBriefingData();
+}
+
 // Load dynamic AI content from API
 (async function loadAIContent() {
   try {

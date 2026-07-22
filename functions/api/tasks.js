@@ -82,7 +82,45 @@ export async function onRequestPost({ request, env }) {
   let body;
   try { body = await request.json(); } catch { return json(400, { ok: false, error: 'JSON inválido' }); }
 
-  const { title, description, dueDate, priority, tags, workspaceId } = body;
+  // ─── COMENTÁRIOS EM TAREFAS ────────────────────────────────────────────────────────
+  if (body.action === 'add-comment') {
+    const { taskId, text } = body;
+    if (!taskId) return json(400, { ok: false, error: 'taskId obrigatório' });
+    if (!text || !String(text).trim()) return json(400, { ok: false, error: 'Texto do comentário obrigatório' });
+    try {
+      const raw = await kv.get(`tasks:${session.sub}`);
+      const tasks = raw ? JSON.parse(raw) : [];
+      const idx = tasks.findIndex(t => t.id === taskId);
+      if (idx === -1) return json(404, { ok: false, error: 'Tarefa não encontrada' });
+      if (!Array.isArray(tasks[idx].comments)) tasks[idx].comments = [];
+      const comment = {
+        id: generateId(),
+        text: String(text).trim().slice(0, 2000),
+        author: session.sub,
+        createdAt: new Date().toISOString(),
+      };
+      tasks[idx].comments.unshift(comment);
+      tasks[idx].updatedAt = new Date().toISOString();
+      await kv.put(`tasks:${session.sub}`, JSON.stringify(tasks));
+      return json(201, { ok: true, comment, taskId });
+    } catch { return json(500, { ok: false, error: 'Erro ao adicionar comentário' }); }
+  }
+  if (body.action === 'delete-comment') {
+    const { taskId, commentId } = body;
+    if (!taskId || !commentId) return json(400, { ok: false, error: 'taskId e commentId obrigatórios' });
+    try {
+      const raw = await kv.get(`tasks:${session.sub}`);
+      const tasks = raw ? JSON.parse(raw) : [];
+      const idx = tasks.findIndex(t => t.id === taskId);
+      if (idx === -1) return json(404, { ok: false, error: 'Tarefa não encontrada' });
+      tasks[idx].comments = (tasks[idx].comments || []).filter(c => c.id !== commentId);
+      tasks[idx].updatedAt = new Date().toISOString();
+      await kv.put(`tasks:${session.sub}`, JSON.stringify(tasks));
+      return json(200, { ok: true, deleted: commentId, taskId });
+    } catch { return json(500, { ok: false, error: 'Erro ao excluir comentário' }); }
+  }
+
+  const { title, description, dueDate, priority, tags, workspaceId, startDate, endDate, dependencies, projectId } = body;
   if (!title || typeof title !== 'string' || title.trim().length === 0) {
     return json(400, { ok: false, error: 'Título obrigatório' });
   }
@@ -92,6 +130,12 @@ export async function onRequestPost({ request, env }) {
     title: title.trim(),
     description: description?.trim() || '',
     dueDate: dueDate || null,
+    // Campos Gantt
+    startDate: startDate || null,
+    endDate: endDate || dueDate || null,
+    // Dependências: array de IDs de tarefas que devem ser concluídas antes
+    dependencies: Array.isArray(dependencies) ? dependencies.filter(d => typeof d === 'string') : [],
+    projectId: projectId || null,
     priority: ['low', 'medium', 'high', 'urgent'].includes(priority) ? priority : 'medium',
     status: 'todo',
     tags: Array.isArray(tags) ? tags : [],
@@ -136,10 +180,13 @@ export async function onRequestPut({ request, env }) {
     const idx = tasks.findIndex(t => t.id === id);
     if (idx === -1) return json(404, { ok: false, error: 'Tarefa não encontrada' });
 
-    // Campos permitidos para atualização
-    const allowed = ['title', 'description', 'dueDate', 'priority', 'status', 'tags', 'workspaceId'];
+    // Campos permitidos para atualização (inclui campos Gantt)
+    const allowed = ['title', 'description', 'dueDate', 'priority', 'status', 'tags', 'workspaceId', 'startDate', 'endDate', 'dependencies', 'projectId'];
     for (const key of allowed) {
-      if (key in updates) tasks[idx][key] = updates[key];
+      if (key in updates) {
+        if (key === 'dependencies') tasks[idx][key] = Array.isArray(updates[key]) ? updates[key].filter(d => typeof d === 'string') : [];
+        else tasks[idx][key] = updates[key];
+      }
     }
     tasks[idx].updatedAt = new Date().toISOString();
 

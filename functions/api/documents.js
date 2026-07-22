@@ -380,6 +380,57 @@ export async function onRequestPost({ request, env }) {
     if (input.type === 'form' && action === 'upload') return await createDocumentFromFile({ request, kv, bucket, session, input });
     if (input.type === 'form' && action === 'new-version') return await uploadNewVersion({ request, kv, bucket, session, input });
     if (action === 'create') return await createBlankDocument({ request, kv, bucket, session, body });
+    if (action === 'create-folder') {
+      const folderName = safeText(body.name, 120);
+      if (!folderName || !folderName.trim()) throw new Error('Nome da pasta obrigatório');
+      const folderId = generateId();
+      const timestamp = now();
+      const folder = {
+        id: folderId, name: folderName.trim(), isFolder: true,
+        folderId: safeText(body.parentId || 'root', 120) || 'root',
+        mimeType: 'application/x-directory', size: 0, favorite: false, deleted: false,
+        version: 1, permissions: { owner: session.sub, viewers: [], editors: [] },
+        createdAt: timestamp, updatedAt: timestamp, createdBy: session.sub, updatedBy: session.sub,
+        tags: [], description: '', storageKey: null, storageUrl: null,
+      };
+      const allDocs = await getDocuments(kv, session.sub);
+      allDocs.unshift(folder);
+      await saveDocuments(kv, session.sub, allDocs);
+      await auditLog(kv, session.sub, 'create-folder', folderId, { name: folderName.trim() });
+      return json(201, { ok: true, folder: documentPayload(request, folder) });
+    }
+    if (action === 'ocr') {
+      const ocrDocId = safeText(body.docId || body.id, 80);
+      if (!ocrDocId) throw new Error('docId obrigatório para OCR');
+      const allDocs = await getDocuments(kv, session.sub);
+      const ocrDoc = requireDocument(allDocs, ocrDocId);
+      if (ocrDoc.deleted) throw new Error('Documento está na lixeira');
+      const openaiKey = env?.OPENAI_API_KEY;
+      if (!openaiKey) {
+        return json(200, { ok: true, text: '', docId: ocrDocId,
+          message: 'OCR via IA requer configuração da chave OpenAI. Acesse Configurações > Integrações para ativar.',
+          source: 'not-configured' });
+      }
+      if (!bucket || !ocrDoc.storageKey) {
+        return json(200, { ok: true, text: '', docId: ocrDocId,
+          message: 'Conteúdo do documento não disponível para OCR. Faça upload do arquivo primeiro.',
+          source: 'no-content' });
+      }
+      try {
+        const ocrObject = await bucket.get(ocrDoc.storageKey);
+        if (!ocrObject) return json(404, { ok: false, error: 'Arquivo não encontrado no armazenamento' });
+        const mimeType = ocrDoc.mimeType || '';
+        if (mimeType.startsWith('text/')) {
+          const text = await ocrObject.text();
+          return json(200, { ok: true, text: text.slice(0, 10000), docId: ocrDocId, source: 'text-extract' });
+        }
+        return json(200, { ok: true, text: '', docId: ocrDocId,
+          message: 'OCR para imagens e PDFs disponível com OpenAI Vision. Tipo atual: ' + mimeType,
+          source: 'vision-required' });
+      } catch (ocrErr) {
+        return json(500, { ok: false, error: 'Erro ao processar OCR: ' + (ocrErr instanceof Error ? ocrErr.message : 'erro desconhecido') });
+      }
+    }
 
     const docs = await getDocuments(kv, session.sub);
     const document = requireDocument(docs, body.docId || body.id);

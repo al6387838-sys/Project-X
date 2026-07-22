@@ -174,7 +174,15 @@ export async function onRequestPost({ request, env }) {
   // ── Chat com OpenAI ──────────────────────────────────────────────────────
   if (action === 'chat') {
     if (!env.OPENAI_API_KEY) {
-      return json(400, { ok: false, error: 'Conecte sua API da OpenAI para habilitar a IA.' });
+      // Aviso elegante — nunca erro bruto
+      return json(200, {
+        ok: true,
+        configured: false,
+        status: 'not_configured',
+        message: 'Conecte sua API da OpenAI para habilitar a IA.',
+        hint: 'Acesse Configurações > Integrações > OpenAI para adicionar sua chave de API.',
+        response: null,
+      });
     }
     const { message, conversationId, useTools = true, stream = false, context } = body;
     if (!message) return json(400, { ok: false, error: 'message é obrigatório' });

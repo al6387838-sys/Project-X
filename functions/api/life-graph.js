@@ -83,11 +83,28 @@ export async function onRequestGet({ request, env }) {
     // Combinar nós automáticos com customizados
     const allNodes = [...autoNodes, ...customGraph.nodes.filter(n => !n.auto)];
     const allEdges = [...autoEdges, ...customGraph.edges.filter(e => !e.auto)];
+    // Calcular Life Score e áreas para o widget do Command Center
+    const today = new Date().toISOString().split('T')[0];
+    const tasksRaw = await kv.get(`tasks:${session.sub}`);
+    const tasks = tasksRaw ? JSON.parse(tasksRaw) : [];
+    const taskScore = tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'done').length / tasks.length) * 100) : 0;
+    const activeHabits = habits.filter(h => h.active !== false);
+    const habitScore = activeHabits.length > 0 ? Math.round((activeHabits.filter(h => h.completions && h.completions.includes(today)).length / activeHabits.length) * 100) : 0;
+    const activeGoals = goals.filter(g => g.status === 'active');
+    const goalScore = activeGoals.length > 0 ? Math.round(activeGoals.reduce((s, g) => s + (g.progress || 0), 0) / activeGoals.length) : 0;
+    const currentScore = Math.round(taskScore * 0.35 + habitScore * 0.35 + goalScore * 0.30);
+    const areas = [
+      { name: 'Produtividade', score: taskScore, color: '#6366F1' },
+      { name: 'Hábitos', score: habitScore, color: '#10B981' },
+      { name: 'Metas', score: goalScore, color: '#F59E0B' },
+    ].filter(a => a.score > 0 || tasks.length > 0 || activeHabits.length > 0 || activeGoals.length > 0);
     return json(200, {
       ok: true,
       nodes: allNodes,
       edges: allEdges,
       total: allNodes.length,
+      currentScore,
+      areas,
       source: 'real',
     });
   } catch (err) {

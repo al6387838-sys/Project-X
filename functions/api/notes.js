@@ -53,8 +53,26 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.toLowerCase() || '';
     const category = url.searchParams.get('category') || '';
+    const view = url.searchParams.get('view') || '';
+    const noteId = url.searchParams.get('id') || '';
+    // Histórico de versões de uma nota específica
+    if (view === 'versions' && noteId) {
+      const versionsRaw = await kv.get(`notes:versions:${session.sub}:${noteId}`);
+      const versions = versionsRaw ? JSON.parse(versionsRaw) : [];
+      const note = notes.find(n => n.id === noteId) || null;
+      return json(200, { ok: true, note, versions });
+    }
+    // Links internos: notas que referenciam outras notas via [[slug]]
+    if (view === 'links' && noteId) {
+      const note = notes.find(n => n.id === noteId);
+      if (!note) return json(404, { ok: false, error: 'Nota não encontrada' });
+      const linkPattern = /\[\[([^\]]+)\]\]/g;
+      const linkedSlugs = [...(note.content || '').matchAll(linkPattern)].map(m => m[1].toLowerCase());
+      const linked = notes.filter(n => linkedSlugs.includes((n.title || '').toLowerCase()) || linkedSlugs.includes((n.slug || '').toLowerCase()));
+      return json(200, { ok: true, note, links: linked, total: linked.length });
+    }
     let filtered = notes;
-    if (q) filtered = filtered.filter(n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q));
+    if (q) filtered = filtered.filter(n => (n.title || '').toLowerCase().includes(q) || (n.content || '').toLowerCase().includes(q));
     if (category) filtered = filtered.filter(n => n.category === category);
     return json(200, { ok: true, notes: filtered, total: notes.length });
   } catch {
@@ -147,10 +165,25 @@ export async function onRequestPut({ request, env }) {
       category: category || existing.category,
       icon: icon || existing.icon,
       tags: Array.isArray(tags) ? tags : existing.tags,
+      version: (existing.version || 1) + 1,
       updatedAt: new Date().toISOString(),
     };
     notes[idx] = updated;
-    await kv.put(`notes:${session.sub}`, JSON.stringify(notes));
+    // Versionamento: salvar snapshot da versão anterior
+    const verKey = `notes:versions:${session.sub}:${id}`;
+    const versionsRaw = await kv.get(verKey);
+    const versions = versionsRaw ? JSON.parse(versionsRaw) : [];
+    versions.unshift({
+      version: existing.version || 1,
+      title: existing.title,
+      content: existing.content,
+      savedAt: existing.updatedAt || existing.createdAt,
+      savedBy: session.sub,
+    });
+    await Promise.all([
+      kv.put(`notes:${session.sub}`, JSON.stringify(notes)),
+      kv.put(verKey, JSON.stringify(versions.slice(0, 50))),
+    ]);
     return json(200, { ok: true, note: updated });
   } catch {
     return json(500, { ok: false, error: 'Erro ao atualizar nota' });
