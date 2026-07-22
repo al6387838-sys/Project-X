@@ -19,245 +19,57 @@ const STATE = {
 };
 
 /* ============================================================
-   MOCK DATA — LifeOS Platform
+   REAL DATA — LifeOS Platform
+   Data is loaded from /api/observability and /api/dashboard
+   No mock data remains in this file.
    ============================================================ */
 const DATA = {
-  empresa: {
-    usuarios_cadastrados: 1_247,
-    usuarios_ativos: 834,
-    beta_testers: 112,
-    receita_mrr: 4_890,
-    receita_arr: 58_680,
-    assinaturas_ativas: 203,
-    assinaturas_trial: 89,
-    waitlist: 3_412,
-    churn_rate: 2.4,
-    nps: 72,
-    crescimento_usuarios: 18.3,
-    crescimento_receita: 24.7,
-    crescimento_waitlist: 31.2,
-    historico_usuarios: [420, 510, 620, 710, 820, 940, 1050, 1140, 1247],
-    historico_mrr: [800, 1200, 1800, 2400, 3100, 3700, 4200, 4600, 4890],
-    historico_waitlist: [800, 1100, 1500, 1900, 2300, 2700, 3000, 3200, 3412],
-    planos: [
-      { nome: 'Free',    usuarios: 631, percentual: 50.6, cor: '#6366F1' },
-      { nome: 'Pro',     usuarios: 203, percentual: 16.3, cor: '#8B5CF6' },
-      { nome: 'Trial',   usuarios: 89,  percentual: 7.1,  cor: '#3B82F6' },
-      { nome: 'Beta',    usuarios: 112, percentual: 9.0,  cor: '#10B981' },
-      { nome: 'Waitlist',usuarios: 212, percentual: 17.0, cor: '#F59E0B' },
-    ],
-  },
-
-  produto: {
-    versao_atual: '1.0.0-rc',
-    versao_nome: 'Release Candidate',
-    versao_data: '2026-07-09',
-    sprint_atual: 28,
-    testes_passando: 544,
-    testes_total: 544,
-    cobertura_codigo: 94.2,
-    bugs_abertos: 7,
-    bugs_criticos: 0,
-    features_concluidas: [
-      { nome: 'Life Kernel — Núcleo central do sistema',       tag: 'core' },
-      { nome: 'Intelligence Hub — Motor de IA',                tag: 'ai'   },
-      { nome: 'Action Engine — Automação de ações',            tag: 'core' },
-      { nome: 'Decision Engine — Tomada de decisão',           tag: 'ai'   },
-      { nome: 'Learning Engine — Aprendizado contínuo',        tag: 'ai'   },
-      { nome: 'Connector Platform — Integrações externas',     tag: 'infra'},
-      { nome: 'Security Center — Segurança e auditoria',       tag: 'infra'},
-      { nome: 'Observability Stack — Monitoramento',           tag: 'infra'},
-      { nome: 'Premium UI — Design System v2.0',               tag: 'ux'   },
-      { nome: 'OAuth System — Autenticação segura',            tag: 'infra'},
-      { nome: 'Cloud Sync — Sincronização multi-device',       tag: 'infra'},
-      { nome: 'Growth OS — Funil e retenção',                  tag: 'core' },
-    ],
-    features_em_dev: [
-      { nome: 'Voice Interface — Interação por voz',           tag: 'ai',   prog: 35 },
-      { nome: 'Predictive Action Engine',                      tag: 'ai',   prog: 20 },
-      { nome: 'Connector Marketplace API pública',             tag: 'infra', prog: 55 },
-      { nome: 'IoT Orchestration (Matter/Thread)',              tag: 'infra', prog: 10 },
-      { nome: 'Financial Engine — Budget autônomo',            tag: 'core', prog: 40 },
-    ],
-    roadmap: [
-      { fase: 'V0.9',   nome: 'Alpha Interno',         desc: 'Arquitetura base e motores core',                   status: 'done'    },
-      { fase: 'V1.0-rc',nome: 'Release Candidate',     desc: 'Suite completa, 544 testes, deploy production',     status: 'active'  },
-      { fase: 'V1.0.x', nome: 'Stability & Scale',     desc: 'Chaos testing, Rust extensions, DB sharding',       status: 'planned' },
-      { fase: 'V1.1.0', nome: 'Intelligence Expansion', desc: 'Voice Interface, Predictive Engine, Globalization', status: 'planned' },
-      { fase: 'V1.2.0', nome: 'Ecosystem Growth',      desc: 'Connector Marketplace, IoT, Financial Engine',      status: 'planned' },
-      { fase: 'V2.0.0', nome: 'Decentralization',      desc: 'P2P Sync, Local LLM, Federated Learning',          status: 'planned' },
-    ],
-  },
-
-  ia: {
-    companion_status: 'ONLINE',
-    companion_model: 'GPT-4o + Fine-tuned LifeOS',
-    companion_versao: '2.4.1',
-    missoes_executadas: 8_934,
-    missoes_hoje: 247,
-    missoes_semana: 1_823,
-    taxa_sucesso: 97.8,
-    aprendizado_ciclos: 1_204,
-    aprendizado_ultima_atualizacao: '2026-07-09 03:00 UTC',
-    aprendizado_precisao: 94.6,
-    sig_status: 'ACTIVE',
-    sig_versao: 'SIG-v3.2',
-    sig_modelos_ativos: 7,
-    sig_ultima_inferencia: '2 min atrás',
-    tokens_consumidos_mes: 48_200_000,
-    latencia_media_ms: 312,
-    historico_missoes: [180, 210, 195, 230, 215, 240, 225, 247],
-    modelos: [
-      { nome: 'Companion Core',    status: 'online',  latencia: '312ms', req_dia: 4200 },
-      { nome: 'Decision Engine',   status: 'online',  latencia: '89ms',  req_dia: 2100 },
-      { nome: 'Learning Engine',   status: 'online',  latencia: '445ms', req_dia: 890  },
-      { nome: 'Pattern Recognizer',status: 'online',  latencia: '156ms', req_dia: 3400 },
-      { nome: 'Emotion Analyzer',  status: 'standby', latencia: '—',     req_dia: 0    },
-      { nome: 'Voice Interface',   status: 'dev',     latencia: '—',     req_dia: 0    },
-      { nome: 'Predictive Engine', status: 'dev',     latencia: '—',     req_dia: 0    },
-    ],
-  },
-
-  plataforma: {
-    uptime_30d: 99.94,
-    uptime_7d: 100.0,
-    latencia_p50: 48,
-    latencia_p95: 187,
-    latencia_p99: 412,
-    taxa_erros: 0.08,
-    requests_dia: 142_800,
-    requests_hora: 5_950,
-    cpu_uso: 34,
-    memoria_uso: 61,
-    disco_uso: 28,
-    incidentes_30d: 1,
-    deploys_30d: 8,
-    logs_recentes: [
-      { nivel: 'info',    msg: 'Deploy v1.0.0-rc concluído com sucesso',         ts: '09/07 18:42' },
-      { nivel: 'info',    msg: '544 testes passando — zero falhas',              ts: '09/07 18:40' },
-      { nivel: 'warning', msg: 'Latência P99 acima de 400ms por 3 minutos',      ts: '09/07 14:22' },
-      { nivel: 'info',    msg: 'Backup automático concluído — 2.4 GB',           ts: '09/07 03:00' },
-      { nivel: 'info',    msg: 'Certificado SSL renovado automaticamente',       ts: '08/07 22:15' },
-      { nivel: 'info',    msg: 'Prometheus + Grafana stack atualizado',          ts: '08/07 16:30' },
-      { nivel: 'info',    msg: 'Auto-scaling ativado — 3 instâncias',            ts: '07/07 11:00' },
-      { nivel: 'warning', msg: 'Pico de CPU 78% — normalizado em 4 min',        ts: '06/07 20:45' },
-    ],
-    alertas: [
-      { nivel: 'warning', titulo: 'Latência P99 Elevada',    desc: 'P99 atingiu 412ms às 14:22. Limiar: 400ms. Monitorando.', ts: '14:22' },
-      { nivel: 'info',    titulo: 'Deploy Agendado',         desc: 'v1.0.0 estável programado para 15/07 às 02:00 UTC.',      ts: '12:00' },
-      { nivel: 'info',    titulo: 'Backup Concluído',        desc: 'Snapshot diário de 2.4 GB armazenado com sucesso.',       ts: '03:00' },
-    ],
-    historico_latencia: [42, 45, 48, 51, 44, 47, 52, 48, 46, 49, 187, 48],
-    historico_erros: [0.05, 0.06, 0.07, 0.08, 0.06, 0.09, 0.07, 0.08],
-    servicos: [
-      { nome: 'API Gateway',       status: 'online',  uptime: '100%' },
-      { nome: 'Life Kernel',       status: 'online',  uptime: '99.9%' },
-      { nome: 'Intelligence Hub',  status: 'online',  uptime: '99.9%' },
-      { nome: 'Action Engine',     status: 'online',  uptime: '100%' },
-      { nome: 'Database (Primary)',status: 'online',  uptime: '100%' },
-      { nome: 'Database (Replica)',status: 'online',  uptime: '100%' },
-      { nome: 'Redis Cache',       status: 'online',  uptime: '100%' },
-      { nome: 'Object Storage',    status: 'online',  uptime: '100%' },
-    ],
-  },
-
-  seguranca: {
-    score: 94,
-    nivel: 'ALTO',
-    eventos_30d: 1_847,
-    eventos_criticos: 0,
-    eventos_suspeitos: 2,
-    logins_suspeitos: 2,
-    tentativas_bloqueadas: 34,
-    ips_bloqueados: 12,
-    auditoria_ultima: '2026-07-09 18:42 UTC',
-    integridade_status: 'ÍNTEGRO',
-    integridade_hash: 'sha256:a3f8c2d1...',
-    certificados_validos: 4,
-    certificados_expirando: 0,
-    vulnerabilidades_criticas: 0,
-    vulnerabilidades_medias: 2,
-    eventos_recentes: [
-      { tipo: 'info',    msg: 'Auditoria automática concluída — sem anomalias',   ts: '09/07 18:42', ip: 'sistema' },
-      { tipo: 'warning', msg: 'Login de IP incomum — Brasil/SP bloqueado',        ts: '09/07 11:30', ip: '177.x.x.x' },
-      { tipo: 'warning', msg: 'Múltiplas tentativas de login — conta bloqueada',  ts: '08/07 23:15', ip: '45.x.x.x' },
-      { tipo: 'info',    msg: 'Certificado SSL renovado automaticamente',         ts: '08/07 22:15', ip: 'sistema' },
-      { tipo: 'info',    msg: 'Scan de vulnerabilidades — 0 críticas encontradas',ts: '07/07 04:00', ip: 'sistema' },
-      { tipo: 'info',    msg: 'Rate limiting ativado — 34 IPs bloqueados (24h)',  ts: '06/07 18:00', ip: 'sistema' },
-    ],
-    politicas: [
-      { nome: 'MFA Obrigatório',          status: 'ativo' },
-      { nome: 'Rate Limiting',            status: 'ativo' },
-      { nome: 'Criptografia AES-256',     status: 'ativo' },
-      { nome: 'TLS 1.3',                  status: 'ativo' },
-      { nome: 'RBAC',                     status: 'ativo' },
-      { nome: 'Audit Logging',            status: 'ativo' },
-      { nome: 'IP Allowlist (Admin)',      status: 'ativo' },
-      { nome: 'Pen Test Trimestral',      status: 'agendado' },
-    ],
-  },
-
-  ceo: {
-    kpis: [
-      { nome: 'MRR',            valor: 'R$ 4.890',  tendencia: '+24.7%', positivo: true  },
-      { nome: 'ARR',            valor: 'R$ 58.680', tendencia: '+24.7%', positivo: true  },
-      { nome: 'Usuários Ativos',valor: '834',        tendencia: '+18.3%', positivo: true  },
-      { nome: 'NPS',            valor: '72',         tendencia: '+8 pts', positivo: true  },
-      { nome: 'Churn Mensal',   valor: '2.4%',       tendencia: '-0.3%',  positivo: true  },
-      { nome: 'LTV/CAC',        valor: '4.2x',       tendencia: '+0.4x',  positivo: true  },
-      { nome: 'Waitlist',       valor: '3.412',      tendencia: '+31.2%', positivo: true  },
-      { nome: 'Uptime',         valor: '99.94%',     tendencia: '=',      positivo: true  },
-    ],
-    okrs: [
-      {
-        objetivo: 'Lançar V1.0 em produção com qualidade enterprise',
-        progresso: 92,
-        resultados: [
-          { kr: '544 testes passando (100%)',  prog: 100 },
-          { kr: 'Deploy em staging validado',  prog: 100 },
-          { kr: 'Documentação completa',       prog: 85  },
-          { kr: 'Deploy em produção',          prog: 80  },
-        ],
-      },
-      {
-        objetivo: 'Atingir 1.000 usuários ativos no Q3/2026',
-        progresso: 83,
-        resultados: [
-          { kr: '1.000 usuários cadastrados',  prog: 100 },
-          { kr: '834 usuários ativos (83.4%)', prog: 83  },
-          { kr: '200+ assinantes pagantes',    prog: 100 },
-          { kr: 'NPS ≥ 70',                   prog: 100 },
-        ],
-      },
-      {
-        objetivo: 'Construir base técnica escalável para 100k usuários',
-        progresso: 70,
-        resultados: [
-          { kr: 'Observability Stack completo', prog: 100 },
-          { kr: 'Chaos Testing implementado',   prog: 30  },
-          { kr: 'DB Sharding preparado',        prog: 50  },
-          { kr: 'Latência P95 < 200ms',         prog: 100 },
-        ],
-      },
-    ],
-    proximos_releases: [
-      { versao: 'v1.0.0',   data: '15 Jul 2026', desc: 'Release estável para produção',         status: 'iminente' },
-      { versao: 'v1.0.1',   data: 'Ago 2026',    desc: 'Hotfixes e otimizações de performance',  status: 'planejado' },
-      { versao: 'v1.1.0',   data: 'Set 2026',    desc: 'Voice Interface + Predictive Engine',    status: 'planejado' },
-      { versao: 'v1.2.0',   data: 'Nov 2026',    desc: 'Connector Marketplace público',          status: 'planejado' },
-    ],
-    metricas_estrategicas: {
-      runway_meses: 18,
-      burn_rate: 12_400,
-      cac: 48,
-      ltv: 201,
-      payback_meses: 6.2,
-      k_factor: 0.34,
-      taxa_ativacao: 67,
-      conversao_visitante: 3.8,
-    },
-  },
+  empresa: null,
+  produto: null,
+  ia: null,
+  plataforma: null,
+  seguranca: null,
+  ceo: null,
 };
+
+async function loadDashboardData() {
+  try {
+    const [dashRes, obsRes] = await Promise.all([
+      fetch('/api/dashboard', { credentials: 'same-origin' }),
+      fetch('/api/observability', { credentials: 'same-origin' }),
+    ]);
+    const dashData = dashRes.ok ? await dashRes.json() : {};
+    const obsData = obsRes.ok ? await obsRes.json() : {};
+    DATA.empresa = dashData.empresa || null;
+    DATA.produto = dashData.produto || null;
+    DATA.ia = dashData.ia || null;
+    DATA.plataforma = obsData.plataforma || null;
+    DATA.seguranca = obsData.seguranca || null;
+    DATA.ceo = dashData.ceo || null;
+    renderDashboard();
+  } catch (err) {
+    console.error('[Founder Dashboard] Erro ao carregar dados:', err);
+    showEmptyState();
+  }
+}
+
+function showEmptyState() {
+  const container = document.getElementById('dashboard-content');
+  if (container) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Conecte-se para visualizar métricas em tempo real.</div></div>';
+  }
+}
+
+function renderDashboard() {
+  // Delegate to existing render functions which now use real DATA
+  if (STATE.currentSection === 'overview') renderOverview();
+  else if (STATE.currentSection === 'empresa') renderEmpresa();
+  else if (STATE.currentSection === 'produto') renderProduto();
+  else if (STATE.currentSection === 'ia') renderIA();
+  else if (STATE.currentSection === 'plataforma') renderPlataforma();
+  else if (STATE.currentSection === 'seguranca') renderSeguranca();
+  else if (STATE.currentSection === 'ceo') renderCEO();
+}
 
 /* ============================================================
    UTILITY FUNCTIONS
@@ -476,6 +288,7 @@ function renderOverview() {
 
 // ---- EMPRESA ----
 function renderEmpresa() {
+  if (!DATA.empresa) { document.getElementById('section-empresa').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados da empresa serão carregados da API.</div></div>'; return; }
   const d = DATA.empresa;
   document.getElementById('section-empresa').innerHTML = `
     <div class="page-header">
@@ -626,6 +439,7 @@ function renderEmpresa() {
 
 // ---- PRODUTO ----
 function renderProduto() {
+  if (!DATA.produto) { document.getElementById('section-produto').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados do produto serão carregados da API.</div></div>'; return; }
   const d = DATA.produto;
   document.getElementById('section-produto').innerHTML = `
     <div class="page-header">
@@ -745,6 +559,7 @@ function renderProduto() {
 
 // ---- IA ----
 function renderIA() {
+  if (!DATA.ia) { document.getElementById('section-ia').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados de IA serão carregados da API.</div></div>'; return; }
   const d = DATA.ia;
   document.getElementById('section-ia').innerHTML = `
     <div class="page-header">
@@ -1036,6 +851,7 @@ function renderMultiLineChart(id, datasets) {
    PLATAFORMA
    ============================================================ */
 function renderPlataforma() {
+  if (!DATA.plataforma) { document.getElementById('section-plataforma').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados da plataforma serão carregados da API.</div></div>'; return; }
   const d = DATA.plataforma;
   document.getElementById('section-plataforma').innerHTML = `
     <div class="page-header">
@@ -1190,6 +1006,7 @@ function renderPlataforma() {
    SEGURANÇA
    ============================================================ */
 function renderSeguranca() {
+  if (!DATA.seguranca) { document.getElementById('section-seguranca').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados de segurança serão carregados da API.</div></div>'; return; }
   const d = DATA.seguranca;
   document.getElementById('section-seguranca').innerHTML = `
     <div class="page-header">
@@ -1320,6 +1137,7 @@ function renderSeguranca() {
    CEO VIEW
    ============================================================ */
 function renderCEO() {
+  if (!DATA.ceo) { document.getElementById('section-ceo').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Dados CEO serão carregados da API.</div></div>'; return; }
   const d = DATA.ceo;
   document.getElementById('section-ceo').innerHTML = `
     <div class="page-header">
@@ -1532,21 +1350,13 @@ function exportReport() {
 document.addEventListener('DOMContentLoaded', () => {
   // Inicializar ícones
   lucide.createIcons();
-
   // Iniciar relógio
   updateClock();
   setInterval(updateClock, 1000);
-
-  // Renderizar overview inicial
-  renderOverview();
-
+  // Load real data from APIs
+  loadDashboardData();
   // Auto-refresh a cada 60s
   STATE.refreshInterval = setInterval(() => {
-    if (SECTION_RENDERERS[STATE.currentSection]) {
-      SECTION_RENDERERS[STATE.currentSection]();
-    }
+    loadDashboardData();
   }, 60000);
-
-  
-  
 });

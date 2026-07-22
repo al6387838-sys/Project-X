@@ -76,84 +76,8 @@ const ONBOARDING_STEPS = [
   },
 ];
 
-const MOCK_MISSIONS = [
-  {
-    id: 1, title: 'Aprender TypeScript', category: 'aprendizado', priority: 'high',
-    objective: 'Dominar TypeScript para melhorar a qualidade do código e abrir novas oportunidades.',
-    progress: 65, deadline: '2026-09-30', status: 'active',
-    subtasks: [
-      { id: 1, text: 'Completar curso básico', done: true },
-      { id: 2, text: 'Praticar com projetos pessoais', done: true },
-      { id: 3, text: 'Contribuir para projeto open-source', done: false },
-      { id: 4, text: 'Certificação TypeScript', done: false },
-    ]
-  },
-  {
-    id: 2, title: 'Exercitar 4x por semana', category: 'saude', priority: 'high',
-    objective: 'Melhorar saúde física e mental através de exercícios regulares.',
-    progress: 80, deadline: '2026-12-31', status: 'active',
-    subtasks: [
-      { id: 1, text: 'Definir rotina de treinos', done: true },
-      { id: 2, text: 'Academia 4x semana', done: false },
-      { id: 3, text: 'Correr 5km sem parar', done: false },
-    ]
-  },
-  {
-    id: 3, title: 'Reserva de Emergência', category: 'financas', priority: 'medium',
-    objective: 'Construir reserva de 6 meses de despesas para segurança financeira.',
-    progress: 40, deadline: '2026-12-31', status: 'active',
-    subtasks: [
-      { id: 1, text: 'Mapear despesas mensais', done: true },
-      { id: 2, text: 'Abrir conta de investimento', done: true },
-      { id: 3, text: 'Automatizar aportes mensais', done: false },
-      { id: 4, text: 'Atingir meta de 6 meses', done: false },
-    ]
-  },
-  {
-    id: 4, title: 'Lançar Produto Digital', category: 'carreira', priority: 'high',
-    objective: 'Criar e lançar um produto digital que gere renda passiva.',
-    progress: 25, deadline: '2026-10-31', status: 'active',
-    subtasks: [
-      { id: 1, text: 'Validar ideia com potenciais clientes', done: true },
-      { id: 2, text: 'Desenvolver MVP', done: false },
-      { id: 3, text: 'Criar landing page', done: false },
-      { id: 4, text: 'Lançar e coletar feedback', done: false },
-    ]
-  },
-];
-
-const MOCK_TIMELINE = [
-  {
-    id: 1, year: 2026, date: '2026-07-09', title: 'LifeOS Sprint 028 — Premium Experience',
-    description: 'Implementação completa do Design System V2, Component Library e todas as UIs premium.',
-    category: 'carreira', tags: ['lifeos', 'sprint', 'design'], color: '#6366F1'
-  },
-  {
-    id: 2, year: 2026, date: '2026-06-15', title: 'Início do Projeto LifeOS',
-    description: 'Primeiro commit do Project-X. Visão de criar um copiloto de vida pessoal com IA.',
-    category: 'carreira', tags: ['lifeos', 'inicio'], color: '#3B82F6'
-  },
-  {
-    id: 3, year: 2026, date: '2026-05-01', title: 'Meta de Saúde — 30 dias',
-    description: 'Completei 30 dias consecutivos de exercício físico.',
-    category: 'saude', tags: ['saude', 'conquista'], color: '#10B981'
-  },
-  {
-    id: 4, year: 2026, date: '2026-03-20', title: 'Certificação TypeScript',
-    description: 'Obtive certificação avançada em TypeScript após 3 meses de estudo.',
-    category: 'aprendizado', tags: ['typescript', 'certificacao'], color: '#8B5CF6'
-  },
-  {
-    id: 5, year: 2025, date: '2025-12-31', title: 'Ano de 2025 — Reflexão',
-    description: 'Ano de grandes mudanças. Carreira acelerou, saúde melhorou, relacionamentos aprofundados.',
-    category: 'pessoal', tags: ['reflexao', 'ano'], color: '#F59E0B'
-  },
-  {
-    id: 6, year: 2025, date: '2025-09-10', title: 'Primeiro Investimento',
-    description: 'Comecei a investir regularmente. Reserva de emergência iniciada.',
-    category: 'financas', tags: ['financas', 'investimento'], color: '#F59E0B'
-  },
-];
+// MOCK_MISSIONS removed — data loaded from API
+// MOCK_TIMELINE removed — data loaded from API
 
 const COMMANDS = [
   { icon: '\u{26A1}', label: 'Dashboard',       shortcut: 'G D', action: () => showView('dashboard') },
@@ -221,23 +145,31 @@ function startExperience() {
   }, 400);
 }
 
-function enterDemo() {
-  // Pre-populate with demo data
-  AppState.user.name = 'Demo User';
-  AppState.user.values = ['\u{1F31F} Família', '\u{1F4C8} Crescimento', '\u{1F49A} Saúde'];
-  AppState.user.lifeAreas = { saude: 7, carreira: 8, relacionamentos: 6, financas: 5, aprendizado: 9, lazer: 6 };
-  AppState.user.lifeScore = 73;
-  AppState.missions = [...MOCK_MISSIONS];
-  AppState.timelineEvents = [...MOCK_TIMELINE];
-  AppState.isOnboarded = true;
+async function loadUserProfile() {
+  try {
+    const res = await fetch('/api/dashboard', { credentials: 'same-origin' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const d = data.dashboard || {};
+    if (d.user) AppState.user = { ...AppState.user, ...d.user };
+    if (d.lifeScore !== undefined) AppState.user.lifeScore = d.lifeScore;
+    if (d.lifeAreas) AppState.user.lifeAreas = d.lifeAreas;
+    if (d.goals) AppState.goals = d.goals;
+    if (d.tasks) AppState.tasks = d.tasks;
+    if (d.habits) AppState.habits = d.habits;
+    saveState();
+  } catch { /* API may not be available yet */ }
+}
 
+function enterDemo() {
+  // Demo mode — load user profile from API instead of hardcoded data
+  AppState.isOnboarded = true;
   saveState();
   localStorage.setItem('lifeos_onboarded', '1');
-
   const splash = document.getElementById('screen-splash');
   splash.style.display = 'none';
   showAppShell();
-  showToast('success', '\u{2728} Demo carregado!', 'Explore todas as funcionalidades do LifeOS.');
+  loadUserProfile();
 }
 
 /* ============================================================
@@ -467,11 +399,13 @@ function completeOnboarding() {
   AppState.user.lifeScore = calculateLifeScore();
   AppState.isOnboarded = true;
 
-  // Add mock data if no missions
+  // Missions and timeline start empty — user creates real data
   if (AppState.missions.length === 0) {
-    AppState.missions = [...MOCK_MISSIONS];
+    AppState.missions = [];
   }
-  AppState.timelineEvents = [...MOCK_TIMELINE];
+  if (AppState.timelineEvents.length === 0) {
+    AppState.timelineEvents = [];
+  }
 
   saveState();
   localStorage.setItem('lifeos_onboarded', '1');

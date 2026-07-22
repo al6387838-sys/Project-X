@@ -85,6 +85,7 @@ await copy('modules/integrations-manager.html', 'modules/integrations-manager.ht
 await copy('modules/dashboard-v11.html', 'modules/dashboard-v11.html');
 await copy('modules/identity.html', 'modules/identity.html');
 await copy('modules/file-center.html', 'modules/file-center.html');
+await copy('modules/photos.html', 'modules/photos.html');
 await copy('modules/automation.html', 'modules/automation.html');
 await copy('modules/analytics.html', 'modules/analytics.html');
 await copy('services/oauth-manager.js', 'services/oauth-manager.js');

@@ -1,4 +1,5 @@
-<!-- LifeOS Enterprise — Módulo Produtividade v8.0 -->
+<!-- LifeOS Enterprise — Productivity Module v2.0 -->
+<!-- Kanban/Gantt/Wiki dinâmicos via /api/tasks e /api/ai-insights -->
 <div id="module-productivity" style="display:none">
 
 <!-- ─── KANBAN ─── -->
@@ -9,103 +10,33 @@
       <div class="page-subtitle">Gerencie suas tarefas visualmente</div>
     </div>
     <div style="display:flex;gap:8px">
-      <select class="form-input" style="width:auto;font-size:13px">
-        <option>Selecione um projeto</option>
-        <option>Projeto Beta</option>
-        <option>Pessoal</option>
-        <option>Trabalho</option>
+      <select class="form-input" id="kanban-project" style="width:auto;font-size:13px" onchange="kanbanLoad()">
+        <option value="">Todos os projetos</option>
       </select>
       <button class="btn btn-ghost" onclick="showPage('gantt')">Gantt</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
+      <button class="btn btn-primary" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 180px);overflow-x:auto">
-    <!-- Coluna: Backlog -->
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--text-muted)">
-        <span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Backlog</span><span class="kanban-count">5</span>
-      </div>
-      <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'backlog')">
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k1">
-          <div class="kanban-card-title">Pesquisar concorrentes</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Pesquisa</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">Sem prazo</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
-        </div>
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k2">
-          <div class="kanban-card-title">Configurar CI/CD pipeline</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">Dev</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">20 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Carlos</span></div>
-        </div>
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k3">
-          <div class="kanban-card-title">Documentar API v2</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(245,158,11,0.15);color:var(--amber)">Docs</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">25 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Ana</span></div>
-        </div>
-      </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <div class="kanban-col-header" style="border-top-color:var(--text-muted)"><span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Backlog</span><span class="kanban-count" id="kanban-count-backlog">—</span></div>
+      <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'backlog')"></div>
+      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
-    <!-- Coluna: Em Progresso -->
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--accent)">
-        <span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Em Progresso</span><span class="kanban-count">3</span>
-      </div>
-      <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')">
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k4">
-          <div class="kanban-card-title">Implementar módulo Finance</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(99,102,241,0.15);color:var(--accent)">Dev</span><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Urgente</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">15 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
-          <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:65%"></div></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:3px">65% concluído</div>
-        </div>
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k5">
-          <div class="kanban-card-title">Design da landing page v2</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(236,72,153,0.15);color:var(--pink)">Design</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">18 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Maria</span></div>
-          <div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:40%;background:linear-gradient(90deg,var(--pink),#F472B6)"></div></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:3px">40% concluído</div>
-        </div>
-      </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <div class="kanban-col-header" style="border-top-color:var(--accent)"><span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Em Progresso</span><span class="kanban-count" id="kanban-count-progress">—</span></div>
+      <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')"></div>
+      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
-    <!-- Coluna: Revisão -->
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--amber)">
-        <span><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i> Revisão</span><span class="kanban-count">2</span>
-      </div>
-      <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')">
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k6">
-          <div class="kanban-card-title">Testes de integração</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">QA</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--text-muted)">14 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Carlos</span></div>
-        </div>
-        <div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k7">
-          <div class="kanban-card-title">Revisão de segurança</div>
-          <div class="kanban-card-meta"><span class="kanban-tag" style="background:rgba(239,68,68,0.15);color:var(--red)">Segurança</span></div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--amber)">16 Jul</span><span style="font-size:11px"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Eu</span></div>
-        </div>
-      </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <div class="kanban-col-header" style="border-top-color:var(--amber)"><span><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i> Revisão</span><span class="kanban-count" id="kanban-count-review">—</span></div>
+      <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')"></div>
+      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
-    <!-- Coluna: Concluído -->
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--green)">
-        <span><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Concluído</span><span class="kanban-count">8</span>
-      </div>
-      <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')">
-        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k8">
-          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Setup do ambiente</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 10 Jul</span></div>
-        </div>
-        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k9">
-          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Autenticação JWT</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 12 Jul</span></div>
-        </div>
-        <div class="kanban-card done" draggable="true" ondragstart="kanbanDragStart(event)" data-id="k10">
-          <div class="kanban-card-title" style="text-decoration:line-through;opacity:0.6">Deploy inicial</div>
-          <div class="kanban-card-footer"><span style="font-size:11px;color:var(--green)"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> 13 Jul</span></div>
-        </div>
-      </div>
-      <button class="kanban-add-btn" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <div class="kanban-col-header" style="border-top-color:var(--green)"><span><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Concluído</span><span class="kanban-count" id="kanban-count-done">—</span></div>
+      <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')"></div>
+      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
   </div>
 </div>
@@ -119,212 +50,296 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('kanban')">Kanban</button>
-      <select class="form-input" style="width:auto;font-size:13px">
-        <option>Selecione um projeto</option>
-        <option>Projeto Beta</option>
-      </select>
-      <button class="btn btn-primary" onclick="openModal('modal-new-task')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
   <div class="card" style="overflow-x:auto">
-    <div style="min-width:900px">
-      <!-- Cabeçalho de datas -->
-      <div style="display:grid;grid-template-columns:200px repeat(14,1fr);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:600;color:var(--text-muted)">Tarefa</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">07/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">08/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">09/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">10/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">11/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">12/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">13/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center;font-weight:700;color:var(--accent)">14/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">15/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">16/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">17/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">18/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">19/07</div>
-        <div style="font-size:10px;color:var(--text-muted);text-align:center">20/07</div>
-      </div>
-      <!-- Tarefas -->
-      <div style="display:flex;flex-direction:column;gap:6px" id="gantt-rows">
-        <div class="gantt-row"><div class="gantt-task-name">Setup do ambiente</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:1/3;background:var(--green);opacity:0.7"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Autenticação JWT</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:2/5;background:var(--green);opacity:0.7"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Módulo Finance</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:4/9;background:var(--accent)"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Design Landing v2</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:5/11;background:var(--pink)"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Testes de integração</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:7/10;background:var(--amber)"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Revisão de segurança</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:8/11;background:var(--red)"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Deploy produção</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:10/13;background:var(--purple)"></div></div></div>
-        <div class="gantt-row"><div class="gantt-task-name">Documentar API v2</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:11/15;background:var(--cyan)"></div></div></div>
-      </div>
+    <div style="min-width:900px" id="gantt-content">
+      <div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando tarefas...</div>
     </div>
   </div>
 </div>
 
-<!-- ─── CRM ENTERPRISE v48.0.0 ─── -->
+<!-- ─── CRM ─── -->
 <div class="page" id="page-crm">
   <div id="crm-client-view" aria-live="polite"></div>
 </div>
-
-<!-- ─── PIPELINE COMERCIAL ─── -->
 <div class="page" id="page-crm-pipeline">
   <div id="crm-pipeline-view" aria-live="polite"></div>
 </div>
-
-<!-- ─── AGENDA COMERCIAL ─── -->
 <div class="page" id="page-crm-agenda">
   <div id="crm-agenda-view" aria-live="polite"></div>
 </div>
 
-<!-- ─── WIKI / BASE DE CONHECIMENTO ─── -->
+<!-- ─── WIKI ─── -->
 <div class="page" id="page-wiki">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Wiki</div>
-      <div class="page-subtitle">Base de conhecimento pessoal e corporativa</div>
+      <div class="page-title"><i data-lucide="book-open" class="pg-icon" aria-hidden="true"></i> Wiki</div>
+      <div class="page-subtitle">Base de conhecimento da equipe</div>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="openModal('modal-new-wiki-page')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-wiki-page')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button>
-    </div>
+    <button class="btn btn-primary" onclick="wikiNewPage()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página</button>
   </div>
-  <div style="display:grid;grid-template-columns:240px 1fr;gap:16px;height:calc(100vh - 160px)">
-    <!-- Sidebar Wiki -->
-    <div class="card" style="overflow-y:auto;padding:12px">
-      <input type="text" class="form-input" placeholder=" Buscar..." style="width:100%;margin-bottom:12px;font-size:12px" />
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Espaços</div>
-      <div class="wiki-nav-item active" onclick="wikiOpen('home')"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Início</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('work')"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Trabalho</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('personal')"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Pessoal</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('projects')"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i> Projetos</div>
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin:12px 0 8px">Páginas Recentes</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('setup')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Setup do Ambiente</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('api')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Documentação API</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('onboarding')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Onboarding</div>
-      <div class="wiki-nav-item" onclick="wikiOpen('processes')"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Processos</div>
-    </div>
-    <!-- Conteúdo Wiki -->
-    <div class="card" style="overflow-y:auto" id="wiki-content">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div>
-          <div style="font-size:24px;font-weight:800;margin-bottom:4px"><i data-lucide="house" class="pg-icon" aria-hidden="true"></i> Início — Wiki LifeOS</div>
-          <div style="font-size:12px;color:var(--text-muted)">Atualizado: 14 Jul 2026 · por Você</div>
-        </div>
-        <button class="btn btn-ghost" onclick="showToast('Modo de edição ativado','info')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button>
-      </div>
-      <div style="line-height:1.8;color:var(--text-secondary)">
-        <p>Bem-vindo à sua base de conhecimento pessoal. Aqui você pode documentar processos, ideias, referências e qualquer informação importante.</p>
-        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px"><i data-lucide="pin" class="pg-icon" aria-hidden="true"></i> Páginas em Destaque</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
-          <div class="wiki-page-card" onclick="wikiOpen('setup')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Setup do Ambiente</div><div style="font-size:11px;color:var(--text-muted)">Configuração completa do ambiente de desenvolvimento</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('api')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Documentação API</div><div style="font-size:11px;color:var(--text-muted)">Endpoints, autenticação e exemplos de uso</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('onboarding')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="rocket" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Onboarding</div><div style="font-size:11px;color:var(--text-muted)">Guia de integração para novos membros</div></div>
-          <div class="wiki-page-card" onclick="wikiOpen('processes')"><div style="font-size:20px;margin-bottom:6px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></div><div style="font-weight:600;font-size:13px">Processos</div><div style="font-size:11px;color:var(--text-muted)">Fluxos e procedimentos operacionais</div></div>
-        </div>
-        <h3 style="color:var(--text-primary);margin:20px 0 10px;font-size:16px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Atividade Recente</h3>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span><i data-lucide="notebook-pen" class="pg-icon" aria-hidden="true"></i></span><div><div style="font-size:13px;font-weight:600">Documentação API atualizada</div><div style="font-size:11px;color:var(--text-muted)">Hoje, 10:30</div></div></div>
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:8px"><span><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></span><div><div style="font-size:13px;font-weight:600">Nova página: Processos de Deploy</div><div style="font-size:11px;color:var(--text-muted)">Ontem, 15:20</div></div></div>
-        </div>
-      </div>
-    </div>
+  <div id="wiki-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+    <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Carregando wiki...</div>
   </div>
 </div>
 
-</div>
-<script src="/app/modules/crm-live.js"></script>
-
-<!-- ─── MODAL: Nova Tarefa ─── -->
-<div class="modal-overlay" id="modal-new-task" style="display:none">
-  <div class="modal-box">
+<!-- ─── NEW TASK MODAL ─── -->
+<div id="modal-new-task" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="kanbanCloseModal('modal-new-task')"></div>
+  <div class="modal-content" style="width:500px;max-width:90vw">
     <div class="modal-header">
       <div class="modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa</div>
-      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <button class="modal-close" onclick="kanbanCloseModal('modal-new-task')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Título</label>
-      <input type="text" class="form-input" id="task-title" placeholder="Título da tarefa" />
+    <div class="modal-body">
+      <form id="new-task-form">
+        <div style="margin-bottom:10px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Título</label>
+          <input type="text" id="task-title" class="form-input" style="width:100%" required>
+        </div>
+        <div style="margin-bottom:10px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Descrição</label>
+          <textarea id="task-desc" class="form-input" style="width:100%;min-height:80px;resize:vertical"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Status</label>
+            <select id="task-status" class="form-input" style="width:100%">
+              <option value="todo">Backlog</option>
+              <option value="progress">Em Progresso</option>
+              <option value="review">Revisão</option>
+              <option value="done">Concluído</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Prioridade</label>
+            <select id="task-priority" class="form-input" style="width:100%">
+              <option value="low">Baixa</option>
+              <option value="medium">Média</option>
+              <option value="high">Alta</option>
+              <option value="urgent">Urgente</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Prazo</label>
+          <input type="date" id="task-due" class="form-input" style="width:100%">
+        </div>
+        <div id="task-form-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button type="button" class="btn btn-ghost" onclick="kanbanCloseModal('modal-new-task')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Criar</button>
+        </div>
+      </form>
     </div>
-    <div class="form-group">
-      <label class="form-label">Descrição</label>
-      <input type="text" class="form-input" id="task-desc" placeholder="Descrição (opcional)" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Status</label>
-      <select class="form-input" id="task-status">
-        <option value="backlog">Backlog</option>
-        <option value="todo">A Fazer</option>
-        <option value="doing">Em Progresso</option>
-        <option value="done">Concluída</option>
-      </select>
-    </div>
-    <button class="btn btn-primary" style="width:100%" onclick="submitNewTask()">Criar Tarefa</button>
   </div>
 </div>
-<!-- ─── MODAL: Nova Página Wiki ─── -->
-<div class="modal-overlay" id="modal-new-wiki-page" style="display:none">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página Wiki</div>
-      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Título</label>
-      <input type="text" class="form-input" id="wiki-title" placeholder="Título da página" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Conteúdo</label>
-      <textarea class="form-input" id="wiki-content" rows="6" placeholder="Conteúdo da página..."></textarea>
-    </div>
-    <button class="btn btn-primary" style="width:100%" onclick="submitNewWiki()">Criar Página</button>
-  </div>
+
 </div>
-<script>
-async function submitNewTask() {
-  const title = document.getElementById('task-title')?.value?.trim();
-  if (!title) { showToast?.('Título obrigatório', 'error'); return; }
-  const description = document.getElementById('task-desc')?.value?.trim() || '';
-  const status = document.getElementById('task-status')?.value || 'todo';
-  try {
-    const r = await fetch('/api/tasks', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description, status }),
-    });
-    const d = await r.json();
-    if (d.ok) {
-      showToast?.('Tarefa criada!', 'success');
-      closeModal();
-      document.getElementById('task-title').value = '';
-      document.getElementById('task-desc').value = '';
-      // Reload productivity module
-      window.loadModuleForPage?.('productivity');
-    } else {
-      showToast?.(d.error || 'Erro', 'error');
-    }
-  } catch { showToast?.('Erro ao criar tarefa', 'error'); }
-}
-async function submitNewWiki() {
-  const title = document.getElementById('wiki-title')?.value?.trim();
-  if (!title) { showToast?.('Título obrigatório', 'error'); return; }
-  const content = document.getElementById('wiki-content')?.value?.trim() || '';
-  try {
-    const r = await fetch('/api/documents', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'upload', name: title, description: content, tags: ['wiki'], mimeType: 'text/markdown' }),
-    });
-    const d = await r.json();
-    if (d.ok) {
-      showToast?.('Página wiki criada!', 'success');
-      closeModal();
-    } else {
-      showToast?.(d.error || 'Erro', 'error');
-    }
-  } catch { showToast?.('Erro ao criar página', 'error'); }
-}
-function wikiOpen(page) {
-  showToast?.(`Abrindo ${page}...`, 'info');
-}
-</script>
 <!-- END module-productivity -->
+
+<script>
+(() => {
+  'use strict';
+  const TASKS_API = '/api/tasks';
+  const WIKI_API = '/api/documents';
+  let state = { tasks: [], wikiPages: [], draggedId: null };
+
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+  function fmtDate(d) { if (!d) return 'Sem prazo'; try { return new Date(d).toLocaleDateString('pt-BR', { dateStyle: 'short' }); } catch { return String(d); } }
+
+  async function fetchTasks() {
+    const res = await fetch(TASKS_API, { credentials: 'same-origin' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao carregar tarefas');
+    return data.tasks || data.items || [];
+  }
+
+  async function createTask(body) {
+    const res = await fetch(TASKS_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao criar tarefa');
+    return data;
+  }
+
+  async function updateTaskStatus(id, newStatus) {
+    const res = await fetch(TASKS_API, {
+      method: 'PUT', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, status: newStatus }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao atualizar tarefa');
+    return data;
+  }
+
+  async function loadTasks() {
+    try {
+      state.tasks = await fetchTasks();
+      renderKanban();
+      renderGantt();
+    } catch (err) {
+      console.error('[Kanban] Erro:', err);
+    }
+  }
+
+  function getStatusColumn(status) {
+    const s = String(status || 'todo').toLowerCase();
+    if (s === 'done' || s === 'completed') return 'done';
+    if (s === 'progress' || s === 'in_progress' || s === 'inprogress') return 'progress';
+    if (s === 'review') return 'review';
+    return 'backlog';
+  }
+
+  function renderKanban() {
+    const cols = { backlog: [], progress: [], review: [], done: [] };
+    state.tasks.forEach(t => {
+      const col = getStatusColumn(t.status);
+      cols[col].push(t);
+    });
+
+    Object.entries(cols).forEach(([col, tasks]) => {
+      const el = document.getElementById(`kanban-${col}`);
+      if (el) {
+        el.innerHTML = tasks.map(t => `
+          <div class="kanban-card ${col === 'done' ? 'done' : ''}" draggable="true" ondragstart="kanbanDragStart(event,'${esc(t.id)}')">
+            <div class="kanban-card-title">${esc(t.title || t.name || 'Sem título')}</div>
+            ${t.description ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.description)}</div>` : ''}
+            ${t.priority ? `<div class="kanban-card-meta"><span class="kanban-tag" style="background:${t.priority === 'urgent' ? 'rgba(239,68,68,.15)' : t.priority === 'high' ? 'rgba(245,158,11,.15)' : 'rgba(99,102,241,.15)'};color:${t.priority === 'urgent' ? 'var(--red)' : t.priority === 'high' ? 'var(--amber)' : 'var(--accent)'}">${esc(t.priority)}</span></div>` : ''}
+            <div class="kanban-card-footer">
+              <span style="font-size:11px;color:var(--text-muted)">${fmtDate(t.dueDate)}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+      const countEl = document.getElementById(`kanban-count-${col}`);
+      if (countEl) countEl.textContent = tasks.length;
+    });
+  }
+
+  function renderGantt() {
+    const container = document.getElementById('gantt-content');
+    const tasks = state.tasks.filter(t => t.status !== 'done');
+    if (!tasks.length) {
+      container.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhuma tarefa ativa para exibir no Gantt.</div>';
+      return;
+    }
+    // Dynamic Gantt — show last 30 days
+    const now = new Date();
+    const days = Array.from({ length: 30 }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() - 15 + i);
+      return d;
+    });
+    container.innerHTML = `
+      <div style="display:grid;grid-template-columns:200px repeat(${days.length},1fr);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted)">Tarefa</div>
+        ${days.map(d => `<div style="font-size:10px;color:${d.toDateString() === now.toDateString() ? 'var(--accent)' : 'var(--text-muted)'};text-align:center">${d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</div>`).join('')}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${tasks.map(t => {
+          const start = t.createdAt ? new Date(t.createdAt) : now;
+          const due = t.dueDate ? new Date(t.dueDate) : now;
+          const startOffset = Math.max(0, Math.floor((start - days[0]) / 86400000));
+          const endOffset = Math.min(days.length - 1, Math.floor((due - days[0]) / 86400000));
+          const span = Math.max(1, endOffset - startOffset + 1);
+          const col = startOffset + 2; // +2 because grid starts at col 2
+          return `<div class="gantt-row"><div class="gantt-task-name" style="padding:4px 0">${esc(t.title || t.name || 'Tarefa')}</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:${col}/${col + span};background:var(--accent);opacity:0.7"></div></div></div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  // ─── WIKI ───
+  async function loadWiki() {
+    try {
+      const res = await fetch('/api/documents?view=notes', { credentials: 'same-origin' });
+      const data = await res.json().catch(() => ({}));
+      state.wikiPages = data.notes || data.items || [];
+      renderWiki();
+    } catch {
+      document.getElementById('wiki-content').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Wiki não disponível. Crie uma página para começar.</div>';
+    }
+  }
+
+  function renderWiki() {
+    const el = document.getElementById('wiki-content');
+    if (!state.wikiPages.length) {
+      el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhuma página na wiki. Crie uma para começar.</div>';
+      return;
+    }
+    el.innerHTML = state.wikiPages.map(w => `
+      <div class="card" style="cursor:pointer;padding:16px" onclick="wikiOpenPage('${esc(w.id)}')">
+        <div style="font-size:14px;font-weight:600;margin-bottom:6px">${esc(w.name || w.title || 'Sem título')}</div>
+        <div style="font-size:12px;color:var(--text-muted)">${esc((w.description || w.content || '').slice(0, 100))}</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px">${fmtDate(w.updatedAt || w.createdAt)}</div>
+      </div>
+    `).join('');
+  }
+
+  // ─── PUBLIC API ───
+  window.kanbanOpenNewTask = () => {
+    document.getElementById('task-form-error').style.display = 'none';
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-desc').value = '';
+    document.getElementById('task-status').value = 'todo';
+    document.getElementById('task-priority').value = 'medium';
+    document.getElementById('task-due').value = '';
+    document.getElementById('modal-new-task').style.display = '';
+  };
+
+  window.kanbanCloseModal = (id) => { document.getElementById(id).style.display = 'none'; };
+
+  window.kanbanDragStart = (e, taskId) => { state.draggedId = taskId; e.dataTransfer.effectAllowed = 'move'; };
+  window.kanbanDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+  window.kanbanDrop = async (e, newStatus) => {
+    e.preventDefault();
+    if (!state.draggedId) return;
+    try {
+      await updateTaskStatus(state.draggedId, newStatus);
+      if (typeof showToast === 'function') showToast('Tarefa movida', 'success');
+      await loadTasks();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+    state.draggedId = null;
+  };
+
+  window.kanbanLoad = loadTasks;
+
+  window.wikiNewPage = () => { if (typeof showToast === 'function') showToast('Funcionalidade de criação de páginas wiki — utilize Documentos para criar notas', 'info'); };
+  window.wikiOpenPage = (id) => { if (typeof showToast === 'function') showToast('Abrindo página wiki: ' + id, 'info'); };
+
+  // ─── FORM HANDLER ───
+  document.getElementById('new-task-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('task-form-error');
+    const title = document.getElementById('task-title').value.trim();
+    if (!title) { errEl.textContent = 'Título obrigatório.'; errEl.style.display = 'block'; return; }
+
+    try {
+      await createTask({
+        title,
+        description: document.getElementById('task-desc').value.trim(),
+        status: document.getElementById('task-status').value === 'todo' ? 'todo' : document.getElementById('task-status').value,
+        priority: document.getElementById('task-priority').value,
+        dueDate: document.getElementById('task-due').value || null,
+      });
+      kanbanCloseModal('modal-new-task');
+      if (typeof showToast === 'function') showToast('Tarefa criada', 'success');
+      await loadTasks();
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.style.display = 'block';
+    }
+  });
+
+  // ─── INIT ───
+  loadTasks();
+  loadWiki();
+})();
+</script>

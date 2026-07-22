@@ -1,0 +1,376 @@
+<!-- LifeOS Enterprise — Photos Module v1.0 -->
+<div id="module-photos" style="display:none">
+
+<!-- ─── PHOTOS GALLERY ─── -->
+<div class="page" id="page-photos">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="image" class="pg-icon" aria-hidden="true"></i> Fotos</div>
+      <div class="page-subtitle">Galeria de fotos com upload, álbuns e organização</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="photosShowAlbums()">Álbuns</button>
+      <button class="btn btn-primary" onclick="photosOpenUpload()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid-4" style="margin-bottom:20px" id="photos-stats">
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><i data-lucide="image" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="photos-stat-total">—</div><div class="kpi-label">Fotos</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(139,92,246,.15);color:var(--purple)"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="photos-stat-albums">—</div><div class="kpi-label">Álbuns</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><i data-lucide="hard-drive" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="photos-stat-size">—</div><div class="kpi-label">Armazenamento</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="photos-stat-favorites">—</div><div class="kpi-label">Favoritas</div></div>
+  </div>
+
+  <!-- Gallery Grid -->
+  <div id="photos-gallery" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+    <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Carregando fotos...</div>
+  </div>
+</div>
+
+<!-- ─── ALBUMS VIEW ─── -->
+<div class="page" id="page-photos-albums" style="display:none">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Álbuns</div>
+      <div class="page-subtitle">Organize suas fotos em álbuns</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="photosShowGallery()">Galeria</button>
+      <button class="btn btn-primary" onclick="photosOpenNewAlbum()"><i data-lucide="folder-plus" class="pg-icon" aria-hidden="true"></i> Novo Álbum</button>
+    </div>
+  </div>
+  <div id="photos-albums-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+    <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Carregando álbuns...</div>
+  </div>
+</div>
+
+<!-- ─── UPLOAD MODAL ─── -->
+<div id="modal-photos-upload" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="photosCloseModal('modal-photos-upload')"></div>
+  <div class="modal-content" style="width:500px;max-width:90vw">
+    <div class="modal-header">
+      <div class="modal-title"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload de Fotos</div>
+      <button class="modal-close" onclick="photosCloseModal('modal-photos-upload')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="photos-upload-form">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Fotos</label>
+          <input type="file" id="photos-upload-files" accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif" multiple class="form-input" style="width:100%">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Álbum (opcional)</label>
+          <select id="photos-upload-album" class="form-input" style="width:100%"><option value="">Nenhum</option></select>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Tags (separadas por vírgula)</label>
+          <input type="text" id="photos-upload-tags" class="form-input" style="width:100%" placeholder="ex: família, viagem, natureza">
+        </div>
+        <div id="photos-upload-error" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button type="button" class="btn btn-ghost" onclick="photosCloseModal('modal-photos-upload')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ─── NEW ALBUM MODAL ─── -->
+<div id="modal-photos-album" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="photosCloseModal('modal-photos-album')"></div>
+  <div class="modal-content" style="width:420px;max-width:90vw">
+    <div class="modal-header">
+      <div class="modal-title"><i data-lucide="folder-plus" class="pg-icon" aria-hidden="true"></i> Novo Álbum</div>
+      <button class="modal-close" onclick="photosCloseModal('modal-photos-album')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="photos-album-form">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Nome do Álbum</label>
+          <input type="text" id="photos-album-name" class="form-input" style="width:100%" required>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Descrição (opcional)</label>
+          <textarea id="photos-album-desc" class="form-input" style="width:100%;resize:vertical;min-height:60px"></textarea>
+        </div>
+        <div id="photos-album-error" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button type="button" class="btn btn-ghost" onclick="photosCloseModal('modal-photos-album')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Criar Álbum</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PHOTO VIEWER MODAL ─── -->
+<div id="modal-photo-viewer" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="photosCloseModal('modal-photo-viewer')"></div>
+  <div class="modal-content" style="width:90vw;max-width:900px;height:85vh">
+    <div class="modal-header">
+      <div class="modal-title" id="photo-viewer-title">Foto</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost" style="padding:8px" id="photo-viewer-fav" title="Favoritar" onclick="photosToggleFavorite()">❤</button>
+        <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="photosDeleteCurrent()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="modal-close" onclick="photosCloseModal('modal-photo-viewer')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="modal-body" style="display:flex;gap:16px;overflow-y:auto">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border-radius:var(--radius-md);overflow:hidden">
+        <img id="photo-viewer-img" src="" style="max-width:100%;max-height:70vh;object-fit:contain" alt="">
+      </div>
+      <div style="width:260px;flex-shrink:0">
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px" id="photo-viewer-name"></div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px" id="photo-viewer-meta"></div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px" id="photo-viewer-desc"></div>
+        <div id="photo-viewer-tags" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END module-photos -->
+
+<script>
+(() => {
+  'use strict';
+  const API = '/api/photos';
+  let state = { photos: [], albums: [], stats: null, currentPhoto: null, view: 'gallery' };
+
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+  function fmtSize(b) { if (!b) return '0 B'; const k = 1024, s = ['B','KB','MB','GB']; const i = Math.floor(Math.log(b) / Math.log(k)); return (b / Math.pow(k, i)).toFixed(1) + ' ' + s[i]; }
+  function fmtDate(d) { if (!d) return '—'; return new Date(d).toLocaleDateString('pt-BR', { dateStyle: 'short' }); }
+
+  async function fetchPhotos(view = 'list', params = '') {
+    const res = await fetch(`${API}?view=${view}${params}`, { credentials: 'same-origin' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao carregar dados');
+    return data;
+  }
+
+  async function request(body) {
+    const res = await fetch(API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro na operação');
+    return data;
+  }
+
+  async function uploadFiles(formData) {
+    const res = await fetch(API, { method: 'POST', credentials: 'same-origin', body: formData });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro no upload');
+    return data;
+  }
+
+  async function photosLoad() {
+    try {
+      const [photoData, albumData, statsData] = await Promise.all([
+        fetchPhotos('list'),
+        fetchPhotos('albums'),
+        fetchPhotos('stats'),
+      ]);
+      state.photos = photoData.photos || [];
+      state.albums = albumData.albums || [];
+      state.stats = statsData.stats || {};
+      renderStats();
+      if (state.view === 'gallery') renderGallery();
+      else renderAlbums();
+    } catch (err) {
+      document.getElementById('photos-gallery').innerHTML = `<div style="padding:32px;text-align:center;color:var(--red);grid-column:1/-1">Erro: ${esc(err.message)}</div>`;
+    }
+  }
+
+  function renderStats() {
+    const s = state.stats || {};
+    document.getElementById('photos-stat-total').textContent = (s.totalPhotos || 0).toLocaleString('pt-BR');
+    document.getElementById('photos-stat-albums').textContent = (s.totalAlbums || 0).toLocaleString('pt-BR');
+    document.getElementById('photos-stat-size').textContent = fmtSize(s.totalSize || 0);
+    document.getElementById('photos-stat-favorites').textContent = (s.favoriteCount || 0).toLocaleString('pt-BR');
+  }
+
+  function renderGallery() {
+    const grid = document.getElementById('photos-gallery');
+    if (!state.photos.length) {
+      grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhuma foto. Faça upload para começar.</div>';
+      return;
+    }
+    grid.innerHTML = state.photos.map(p => `
+      <div class="photo-thumb" style="position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;border:1px solid var(--border);background:var(--bg-elevated)" onclick="photosOpenViewer('${esc(p.id)}')">
+        <img src="${esc(p.url)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+        ${p.favorite ? '<div style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,.8);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">❤</div>' : ''}
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderAlbums() {
+    const grid = document.getElementById('photos-albums-grid');
+    if (!state.albums.length) {
+      grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhum álbum. Crie um para organizar suas fotos.</div>';
+      return;
+    }
+    grid.innerHTML = state.albums.map(a => {
+      const albumPhotos = state.photos.filter(p => p.albumId === a.id);
+      const cover = albumPhotos[0];
+      return `
+      <div class="card" style="padding:12px;cursor:pointer" onclick="photosOpenAlbum('${esc(a.id)}')">
+        <div style="aspect-ratio:16/9;background:var(--bg-elevated);border-radius:var(--radius-md);overflow:hidden;margin-bottom:8px;position:relative">
+          ${cover ? `<img src="${esc(cover.url)}" alt="" style="width:100%;height:100%;object-fit:cover">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i data-lucide="image" class="pg-icon" style="width:32px;height:32px"></i></div>'}
+        </div>
+        <div style="font-size:14px;font-weight:600">${esc(a.name)}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${albumPhotos.length} foto(s) · ${esc(a.description || 'Sem descrição')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ─── PUBLIC API ───
+  window.photosShowGallery = () => {
+    state.view = 'gallery';
+    document.getElementById('page-photos').style.display = '';
+    document.getElementById('page-photos-albums').style.display = 'none';
+    renderGallery();
+  };
+
+  window.photosShowAlbums = () => {
+    state.view = 'albums';
+    document.getElementById('page-photos').style.display = 'none';
+    document.getElementById('page-photos-albums').style.display = '';
+    renderAlbums();
+  };
+
+  window.photosOpenUpload = () => {
+    // Populate album dropdown
+    const sel = document.getElementById('photos-upload-album');
+    sel.innerHTML = '<option value="">Nenhum</option>' + state.albums.map(a => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('');
+    document.getElementById('photos-upload-error').style.display = 'none';
+    document.getElementById('modal-photos-upload').style.display = '';
+  };
+
+  window.photosOpenNewAlbum = () => {
+    document.getElementById('photos-album-error').style.display = 'none';
+    document.getElementById('photos-album-name').value = '';
+    document.getElementById('photos-album-desc').value = '';
+    document.getElementById('modal-photos-album').style.display = '';
+  };
+
+  window.photosOpenViewer = (photoId) => {
+    const photo = state.photos.find(p => p.id === photoId);
+    if (!photo) return;
+    state.currentPhoto = photo;
+    document.getElementById('photo-viewer-title').textContent = esc(photo.name);
+    document.getElementById('photo-viewer-img').src = photo.url;
+    document.getElementById('photo-viewer-name').textContent = esc(photo.name);
+    document.getElementById('photo-viewer-meta').textContent = `${fmtDate(photo.createdAt)} · ${fmtSize(photo.size)} · ${esc(photo.mimeType || 'image')}`;
+    document.getElementById('photo-viewer-desc').textContent = esc(photo.description || '');
+    document.getElementById('photo-viewer-tags').innerHTML = (photo.tags || []).map(t => `<span style="font-size:10px;padding:2px 6px;background:var(--accent-glow);color:var(--accent);border-radius:4px">${esc(t)}</span>`).join('');
+    document.getElementById('photo-viewer-fav').textContent = photo.favorite ? '❤' : '♡';
+    document.getElementById('modal-photo-viewer').style.display = '';
+  };
+
+  window.photosCloseModal = (id) => { document.getElementById(id).style.display = 'none'; };
+
+  window.photosToggleFavorite = async () => {
+    if (!state.currentPhoto) return;
+    try {
+      await request({ action: 'toggle-favorite', photoId: state.currentPhoto.id });
+      state.currentPhoto.favorite = !state.currentPhoto.favorite;
+      document.getElementById('photo-viewer-fav').textContent = state.currentPhoto.favorite ? '❤' : '♡';
+      if (typeof showToast === 'function') showToast(state.currentPhoto.favorite ? 'Favoritada' : 'Desfavoritada', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  window.photosDeleteCurrent = async () => {
+    if (!state.currentPhoto) return;
+    if (!confirm('Excluir esta foto permanentemente?')) return;
+    try {
+      await request({ action: 'delete-photo', photoId: state.currentPhoto.id });
+      photosCloseModal('modal-photo-viewer');
+      if (typeof showToast === 'function') showToast('Foto excluída', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  window.photosOpenAlbum = (albumId) => {
+    // Filter gallery to album photos
+    const album = state.albums.find(a => a.id === albumId);
+    if (!album) return;
+    state.photos = state.photos.filter(p => p.albumId === albumId);
+    state.view = 'gallery';
+    document.getElementById('page-photos').style.display = '';
+    document.getElementById('page-photos-albums').style.display = 'none';
+    renderGallery();
+  };
+
+  // ─── FORM HANDLERS ───
+  document.getElementById('photos-upload-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const files = document.getElementById('photos-upload-files').files;
+    if (!files || files.length === 0) {
+      const err = document.getElementById('photos-upload-error');
+      err.textContent = 'Selecione pelo menos uma foto.';
+      err.style.display = 'block';
+      return;
+    }
+    const albumId = document.getElementById('photos-upload-album').value;
+    const tags = document.getElementById('photos-upload-tags').value;
+
+    try {
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        if (albumId) formData.append('albumId', albumId);
+        if (tags) formData.append('tags', tags);
+        await uploadFiles(formData);
+      }
+      photosCloseModal('modal-photos-upload');
+      document.getElementById('photos-upload-form').reset();
+      if (typeof showToast === 'function') showToast(`${files.length} foto(s) enviada(s)`, 'success');
+      await photosLoad();
+    } catch (err) {
+      const error = document.getElementById('photos-upload-error');
+      error.textContent = err.message;
+      error.style.display = 'block';
+    }
+  });
+
+  document.getElementById('photos-album-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('photos-album-name').value.trim();
+    if (!name) {
+      const err = document.getElementById('photos-album-error');
+      err.textContent = 'Nome obrigatório.';
+      err.style.display = 'block';
+      return;
+    }
+    try {
+      await request({
+        action: 'create-album',
+        name,
+        description: document.getElementById('photos-album-desc').value.trim(),
+      });
+      photosCloseModal('modal-photos-album');
+      if (typeof showToast === 'function') showToast('Álbum criado', 'success');
+      await photosLoad();
+    } catch (err) {
+      const error = document.getElementById('photos-album-error');
+      error.textContent = err.message;
+      error.style.display = 'block';
+    }
+  });
+
+  // ─── INIT ───
+  photosLoad();
+})();
+</script>
