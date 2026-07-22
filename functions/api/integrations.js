@@ -173,7 +173,8 @@ export async function onRequest({ request, env }) {
   const url = new URL(request.url);
   const cookieHeader = request.headers.get('cookie') || '';
   const token = getCookie(cookieHeader, 'lifeos_session');
-  const session = token ? await verifySession(token, kv) : null;
+  const secret = env?.LIFEOS_SESSION_SECRET || null;
+  const session = token && secret ? await verifySession(token, secret, kv) : null;
 
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
