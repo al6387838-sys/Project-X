@@ -77,7 +77,29 @@ export async function onRequestGet({ request, env }) {
           id: p.id, category: 'projects',
         }));
     }
-    return json(200, { ok: true, results: results.slice(0, 15), total: results.length });
+    // Buscar em documentos
+    const docsRaw = await kv.get(`documents:${session.sub}`);
+    if (docsRaw) {
+      const docs = JSON.parse(docsRaw);
+      docs.filter(d => !d.deleted && ((d.name || '').toLowerCase().includes(q) || (d.ocrText || '').toLowerCase().includes(q)))
+        .slice(0, 3).forEach(d => results.push({
+          type: 'Documento', icon: 'doc', title: d.name,
+          desc: d.isFolder ? 'Pasta' : (d.type || 'Arquivo'),
+          id: d.id, category: 'documents',
+        }));
+    }
+    // Buscar em eventos
+    const eventsRaw = await kv.get(`events:${session.sub}`);
+    if (eventsRaw) {
+      const events = JSON.parse(eventsRaw);
+      events.filter(e => (e.title || '').toLowerCase().includes(q) || (e.description || '').toLowerCase().includes(q))
+        .slice(0, 3).forEach(e => results.push({
+          type: 'Evento', icon: 'cal', title: e.title,
+          desc: e.date || '',
+          id: e.id, category: 'events',
+        }));
+    }
+    return json(200, { ok: true, results: results.slice(0, 20), total: results.length });
   } catch {
     return json(500, { ok: false, error: 'Erro na busca' });
   }
