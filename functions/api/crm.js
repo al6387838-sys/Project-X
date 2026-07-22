@@ -574,7 +574,14 @@ export async function onRequest({ request, env }) {
       assertWorkspacePermission(context.organization, actorLabel(session), context.workspace.id, 'crm.read', context.organization.roles || []);
       assertWorkspacePermission(context.organization, actorLabel(session), context.workspace.id, 'agenda.read', context.organization.roles || []);
       const data = await loadCrmData(kv, context.organization.id, context.workspace.id);
-      return json(200, { ok: true, data: { ...crmSnapshot(context.organization, context.membership, context.workspace, data), organizations: context.organizations } });
+      const snapshot = crmSnapshot(context.organization, context.membership, context.workspace, data);
+      // Pesquisa por texto nos contatos e oportunidades via ?q=
+      const q = (url.searchParams.get('q') || '').toLowerCase().trim();
+      if (q) {
+        snapshot.contacts = snapshot.contacts.filter(c => contactKey(c).includes(q));
+        snapshot.deals = snapshot.deals.filter(d => (d.title + ' ' + (d.company || '') + ' ' + (d.description || '')).toLowerCase().includes(q));
+      }
+      return json(200, { ok: true, data: { ...snapshot, organizations: context.organizations } });
     }
 
     if (request.method !== 'POST') return json(405, { ok: false, error: 'Método não permitido.' }, { allow: 'GET, POST' });
