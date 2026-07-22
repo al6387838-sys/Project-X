@@ -1,9 +1,9 @@
-// LifeOS Enterprise v46.0.0 — Version endpoint (Hardening Fase 328)
+// LifeOS Enterprise v48.0.0 — Version endpoint (Hardening Fase 328)
 // Sincronizado com CF_PAGES_COMMIT_SHA e LIFEOS_VERSION (SSOT)
 export async function onRequest(context) {
-  const commit = String(context.env.CF_PAGES_COMMIT_SHA || '780daaa8a8bd');
-  const version = context.env.LIFEOS_VERSION || 'v46.0.0';
-  const buildId = `lifeos-46.0.0-${commit.slice(0, 12)}`;
+  const commit = String(context.env.CF_PAGES_COMMIT_SHA || '4d2b0f779cd5');
+  const version = context.env.LIFEOS_VERSION || 'v48.0.0';
+  const buildId = `lifeos-48.0.0-${commit.slice(0, 12)}`;
   return new Response(JSON.stringify({
     status: 'ok',
     version,
