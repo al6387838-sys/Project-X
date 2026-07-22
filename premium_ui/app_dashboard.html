@@ -2090,7 +2090,38 @@
 
   // Navigation
   // ─── Dynamic Module Loader ───
-  const _loadedModules = new Set();
+  const _loadedPageModules = new Set();
+  const _moduleLoadPromises = new Map();
+  const _moduleDocuments = new Map();
+  const _loadedModuleStyles = new Set();
+  const _loadedModuleScripts = new Set();
+  const _navigationTrace = [];
+  const _navigationDebug = new URLSearchParams(window.location.search).has('navigation-debug');
+  const _navigationTraceLimit = 500;
+  const _routeAliases = { 'companion-ai': 'ai-center' };
+  window.__navigationTrace = _navigationTrace;
+
+  function traceNavigation(step, details = {}) {
+    const entry = {
+      at: new Date().toISOString(),
+      step,
+      ...details,
+    };
+    _navigationTrace.push(entry);
+    if (_navigationTrace.length > _navigationTraceLimit) _navigationTrace.shift();
+    if (_navigationDebug) console.info('[LifeOS navigation]', entry);
+    return entry;
+  }
+
+  if (_navigationDebug) {
+    window.__navigationDiagnostics = () => ({
+      pendingModuleLoads: [..._moduleLoadPromises.keys()],
+      loadedModules: [..._loadedPageModules],
+      mountedModules: [..._moduleHostByName.keys()],
+      traceLength: _navigationTrace.length,
+    });
+  }
+
   const _modulePageMap = {
     'ai-center': 'ai-center',
     'analytics': 'analytics',
@@ -2098,7 +2129,7 @@
     'automation': 'automation',
     'calendar': 'calendar',
     'command-center': 'dashboard-v2',
-    'crm': 'crm-live',
+    'crm': 'productivity',
     'document-viewer': 'document-center',
     'documents': 'documents',
     'email': 'email',
@@ -2110,6 +2141,15 @@
     'finance-goals': 'finance',
     'finance-openfinance': 'finance',
     'finance-pix': 'finance',
+    'finance-accounts': 'finance',
+    'finance-cards': 'finance',
+    'finance-extract': 'finance',
+    'finance-bills': 'finance',
+    'finance-subscriptions': 'finance',
+    'finance-investments': 'finance',
+    'finance-transfer': 'finance',
+    'finance-invoice': 'finance',
+    'finance-planning': 'finance',
     'gantt': 'productivity',
     'identity': 'identity',
     'integration-center': 'integration-center',
@@ -2121,10 +2161,17 @@
     'settings-account': 'enterprise-settings',
     'settings-security': 'enterprise-settings',
     'settings-sessions': 'enterprise-settings',
-    'wiki': 'documents',
+    'wiki': 'productivity',
     'ai-daily': 'ai-center',
     'ai-weekly': 'ai-center',
     'ai-recommendations': 'ai-center',
+    'ai-memory': 'ai-center',
+    'ai-chat': 'ai-center',
+    'ai-automations': 'ai-center',
+    'ai-organize': 'ai-center',
+    'calendar-integrations': 'calendar',
+    'email-integrations': 'email',
+    'file-viewer': 'file-center',
     // Páginas inline (sem módulo externo)
     'agenda': null,
     'ai': null,
@@ -2142,87 +2189,282 @@
     'timeline': null,
   };
 
+  const _moduleHostByName = new Map();
+
+  function getMountedRoute(host, pageId) {
+    if (!host) return null;
+    if (host.dataset.lifeosRoute === pageId) return host;
+    return Array.from(host.querySelectorAll('[data-lifeos-route]'))
+      .find(node => node.dataset.lifeosRoute === pageId) || null;
+  }
+
+  function getPageHost(page) {
+    if (!page) return null;
+    if (page.dataset.lifeosModuleHost) return page;
+    return page.parentElement?.closest('[data-lifeos-module-host]') || page;
+  }
+
+  function getOrCreateModuleHost(moduleName, requestedPageId) {
+    const existing = _moduleHostByName.get(moduleName);
+    if (existing?.isConnected) return existing;
+
+    const placeholders = Array.from(document.querySelectorAll('.page[id^="page-"]')).filter(page => {
+      const route = page.id.slice('page-'.length);
+      return _modulePageMap[route] === moduleName && !page.closest('[data-lifeos-module-host]');
+    });
+    const host = document.createElement('section');
+    host.id = `module-host-${moduleName}`;
+    host.dataset.lifeosModuleHost = moduleName;
+    host.dataset.lifeosRequestedPage = requestedPageId;
+
+    if (placeholders.length) {
+      const [anchor, ...duplicates] = placeholders;
+      anchor.replaceWith(host);
+      duplicates.forEach(page => page.remove());
+    } else {
+      const content = document.querySelector('.content');
+      if (!content) throw new Error('Container principal de conteúdo ausente');
+      content.appendChild(host);
+    }
+    return host;
+  }
+
+  function registerModuleStyles(moduleDocument, moduleName) {
+    moduleDocument.querySelectorAll('style').forEach((styleNode, index) => {
+      const styleKey = `${moduleName}:${index}`;
+      if (_loadedModuleStyles.has(styleKey)) {
+        styleNode.remove();
+        return;
+      }
+      const style = document.createElement('style');
+      style.dataset.lifeosModule = moduleName;
+      style.textContent = styleNode.textContent;
+      document.head.appendChild(style);
+      _loadedModuleStyles.add(styleKey);
+      styleNode.remove();
+    });
+  }
+
+  async function activateModuleScripts(host, moduleName) {
+    const scripts = Array.from(host.querySelectorAll('script'));
+    for (const [index, oldScript] of scripts.entries()) {
+      const source = oldScript.getAttribute('src');
+      const scriptKey = `${moduleName}:${source || `inline-${index}-${oldScript.textContent.length}`}`;
+      if (_loadedModuleScripts.has(scriptKey)) {
+        oldScript.remove();
+        continue;
+      }
+      const script = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attribute => script.setAttribute(attribute.name, attribute.value));
+      script.dataset.lifeosModule = moduleName;
+      script.async = false;
+      if (source) {
+        await new Promise((resolve, reject) => {
+          script.addEventListener('load', resolve, { once: true });
+          script.addEventListener('error', () => reject(new Error(`Falha ao carregar script ${source}`)), { once: true });
+          oldScript.replaceWith(script);
+        });
+      } else {
+        script.textContent = oldScript.textContent;
+        oldScript.replaceWith(script);
+      }
+      _loadedModuleScripts.add(scriptKey);
+    }
+  }
+
+  async function fetchModuleHtml(moduleName, pageId) {
+    if (_moduleDocuments.has(moduleName)) {
+      traceNavigation('import:cache-hit', { page: pageId, module: moduleName });
+      return _moduleDocuments.get(moduleName);
+    }
+    traceNavigation('import:started', { page: pageId, module: moduleName });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(`/app/modules/${moduleName}.html`, {
+        credentials: 'same-origin',
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const html = await response.text();
+      _moduleDocuments.set(moduleName, html);
+      traceNavigation('import:completed', { page: pageId, module: moduleName, bytes: html.length });
+      return html;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  function renderModuleFailure(host, pageId, moduleName, error) {
+    host.innerHTML = `<div style="padding:48px;text-align:center">
+      <div style="font-size:36px;margin-bottom:14px">⚠️</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:8px">Falha ao carregar módulo</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:22px">${moduleName} não pôde ser carregado. Tente novamente.</div>
+      <button type="button" onclick="location.reload()" style="padding:9px 20px;border-radius:9px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-primary);cursor:pointer;font-size:13px;font-family:inherit">Recarregar página</button>
+    </div>`;
+    traceNavigation('render:failed', { page: pageId, module: moduleName, error: error.message });
+  }
+
   async function loadModuleForPage(pageId) {
     const moduleName = _modulePageMap[pageId];
-    if (!moduleName || _loadedModules.has(pageId)) return;
-    // Mostrar loading
-    const page = document.getElementById('page-' + pageId);
-    if (page) {
-      page.innerHTML = `<div class="page-loading" role="status" aria-label="Carregando módulo" style="display:block;padding:32px">
+    if (!moduleName) return null;
+
+    traceNavigation('module:found', { page: pageId, module: moduleName });
+    const mountedHost = _moduleHostByName.get(moduleName);
+    if (mountedHost?.isConnected) {
+      traceNavigation('module:reused', { page: pageId, module: moduleName, host: mountedHost.id });
+      return mountedHost;
+    }
+    if (_moduleLoadPromises.has(moduleName)) return _moduleLoadPromises.get(moduleName);
+
+    const loadPromise = (async () => {
+      const host = getOrCreateModuleHost(moduleName, pageId);
+      host.innerHTML = `<div class="page-loading" role="status" aria-label="Carregando módulo" style="display:block;padding:32px">
         <div class="skeleton" style="height:28px;width:40%;margin-bottom:16px;border-radius:8px"></div>
         <div class="skeleton" style="height:16px;width:70%;margin-bottom:10px;border-radius:6px"></div>
         <div class="skeleton" style="height:16px;width:55%;margin-bottom:24px;border-radius:6px"></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
-          <div class="skeleton" style="height:120px;border-radius:12px"></div>
-          <div class="skeleton" style="height:120px;border-radius:12px"></div>
-          <div class="skeleton" style="height:120px;border-radius:12px"></div>
-          <div class="skeleton" style="height:120px;border-radius:12px"></div>
-        </div>
       </div>`;
-      page.classList.add('active');
-    }
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
-      const res = await fetch(`/app/modules/${moduleName}.html`, {
-        credentials: 'same-origin', signal: controller.signal
+      const html = await fetchModuleHtml(moduleName, pageId);
+      const moduleDocument = new DOMParser().parseFromString(html, 'text/html');
+      traceNavigation('render:started', { page: pageId, module: moduleName, host: host.id });
+      registerModuleStyles(moduleDocument, moduleName);
+      host.innerHTML = moduleDocument.body.innerHTML;
+      const moduleRoot = host.querySelector(':scope > [id^="module-"]');
+      if (moduleRoot) moduleRoot.style.display = 'block';
+      const mountedPages = host.querySelectorAll('.page[id^="page-"]');
+      mountedPages.forEach(page => {
+        page.dataset.lifeosRoute = page.id.slice('page-'.length);
+        page.classList.remove('active');
       });
-      clearTimeout(timeout);
-      if (!res.ok) { _loadedModules.add(pageId); return; }
-      const html = await res.text();
-      if (page) {
-        page.innerHTML = html;
-        _loadedModules.add(pageId);
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+      if (!mountedPages.length) {
+        host.classList.add('page');
+        host.dataset.lifeosRoute = pageId;
       }
-    } catch (e) {
-      console.warn(`Module load failed for ${pageId}:`, e);
-      _loadedModules.add(pageId);
-      if (page) {
-        page.innerHTML = `<div style="padding:48px;text-align:center">
-          <div style="font-size:36px;margin-bottom:14px">⚠️</div>
-          <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:8px">Falha ao carregar módulo</div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:22px">Verifique sua conexão e tente novamente.</div>
-          <button onclick="location.reload()" style="padding:9px 20px;border-radius:9px;border:1px solid var(--border);background:var(--bg-elevated);color:var(--text-primary);cursor:pointer;font-size:13px;font-family:inherit">Recarregar página</button>
-        </div>`;
-      }
+      await activateModuleScripts(host, moduleName);
+      _moduleHostByName.set(moduleName, host);
+      _loadedPageModules.add(moduleName);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      traceNavigation('module:rendered', { page: pageId, module: moduleName, host: host.id });
+      return host;
+    })();
+
+    _moduleLoadPromises.set(moduleName, loadPromise);
+    try {
+      return await loadPromise;
+    } catch (error) {
+      const host = _moduleHostByName.get(moduleName) || document.getElementById(`module-host-${moduleName}`);
+      if (host) renderModuleFailure(host, pageId, moduleName, error);
+      throw error;
+    } finally {
+      _moduleLoadPromises.delete(moduleName);
     }
   }
-  function showPage(id) {
-    // Load module if needed
-    if (_modulePageMap[id] && !_loadedModules.has(id)) {
-      loadModuleForPage(id);
+
+  async function runPageDataLoader(pageId) {
+    const loaders = {
+      agenda: () => typeof loadAgenda === 'function' && loadAgenda(),
+      ai: () => typeof loadAIInsights === 'function' && loadAIInsights(),
+      billing: () => typeof loadBillingData === 'function' && loadBillingData(),
+      documents: () => typeof docsLoadCurrent === 'function' && docsLoadCurrent(),
+      goals: () => typeof loadGoals === 'function' && loadGoals(),
+      habits: () => typeof loadHabits === 'function' && loadHabits(),
+      lifescore: () => typeof loadLifeScore === 'function' && loadLifeScore(),
+      memory: () => typeof loadMemory === 'function' && loadMemory(),
+      notifications: () => typeof loadNotificationCenter === 'function' && loadNotificationCenter(),
+      profile: () => typeof loadProfileStats === 'function' && loadProfileStats(),
+      projects: () => typeof loadProjects === 'function' && loadProjects(),
+      search: () => typeof loadSmartSearch === 'function' && loadSmartSearch(),
+      timeline: () => typeof initTimeline === 'function' && initTimeline(),
+    };
+    const loader = loaders[pageId];
+    if (!loader) return;
+    traceNavigation('data:load-started', { page: pageId });
+    try {
+      await Promise.resolve(loader());
+      traceNavigation('data:load-completed', { page: pageId });
+    } catch (error) {
+      console.warn(`Data load failed for ${pageId}:`, error);
+      traceNavigation('data:load-failed', { page: pageId, error: error.message });
     }
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const page = document.getElementById('page-' + id);
-    if (page) {
-      page.classList.add('active');
-      // Reiniciar animação
-      page.style.animation = 'none';
-      page.offsetHeight; // reflow
-      page.style.animation = '';
+  }
+
+  function updateNavigationHistory(pageId, historyMode) {
+    if (historyMode === 'none') return;
+    const nextUrl = `${location.pathname}${location.search}#${encodeURIComponent(pageId)}`;
+    if (location.hash === `#${encodeURIComponent(pageId)}`) return;
+    if (historyMode === 'replace') history.replaceState({ page: pageId }, '', nextUrl);
+    else history.pushState({ page: pageId }, '', nextUrl);
+    traceNavigation('history:updated', { page: pageId, mode: historyMode || 'push' });
+  }
+
+  async function showPage(requestedPageId, options = {}) {
+    const pageId = _routeAliases[requestedPageId] || requestedPageId;
+    const source = options.source || 'programmatic';
+    traceNavigation('page:requested', { requestedPage: requestedPageId, page: pageId, source });
+
+    const moduleName = _modulePageMap[pageId];
+    let moduleHost = null;
+    try {
+      if (moduleName) moduleHost = await loadModuleForPage(pageId);
+    } catch (error) {
+      traceNavigation('navigation:failed', { requestedPage: requestedPageId, page: pageId, module: moduleName, error: error.message });
+      return false;
     }
-    // Highlight nav
-    document.querySelectorAll('.nav-item').forEach(n => {
-      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) {
-        n.classList.add('active');
-      }
+
+    const page = getMountedRoute(moduleHost, pageId) || document.getElementById(`page-${pageId}`);
+    if (!page) {
+      traceNavigation('navigation:missing-page', { requestedPage: requestedPageId, page: pageId, module: moduleName || null });
+      return false;
+    }
+
+    document.querySelectorAll('.page.active').forEach(node => node.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(node => node.classList.remove('active'));
+    const pageHost = getPageHost(page);
+    if (pageHost && pageHost !== page) pageHost.classList.add('active');
+    page.classList.add('active');
+    page.style.animation = 'none';
+    void page.offsetHeight;
+    page.style.animation = '';
+
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      if (item.dataset.page === requestedPageId || item.dataset.page === pageId) item.classList.add('active');
     });
-    // Scroll to top
-    document.querySelector('.content').scrollTop = 0;
-    // Lazy load modules
-    if (id === 'search') loadSmartSearch();
-    if (id === 'notifications') loadNotificationCenter();
-    if (id === 'documents') docsLoadCurrent();
-    if (id === 'billing') loadBillingData();
-    // Fechar sidebar no mobile
-    if (window.innerWidth <= 768) {
-      document.getElementById('sidebar').classList.remove('mobile-open');
-    }
-    // Atualizar URL hash
-    history.replaceState({}, '', `#${id}`);
+    const content = document.querySelector('.content');
+    if (content) content.scrollTop = 0;
+    if (window.innerWidth <= 768) document.getElementById('sidebar')?.classList.remove('mobile-open');
+
+    await runPageDataLoader(pageId);
+    updateNavigationHistory(requestedPageId, options.historyMode);
+    traceNavigation('render:completed', { page: pageId, host: pageHost?.id || page.id, source });
+    return true;
   }
+
+  function initializeNavigationListeners() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const match = item.getAttribute('onclick')?.match(/showPage\((['"])([^'"]+)\1\)/);
+      if (!match) return;
+      const pageId = match[2];
+      item.dataset.page = pageId;
+      item.removeAttribute('onclick');
+      item.addEventListener('click', async event => {
+        event.preventDefault();
+        traceNavigation('click:received', { button: item.textContent.trim().replace(/\s+/g, ' '), page: pageId });
+        await showPage(pageId, { source: 'sidebar' });
+      });
+    });
+  }
+
+  function restoreNavigationFromLocation() {
+    const pageId = decodeURIComponent(location.hash.slice(1));
+    if (!pageId || !(_modulePageMap.hasOwnProperty(pageId) || document.getElementById(`page-${pageId}`))) return;
+    traceNavigation('history:received', { page: pageId });
+    void showPage(pageId, { source: 'history', historyMode: 'none' });
+  }
+
+  initializeNavigationListeners();
+  window.addEventListener('popstate', restoreNavigationFromLocation);
+  window.addEventListener('hashchange', restoreNavigationFromLocation);
+  restoreNavigationFromLocation();
 
   // Sidebar toggle
   function toggleSidebar() {
@@ -2243,12 +2485,6 @@
       }
     }
   });
-
-  // Restaurar página do hash na URL
-  const _hashPage = location.hash.slice(1);
-  if (_hashPage && document.getElementById('page-' + _hashPage)) {
-    showPage(_hashPage);
-  }
 
   // Habit toggle
   function toggleHabit(el) {
@@ -3036,9 +3272,9 @@
     'module-automation-container': 'modules/automation',
     'module-analytics-container': 'modules/analytics',
   };
-  const _loadedModules = new Set();
-  async function _loadModule(containerId) {
-    if (_loadedModules.has(containerId)) return;
+  const _legacyLoadedModules = new Set();
+  async function _loadLegacyModule(containerId) {
+    if (_legacyLoadedModules.has(containerId)) return;
     const file = _moduleFiles[containerId];
     if (!file) return;
     try {
@@ -3063,7 +3299,7 @@
         script.textContent = oldScript.textContent;
         oldScript.replaceWith(script);
       });
-      _loadedModules.add(containerId);
+      _legacyLoadedModules.add(containerId);
       if (containerId === 'module-ai-center-container' && file !== 'modules/live-surface') setTimeout(aiLoadPreferences, 0);
       if (containerId === 'module-automation-container' && typeof window.automationInit === 'function') {
         setTimeout(() => window.automationInit(), 0);
@@ -3073,24 +3309,24 @@
   // Override showPage to load modules on demand
   const _origShowPage = showPage;
   const _moduleContainers = [...new Set(Object.values(_moduleMap))];
-  const _routeAliases = { 'companion-ai': 'ai-center' };
-  showPage = async function(id) {
+  const _legacyRouteAliases = { 'companion-ai': 'ai-center' };
+  async function legacyShowPage(id) {
     const containerId = _moduleMap[id];
     _moduleContainers.forEach(candidate => {
       const node = document.getElementById(candidate);
       if (node) node.hidden = candidate !== containerId;
     });
     if (containerId) {
-      await _loadModule(containerId);
+      await _loadLegacyModule(containerId);
       const activeModule = document.getElementById(containerId);
       if (activeModule) activeModule.hidden = false;
     }
-    _origShowPage(_routeAliases[id] || id);
+    _origShowPage(_legacyRouteAliases[id] || id);
     if (id.startsWith('settings-') && typeof window.switchSettings === 'function') {
       window.switchSettings(id.slice('settings-'.length));
     }
-    if (_routeAliases[id] || id.startsWith('settings-')) history.replaceState({}, '', `#${id}`);
-  };
+    if (_legacyRouteAliases[id] || id.startsWith('settings-')) history.replaceState({}, '', `#${id}`);
+  }
 
   // ═══ FINANCE FUNCTIONS ═══
   // ═══ GLOBAL SEARCH ═══
@@ -4267,23 +4503,8 @@
     }).catch(() => showToast('Erro ao criar hábito', 'error'));
   }
 
-  // ── Override showPage para carregar dados reais por página ────────────
-  const _origShowPagePhase200 = typeof showPage === 'function' ? showPage : null;
-  showPage = async function(id) {
-    if (_origShowPagePhase200) _origShowPagePhase200(id);
-    // Carregar dados reais por página
-    switch (id) {
-      case 'agenda': await loadAgenda(); break;
-      case 'habits': await loadHabits(); break;
-      case 'goals': await loadGoals(); break;
-      case 'projects': await loadProjects(); break;
-      case 'ai': await loadAIInsights(); break;
-      case 'lifescore': await loadLifeScore(); break;
-      case 'timeline': await initTimeline(); break;
-      case 'memory': await loadMemory(); break;
-      case 'profile': await loadProfileStats(); break;
-    }
-  };
+  // Os carregadores de dados por página são executados por runPageDataLoader(),
+  // dentro do fluxo único de showPage(), sem sobrescrever o roteador.
 
   // ── Inicialização automática ao carregar o dashboard ─────────────────
   window.addEventListener('lifeos:dashboard-ready', async () => {

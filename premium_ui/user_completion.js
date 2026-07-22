@@ -538,8 +538,17 @@ window.fetch = function(url, opts) {
     const item = document.createElement('div');
     item.className = 'nav-item';
     item.dataset.lifeosWorkspaceLink = 'true';
-    item.setAttribute('onclick', "showPage('workspace')");
+    item.setAttribute('role', 'button');
+    item.tabIndex = 0;
     item.innerHTML = '<div class="nav-icon"><i data-lucide="layers-3" class="pg-icon" aria-hidden="true"></i></div><span>Workspace</span>';
+    const openWorkspace = (event) => {
+      event?.preventDefault();
+      void navigate('workspace');
+    };
+    item.addEventListener('click', openWorkspace);
+    item.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') openWorkspace(event);
+    });
     if (settingsLink) nav.insertBefore(item, settingsLink); else nav.appendChild(item);
     if (window.lucide?.createIcons) window.lucide.createIcons();
   }
@@ -550,9 +559,10 @@ window.fetch = function(url, opts) {
     addWorkspaceLink();
     legacyShowPage = window.showPage;
     if (typeof legacyShowPage !== 'function') return;
-    window.showPage = (id) => navigate(id);
+    // Esta camada é complementar: não substitui o roteador principal nem seus handlers.
+    // A única rota própria é Workspace, acionada diretamente pelo item dinâmico acima.
     const hash = location.hash.slice(1);
-    if (ROUTES[hash]) navigate(hash);
+    if (hash === 'workspace') void navigate(hash);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
