@@ -73,7 +73,11 @@ function photoPayload(request, photo) {
 // ─── GET /api/photos ───
 export async function onRequestGet({ request, env }) {
   try {
-    const session = await verifySession(request, env);
+    const cookieHeader = request.headers.get('cookie');
+    const token = getCookie(cookieHeader);
+    const session = env.LIFEOS_SESSION_SECRET
+      ? await verifySession(token, env.LIFEOS_SESSION_SECRET)
+      : null;
     if (!session) return json(401, { ok: false, error: 'Sessão expirada' });
 
     const url = new URL(request.url);
@@ -177,7 +181,11 @@ export async function onRequestGet({ request, env }) {
 // ─── POST /api/photos ───
 export async function onRequestPost({ request, env }) {
   try {
-    const session = await verifySession(request, env);
+    const cookieHeader = request.headers.get('cookie');
+    const token = getCookie(cookieHeader);
+    const session = env.LIFEOS_SESSION_SECRET
+      ? await verifySession(token, env.LIFEOS_SESSION_SECRET)
+      : null;
     if (!session) return json(401, { ok: false, error: 'Sessão expirada' });
 
     const contentType = request.headers.get('content-type') || '';
