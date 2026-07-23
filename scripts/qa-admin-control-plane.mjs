@@ -20,7 +20,25 @@ class MemoryKV {
 
 const secret = 'lifeos-qa-admin-secret';
 const adminEmail = 'admin@lifeos.test';
+const mockAssets = {
+  async fetch(request) {
+    const url = new URL(request.url);
+    if (url.pathname === '/release.json') {
+      return new Response(JSON.stringify({
+        release: 'v51.0.0',
+        version: 'v51.0.0',
+        buildId: 'lifeos-51.0.0-e48be225d3c5',
+        commit: 'e48be225d3c5cc788225309fbc75486716679d81',
+        builtAt: '2026-07-23T13:34:34.446Z',
+        environment: 'production',
+        platform: 'cloudflare-pages',
+      }), { headers: { 'content-type': 'application/json' } });
+    }
+    return new Response('Not Found', { status: 404 });
+  }
+};
 const env = {
+  ASSETS: mockAssets,
   LIFEOS_SESSION_SECRET: secret,
   LIFEOS_KV: new MemoryKV({
     [`user:${adminEmail}`]: JSON.stringify({ email: adminEmail, name: 'Admin QA', role: 'admin', plan: 'enterprise', status: 'active', emailVerified: true, createdAt: '2026-01-01T00:00:00.000Z' }),

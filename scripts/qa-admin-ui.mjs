@@ -47,14 +47,14 @@ await check('Carrega a superfície administrativa concluída', async () => {
 });
 
 await check('Navega para usuários e renderiza controles operacionais', async () => {
-  await page.locator('[data-action="navigate"][data-page="users"]').click();
+  await page.locator('[data-action="navigate"][data-page="users"]').first().click();
   await page.locator('#lifeos-admin-root h1').filter({ hasText: 'Usuários' }).waitFor({ state: 'visible' });
-  await page.locator('#lifeos-admin-search').waitFor({ state: 'visible' });
-  await page.locator('[data-action="invite-user"]').waitFor({ state: 'visible' });
+  await page.locator('#la-search').waitFor({ state: 'visible' });
+  await page.locator('[data-action="invite-user"]').first().waitFor({ state: 'visible' });
 });
 
 await check('Abre e fecha o formulário de convite de usuário', async () => {
-  await page.locator('[data-action="invite-user"]').click();
+  await page.locator('[data-action="invite-user"]').first().click();
   await page.locator('#lifeos-admin-dialog').waitFor({ state: 'visible' });
   await page.locator('#la-field-email').fill('ui-qa@lifeos.test');
   await page.locator('[data-action="close-dialog"]').first().click();
@@ -63,14 +63,14 @@ await check('Abre e fecha o formulário de convite de usuário', async () => {
 
 await check('Navega para organizações, workspaces e planos', async () => {
   for (const target of ['organizations', 'workspaces', 'plans']) {
-    await page.locator(`[data-action="navigate"][data-page="${target}"]`).click();
+    await page.locator(`[data-action="navigate"][data-page="${target}"]`).first().click();
     await page.locator('#lifeos-admin-root h1').filter({ hasText: target === 'organizations' ? 'Organizações' : target === 'workspaces' ? 'Workspaces' : 'Planos' }).waitFor({ state: 'visible' });
   }
 });
 
 await check('Renderiza auditoria, sistema e integrações com estados profissionais', async () => {
   for (const target of ['audit', 'system', 'integrations']) {
-    await page.locator(`[data-action="navigate"][data-page="${target}"]`).click();
+    await page.locator(`[data-action="navigate"][data-page="${target}"]`).first().click();
     await page.locator('#lifeos-admin-root h1').waitFor({ state: 'visible' });
   }
 });

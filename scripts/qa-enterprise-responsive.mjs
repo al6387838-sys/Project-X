@@ -82,8 +82,8 @@ for (const viewport of viewports) {
     if (response.status() >= 400) failedResponses.push(`${response.status()} ${response.url()}`);
   });
 
-  await page.goto(`${baseURL}/enterprise#command`, { waitUntil: 'networkidle' });
-  await page.locator('#view-command.active').waitFor({ state: 'visible' });
+  await page.goto(`${baseURL}/enterprise#command`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await page.locator('#view-command.active').waitFor({ state: 'visible', timeout: 30000 });
   for (const view of views) {
     await page.evaluate((targetView) => document.querySelector(`[data-view="${targetView}"]`)?.click(), view);
     await page.locator(`#view-${view}.active`).waitFor({ state: 'visible' });

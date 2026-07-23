@@ -1417,7 +1417,7 @@
     }
   }
 
-  window.LifeosAdminCompletion = { boot, load, version: VERSION };
+  window.LifeosAdminCompletion = { boot, load, version: 'v51.0.0' };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
 })();
