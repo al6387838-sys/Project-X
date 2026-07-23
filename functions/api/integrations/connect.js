@@ -55,7 +55,7 @@ export async function onRequestPost({ request, env }) {
 
   // Gerar URL de autorização OAuth baseada no tipo
   let authUrl = null;
-  const state = Buffer.from(JSON.stringify({ provider, type, userId: session.sub, ts: Date.now() })).toString('base64');
+  const state = btoa(JSON.stringify({ provider, type, userId: session.sub, ts: Date.now() }));
 
   if (providerKey === 'google') {
     const scope = type === 'calendar'
