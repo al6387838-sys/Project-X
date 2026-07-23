@@ -497,7 +497,7 @@ async function buildDashboard(kv, env) {
 async function selectResource(resource, context, url) {
   const { kv, env, request } = context;
   const dashboard = await buildDashboard(kv, env);
-  const release = resource === 'system' ? await getReleaseMetadata({ request, env }) : null;
+  const release = await getReleaseMetadata({ request, env });
   const resourceMap = {
     dashboard: { metrics: dashboard.metrics, recentAudit: dashboard.audit.slice(0, 10), infrastructure: dashboard.integrations.infrastructure },
     users: dashboard.users.map(({ _key, _raw, ...user }) => user),
