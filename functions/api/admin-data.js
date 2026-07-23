@@ -14,6 +14,7 @@ import {
   saveOrganization,
 } from '../_enterprise.js';
 import { revokeAllSessions } from '../_account.js';
+import { getReleaseMetadata } from '../_release.js';
 
 const DEFAULT_PAGE_SIZE = 25;
 const MAX_PAGE_SIZE = 100;
@@ -494,8 +495,9 @@ async function buildDashboard(kv, env) {
 }
 
 async function selectResource(resource, context, url) {
-  const { kv, env } = context;
+  const { kv, env, request } = context;
   const dashboard = await buildDashboard(kv, env);
+  const release = resource === 'system' ? await getReleaseMetadata({ request, env }) : null;
   const resourceMap = {
     dashboard: { metrics: dashboard.metrics, recentAudit: dashboard.audit.slice(0, 10), infrastructure: dashboard.integrations.infrastructure },
     users: dashboard.users.map(({ _key, _raw, ...user }) => user),
@@ -514,8 +516,11 @@ async function selectResource(resource, context, url) {
       metrics: dashboard.metrics.systemMetrics,
       settings: objectOrEmpty(await readJson(kv, 'system:settings', {})),
       infrastructure: dashboard.integrations.infrastructure,
-      version: normalizeText(env.LIFEOS_VERSION, 40) || 'not_configured',
-      environment: normalizeText(env.LIFEOS_ENV, 40) || 'not_configured',
+      release: release.release,
+      version: release.release,
+      buildId: release.buildId,
+      commit: release.commit,
+      environment: release.environment,
       checkedAt: now(),
     },
   };
@@ -880,7 +885,7 @@ export async function onRequestGet({ request, env }) {
     const { session, kv } = await authenticateAdmin(request, env);
     const url = new URL(request.url);
     const resource = normalizeText(url.searchParams.get('resource') || 'dashboard', 80);
-    const selected = await selectResource(resource, { kv, env }, url);
+    const selected = await selectResource(resource, { kv, env, request }, url);
     return json(200, { ok: true, admin: session.sub, ...selected, ...selected.legacy });
   } catch (error) {
     return json(error.status || 500, { ok: false, error: error.message || 'Falha ao carregar dados administrativos.' });

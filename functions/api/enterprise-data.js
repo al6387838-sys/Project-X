@@ -1,4 +1,4 @@
-// LifeOS Enterprise — fachada de compatibilidade do shell Enterprise v46.0.0
+// LifeOS Enterprise — fachada de compatibilidade do shell Enterprise
 // Cloudflare Pages Function: GET/POST /api/enterprise-data
 // Não usa dados sem fonte: todas as entidades vêm de organizações reais em LIFEOS_KV.
 

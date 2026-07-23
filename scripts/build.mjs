@@ -1,15 +1,17 @@
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
-// Version: 49.0.0 (Phases 341-345 — Full Functional Audit, Dead Button Removal, Mock Elimination, Module Certification, E2E Validation)
+// Release, build ID e commit são derivados exclusivamente de config/release.json.
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { minify } from 'html-minifier-terser';
+import { createReleaseMetadata } from './release-metadata.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const source = resolve(root, 'premium_ui');
 const dist = resolve(root, 'dist');
 const publicDir = resolve(root, 'public');
+const releaseMetadata = await createReleaseMetadata();
+const { release, buildId, commit, builtAt } = releaseMetadata;
 
 const MINIFY_OPTIONS = {
   collapseWhitespace: true,
@@ -34,11 +36,14 @@ const copyHtml = async (from, to) => {
   const target = resolve(dist, to);
   await mkdir(dirname(target), { recursive: true });
   const raw = await readFile(resolve(source, from), 'utf8');
+  const withReleaseClient = raw.includes('/version-display.js')
+    ? raw
+    : raw.replace(/<\/head>/i, '  <script src="/version-display.js" defer></script>\n</head>');
   try {
-    const minified = await minify(raw, MINIFY_OPTIONS);
+    const minified = await minify(withReleaseClient, MINIFY_OPTIONS);
     await writeFile(target, minified);
   } catch (_) {
-    await writeFile(target, raw);
+    await writeFile(target, withReleaseClient);
   }
 };
 
@@ -47,7 +52,7 @@ await mkdir(dist, { recursive: true });
 
 const productionAssets = [
   'precision_graphite.css', 'precision_graphite.js', 'vendor/lucide.min.js',
-  'black_diamond.css', 'black_diamond.js', 'performance.js',
+  'black_diamond.css', 'black_diamond.js', 'performance.js', 'version-display.js',
   'design_system/variables.css', 'design_system/enterprise_identity.css',
   'design_system/enterprise_components.css', 'design_system/enterprise_v4.css',
   'design_system/enterprise_v9_5.css', 'design_system/enterprise_v10_1.css',
@@ -132,7 +137,7 @@ try {
 } catch { }
 
 const redirects = [
-  '# LifeOS Enterprise v49.0.0 — Cloudflare Pages Redirects',
+  `# LifeOS Enterprise ${release} — Cloudflare Pages Redirects`,
   '',
   '# Auth routes',
   '/login              /login/index.html           200',
@@ -229,10 +234,6 @@ const redirects = [
 
 await writeFile(resolve(dist, '_redirects'), redirects);
 
-const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-const builtAt = new Date().toISOString();
-const buildId = `lifeos-49.0.0-${commit.slice(0, 12)}`;
-
 const routes = [
   '/', '/login', '/register', '/forgot-password', '/app', '/admin',
   '/enterprise', '/memory-center', '/life-hub', '/ai-copilot',
@@ -252,13 +253,12 @@ const routes = [
   '/settings-security', '/settings-sessions', '/wiki',
 ];
 
+await writeFile(resolve(dist, 'release.json'), JSON.stringify(releaseMetadata, null, 2) + '\n');
+
 await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   application: 'LifeOS Enterprise',
   service: 'lifeos-enterprise',
-  version: 'v49.0.0',
-  buildId,
-  environment: 'production',
-  platform: 'cloudflare-pages',
+  ...releaseMetadata,
   architecture: 'multi-page-rbac-modules-oauth2-openfinance-enterprise-ai-orchestrator-security-payments-collaboration-api-observability',
   phases: [
     '093-100','101-108','109','111-115','119',
@@ -289,20 +289,13 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/enterprise/rbac','/api/enterprise/certification','/api/enterprise/invite','/api/enterprise/members','/api/enterprise/config-center','/api/enterprise/onboarding','/api/enterprise-data','/api/crm',
     '/api/automations','/api/comm-hub','/api/analytics-pro','/api/db-optimize','/api/security-audit','/api/admin-data',
   ],
-  commit,
-  builtAt,
   routes,
 }, null, 2) + '\n');
 
 await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
-  version: 'v49.0.0',
-  buildId,
-  environment: 'production',
-  platform: 'cloudflare-pages',
-  commit,
-  builtAt,
+  ...releaseMetadata,
   phases: '341-345',
   status: 'operational',
 }, null, 2) + '\n');
@@ -328,12 +321,12 @@ if (!appDash.includes('LifeOS') || !appDash.includes('/api/session')) {
 
 console.log('');
 console.log('╔══════════════════════════════════════════════════════════╗');
-console.log('║   LifeOS Enterprise 49.0.0 — Build OK ✓               ║');
+console.log(`║   LifeOS Enterprise ${release} — Build OK ✓               ║`);
 console.log('╚══════════════════════════════════════════════════════════╝');
 console.log(`  Platform      : Cloudflare Pages`);
-  console.log(`  Version       : v49.0.0`);
+console.log(`  Release       : ${release}`);
 console.log(`  Build ID      : ${buildId}`);
-  console.log(`  Phases        : 341-345 — Full Functional Audit, Dead Button Removal, Mock Elimination, Module Certification, E2E Validation`);
+console.log(`  Metadata      : config/release.json`);
 console.log(`  Modules       : 52 total`);
 console.log(`  APIs          : 77 endpoints`);
 console.log(`  Commit        : ${commit}`);

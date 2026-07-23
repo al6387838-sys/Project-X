@@ -1,4 +1,4 @@
-# LifeOS V1.0 RC — Production Dockerfile
+# LifeOS — Production Dockerfile
 # Multi-stage build for minimal production image
 
 # ─── Stage 1: Builder ───────────────────────────────────────────────────────
@@ -18,9 +18,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # ─── Stage 2: Production ────────────────────────────────────────────────────
 FROM python:3.12-slim AS production
+ARG LIFEOS_VERSION
 
 LABEL maintainer="LifeOS Team"
-LABEL version="1.0.0-rc"
+LABEL version="${LIFEOS_VERSION}"
 LABEL description="LifeOS — AI-Powered Life Operating System"
 
 WORKDIR /app
@@ -40,7 +41,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app \
     LIFEOS_ENV=production \
-    LIFEOS_VERSION=1.0.0-rc \
+    LIFEOS_VERSION=${LIFEOS_VERSION} \
     LOG_LEVEL=INFO
 
 # Switch to non-root user

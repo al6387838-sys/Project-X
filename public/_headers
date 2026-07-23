@@ -12,18 +12,45 @@
   X-Permitted-Cross-Domain-Policies: none
 
 /*.html
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/app
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/admin
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/dashboard
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /*.json
-  Cache-Control: public, max-age=0, must-revalidate
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /*.css
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept-Encoding
 
 /*.js
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept-Encoding
+
+/version-display.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/release.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/build-meta.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/health.json
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/sw.js
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
@@ -77,11 +104,8 @@
 /status/*
   Cache-Control: public, max-age=60
 
-/health.json
-  Cache-Control: public, max-age=30, s-maxage=30
-
 /api/health
-  Cache-Control: public, max-age=30, s-maxage=30
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
 
 /.well-known/security.txt
   Cache-Control: public, max-age=86400

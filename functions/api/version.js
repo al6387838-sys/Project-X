@@ -1,21 +1,20 @@
-// LifeOS Enterprise v48.0.0 — Version endpoint (Hardening Fase 328)
-// Sincronizado com CF_PAGES_COMMIT_SHA e LIFEOS_VERSION (SSOT)
+import { getReleaseMetadata, releaseErrorResponse } from '../_release.js';
+
 export async function onRequest(context) {
-  const commit = String(context.env.CF_PAGES_COMMIT_SHA || '4d2b0f779cd5');
-  const version = context.env.LIFEOS_VERSION || 'v48.0.0';
-  const buildId = `lifeos-48.0.0-${commit.slice(0, 12)}`;
-  return new Response(JSON.stringify({
-    status: 'ok',
-    version,
-    buildId,
-    commit,
-    environment: context.env.LIFEOS_ENV || 'production',
-    platform: 'cloudflare-pages',
-    timestamp: new Date().toISOString(),
-  }), {
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store',
-    },
-  });
+  try {
+    const metadata = await getReleaseMetadata(context);
+    return new Response(JSON.stringify({
+      status: 'ok',
+      ...metadata,
+      timestamp: new Date().toISOString(),
+    }), {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      },
+    });
+  } catch (error) {
+    console.error('LifeOS release metadata error', error);
+    return releaseErrorResponse(error);
+  }
 }

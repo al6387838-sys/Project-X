@@ -259,7 +259,6 @@ const LAZY_MODULES = ['communication-hub', 'finance-hub', 'document-center', 'ai
 // 2. Servir imagens responsivas com srcset
 // 3. Minificar CSS e JS em produção
 // 4. Usar gzip/brotli no servidor (Cloudflare)
-// 5. Implementar service worker para cache offline
 
 function optimizeImages() {
   document.querySelectorAll('img').forEach(img => {
@@ -268,17 +267,6 @@ function optimizeImages() {
       img.loading = 'lazy';
     }
   });
-}
-
-// ─── Service Worker Registration ──────────────────────────────────────────────
-function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
-      // [removed]
-    }).catch(err => {
-      // [removed]
-    });
-  }
 }
 
 // ─── Initialize Performance Optimizations ─────────────────────────────────────
@@ -291,9 +279,6 @@ function initPerformanceOptimizations() {
 
   // Otimizar imagens
   optimizeImages();
-
-  // Service Worker
-  registerServiceWorker();
 
   // Monitorar performance
   PerformanceMonitor.reportWebVitals();

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# LifeOS V1.0 RC — Backup Script
+# LifeOS — Backup Script
 # Usage: ./deploy/scripts/backup.sh
 # Cron: 0 2 * * * /path/to/backup.sh (daily at 2am)
 set -euo pipefail
 
-LIFEOS_VERSION="${LIFEOS_VERSION:-1.0.0-rc}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RELEASE_CONFIG="$(cd "$SCRIPT_DIR/../.." && pwd)/config/release.json"
+LIFEOS_VERSION="$(sed -n 's/^[[:space:]]*"release"[[:space:]]*:[[:space:]]*"\\([^"\\]*\\)".*/\\1/p' "$RELEASE_CONFIG" | head -n 1)"
+[[ "$LIFEOS_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release in $RELEASE_CONFIG" >&2; exit 1; }
 BACKUP_DIR="${BACKUP_DIR:-./backups}"
 RETENTION_DAYS="${BACKUP_RETENTION_DAYS:-30}"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)

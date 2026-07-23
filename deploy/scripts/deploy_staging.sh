@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# LifeOS V1.0 RC — Staging Deploy Script
+# LifeOS — Staging Deploy Script
 set -euo pipefail
 
-LIFEOS_VERSION="${LIFEOS_VERSION:-1.0.0-rc}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RELEASE_CONFIG="$(cd "$SCRIPT_DIR/../.." && pwd)/config/release.json"
+LIFEOS_VERSION="$(sed -n 's/^[[:space:]]*"release"[[:space:]]*:[[:space:]]*"\\([^"\\]*\\)".*/\\1/p' "$RELEASE_CONFIG" | head -n 1)"
+[[ "$LIFEOS_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release in $RELEASE_CONFIG" >&2; exit 1; }
 DEPLOY_ENV="staging"
 
 echo "[STAGING] Deploying LifeOS ${LIFEOS_VERSION}..."

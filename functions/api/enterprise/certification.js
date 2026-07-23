@@ -4,6 +4,7 @@
 // Auditoria completa: Segurança · APIs · Banco · Cloudflare · Integrações
 // Comunicação · Billing · IA · Upload · Organizações · Usuários · Admin · Performance
 import { getCookie, json, verifySession } from '../../_auth.js';
+import { getReleaseMetadata } from '../../_release.js';
 
 const CERTIFICATION_CHECKS = [
   // Segurança
@@ -84,6 +85,7 @@ export async function onRequestGet({ request, env }) {
   const isAdmin = session.sub === env.LIFEOS_ADMIN_USER || session.role === 'admin' || session.role === 'owner';
   if (!isAdmin) return json(403, { ok: false, error: 'Acesso restrito a administradores' });
   const kv = env.LIFEOS_KV;
+  const release = await getReleaseMetadata({ request, env });
   const checks = runChecks(env, kv);
   const categories = [...new Set(checks.map(c => c.category))];
   const summary = {};
@@ -104,7 +106,10 @@ export async function onRequestGet({ request, env }) {
   return json(200, {
     ok: true,
     certification: {
-      version: env.LIFEOS_VERSION || '26.0.0',
+      release: release.release,
+      version: release.release,
+      buildId: release.buildId,
+      commit: release.commit,
       timestamp: new Date().toISOString(),
       readyForProduction,
       productionReadiness: `${Math.round((totalOk / checks.length) * 100)}%`,

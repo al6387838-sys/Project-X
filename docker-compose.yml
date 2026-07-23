@@ -1,6 +1,6 @@
 version: "3.9"
 
-# LifeOS V1.0 RC — Docker Compose
+# LifeOS — Docker Compose
 # Environments: production, staging
 
 services:
@@ -10,12 +10,12 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: lifeos:1.0.0-rc
+    image: lifeos:${LIFEOS_VERSION:?LIFEOS_VERSION must be derived from config/release.json}
     container_name: lifeos-core
     restart: unless-stopped
     environment:
       - LIFEOS_ENV=${LIFEOS_ENV:-production}
-      - LIFEOS_VERSION=1.0.0-rc
+      - LIFEOS_VERSION=${LIFEOS_VERSION:?LIFEOS_VERSION must be derived from config/release.json}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       - CLOUD_SYNC_ENDPOINT=${CLOUD_SYNC_ENDPOINT}
@@ -32,7 +32,7 @@ services:
       start_period: 10s
     labels:
       - "lifeos.service=core"
-      - "lifeos.version=1.0.0-rc"
+      - "lifeos.version=${LIFEOS_VERSION:?LIFEOS_VERSION must be derived from config/release.json}"
 
   # ─── Observability: Prometheus ────────────────────────────────────────────
   prometheus:

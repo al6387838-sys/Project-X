@@ -19,7 +19,7 @@ function lifeosLogError(env, operation, error, details = {}) {
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const MAX_AUDIT = 500;
-// Hardening v46.0.0 (Fase 328): allowlist de tipos MIME e extensões bloqueadas
+// Hardening (Fase 328): allowlist de tipos MIME e extensões bloqueadas
 const ALLOWED_MIME_TYPES = new Set([
   'application/pdf', 'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -190,7 +190,7 @@ async function createDocumentFromFile({ request, kv, bucket, session, input }) {
   const file = form.get('file');
   if (!file || typeof file.arrayBuffer !== 'function' || !safeText(file.name)) throw new Error('Selecione um arquivo válido');
   if (Number(file.size || 0) > MAX_FILE_SIZE) throw new Error('O arquivo excede o limite de 25 MB');
-  validateFileUpload(file); // Hardening v46.0.0: validação de tipo MIME e extensão
+  validateFileUpload(file); // Hardening: validação de tipo MIME e extensão
   if (!bucket) throw new Error('Armazenamento R2 pronto para ativação. Configure o binding oficial de arquivos.');
 
   const docs = await getDocuments(kv, session.sub);
@@ -257,7 +257,7 @@ async function uploadNewVersion({ request, kv, bucket, session, input }) {
   if (!file || typeof file.arrayBuffer !== 'function' || !safeText(file.name)) throw new Error('Selecione um arquivo válido');
   if (!bucket) throw new Error('Armazenamento R2 pronto para ativação. Configure o binding oficial de arquivos.');
   if (Number(file.size || 0) > MAX_FILE_SIZE) throw new Error('O arquivo excede o limite de 25 MB');
-  validateFileUpload(file); // Hardening v46.0.0: validação de tipo MIME e extensão
+  validateFileUpload(file); // Hardening: validação de tipo MIME e extensão
   const docs = await getDocuments(kv, session.sub);
   const document = requireDocument(docs, docId);
   assertEditable(document, session);

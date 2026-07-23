@@ -1,10 +1,12 @@
 {
   "name": "lifeos-enterprise",
-  "version": "49.0.0",
   "private": true,
   "description": "LifeOS Enterprise — sistema operacional pessoal com governança organizacional, RBAC, billing, compliance, integrações OAuth 2.0 e automação.",
   "scripts": {
+    "clean": "node scripts/clean-build.mjs",
     "build": "node scripts/build.mjs",
+    "build:clean": "npm run clean && npm run build",
+    "verify:release": "node scripts/verify-production.mjs",
     "deploy": "bash scripts/deploy-cloudflare.sh",
     "deploy:cf": "npx wrangler pages deploy dist --project-name lifeos-enterprise --branch main",
     "test:production": "node scripts/verify-production.mjs",

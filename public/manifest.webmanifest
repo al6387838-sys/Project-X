@@ -1,7 +1,7 @@
 {
   "name": "LifeOS Enterprise",
   "short_name": "LifeOS",
-  "description": "LifeOS Enterprise v46.0.0 — O sistema operacional inteligente para vida pessoal e profissional.",
+  "description": "LifeOS Enterprise — O sistema operacional inteligente para vida pessoal e profissional.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0E14",

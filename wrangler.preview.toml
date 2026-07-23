@@ -1,4 +1,4 @@
-# LifeOS Enterprise v46.0.0 — Cloudflare Pages Preview Configuration
+# LifeOS Enterprise — Cloudflare Pages Preview Configuration
 # Este arquivo é usado para testes locais antes do deploy em produção.
 # NÃO usar em produção.
 
@@ -29,5 +29,4 @@ preview_bucket_name = "lifeos-storage-preview"
 
 [vars]
 LIFEOS_ADMIN_USER = "al6387838@gmail.com"
-LIFEOS_VERSION = "v46.0.0"
 LIFEOS_ENV = "preview"

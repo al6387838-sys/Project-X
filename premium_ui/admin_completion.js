@@ -1,4 +1,4 @@
-/* LIFEOS Enterprise v48.0.0 — Admin Control Plane
+/* LIFEOS Enterprise — Admin Control Plane
  * Phases 304-307: Layout Enterprise corrigido, auditoria visual completa,
  * funcionalidade total dos botões, UX Enterprise premium.
  * Camada progressiva sobre /admin — usa exclusivamente /api/admin-data.
@@ -6,7 +6,6 @@
 (() => {
   'use strict';
 
-  const VERSION = '47.0';
 
   const NAVIGATION = [
     ['overview',       'dashboard',     'Dashboard',       '▦'],
@@ -45,7 +44,17 @@
     payload: null,
     cache: { organizations: [], plans: [], users: [], workspaces: [] },
     sidebarOpen: false,
+    release: window.LifeOSReleaseMetadata || null,
   };
+
+  window.addEventListener('lifeos:release-ready', (event) => {
+    state.release = event.detail;
+    updateSidebar();
+  });
+  window.LifeOSReleaseReady?.then((metadata) => {
+    state.release = metadata;
+    updateSidebar();
+  }).catch(() => {});
 
   /* ── UTILS ── */
   const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -55,6 +64,7 @@
   const route = (id) => NAVIGATION.find(([i]) => i === id) || NAVIGATION[0];
   const el   = (sel, root = document) => root.querySelector(sel);
   const all  = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const releaseLabel = () => text(state.release?.release, 'Release indisponível');
 
   const statusClass = (s) => {
     const n = String(s || '').toLowerCase();
@@ -561,7 +571,7 @@
     return `
       <div class="la-brand">
         <div class="la-brand-name">LIFEOS ENTERPRISE</div>
-        <div class="la-brand-sub">Admin Control Plane · v${VERSION}</div>
+        <div class="la-brand-sub">Admin Control Plane · ${esc(releaseLabel())}</div>
       </div>
       ${navItems}
       <div class="la-sidebar-footer">
@@ -938,9 +948,11 @@
     const infra = obj(data.infrastructure);
     const settingEntries = Object.entries(settings).filter(([k]) => !['updatedAt', 'updatedBy'].includes(k));
     return `${pageTopbar('Sistema', 'Configurações persistidas, bindings ativos e operações de manutenção.')}
-    <div class="la-metrics" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+    <div class="la-metrics" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
       ${stat('Ambiente', esc(data.environment || 'Não configurado'))}
-      ${stat('Versão em execução', esc(data.version || 'Não configurada'))}
+      ${stat('Release', esc(data.release || data.version || 'Não configurada'))}
+      ${stat('Build ID', esc(data.buildId || 'Não configurado'))}
+      ${stat('Commit SHA', esc(data.commit || 'Não configurado'))}
       ${stat('Cloudflare KV', infra.kvBound ? '✓ Vinculado' : '✗ Indisponível')}
     </div>
     <div class="la-grid split">

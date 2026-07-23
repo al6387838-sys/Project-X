@@ -1,5 +1,5 @@
-# LifeOS Enterprise v48.0.0 — Cloudflare Pages Configuration
-# HARDENING v48.0.0 (Fases 331-335):
+# LifeOS Enterprise — Cloudflare Pages Configuration
+# Production hardening configuration:
 #   LIFEOS_SESSION_SECRET  → configurar via: wrangler secret put LIFEOS_SESSION_SECRET
 #   LIFEOS_ADMIN_PASSWORD_HASH → configurar via: wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
 #   Secrets NÃO devem constar em [vars] em produção — usar Cloudflare Pages Secrets
@@ -53,5 +53,4 @@ LIFEOS_ADMIN_USER = "al6387838@gmail.com"
 # como Cloudflare Pages Secrets (não como [vars]):
 #   npx wrangler secret put LIFEOS_SESSION_SECRET
 #   npx wrangler secret put LIFEOS_ADMIN_PASSWORD_HASH
-LIFEOS_VERSION = "v48.0.0"
 LIFEOS_ENV = "production"

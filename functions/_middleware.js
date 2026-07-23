@@ -1,4 +1,4 @@
-// LifeOS Enterprise — Global Security Middleware v48.0.0 (Phases 250-254 — Version Synchronization)
+// LifeOS Enterprise — Global Security Middleware
 // Production Hardening: CSP, HSTS, CSRF, XSS, Rate Limiting, RBAC, Audit, Session Validation
 // Security audit: headers, CSP, HSTS, CSRF, XSS, SQL Injection prevention, Rate Limiting,
 // RBAC, sessions, tokens, secrets, Cloudflare Workers, KV
@@ -214,9 +214,6 @@ export async function onRequest({ request, env, next }) {
   if (url.pathname.startsWith('/admin') || ADMIN_ROUTES.some(r => url.pathname.startsWith(r))) {
     newHeaders.set('x-lifeos-audit', new Date().toISOString());
   }
-
-  // Security version header
-  newHeaders.set('x-lifeos-security', 'v48.0.0');
 
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers: newHeaders });
 }
