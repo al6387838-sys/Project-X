@@ -75,7 +75,7 @@ check('Sessão administrativa', admin.includes('/api/session') && (admin.include
 check('Navegação acessível', app.includes('<nav') && app.includes('aria-label=') && (admin.includes('<nav') || admin.includes('<aside') || admin.includes('admin_completion.js')));
 check('Viewport responsivo', app.includes('name="viewport"') && admin.includes('name="viewport"'));
 check('Cliente de release na landing', index.includes('/version-display.js') && index.includes('data-lifeos-build') && index.includes('data-lifeos-commit'));
-check('Cliente de release no dashboard', app.includes('/version-display.js') && app.includes('data-lifeos-release'));
+check('Cliente de release no dashboard', app.includes('/version-display.js') && app.includes('data-lifeos-release') && app.includes('data-lifeos-build') && app.includes('data-lifeos-commit'));
 check('Cliente de release no admin', admin.includes('/version-display.js') && admin.includes('admin_completion.js'));
 check('Limpeza de caches legados', releaseClient.includes('getRegistrations') && releaseClient.includes('caches.delete'));
 check('Sem registro de service worker', !releaseClient.includes('serviceWorker.register') && !app.includes('serviceWorker.register'));
