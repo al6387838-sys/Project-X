@@ -311,6 +311,23 @@ async function commSync(provider) {
   }
 })();
 
+// Exibir instruções de configuração em modal
+function showSetupInstructions(msg) {
+  var text = msg || 'Configure as variáveis de ambiente no Cloudflare Dashboard.';
+  var modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = '<div style="background:var(--bg-card,#1E293B);border:1px solid var(--border,#334155);border-radius:16px;padding:28px;max-width:480px;width:100%">' +
+    '<div style="font-size:16px;font-weight:700;margin-bottom:12px">Instruções de Configuração</div>' +
+    '<div style="font-size:13px;color:var(--text-secondary,#94A3B8);line-height:1.6;margin-bottom:20px;white-space:pre-wrap">' + text.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+    '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+    '<a href="https://dash.cloudflare.com" target="_blank" rel="noopener" style="padding:8px 16px;background:var(--accent,#6366F1);color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600">Abrir Cloudflare</a>' +
+    '<button style="padding:8px 16px;background:transparent;border:1px solid var(--border,#334155);color:var(--text-primary,#F1F5F9);border-radius:8px;cursor:pointer;font-size:13px">Fechar</button>' +
+    '</div></div>';
+  document.body.appendChild(modal);
+  modal.querySelector('button').addEventListener('click', function(){ modal.remove(); });
+  modal.addEventListener('click', function(e){ if (e.target === modal) modal.remove(); });
+}
+
 // Auto-carregar ao inicializar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadCommHubMonitor);

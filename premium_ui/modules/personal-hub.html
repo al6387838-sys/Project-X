@@ -138,7 +138,7 @@
   <div class="hub-greeting">
     <div class="greeting-text">
       <h2>Bom dia! <i data-lucide="sun" class="pg-icon" aria-hidden="true"></i> Seu dia está organizado.</h2>
-      <p>{daily_summary}</p>
+      <p id="hub-daily-summary">Carregando resumo do dia...</p>
     </div>
     <div class="greeting-ai">
       <span><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></span>
@@ -149,7 +149,7 @@
   <div class="quick-stats">
     <div class="qs-card">
       <div class="qs-icon"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-      <div class="qs-value" style="color:var(--green)">{quick_stat}</div>
+      <div class="qs-value" style="color:var(--green)" id="hub-qs-saldo">—</div>
       <div class="qs-label">Saldo Total</div>
     </div>
     <div class="qs-card">
@@ -192,37 +192,37 @@
       <div class="finance-summary">
         <div class="fin-item">
           <div class="fin-item-label">Receita (mês)</div>
-          <div class="fin-item-value positive">{income_value}</div>
+          <div class="fin-item-value positive" id="hub-fin-income">—</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:74%;background:var(--green)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Despesas (mês)</div>
-          <div class="fin-item-value negative">{expense_value}</div>
+          <div class="fin-item-value negative" id="hub-fin-expense">—</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:33%;background:var(--red)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Investimentos</div>
-          <div class="fin-item-value neutral">{balance_value}</div>
+          <div class="fin-item-value neutral" id="hub-fin-invest">—</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:60%;background:var(--cyan)"></div></div>
         </div>
         <div class="fin-item">
           <div class="fin-item-label">Patrimônio</div>
-          <div class="fin-item-value positive">{investments_value}</div>
+          <div class="fin-item-value positive" id="hub-fin-patrimonio">—</div>
           <div class="fin-chart-bar"><div class="fin-chart-fill" style="width:85%;background:var(--accent)"></div></div>
         </div>
       </div>
       <ul class="fin-transactions">
         <li class="fin-tx">
           <div><div class="fin-tx-name">Salário recebido</div><div class="fin-tx-date">Hoje, 09:00</div></div>
-          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
+          <div class="fin-tx-amount" style="color:var(--green)" id="hub-tx-1-val">+—</div>
         </li>
         <li class="fin-tx">
-          <div><div class="fin-tx-name">Aluguel</div><div class="fin-tx-date">Hoje, 10:30</div></div>
-          <div class="fin-tx-amount" style="color:var(--red)">-{tx_amount}</div>
+          <div><div class="fin-tx-name" id="hub-tx-2-name">Aluguel</div><div class="fin-tx-date" id="hub-tx-2-date">Hoje, 10:30</div></div>
+          <div class="fin-tx-amount" style="color:var(--red)" id="hub-tx-2-val">-—</div>
         </li>
         <li class="fin-tx">
-          <div><div class="fin-tx-name">Dividendos ITSA4</div><div class="fin-tx-date">Ontem</div></div>
-          <div class="fin-tx-amount" style="color:var(--green)">+{tx_amount}</div>
+          <div><div class="fin-tx-name" id="hub-tx-3-name">Freela Design</div><div class="fin-tx-date" id="hub-tx-3-date">Ontem, 18:00</div></div>
+          <div class="fin-tx-amount" style="color:var(--green)" id="hub-tx-3-val">+—</div>
         </li>
       </ul>
     </div>
@@ -285,23 +285,9 @@
         </div>
         <a class="central-link" href="/modules/calendar.html">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></a>
       </div>
-      <div class="cal-today">
-        <div class="cal-today-label">Hoje — Terça, 15 Jul</div>
-        <div class="cal-event">
-          <div class="cal-time">09:00</div>
-          <div class="cal-event-dot" style="background:var(--accent)"></div>
-          <div><div class="cal-event-name">Daily Standup</div><div class="cal-event-sub">Google Meet · 30 min</div></div>
-        </div>
-        <div class="cal-event">
-          <div class="cal-time">14:00</div>
-          <div class="cal-event-dot" style="background:var(--green)"></div>
-          <div><div class="cal-event-name">Revisão de Contrato</div><div class="cal-event-sub">Sala 3 · 1h</div></div>
-        </div>
-        <div class="cal-event">
-          <div class="cal-time">16:00</div>
-          <div class="cal-event-dot" style="background:var(--amber)"></div>
-          <div><div class="cal-event-name">Reunião com Rafael</div><div class="cal-event-sub">Zoom · 45 min</div></div>
-        </div>
+      <div class="cal-today" id="hub-cal-today">
+        <div class="cal-today-label" id="hub-cal-date">Carregando...</div>
+        <div id="hub-cal-events"><div style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px">Carregando eventos...</div></div>
       </div>
     </div>
 
@@ -317,7 +303,7 @@
       <div class="ai-chat">
         <div class="ai-msg">
           <div class="ai-avatar bot"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="ai-bubble">{ai_suggestion}</div>
+          <div class="ai-bubble" id="hub-ai-suggestion">Olá! Estou analisando seus dados para gerar insights personalizados. Clique em "Ver tudo" para o briefing completo do dia.</div>
         </div>
         <div class="ai-msg" style="flex-direction:row-reverse">
           <div class="ai-avatar user"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i></div>
@@ -389,6 +375,78 @@
         document.querySelector('.ai-input input').focus();
       });
     });
+    // Carregar dados financeiros reais
+    (async () => {
+      try {
+        const r = await fetch('/api/finance/hub?view=summary', { credentials: 'same-origin' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        if (!d.ok) return;
+        const s = d.summary || {};
+        const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+        const el = id => document.getElementById(id);
+        if (el('hub-qs-saldo')) el('hub-qs-saldo').textContent = fmt(s.totalBalance);
+        if (el('hub-fin-income')) el('hub-fin-income').textContent = fmt(s.monthlyIncome);
+        if (el('hub-fin-expense')) el('hub-fin-expense').textContent = fmt(s.monthlyExpenses);
+        if (el('hub-fin-invest')) el('hub-fin-invest').textContent = fmt(s.investments);
+        if (el('hub-fin-patrimonio')) el('hub-fin-patrimonio').textContent = fmt(s.netWorth || s.totalBalance);
+        // Transações recentes
+        if (d.recentTransactions && d.recentTransactions.length > 0) {
+          const txs = d.recentTransactions;
+          if (txs[0] && el('hub-tx-1-val')) el('hub-tx-1-val').textContent = (txs[0].amount >= 0 ? '+' : '') + fmt(txs[0].amount);
+          if (txs[1] && el('hub-tx-2-name')) { el('hub-tx-2-name').textContent = txs[1].description || 'Transação'; el('hub-tx-2-val').textContent = (txs[1].amount >= 0 ? '+' : '') + fmt(txs[1].amount); }
+          if (txs[2] && el('hub-tx-3-name')) { el('hub-tx-3-name').textContent = txs[2].description || 'Transação'; el('hub-tx-3-val').textContent = (txs[2].amount >= 0 ? '+' : '') + fmt(txs[2].amount); }
+        }
+        // Resumo diário
+        if (el('hub-daily-summary')) el('hub-daily-summary').textContent = 'Saldo: ' + fmt(s.totalBalance) + ' · Gastos do mês: ' + fmt(s.monthlyExpenses) + ' · Economia: ' + (s.savingsRate || 0) + '%';
+      } catch { /* manter valores padrão */ }
+    })();
+    // Carregar eventos de agenda reais
+    (async () => {
+      const calDate = document.getElementById('hub-cal-date');
+      const calEvents = document.getElementById('hub-cal-events');
+      if (!calDate || !calEvents) return;
+      try {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        const dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+        const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+        calDate.textContent = 'Hoje — ' + dias[today.getDay()] + ', ' + today.getDate() + ' ' + meses[today.getMonth()];
+        const r = await fetch('/api/events?date=' + todayStr, { credentials: 'same-origin' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        const events = (d.events || []).slice(0, 3);
+        const dotColors = ['var(--accent)', 'var(--green)', 'var(--amber)', 'var(--cyan)', 'var(--purple)'];
+        if (!events.length) {
+          calEvents.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px">Nenhum evento hoje</div>';
+        } else {
+          calEvents.innerHTML = events.map((ev, i) => {
+            const t = ev.startTime || ev.time || '';
+            const timeStr = t ? (t.length > 5 ? new Date(t).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : t) : '--:--';
+            const sub = [ev.location, ev.duration ? ev.duration + ' min' : ''].filter(Boolean).join(' · ');
+            return '<div class="cal-event"><div class="cal-time">' + timeStr + '</div><div class="cal-event-dot" style="background:' + dotColors[i % dotColors.length] + '"></div><div><div class="cal-event-name">' + (ev.title || 'Evento') + '</div>' + (sub ? '<div class="cal-event-sub">' + sub + '</div>' : '') + '</div></div>';
+          }).join('');
+        }
+      } catch {
+        const calDate2 = document.getElementById('hub-cal-date');
+        const calEvents2 = document.getElementById('hub-cal-events');
+        if (calDate2) { const t = new Date(); const dias2=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']; const meses2=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']; calDate2.textContent = 'Hoje — ' + dias2[t.getDay()] + ', ' + t.getDate() + ' ' + meses2[t.getMonth()]; }
+        if (calEvents2) calEvents2.innerHTML = '<div style="text-align:center;padding:10px;color:var(--text-muted);font-size:12px">Agenda indisponível</div>';
+      }
+    })();
+    // Carregar briefing de IA
+    (async () => {
+      const aiEl = document.getElementById('hub-ai-suggestion');
+      if (!aiEl) return;
+      try {
+        const r = await fetch('/api/briefing', { credentials: 'same-origin' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        const b = d.briefing || {};
+        if (b.summary) aiEl.textContent = b.summary;
+        else if (b.greeting) aiEl.textContent = b.greeting;
+      } catch { /* manter texto padrão */ }
+    })();
     // Load recent messages dynamically
     (async () => {
       const commList = document.getElementById('hub-comm-list');

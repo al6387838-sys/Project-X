@@ -38,7 +38,7 @@
         <div style="font-size:13px;color:var(--text-secondary)">Expanda as capacidades da IA com modelos avançados, memória ilimitada, análise preditiva e automações complexas.</div>
       </div>
       <div style="text-align:center;flex-shrink:0">
-        <div style="font-size:24px;font-weight:800;color:var(--accent)">{app_price}</div>
+        <div style="font-size:24px;font-weight:800;color:var(--accent)">R$ 149/mês</div>
         <button class="btn btn-primary" style="margin-top:8px;padding:10px 24px" onclick="mktSubscribe('ai-pro')">Assinar</button>
       </div>
     </div>
@@ -106,7 +106,7 @@
       </div>
       <div class="mkt-app-desc">Acompanhe sua carteira de ações da B3 em tempo real com cotações e alertas.</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-        <span class="mkt-app-price paid">{app_price}</span>
+        <span class="mkt-app-price paid">R$ 29/mês</span>
         <button class="btn btn-primary" style="font-size:12px;padding:6px 14px" onclick="mktInstall(this,'B3 Investimentos')">Instalar</button>
       </div>
     </div>
@@ -280,4 +280,32 @@
 </div>
 
 </div>
+<script>
+(function(){
+  'use strict';
+  window.mktSubscribe = async function(planId) {
+    try {
+      var pid = planId === 'ai-pro' ? 'professional' : planId;
+      var res = await fetch('/api/payments', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'select-plan', planId: pid }),
+      });
+      var data = await res.json();
+      if (data.ok) {
+        if (typeof window.showToast === 'function') window.showToast('Plano selecionado! Configure o pagamento em Billing.', 'success');
+        if (typeof window.showPage === 'function') setTimeout(function(){ window.showPage('billing'); }, 1200);
+      } else {
+        if (typeof window.showToast === 'function') window.showToast(data.error || 'Erro ao selecionar plano', 'error');
+      }
+    } catch (err) {
+      if (typeof window.showToast === 'function') window.showToast('Erro ao processar assinatura', 'error');
+    }
+  };
+  window.mktPublishApp = function() {
+    if (typeof window.showToast === 'function') window.showToast('Para publicar um app, acesse Configurações > API Platform.', 'info');
+    if (typeof window.showPage === 'function') setTimeout(function(){ window.showPage('settings'); }, 1500);
+  };
+})();
+</script>
 <!-- END module-marketplace -->

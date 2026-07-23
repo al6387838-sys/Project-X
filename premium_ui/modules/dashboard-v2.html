@@ -400,50 +400,8 @@
         <div class="widget-title">Agenda de Hoje</div>
         <button class="widget-action" onclick="window.parent?.showPage?.('agenda')">Ver tudo <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i></button>
       </div>
-      <div class="agenda-item">
-        <div class="agenda-time">09:00</div>
-        <div class="agenda-dot" style="background:var(--green)"></div>
-        <div class="agenda-content">
-          <div class="agenda-title" id="d2-agenda-item-1">Carregando...</div>
-          <div class="agenda-meta">10 min · Pessoal</div>
-        </div>
-        <span class="agenda-badge badge-sm badge-green">Feito</span>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-time">10:30</div>
-        <div class="agenda-dot" style="background:var(--accent)"></div>
-        <div class="agenda-content">
-          <div class="agenda-title">Revisão de Sprint</div>
-          <div class="agenda-meta">1h · Google Meet</div>
-        </div>
-        <span class="agenda-badge badge-sm badge-accent">Em breve</span>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-time">14:30</div>
-        <div class="agenda-dot" style="background:var(--cyan)"></div>
-        <div class="agenda-content">
-          <div class="agenda-title">Daily Standup</div>
-          <div class="agenda-meta">30 min · Zoom</div>
-        </div>
-        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-time">16:00</div>
-        <div class="agenda-dot" style="background:var(--purple)"></div>
-        <div class="agenda-content">
-          <div class="agenda-title">Treino funcional</div>
-          <div class="agenda-meta">1h · Academia</div>
-        </div>
-        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-time">19:00</div>
-        <div class="agenda-dot" style="background:var(--amber)"></div>
-        <div class="agenda-content">
-          <div class="agenda-title" id="d2-agenda-item-2">—</div>
-          <div class="agenda-meta">30 min · Pessoal</div>
-        </div>
-        <span class="agenda-badge badge-sm badge-amber">Hoje</span>
+      <div id="d2-agenda-list">
+        <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">Carregando eventos...</div>
       </div>
     </div>
 
@@ -916,15 +874,29 @@
         } catch { goalsList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Erro ao carregar metas.</div>'; }
       }
       // Agenda
-      try {
-        const r = await fetch('/api/events?date=' + today, { credentials: 'same-origin' });
-        const data = await r.json();
-        const events = data.events || [];
-        const item1 = document.getElementById('d2-agenda-item-1');
-        const item2 = document.getElementById('d2-agenda-item-2');
-        if (item1) item1.textContent = events[0]?.title || 'Nenhum evento hoje';
-        if (item2) item2.textContent = events[1]?.title || '—';
-      } catch {}
+      const agendaList = document.getElementById('d2-agenda-list');
+      if (agendaList) {
+        try {
+          const r = await fetch('/api/events?date=' + today, { credentials: 'same-origin' });
+          const data = await r.json();
+          const events = (data.events || []).slice(0, 5);
+          const dotColors = ['var(--green)', 'var(--accent)', 'var(--cyan)', 'var(--purple)', 'var(--amber)'];
+          if (!events.length) {
+            agendaList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:12px 0">Nenhum evento hoje</div>';
+          } else {
+            agendaList.innerHTML = events.map((ev, i) => {
+              const t = ev.startTime || ev.time || '';
+              const timeStr = t ? (t.length > 5 ? new Date(t).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : t) : '--:--';
+              const loc = ev.location || '';
+              const dur = ev.duration ? ev.duration + ' min' : '';
+              const meta = [dur, loc].filter(Boolean).join(' · ');
+              return '<div class="agenda-item"><div class="agenda-time">' + timeStr + '</div><div class="agenda-dot" style="background:' + dotColors[i % dotColors.length] + '"></div><div class="agenda-content"><div class="agenda-title">' + (ev.title || 'Evento') + '</div>' + (meta ? '<div class="agenda-meta">' + meta + '</div>' : '') + '</div></div>';
+            }).join('');
+          }
+        } catch {
+          agendaList.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:8px 0">Erro ao carregar agenda.</div>';
+        }
+      }
     }
     async function toggleD2HabitReal(id, el) {
       try {

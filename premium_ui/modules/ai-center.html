@@ -130,8 +130,8 @@
       </div>
       <div class="ai-rec-card" style="border-color:rgba(99,102,241,0.3)">
         <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
-        <div style="font-weight:600;margin-bottom:4px">{savings}</div>
-        <div style="font-size:12px;color:var(--text-secondary)">{subscription_suggestion}</div>
+        <div style="font-weight:600;margin-bottom:4px" id="ai-rec-savings">Economia potencial</div>
+        <div style="font-size:12px;color:var(--text-secondary)" id="ai-rec-subscription">Carregando análise de assinaturas...</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showPage('finance-subscriptions')">Ver Assinaturas</button>
       </div>
       <div class="ai-rec-card" style="border-color:rgba(245,158,11,0.3)">
@@ -192,7 +192,7 @@
       </div>
       <div class="ai-memory-item" data-category="Financeiro">
         <div class="ai-memory-category" style="background:rgba(245,158,11,0.15);color:var(--amber)">Financeiro</div>
-        <div class="ai-memory-content">{finance_memory}</div>
+        <div class="ai-memory-content" id="ai-memory-finance">Carregando dados financeiros...</div>
         <div class="ai-memory-meta">Adicionado: 01 Jul 2026 · Fonte: Finance · Relevância: 91%</div>
         <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="showToast('Memória removida','warning')">Remover</button>
       </div>
@@ -348,23 +348,8 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title" style="margin-bottom:14px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Prioridades do Dia</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
-          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
-          <div style="flex:1"><div style="font-weight:600;font-size:13px">Revisar proposta cliente XYZ</div><div style="font-size:11px;color:var(--text-muted)">Prazo: hoje 14h · Alta prioridade</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
-          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
-          <div style="flex:1"><div style="font-weight:600;font-size:13px">Reunião equipe dev — 10h</div><div style="font-size:11px;color:var(--text-muted)">Google Meet · 45 min</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
-          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
-          <div style="flex:1"><div style="font-weight:600;font-size:13px">{bill_name}</div><div style="font-size:11px;color:var(--text-muted)">{bill_due}</div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
-          <span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span>
-          <div style="flex:1"><div style="font-weight:600;font-size:13px">Treino — 18h30</div><div style="font-size:11px;color:var(--text-muted)">Smart Fit · Musculação</div></div>
-        </div>
+      <div style="display:flex;flex-direction:column;gap:10px" data-briefing-priorities>
+        <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px"><i data-lucide="loader" class="pg-icon" aria-hidden="true"></i> Carregando prioridades reais...</div>
       </div>
     </div>
     <div class="card">
@@ -372,19 +357,19 @@
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Produtividade</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Seu pico de foco é entre 9h–11h. Reserve esse período para a proposta do cliente XYZ.</div>
+          <div style="font-size:13px;color:var(--text-secondary)" id="ai-prod-insight">Seu pico de foco é entre 9h–11h. Reserve esse período para suas tarefas de maior impacto.</div>
         </div>
         <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Financeiro</div>
-          <div style="font-size:13px;color:var(--text-secondary)">{bill_reminder}</div>
+          <div style="font-size:13px;color:var(--text-secondary)" class="ai-reminder-text">Carregando lembretes financeiros...</div>
         </div>
         <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Você dormiu 7h30 ontem. Hidratação: lembre-se de beber água a cada 2h para manter o foco.</div>
+          <div style="font-size:13px;color:var(--text-secondary)" id="ai-health-insight">Registre seu sono e hidratação no módulo Saúde para receber insights personalizados.</div>
         </div>
         <div style="padding:12px;background:rgba(6,182,212,0.08);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
           <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Hábitos</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Seu streak atual está sendo calculado...uebre hoje. Hábito crítico: meditação matinal ainda não registrada.</div>
+          <div style="font-size:13px;color:var(--text-secondary)" id="ai-habits-insight">Carregando análise de hábitos...</div>
         </div>
       </div>
     </div>
@@ -720,18 +705,25 @@ if (document.readyState === 'loading') {
     if (!r.ok) return;
     const data = await r.json();
     const el = id => document.getElementById(id);
-    // Replace placeholders with real data
-    if (data.savings) {
-      document.querySelectorAll('.ai-insight-item').forEach(item => {
-        item.innerHTML = item.innerHTML.replace('{savings}', data.savings);
-        item.innerHTML = item.innerHTML.replace('{subscription_suggestion}', data.subscriptionSuggestion || 'Revisão de assinaturas disponível');
-      });
+    // Atualizar insights dinâmicos
+    if (data.insights && data.insights.length > 0) {
+      const insightsList = document.getElementById('ai-insights-list');
+      if (insightsList) {
+        insightsList.innerHTML = data.insights.slice(0, 3).map(ins => {
+          const colors = { 'chart-no-axes-combined': 'var(--green)', 'refresh-cw': 'var(--amber)', 'target': 'var(--accent)', 'wallet-cards': 'var(--cyan)', 'brain': 'var(--purple)' };
+          const color = colors[ins.icon] || 'var(--accent)';
+          return '<div class="ai-insight-item" style="border-left-color:' + color + '"><div class="ai-insight-title">' + (ins.label || 'Insight') + '</div><div class="ai-insight-desc">' + (ins.text || '') + '</div></div>';
+        }).join('');
+      }
     }
-    if (data.financeMemory) {
-      document.querySelectorAll('.ai-memory-content').forEach(item => {
-        item.innerHTML = item.innerHTML.replace('{finance_memory}', data.financeMemory);
-      });
-    }
+    // Atualizar recomendações financeiras
+    const savingsEl = document.getElementById('ai-rec-savings');
+    const subEl = document.getElementById('ai-rec-subscription');
+    if (savingsEl) savingsEl.textContent = data.savings || 'Análise financeira';
+    if (subEl) subEl.textContent = data.subscriptionSuggestion || 'Acesse Finanças para ver recomendações de assinaturas.';
+    // Atualizar memória financeira
+    const finMemEl = document.getElementById('ai-memory-finance');
+    if (finMemEl) finMemEl.textContent = data.financeMemory || 'Dados financeiros serão analisados conforme você usa o módulo Finance.';
     if (data.bills) {
       document.querySelectorAll('.ai-bill-item').forEach((item, i) => {
         const bill = data.bills[i] || {};
@@ -741,8 +733,25 @@ if (document.readyState === 'loading') {
     }
     if (data.reminder) {
       document.querySelectorAll('.ai-reminder-text').forEach(item => {
-        item.innerHTML = item.innerHTML.replace('{bill_reminder}', data.reminder);
+        item.textContent = data.reminder;
       });
+    } else {
+      document.querySelectorAll('.ai-reminder-text').forEach(item => {
+        item.textContent = 'Nenhum lembrete financeiro pendente.';
+      });
+    }
+    // Atualizar insights de saúde e hábitos a partir dos insights gerais
+    if (data.insights && data.insights.length > 0) {
+      const healthIns = data.insights.find(i => i.label && i.label.toLowerCase().includes('saúde'));
+      const habitsIns = data.insights.find(i => i.label && (i.label.toLowerCase().includes('hábito') || i.label.toLowerCase().includes('habito')));
+      const prodIns = data.insights.find(i => i.label && i.label.toLowerCase().includes('produtividade'));
+      const healthEl = document.getElementById('ai-health-insight');
+      const habitsEl = document.getElementById('ai-habits-insight');
+      const prodEl = document.getElementById('ai-prod-insight');
+      if (healthEl && healthIns) healthEl.textContent = healthIns.text;
+      if (habitsEl && habitsIns) habitsEl.textContent = habitsIns.text;
+      else if (habitsEl) habitsEl.textContent = 'Adicione hábitos para receber análises personalizadas.';
+      if (prodEl && prodIns) prodEl.textContent = prodIns.text;
     }
   } catch {}
 })();
