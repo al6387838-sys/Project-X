@@ -202,16 +202,33 @@
       performSearch(q);
     }
 
-    function performSearch(q) {
+    async function performSearch(q) {
       document.getElementById('ss-main').style.display = 'none';
       document.getElementById('ss-results-area').style.display = 'block';
-      const lower = q.toLowerCase();
-      let results = SEARCH_INDEX.filter(item => {
-        if (currentFilter !== 'all' && item.type !== currentFilter) return false;
-        const searchable = [item.title, item.meta, item.badge, item.keywords || ''].join(' ').toLowerCase();
-        return searchable.includes(lower);
-      });
-      renderResults(results, q);
+      const listEl = document.getElementById('ss-results-list');
+      listEl.innerHTML = '<div class="ss-loading"><div class="ss-spinner"></div> Buscando em seus dados reais...</div>';
+      
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&filter=${currentFilter}`, { credentials: 'same-origin' });
+        const data = await res.json();
+        if (data.ok && data.results) {
+          const results = data.results.map(r => ({
+            title: r.title,
+            meta: r.desc || r.type,
+            type: r.category || 'other',
+            page: r.category === 'notes' ? 'documents' : r.category,
+            icon: r.icon || '🔍',
+            badge: r.type,
+            badgeColor: 'var(--bg-elevated)',
+            badgeText: 'var(--text-secondary)'
+          }));
+          renderResults(results, q);
+        } else {
+          renderResults([], q);
+        }
+      } catch (err) {
+        renderResults([], q);
+      }
     }
 
     function renderResults(results, q) {

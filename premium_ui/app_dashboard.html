@@ -3397,27 +3397,36 @@
     const panel = document.getElementById('msg-chat-panel');
     if (panel) { panel.style.display = 'flex'; document.getElementById('msg-chat-name').textContent = name; }
   }
-  function msgSend() {
+  async function msgSend() {
     const inp = document.getElementById('msg-input');
     if (!inp || !inp.value.trim()) return;
+    const text = inp.value.trim();
+    const chatName = document.getElementById('msg-chat-name')?.textContent || 'Geral';
     const msgs = document.getElementById('msg-messages');
     if (msgs) {
       const div = document.createElement('div');
       div.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end;margin-bottom:8px';
-      const bubble = document.createElement('div');
-      bubble.className = 'msg-bubble sent';
-      const text = document.createElement('div');
-      text.className = 'msg-bubble-text';
-      text.textContent = inp.value;
-      const time = document.createElement('div');
-      time.className = 'msg-bubble-time';
-      time.textContent = 'Agora';
-      bubble.append(text, time);
-      div.appendChild(bubble);
+      div.innerHTML = `<div class="msg-bubble sent"><div class="msg-bubble-text">${text}</div><div class="msg-bubble-time">Enviando...</div></div>`;
       msgs.appendChild(div);
       msgs.scrollTop = msgs.scrollHeight;
     }
     inp.value = '';
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'send', conversationId: chatName.toLowerCase(), text })
+      });
+      const data = await res.json();
+      if (data.ok && msgs) {
+        const lastTime = msgs.lastElementChild.querySelector('.msg-bubble-time');
+        if (lastTime) lastTime.textContent = 'Agora';
+      } else if (data.error) {
+        showToast(data.error, 'error');
+      }
+    } catch (err) {
+      showToast('Erro ao enviar mensagem', 'error');
+    }
   }
   function msgFilter(platform, btn) {
     document.querySelectorAll('.msg-filter').forEach(b => b.classList.remove('active'));
@@ -3433,7 +3442,28 @@
   }
   function emailOpen(subject) { showToast('Abrindo: ' + subject, 'info'); }
   function emailCompose() { showPage('email-compose'); }
-  function emailSend() { showToast('Email enviado!', 'success'); showPage('email'); }
+  async function emailSend() {
+    const to = document.getElementById('compose-to')?.value;
+    const subject = document.getElementById('compose-subject')?.value;
+    const body = document.getElementById('compose-body')?.value;
+    if (!to) { showToast('Destinatário obrigatório', 'warning'); return; }
+    try {
+      const res = await fetch('/api/comm-hub', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'send', to, subject, body, provider: 'smtp' })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        showToast('Email enviado com sucesso!', 'success');
+        showPage('email');
+      } else {
+        showToast(data.error || 'Erro ao enviar email. Verifique as credenciais.', 'info');
+      }
+    } catch (err) {
+      showToast('Erro ao processar envio', 'error');
+    }
+  }
   async function emailConnectAccount(provider) {
     showToast('Iniciando OAuth com ' + provider + '...', 'info');
     try {
@@ -3578,14 +3608,28 @@
     const query = inp.value.trim();
     inp.value = '';
     aiAppendMessage(query, 'user');
-    aiAppendMessage('Analisando seus dados reais...', 'ai');
-    const reply = await aiContextualReply(query);
-    const msgs = document.getElementById('ai-chat-messages');
-    if (msgs) {
-      const last = msgs.lastElementChild;
-      if (last && last.textContent.includes('Analisando')) last.remove();
+    aiAppendMessage('Analisando dados...', 'ai');
+    try {
+      const res = await fetch('/api/ai/orchestrator', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'chat', query })
+      });
+      const data = await res.json();
+      const msgs = document.getElementById('ai-chat-messages');
+      if (msgs && msgs.lastElementChild) msgs.lastElementChild.remove();
+      if (data.ok) {
+        aiAppendMessage(data.reply || 'Processado com sucesso.', 'ai');
+      } else {
+        const fallback = await aiContextualReply(query);
+        aiAppendMessage(fallback, 'ai');
+      }
+    } catch (err) {
+      const fallback = await aiContextualReply(query);
+      const msgs = document.getElementById('ai-chat-messages');
+      if (msgs && msgs.lastElementChild) msgs.lastElementChild.remove();
+      aiAppendMessage(fallback, 'ai');
     }
-    aiAppendMessage(reply, 'ai');
   }
   function aiChatSend() { aiSendChat(); }
   function aiQuickPrompt(prompt) { const inp = document.getElementById('ai-chat-input'); if (inp) inp.value = prompt; aiSendChat(); }

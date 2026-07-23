@@ -243,7 +243,7 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:6px">
         ${tasks.map(t => {
-          const start = t.createdAt ? new Date(t.createdAt) : now;
+          const start = t.startDate ? new Date(t.startDate) : (t.createdAt ? new Date(t.createdAt) : now);
           const due = t.dueDate ? new Date(t.dueDate) : now;
           const startOffset = Math.max(0, Math.floor((start - days[0]) / 86400000));
           const endOffset = Math.min(days.length - 1, Math.floor((due - days[0]) / 86400000));

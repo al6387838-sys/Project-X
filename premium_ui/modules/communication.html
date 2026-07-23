@@ -616,6 +616,37 @@ if (document.readyState === 'loading') {
   function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
   // Carregar conversas ao iniciar
   loadConversations();
+  async function msgSend() {
+    const inp = document.getElementById("msg-input") || document.querySelector("textarea[placeholder]");
+    if (!inp || !inp.value.trim()) return;
+    const text = inp.value.trim();
+    const chatName = document.getElementById("chat-name")?.textContent || "Geral";
+    const chatArea = document.getElementById("chat-messages");
+    if (chatArea) {
+      const div = document.createElement("div");
+      div.style.cssText = "display:flex;flex-direction:column;align-items:flex-end;margin-bottom:12px";
+      div.innerHTML = `<div class="msg-bubble sent" style="background:var(--accent);color:#fff;padding:10px 14px;border-radius:14px 14px 2px 14px;max-width:80%"><div class="msg-bubble-text" style="font-size:13px">${text}</div><div class="msg-bubble-time" style="font-size:10px;opacity:0.7;margin-top:4px;text-align:right">Enviando...</div></div>`;
+      chatArea.appendChild(div);
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+    inp.value = "";
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST", credentials: "same-origin",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action: "send", conversationId: chatName.toLowerCase(), text })
+      });
+      const data = await res.json();
+      if (data.ok && chatArea) {
+        const lastTime = chatArea.lastElementChild.querySelector(".msg-bubble-time");
+        if (lastTime) lastTime.textContent = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+      } else if (data.error) {
+        showToast(data.error, "error");
+      }
+    } catch (err) {
+      showToast("Erro ao enviar mensagem", "error");
+    }
+  }
 </script>
 
 <!-- END module-communication -->
