@@ -10,7 +10,8 @@ export async function onRequestGet({ request, env }) {
   if (!env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) {
     return json(503, { ok: false, error: 'Serviço indisponível.' });
   }
-  const token = getCookie(request, 'lifeos_session');
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
   if (!token) return json(401, { ok: false, error: 'Não autenticado' });
   let session;
   try { session = await verifySession(token, env.LIFEOS_SESSION_SECRET); } catch { return json(401, { ok: false, error: 'Sessão inválida' }); }
@@ -25,7 +26,8 @@ export async function onRequestPost({ request, env }) {
   if (!env.LIFEOS_SESSION_SECRET || !env.LIFEOS_KV) {
     return json(503, { ok: false, error: 'Serviço indisponível.' });
   }
-  const token = getCookie(request, 'lifeos_session');
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
   if (!token) return json(401, { ok: false, error: 'Não autenticado' });
   let session;
   try { session = await verifySession(token, env.LIFEOS_SESSION_SECRET); } catch { return json(401, { ok: false, error: 'Sessão inválida' }); }

@@ -8,7 +8,8 @@ export async function onRequestPost({ request, env }) {
     return json(503, { ok: false, error: 'Serviço temporariamente indisponível.' });
   }
 
-  const token = getCookie(request, 'lifeos_session');
+  const cookieHeader = request.headers.get('cookie');
+  const token = getCookie(cookieHeader);
   if (!token) return json(401, { ok: false, error: 'Não autenticado' });
 
   let session;
