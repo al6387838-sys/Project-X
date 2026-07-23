@@ -36,9 +36,11 @@ const copyHtml = async (from, to) => {
   const target = resolve(dist, to);
   await mkdir(dirname(target), { recursive: true });
   const raw = await readFile(resolve(source, from), 'utf8');
-  const withReleaseClient = raw.includes('/version-display.js')
-    ? raw
-    : raw.replace(/<\/head>/i, '  <script src="/version-display.js" defer></script>\n</head>');
+  // Substituir query strings de versão antiga por release atual (cache-busting SSOT)
+  const withVersionBust = raw.replace(/(\.css|\.js)\?v=[\d.]+/g, `$1?v=${release.slice(1)}`);
+  const withReleaseClient = withVersionBust.includes('/version-display.js')
+    ? withVersionBust
+    : withVersionBust.replace(/<\/head>/i, '  <script src="/version-display.js" defer></script>\n</head>');
   try {
     const minified = await minify(withReleaseClient, MINIFY_OPTIONS);
     await writeFile(target, minified);
