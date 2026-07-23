@@ -2560,6 +2560,9 @@
     });
   });
 
+  // ─── Utility: HTML escaping ─────────────────────────────────
+  function escH(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
   // ─── Toast system ─────────────────────────────────────────────
   function showToast(msg, type = 'info') {
     const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };

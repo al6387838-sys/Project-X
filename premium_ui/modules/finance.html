@@ -1342,5 +1342,16 @@ function finAddBill() {
   }
   window.finFilterExtract = finFilterExtract;
 })();
+
+// finSwitchTransfer — alterna entre abas de transferência (TED, PIX, Interna)
+window.finSwitchTransfer = function finSwitchTransfer(type) {
+  const tabs = ['ted', 'pix', 'internal'];
+  tabs.forEach(function(t) {
+    var btn = document.getElementById('tab-' + t);
+    var panel = document.getElementById('panel-transfer-' + t);
+    if (btn) btn.className = t === type ? 'btn btn-primary' : 'btn btn-ghost';
+    if (panel) panel.style.display = t === type ? 'block' : 'none';
+  });
+};
 </script>
 <!-- END module-finance -->

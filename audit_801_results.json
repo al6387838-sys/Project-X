@@ -1,0 +1,492 @@
+{
+  "total": 69,
+  "ok": 67,
+  "parcial": 2,
+  "erro": 0,
+  "results": [
+    {
+      "tela": "Landing",
+      "item": "Navbar carregada",
+      "status": "OK",
+      "detalhe": "8 links",
+      "ts": "2026-07-23T14:44:44.369Z"
+    },
+    {
+      "tela": "Landing",
+      "item": "Botões CTA (Começar/Entrar)",
+      "status": "OK",
+      "detalhe": "Entrar, Começar agora, Começar gratuitamente, Já tenho conta, Começar grátis, Começar Pro, Falar com vendas, Começar gratuitamente, Já tenho conta",
+      "ts": "2026-07-23T14:44:44.380Z"
+    },
+    {
+      "tela": "Landing",
+      "item": "FAQ Accordion",
+      "status": "PARCIAL",
+      "detalhe": "27 elementos encontrados",
+      "ts": "2026-07-23T14:44:44.459Z"
+    },
+    {
+      "tela": "Landing",
+      "item": "Formulário de Contato",
+      "status": "OK",
+      "detalhe": "",
+      "ts": "2026-07-23T14:44:44.468Z"
+    },
+    {
+      "tela": "Login",
+      "item": "Formulário de login",
+      "status": "OK",
+      "detalhe": "",
+      "ts": "2026-07-23T14:44:44.659Z"
+    },
+    {
+      "tela": "Login",
+      "item": "Toggle mostrar senha",
+      "status": "OK",
+      "detalhe": "",
+      "ts": "2026-07-23T14:44:44.932Z"
+    },
+    {
+      "tela": "Login",
+      "item": "Link Esqueci a senha",
+      "status": "OK",
+      "detalhe": "",
+      "ts": "2026-07-23T14:44:44.935Z"
+    },
+    {
+      "tela": "Login",
+      "item": "Tab Criar Conta",
+      "status": "OK",
+      "detalhe": "Campos de registro",
+      "ts": "2026-07-23T14:44:45.286Z"
+    },
+    {
+      "tela": "Esqueci Senha",
+      "item": "Formulário",
+      "status": "OK",
+      "detalhe": "",
+      "ts": "2026-07-23T14:44:45.795Z"
+    },
+    {
+      "tela": "API",
+      "item": "/api/health",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:44:46.068Z"
+    },
+    {
+      "tela": "API",
+      "item": "/api/version",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:44:46.464Z"
+    },
+    {
+      "tela": "API",
+      "item": "/api/auth/config",
+      "status": "OK",
+      "detalhe": "HTTP 200 | providers: {\"email\":true,\"admin\":true,\"google\":false,\"apple\":false}",
+      "ts": "2026-07-23T14:44:46.687Z"
+    },
+    {
+      "tela": "Login API",
+      "item": "POST /api/login (demo)",
+      "status": "PARCIAL",
+      "detalhe": "HTTP 401 — Credenciais inválidas. Verifique e tente novamente.",
+      "ts": "2026-07-23T14:44:47.445Z"
+    },
+    {
+      "tela": "App Dashboard",
+      "item": "Redirecionamento não autenticado",
+      "status": "OK",
+      "detalhe": "Redirecionou para: https://lifeos-enterprise.pages.dev/login/",
+      "ts": "2026-07-23T14:44:49.044Z"
+    },
+    {
+      "tela": "Módulo: Finanças",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:49.461Z"
+    },
+    {
+      "tela": "Módulo: Calendário",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:49.877Z"
+    },
+    {
+      "tela": "Módulo: Documentos",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:50.308Z"
+    },
+    {
+      "tela": "Módulo: Produtividade",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:50.732Z"
+    },
+    {
+      "tela": "Módulo: Marketplace",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:51.154Z"
+    },
+    {
+      "tela": "Módulo: AI Center",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:51.568Z"
+    },
+    {
+      "tela": "Módulo: Comunicação",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:51.984Z"
+    },
+    {
+      "tela": "Módulo: Email",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:52.414Z"
+    },
+    {
+      "tela": "Módulo: Analytics",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:52.833Z"
+    },
+    {
+      "tela": "Módulo: Automação",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:53.255Z"
+    },
+    {
+      "tela": "Módulo: Identidade",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:53.683Z"
+    },
+    {
+      "tela": "Módulo: Centro de Integração",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:54.108Z"
+    },
+    {
+      "tela": "Módulo: Busca Inteligente",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:54.520Z"
+    },
+    {
+      "tela": "Módulo: Notificações",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:54.936Z"
+    },
+    {
+      "tela": "Módulo: Observabilidade",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:55.377Z"
+    },
+    {
+      "tela": "Módulo: Hub Pessoal",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:55.809Z"
+    },
+    {
+      "tela": "Módulo: Fotos",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:56.219Z"
+    },
+    {
+      "tela": "Módulo: Arquivos",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:56.646Z"
+    },
+    {
+      "tela": "Módulo: Admin Enterprise",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:57.054Z"
+    },
+    {
+      "tela": "Módulo: Config Enterprise",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:57.464Z"
+    },
+    {
+      "tela": "Módulo: Life Hub",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:57.885Z"
+    },
+    {
+      "tela": "Módulo: AI Copilot",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:58.357Z"
+    },
+    {
+      "tela": "Módulo: App Ecosystem",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:58.783Z"
+    },
+    {
+      "tela": "Módulo: Communication Hub",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:59.226Z"
+    },
+    {
+      "tela": "Módulo: Document Center",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:44:59.665Z"
+    },
+    {
+      "tela": "Módulo: Finance Hub",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:00.094Z"
+    },
+    {
+      "tela": "Módulo: Integration Marketplace",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:00.532Z"
+    },
+    {
+      "tela": "Módulo: Integrations Manager",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:00.958Z"
+    },
+    {
+      "tela": "Módulo: Onboarding Flow",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:01.398Z"
+    },
+    {
+      "tela": "Módulo: Dashboard v11",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:01.844Z"
+    },
+    {
+      "tela": "Módulo: Dashboard v2",
+      "item": "Carregamento",
+      "status": "OK",
+      "detalhe": "HTTP 200 | Title: Entrar — LifeOS Enterprise v51.0.0",
+      "ts": "2026-07-23T14:45:02.275Z"
+    },
+    {
+      "tela": "Admin",
+      "item": "Acesso /admin",
+      "status": "OK",
+      "detalhe": "URL: https://lifeos-enterprise.pages.dev/login/ | HTTP 200",
+      "ts": "2026-07-23T14:45:03.381Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/session",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:03.656Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/dashboard",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:03.966Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/habits",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:04.369Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/goals",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:04.714Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/tasks",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:05.023Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/notes",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:05.381Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/projects",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:05.731Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/profile",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:05.999Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/notifications",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:06.290Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/settings",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:06.594Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/crm",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:06.986Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/documents",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:07.323Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/photos",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:07.646Z"
+    },
+    {
+      "tela": "API Protegida",
+      "item": "/api/messages",
+      "status": "OK",
+      "detalhe": "HTTP 401 (esperado 401/403)",
+      "ts": "2026-07-23T14:45:07.959Z"
+    },
+    {
+      "tela": "App Dashboard",
+      "item": "Erros JavaScript",
+      "status": "OK",
+      "detalhe": "Nenhum erro no console",
+      "ts": "2026-07-23T14:45:12.377Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:12.644Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/login",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:13.025Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/register",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:13.401Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/contact",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:13.929Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/privacy",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:14.250Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/terms",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:14.575Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/privacy#lgpd",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:14.922Z"
+    },
+    {
+      "tela": "Landing Links",
+      "item": "/status",
+      "status": "OK",
+      "detalhe": "HTTP 200",
+      "ts": "2026-07-23T14:45:15.259Z"
+    }
+  ],
+  "errors": []
+}

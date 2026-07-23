@@ -276,6 +276,12 @@ function calToggle(name, el) {
 }
 
 function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+// Expor funções como globais para o app_dashboard.html
+window.calRenderGrid = calRenderGrid;
+window.calRenderUpcoming = calRenderUpcoming;
+window.calLoadIntegrations = calLoadIntegrations;
+window.calLoadEvents = calLoadEvents;
 </script>
 </div>
 <!-- END module-calendar -->
