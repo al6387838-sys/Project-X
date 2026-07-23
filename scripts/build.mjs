@@ -65,6 +65,7 @@ const productionAssets = [
   'beta/feedback-center.js', 'beta/feature-flags.js',
   'enterprise/enterprise_app.css', 'enterprise/enterprise_app.js',
   'enterprise/executive_dashboard.html', 'admin/master_admin.html', 'admin_completion.js', 'user_completion.js',
+  'persistence.js',
 ];
 
 // Copiar módulos v9.2–v11
@@ -266,7 +267,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '093-100','101-108','109','111-115','119',
     '131-138','139-146','147-152','153-160','161-162','163-171',
     '172-177','225-233','250-254','255','257-258','259-262','279-281','303-306','304-308',
-    '341-345',
+    '341-345','721-725','731-735',
   ],
   modules: [
     'finance','communication','email','calendar','ai-center',
@@ -278,6 +279,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     'communication-hub','finance-hub','document-center','onboarding-flow',
     'system-health','structured-logs','alerts','org-usage',
     'enterprise-admin-control-plane','user-experience-completion','document-workflow-r2',
+    'persistence-real','messages-real','email-real','documents-real','photos-real',
   ],
   apis: [
     '/api/dashboard','/api/tasks','/api/habits','/api/goals',
@@ -290,6 +292,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
     '/api/observability','/api/health','/api/integrations','/api/operation-audit',
     '/api/enterprise/rbac','/api/enterprise/certification','/api/enterprise/invite','/api/enterprise/members','/api/enterprise/config-center','/api/enterprise/onboarding','/api/enterprise-data','/api/crm',
     '/api/automations','/api/comm-hub','/api/analytics-pro','/api/db-optimize','/api/security-audit','/api/admin-data',
+    '/api/persistence','/api/messages','/api/email-drafts',
   ],
   routes,
 }, null, 2) + '\n');
@@ -298,7 +301,7 @@ await writeFile(resolve(dist, 'health.json'), JSON.stringify({
   ok: true,
   service: 'lifeos-enterprise',
   ...releaseMetadata,
-  phases: '341-345',
+  phases: '731-735',
   status: 'operational',
 }, null, 2) + '\n');
 
@@ -329,8 +332,8 @@ console.log(`  Platform      : Cloudflare Pages`);
 console.log(`  Release       : ${release}`);
 console.log(`  Build ID      : ${buildId}`);
 console.log(`  Metadata      : config/release.json`);
-console.log(`  Modules       : 52 total`);
-console.log(`  APIs          : 77 endpoints`);
+console.log(`  Modules       : 37 total`);
+console.log(`  APIs          : 81 endpoints`);
 console.log(`  Commit        : ${commit}`);
 console.log(`  Built at      : ${builtAt}`);
 console.log(`  Routes        : ${routes.length}`);
