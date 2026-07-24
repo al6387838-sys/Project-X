@@ -132,7 +132,7 @@ export async function onRequest({ request, env, next }) {
     }
 
     // Method allowlist
-    const allowedMethods = ['GET', 'POST', 'OPTIONS', 'HEAD'];
+    const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'];
     if (!allowedMethods.includes(request.method)) {
       return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), {
         status: 405,
