@@ -284,7 +284,7 @@ await writeFile(resolve(dist, 'build-meta.json'), JSON.stringify({
   apis: [
     '/api/dashboard','/api/tasks','/api/habits','/api/goals',
     '/api/communication/hub','/api/communication/callback/[provider]',
-    '/api/finance/hub','/api/documents','/api/ai/orchestrator','/api/ai/platform','/api/security',
+    '/api/finance/hub','/api/finance/transactions','/api/documents','/api/ai/orchestrator','/api/ai/platform','/api/security',
     '/api/payments','/api/payments/webhook','/api/payments/billing','/api/collaboration','/api/platform',
     '/api/auth/google','/api/auth/apple','/api/auth/config','/api/login','/api/logout','/api/register',
     '/api/email-confirmation','/api/password-reset','/api/session','/api/profile',

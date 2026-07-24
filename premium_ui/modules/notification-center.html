@@ -103,6 +103,20 @@
     <button class="nc-tab" onclick="ncSetTab('unread', this)" id="nc-tab-unread">Não lidas <span class="nc-tab-count red" id="nc-count-unread2">0</span></button>
     <button class="nc-tab" onclick="ncSetTab('categories', this)" id="nc-tab-categories">Por categoria</button>
     <button class="nc-tab" onclick="ncSetTab('history', this)" id="nc-tab-history">Histórico</button>
+    <button class="nc-tab" onclick="ncSetTab('preferences', this)" id="nc-tab-preferences">Preferências</button>
+  </div>
+
+  <!-- SEARCH -->
+  <div style="margin-bottom:12px" id="nc-search-bar">
+    <input type="search" id="nc-search-input" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 14px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none" placeholder="Pesquisar notificações..." oninput="ncSearchFilter(this.value)">
+  </div>
+
+  <!-- BULK ACTIONS -->
+  <div id="nc-bulk-bar" style="display:none;margin-bottom:12px;gap:8px;align-items:center">
+    <span id="nc-selected-count" style="font-size:12px;color:var(--text-muted)">0 selecionadas</span>
+    <button class="nc-filter-btn" onclick="ncDeleteSelected()">Excluir selecionadas</button>
+    <button class="nc-filter-btn" onclick="ncMarkSelectedRead()">Marcar lidas</button>
+    <button class="nc-filter-btn" onclick="ncClearSelection()">Cancelar</button>
   </div>
 
   <!-- FILTER BAR -->
@@ -142,12 +156,58 @@
     <div class="nc-empty-desc">Você está em dia! Nenhuma notificação pendente.</div>
   </div>
 
+  <!-- PREFERENCES PANEL -->
+  <div id="nc-preferences-panel" style="display:none">
+    <div style="font-size:14px;font-weight:700;margin-bottom:16px">Preferências de Notificações</div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:12px">Canais</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font-size:13px;font-weight:600">Notificações internas</div><div style="font-size:11px;color:var(--text-muted)">Sempre ativas</div></div>
+          <label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" checked disabled style="opacity:0;width:0;height:0"><span style="position:absolute;inset:0;background:var(--accent);border-radius:12px;cursor:not-allowed"></span></label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font-size:13px;font-weight:600">Notificações por e-mail</div><div style="font-size:11px;color:var(--text-muted)">Receba alertas no seu e-mail</div></div>
+          <label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" id="pref-email-toggle" style="opacity:0;width:0;height:0" onchange="ncPrefsToggleEmail(this.checked)"><span id="pref-email-span" style="position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer"></span></label>
+        </div>
+        <div id="pref-email-addr-row" style="display:none">
+          <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:4px">E-mail para notificações</label>
+          <input type="email" id="pref-email-addr" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 14px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none" placeholder="seu@email.com">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font-size:13px;font-weight:600">Som</div><div style="font-size:11px;color:var(--text-muted)">Tocar som ao receber notificações</div></div>
+          <label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" id="pref-sound-toggle" style="opacity:0;width:0;height:0"><span id="pref-sound-span" style="position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer"></span></label>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:12px">Categorias ativas</div>
+      <div id="pref-categories" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:12px">Prioridade mínima</div>
+      <select id="pref-min-priority" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-md);padding:8px 14px;font-size:12px;color:var(--text-primary);font-family:inherit;outline:none">
+        <option value="low">Todas (incluindo baixa)</option>
+        <option value="normal">Normal e acima</option>
+        <option value="high">Alta e acima</option>
+        <option value="urgent">Apenas urgentes</option>
+      </select>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button class="nc-filter-btn" onclick="ncSetTab('all', document.getElementById('nc-tab-all'))">Cancelar</button>
+      <button style="padding:8px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--gradient-primary);color:#fff" onclick="ncSavePreferences()">Salvar preferências</button>
+    </div>
+  </div>
+
   <script>
     // ── DATA (carregado via API real — zero dados estáticos) ──
     let NOTIFICATIONS = [];
     let currentTab = 'all';
     let priorityFilter = 'all';
     let categoryFilter = 'all';
+    let searchQuery = '';
+    let selectedIds = new Set();
+    let ncPreferences = null;
 
     // Carrega notificações reais do backend (Cloudflare KV)
     async function ncLoadFromAPI() {
@@ -191,8 +251,14 @@
       if (currentTab === 'history') list = list.filter(n => n.read);
       if (priorityFilter !== 'all') list = list.filter(n => n.priority === priorityFilter);
       if (categoryFilter !== 'all') list = list.filter(n => n.category === categoryFilter);
+      if (searchQuery) {
+        const lq = searchQuery.toLowerCase();
+        list = list.filter(n => (n.title || '').toLowerCase().includes(lq) || (n.body || '').toLowerCase().includes(lq));
+      }
       return list;
     }
+
+    function ncSearchFilter(q) { searchQuery = q; renderNotifications(); }
 
     function updateStats() {
       const total = NOTIFICATIONS.length;
@@ -273,8 +339,28 @@
     function ncSetTab(tab, btn) {
       currentTab = tab;
       document.querySelectorAll('.nc-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderNotifications();
+      if (btn) btn.classList.add('active');
+      const listEl = document.getElementById('nc-list');
+      const statsEl = document.getElementById('nc-stats');
+      const filterEl = document.getElementById('nc-filter-bar');
+      const searchEl = document.getElementById('nc-search-bar');
+      const bulkEl = document.getElementById('nc-bulk-bar');
+      const prefsEl = document.getElementById('nc-preferences-panel');
+      const emptyEl = document.getElementById('nc-empty');
+      if (tab === 'preferences') {
+        if (listEl) listEl.style.display = 'none';
+        if (statsEl) statsEl.style.display = 'none';
+        if (filterEl) filterEl.style.display = 'none';
+        if (searchEl) searchEl.style.display = 'none';
+        if (bulkEl) bulkEl.style.display = 'none';
+        if (emptyEl) emptyEl.style.display = 'none';
+        if (prefsEl) prefsEl.style.display = 'block';
+        ncLoadPreferences();
+      } else {
+        if (listEl) listEl.style.display = '';
+        if (prefsEl) prefsEl.style.display = 'none';
+        renderNotifications();
+      }
     }
     function ncFilterPriority(pri, btn) {
       priorityFilter = pri;
@@ -317,13 +403,118 @@
       showToastNC('Todas marcadas como lidas', 'success');
     };
     window.ncClearHistory = function() {
-      const unread = NOTIFICATIONS.filter(n => !n.read);
-      NOTIFICATIONS.length = 0;
-      NOTIFICATIONS.push(...unread);
-      renderNotifications();
-      updateStats();
-      showToastNC('Histórico limpo. Não lidas preservadas.', 'info');
+      if (!confirm('Limpar histórico de notificações lidas?')) return;
+      fetch('/api/notifications', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'clear_read' })
+      }).then(() => ncLoadFromAPI()).catch(() => {});
+      showToastNC('Histórico limpo.', 'info');
     };
+
+    // ── SELEÇÃO EM LOTE ──
+    function ncClearSelection() { selectedIds.clear(); updateBulkBar(); renderNotifications(); }
+    function updateBulkBar() {
+      const bar = document.getElementById('nc-bulk-bar');
+      const cnt = document.getElementById('nc-selected-count');
+      if (bar) bar.style.display = selectedIds.size > 0 ? 'flex' : 'none';
+      if (cnt) cnt.textContent = selectedIds.size + ' selecionada(s)';
+    }
+    async function ncDeleteSelected() {
+      if (!selectedIds.size) return;
+      if (!confirm('Excluir ' + selectedIds.size + ' notificação(ões)?')) return;
+      try {
+        await fetch('/api/notifications', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_batch', ids: [...selectedIds] })
+        });
+        selectedIds.clear(); updateBulkBar();
+        await ncLoadFromAPI();
+        showToastNC('Notificações excluídas', 'success');
+      } catch { showToastNC('Erro ao excluir', 'error'); }
+    }
+    async function ncMarkSelectedRead() {
+      if (!selectedIds.size) return;
+      for (const id of selectedIds) await ncPersistRead(id);
+      selectedIds.clear(); updateBulkBar();
+      await ncLoadFromAPI();
+      showToastNC('Marcadas como lidas', 'success');
+    }
+
+    // ── PREFERÊNCIAS ──
+    async function ncLoadPreferences() {
+      try {
+        const r = await fetch('/api/notifications?view=preferences', { credentials: 'same-origin' });
+        const d = await r.json();
+        if (d.ok) { ncPreferences = d.preferences; renderPreferences(); }
+      } catch { showToastNC('Erro ao carregar preferências', 'error'); }
+    }
+    function renderPreferences() {
+      if (!ncPreferences) return;
+      const p = ncPreferences;
+      const emailToggle = document.getElementById('pref-email-toggle');
+      if (emailToggle) emailToggle.checked = p.email;
+      const emailSpan = document.getElementById('pref-email-span');
+      if (emailSpan) emailSpan.style.background = p.email ? 'var(--accent)' : 'var(--border)';
+      const emailAddrRow = document.getElementById('pref-email-addr-row');
+      if (emailAddrRow) emailAddrRow.style.display = p.email ? 'block' : 'none';
+      const emailAddr = document.getElementById('pref-email-addr');
+      if (emailAddr) emailAddr.value = p.emailAddress || '';
+      const soundToggle = document.getElementById('pref-sound-toggle');
+      if (soundToggle) soundToggle.checked = p.sound;
+      const soundSpan = document.getElementById('pref-sound-span');
+      if (soundSpan) soundSpan.style.background = p.sound ? 'var(--accent)' : 'var(--border)';
+      const minPri = document.getElementById('pref-min-priority');
+      if (minPri) minPri.value = p.minPriority || 'low';
+      const catsEl = document.getElementById('pref-categories');
+      if (catsEl) {
+        const catLabels = { task: 'Tarefas', crm: 'CRM', finance: 'Financeiro', habit: 'Hábitos', goal: 'Metas', system: 'Sistema', reminder: 'Lembretes', ai: 'Inteligência Artificial', integration: 'Integrações' };
+        catsEl.innerHTML = Object.entries(p.categories || {}).map(function(e) {
+          var cat = e[0], enabled = e[1];
+          return '<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px">' + (catLabels[cat] || cat) + '</span><label style="position:relative;display:inline-block;width:44px;height:24px"><input type="checkbox" id="pref-cat-' + cat + '" ' + (enabled ? 'checked' : '') + ' style="opacity:0;width:0;height:0" onchange="ncPrefsCatToggle(\'' + cat + '\', this.checked)"><span style="position:absolute;inset:0;background:' + (enabled ? 'var(--accent)' : 'var(--border)') + ';border-radius:12px;cursor:pointer" id="pref-cat-span-' + cat + '"></span></label></div>';
+        }).join('');
+      }
+    }
+    function ncPrefsToggleEmail(checked) {
+      if (!ncPreferences) ncPreferences = {};
+      ncPreferences.email = checked;
+      const span = document.getElementById('pref-email-span');
+      if (span) span.style.background = checked ? 'var(--accent)' : 'var(--border)';
+      const row = document.getElementById('pref-email-addr-row');
+      if (row) row.style.display = checked ? 'block' : 'none';
+    }
+    function ncPrefsCatToggle(cat, checked) {
+      if (!ncPreferences) ncPreferences = {};
+      if (!ncPreferences.categories) ncPreferences.categories = {};
+      ncPreferences.categories[cat] = checked;
+      const span = document.getElementById('pref-cat-span-' + cat);
+      if (span) span.style.background = checked ? 'var(--accent)' : 'var(--border)';
+    }
+    async function ncSavePreferences() {
+      if (!ncPreferences) return;
+      const emailAddr = (document.getElementById('pref-email-addr') || {}).value || '';
+      const soundToggle = document.getElementById('pref-sound-toggle');
+      const minPri = document.getElementById('pref-min-priority');
+      const payload = {
+        action: 'save_preferences',
+        email: ncPreferences.email,
+        emailAddress: emailAddr,
+        categories: ncPreferences.categories,
+        minPriority: minPri ? minPri.value : 'low',
+        sound: soundToggle ? soundToggle.checked : true,
+      };
+      try {
+        const r = await fetch('/api/notifications', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const d = await r.json();
+        if (d.ok) { ncPreferences = d.preferences; showToastNC('Preferências salvas', 'success'); }
+        else showToastNC(d.error || 'Erro ao salvar', 'error');
+      } catch { showToastNC('Erro ao salvar preferências', 'error'); }
+    }
 
     function showToastNC(msg, type = 'info') {
       const colors = { success: '#10B981', error: '#EF4444', info: '#6366F1', warning: '#F59E0B' };

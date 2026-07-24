@@ -162,7 +162,12 @@
       <td style="padding:10px 8px">${statusChip(contact.status)}</td>
       <td style="padding:10px 8px;font-size:13px;font-weight:700;color:var(--green)">${money(contact.value)}</td>
       <td style="padding:10px 8px;font-size:12px;color:var(--text-muted)">${shortDate(contact.lastContactAt)}</td>
-      <td style="padding:10px 8px;white-space:nowrap"><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" data-action="view-contact" data-id="${escapeAttr(contact.id)}">Ver</button>${capabilities().remove ? `<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" data-action="delete-contact" data-id="${escapeAttr(contact.id)}" aria-label="Excluir ${escapeAttr(contact.name)}">Excluir</button>` : ''}</td>
+      <td style="padding:10px 8px;white-space:nowrap;display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" data-action="view-contact" data-id="${escapeAttr(contact.id)}">Ver</button>
+        ${capabilities().write ? `<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--accent)" data-action="contact-followup" data-id="${escapeAttr(contact.id)}" title="Agendar follow-up">Follow-up</button>` : ''}
+        ${capabilities().write ? `<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" data-action="contact-note" data-id="${escapeAttr(contact.id)}" title="Adicionar observação">Nota</button>` : ''}
+        ${capabilities().remove ? `<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" data-action="delete-contact" data-id="${escapeAttr(contact.id)}" aria-label="Excluir ${escapeAttr(contact.name)}">Excluir</button>` : ''}
+      </td>
     </tr>`).join('');
   }
 
@@ -413,6 +418,47 @@
         if (action === 'show-crm') return window.showPage?.('crm');
         if (action === 'show-pipeline') return window.showPage?.('crm-pipeline');
         if (action === 'show-agenda') return window.showPage?.('crm-agenda');
+        if (action === 'contact-followup') {
+          const contact = (state.data.contacts || []).find(c => c.id === id);
+          const title = prompt(`Follow-up para ${contact?.name || 'cliente'}:`, 'Follow-up');
+          if (!title) return;
+          const date = prompt('Data (AAAA-MM-DD):', new Date().toISOString().slice(0, 10));
+          if (!date) return;
+          try {
+            await request('contact.followup', { ...selectedContext(), contactId: id, title, date });
+            toast('Follow-up agendado com sucesso.', 'success');
+          } catch (err) { toast(err.message, 'error'); }
+          return;
+        }
+        if (action === 'contact-note') {
+          const detail = prompt('Adicionar observação ao cliente:');
+          if (!detail) return;
+          try {
+            await request('contact.note', { ...selectedContext(), contactId: id, detail });
+            toast('Observação registrada.', 'success');
+          } catch (err) { toast(err.message, 'error'); }
+          return;
+        }
+        if (action === 'deal-note') {
+          const detail = prompt('Adicionar nota à oportunidade:');
+          if (!detail) return;
+          try {
+            await request('deal.note', { ...selectedContext(), dealId: id, detail });
+            toast('Nota adicionada.', 'success');
+          } catch (err) { toast(err.message, 'error'); }
+          return;
+        }
+        if (action === 'contact-attachment') {
+          const name = prompt('Nome do arquivo:');
+          if (!name) return;
+          const url = prompt('URL do arquivo:');
+          if (!url) return;
+          try {
+            await request('contact.attachment.add', { ...selectedContext(), contactId: id, name, url });
+            toast('Anexo adicionado.', 'success');
+          } catch (err) { toast(err.message, 'error'); }
+          return;
+        }
       });
     });
     document.querySelectorAll('#crm-retry').forEach((button) => button.addEventListener('click', () => load(selectedContext())));

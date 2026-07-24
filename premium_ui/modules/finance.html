@@ -1343,7 +1343,7 @@ function finAddBill() {
   window.finFilterExtract = finFilterExtract;
 } catch (err) {
   // Non-fatal: render empty state instead of blank screen
-  console.warn('[Finance] Init error:', err.message);
+  // Non-fatal init error — handled gracefully
   const emptyState = document.getElementById('fin-bank-cards-grid');
   if (emptyState) emptyState.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;grid-column:1/-1">Serviço indisponível. Tente recarregar a página.</div>';
   const emptyAccounts = document.getElementById('fin-accounts-list');
@@ -1361,5 +1361,522 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     if (panel) panel.style.display = t === type ? 'block' : 'none';
   });
 };
+</script>
+
+<!-- ─── TRANSAÇÕES (RECEITAS/DESPESAS) ─── -->
+<div class="page" id="page-finance-transactions">
+  <div class="page-header" style="flex-wrap:wrap;gap:8px">
+    <div>
+      <div class="page-title"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i> Transações</div>
+      <div class="page-subtitle">Receitas e despesas com persistência real</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="showPage('finance-reports')"><i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios</button>
+      <button class="btn btn-ghost" onclick="finExportCSV()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
+      <button class="btn btn-primary" onclick="finOpenNewTransaction()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Lançamento</button>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input type="search" id="fin-tx-search" class="form-input" style="flex:1;min-width:180px;font-size:12px" placeholder="Pesquisar transações..." oninput="finTxSearch(this.value)">
+      <select id="fin-tx-type" class="form-input" style="width:auto;font-size:12px" onchange="finTxFilter()">
+        <option value="">Todos os tipos</option>
+        <option value="credit">Receitas</option>
+        <option value="debit">Despesas</option>
+      </select>
+      <select id="fin-tx-category" class="form-input" style="width:auto;font-size:12px" onchange="finTxFilter()">
+        <option value="">Todas as categorias</option>
+      </select>
+      <input type="date" id="fin-tx-from" class="form-input" style="width:auto;font-size:12px" onchange="finTxFilter()" title="Data inicial">
+      <input type="date" id="fin-tx-to" class="form-input" style="width:auto;font-size:12px" onchange="finTxFilter()" title="Data final">
+    </div>
+  </div>
+  <div class="card">
+    <div id="fin-tx-list"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando transações...</div></div>
+    <div id="fin-tx-pagination" style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;color:var(--text-muted)"></div>
+  </div>
+</div>
+
+<!-- ─── RELATÓRIOS ─── -->
+<div class="page" id="page-finance-reports">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios</div>
+      <div class="page-subtitle">Análise financeira por categoria, centro de custo e período</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="showPage('finance-transactions')"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i> Transações</button>
+      <button class="btn btn-ghost" onclick="finExportCSV()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <input type="date" id="fin-rep-from" class="form-input" style="width:auto;font-size:12px" onchange="finLoadReport()">
+    <input type="date" id="fin-rep-to" class="form-input" style="width:auto;font-size:12px" onchange="finLoadReport()">
+    <button class="btn btn-ghost" onclick="finSetReportPeriod('month')">Este mês</button>
+    <button class="btn btn-ghost" onclick="finSetReportPeriod('quarter')">Trimestre</button>
+    <button class="btn btn-ghost" onclick="finSetReportPeriod('year')">Este ano</button>
+  </div>
+  <div id="fin-report-content"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando relatório...</div></div>
+</div>
+
+<!-- ─── CATEGORIAS ─── -->
+<div class="page" id="page-finance-categories">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="tag" class="pg-icon" aria-hidden="true"></i> Categorias</div>
+      <div class="page-subtitle">Categorias de receitas e despesas</div>
+    </div>
+    <button class="btn btn-primary" onclick="finOpenNewCategory()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Categoria</button>
+  </div>
+  <div id="fin-categories-content"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando categorias...</div></div>
+</div>
+
+<!-- ─── CENTROS DE CUSTO ─── -->
+<div class="page" id="page-finance-cost-centers">
+  <div class="page-header">
+    <div>
+      <div class="page-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Centros de Custo</div>
+      <div class="page-subtitle">Organize despesas por centro de custo</div>
+    </div>
+    <button class="btn btn-primary" onclick="finOpenNewCostCenter()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Centro</button>
+  </div>
+  <div id="fin-cost-centers-content"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando centros de custo...</div></div>
+</div>
+
+<!-- ─── MODAL: NOVA TRANSAÇÃO ─── -->
+<div id="modal-fin-transaction" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="finCloseTransaction()"></div>
+  <div class="modal-content" style="width:520px;max-width:95vw;max-height:90vh;overflow-y:auto">
+    <div class="modal-header">
+      <div class="modal-title" id="fin-tx-modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Lançamento</div>
+      <button class="modal-close" onclick="finCloseTransaction()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="fin-tx-form" autocomplete="off">
+        <input type="hidden" id="fin-tx-edit-id">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button type="button" id="fin-tx-btn-credit" class="btn btn-primary" style="flex:1" onclick="finSetTxType('credit')"><i data-lucide="arrow-down-left" class="pg-icon" aria-hidden="true"></i> Receita</button>
+          <button type="button" id="fin-tx-btn-debit" class="btn btn-ghost" style="flex:1" onclick="finSetTxType('debit')"><i data-lucide="arrow-up-right" class="pg-icon" aria-hidden="true"></i> Despesa</button>
+        </div>
+        <input type="hidden" id="fin-tx-type-val" value="credit">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Descrição <span style="color:var(--red)">*</span></label>
+          <input type="text" id="fin-tx-desc" class="form-input" style="width:100%" required maxlength="500" placeholder="Ex: Salário, Aluguel, Supermercado...">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Valor <span style="color:var(--red)">*</span></label>
+            <input type="number" id="fin-tx-amount" class="form-input" style="width:100%" required min="0.01" step="0.01" placeholder="0,00">
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Data</label>
+            <input type="date" id="fin-tx-date" class="form-input" style="width:100%">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Categoria</label>
+            <select id="fin-tx-cat" class="form-input" style="width:100%"></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Centro de Custo</label>
+            <select id="fin-tx-cost-center" class="form-input" style="width:100%"><option value="">Nenhum</option></select>
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Conta</label>
+          <select id="fin-tx-account" class="form-input" style="width:100%"><option value="">Sem conta</option></select>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Comprovante (URL)</label>
+          <input type="url" id="fin-tx-attach-url" class="form-input" style="width:100%" placeholder="https://..." maxlength="2000">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Observações</label>
+          <textarea id="fin-tx-notes" class="form-input" style="width:100%;min-height:60px;resize:vertical" maxlength="1000" placeholder="Observações opcionais..."></textarea>
+        </div>
+        <div id="fin-tx-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button type="button" class="btn btn-ghost" onclick="finCloseTransaction()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="fin-tx-submit">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  const TX_API = '/api/finance/transactions';
+  const finTxState = { txs: [], total: 0, offset: 0, limit: 50, searchQ: '', filterType: '', filterCat: '', dateFrom: '', dateTo: '', categories: {}, costCenters: [], accounts: [] };
+
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function fmt(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
+  function fmtDate(d) { if (!d) return ''; try { return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { dateStyle: 'short' }); } catch { return d; } }
+  function toast(msg, t) { if (typeof window.showToast === 'function') window.showToast(msg, t || 'info'); }
+
+  async function apiFetch(method, params, body) {
+    const url = new URL(TX_API, location.origin);
+    if (params) Object.entries(params).forEach(([k, v]) => v !== undefined && v !== '' && url.searchParams.set(k, v));
+    const opts = { method, credentials: 'same-origin', headers: {} };
+    if (body) { opts.headers['content-type'] = 'application/json'; opts.body = JSON.stringify(body); }
+    const r = await fetch(url.toString(), opts);
+    if (method === 'GET' && params && params.view === 'export-csv') {
+      if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.error || 'Erro ao exportar'); }
+      const blob = await r.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'transacoes-' + new Date().toISOString().slice(0, 10) + '.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      return { ok: true };
+    }
+    const d = await r.json().catch(() => ({}));
+    if (!d.ok) throw new Error(d.error || 'Erro desconhecido');
+    return d;
+  }
+
+  async function loadTxs() {
+    const params = { view: 'list', limit: finTxState.limit, offset: finTxState.offset };
+    if (finTxState.searchQ) params.q = finTxState.searchQ;
+    if (finTxState.filterType) params.type = finTxState.filterType;
+    if (finTxState.filterCat) params.category = finTxState.filterCat;
+    if (finTxState.dateFrom) params.dateFrom = finTxState.dateFrom;
+    if (finTxState.dateTo) params.dateTo = finTxState.dateTo;
+    const el = document.getElementById('fin-tx-list');
+    if (el) el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)">Carregando...</div>';
+    try {
+      const d = await apiFetch('GET', params);
+      finTxState.txs = d.transactions || [];
+      finTxState.total = d.total || 0;
+      finTxState.categories = d.categories || {};
+      renderTxList();
+      renderCategoryOptions();
+    } catch (err) { if (el) el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--red)">Erro: ' + esc(err.message) + '</div>'; }
+  }
+
+  async function loadCostCenters() {
+    try {
+      const d = await apiFetch('GET', { view: 'cost-centers' });
+      finTxState.costCenters = d.costCenters || [];
+      renderCostCenterOptions();
+    } catch {}
+  }
+
+  async function loadAccounts() {
+    try {
+      const r = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      finTxState.accounts = d.accounts || [];
+      renderAccountOptions();
+    } catch {}
+  }
+
+  function renderCategoryOptions() {
+    const cats = finTxState.categories;
+    const filterSel = document.getElementById('fin-tx-category');
+    const formSel = document.getElementById('fin-tx-cat');
+    const opts = Object.entries(cats).map(([id, c]) => '<option value="' + esc(id) + '">' + esc(c.label || c.name || id) + '</option>').join('');
+    if (filterSel) filterSel.innerHTML = '<option value="">Todas as categorias</option>' + opts;
+    if (formSel) formSel.innerHTML = '<option value="other">Outros</option>' + opts;
+  }
+
+  function renderCostCenterOptions() {
+    const sel = document.getElementById('fin-tx-cost-center');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Nenhum</option>' + finTxState.costCenters.map(c => '<option value="' + esc(c.name) + '">' + esc(c.name) + '</option>').join('');
+  }
+
+  function renderAccountOptions() {
+    const sel = document.getElementById('fin-tx-account');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Sem conta</option>' + finTxState.accounts.map(a => '<option value="' + esc(a.id) + '">' + esc(a.name) + '</option>').join('');
+  }
+
+  function renderTxList() {
+    const el = document.getElementById('fin-tx-list');
+    if (!el) return;
+    if (!finTxState.txs.length) {
+      el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhuma transação encontrada. Clique em "Lançamento" para adicionar.</div>';
+    } else {
+      const cats = finTxState.categories;
+      el.innerHTML = '<table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:8px;font-size:11px;color:var(--text-muted)">DATA</th><th style="text-align:left;padding:8px;font-size:11px;color:var(--text-muted)">DESCRIÇÃO</th><th style="text-align:left;padding:8px;font-size:11px;color:var(--text-muted)">CATEGORIA</th><th style="text-align:left;padding:8px;font-size:11px;color:var(--text-muted)">CENTRO</th><th style="text-align:right;padding:8px;font-size:11px;color:var(--text-muted)">VALOR</th><th style="padding:8px"></th></tr></thead><tbody>' +
+        finTxState.txs.map(function(t) {
+          var catLabel = (cats[t.category] && (cats[t.category].label || cats[t.category].name)) || t.category || '—';
+          return '<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px;font-size:12px;color:var(--text-muted)">' + esc(fmtDate(t.date)) + '</td><td style="padding:8px;font-size:13px;font-weight:600">' + esc(t.description) + '</td><td style="padding:8px;font-size:12px;color:var(--text-muted)">' + esc(catLabel) + '</td><td style="padding:8px;font-size:12px;color:var(--text-muted)">' + esc(t.costCenter || '—') + '</td><td style="padding:8px;text-align:right;font-size:13px;font-weight:700;color:' + (t.type === 'credit' ? 'var(--green)' : 'var(--red)') + '">' + (t.type === 'credit' ? '+' : '-') + esc(fmt(t.amount)) + '</td><td style="padding:8px;white-space:nowrap"><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px" onclick="finEditTransaction(\'' + esc(t.id) + '\')">Editar</button> <button class="btn btn-ghost" style="font-size:11px;padding:3px 7px;color:var(--red)" onclick="finDeleteTransaction(\'' + esc(t.id) + '\')">Excluir</button></td></tr>';
+        }).join('') + '</tbody></table>';
+    }
+    var pg = document.getElementById('fin-tx-pagination');
+    if (pg) {
+      var total = finTxState.total, offset = finTxState.offset, limit = finTxState.limit;
+      pg.innerHTML = '<span>Mostrando ' + (offset + 1) + '–' + Math.min(offset + limit, total) + ' de ' + total + '</span><div style="display:flex;gap:8px">' + (offset > 0 ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(-1)">← Anterior</button>' : '') + (offset + limit < total ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(1)">Próximo →</button>' : '') + '</div>';
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
+  window.finTxPage = function(dir) { finTxState.offset = Math.max(0, finTxState.offset + dir * finTxState.limit); loadTxs(); };
+
+  var finTxSearchTimeout;
+  window.finTxSearch = function(q) { finTxState.searchQ = q; finTxState.offset = 0; clearTimeout(finTxSearchTimeout); finTxSearchTimeout = setTimeout(loadTxs, 300); };
+  window.finTxFilter = function() {
+    finTxState.filterType = (document.getElementById('fin-tx-type') || {}).value || '';
+    finTxState.filterCat = (document.getElementById('fin-tx-category') || {}).value || '';
+    finTxState.dateFrom = (document.getElementById('fin-tx-from') || {}).value || '';
+    finTxState.dateTo = (document.getElementById('fin-tx-to') || {}).value || '';
+    finTxState.offset = 0;
+    loadTxs();
+  };
+
+  window.finOpenNewTransaction = function() {
+    var editId = document.getElementById('fin-tx-edit-id');
+    if (editId) editId.value = '';
+    var title = document.getElementById('fin-tx-modal-title');
+    if (title) title.innerHTML = '<i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Lançamento';
+    var form = document.getElementById('fin-tx-form');
+    if (form) form.reset();
+    var dateEl = document.getElementById('fin-tx-date');
+    if (dateEl) dateEl.value = new Date().toISOString().slice(0, 10);
+    finSetTxType('credit');
+    var errEl = document.getElementById('fin-tx-error');
+    if (errEl) errEl.style.display = 'none';
+    var modal = document.getElementById('modal-fin-transaction');
+    if (modal) modal.style.display = '';
+    renderCategoryOptions();
+    renderCostCenterOptions();
+    renderAccountOptions();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  };
+
+  window.finCloseTransaction = function() {
+    var modal = document.getElementById('modal-fin-transaction');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.finSetTxType = function(type) {
+    var typeVal = document.getElementById('fin-tx-type-val');
+    if (typeVal) typeVal.value = type;
+    var btnCredit = document.getElementById('fin-tx-btn-credit');
+    var btnDebit = document.getElementById('fin-tx-btn-debit');
+    if (btnCredit) btnCredit.className = type === 'credit' ? 'btn btn-primary' : 'btn btn-ghost';
+    if (btnDebit) btnDebit.className = type === 'debit' ? 'btn btn-primary' : 'btn btn-ghost';
+    var cats = finTxState.categories;
+    var sel = document.getElementById('fin-tx-cat');
+    if (sel) {
+      var opts = Object.entries(cats).filter(function(e) { var c = e[1]; return !c.type || c.type === type || c.type === 'both'; }).map(function(e) { return '<option value="' + esc(e[0]) + '">' + esc(e[1].label || e[1].name || e[0]) + '</option>'; }).join('');
+      sel.innerHTML = '<option value="other">Outros</option>' + opts;
+    }
+  };
+
+  window.finEditTransaction = function(id) {
+    var t = finTxState.txs.find(function(tx) { return tx.id === id; });
+    if (!t) return;
+    var editId = document.getElementById('fin-tx-edit-id');
+    if (editId) editId.value = t.id;
+    var title = document.getElementById('fin-tx-modal-title');
+    if (title) title.innerHTML = '<i data-lucide="edit" class="pg-icon" aria-hidden="true"></i> Editar Lançamento';
+    var descEl = document.getElementById('fin-tx-desc');
+    if (descEl) descEl.value = t.description || '';
+    var amtEl = document.getElementById('fin-tx-amount');
+    if (amtEl) amtEl.value = t.amount || '';
+    var dateEl = document.getElementById('fin-tx-date');
+    if (dateEl) dateEl.value = (t.date || '').slice(0, 10);
+    var notesEl = document.getElementById('fin-tx-notes');
+    if (notesEl) notesEl.value = t.notes || '';
+    var attachEl = document.getElementById('fin-tx-attach-url');
+    if (attachEl) attachEl.value = t.attachmentUrl || '';
+    finSetTxType(t.type || 'credit');
+    renderCategoryOptions();
+    renderCostCenterOptions();
+    renderAccountOptions();
+    setTimeout(function() {
+      var catSel = document.getElementById('fin-tx-cat');
+      if (catSel) catSel.value = t.category || 'other';
+      var ccSel = document.getElementById('fin-tx-cost-center');
+      if (ccSel) ccSel.value = t.costCenter || '';
+      var accSel = document.getElementById('fin-tx-account');
+      if (accSel) accSel.value = t.accountId || '';
+    }, 50);
+    var errEl = document.getElementById('fin-tx-error');
+    if (errEl) errEl.style.display = 'none';
+    var modal = document.getElementById('modal-fin-transaction');
+    if (modal) modal.style.display = '';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  };
+
+  window.finDeleteTransaction = function(id) {
+    if (!confirm('Excluir esta transação? O saldo da conta será revertido.')) return;
+    apiFetch('DELETE', { id: id })
+      .then(function() { toast('Transação excluída', 'success'); loadTxs(); })
+      .catch(function(err) { toast(err.message, 'error'); });
+  };
+
+  var finTxForm = document.getElementById('fin-tx-form');
+  if (finTxForm) {
+    finTxForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('fin-tx-error');
+      if (errEl) errEl.style.display = 'none';
+      var editId = (document.getElementById('fin-tx-edit-id') || {}).value || '';
+      var type = (document.getElementById('fin-tx-type-val') || {}).value || 'credit';
+      var description = ((document.getElementById('fin-tx-desc') || {}).value || '').trim();
+      var amount = parseFloat((document.getElementById('fin-tx-amount') || {}).value || '0');
+      var date = (document.getElementById('fin-tx-date') || {}).value || '';
+      var category = (document.getElementById('fin-tx-cat') || {}).value || 'other';
+      var costCenter = (document.getElementById('fin-tx-cost-center') || {}).value || '';
+      var accountId = (document.getElementById('fin-tx-account') || {}).value || '';
+      var notes = (document.getElementById('fin-tx-notes') || {}).value || '';
+      var attachmentUrl = (document.getElementById('fin-tx-attach-url') || {}).value || '';
+      if (!description) { if (errEl) { errEl.textContent = 'Descrição obrigatória.'; errEl.style.display = 'block'; } return; }
+      if (!amount || amount <= 0) { if (errEl) { errEl.textContent = 'Valor inválido.'; errEl.style.display = 'block'; } return; }
+      var btn = document.getElementById('fin-tx-submit');
+      if (btn) btn.disabled = true;
+      var payload = { type: type, description: description, amount: amount, date: date, category: category, costCenter: costCenter, accountId: accountId, notes: notes, attachmentUrl: attachmentUrl };
+      var promise = editId ? apiFetch('PUT', {}, Object.assign({ id: editId }, payload)) : apiFetch('POST', {}, payload);
+      promise.then(function() {
+        toast(editId ? 'Transação atualizada' : 'Transação criada', 'success');
+        window.finCloseTransaction();
+        loadTxs();
+      }).catch(function(err) {
+        if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+      }).finally(function() {
+        if (btn) btn.disabled = false;
+      });
+    });
+  }
+
+  // ─── RELATÓRIOS ───
+  window.finSetReportPeriod = function(period) {
+    var now = new Date(), from, to;
+    if (period === 'month') { from = new Date(now.getFullYear(), now.getMonth(), 1); to = new Date(now.getFullYear(), now.getMonth() + 1, 0); }
+    else if (period === 'quarter') { var q = Math.floor(now.getMonth() / 3); from = new Date(now.getFullYear(), q * 3, 1); to = new Date(now.getFullYear(), q * 3 + 3, 0); }
+    else { from = new Date(now.getFullYear(), 0, 1); to = new Date(now.getFullYear(), 11, 31); }
+    var fromEl = document.getElementById('fin-rep-from');
+    var toEl = document.getElementById('fin-rep-to');
+    if (fromEl) fromEl.value = from.toISOString().slice(0, 10);
+    if (toEl) toEl.value = to.toISOString().slice(0, 10);
+    window.finLoadReport();
+  };
+
+  window.finLoadReport = function() {
+    var from = (document.getElementById('fin-rep-from') || {}).value;
+    var to = (document.getElementById('fin-rep-to') || {}).value;
+    var el = document.getElementById('fin-report-content');
+    if (!el) return;
+    el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando relatório...</div>';
+    apiFetch('GET', { view: 'report', dateFrom: from, dateTo: to }).then(function(d) {
+      var r = d.report;
+      var byMonthHtml = (r.byMonth || []).map(function(m) {
+        var net = m.income - m.expenses;
+        return '<tr><td style="padding:6px 8px;font-size:12px">' + esc(m.month) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--green);text-align:right">' + esc(fmt(m.income)) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--red);text-align:right">' + esc(fmt(m.expenses)) + '</td><td style="padding:6px 8px;font-size:12px;font-weight:700;text-align:right;color:' + (net >= 0 ? 'var(--green)' : 'var(--red)') + '">' + esc(fmt(net)) + '</td></tr>';
+      }).join('');
+      var byCatHtml = Object.entries(r.byCategory || {}).sort(function(a, b) { return (b[1].expenses + b[1].income) - (a[1].expenses + a[1].income); }).map(function(e) {
+        return '<tr><td style="padding:6px 8px;font-size:12px">' + esc(e[0]) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--green);text-align:right">' + esc(fmt(e[1].income)) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--red);text-align:right">' + esc(fmt(e[1].expenses)) + '</td><td style="padding:6px 8px;font-size:11px;color:var(--text-muted);text-align:right">' + e[1].count + '</td></tr>';
+      }).join('');
+      el.innerHTML = '<div class="grid-4" style="margin-bottom:20px"><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><i data-lucide="arrow-down-left" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.income)) + '</div><div class="kpi-label">Total Receitas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(239,68,68,.15);color:var(--red)"><i data-lucide="arrow-up-right" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.expenses)) + '</div><div class="kpi-label">Total Despesas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><i data-lucide="wallet" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" style="font-size:20px;color:' + (r.net >= 0 ? 'var(--green)' : 'var(--red)') + '">' + esc(fmt(r.net)) + '</div><div class="kpi-label">Saldo do Período</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">' + r.count + '</div><div class="kpi-label">Lançamentos</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Mês</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">MÊS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">SALDO</th></tr></thead><tbody>' + (byMonthHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Categoria</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">CATEGORIA</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">QTD</th></tr></thead><tbody>' + (byCatHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div></div>';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }).catch(function(err) { el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--red)">Erro: ' + esc(err.message) + '</div>'; });
+  };
+
+  // ─── CATEGORIAS ───
+  window.finOpenNewCategory = function() {
+    var name = prompt('Nome da categoria:');
+    if (!name) return;
+    var type = prompt('Tipo (credit=receita, debit=despesa, both=ambos):', 'both');
+    apiFetch('POST', {}, { action: 'add-category', name: name, type: type || 'both' })
+      .then(function() { toast('Categoria criada', 'success'); finLoadCategories(); })
+      .catch(function(err) { toast(err.message, 'error'); });
+  };
+
+  function finLoadCategories() {
+    var el = document.getElementById('fin-categories-content');
+    if (!el) return;
+    el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)">Carregando...</div>';
+    apiFetch('GET', { view: 'categories' }).then(function(d) {
+      var cats = d.categories || {};
+      el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">' +
+        Object.entries(cats).map(function(e) {
+          var id = e[0], c = e[1];
+          return '<div class="card" style="padding:12px"><div style="font-size:13px;font-weight:600">' + esc(c.label || c.name || id) + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px">' + esc(c.type === 'credit' ? 'Receita' : c.type === 'debit' ? 'Despesa' : 'Ambos') + '</div>' + (c.id ? '<button class="btn btn-ghost" style="font-size:11px;margin-top:8px;color:var(--red)" onclick="finDeleteCategory(\'' + esc(c.id) + '\')">Excluir</button>' : '') + '</div>';
+        }).join('') + '</div>';
+    }).catch(function(err) { el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--red)">Erro: ' + esc(err.message) + '</div>'; });
+  }
+
+  window.finDeleteCategory = function(id) {
+    if (!confirm('Excluir categoria?')) return;
+    apiFetch('POST', {}, { action: 'delete-category', id: id })
+      .then(function() { toast('Categoria excluída', 'success'); finLoadCategories(); })
+      .catch(function(err) { toast(err.message, 'error'); });
+  };
+
+  // ─── CENTROS DE CUSTO ───
+  window.finOpenNewCostCenter = function() {
+    var name = prompt('Nome do centro de custo:');
+    if (!name) return;
+    apiFetch('POST', {}, { action: 'add-cost-center', name: name })
+      .then(function() { toast('Centro de custo criado', 'success'); finLoadCostCentersPage(); })
+      .catch(function(err) { toast(err.message, 'error'); });
+  };
+
+  function finLoadCostCentersPage() {
+    var el = document.getElementById('fin-cost-centers-content');
+    if (!el) return;
+    el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)">Carregando...</div>';
+    apiFetch('GET', { view: 'cost-centers' }).then(function(d) {
+      var centers = d.costCenters || [];
+      if (!centers.length) { el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhum centro de custo. Clique em "Novo Centro" para criar.</div>'; return; }
+      el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">' +
+        centers.map(function(c) {
+          return '<div class="card" style="padding:12px"><div style="font-size:13px;font-weight:600">' + esc(c.name) + '</div>' + (c.description ? '<div style="font-size:12px;color:var(--text-muted);margin-top:4px">' + esc(c.description) + '</div>' : '') + '<button class="btn btn-ghost" style="font-size:11px;margin-top:8px;color:var(--red)" onclick="finDeleteCostCenter(\'' + esc(c.id) + '\')">Excluir</button></div>';
+        }).join('') + '</div>';
+    }).catch(function(err) { el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--red)">Erro: ' + esc(err.message) + '</div>'; });
+  }
+
+  window.finDeleteCostCenter = function(id) {
+    if (!confirm('Excluir centro de custo?')) return;
+    apiFetch('POST', {}, { action: 'delete-cost-center', id: id })
+      .then(function() { toast('Centro de custo excluído', 'success'); finLoadCostCentersPage(); })
+      .catch(function(err) { toast(err.message, 'error'); });
+  };
+
+  // ─── EXPORTAÇÃO ───
+  window.finExportCSV = function() {
+    var params = { view: 'export-csv' };
+    if (finTxState.filterType) params.type = finTxState.filterType;
+    if (finTxState.filterCat) params.category = finTxState.filterCat;
+    if (finTxState.dateFrom) params.dateFrom = finTxState.dateFrom;
+    if (finTxState.dateTo) params.dateTo = finTxState.dateTo;
+    apiFetch('GET', params).catch(function(err) { toast('Erro ao exportar: ' + err.message, 'error'); });
+  };
+
+  // ─── INIT PAGES ───
+  var _origShowPage = window.showPage;
+  window.showPage = function(page) {
+    if (_origShowPage) _origShowPage(page);
+    if (page === 'finance-transactions') { loadTxs(); loadCostCenters(); loadAccounts(); }
+    if (page === 'finance-reports') { window.finSetReportPeriod('month'); }
+    if (page === 'finance-categories') { finLoadCategories(); }
+    if (page === 'finance-cost-centers') { finLoadCostCentersPage(); }
+  };
+
+  // Adicionar links no dashboard financeiro
+  setTimeout(function() {
+    var finDashHeader = document.querySelector('#page-finance .page-header > div:last-child');
+    if (finDashHeader && !document.getElementById('fin-dash-tx-btn')) {
+      var txBtn = document.createElement('button');
+      txBtn.id = 'fin-dash-tx-btn';
+      txBtn.className = 'btn btn-ghost';
+      txBtn.innerHTML = '<i data-lucide="list" class="pg-icon" aria-hidden="true"></i> Transações';
+      txBtn.onclick = function() { window.showPage('finance-transactions'); };
+      finDashHeader.insertBefore(txBtn, finDashHeader.firstChild);
+      var repBtn = document.createElement('button');
+      repBtn.id = 'fin-dash-rep-btn';
+      repBtn.className = 'btn btn-ghost';
+      repBtn.innerHTML = '<i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios';
+      repBtn.onclick = function() { window.showPage('finance-reports'); };
+      finDashHeader.insertBefore(repBtn, finDashHeader.firstChild);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  }, 500);
+})();
 </script>
 <!-- END module-finance -->

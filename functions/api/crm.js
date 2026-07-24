@@ -552,6 +552,111 @@ async function handleAction(kv, actor, action, payload, origin) {
     return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
   }
 
+  // ─── CONTACT NOTE (observação) ────────────────────────────────────────────
+  if (action === 'contact.note') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const contactId = normalizeText(payload.contactId, 80);
+    const detail = normalizeText(payload.detail, 3000);
+    if (!contactId || !detail) throw new Error('contactId e detail são obrigatórios.');
+    const contact = data.contacts.find(c => c.id === contactId);
+    if (!contact) throw new Error('Cliente não encontrado.');
+    if (!Array.isArray(contact.observations)) contact.observations = [];
+    contact.observations.unshift({ id: generateEnterpriseId('obs'), detail, actor, createdAt: now() });
+    contact.updatedAt = now();
+    recordHistory(data, actor, { type: 'note', entity: 'contact', entityId: contactId, detail });
+    await saveCrmData(kv, data, { contacts: true, history: true });
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
+  // ─── CONTACT ATTACHMENT ──────────────────────────────────────────────────
+  if (action === 'contact.attachment.add') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const contactId = normalizeText(payload.contactId, 80);
+    const name = normalizeText(payload.name, 200);
+    const url = normalizeText(payload.url, 2000);
+    if (!contactId || !name || !url) throw new Error('contactId, name e url são obrigatórios.');
+    const contact = data.contacts.find(c => c.id === contactId);
+    if (!contact) throw new Error('Cliente não encontrado.');
+    if (!Array.isArray(contact.attachments)) contact.attachments = [];
+    contact.attachments.push({ id: generateEnterpriseId('att'), name, url, mimeType: normalizeText(payload.mimeType, 100) || 'application/octet-stream', size: parseInt(payload.size) || 0, uploadedBy: actor, uploadedAt: now() });
+    contact.updatedAt = now();
+    recordHistory(data, actor, { type: 'attachment', entity: 'contact', entityId: contactId, detail: `Anexo adicionado: "${name}"` });
+    await saveCrmData(kv, data, { contacts: true, history: true });
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
+  if (action === 'contact.attachment.delete') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const contactId = normalizeText(payload.contactId, 80);
+    const attachmentId = normalizeText(payload.attachmentId, 80);
+    if (!contactId || !attachmentId) throw new Error('contactId e attachmentId são obrigatórios.');
+    const contact = data.contacts.find(c => c.id === contactId);
+    if (!contact) throw new Error('Cliente não encontrado.');
+    contact.attachments = (contact.attachments || []).filter(a => a.id !== attachmentId);
+    contact.updatedAt = now();
+    await saveCrmData(kv, data, { contacts: true });
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
+  // ─── DEAL ATTACHMENT ─────────────────────────────────────────────────────
+  if (action === 'deal.attachment.add') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const dealId = normalizeText(payload.dealId, 80);
+    const name = normalizeText(payload.name, 200);
+    const url = normalizeText(payload.url, 2000);
+    if (!dealId || !name || !url) throw new Error('dealId, name e url são obrigatórios.');
+    const deal = data.deals.find(d => d.id === dealId);
+    if (!deal) throw new Error('Oportunidade não encontrada.');
+    if (!Array.isArray(deal.attachments)) deal.attachments = [];
+    deal.attachments.push({ id: generateEnterpriseId('att'), name, url, mimeType: normalizeText(payload.mimeType, 100) || 'application/octet-stream', size: parseInt(payload.size) || 0, uploadedBy: actor, uploadedAt: now() });
+    deal.updatedAt = now();
+    recordHistory(data, actor, { type: 'attachment', entity: 'deal', entityId: dealId, detail: `Anexo adicionado: "${name}"` });
+    await saveCrmData(kv, data, { deals: true, history: true });
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
+  // ─── CONTACT FOLLOWUP ────────────────────────────────────────────────────
+  if (action === 'contact.followup') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const contactId = normalizeText(payload.contactId, 80);
+    const title = normalizeText(payload.title, 160) || 'Follow-up';
+    const date = normalizeDate(payload.date) || now().slice(0, 10);
+    const time = normalizeTime(payload.time) || '09:00';
+    if (!contactId) throw new Error('contactId é obrigatório.');
+    const contact = data.contacts.find(c => c.id === contactId);
+    if (!contact) throw new Error('Cliente não encontrado.');
+    const agendaItem = cleanAgendaItem({ title, type: 'followup', date, time, status: 'scheduled', contactId, description: normalizeText(payload.description, 1000), responsibleId: actor, tags: payload.tags }, actor);
+    data.agenda.push(agendaItem);
+    contact.lastContactAt = now().slice(0, 10);
+    contact.updatedAt = now();
+    recordHistory(data, actor, { type: 'followup', entity: 'contact', entityId: contactId, detail: `Follow-up agendado: "${title}" para ${date}` });
+    await saveCrmData(kv, data, { agenda: true, contacts: true, history: true });
+    await syncPersonalAgenda(kv, agendaItem);
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
+  // ─── DEAL NOTE ───────────────────────────────────────────────────────────
+  if (action === 'deal.note') {
+    const { organization, workspace } = await requireContext(kv, actor, payload, 'crm.write');
+    const data = await loadCrmData(kv, organization.id, workspace.id);
+    const dealId = normalizeText(payload.dealId, 80);
+    const detail = normalizeText(payload.detail, 3000);
+    if (!dealId || !detail) throw new Error('dealId e detail são obrigatórios.');
+    const deal = data.deals.find(d => d.id === dealId);
+    if (!deal) throw new Error('Oportunidade não encontrada.');
+    if (!Array.isArray(deal.notes)) deal.notes = [];
+    deal.notes.unshift({ id: generateEnterpriseId('note'), detail, actor, createdAt: now() });
+    deal.updatedAt = now();
+    recordHistory(data, actor, { type: 'note', entity: 'deal', entityId: dealId, detail });
+    await saveCrmData(kv, data, { deals: true, history: true });
+    return crmSnapshot(organization, getMembership(organization, actor), workspace, data);
+  }
+
   throw new Error('Ação CRM inválida.');
 }
 

@@ -1,42 +1,53 @@
-<!-- LifeOS Enterprise — Productivity Module v2.0 -->
-<!-- Kanban/Gantt/Wiki dinâmicos via /api/tasks e /api/ai-insights -->
-<div id="module-productivity" style="display:none">
+<!-- LifeOS Enterprise — Productivity Module v3.0 -->
+<!-- Tasks: CRUD, subtasks, comments, labels, filters, search, sort, recurrence, assignees, history -->
+<div id="module-productivity" style="height:100%;display:flex;flex-direction:column">
 
 <!-- ─── KANBAN ─── -->
 <div class="page" id="page-kanban">
-  <div class="page-header">
+  <div class="page-header" style="flex-wrap:wrap;gap:8px">
     <div>
-      <div class="page-title"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Kanban</div>
-      <div class="page-subtitle">Gerencie suas tarefas visualmente</div>
+      <div class="page-title"><i data-lucide="layout-kanban" class="pg-icon" aria-hidden="true"></i> Tarefas</div>
+      <div class="page-subtitle">Quadro Kanban — arraste para mover</div>
     </div>
-    <div style="display:flex;gap:8px">
-      <select class="form-input" id="kanban-project" style="width:auto;font-size:13px" onchange="kanbanLoad()">
-        <option value="">Todos os projetos</option>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input type="search" id="task-search" class="form-input" style="width:200px;font-size:12px" placeholder="Pesquisar tarefas..." oninput="taskSearch(this.value)">
+      <select id="task-filter-priority" class="form-input" style="width:auto;font-size:12px" onchange="taskFilterPriority(this.value)">
+        <option value="">Todas prioridades</option>
+        <option value="urgent">Urgente</option>
+        <option value="high">Alta</option>
+        <option value="medium">Média</option>
+        <option value="low">Baixa</option>
       </select>
-      <button class="btn btn-ghost" onclick="showPage('gantt')">Gantt</button>
-      <button class="btn btn-primary" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
+      <select id="task-sort" class="form-input" style="width:auto;font-size:12px" onchange="taskSort(this.value)">
+        <option value="createdAt">Mais recentes</option>
+        <option value="dueDate">Por prazo</option>
+        <option value="priority">Por prioridade</option>
+        <option value="title">Por título</option>
+      </select>
+      <button class="btn btn-ghost" onclick="showPage('gantt')"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Gantt</button>
+      <button class="btn btn-primary" onclick="taskOpenNew()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 180px);overflow-x:auto">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 200px);overflow-x:auto">
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--text-muted)"><span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Backlog</span><span class="kanban-count" id="kanban-count-backlog">—</span></div>
-      <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'backlog')"></div>
-      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'todo')"></div>
+      <button class="kanban-add-btn" onclick="taskOpenNew('todo')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--accent)"><span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Em Progresso</span><span class="kanban-count" id="kanban-count-progress">—</span></div>
       <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')"></div>
-      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('progress')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--amber)"><span><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i> Revisão</span><span class="kanban-count" id="kanban-count-review">—</span></div>
       <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')"></div>
-      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('review')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
     <div class="kanban-col">
       <div class="kanban-col-header" style="border-top-color:var(--green)"><span><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Concluído</span><span class="kanban-count" id="kanban-count-done">—</span></div>
       <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')"></div>
-      <button class="kanban-add-btn" onclick="kanbanOpenNewTask()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('done')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
     </div>
   </div>
 </div>
@@ -49,7 +60,8 @@
       <div class="page-subtitle">Cronograma visual do projeto</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('kanban')">Kanban</button>
+      <button class="btn btn-ghost" onclick="showPage('kanban')"><i data-lucide="layout-kanban" class="pg-icon" aria-hidden="true"></i> Kanban</button>
+      <button class="btn btn-primary" onclick="taskOpenNew()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
     </div>
   </div>
   <div class="card" style="overflow-x:auto">
@@ -84,25 +96,26 @@
   </div>
 </div>
 
-<!-- ─── NEW TASK MODAL ─── -->
-<div id="modal-new-task" class="modal" style="display:none">
-  <div class="modal-backdrop" onclick="kanbanCloseModal('modal-new-task')"></div>
-  <div class="modal-content" style="width:500px;max-width:90vw">
+<!-- ─── MODAL: CRIAR/EDITAR TAREFA ─── -->
+<div id="modal-task" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="taskCloseModal()"></div>
+  <div class="modal-content" style="width:600px;max-width:95vw;max-height:90vh;overflow-y:auto">
     <div class="modal-header">
-      <div class="modal-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa</div>
-      <button class="modal-close" onclick="kanbanCloseModal('modal-new-task')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      <div class="modal-title" id="modal-task-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa</div>
+      <button class="modal-close" onclick="taskCloseModal()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
     </div>
     <div class="modal-body">
-      <form id="new-task-form">
-        <div style="margin-bottom:10px">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Título</label>
-          <input type="text" id="task-title" class="form-input" style="width:100%" required>
+      <form id="task-form" autocomplete="off">
+        <input type="hidden" id="task-edit-id">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Título <span style="color:var(--red)">*</span></label>
+          <input type="text" id="task-title" class="form-input" style="width:100%" required maxlength="200" placeholder="Título da tarefa">
         </div>
-        <div style="margin-bottom:10px">
+        <div style="margin-bottom:12px">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Descrição</label>
-          <textarea id="task-desc" class="form-input" style="width:100%;min-height:80px;resize:vertical"></textarea>
+          <textarea id="task-desc" class="form-input" style="width:100%;min-height:80px;resize:vertical" maxlength="5000" placeholder="Descreva a tarefa..."></textarea>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
           <div>
             <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Status</label>
             <select id="task-status" class="form-input" style="width:100%">
@@ -116,22 +129,69 @@
             <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Prioridade</label>
             <select id="task-priority" class="form-input" style="width:100%">
               <option value="low">Baixa</option>
-              <option value="medium">Média</option>
+              <option value="medium" selected>Média</option>
               <option value="high">Alta</option>
               <option value="urgent">Urgente</option>
             </select>
           </div>
         </div>
-        <div style="margin-bottom:10px">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Prazo</label>
-          <input type="date" id="task-due" class="form-input" style="width:100%">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Data de início</label>
+            <input type="date" id="task-start" class="form-input" style="width:100%">
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Prazo</label>
+            <input type="date" id="task-due" class="form-input" style="width:100%">
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Etiquetas (separadas por vírgula)</label>
+          <input type="text" id="task-tags" class="form-input" style="width:100%" placeholder="ex: design, urgente, cliente">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Responsáveis (separados por vírgula)</label>
+          <input type="text" id="task-assignees" class="form-input" style="width:100%" placeholder="ex: João, Maria">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Recorrência</label>
+          <select id="task-recurrence" class="form-input" style="width:100%" onchange="taskToggleRecurrence(this.value)">
+            <option value="">Sem recorrência</option>
+            <option value="daily">Diária</option>
+            <option value="weekly">Semanal</option>
+            <option value="biweekly">Quinzenal</option>
+            <option value="monthly">Mensal</option>
+            <option value="yearly">Anual</option>
+          </select>
+          <div id="task-recurrence-end" style="display:none;margin-top:8px">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Repetir até</label>
+            <input type="date" id="task-recurrence-enddate" class="form-input" style="width:100%">
+          </div>
         </div>
         <div id="task-form-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
         <div style="display:flex;justify-content:flex-end;gap:8px">
-          <button type="button" class="btn btn-ghost" onclick="kanbanCloseModal('modal-new-task')">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Criar</button>
+          <button type="button" class="btn btn-ghost" onclick="taskCloseModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="task-submit-btn">Criar Tarefa</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: DETALHE DA TAREFA ─── -->
+<div id="modal-task-detail" class="modal" style="display:none">
+  <div class="modal-backdrop" onclick="taskCloseDetail()"></div>
+  <div class="modal-content" style="width:700px;max-width:95vw;max-height:90vh;overflow-y:auto">
+    <div class="modal-header">
+      <div class="modal-title" id="task-detail-title">Detalhes da Tarefa</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" onclick="taskEditFromDetail()" title="Editar"><i data-lucide="edit" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="color:var(--red)" onclick="taskDeleteFromDetail()" title="Excluir"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="modal-close" onclick="taskCloseDetail()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="modal-body" id="task-detail-body">
+      <div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando...</div>
     </div>
   </div>
 </div>
@@ -142,132 +202,489 @@
 <script>
 (() => {
   'use strict';
-  const TASKS_API = '/api/tasks';
-  const WIKI_API = '/api/documents';
-  let state = { tasks: [], wikiPages: [], draggedId: null };
+  const API = '/api/tasks';
+  const state = {
+    tasks: [],
+    draggedId: null,
+    detailId: null,
+    searchQ: '',
+    filterPriority: '',
+    sortField: 'createdAt',
+    wikiPages: [],
+  };
 
-  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-  function fmtDate(d) { if (!d) return 'Sem prazo'; try { return new Date(d).toLocaleDateString('pt-BR', { dateStyle: 'short' }); } catch { return String(d); } }
-
-  async function fetchTasks() {
-    const res = await fetch(TASKS_API, { credentials: 'same-origin' });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao carregar tarefas');
-    return data.tasks || data.items || [];
+  function esc(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function fmtDate(d) {
+    if (!d) return '';
+    try { return new Date(d).toLocaleDateString('pt-BR', { dateStyle: 'short' }); } catch { return String(d); }
+  }
+  function priorityColor(p) {
+    return { urgent: 'var(--red)', high: 'var(--amber)', medium: 'var(--accent)', low: 'var(--text-muted)' }[p] || 'var(--text-muted)';
+  }
+  function priorityLabel(p) {
+    return { urgent: 'Urgente', high: 'Alta', medium: 'Média', low: 'Baixa' }[p] || p;
+  }
+  function statusLabel(s) {
+    return { todo: 'Backlog', progress: 'Em Progresso', review: 'Revisão', done: 'Concluído', backlog: 'Backlog', cancelled: 'Cancelado' }[s] || s;
+  }
+  function toast(msg, type) {
+    if (typeof window.showToast === 'function') window.showToast(msg, type || 'info');
   }
 
-  async function createTask(body) {
-    const res = await fetch(TASKS_API, {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao criar tarefa');
-    return data;
+  // ─── API HELPERS ──────────────────────────────────────────────────────────
+  async function apiGet(params = {}) {
+    const url = new URL(API, location.origin);
+    Object.entries(params).forEach(([k, v]) => v !== undefined && v !== '' && url.searchParams.set(k, v));
+    const r = await fetch(url.toString(), { credentials: 'same-origin' });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  }
+  async function apiPost(body) {
+    const r = await fetch(API, { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Erro desconhecido');
+    return d;
+  }
+  async function apiPut(body) {
+    const r = await fetch(API, { method: 'PUT', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Erro desconhecido');
+    return d;
+  }
+  async function apiDelete(id) {
+    const r = await fetch(`${API}?id=${encodeURIComponent(id)}`, { method: 'DELETE', credentials: 'same-origin' });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Erro desconhecido');
+    return d;
   }
 
-  async function updateTaskStatus(id, newStatus) {
-    const res = await fetch(TASKS_API, {
-      method: 'PUT', credentials: 'same-origin',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id, status: newStatus }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro ao atualizar tarefa');
-    return data;
-  }
-
+  // ─── LOAD & RENDER ────────────────────────────────────────────────────────
   async function loadTasks() {
     try {
-      state.tasks = await fetchTasks();
+      const params = {};
+      if (state.searchQ) params.q = state.searchQ;
+      if (state.filterPriority) params.priority = state.filterPriority;
+      params.sort = state.sortField;
+      params.order = state.sortField === 'priority' ? 'desc' : 'desc';
+      const d = await apiGet(params);
+      state.tasks = d.tasks || [];
       renderKanban();
       renderGantt();
     } catch (err) {
-      /* error handled */
+      toast('Erro ao carregar tarefas: ' + err.message, 'error');
     }
   }
 
   function getStatusColumn(status) {
-    const s = String(status || 'todo').toLowerCase();
-    if (s === 'done' || s === 'completed') return 'done';
-    if (s === 'progress' || s === 'in_progress' || s === 'inprogress') return 'progress';
-    if (s === 'review') return 'review';
+    if (status === 'progress') return 'progress';
+    if (status === 'review') return 'review';
+    if (status === 'done') return 'done';
     return 'backlog';
   }
 
   function renderKanban() {
     const cols = { backlog: [], progress: [], review: [], done: [] };
-    state.tasks.forEach(t => {
+    for (const t of state.tasks) {
       const col = getStatusColumn(t.status);
-      cols[col].push(t);
-    });
-
-    Object.entries(cols).forEach(([col, tasks]) => {
+      if (cols[col]) cols[col].push(t);
+    }
+    for (const [col, tasks] of Object.entries(cols)) {
       const el = document.getElementById(`kanban-${col}`);
-      if (el) {
-        el.innerHTML = tasks.map(t => `
-          <div class="kanban-card ${col === 'done' ? 'done' : ''}" draggable="true" ondragstart="kanbanDragStart(event,'${esc(t.id)}')">
-            <div class="kanban-card-title">${esc(t.title || t.name || 'Sem título')}</div>
-            ${t.description ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.description)}</div>` : ''}
-            ${t.priority ? `<div class="kanban-card-meta"><span class="kanban-tag" style="background:${t.priority === 'urgent' ? 'rgba(239,68,68,.15)' : t.priority === 'high' ? 'rgba(245,158,11,.15)' : 'rgba(99,102,241,.15)'};color:${t.priority === 'urgent' ? 'var(--red)' : t.priority === 'high' ? 'var(--amber)' : 'var(--accent)'}">${esc(t.priority)}</span></div>` : ''}
-            <div class="kanban-card-footer">
-              <span style="font-size:11px;color:var(--text-muted)">${fmtDate(t.dueDate)}</span>
+      const cnt = document.getElementById(`kanban-count-${col}`);
+      if (!el) continue;
+      if (cnt) cnt.textContent = tasks.length;
+      if (!tasks.length) {
+        el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:12px">Nenhuma tarefa</div>';
+        continue;
+      }
+      el.innerHTML = tasks.map(t => {
+        const subtasksDone = (t.subtasks || []).filter(s => s.done).length;
+        const subtasksTotal = (t.subtasks || []).length;
+        const tags = (t.tags || []).slice(0, 3).map(tag => `<span class="kanban-tag" style="background:rgba(99,102,241,.12);color:var(--accent);font-size:10px;padding:2px 6px;border-radius:4px">${esc(tag)}</span>`).join('');
+        const assignees = (t.assignees || []).slice(0, 2).map(a => `<span style="font-size:10px;background:var(--bg-elevated);padding:2px 6px;border-radius:10px;color:var(--text-secondary)">${esc(a)}</span>`).join('');
+        const recurrenceIcon = t.recurrence ? '<i data-lucide="repeat" style="width:10px;height:10px;color:var(--text-muted)" aria-hidden="true"></i>' : '';
+        return `<div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event,'${esc(t.id)}')" onclick="taskOpenDetail('${esc(t.id)}')" style="cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+            <div style="font-size:13px;font-weight:600;line-height:1.3;flex:1">${esc(t.title)}</div>
+            <div style="display:flex;gap:4px;flex-shrink:0">
+              ${recurrenceIcon}
+              <button onclick="event.stopPropagation();taskComplete('${esc(t.id)}','${esc(t.status)}')" title="${t.status === 'done' ? 'Reabrir' : 'Concluir'}" style="background:none;border:none;cursor:pointer;padding:2px;color:${t.status === 'done' ? 'var(--green)' : 'var(--text-muted)'}"><i data-lucide="${t.status === 'done' ? 'circle-check' : 'circle'}" style="width:14px;height:14px" aria-hidden="true"></i></button>
+              <button onclick="event.stopPropagation();taskDelete('${esc(t.id)}')" title="Excluir" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--text-muted)"><i data-lucide="trash-2" style="width:12px;height:12px" aria-hidden="true"></i></button>
             </div>
           </div>
-        `).join('');
-      }
-      const countEl = document.getElementById(`kanban-count-${col}`);
-      if (countEl) countEl.textContent = tasks.length;
-    });
+          ${t.description ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.description)}</div>` : ''}
+          <div class="kanban-card-meta" style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">
+            <span style="font-size:10px;font-weight:700;color:${priorityColor(t.priority)}">${priorityLabel(t.priority)}</span>
+            ${t.dueDate ? `<span style="font-size:10px;color:var(--text-muted)">${fmtDate(t.dueDate)}</span>` : ''}
+            ${subtasksTotal ? `<span style="font-size:10px;color:var(--text-muted)">${subtasksDone}/${subtasksTotal} subtarefas</span>` : ''}
+            ${tags}
+            ${assignees}
+          </div>
+        </div>`;
+      }).join('');
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   }
 
   function renderGantt() {
-    const container = document.getElementById('gantt-content');
+    const el = document.getElementById('gantt-content');
+    if (!el) return;
     const tasks = state.tasks.filter(t => t.status !== 'done');
     if (!tasks.length) {
-      container.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhuma tarefa ativa para exibir no Gantt.</div>';
+      el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhuma tarefa ativa para exibir no Gantt.</div>';
       return;
     }
-    // Dynamic Gantt — show last 30 days
     const now = new Date();
-    const days = Array.from({ length: 30 }, (_, i) => {
+    const days = Array.from({ length: 14 }, (_, i) => {
       const d = new Date(now);
-      d.setDate(d.getDate() - 15 + i);
+      d.setDate(d.getDate() + i - 2);
       return d;
     });
-    container.innerHTML = `
-      <div style="display:grid;grid-template-columns:200px repeat(${days.length},1fr);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:8px">
-        <div style="font-size:12px;font-weight:600;color:var(--text-muted)">Tarefa</div>
-        ${days.map(d => `<div style="font-size:10px;color:${d.toDateString() === now.toDateString() ? 'var(--accent)' : 'var(--text-muted)'};text-align:center">${d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</div>`).join('')}
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        ${tasks.map(t => {
-          const start = t.startDate ? new Date(t.startDate) : (t.createdAt ? new Date(t.createdAt) : now);
-          const due = t.dueDate ? new Date(t.dueDate) : now;
-          const startOffset = Math.max(0, Math.floor((start - days[0]) / 86400000));
-          const endOffset = Math.min(days.length - 1, Math.floor((due - days[0]) / 86400000));
-          const span = Math.max(1, endOffset - startOffset + 1);
-          const col = startOffset + 2; // +2 because grid starts at col 2
-          return `<div class="gantt-row"><div class="gantt-task-name" style="padding:4px 0">${esc(t.title || t.name || 'Tarefa')}</div><div class="gantt-bar-container"><div class="gantt-bar" style="grid-column:${col}/${col + span};background:var(--accent);opacity:0.7"></div></div></div>`;
-        }).join('')}
+    const dayHeaders = days.map(d => `<div style="text-align:center;font-size:10px;color:var(--text-muted);padding:4px 2px;border-left:1px solid var(--border)">${d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}</div>`).join('');
+    const rows = tasks.map(t => {
+      const start = t.startDate ? new Date(t.startDate) : (t.createdAt ? new Date(t.createdAt) : now);
+      const due = t.dueDate ? new Date(t.dueDate) : new Date(now.getTime() + 86400000);
+      const startOffset = Math.max(0, Math.floor((start - days[0]) / 86400000));
+      const endOffset = Math.min(days.length - 1, Math.floor((due - days[0]) / 86400000));
+      const span = Math.max(1, endOffset - startOffset + 1);
+      const col = startOffset + 2;
+      const pColor = priorityColor(t.priority);
+      return `<div style="display:grid;grid-template-columns:200px repeat(${days.length},1fr);align-items:center;border-bottom:1px solid var(--border);min-height:36px">
+        <div style="font-size:12px;font-weight:600;padding:4px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="taskOpenDetail('${esc(t.id)}')" title="${esc(t.title)}">${esc(t.title)}</div>
+        <div style="grid-column:${col}/${col + span};background:${pColor};opacity:0.7;border-radius:4px;height:20px;margin:2px 0"></div>
       </div>`;
+    }).join('');
+    el.innerHTML = `<div style="display:grid;grid-template-columns:200px repeat(${days.length},1fr);border-bottom:2px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;padding:4px 8px;color:var(--text-muted)">TAREFA</div>
+      ${dayHeaders}
+    </div>${rows}`;
   }
 
-  // ─── WIKI ───
+  // ─── TASK DETAIL ──────────────────────────────────────────────────────────
+  window.taskOpenDetail = async function(id) {
+    state.detailId = id;
+    const modal = document.getElementById('modal-task-detail');
+    modal.style.display = '';
+    document.getElementById('task-detail-body').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando...</div>';
+    try {
+      const d = await apiGet({ id });
+      const t = d.task;
+      document.getElementById('task-detail-title').textContent = t.title;
+      const subtasksHtml = (t.subtasks || []).map(s => `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <button onclick="taskToggleSubtask('${esc(t.id)}','${esc(s.id)}')" style="background:none;border:none;cursor:pointer;color:${s.done ? 'var(--green)' : 'var(--text-muted)'}"><i data-lucide="${s.done ? 'circle-check' : 'circle'}" style="width:14px;height:14px" aria-hidden="true"></i></button>
+          <span style="flex:1;font-size:13px;${s.done ? 'text-decoration:line-through;color:var(--text-muted)' : ''}">${esc(s.title)}</span>
+          <button onclick="taskDeleteSubtask('${esc(t.id)}','${esc(s.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><i data-lucide="x" style="width:12px;height:12px" aria-hidden="true"></i></button>
+        </div>`).join('');
+      const commentsHtml = (t.comments || []).map(c => `
+        <div style="padding:8px;background:var(--bg-elevated);border-radius:6px;margin-bottom:6px">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${esc(c.author)} · ${fmtDate(c.createdAt)}</div>
+          <div style="font-size:13px">${esc(c.text)}</div>
+          <button onclick="taskDeleteComment('${esc(t.id)}','${esc(c.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:11px;margin-top:4px"><i data-lucide="trash-2" style="width:10px;height:10px" aria-hidden="true"></i> Excluir</button>
+        </div>`).join('');
+      const historyHtml = (t.history || []).slice(0, 10).map(h => `
+        <div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--text-muted)">${esc(h.detail)} · ${fmtDate(h.createdAt)}</div>`).join('');
+      const attachHtml = (t.attachments || []).map(a => `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <i data-lucide="paperclip" style="width:12px;height:12px;color:var(--text-muted)" aria-hidden="true"></i>
+          <a href="${esc(a.url)}" target="_blank" style="font-size:12px;color:var(--accent);flex:1">${esc(a.name)}</a>
+          <button onclick="taskDeleteAttachment('${esc(t.id)}','${esc(a.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><i data-lucide="x" style="width:12px;height:12px" aria-hidden="true"></i></button>
+        </div>`).join('');
+      const recurrenceText = t.recurrence ? `${({ daily: 'Diária', weekly: 'Semanal', biweekly: 'Quinzenal', monthly: 'Mensal', yearly: 'Anual' }[t.recurrence.frequency] || t.recurrence.frequency)}${t.recurrence.endDate ? ` até ${fmtDate(t.recurrence.endDate)}` : ''}` : 'Sem recorrência';
+      document.getElementById('task-detail-body').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div><span style="font-size:11px;color:var(--text-muted)">STATUS</span><br><span style="font-size:13px;font-weight:600">${statusLabel(t.status)}</span></div>
+          <div><span style="font-size:11px;color:var(--text-muted)">PRIORIDADE</span><br><span style="font-size:13px;font-weight:700;color:${priorityColor(t.priority)}">${priorityLabel(t.priority)}</span></div>
+          <div><span style="font-size:11px;color:var(--text-muted)">PRAZO</span><br><span style="font-size:13px">${fmtDate(t.dueDate) || '—'}</span></div>
+          <div><span style="font-size:11px;color:var(--text-muted)">RECORRÊNCIA</span><br><span style="font-size:13px">${recurrenceText}</span></div>
+          ${t.assignees && t.assignees.length ? `<div style="grid-column:1/-1"><span style="font-size:11px;color:var(--text-muted)">RESPONSÁVEIS</span><br><span style="font-size:13px">${esc(t.assignees.join(', '))}</span></div>` : ''}
+          ${t.tags && t.tags.length ? `<div style="grid-column:1/-1"><span style="font-size:11px;color:var(--text-muted)">ETIQUETAS</span><br><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${t.tags.map(tag => `<span style="font-size:11px;background:rgba(99,102,241,.12);color:var(--accent);padding:2px 8px;border-radius:10px">${esc(tag)}</span>`).join('')}</div></div>` : ''}
+        </div>
+        ${t.description ? `<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px">DESCRIÇÃO</div><div style="font-size:13px;white-space:pre-wrap">${esc(t.description)}</div></div>` : ''}
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px">SUBTAREFAS (${(t.subtasks || []).filter(s => s.done).length}/${(t.subtasks || []).length})</div>
+          <div id="detail-subtasks">${subtasksHtml || '<div style="font-size:12px;color:var(--text-muted)">Nenhuma subtarefa</div>'}</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input type="text" id="new-subtask-input" class="form-input" style="flex:1;font-size:12px" placeholder="Nova subtarefa..." maxlength="200">
+            <button class="btn btn-ghost" onclick="taskAddSubtask('${esc(t.id)}')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px">COMENTÁRIOS (${(t.comments || []).length})</div>
+          <div id="detail-comments">${commentsHtml || '<div style="font-size:12px;color:var(--text-muted)">Nenhum comentário</div>'}</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input type="text" id="new-comment-input" class="form-input" style="flex:1;font-size:12px" placeholder="Adicionar comentário..." maxlength="2000">
+            <button class="btn btn-ghost" onclick="taskAddComment('${esc(t.id)}')"><i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar</button>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px">ANEXOS (${(t.attachments || []).length})</div>
+          <div id="detail-attachments">${attachHtml || '<div style="font-size:12px;color:var(--text-muted)">Nenhum anexo</div>'}</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input type="text" id="new-attach-name" class="form-input" style="flex:1;font-size:12px" placeholder="Nome do arquivo" maxlength="200">
+            <input type="url" id="new-attach-url" class="form-input" style="flex:1;font-size:12px" placeholder="URL do arquivo" maxlength="2000">
+            <button class="btn btn-ghost" onclick="taskAddAttachment('${esc(t.id)}')"><i data-lucide="paperclip" class="pg-icon" aria-hidden="true"></i> Anexar</button>
+          </div>
+        </div>
+        ${historyHtml ? `<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px">HISTÓRICO</div><div>${historyHtml}</div></div>` : ''}
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    } catch (err) {
+      document.getElementById('task-detail-body').innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">Erro ao carregar: ${esc(err.message)}</div>`;
+    }
+  };
+
+  window.taskCloseDetail = function() {
+    document.getElementById('modal-task-detail').style.display = 'none';
+    state.detailId = null;
+  };
+
+  window.taskEditFromDetail = function() {
+    if (!state.detailId) return;
+    const t = state.tasks.find(t => t.id === state.detailId);
+    if (!t) return;
+    taskCloseDetail();
+    taskOpenEdit(t);
+  };
+
+  window.taskDeleteFromDetail = function() {
+    if (!state.detailId) return;
+    taskDelete(state.detailId);
+    taskCloseDetail();
+  };
+
+  // ─── SUBTASKS ─────────────────────────────────────────────────────────────
+  window.taskAddSubtask = async function(taskId) {
+    const input = document.getElementById('new-subtask-input');
+    const title = input ? input.value.trim() : '';
+    if (!title) { toast('Digite o título da subtarefa', 'error'); return; }
+    try {
+      await apiPost({ action: 'add-subtask', taskId, title });
+      toast('Subtarefa adicionada', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  window.taskToggleSubtask = async function(taskId, subtaskId) {
+    try {
+      await apiPost({ action: 'toggle-subtask', taskId, subtaskId });
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  window.taskDeleteSubtask = async function(taskId, subtaskId) {
+    try {
+      await apiPost({ action: 'delete-subtask', taskId, subtaskId });
+      toast('Subtarefa removida', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  // ─── COMMENTS ─────────────────────────────────────────────────────────────
+  window.taskAddComment = async function(taskId) {
+    const input = document.getElementById('new-comment-input');
+    const text = input ? input.value.trim() : '';
+    if (!text) { toast('Digite o comentário', 'error'); return; }
+    try {
+      await apiPost({ action: 'add-comment', taskId, text });
+      toast('Comentário adicionado', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  window.taskDeleteComment = async function(taskId, commentId) {
+    try {
+      await apiPost({ action: 'delete-comment', taskId, commentId });
+      toast('Comentário removido', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  // ─── ATTACHMENTS ──────────────────────────────────────────────────────────
+  window.taskAddAttachment = async function(taskId) {
+    const name = document.getElementById('new-attach-name')?.value.trim();
+    const url = document.getElementById('new-attach-url')?.value.trim();
+    if (!name || !url) { toast('Nome e URL são obrigatórios', 'error'); return; }
+    try {
+      await apiPost({ action: 'add-attachment', taskId, name, url });
+      toast('Anexo adicionado', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  window.taskDeleteAttachment = async function(taskId, attachmentId) {
+    try {
+      await apiPost({ action: 'delete-attachment', taskId, attachmentId });
+      toast('Anexo removido', 'success');
+      await loadTasks();
+      taskOpenDetail(taskId);
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  // ─── CREATE / EDIT ────────────────────────────────────────────────────────
+  window.taskOpenNew = function(defaultStatus) {
+    const form = document.getElementById('task-form');
+    form.reset();
+    document.getElementById('task-edit-id').value = '';
+    document.getElementById('modal-task-title').innerHTML = '<i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa';
+    document.getElementById('task-submit-btn').textContent = 'Criar Tarefa';
+    document.getElementById('task-form-error').style.display = 'none';
+    if (defaultStatus) document.getElementById('task-status').value = defaultStatus;
+    document.getElementById('modal-task').style.display = '';
+    document.getElementById('task-title').focus();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  };
+
+  function taskOpenEdit(t) {
+    document.getElementById('task-edit-id').value = t.id;
+    document.getElementById('modal-task-title').innerHTML = '<i data-lucide="edit" class="pg-icon" aria-hidden="true"></i> Editar Tarefa';
+    document.getElementById('task-submit-btn').textContent = 'Salvar Alterações';
+    document.getElementById('task-title').value = t.title || '';
+    document.getElementById('task-desc').value = t.description || '';
+    document.getElementById('task-status').value = t.status || 'todo';
+    document.getElementById('task-priority').value = t.priority || 'medium';
+    document.getElementById('task-start').value = t.startDate || '';
+    document.getElementById('task-due').value = t.dueDate || '';
+    document.getElementById('task-tags').value = (t.tags || []).join(', ');
+    document.getElementById('task-assignees').value = (t.assignees || []).join(', ');
+    const recFreq = t.recurrence ? t.recurrence.frequency : '';
+    document.getElementById('task-recurrence').value = recFreq;
+    taskToggleRecurrence(recFreq);
+    if (t.recurrence && t.recurrence.endDate) document.getElementById('task-recurrence-enddate').value = t.recurrence.endDate;
+    document.getElementById('task-form-error').style.display = 'none';
+    document.getElementById('modal-task').style.display = '';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
+  window.taskCloseModal = function() {
+    document.getElementById('modal-task').style.display = 'none';
+  };
+
+  window.taskToggleRecurrence = function(val) {
+    document.getElementById('task-recurrence-end').style.display = val ? '' : 'none';
+  };
+
+  document.getElementById('task-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('task-form-error');
+    errEl.style.display = 'none';
+    const editId = document.getElementById('task-edit-id').value;
+    const title = document.getElementById('task-title').value.trim();
+    if (!title) { errEl.textContent = 'Título obrigatório.'; errEl.style.display = 'block'; return; }
+    const tags = document.getElementById('task-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+    const assignees = document.getElementById('task-assignees').value.split(',').map(a => a.trim()).filter(Boolean);
+    const recFreq = document.getElementById('task-recurrence').value;
+    const recurrence = recFreq ? { frequency: recFreq, endDate: document.getElementById('task-recurrence-enddate').value || null } : null;
+    const payload = {
+      title,
+      description: document.getElementById('task-desc').value.trim(),
+      status: document.getElementById('task-status').value,
+      priority: document.getElementById('task-priority').value,
+      startDate: document.getElementById('task-start').value || null,
+      dueDate: document.getElementById('task-due').value || null,
+      tags,
+      assignees,
+      recurrence,
+    };
+    const btn = document.getElementById('task-submit-btn');
+    btn.disabled = true;
+    try {
+      if (editId) {
+        await apiPut({ id: editId, ...payload });
+        toast('Tarefa atualizada', 'success');
+      } else {
+        await apiPost(payload);
+        toast('Tarefa criada', 'success');
+      }
+      taskCloseModal();
+      await loadTasks();
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ─── COMPLETE / DELETE ────────────────────────────────────────────────────
+  window.taskComplete = async function(id, currentStatus) {
+    const newStatus = currentStatus === 'done' ? 'todo' : 'done';
+    try {
+      await apiPut({ id, status: newStatus });
+      toast(newStatus === 'done' ? 'Tarefa concluída' : 'Tarefa reaberta', 'success');
+      await loadTasks();
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  window.taskDelete = async function(id) {
+    try {
+      await apiDelete(id);
+      toast('Tarefa excluída', 'success');
+      await loadTasks();
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  // ─── SEARCH / FILTER / SORT ───────────────────────────────────────────────
+  let searchTimeout;
+  window.taskSearch = function(q) {
+    state.searchQ = q;
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(loadTasks, 300);
+  };
+
+  window.taskFilterPriority = function(p) {
+    state.filterPriority = p;
+    loadTasks();
+  };
+
+  window.taskSort = function(field) {
+    state.sortField = field;
+    loadTasks();
+  };
+
+  // ─── DRAG & DROP ──────────────────────────────────────────────────────────
+  window.kanbanDragStart = function(e, taskId) {
+    state.draggedId = taskId;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  window.kanbanDragOver = function(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  window.kanbanDrop = async function(e, newStatus) {
+    e.preventDefault();
+    if (!state.draggedId) return;
+    try {
+      await apiPut({ id: state.draggedId, status: newStatus });
+      toast('Tarefa movida', 'success');
+      await loadTasks();
+    } catch (err) { toast(err.message, 'error'); }
+    state.draggedId = null;
+  };
+
+  // ─── WIKI ─────────────────────────────────────────────────────────────────
   async function loadWiki() {
     try {
-      const res = await fetch('/api/documents?view=notes', { credentials: 'same-origin' });
-      const data = await res.json().catch(() => ({}));
-      state.wikiPages = data.notes || data.items || [];
+      const r = await fetch('/api/documents?view=notes', { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      state.wikiPages = d.notes || d.items || [];
       renderWiki();
     } catch {
-      document.getElementById('wiki-content').innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Wiki não disponível. Crie uma página para começar.</div>';
+      const el = document.getElementById('wiki-content');
+      if (el) el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Wiki não disponível. Crie uma página para começar.</div>';
     }
   }
-
   function renderWiki() {
     const el = document.getElementById('wiki-content');
+    if (!el) return;
     if (!state.wikiPages.length) {
       el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhuma página na wiki. Crie uma para começar.</div>';
       return;
@@ -277,68 +694,26 @@
         <div style="font-size:14px;font-weight:600;margin-bottom:6px">${esc(w.name || w.title || 'Sem título')}</div>
         <div style="font-size:12px;color:var(--text-muted)">${esc((w.description || w.content || '').slice(0, 100))}</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:8px">${fmtDate(w.updatedAt || w.createdAt)}</div>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
 
-  // ─── PUBLIC API ───
-  window.kanbanOpenNewTask = () => {
-    document.getElementById('task-form-error').style.display = 'none';
-    document.getElementById('task-title').value = '';
-    document.getElementById('task-desc').value = '';
-    document.getElementById('task-status').value = 'todo';
-    document.getElementById('task-priority').value = 'medium';
-    document.getElementById('task-due').value = '';
-    document.getElementById('modal-new-task').style.display = '';
+  window.wikiNewPage = function() {
+    toast('Para criar páginas wiki, utilize o módulo Documentos', 'info');
+  };
+  window.wikiOpenPage = function(id) {
+    if (typeof showPage === 'function') showPage('documents');
+    else toast('Abrindo documento: ' + id, 'info');
   };
 
-  window.kanbanCloseModal = (id) => { document.getElementById(id).style.display = 'none'; };
-
-  window.kanbanDragStart = (e, taskId) => { state.draggedId = taskId; e.dataTransfer.effectAllowed = 'move'; };
-  window.kanbanDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-  window.kanbanDrop = async (e, newStatus) => {
-    e.preventDefault();
-    if (!state.draggedId) return;
-    try {
-      await updateTaskStatus(state.draggedId, newStatus);
-      if (typeof showToast === 'function') showToast('Tarefa movida', 'success');
-      await loadTasks();
-    } catch (err) {
-      if (typeof showToast === 'function') showToast(err.message, 'error');
-    }
-    state.draggedId = null;
-  };
-
+  // ─── PUBLIC API ───────────────────────────────────────────────────────────
   window.kanbanLoad = loadTasks;
+  window.kanbanOpenNewTask = taskOpenNew;
+  window.kanbanCloseModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  };
 
-  window.wikiNewPage = () => { if (typeof showToast === 'function') showToast('Funcionalidade de criação de páginas wiki — utilize Documentos para criar notas', 'info'); };
-  window.wikiOpenPage = (id) => { if (typeof showToast === 'function') showToast('Abrindo página wiki: ' + id, 'info'); };
-
-  // ─── FORM HANDLER ───
-  document.getElementById('new-task-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errEl = document.getElementById('task-form-error');
-    const title = document.getElementById('task-title').value.trim();
-    if (!title) { errEl.textContent = 'Título obrigatório.'; errEl.style.display = 'block'; return; }
-
-    try {
-      await createTask({
-        title,
-        description: document.getElementById('task-desc').value.trim(),
-        status: document.getElementById('task-status').value === 'todo' ? 'todo' : document.getElementById('task-status').value,
-        priority: document.getElementById('task-priority').value,
-        dueDate: document.getElementById('task-due').value || null,
-      });
-      kanbanCloseModal('modal-new-task');
-      if (typeof showToast === 'function') showToast('Tarefa criada', 'success');
-      await loadTasks();
-    } catch (err) {
-      errEl.textContent = err.message;
-      errEl.style.display = 'block';
-    }
-  });
-
-  // ─── INIT ───
+  // ─── INIT ─────────────────────────────────────────────────────────────────
   loadTasks();
   loadWiki();
 })();
