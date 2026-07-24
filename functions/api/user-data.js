@@ -112,11 +112,60 @@ export async function onRequestGet_export({ request, env }) {
   });
 }
 
+export async function onRequestPost({ request, env }) {
+  const secret = env.LIFEOS_SESSION_SECRET;
+  if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
+  const session = await verifySession(getCookie(request.headers.get('cookie')), secret);
+  if (!session) return json(401, { ok: false, error: 'Não autenticado' });
+  const kv = env.LIFEOS_KV;
+  if (!kv) return json(503, { ok: false, error: 'Armazenamento indisponível' });
+  try {
+    const url = new URL(request.url);
+    const action = url.searchParams.get('action');
+    if (action === 'import') {
+      const body = await request.json();
+      const data = body.data || body;
+      let imported = 0;
+      const mappings = {
+        profile: `user:${session.sub}`,
+        tasks: `tasks:${session.sub}`,
+        habits: `habits:${session.sub}`,
+        goals: `goals:${session.sub}`,
+        notes: `notes:${session.sub}`,
+        events: `events:${session.sub}`,
+        crm: null, // CRM has sub-keys
+        docs: `docs:${session.sub}`,
+        timeline: `timeline:${session.sub}`,
+      };
+      for (const [category, value] of Object.entries(data)) {
+        if (category === 'crm') {
+          if (value.contacts) await kv.put(`crm:contacts:${session.sub}`, JSON.stringify(value.contacts));
+          if (value.deals) await kv.put(`crm:deals:${session.sub}`, JSON.stringify(value.deals));
+          imported += (value.contacts ? 1 : 0) + (value.deals ? 1 : 0);
+        } else if (category === 'exportedAt' || category === 'userId') {
+          continue;
+        } else {
+          const key = mappings[category];
+          if (key && value !== undefined) {
+            await kv.put(key, JSON.stringify(value));
+            imported++;
+          }
+        }
+      }
+      return json(200, { ok: true, imported, message: `${imported} categoria(s) importada(s)` });
+    }
+    return json(400, { ok: false, error: 'Ação inválida. Use: import' });
+  } catch (e) {
+    return json(500, { ok: false, error: 'Erro ao importar: ' + (e.message || 'desconhecido') });
+  }
+}
+
 export async function onRequest({ request, env }) {
   if (request.method === 'GET') {
     const url = new URL(request.url);
     if (url.searchParams.get('action') === 'export') return onRequestGet_export({ request, env });
     return onRequestGet({ request, env });
   }
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET' });
+  if (request.method === 'POST') return onRequestPost({ request, env });
+  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
 }

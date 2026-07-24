@@ -1514,7 +1514,7 @@
       <div class="page" id="page-profile">
         <div class="page-header">
           <div><div class="page-title">Perfil</div><div class="page-subtitle">Suas informações pessoais</div></div>
-          <button class="btn btn-primary">Salvar alterações</button>
+          <button class="btn btn-primary" onclick="saveProfileInline()">Salvar alterações</button>
         </div>
         <div class="profile-header">
           <div class="profile-avatar-big" id="profile-avatar">U</div>
@@ -1570,16 +1570,16 @@
           <div class="card">
             <div class="card-title">Segurança</div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i> Alterar senha</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i> Ativar MFA</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Ver sessões ativas</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="showPage('password')"><i data-lucide="key-round" class="pg-icon" aria-hidden="true"></i> Alterar senha</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="showPage('identity')"><i data-lucide="smartphone" class="pg-icon" aria-hidden="true"></i> Ativar MFA</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="showPage('identity-sessions')"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Ver sessões ativas</button>
             </div>
           </div>
           <div class="card">
             <div class="card-title">Dados</div>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
-              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Exportar dados</button>
-              <button class="btn btn-ghost" style="justify-content:flex-start"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Importar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="exportUserData()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Exportar dados</button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="importUserData()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Importar dados</button>
               <button class="btn btn-ghost" style="justify-content:flex-start;color:var(--red)" onclick="doLogout()"><i data-lucide="log-out" class="pg-icon" aria-hidden="true"></i> Sair da conta</button>
             </div>
           </div>
@@ -2777,7 +2777,7 @@
               const cr = await fetch('/api/payments/billing', {
                 method: 'POST', credentials: 'same-origin',
                 headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ action: 'checkout', plan: 'enterprise' })
+                body: JSON.stringify({ action: 'create-checkout-stripe', planId: 'enterprise', currency: 'brl' })
               });
               const cd = await cr.json();
               if (cd.ok && cd.checkoutUrl) window.location.href = cd.checkoutUrl;
@@ -2792,11 +2792,74 @@
       if (nameEl) nameEl.textContent = 'Erro ao carregar';
     }
   }
-  // Portal button
-  document.getElementById('billing-portal-btn')?.addEventListener('click', () => {
-    showToast('Redirecionando para portal de pagamento...', 'info');
+  // Portal button — opens Stripe/MercadoPago portal for managing subscriptions
+  document.getElementById('billing-portal-btn')?.addEventListener('click', async () => {
+    showToast('Carregando portal de pagamento...', 'info');
+    try {
+      const r = await fetch('/api/payments/billing', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'change-plan' })
+      });
+      const d = await r.json();
+      if (r.ok && d.portalUrl) window.open(d.portalUrl, '_blank');
+      else if (r.ok && d.ok) { showToast('Redirecionando...', 'info'); if (d.redirectUrl) window.open(d.redirectUrl, '_blank'); }
+      else showToast(d.error || 'Gerencie seu plano através do botão de upgrade', 'info');
+    } catch (_) { showToast('Erro de conexão', 'error'); }
   });
-
+  // ─── Profile save ────────────────────────────────────────────
+  async function saveProfileInline() {
+    const inputs = document.querySelectorAll('#page-profile input');
+    const name = inputs[0]?.value?.trim() || '';
+    const email = inputs[1]?.value?.trim() || '';
+    const timezone = inputs[2]?.value?.trim() || '';
+    try {
+      const r = await fetch('/api/profile-update', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name, email, timezone })
+      });
+      const d = await r.json();
+      if (r.ok) { showToast('Perfil atualizado!', 'success'); }
+      else { showToast(d.error || 'Erro ao salvar', 'error'); }
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+  }
+  // ─── Export/Import data ──────────────────────────────────────
+  async function exportUserData() {
+    try {
+      const r = await fetch('/api/user-data?action=export', { credentials: 'same-origin' });
+      const d = await r.json();
+      if (r.ok && d.data) {
+        const blob = new Blob([JSON.stringify(d.data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'lifeos-export-' + new Date().toISOString().split('T')[0] + '.json';
+        a.click(); URL.revokeObjectURL(url);
+        showToast('Dados exportados!', 'success');
+      } else { showToast(d.error || 'Erro ao exportar', 'error'); }
+    } catch (_) { showToast('Erro de conexão', 'error'); }
+  }
+  function importUserData() {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        const r = await fetch('/api/user-data?action=import', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const d = await r.json();
+        if (r.ok) { showToast('Dados importados com sucesso!', 'success'); }
+        else { showToast(d.error || 'Erro ao importar', 'error'); }
+      } catch (_) { showToast('Arquivo inválido', 'error'); }
+    };
+    input.click();
+  }
   // ─── Password change ─────────────────────────────────────────
   async function submitPasswordChange() {
     const current = document.getElementById('pwd-current')?.value;

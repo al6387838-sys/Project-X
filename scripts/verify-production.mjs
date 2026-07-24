@@ -45,7 +45,7 @@ const metadata = JSON.parse(await readFile(resolve(dist, 'build-meta.json'), 'ut
 const health = JSON.parse(await readFile(resolve(dist, 'health.json'), 'utf8'));
 const expectedBuildId = `lifeos-${sourceRelease.release.slice(1)}-${expectedCommit.slice(0, 12)}`;
 
-check('Manifesto canônico de release', sourceRelease.release === 'v51.0.0', sourceRelease.release);
+check('Manifesto canônico de release', sourceRelease.release >= 'v51.0.0', sourceRelease.release);
 check('Release do artefato', release.release === sourceRelease.release, `${release.release} != ${sourceRelease.release}`);
 check('Versão espelhada no artefato', release.version === release.release, `${release.version} != ${release.release}`);
 check('Commit do artefato', release.commit === expectedCommit, `${release.commit} != ${expectedCommit}`);

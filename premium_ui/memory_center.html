@@ -1770,6 +1770,39 @@ function showNotification(msg, type = 'success') {
   setTimeout(() => el.classList.remove('show'), 3500);
 }
 
+function showAddMemory() {
+  const title = prompt('Título da memória:');
+  if (!title) return;
+  const content = prompt('Conteúdo da memória:') || '';
+  const type = prompt('Tipo (episodic, semantic, long_term):', 'semantic') || 'semantic';
+  (async () => {
+    let local = false;
+    try {
+      const r = await fetch('/api/timeline', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, type }),
+      });
+      const d = await r.json();
+      if (d.ok) { local = false; }
+      else { local = true; }
+    } catch (_) { local = true; }
+    const newMem = {
+      id: 'mem-' + Date.now().toString(36),
+      title, content,
+      memory_type: type === 'episodic' ? 'episodic' : type === 'long_term' ? 'long_term' : 'semantic',
+      priority: 'medium', status: 'active',
+      domain: 'manual', tags: [], entities: [],
+      strength: 0.5, confidence: 1.0, access_count: 0,
+      created_at: Date.now(), metadata: {},
+    };
+    memories.unshift(newMem);
+    showNotification(local ? 'Memória adicionada localmente' : 'Memória criada com sucesso!', local ? 'info' : 'success');
+    updateStats();
+    renderOverview();
+    renderAllMemories();
+  })();
+}
 // Close modal on overlay click
 document.getElementById('inspector-modal').addEventListener('click', function(e) {
   if (e.target === this) closeInspector();

@@ -221,7 +221,7 @@
             <select class="form-select"><option selected>America/Sao_Paulo (GMT-3)</option><option>America/New_York (GMT-5)</option><option>Europe/London (GMT+0)</option></select>
           </div>
         </div>
-        <div class="form-actions"><button class="btn-primary">Salvar Preferências</button></div>
+        <div class="form-actions"><button class="btn-primary" onclick="savePreferences()">Salvar Preferências</button></div>
       </div>
     </div>
 
@@ -860,6 +860,22 @@
         });
         if (r.ok) { showToast?.('Webhook removido', 'success'); loadWebhooks(); }
         else { showToast?.('Erro ao remover', 'error'); }
+      } catch (_) { showToast?.('Erro de conexão', 'error'); }
+    }
+
+    async function savePreferences() {
+      try {
+        const locale = document.querySelector('#panel-preferences select:nth-of-type(1)')?.value || 'pt-BR';
+        const currency = document.querySelector('#panel-preferences select:nth-of-type(3)')?.value || 'BRL';
+        const timezone = document.querySelector('#panel-preferences select:nth-of-type(4)')?.value || 'America/Sao_Paulo';
+        const r = await fetch('/api/settings', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'save', locale, currency, timezone })
+        });
+        const d = await r.json();
+        if (r.ok && d.ok) { showToast?.('Preferências salvas!', 'success'); }
+        else { showToast?.(d?.error || 'Erro ao salvar preferências', 'error'); }
       } catch (_) { showToast?.('Erro de conexão', 'error'); }
     }
 

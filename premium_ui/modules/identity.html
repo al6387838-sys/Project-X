@@ -317,8 +317,14 @@
   };
   window.identityToggleView=function(v){ showToast('Visualização: '+v,'info'); };
   window.identityNewProfile=function(){ openModal('modal-new-profile'); };
-  window.identityEditProfile=function(){ showToast('Edição de perfil','info'); };
-  window.identityManageKeys=function(){ showToast('Gerenciamento de chaves','info'); };
+  window.identityEditProfile=function(){
+    const name=prompt('Nome do perfil:');
+    if(!name)return;
+    (async()=>{try{const r=await fetch('/api/profile-update',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({name})});const d=await r.json();if(d.ok)showToast('Perfil atualizado','success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao atualizar perfil','error')}})();
+  };
+  window.identityManageKeys=function(){
+    (async()=>{try{const r=await fetch('/api/security',{method:'GET',credentials:'same-origin'});const d=await r.json();if(d.ok){const keys=d.keys||d.mfa_keys||[];let msg=keys.length?keys.map(k=>k.type+' - '+k.status).join('\n'):'Nenhuma chave registrada';if(window.showToast)showToast('Chaves: '+msg,'info');}}catch(e){showToast('Erro ao carregar chaves','error')}})();
+  };
   window.identityActivateProfile=function(id){
     (async()=>{try{const r=await fetch('/api/enterprise-data',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'activate-profile',profileId:id})});const d=await r.json();if(d.ok)showToast('Perfil ativado: '+id,'success');else showToast('Erro: '+(d.error||''),'error')}catch(e){showToast('Erro ao ativar perfil','error')}})();
   };

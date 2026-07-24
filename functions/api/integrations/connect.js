@@ -29,7 +29,8 @@ export async function onRequestPost({ request, env }) {
   const oauthProviders = {
     google: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET,
     apple: env.APPLE_CLIENT_ID && env.APPLE_PRIVATE_KEY,
-    microsoft: false, // Não implementado ainda
+    microsoft: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
+    outlook: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
   };
 
   const providerKey = provider.toLowerCase();
@@ -67,7 +68,23 @@ export async function onRequestPost({ request, env }) {
 
     authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${encodeURIComponent(env.GOOGLE_CLIENT_ID)}&` +
-      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/auth/google/callback')}&` +
+      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/google')}&` +
+      `response_type=code&` +
+      `scope=${encodeURIComponent(scope)}&` +
+      `state=${encodeURIComponent(state)}&` +
+      `access_type=offline&prompt=consent`;
+  }
+
+  if ((providerKey === 'microsoft' || providerKey === 'outlook') && env.MICROSOFT_CLIENT_ID) {
+    const scope = type === 'calendar'
+      ? 'https://graph.microsoft.com/calendars.read'
+      : type === 'email'
+      ? 'Mail.Read Mail.Send offline_access User.Read'
+      : 'User.Read offline_access';
+
+    authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?` +
+      `client_id=${encodeURIComponent(env.MICROSOFT_CLIENT_ID)}&` +
+      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/microsoft')}&` +
       `response_type=code&` +
       `scope=${encodeURIComponent(scope)}&` +
       `state=${encodeURIComponent(state)}&` +
