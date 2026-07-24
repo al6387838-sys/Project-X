@@ -1350,20 +1350,48 @@
       <!-- ─── AGENDA ─── -->
       <div class="page" id="page-agenda">
         <div class="page-header">
-          <div><div class="page-title">Agenda</div><div class="page-subtitle">Planejamento diário e semanal</div></div>
-          <button class="btn btn-primary" onclick="openNewEventModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo evento</button>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-title">Hoje</div>
-            <div id="agenda-events-list" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-              <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando eventos...</div>
-            </div>
+          <div><div class="page-title"><i data-lucide="calendar" class="pg-icon" aria-hidden="true"></i> Agenda</div><div class="page-subtitle">Planejamento diário, semanal e mensal</div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost" onclick="agendaSyncGoogle()" title="Sincronizar Google Calendar" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Google</button>
+            <button class="btn btn-ghost" onclick="agendaSyncOutlook()" title="Sincronizar Outlook" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Outlook</button>
+            <button class="btn btn-primary" onclick="openNewEventModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo evento</button>
           </div>
-          <div class="card">
-            <div class="card-title">Tarefas do Dia</div>
-            <div id="agenda-tasks-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
-              <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando tarefas...</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+          <input type="text" class="form-input" id="agenda-search" placeholder="Buscar eventos..." style="flex:1;min-width:180px;font-size:12px" oninput="agendaSearch(this.value)" />
+          <select class="form-input" id="agenda-category-filter" style="width:140px;font-size:12px" onchange="loadAgenda()">
+            <option value="">Todas categorias</option>
+            <option value="personal">Pessoal</option>
+            <option value="work">Trabalho</option>
+            <option value="health">Saúde</option>
+            <option value="google">Google Calendar</option>
+            <option value="outlook">Outlook</option>
+          </select>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-ghost agenda-view-btn active" id="agenda-view-day" onclick="agendaSetView('day')" style="font-size:12px">Dia</button>
+            <button class="btn btn-ghost agenda-view-btn" id="agenda-view-week" onclick="agendaSetView('week')" style="font-size:12px">Semana</button>
+            <button class="btn btn-ghost agenda-view-btn" id="agenda-view-month" onclick="agendaSetView('month')" style="font-size:12px">Mês</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <button class="btn btn-ghost" onclick="agendaNavigate(-1)" style="font-size:12px"><i data-lucide="chevron-left" class="pg-icon" aria-hidden="true"></i></button>
+          <span id="agenda-date-label" style="font-size:14px;font-weight:600;min-width:200px;text-align:center">Carregando...</span>
+          <button class="btn btn-ghost" onclick="agendaNavigate(1)" style="font-size:12px"><i data-lucide="chevron-right" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" onclick="agendaGoToday()" style="font-size:12px">Hoje</button>
+        </div>
+        <div id="agenda-view-container">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" id="agenda-events-title">Eventos do Dia</div>
+              <div id="agenda-events-list" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+                <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando eventos...</div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Tarefas do Dia</div>
+              <div id="agenda-tasks-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+                <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando tarefas...</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1372,18 +1400,28 @@
       <!-- ─── HÁBITOS ─── -->
       <div class="page" id="page-habits">
         <div class="page-header">
-          <div><div class="page-title">Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
-          <button class="btn btn-primary" onclick="openNewHabitModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
+          <div><div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Hábitos</div><div class="page-subtitle">Construa rotinas poderosas</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="loadHabits()" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></button>
+            <button class="btn btn-primary" onclick="openNewHabitModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo hábito</button>
+          </div>
         </div>
         <div class="grid-4" style="margin-bottom:20px" id="habits-stats-grid">
-          <div class="card"><div class="card-title">Streak Atual</div><div class="card-value" id="h-streak">—</div><div class="card-trend trend-up" id="h-streak-label" style="display:none"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> <span id="h-streak-text"></span></div></div>
+          <div class="card"><div class="card-title">Melhor Streak</div><div class="card-value" id="h-streak">—</div><div class="card-trend trend-up" id="h-streak-label" style="display:none"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> <span id="h-streak-text"></span></div></div>
           <div class="card"><div class="card-title">Taxa Hoje</div><div class="card-value" id="h-rate">—</div><div class="card-sub" id="h-rate-sub">Carregando...</div></div>
           <div class="card"><div class="card-title">Hábitos Ativos</div><div class="card-value" id="h-active">—</div><div class="card-sub" id="h-active-sub"></div></div>
-          <div class="card"><div class="card-title">Total Hábitos</div><div class="card-value" id="h-total">—</div><div class="card-sub" id="h-total-sub"></div></div>
+          <div class="card"><div class="card-title">Total Concluídos</div><div class="card-value" id="h-total">—</div><div class="card-sub" id="h-total-sub">Hoje</div></div>
         </div>
         <div class="card">
-          <div class="card-title">Todos os Hábitos</div>
-          <div id="habits-list" style="margin-top:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div class="card-title" style="margin-bottom:0">Todos os Hábitos</div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-ghost" onclick="habitsSetFilter('all')" id="habits-filter-all" style="font-size:11px;padding:4px 10px" class="active">Todos</button>
+              <button class="btn btn-ghost" onclick="habitsSetFilter('pending')" id="habits-filter-pending" style="font-size:11px;padding:4px 10px">Pendentes</button>
+              <button class="btn btn-ghost" onclick="habitsSetFilter('done')" id="habits-filter-done" style="font-size:11px;padding:4px 10px">Concluídos</button>
+            </div>
+          </div>
+          <div id="habits-list" style="margin-top:4px">
             <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando hábitos...</div>
           </div>
         </div>
@@ -1392,8 +1430,23 @@
       <!-- ─── METAS ─── -->
       <div class="page" id="page-goals">
         <div class="page-header">
-          <div><div class="page-title">Metas</div><div class="page-subtitle">Objetivos e OKRs</div></div>
-          <button class="btn btn-primary" onclick="openNewGoalModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova meta</button>
+          <div><div class="page-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Metas</div><div class="page-subtitle">Objetivos, OKRs e progresso</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="loadGoals()" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></button>
+            <button class="btn btn-primary" onclick="openNewGoalModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova meta</button>
+          </div>
+        </div>
+        <div class="grid-4" style="margin-bottom:20px">
+          <div class="card"><div class="card-title">Total de Metas</div><div class="card-value" id="goals-kpi-total">—</div></div>
+          <div class="card"><div class="card-title">Em Andamento</div><div class="card-value" id="goals-kpi-active">—</div></div>
+          <div class="card"><div class="card-title">Concluídas</div><div class="card-value" id="goals-kpi-done">—</div></div>
+          <div class="card"><div class="card-title">Progresso Médio</div><div class="card-value" id="goals-kpi-avg">—</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="goalsSetFilter('all')" id="goals-filter-all" style="font-size:12px">Todas</button>
+          <button class="btn btn-ghost" onclick="goalsSetFilter('active')" id="goals-filter-active" style="font-size:12px">Ativas</button>
+          <button class="btn btn-ghost" onclick="goalsSetFilter('done')" id="goals-filter-done" style="font-size:12px">Concluídas</button>
+          <button class="btn btn-ghost" onclick="goalsSetFilter('paused')" id="goals-filter-paused" style="font-size:12px">Pausadas</button>
         </div>
         <div id="goals-grid" class="grid-3">
           <div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
@@ -2121,6 +2174,239 @@
       <input type="email" class="form-input" id="invite-email" placeholder="email@empresa.com" />
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitInvite()">Enviar Convite</button>
+  </div>
+</div>
+
+<!-- ─── MODAL: EVENTO ─── -->
+<div class="modal-overlay" id="modal-event-form" style="display:none">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title" id="ev-modal-title"><i data-lucide="calendar-plus" class="pg-icon" aria-hidden="true"></i> Novo Evento</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <input type="hidden" id="ev-id" />
+    <div id="ev-form-error" style="display:none;padding:8px 12px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:var(--radius-md);color:var(--red);font-size:12px;margin-bottom:12px"></div>
+    <div class="form-group">
+      <label class="form-label">Título *</label>
+      <input type="text" class="form-input" id="ev-title" placeholder="Ex: Reunião de equipe" />
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Data *</label>
+        <input type="date" class="form-input" id="ev-date" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-input" id="ev-category">
+          <option value="personal">Pessoal</option>
+          <option value="work">Trabalho</option>
+          <option value="health">Saúde</option>
+          <option value="finance">Finanças</option>
+          <option value="social">Social</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Início</label>
+        <input type="time" class="form-input" id="ev-time" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fim</label>
+        <input type="time" class="form-input" id="ev-end-time" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Local</label>
+      <input type="text" class="form-input" id="ev-location" placeholder="Ex: Sala de reuniões, Google Meet..." />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <textarea class="form-input" id="ev-description" rows="2" placeholder="Detalhes do evento..." style="resize:vertical"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Recorrência</label>
+        <select class="form-input" id="ev-repeat">
+          <option value="none">Sem recorrência</option>
+          <option value="daily">Diário</option>
+          <option value="weekly">Semanal</option>
+          <option value="biweekly">Quinzenal</option>
+          <option value="monthly">Mensal</option>
+          <option value="yearly">Anual</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lembrete</label>
+        <select class="form-input" id="ev-reminder">
+          <option value="0">Sem lembrete</option>
+          <option value="5">5 min antes</option>
+          <option value="15">15 min antes</option>
+          <option value="30">30 min antes</option>
+          <option value="60">1h antes</option>
+          <option value="1440">1 dia antes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cor</label>
+        <input type="color" class="form-input" id="ev-color" value="#6366F1" style="height:40px;padding:4px" />
+      </div>
+    </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="ev-all-day" style="accent-color:var(--accent)" />
+      <label for="ev-all-day" class="form-label" style="margin-bottom:0;cursor:pointer">Dia inteiro</label>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" style="flex:2;justify-content:center" id="ev-submit-btn" onclick="submitEventForm()">Criar evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: HÁBITO ─── -->
+<div class="modal-overlay" id="modal-habit-form" style="display:none">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="habit-modal-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Novo Hábito</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <input type="hidden" id="habit-id" />
+    <div id="habit-form-error" style="display:none;padding:8px 12px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:var(--radius-md);color:var(--red);font-size:12px;margin-bottom:12px"></div>
+    <div class="form-group">
+      <label class="form-label">Título *</label>
+      <input type="text" class="form-input" id="habit-title" placeholder="Ex: Meditar 10 minutos" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <textarea class="form-input" id="habit-description" rows="2" placeholder="Detalhes do hábito..." style="resize:vertical"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Frequência</label>
+        <select class="form-input" id="habit-frequency">
+          <option value="daily">Diário</option>
+          <option value="weekdays">Dias úteis</option>
+          <option value="weekends">Fins de semana</option>
+          <option value="weekly">Semanal</option>
+          <option value="monthly">Mensal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-input" id="habit-category">
+          <option value="general">Geral</option>
+          <option value="health">Saúde</option>
+          <option value="fitness">Fitness</option>
+          <option value="mind">Mente</option>
+          <option value="productivity">Produtividade</option>
+          <option value="finance">Finanças</option>
+          <option value="social">Social</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Cor</label>
+        <input type="color" class="form-input" id="habit-color" value="#6366F1" style="height:40px;padding:4px" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Horário do lembrete</label>
+        <input type="time" class="form-input" id="habit-reminder-time" value="08:00" />
+      </div>
+    </div>
+    <div class="form-group" style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="habit-reminder-enabled" style="accent-color:var(--accent)" />
+      <label for="habit-reminder-enabled" class="form-label" style="margin-bottom:0;cursor:pointer">Ativar lembrete diário</label>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" style="flex:2;justify-content:center" id="habit-submit-btn" onclick="submitHabitForm()">Criar hábito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: DETALHE DO HÁBITO ─── -->
+<div class="modal-overlay" id="modal-habit-detail" style="display:none">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Detalhes do Hábito</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div id="habit-detail-content"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;color:var(--red)" id="habit-detail-delete-btn">Excluir</button>
+      <button class="btn btn-primary" style="flex:2;justify-content:center" id="habit-detail-edit-btn">Editar hábito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: META ─── -->
+<div class="modal-overlay" id="modal-goal-form" style="display:none">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title" id="goal-modal-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Nova Meta</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <input type="hidden" id="goal-id" />
+    <div id="goal-form-error" style="display:none;padding:8px 12px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:var(--radius-md);color:var(--red);font-size:12px;margin-bottom:12px"></div>
+    <div class="form-group">
+      <label class="form-label">Título *</label>
+      <input type="text" class="form-input" id="goal-title" placeholder="Ex: Ler 24 livros em 2025" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <textarea class="form-input" id="goal-description" rows="2" placeholder="Descreva sua meta..." style="resize:vertical"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-input" id="goal-category">
+          <option value="personal">Pessoal</option>
+          <option value="career">Carreira</option>
+          <option value="health">Saúde</option>
+          <option value="finance">Finanças</option>
+          <option value="education">Educação</option>
+          <option value="relationships">Relacionamentos</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prazo</label>
+        <input type="date" class="form-input" id="goal-target-date" />
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="form-group">
+        <label class="form-label">Meta numérica</label>
+        <input type="number" class="form-input" id="goal-target-value" placeholder="Ex: 24" min="0" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Unidade</label>
+        <input type="text" class="form-input" id="goal-unit" placeholder="Ex: livros" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cor</label>
+        <input type="color" class="form-input" id="goal-color" value="#6366F1" style="height:40px;padding:4px" />
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" style="flex:2;justify-content:center" id="goal-submit-btn" onclick="submitGoalForm()">Criar meta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL: DETALHE DA META ─── -->
+<div class="modal-overlay" id="modal-goal-detail" style="display:none">
+  <div class="modal-box" style="max-width:600px">
+    <div class="modal-header">
+      <span class="modal-title"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Detalhes da Meta</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div id="goal-detail-content" style="max-height:60vh;overflow-y:auto"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center;color:var(--red)" id="goal-detail-delete-btn">Excluir</button>
+      <button class="btn btn-primary" style="flex:2;justify-content:center" id="goal-detail-edit-btn">Editar meta</button>
+    </div>
   </div>
 </div>
 
@@ -4765,30 +5051,171 @@
     }
   }
 
-  // ── loadAgenda: carrega eventos e tarefas de hoje ─────────────────────
+  // ── Agenda: estado e funções de navegação ─────────────────────────────
+  let _agendaView = 'day';
+  let _agendaDate = new Date();
+  let _agendaSearchTimeout = null;
+
+  function agendaSetView(v) {
+    _agendaView = v;
+    ['day','week','month'].forEach(s => {
+      const btn = document.getElementById('agenda-view-' + s);
+      if (btn) btn.classList.toggle('active', s === v);
+    });
+    loadAgenda();
+  }
+  function agendaNavigate(dir) {
+    if (_agendaView === 'day') _agendaDate.setDate(_agendaDate.getDate() + dir);
+    else if (_agendaView === 'week') _agendaDate.setDate(_agendaDate.getDate() + dir * 7);
+    else _agendaDate.setMonth(_agendaDate.getMonth() + dir);
+    loadAgenda();
+  }
+  function agendaGoToday() {
+    _agendaDate = new Date();
+    loadAgenda();
+  }
+  function agendaSearch(q) {
+    clearTimeout(_agendaSearchTimeout);
+    _agendaSearchTimeout = setTimeout(() => {
+      if (!q.trim()) { loadAgenda(); return; }
+      apiFetch('/api/events?q=' + encodeURIComponent(q)).then(data => {
+        const eventsEl = document.getElementById('agenda-events-list');
+        if (!eventsEl) return;
+        const events = data.events || [];
+        if (!events.length) {
+          eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Nenhum resultado para "' + q + '"</div>';
+        } else {
+          eventsEl.innerHTML = events.map(e => renderEventCard(e)).join('');
+          if (window.lucide) lucide.createIcons();
+        }
+      }).catch(() => {});
+    }, 300);
+  }
+  function renderEventCard(e) {
+    const sourceIcon = e.source === 'google' ? '🔵' : e.source === 'outlook' ? '🟦' : '';
+    return `<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:var(--bg-elevated);border-radius:var(--radius-md);border-left:3px solid ${e.color || 'var(--accent)'};cursor:pointer" onclick="openEditEventModal(${JSON.stringify(e).replace(/"/g, '&quot;')})">
+      <div style="font-size:11px;color:var(--text-muted);font-family:monospace;width:44px;padding-top:2px">${e.time || (e.allDay ? 'Dia todo' : '—')}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${sourceIcon} ${e.title}</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">${e.endTime ? e.time + '–' + e.endTime : ''} ${e.location ? '· 📍 ' + e.location : ''} ${e.repeat && e.repeat !== 'none' ? '· 🔄' : ''} ${e.reminder ? '· 🔔' : ''}</div>
+        ${e.description ? '<div style="font-size:11px;color:var(--text-muted);margin-top:3px">' + e.description.slice(0, 80) + (e.description.length > 80 ? '...' : '') + '</div>' : ''}
+      </div>
+      <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();deleteEvent('${e.id}')">✕</button>
+    </div>`;
+  }
+  function renderWeekView(events, from, to) {
+    const days = [];
+    const cur = new Date(from + 'T12:00:00');
+    const end = new Date(to + 'T12:00:00');
+    while (cur <= end) {
+      days.push(cur.toISOString().split('T')[0]);
+      cur.setDate(cur.getDate() + 1);
+    }
+    return '<div style="display:grid;grid-template-columns:repeat(' + days.length + ',1fr);gap:8px">' +
+      days.map(d => {
+        const dayEvents = events.filter(e => e.date === d);
+        const isToday = d === new Date().toISOString().split('T')[0];
+        const label = new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric' });
+        return `<div style="background:var(--bg-elevated);border-radius:var(--radius-md);padding:8px;border:1px solid ${isToday ? 'var(--accent)' : 'var(--border)'}">
+          <div style="font-size:11px;font-weight:700;color:${isToday ? 'var(--accent)' : 'var(--text-muted)'};margin-bottom:6px;text-align:center">${label}</div>
+          ${dayEvents.length ? dayEvents.map(e => `<div style="font-size:11px;padding:4px 6px;background:${e.color || 'var(--accent)'}22;border-radius:4px;margin-bottom:3px;cursor:pointer;border-left:2px solid ${e.color || 'var(--accent)'}" onclick="openEditEventModal(${JSON.stringify(e).replace(/"/g, '&quot;')})">${e.time ? e.time + ' ' : ''}${e.title}</div>`).join('') : '<div style="font-size:10px;color:var(--text-muted);text-align:center;padding:8px 0">—</div>'}
+          <button style="width:100%;background:transparent;border:1px dashed var(--border);border-radius:4px;padding:4px;font-size:10px;color:var(--text-muted);cursor:pointer;margin-top:4px" onclick="openNewEventModal('${d}')">+</button>
+        </div>`;
+      }).join('') + '</div>';
+  }
+  function renderMonthView(events, year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDow = firstDay.getDay();
+    const today = new Date().toISOString().split('T')[0];
+    let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">';
+    ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d => {
+      html += `<div style="text-align:center;font-size:10px;font-weight:700;color:var(--text-muted);padding:4px">${d}</div>`;
+    });
+    for (let i = 0; i < startDow; i++) html += '<div></div>';
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dayEvents = events.filter(e => e.date === dateStr);
+      const isToday = dateStr === today;
+      html += `<div style="min-height:60px;background:var(--bg-elevated);border-radius:4px;padding:4px;border:1px solid ${isToday ? 'var(--accent)' : 'var(--border)'};cursor:pointer" onclick="openNewEventModal('${dateStr}')">
+        <div style="font-size:11px;font-weight:${isToday ? '800' : '500'};color:${isToday ? 'var(--accent)' : 'var(--text-primary)'};margin-bottom:2px">${d}</div>
+        ${dayEvents.slice(0,3).map(e => `<div style="font-size:9px;padding:1px 3px;background:${e.color || 'var(--accent)'}33;border-radius:2px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${e.title}</div>`).join('')}
+        ${dayEvents.length > 3 ? `<div style="font-size:9px;color:var(--text-muted)">+${dayEvents.length - 3}</div>` : ''}
+      </div>`;
+    }
+    html += '</div>';
+    return html;
+  }
+  // ── loadAgenda: carrega eventos com suporte a dia/semana/mês ──────────
   async function loadAgenda() {
     const eventsEl = document.getElementById('agenda-events-list');
     const tasksEl = document.getElementById('agenda-tasks-list');
+    const titleEl = document.getElementById('agenda-events-title');
+    const dateLabel = document.getElementById('agenda-date-label');
+    const category = document.getElementById('agenda-category-filter')?.value || '';
     const today = new Date().toISOString().split('T')[0];
-    // Eventos
-    if (eventsEl) {
-      try {
-        const data = await apiFetch(`/api/events?date=${today}`);
-        const events = data.events || [];
-        if (!events.length) {
-          eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Nenhum evento hoje. <button class="btn btn-ghost" style="font-size:12px;margin-top:8px" onclick="openNewEventModal()">+ Adicionar evento</button></div>';
-        } else {
-          const colors = ['var(--accent)', 'var(--green)', 'var(--amber)', 'var(--purple)', 'var(--cyan)'];
-          eventsEl.innerHTML = events.map((e, i) => `
-            <div style="display:flex;gap:12px;align-items:center;padding:10px;background:var(--bg-elevated);border-radius:var(--radius-md)">
-              <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:40px">${e.time || '—'}</div>
-              <div style="flex:1"><div style="font-size:13px;font-weight:600">${e.title}</div><div style="font-size:11px;color:var(--text-secondary)">${e.duration || ''} ${e.location ? '· ' + e.location : ''}</div></div>
-              <div style="width:4px;height:36px;border-radius:2px;background:${e.color || colors[i % colors.length]}"></div>
-            </div>`).join('');
-        }
-      } catch { eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar eventos.</div>'; }
+    const d = _agendaDate;
+
+    if (_agendaView === 'day') {
+      const dateStr = d.toISOString().split('T')[0];
+      const label = d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      if (dateLabel) dateLabel.textContent = label;
+      if (titleEl) titleEl.textContent = 'Eventos do Dia';
+      if (eventsEl) {
+        eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando...</div>';
+        try {
+          let url = `/api/events?date=${dateStr}`;
+          if (category) url += `&category=${encodeURIComponent(category)}`;
+          const data = await apiFetch(url);
+          const events = data.events || [];
+          if (!events.length) {
+            eventsEl.innerHTML = `<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Nenhum evento. <button class="btn btn-ghost" style="font-size:12px;margin-top:8px" onclick="openNewEventModal('${dateStr}')">+ Adicionar evento</button></div>`;
+          } else {
+            eventsEl.innerHTML = events.map(e => renderEventCard(e)).join('');
+            if (window.lucide) lucide.createIcons();
+          }
+        } catch { eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar eventos.</div>'; }
+      }
+    } else if (_agendaView === 'week') {
+      const weekStart = new Date(d);
+      weekStart.setDate(d.getDate() - d.getDay());
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      const from = weekStart.toISOString().split('T')[0];
+      const to = weekEnd.toISOString().split('T')[0];
+      const label = weekStart.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }) + ' – ' + weekEnd.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+      if (dateLabel) dateLabel.textContent = label;
+      if (titleEl) titleEl.textContent = 'Semana';
+      if (eventsEl) {
+        eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando...</div>';
+        try {
+          let url = `/api/events?from=${from}&to=${to}`;
+          if (category) url += `&category=${encodeURIComponent(category)}`;
+          const data = await apiFetch(url);
+          eventsEl.innerHTML = renderWeekView(data.events || [], from, to);
+          if (window.lucide) lucide.createIcons();
+        } catch { eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar semana.</div>'; }
+      }
+    } else if (_agendaView === 'month') {
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const label = d.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+      if (dateLabel) dateLabel.textContent = label;
+      if (titleEl) titleEl.textContent = 'Mês';
+      const from = `${year}-${String(month+1).padStart(2,'0')}-01`;
+      const to = new Date(year, month + 1, 0).toISOString().split('T')[0];
+      if (eventsEl) {
+        eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Carregando...</div>';
+        try {
+          let url = `/api/events?from=${from}&to=${to}`;
+          if (category) url += `&category=${encodeURIComponent(category)}`;
+          const data = await apiFetch(url);
+          eventsEl.innerHTML = renderMonthView(data.events || [], year, month);
+          if (window.lucide) lucide.createIcons();
+        } catch { eventsEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar mês.</div>'; }
+      }
     }
-    // Tarefas do dia
+    // Tarefas do dia (sempre mostra tarefas de hoje)
     if (tasksEl) {
       try {
         const data = await apiFetch('/api/tasks');
@@ -4806,45 +5233,57 @@
     }
   }
 
-  // ── loadHabits: carrega hábitos reais ─────────────────────────────────
+  // ── loadHabits: carrega hábitos reais com filtros e ações completas ──
   async function loadHabits() {
     const listEl = document.getElementById('habits-list');
     if (!listEl) return;
     try {
       const data = await apiFetch('/api/habits');
-      const habits = data.habits || [];
+      let habits = data.habits || [];
       const today = new Date().toISOString().split('T')[0];
+      // Filtro
+      if (_habitsFilter === 'pending') habits = habits.filter(h => !h.completedToday && h.active !== false);
+      else if (_habitsFilter === 'done') habits = habits.filter(h => h.completedToday);
       // Stats
-      const active = habits.filter(h => h.active);
-      const done = habits.filter(h => h.completions?.includes(today));
-      const maxStreak = Math.max(...habits.map(h => h.streak || 0), 0);
+      const allHabits = data.habits || [];
+      const active = allHabits.filter(h => h.active !== false);
+      const done = allHabits.filter(h => h.completedToday);
+      const maxStreak = Math.max(...allHabits.map(h => h.streak || 0), 0);
       const rate = active.length > 0 ? Math.round((done.length / active.length) * 100) : 0;
       const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
       setEl('h-streak', maxStreak > 0 ? `${maxStreak}d` : '0d');
-      setEl('h-streak-text', maxStreak >= 7 ? 'Recorde!' : `${maxStreak} dias`);
+      setEl('h-streak-text', maxStreak >= 7 ? '🔥 Recorde!' : `${maxStreak} dias`);
       const streakLabel = document.getElementById('h-streak-label');
       if (streakLabel && maxStreak > 0) streakLabel.style.display = 'flex';
       setEl('h-rate', `${rate}%`);
       setEl('h-rate-sub', `${done.length} de ${active.length} completos`);
       setEl('h-active', active.length);
-      setEl('h-active-sub', active.length === habits.length ? 'Todos ativos' : `${habits.length - active.length} inativos`);
-      setEl('h-total', habits.length);
+      setEl('h-active-sub', active.length === allHabits.length ? 'Todos ativos' : `${allHabits.length - active.length} inativos`);
+      setEl('h-total', done.length);
       // Lista
       if (!habits.length) {
-        listEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px 0">Nenhum hábito cadastrado. <button class="btn btn-primary" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto" onclick="openNewHabitModal()">+ Criar primeiro hábito</button></div>';
+        listEl.innerHTML = `<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px 0">
+          ${_habitsFilter === 'all' ? 'Nenhum hábito cadastrado.' : 'Nenhum hábito nesta categoria.'}
+          ${_habitsFilter === 'all' ? '<button class="btn btn-primary" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto" onclick="openNewHabitModal()">+ Criar primeiro hábito</button>' : ''}
+        </div>`;
         return;
       }
       listEl.innerHTML = habits.map(h => {
-        const isDone = h.completions?.includes(today);
-        return `<div class="habit-item ${isDone ? 'done' : ''}" onclick="toggleHabitReal('${h.id}', this)" data-id="${h.id}">
-          <div class="habit-check">${isDone ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : ''}</div>
-          <span class="habit-name"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> ${h.title}</span>
-          <span class="habit-streak"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> ${h.streak || 0}d</span>
+        const isDone = h.completedToday;
+        const streakColor = h.streak >= 7 ? 'var(--amber)' : h.streak >= 3 ? 'var(--green)' : 'var(--text-muted)';
+        return `<div class="habit-item ${isDone ? 'done' : ''}" data-id="${h.id}" style="border-left:3px solid ${h.color || 'var(--accent)'}">
+          <div class="habit-check" onclick="toggleHabitReal('${h.id}', this.parentElement)" style="cursor:pointer">${isDone ? '<i data-lucide="check" class="pg-icon" aria-hidden="true"></i>' : ''}</div>
+          <div style="flex:1;cursor:pointer" onclick="openHabitDetail('${h.id}')">
+            <div class="habit-name">${h.title}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${h.frequency || 'daily'} · ${h.category || 'general'} ${h.reminderEnabled ? '· 🔔 ' + (h.reminderTime || '') : ''}</div>
+          </div>
+          <span class="habit-streak" style="color:${streakColor}"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> ${h.streak || 0}d</span>
+          <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="openEditHabitModal(${JSON.stringify(h).replace(/"/g,'&quot;')})"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;color:var(--red)" onclick="deleteHabit('${h.id}')">✕</button>
         </div>`;
       }).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      /* warn handled */
       if (listEl) listEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar hábitos.</div>';
     }
   }
@@ -4884,43 +5323,61 @@
     } catch { showToast('Erro ao atualizar tarefa', 'error'); }
   }
 
-  // ── loadGoals: carrega metas reais ────────────────────────────────────
+  // ── loadGoals: carrega metas reais com KPIs, filtros e ações ─────────
   async function loadGoals() {
     const gridEl = document.getElementById('goals-grid');
     if (!gridEl) return;
     try {
-      const data = await apiFetch('/api/goals');
+      let url = '/api/goals';
+      if (_goalsFilter && _goalsFilter !== 'all') url += '?status=' + _goalsFilter;
+      const data = await apiFetch(url);
       const goals = data.goals || [];
+      // KPIs (sempre usa todos os dados)
+      const allData = await apiFetch('/api/goals?view=stats').catch(() => ({ stats: {} }));
+      const stats = allData.stats || {};
+      const setKpi = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setKpi('goals-kpi-total', stats.total ?? '—');
+      setKpi('goals-kpi-active', stats.active ?? '—');
+      setKpi('goals-kpi-done', stats.done ?? '—');
+      setKpi('goals-kpi-avg', stats.avgProgress !== undefined ? stats.avgProgress + '%' : '—');
       if (!goals.length) {
         gridEl.innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px">
           <div style="font-size:48px;margin-bottom:16px">🎯</div>
-          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhuma meta cadastrada</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhuma meta ${_goalsFilter !== 'all' ? 'nesta categoria' : 'cadastrada'}</div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Defina seus objetivos e acompanhe o progresso</div>
-          <button class="btn btn-primary" onclick="openNewGoalModal()">+ Criar primeira meta</button>
+          ${_goalsFilter === 'all' ? '<button class="btn btn-primary" onclick="openNewGoalModal()">+ Criar primeira meta</button>' : ''}
         </div>`;
         return;
       }
-      const gradients = [
-        'linear-gradient(90deg,var(--accent),#06B6D4)',
-        'linear-gradient(90deg,var(--amber),#FCD34D)',
-        'linear-gradient(90deg,var(--green),#34D399)',
-        'linear-gradient(90deg,var(--purple),#C4B5FD)',
-        'linear-gradient(90deg,var(--pink),#F9A8D4)',
-      ];
-      gridEl.innerHTML = goals.map((g, i) => `
-        <div class="card">
-          <div style="font-size:24px;margin-bottom:12px"><i data-lucide="${g.icon || 'target'}" class="pg-icon" aria-hidden="true"></i></div>
-          <div style="font-size:15px;font-weight:700;margin-bottom:6px">${g.title}</div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">${g.description || ''} ${g.targetDate ? '· Prazo: ' + new Date(g.targetDate).toLocaleDateString('pt-BR', {month:'short',year:'numeric'}) : ''}</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${g.progress || 0}%;background:${gradients[i % gradients.length]}"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--text-muted)">
-            <span>${g.progress || 0}%</span>
-            <span>${g.status === 'done' ? '✅ Concluída' : g.status === 'paused' ? '⏸ Pausada' : 'Em andamento'}</span>
+      const statusColors = { active: 'var(--accent)', done: 'var(--green)', paused: 'var(--amber)', cancelled: 'var(--red)' };
+      const statusLabels = { active: 'Em andamento', done: '✅ Concluída', paused: '⏸ Pausada', cancelled: '❌ Cancelada' };
+      gridEl.innerHTML = goals.map(g => {
+        const subtaskCount = (g.subtasks || []).length;
+        const subtaskDone = (g.subtasks || []).filter(s => s.done).length;
+        const milestoneCount = (g.milestones || []).length;
+        const milestoneDone = (g.milestones || []).filter(m => m.done).length;
+        return `<div class="card" style="cursor:pointer;border-left:3px solid ${g.color || statusColors[g.status] || 'var(--accent)'}" onclick="openGoalDetail('${g.id}')">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+            <div style="font-size:15px;font-weight:700;flex:1">${g.title}</div>
+            <div style="display:flex;gap:4px;flex-shrink:0">
+              <button class="btn btn-ghost" style="font-size:11px;padding:2px 6px" onclick="event.stopPropagation();openEditGoalModal(${JSON.stringify(g).replace(/"/g,'&quot;')})"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
+              <button class="btn btn-ghost" style="font-size:11px;padding:2px 6px;color:var(--red)" onclick="event.stopPropagation();deleteGoal('${g.id}')">✕</button>
+            </div>
           </div>
-        </div>`).join('');
+          ${g.description ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">${g.description.slice(0,80)}${g.description.length > 80 ? '...' : ''}</div>` : ''}
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:6px">
+            <span>${statusLabels[g.status] || g.status}</span>
+            <span>${g.targetDate ? '📅 ' + new Date(g.targetDate + 'T12:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'short',year:'numeric'}) : ''}</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${g.progress || 0}%;background:${g.color || 'var(--accent)'}"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text-muted)">
+            <span>${g.progress || 0}% concluído</span>
+            <span>${subtaskCount > 0 ? subtaskDone + '/' + subtaskCount + ' subtarefas' : ''} ${milestoneCount > 0 ? '· ' + milestoneDone + '/' + milestoneCount + ' marcos' : ''}</span>
+          </div>
+        </div>`;
+      }).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      /* warn handled */
       if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar metas.</div>';
     }
   }
@@ -5428,34 +5885,267 @@
   }
 
   // ── Modais de criação ─────────────────────────────────────────────────
-  function openNewEventModal() {
-    const today = new Date().toISOString().split('T')[0];
-    const title = prompt('Título do evento:');
-    if (!title) return;
-    const time = prompt('Horário (ex: 09:00):', '09:00') || '09:00';
-    const duration = prompt('Duração (ex: 1h):', '1h') || '1h';
-    fetch('/api/events', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, date: today, time, duration }),
-    }).then(r => r.json()).then(d => {
-      if (d.ok) { showToast('Evento criado!', 'success'); loadAgenda(); }
-      else showToast(d.error || 'Erro ao criar evento', 'error');
-    }).catch(() => showToast('Erro ao criar evento', 'error'));
+  function openNewEventModal(prefillDate) {
+    const today = prefillDate || new Date().toISOString().split('T')[0];
+    document.getElementById('ev-modal-title').textContent = 'Novo Evento';
+    document.getElementById('ev-id').value = '';
+    document.getElementById('ev-title').value = '';
+    document.getElementById('ev-date').value = today;
+    document.getElementById('ev-time').value = '09:00';
+    document.getElementById('ev-end-time').value = '10:00';
+    document.getElementById('ev-location').value = '';
+    document.getElementById('ev-description').value = '';
+    document.getElementById('ev-repeat').value = 'none';
+    document.getElementById('ev-reminder').value = '0';
+    document.getElementById('ev-category').value = 'personal';
+    document.getElementById('ev-color').value = '#6366F1';
+    document.getElementById('ev-all-day').checked = false;
+    document.getElementById('ev-form-error').style.display = 'none';
+    openModal('modal-event-form');
+  }
+  function openEditEventModal(ev) {
+    document.getElementById('ev-modal-title').textContent = 'Editar Evento';
+    document.getElementById('ev-id').value = ev.id || '';
+    document.getElementById('ev-title').value = ev.title || '';
+    document.getElementById('ev-date').value = ev.date || '';
+    document.getElementById('ev-time').value = ev.time || '09:00';
+    document.getElementById('ev-end-time').value = ev.endTime || '';
+    document.getElementById('ev-location').value = ev.location || '';
+    document.getElementById('ev-description').value = ev.description || '';
+    document.getElementById('ev-repeat').value = ev.repeat || 'none';
+    document.getElementById('ev-reminder').value = String(ev.reminder || 0);
+    document.getElementById('ev-category').value = ev.category || 'personal';
+    document.getElementById('ev-color').value = ev.color || '#6366F1';
+    document.getElementById('ev-all-day').checked = Boolean(ev.allDay);
+    document.getElementById('ev-form-error').style.display = 'none';
+    openModal('modal-event-form');
+  }
+  async function submitEventForm() {
+    const id = document.getElementById('ev-id').value;
+    const title = document.getElementById('ev-title').value.trim();
+    const date = document.getElementById('ev-date').value;
+    if (!title) { document.getElementById('ev-form-error').textContent = 'Título obrigatório'; document.getElementById('ev-form-error').style.display = 'block'; return; }
+    if (!date) { document.getElementById('ev-form-error').textContent = 'Data obrigatória'; document.getElementById('ev-form-error').style.display = 'block'; return; }
+    const payload = {
+      title, date,
+      time: document.getElementById('ev-time').value,
+      endTime: document.getElementById('ev-end-time').value,
+      location: document.getElementById('ev-location').value,
+      description: document.getElementById('ev-description').value,
+      repeat: document.getElementById('ev-repeat').value,
+      reminder: Number(document.getElementById('ev-reminder').value),
+      category: document.getElementById('ev-category').value,
+      color: document.getElementById('ev-color').value,
+      allDay: document.getElementById('ev-all-day').checked,
+    };
+    const btn = document.getElementById('ev-submit-btn');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+    try {
+      const method = id ? 'PUT' : 'POST';
+      if (id) payload.id = id;
+      const r = await fetch('/api/events', { method, credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const d = await r.json();
+      if (d.ok) { showToast(id ? 'Evento atualizado!' : 'Evento criado!', 'success'); closeModal(); loadAgenda(); }
+      else { document.getElementById('ev-form-error').textContent = d.error || 'Erro ao salvar'; document.getElementById('ev-form-error').style.display = 'block'; }
+    } catch { document.getElementById('ev-form-error').textContent = 'Erro de conexão'; document.getElementById('ev-form-error').style.display = 'block'; }
+    finally { btn.disabled = false; btn.textContent = id ? 'Salvar alterações' : 'Criar evento'; }
+  }
+  async function deleteEvent(id) {
+    if (!confirm('Excluir este evento?')) return;
+    try {
+      const r = await fetch('/api/events?id=' + id, { method: 'DELETE', credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) { showToast('Evento excluído', 'success'); loadAgenda(); }
+      else showToast(d.error || 'Erro ao excluir', 'error');
+    } catch { showToast('Erro ao excluir evento', 'error'); }
+  }
+  async function agendaSyncGoogle() {
+    showToast('Sincronizando com Google Calendar...', 'info');
+    try {
+      const r = await fetch('/api/events', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'google-sync' }) });
+      const d = await r.json();
+      if (d.ok) { showToast(`${d.synced} eventos sincronizados do Google Calendar`, 'success'); loadAgenda(); }
+      else showToast(d.error || 'Erro ao sincronizar Google Calendar', 'error');
+    } catch { showToast('Erro ao sincronizar Google Calendar', 'error'); }
+  }
+  async function agendaSyncOutlook() {
+    showToast('Sincronizando com Outlook...', 'info');
+    try {
+      const r = await fetch('/api/events', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'outlook-sync' }) });
+      const d = await r.json();
+      if (d.ok) { showToast(`${d.synced} eventos sincronizados do Outlook`, 'success'); loadAgenda(); }
+      else showToast(d.error || 'Erro ao sincronizar Outlook', 'error');
+    } catch { showToast('Erro ao sincronizar Outlook', 'error'); }
   }
 
   function openNewGoalModal() {
-    const title = prompt('Título da meta:');
+    document.getElementById('goal-modal-title').textContent = 'Nova Meta';
+    document.getElementById('goal-id').value = '';
+    document.getElementById('goal-title').value = '';
+    document.getElementById('goal-description').value = '';
+    document.getElementById('goal-category').value = 'personal';
+    document.getElementById('goal-target-date').value = '';
+    document.getElementById('goal-target-value').value = '';
+    document.getElementById('goal-unit').value = '';
+    document.getElementById('goal-color').value = '#6366F1';
+    document.getElementById('goal-form-error').style.display = 'none';
+    openModal('modal-goal-form');
+  }
+  function openEditGoalModal(g) {
+    document.getElementById('goal-modal-title').textContent = 'Editar Meta';
+    document.getElementById('goal-id').value = g.id || '';
+    document.getElementById('goal-title').value = g.title || '';
+    document.getElementById('goal-description').value = g.description || '';
+    document.getElementById('goal-category').value = g.category || 'personal';
+    document.getElementById('goal-target-date').value = g.targetDate || '';
+    document.getElementById('goal-target-value').value = g.targetValue || '';
+    document.getElementById('goal-unit').value = g.unit || '';
+    document.getElementById('goal-color').value = g.color || '#6366F1';
+    document.getElementById('goal-form-error').style.display = 'none';
+    openModal('modal-goal-form');
+  }
+  async function submitGoalForm() {
+    const id = document.getElementById('goal-id').value;
+    const title = document.getElementById('goal-title').value.trim();
+    if (!title) { document.getElementById('goal-form-error').textContent = 'Título obrigatório'; document.getElementById('goal-form-error').style.display = 'block'; return; }
+    const payload = {
+      title,
+      description: document.getElementById('goal-description').value,
+      category: document.getElementById('goal-category').value,
+      targetDate: document.getElementById('goal-target-date').value,
+      targetValue: document.getElementById('goal-target-value').value ? Number(document.getElementById('goal-target-value').value) : null,
+      unit: document.getElementById('goal-unit').value,
+      color: document.getElementById('goal-color').value,
+    };
+    const btn = document.getElementById('goal-submit-btn');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+    try {
+      const method = id ? 'PUT' : 'POST';
+      if (id) payload.id = id;
+      const r = await fetch('/api/goals', { method, credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const d = await r.json();
+      if (d.ok) { showToast(id ? 'Meta atualizada!' : 'Meta criada!', 'success'); closeModal(); loadGoals(); }
+      else { document.getElementById('goal-form-error').textContent = d.error || 'Erro ao salvar'; document.getElementById('goal-form-error').style.display = 'block'; }
+    } catch { document.getElementById('goal-form-error').textContent = 'Erro de conexão'; document.getElementById('goal-form-error').style.display = 'block'; }
+    finally { btn.disabled = false; btn.textContent = id ? 'Salvar alterações' : 'Criar meta'; }
+  }
+  async function deleteGoal(id) {
+    if (!confirm('Excluir esta meta?')) return;
+    try {
+      const r = await fetch('/api/goals?id=' + id, { method: 'DELETE', credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) { showToast('Meta excluída', 'success'); loadGoals(); }
+      else showToast(d.error || 'Erro ao excluir', 'error');
+    } catch { showToast('Erro ao excluir meta', 'error'); }
+  }
+  async function openGoalDetail(id) {
+    try {
+      const data = await apiFetch('/api/goals?id=' + id);
+      if (!data.ok) { showToast('Erro ao carregar meta', 'error'); return; }
+      const g = data.goal;
+      const el = document.getElementById('goal-detail-content');
+      if (!el) return;
+      const subtaskHtml = (g.subtasks || []).map(s => `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <input type="checkbox" ${s.done ? 'checked' : ''} style="accent-color:var(--accent)" onchange="toggleGoalSubtask('${g.id}','${s.id}',this.checked)" />
+          <span style="font-size:13px${s.done ? ';text-decoration:line-through;color:var(--text-muted)' : ''}">${s.title}</span>
+        </div>`).join('');
+      const milestoneHtml = (g.milestones || []).map(m => `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <input type="checkbox" ${m.done ? 'checked' : ''} style="accent-color:var(--accent)" onchange="toggleGoalMilestone('${g.id}','${m.id}',this.checked)" />
+          <span style="font-size:13px${m.done ? ';text-decoration:line-through;color:var(--text-muted)' : ''}">${m.title}${m.date ? ' <span style='color:var(--text-muted);font-size:11px'>· ' + new Date(m.date+'T12:00:00').toLocaleDateString('pt-BR') + '</span>' : ''}</span>
+        </div>`).join('');
+      const historyHtml = (g.history || []).slice(0,10).map(h => `
+        <div style="font-size:11px;color:var(--text-muted);padding:3px 0">${new Date(h.at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})} — ${h.action}</div>`).join('');
+      el.innerHTML = `
+        <div style="margin-bottom:16px">
+          <div style="font-size:20px;font-weight:800;margin-bottom:4px">${g.title}</div>
+          <div style="font-size:13px;color:var(--text-secondary)">${g.description || ''}</div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:4px"><span>Progresso</span><span>${g.progress || 0}%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${g.progress || 0}%"></div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <input type="number" class="form-input" id="goal-detail-progress" value="${g.progress || 0}" min="0" max="100" style="width:80px;font-size:12px" placeholder="%" />
+          <button class="btn btn-ghost" style="font-size:12px" onclick="updateGoalProgress('${g.id}')">Atualizar progresso</button>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="shareGoal('${g.id}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+        </div>
+        ${g.subtasks && g.subtasks.length > 0 ? '<div style="margin-bottom:16px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Subtarefas</div>' + subtaskHtml + '</div>' : ''}
+        ${g.milestones && g.milestones.length > 0 ? '<div style="margin-bottom:16px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Marcos</div>' + milestoneHtml + '</div>' : ''}
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <input type="text" class="form-input" id="goal-new-subtask" placeholder="Nova subtarefa..." style="flex:1;font-size:12px" />
+          <button class="btn btn-ghost" style="font-size:12px" onclick="addGoalSubtask('${g.id}')">+ Subtarefa</button>
+          <input type="text" class="form-input" id="goal-new-milestone" placeholder="Novo marco..." style="flex:1;font-size:12px" />
+          <button class="btn btn-ghost" style="font-size:12px" onclick="addGoalMilestone('${g.id}')">+ Marco</button>
+        </div>
+        ${historyHtml ? '<div><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Histórico</div>' + historyHtml + '</div>' : ''}
+      `;
+      document.getElementById('goal-detail-edit-btn').onclick = () => { closeModal(); openEditGoalModal(g); };
+      document.getElementById('goal-detail-delete-btn').onclick = () => { closeModal(); deleteGoal(g.id); };
+      if (window.lucide) lucide.createIcons();
+      openModal('modal-goal-detail');
+    } catch { showToast('Erro ao carregar detalhes da meta', 'error'); }
+  }
+  async function updateGoalProgress(id) {
+    const val = Number(document.getElementById('goal-detail-progress')?.value);
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update-progress', id, progress: val }) });
+      const d = await r.json();
+      if (d.ok) { showToast('Progresso atualizado!', 'success'); loadGoals(); openGoalDetail(id); }
+      else showToast(d.error || 'Erro', 'error');
+    } catch { showToast('Erro ao atualizar progresso', 'error'); }
+  }
+  async function addGoalSubtask(goalId) {
+    const title = document.getElementById('goal-new-subtask')?.value?.trim();
     if (!title) return;
-    const description = prompt('Descrição (opcional):') || '';
-    fetch('/api/goals', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description }),
-    }).then(r => r.json()).then(d => {
-      if (d.ok) { showToast('Meta criada!', 'success'); loadGoals(); }
-      else showToast(d.error || 'Erro ao criar meta', 'error');
-    }).catch(() => showToast('Erro ao criar meta', 'error'));
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add-subtask', id: goalId, subtaskTitle: title }) });
+      const d = await r.json();
+      if (d.ok) { showToast('Subtarefa adicionada!', 'success'); document.getElementById('goal-new-subtask').value = ''; openGoalDetail(goalId); loadGoals(); }
+      else showToast(d.error || 'Erro', 'error');
+    } catch { showToast('Erro ao adicionar subtarefa', 'error'); }
+  }
+  async function addGoalMilestone(goalId) {
+    const title = document.getElementById('goal-new-milestone')?.value?.trim();
+    if (!title) return;
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add-milestone', id: goalId, milestoneTitle: title }) });
+      const d = await r.json();
+      if (d.ok) { showToast('Marco adicionado!', 'success'); document.getElementById('goal-new-milestone').value = ''; openGoalDetail(goalId); loadGoals(); }
+      else showToast(d.error || 'Erro', 'error');
+    } catch { showToast('Erro ao adicionar marco', 'error'); }
+  }
+  async function toggleGoalSubtask(goalId, subtaskId, done) {
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle-subtask', id: goalId, subtaskId }) });
+      const d = await r.json();
+      if (d.ok) { loadGoals(); openGoalDetail(goalId); }
+    } catch { showToast('Erro ao atualizar subtarefa', 'error'); }
+  }
+  async function toggleGoalMilestone(goalId, milestoneId, done) {
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle-milestone', id: goalId, milestoneId }) });
+      const d = await r.json();
+      if (d.ok) { loadGoals(); openGoalDetail(goalId); }
+    } catch { showToast('Erro ao atualizar marco', 'error'); }
+  }
+  async function shareGoal(id) {
+    try {
+      const r = await fetch('/api/goals', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'share', id }) });
+      const d = await r.json();
+      if (d.ok) { const url = window.location.origin + d.shareUrl; navigator.clipboard?.writeText(url).catch(() => {}); showToast('Link copiado: ' + url, 'success'); }
+      else showToast(d.error || 'Erro ao compartilhar', 'error');
+    } catch { showToast('Erro ao compartilhar meta', 'error'); }
+  }
+  let _goalsFilter = 'all';
+  function goalsSetFilter(f) {
+    _goalsFilter = f;
+    ['all','active','done','paused'].forEach(s => {
+      const btn = document.getElementById('goals-filter-' + s);
+      if (btn) btn.style.background = s === f ? 'var(--accent-glow)' : '';
+    });
+    loadGoals();
   }
 
   function openNewProjectModal() {
@@ -5504,17 +6194,118 @@
   }
 
   function openNewHabitModal() {
-    const title = prompt('Título do hábito:');
-    if (!title) return;
-    const frequency = prompt('Frequência (ex: daily, weekly):', 'daily') || 'daily';
-    fetch('/api/habits', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, frequency }),
-    }).then(r => r.json()).then(d => {
-      if (d.ok) { showToast('Hábito criado!', 'success'); showPage('habits'); loadHabits(); }
-      else showToast(d.error || 'Erro ao criar hábito', 'error');
-    }).catch(() => showToast('Erro ao criar hábito', 'error'));
+    document.getElementById('habit-modal-title').textContent = 'Novo Hábito';
+    document.getElementById('habit-id').value = '';
+    document.getElementById('habit-title').value = '';
+    document.getElementById('habit-description').value = '';
+    document.getElementById('habit-frequency').value = 'daily';
+    document.getElementById('habit-category').value = 'general';
+    document.getElementById('habit-color').value = '#6366F1';
+    document.getElementById('habit-reminder-time').value = '08:00';
+    document.getElementById('habit-reminder-enabled').checked = false;
+    document.getElementById('habit-form-error').style.display = 'none';
+    openModal('modal-habit-form');
+  }
+  function openEditHabitModal(h) {
+    document.getElementById('habit-modal-title').textContent = 'Editar Hábito';
+    document.getElementById('habit-id').value = h.id || '';
+    document.getElementById('habit-title').value = h.title || '';
+    document.getElementById('habit-description').value = h.description || '';
+    document.getElementById('habit-frequency').value = h.frequency || 'daily';
+    document.getElementById('habit-category').value = h.category || 'general';
+    document.getElementById('habit-color').value = h.color || '#6366F1';
+    document.getElementById('habit-reminder-time').value = h.reminderTime || '08:00';
+    document.getElementById('habit-reminder-enabled').checked = Boolean(h.reminderEnabled);
+    document.getElementById('habit-form-error').style.display = 'none';
+    openModal('modal-habit-form');
+  }
+  async function submitHabitForm() {
+    const id = document.getElementById('habit-id').value;
+    const title = document.getElementById('habit-title').value.trim();
+    if (!title) { document.getElementById('habit-form-error').textContent = 'Título obrigatório'; document.getElementById('habit-form-error').style.display = 'block'; return; }
+    const payload = {
+      title,
+      description: document.getElementById('habit-description').value,
+      frequency: document.getElementById('habit-frequency').value,
+      category: document.getElementById('habit-category').value,
+      color: document.getElementById('habit-color').value,
+      reminderTime: document.getElementById('habit-reminder-time').value,
+      reminderEnabled: document.getElementById('habit-reminder-enabled').checked,
+    };
+    const btn = document.getElementById('habit-submit-btn');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+    try {
+      if (id) {
+        payload.action = 'edit'; payload.id = id;
+        const r = await fetch('/api/habits', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const d = await r.json();
+        if (d.ok) { showToast('Hábito atualizado!', 'success'); closeModal(); loadHabits(); }
+        else { document.getElementById('habit-form-error').textContent = d.error || 'Erro ao salvar'; document.getElementById('habit-form-error').style.display = 'block'; }
+      } else {
+        const r = await fetch('/api/habits', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const d = await r.json();
+        if (d.ok) { showToast('Hábito criado!', 'success'); closeModal(); showPage('habits'); loadHabits(); }
+        else { document.getElementById('habit-form-error').textContent = d.error || 'Erro ao salvar'; document.getElementById('habit-form-error').style.display = 'block'; }
+      }
+    } catch { document.getElementById('habit-form-error').textContent = 'Erro de conexão'; document.getElementById('habit-form-error').style.display = 'block'; }
+    finally { btn.disabled = false; btn.textContent = id ? 'Salvar alterações' : 'Criar hábito'; }
+  }
+  async function deleteHabit(id) {
+    if (!confirm('Excluir este hábito?')) return;
+    try {
+      const r = await fetch('/api/habits?id=' + id, { method: 'DELETE', credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok) { showToast('Hábito excluído', 'success'); loadHabits(); }
+      else showToast(d.error || 'Erro ao excluir', 'error');
+    } catch { showToast('Erro ao excluir hábito', 'error'); }
+  }
+  async function openHabitDetail(id) {
+    try {
+      const data = await apiFetch('/api/habits?id=' + id);
+      if (!data.ok) { showToast('Erro ao carregar hábito', 'error'); return; }
+      const h = data.habit;
+      const stats = data.stats;
+      const el = document.getElementById('habit-detail-content');
+      if (!el) return;
+      // Calendário dos últimos 28 dias
+      const calDays = [];
+      for (let i = 27; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const ds = d.toISOString().split('T')[0];
+        calDays.push({ date: ds, done: (h.completions || []).includes(ds), day: d.getDate() });
+      }
+      const calHtml = calDays.map(c => `<div title="${c.date}" style="width:20px;height:20px;border-radius:4px;background:${c.done ? 'var(--green)' : 'var(--border)'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;color:${c.done ? '#fff' : 'var(--text-muted)'}">${c.day}</div>`).join('');
+      const histHtml = (h.history || []).slice(0,10).map(hh => `<div style="font-size:11px;color:var(--text-muted);padding:2px 0">${new Date(hh.at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})} — ${hh.action}</div>`).join('');
+      el.innerHTML = `
+        <div style="margin-bottom:16px">
+          <div style="font-size:20px;font-weight:800;margin-bottom:4px">${h.title}</div>
+          <div style="font-size:13px;color:var(--text-secondary)">${h.description || ''}</div>
+        </div>
+        <div class="grid-4" style="margin-bottom:16px;gap:8px">
+          <div class="card" style="padding:12px"><div class="card-title" style="font-size:10px">Streak</div><div style="font-size:22px;font-weight:800">${stats.streak}d</div></div>
+          <div class="card" style="padding:12px"><div class="card-title" style="font-size:10px">Melhor</div><div style="font-size:22px;font-weight:800">${stats.bestStreak}d</div></div>
+          <div class="card" style="padding:12px"><div class="card-title" style="font-size:10px">Total</div><div style="font-size:22px;font-weight:800">${stats.totalCompletions}</div></div>
+          <div class="card" style="padding:12px"><div class="card-title" style="font-size:10px">Taxa 30d</div><div style="font-size:22px;font-weight:800">${stats.rate30}%</div></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Calendário (28 dias)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px">${calHtml}</div>
+        </div>
+        ${histHtml ? '<div><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Histórico</div>' + histHtml + '</div>' : ''}
+      `;
+      document.getElementById('habit-detail-edit-btn').onclick = () => { closeModal(); openEditHabitModal(h); };
+      document.getElementById('habit-detail-delete-btn').onclick = () => { closeModal(); deleteHabit(h.id); };
+      openModal('modal-habit-detail');
+    } catch { showToast('Erro ao carregar detalhes do hábito', 'error'); }
+  }
+  let _habitsFilter = 'all';
+  function habitsSetFilter(f) {
+    _habitsFilter = f;
+    ['all','pending','done'].forEach(s => {
+      const btn = document.getElementById('habits-filter-' + s);
+      if (btn) btn.style.background = s === f ? 'var(--accent-glow)' : '';
+    });
+    loadHabits();
   }
 
   // Os carregadores de dados por página são executados por runPageDataLoader(),
