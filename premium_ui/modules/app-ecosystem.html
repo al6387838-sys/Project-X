@@ -601,6 +601,52 @@
         btn.classList.add('active');
       });
     });
+    // App Registry: Configurar
+    document.querySelectorAll('.app-action').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const appName = btn.closest('.app-card')?.querySelector('.app-name')?.textContent || 'App';
+        if (typeof window.showToast === 'function') {
+          window.showToast('Configurando ' + appName + '...', 'info');
+        } else if (typeof window.toast === 'function') {
+          window.toast('Configurando ' + appName + '...', 'info', 'App Registry');
+        }
+      });
+    });
+    // Integration buttons
+    document.querySelectorAll('.integration-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.closest('.integration-card')?.querySelector('.integration-name')?.textContent || 'Integração';
+        const isConnected = btn.classList.contains('connected');
+        const msg = isConnected ? 'Gerenciando ' + name + '...' : 'Conectando ' + name + '...';
+        if (typeof window.showToast === 'function') window.showToast(msg, 'info');
+        else if (typeof window.toast === 'function') window.toast(msg, 'info', 'Integrações');
+      });
+    });
+    // Market install buttons
+    document.querySelectorAll('.market-install').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name = btn.closest('.market-card')?.querySelector('.market-name')?.textContent || 'App';
+        const msg = 'Instalando ' + name + '...';
+        if (typeof window.showToast === 'function') window.showToast(msg, 'info');
+        else if (typeof window.toast === 'function') window.toast(msg, 'info', 'Marketplace');
+      });
+    });
+    // Btn-primary (Adicionar App / Buscar)
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      if (btn.closest('.market-search')) {
+        btn.addEventListener('click', () => {
+          const q = btn.closest('.market-search')?.querySelector('input')?.value?.trim();
+          if (typeof window.showToast === 'function') window.showToast(q ? 'Buscando: ' + q : 'Digite um termo para buscar.', 'info');
+          else if (typeof window.toast === 'function') window.toast(q ? 'Buscando: ' + q : 'Digite um termo para buscar.', 'info', 'Marketplace');
+        });
+      } else if (btn.closest('.section-toolbar')) {
+        btn.addEventListener('click', () => {
+          if (typeof window.showToast === 'function') window.showToast('Adicionar App: em breve.', 'info');
+          else if (typeof window.toast === 'function') window.toast('Adicionar App: em breve.', 'info', 'App Registry');
+        });
+      }
+    });
   </script>
 </body>
 </html>

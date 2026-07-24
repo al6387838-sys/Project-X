@@ -1200,8 +1200,10 @@
 
   // ── INTELLIGENCE ──
   function renderIntelligence() {
-    const insights = state.data?.intelligence || [];
-    const open = insights.filter(i=>i.status==='open');
+    const allInsights = state.data?.intelligence || [];
+    const activeFilter = state.intelligenceFilter || 'all';
+    const insights = activeFilter === 'all' ? allInsights : allInsights.filter(i => i.status === activeFilter);
+    const open = allInsights.filter(i=>i.status==='open');
     document.getElementById('intelligence-content').innerHTML = `
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
         <div>
@@ -1211,9 +1213,9 @@
         </div>
         <div style="display:flex;gap:8px">
           <div class="filter-chips">
-            <button class="filter-chip active" type="button">Todos</button>
-            <button class="filter-chip" type="button">Abertos</button>
-            <button class="filter-chip" type="button">Resolvidos</button>
+            <button class="filter-chip ${'${activeFilter}'==='all'?'active':''}" type="button" data-action="intelligence.filter" data-filter="all">Todos</button>
+            <button class="filter-chip ${'${activeFilter}'==='open'?'active':''}" type="button" data-action="intelligence.filter" data-filter="open">Abertos</button>
+            <button class="filter-chip ${'${activeFilter}'==='resolved'?'active':''}" type="button" data-action="intelligence.filter" data-filter="resolved">Resolvidos</button>
           </div>
         </div>
       </div>
@@ -1579,12 +1581,14 @@
 
   // ── COMPLIANCE ──
   function renderCompliance() {
-    const audit = state.data?.auditLog || [];
+    const allAudit = state.data?.auditLog || [];
+    const auditFilter = state.auditFilter || 'all';
+    const audit = auditFilter === 'all' ? allAudit : allAudit.filter(log => (log.category || log.action || '').toLowerCase().includes(auditFilter));
     document.getElementById('compliance-content').innerHTML = `
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
         <div>
           <h1 class="page-title">Auditoria & Compliance</h1>
-          <p class="page-subtitle">${audit.length} eventos registrados.</p>
+          <p class="page-subtitle">${audit.length} de ${allAudit.length} eventos.</p>
         </div>
         <button class="btn btn-secondary" data-action="audit.export" type="button">⬇ Exportar CSV</button>
       </div>
@@ -1592,10 +1596,10 @@
         <div class="card-header">
           <div class="card-title">Log de Auditoria</div>
           <div class="filter-chips">
-            <button class="filter-chip active" type="button">Todos</button>
-            <button class="filter-chip" type="button">Auth</button>
-            <button class="filter-chip" type="button">Membros</button>
-            <button class="filter-chip" type="button">Billing</button>
+            <button class="filter-chip ${'${auditFilter}'==='all'?'active':''}" type="button" data-action="audit.filter" data-filter="all">Todos</button>
+            <button class="filter-chip ${'${auditFilter}'==='auth'?'active':''}" type="button" data-action="audit.filter" data-filter="auth">Auth</button>
+            <button class="filter-chip ${'${auditFilter}'==='members'?'active':''}" type="button" data-action="audit.filter" data-filter="members">Membros</button>
+            <button class="filter-chip ${'${auditFilter}'==='billing'?'active':''}" type="button" data-action="audit.filter" data-filter="billing">Billing</button>
           </div>
         </div>
         <div class="table-wrap">
@@ -2318,6 +2322,24 @@
         break;
       }
       case 'intelligence.resolve': mutate('intelligence.resolve', {id: target.dataset.id, status: target.dataset.status}, 'Insight tratado.', 'Companion'); break;
+      case 'intelligence.filter': {
+        const filter = target.dataset.filter || 'all';
+        state.intelligenceFilter = filter;
+        document.querySelectorAll('[data-action="intelligence.filter"]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+        renderIntelligence();
+        break;
+      }
+      case 'audit.filter': {
+        const filter = target.dataset.filter || 'all';
+        state.auditFilter = filter;
+        document.querySelectorAll('[data-action="audit.filter"]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+        renderCompliance();
+        break;
+      }
       case 'notifications.filter': state.notificationFilter = target.dataset.filter || 'unread'; renderNotifications(); break;
       case 'notifications.preferences.open': openNotificationPreferencesModal(); break;
       case 'notifications.preferences.save': {

@@ -21,3 +21,4 @@ build/
 sprint_progress_summary.txt
 security-a11y-fixes.json
 demo_execution*.py
+.dev.vars

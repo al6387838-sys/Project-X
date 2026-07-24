@@ -1096,6 +1096,53 @@
   <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
 <link rel="stylesheet" href="/precision_graphite.css" data-visual-system="precision-graphite" />
   <script src="/persistence.js" defer></script>
+  <!-- LifeOS Enterprise — Error Boundary Global v52.5.0 -->
+  <script>
+  (function(){
+    'use strict';
+    function showFallback(msg,detail){
+      if(document.getElementById('lifeos-error-boundary'))return;
+      var el=document.createElement('div');
+      el.id='lifeos-error-boundary';
+      el.setAttribute('role','alert');
+      el.style.cssText='position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0A0E14;color:#F0F4FF;font-family:Inter,sans-serif;padding:32px;text-align:center;gap:16px';
+      el.innerHTML='<div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:8px">⚡</div>'
+        +'<div style="font-size:20px;font-weight:700">LifeOS Enterprise</div>'
+        +'<div style="font-size:14px;color:#8892A4;max-width:400px">'+(msg||'Ocorreu um erro inesperado.')+'</div>'
+        +(detail?'<div style="font-size:11px;color:#4A5568;font-family:monospace;max-width:500px;word-break:break-all">'+detail+'</div>':'')
+        +'<div style="display:flex;gap:12px;margin-top:8px">'
+        +'<button onclick="location.reload()" style="padding:10px 24px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer">↺ Recarregar</button>'
+        +'<button onclick="location.replace(\'/login\')" style="padding:10px 24px;border-radius:8px;background:rgba(255,255,255,0.08);color:#F0F4FF;border:1px solid rgba(255,255,255,0.12);font-size:14px;font-weight:600;cursor:pointer">→ Login</button>'
+        +'</div>';
+      (document.body||document.documentElement).appendChild(el);
+    }
+    window.onerror=function(msg,src,line,col,err){
+      var detail=src?(src.split('/').pop()+':'+line):'';
+      console.error('[LifeOS ErrorBoundary]',msg,detail,err);
+      if(src&&(src.includes('fonts.googleapis')||src.includes('cdn.jsdelivr')))return false;
+      if(!window.__lifeosReady)showFallback('Erro JavaScript: '+msg,detail);
+      return false;
+    };
+    window.addEventListener('unhandledrejection',function(e){
+      var reason=e.reason;
+      var msg=reason instanceof Error?reason.message:String(reason||'Promise rejeitada');
+      console.error('[LifeOS ErrorBoundary] UnhandledRejection:',msg);
+      if(!window.__lifeosReady)showFallback('Erro ass\u00edncrono: '+msg);
+    });
+    var _startupTimer=setTimeout(function(){
+      if(!window.__lifeosReady){
+        console.warn('[LifeOS ErrorBoundary] Timeout de inicializa\u00e7\u00e3o');
+        showFallback('O aplicativo demorou muito para carregar.','Verifique sua conex\u00e3o e tente recarregar.');
+      }
+    },15000);
+    window.__lifeosMarkReady=function(){
+      window.__lifeosReady=true;
+      clearTimeout(_startupTimer);
+      var fb=document.getElementById('lifeos-error-boundary');
+      if(fb)fb.remove();
+    };
+  })();
+  </script>
 </head>
 <body>
 <div class="app-shell">
@@ -1979,6 +2026,8 @@
     // Load Life Dashboard 2.0 (Phase 088)
     loadDashboardV2(name);
     initializeEnterpriseOnboarding(user);
+    // Marcar app como pronto — remove Error Boundary se existir
+    if (typeof window.__lifeosMarkReady === 'function') window.__lifeosMarkReady();
   }
 
   function applyProfileUpdate(profile) {
@@ -2412,9 +2461,15 @@
     traceNavigation('history:updated', { page: pageId, mode: historyMode || 'push' });
   }
 
+  let _currentPageId = null;
   async function showPage(requestedPageId, options = {}) {
     const pageId = _routeAliases[requestedPageId] || requestedPageId;
     const source = options.source || 'programmatic';
+    // Guard: evitar re-render da mesma página (performance)
+    if (pageId === _currentPageId && source !== 'reload') {
+      traceNavigation('page:skipped-same', { page: pageId, source });
+      return true;
+    }
     traceNavigation('page:requested', { requestedPage: requestedPageId, page: pageId, source });
 
     const moduleName = _modulePageMap[pageId];
@@ -2450,6 +2505,7 @@
 
     await runPageDataLoader(pageId);
     updateNavigationHistory(requestedPageId, options.historyMode);
+    _currentPageId = pageId;
     traceNavigation('render:completed', { page: pageId, host: pageHost?.id || page.id, source });
     return true;
   }
