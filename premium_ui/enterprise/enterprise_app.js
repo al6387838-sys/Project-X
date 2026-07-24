@@ -340,8 +340,10 @@
       const count = state.data.intelligence.filter(item => item.status === 'open').length;
       document.querySelectorAll('[data-intelligence-count]').forEach(node => node.textContent = count);
     } catch (error) {
-      document.getElementById('enterprise-dynamic').innerHTML = `<div class="enterprise-error"><strong>Não foi possível carregar o ambiente Enterprise.</strong><br>${esc(error.message)}</div>`;
-      document.getElementById('enterprise-dynamic').classList.add('active');
+      const dynamicHost = document.getElementById('enterprise-dynamic');
+      if (!dynamicHost) return;
+      dynamicHost.innerHTML = `<div class="enterprise-error"><strong>Não foi possível carregar o ambiente Enterprise.</strong><br>${esc(error.message)}</div>`;
+      dynamicHost.classList.add('active');
     }
   }
 

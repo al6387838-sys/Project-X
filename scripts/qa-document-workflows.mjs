@@ -74,6 +74,12 @@ const created = await post('/api/documents', { action: 'create', name: 'Plano v4
 assert.equal(created.ok, true);
 const firstId = created.document.id;
 assert.equal(r2.data.size, 1);
+const edited = await post('/api/documents', { action: 'update-content', docId: firstId, content: 'Documento editado\ncom persistência real.' });
+assert.equal(edited.document.version, 2);
+assert.equal(r2.data.size, 2);
+const editedContentResponse = await onRequestGet({ request: request(`/api/documents?view=content&docId=${firstId}`), env });
+assert.equal(editedContentResponse.status, 200);
+assert.equal(await editedContentResponse.text(), 'Documento editado\ncom persistência real.');
 
 const uploadedForm = new FormData();
 uploadedForm.append('file', new File(['conteúdo confidencial v43'], 'relatorio.txt', { type: 'text/plain' }));
@@ -81,7 +87,7 @@ uploadedForm.append('description', 'Relatório de validação');
 const uploaded = await post('/api/documents', uploadedForm, ownerToken, true);
 assert.equal(uploaded.ok, true);
 const uploadedId = uploaded.document.id;
-assert.equal(r2.data.size, 2);
+assert.equal(r2.data.size, 3);
 
 await post('/api/documents', { action: 'rename', docId: uploadedId, name: 'Relatório Final.txt' });
 await post('/api/documents', { action: 'move', docId: uploadedId, folderId: 'financeiro' });
@@ -101,7 +107,7 @@ secondVersion.append('file', new File(['conteúdo revisado v43'], 'relatorio-rev
 secondVersion.append('comment', 'Revisão operacional');
 const versioned = await post('/api/documents', secondVersion, ownerToken, true);
 assert.equal(versioned.document.version, 2);
-assert.equal(r2.data.size, 3);
+assert.equal(r2.data.size, 4);
 
 const versions = await get(`/api/documents?view=versions&docId=${uploadedId}`);
 assert.equal(versions.versions.length, 2);
@@ -118,13 +124,22 @@ assert.equal(shared.shared.length, 1);
 assert.equal(shared.shared[0].permission, 'edit');
 const recipientNotifications = JSON.parse(await kv.get(`notifications:${recipient}`));
 assert.equal(recipientNotifications.length, 1);
+const recipientDownload = await get(`/api/documents?view=download&docId=${uploadedId}`, recipientToken);
+assert.match(recipientDownload.downloadUrl, /view=content/);
+const recipientContentResponse = await onRequestGet({ request: request(`/api/documents?view=content&docId=${uploadedId}`, 'GET', undefined, recipientToken), env });
+assert.equal(recipientContentResponse.status, 200);
+assert.equal(await recipientContentResponse.text(), 'conteúdo revisado v43');
+const copied = await post('/api/documents', { action: 'copy', docId: uploadedId });
+const copiedId = copied.document.id;
+assert.notEqual(copiedId, uploadedId);
+assert.equal(r2.data.size, 5);
 
 await post('/api/documents', { action: 'delete', docId: uploadedId });
 const trash = await get('/api/documents?view=trash');
 assert.equal(trash.documents.length, 1);
 await post('/api/documents', { action: 'restore', docId: uploadedId });
 const restored = await get('/api/documents?view=list&folderId=financeiro');
-assert.equal(restored.documents.length, 1);
+assert.equal(restored.documents.length, 2);
 
 const audit = await get(`/api/documents?view=history&docId=${uploadedId}`);
 assert.equal(audit.audit.some((entry) => entry.action === 'shared'), true);
@@ -134,12 +149,21 @@ await post('/api/documents', { action: 'delete', docId: uploadedId });
 await post('/api/documents', { action: 'permanent-delete', docId: uploadedId });
 const afterDelete = await get('/api/documents?view=all');
 assert.equal(afterDelete.documents.some((document) => document.id === uploadedId), false);
-assert.equal(r2.data.size, 1);
+assert.equal(r2.data.size, 3);
+const copiedContentResponse = await onRequestGet({ request: request(`/api/documents?view=content&docId=${copiedId}`), env });
+assert.equal(copiedContentResponse.status, 200);
+assert.equal(await copiedContentResponse.text(), 'conteúdo revisado v43');
 
 const stats = await get('/api/documents?view=stats');
-assert.equal(stats.stats.total, 1);
+assert.equal(stats.stats.total, 2);
 assert.equal(stats.stats.r2Bound, true);
 assert.equal(firstId.length > 0, true);
+const folder = await post('/api/documents', { action: 'create-folder', name: 'Arquivo de QA' });
+await post('/api/documents', { action: 'move', docId: firstId, folderId: folder.folder.id });
+const folderDeleted = await post('/api/documents', { action: 'delete', docId: folder.folder.id });
+assert.equal(folderDeleted.reparented, 1);
+const rootAfterFolderDelete = await get('/api/documents?view=list');
+assert.equal(rootAfterFolderDelete.documents.some((document) => document.id === firstId), true);
 
 console.log('QA Document Workflows v43.0: PASS');
 console.log('  fluxos: criação, upload, download, mover, renomear, compartilhamento, favoritos, versões, lixeira, restauração, exclusão, auditoria, logs');

@@ -1,5 +1,10 @@
 <!-- LifeOS Enterprise — Photos Module v1.0 -->
 <div id="module-photos" style="display:none">
+<style>
+  .photo-modal-shell { position:fixed; inset:0; z-index:var(--z-modal); display:flex; align-items:center; justify-content:center; padding:var(--space-4); }
+  .photo-modal-shell .modal-backdrop { z-index:0; }
+  .photo-modal-shell .modal-content { position:relative; z-index:1; max-height:90vh; overflow:auto; }
+</style>
 
 <!-- ─── PHOTOS GALLERY ─── -->
 <div class="page" id="page-photos">
@@ -12,6 +17,10 @@
       <button class="btn btn-ghost" onclick="photosShowAlbums()">Álbuns</button>
       <button class="btn btn-primary" onclick="photosOpenUpload()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload</button>
     </div>
+  </div>
+
+  <div style="margin-bottom:16px">
+    <input type="search" id="photos-search-input" class="form-input" style="width:100%" placeholder="Buscar fotos por nome, tags, descrição ou local" oninput="photosSearch(this.value)">
   </div>
 
   <!-- Stats -->
@@ -46,7 +55,7 @@
 </div>
 
 <!-- ─── UPLOAD MODAL ─── -->
-<div id="modal-photos-upload" class="modal" style="display:none">
+<div id="modal-photos-upload" class="photo-modal-shell" style="display:none">
   <div class="modal-backdrop" onclick="photosCloseModal('modal-photos-upload')"></div>
   <div class="modal-content" style="width:500px;max-width:90vw">
     <div class="modal-header">
@@ -78,7 +87,7 @@
 </div>
 
 <!-- ─── NEW ALBUM MODAL ─── -->
-<div id="modal-photos-album" class="modal" style="display:none">
+<div id="modal-photos-album" class="photo-modal-shell" style="display:none">
   <div class="modal-backdrop" onclick="photosCloseModal('modal-photos-album')"></div>
   <div class="modal-content" style="width:420px;max-width:90vw">
     <div class="modal-header">
@@ -106,13 +115,15 @@
 </div>
 
 <!-- ─── PHOTO VIEWER MODAL ─── -->
-<div id="modal-photo-viewer" class="modal" style="display:none">
+<div id="modal-photo-viewer" class="photo-modal-shell" style="display:none">
   <div class="modal-backdrop" onclick="photosCloseModal('modal-photo-viewer')"></div>
   <div class="modal-content" style="width:90vw;max-width:900px;height:85vh">
     <div class="modal-header">
       <div class="modal-title" id="photo-viewer-title">Foto</div>
       <div style="display:flex;gap:6px">
         <button class="btn btn-ghost" style="padding:8px" id="photo-viewer-fav" title="Favoritar" onclick="photosToggleFavorite()">❤</button>
+        <button class="btn btn-ghost" style="padding:8px" title="Editar" onclick="photosEditCurrent()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Mover para álbum" onclick="photosMoveCurrent()"><i data-lucide="folder-input" class="pg-icon" aria-hidden="true"></i></button>
         <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="photosDeleteCurrent()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
         <button class="modal-close" onclick="photosCloseModal('modal-photo-viewer')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       </div>
@@ -138,7 +149,8 @@
 (() => {
   'use strict';
   const API = '/api/photos';
-  let state = { photos: [], albums: [], stats: null, currentPhoto: null, view: 'gallery' };
+  let state = { photos: [], allPhotos: [], albums: [], stats: null, currentPhoto: null, view: 'gallery', activeAlbumId: null, searchQuery: '' };
+  let searchTimer = null;
 
   function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
   function fmtSize(b) { if (!b) return '0 B'; const k = 1024, s = ['B','KB','MB','GB']; const i = Math.floor(Math.log(b) / Math.log(k)); return (b / Math.pow(k, i)).toFixed(1) + ' ' + s[i]; }
@@ -171,19 +183,23 @@
 
   async function photosLoad() {
     try {
-      const [photoData, albumData, statsData] = await Promise.all([
+      const query = state.searchQuery.trim();
+      const [allPhotoData, searchData, albumData, statsData] = await Promise.all([
         fetchPhotos('list'),
+        query ? fetchPhotos('search', `&q=${encodeURIComponent(query)}`) : Promise.resolve(null),
         fetchPhotos('albums'),
         fetchPhotos('stats'),
       ]);
-      state.photos = photoData.photos || [];
+      state.allPhotos = allPhotoData.photos || [];
+      state.photos = searchData?.photos || state.allPhotos;
       state.albums = albumData.albums || [];
       state.stats = statsData.stats || {};
       renderStats();
       if (state.view === 'gallery') renderGallery();
       else renderAlbums();
     } catch (err) {
-      document.getElementById('photos-gallery').innerHTML = `<div style="padding:32px;text-align:center;color:var(--red);grid-column:1/-1">Erro: ${esc(err.message)}</div>`;
+      const gallery = document.getElementById('photos-gallery');
+      if (gallery) gallery.innerHTML = `<div style="padding:32px;text-align:center;color:var(--red);grid-column:1/-1">Erro: ${esc(err.message)}</div>`;
     }
   }
 
@@ -197,11 +213,13 @@
 
   function renderGallery() {
     const grid = document.getElementById('photos-gallery');
-    if (!state.photos.length) {
-      grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhuma foto. Faça upload para começar.</div>';
+    if (!grid) return;
+    const galleryPhotos = state.activeAlbumId ? state.photos.filter(photo => photo.albumId === state.activeAlbumId) : state.photos;
+    if (!galleryPhotos.length) {
+      grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhuma foto encontrada. Faça upload ou ajuste a busca.</div>';
       return;
     }
-    grid.innerHTML = state.photos.map(p => `
+    grid.innerHTML = galleryPhotos.map(p => `
       <div class="photo-thumb" style="position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;border:1px solid var(--border);background:var(--bg-elevated)" onclick="photosOpenViewer('${esc(p.id)}')">
         <img src="${esc(p.url)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
         ${p.favorite ? '<div style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,.8);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">❤</div>' : ''}
@@ -217,14 +235,14 @@
       return;
     }
     grid.innerHTML = state.albums.map(a => {
-      const albumPhotos = state.photos.filter(p => p.albumId === a.id);
+      const albumPhotos = state.allPhotos.filter(p => p.albumId === a.id);
       const cover = albumPhotos[0];
       return `
       <div class="card" style="padding:12px;cursor:pointer" onclick="photosOpenAlbum('${esc(a.id)}')">
         <div style="aspect-ratio:16/9;background:var(--bg-elevated);border-radius:var(--radius-md);overflow:hidden;margin-bottom:8px;position:relative">
           ${cover ? `<img src="${esc(cover.url)}" alt="" style="width:100%;height:100%;object-fit:cover">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i data-lucide="image" class="pg-icon" style="width:32px;height:32px"></i></div>'}
         </div>
-        <div style="font-size:14px;font-weight:600">${esc(a.name)}</div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:14px;font-weight:600;flex:1">${esc(a.name)}</div><button class="btn btn-ghost" type="button" style="padding:3px 6px;color:var(--red)" onclick="event.stopPropagation();photosDeleteAlbum('${esc(a.id)}')" title="Excluir álbum"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button></div>
         <div style="font-size:11px;color:var(--text-muted)">${albumPhotos.length} foto(s) · ${esc(a.description || 'Sem descrição')}</div>
       </div>`;
     }).join('');
@@ -233,15 +251,27 @@
   // ─── PUBLIC API ───
   window.photosShowGallery = () => {
     state.view = 'gallery';
-    document.getElementById('page-photos').style.display = '';
-    document.getElementById('page-photos-albums').style.display = 'none';
+    state.activeAlbumId = null;
+    const gallery = document.getElementById('page-photos');
+    const albums = document.getElementById('page-photos-albums');
+    if (gallery) { gallery.classList.add('active'); gallery.style.display = ''; }
+    if (albums) { albums.classList.remove('active'); albums.style.display = 'none'; }
     renderGallery();
+  };
+
+  window.photosSearch = (value) => {
+    state.searchQuery = String(value || '');
+    state.activeAlbumId = null;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { void photosLoad(); }, 250);
   };
 
   window.photosShowAlbums = () => {
     state.view = 'albums';
-    document.getElementById('page-photos').style.display = 'none';
-    document.getElementById('page-photos-albums').style.display = '';
+    const gallery = document.getElementById('page-photos');
+    const albums = document.getElementById('page-photos-albums');
+    if (gallery) { gallery.classList.remove('active'); gallery.style.display = 'none'; }
+    if (albums) { albums.classList.add('active'); albums.style.display = ''; }
     renderAlbums();
   };
 
@@ -303,14 +333,73 @@
   };
 
   window.photosOpenAlbum = (albumId) => {
-    // Filter gallery to album photos
     const album = state.albums.find(a => a.id === albumId);
     if (!album) return;
-    state.photos = state.photos.filter(p => p.albumId === albumId);
-    state.view = 'gallery';
-    document.getElementById('page-photos').style.display = '';
-    document.getElementById('page-photos-albums').style.display = 'none';
-    renderGallery();
+    state.activeAlbumId = albumId;
+    window.photosShowGallery();
+  };
+
+  window.photosEditCurrent = async () => {
+    if (!state.currentPhoto) return;
+    const current = state.currentPhoto;
+    const name = prompt('Nome da foto:', current.name);
+    if (name === null || !name.trim()) return;
+    const description = prompt('Descrição da foto:', current.description || '');
+    if (description === null) return;
+    const tags = prompt('Tags separadas por vírgula:', (current.tags || []).join(', '));
+    if (tags === null) return;
+    try {
+      const data = await request({
+        action: 'update-photo',
+        photoId: current.id,
+        name: name.trim(),
+        description: description.trim(),
+        tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+      });
+      Object.assign(current, data.photo || {});
+      if (typeof showToast === 'function') showToast('Foto atualizada', 'success');
+      await photosLoad();
+      window.photosOpenViewer(current.id);
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  window.photosMoveCurrent = async () => {
+    if (!state.currentPhoto) return;
+    const options = state.albums.map((album, index) => `${index + 1}. ${album.name}`).join('\n');
+    const selection = prompt(`Digite o número do álbum de destino ou deixe vazio para remover da pasta.\n${options}`);
+    if (selection === null) return;
+    let albumId = null;
+    if (selection.trim()) {
+      const selected = state.albums[Number(selection) - 1];
+      if (!selected) {
+        if (typeof showToast === 'function') showToast('Álbum inválido', 'error');
+        return;
+      }
+      albumId = selected.id;
+    }
+    try {
+      await request({ action: 'move-to-album', photoId: state.currentPhoto.id, albumId });
+      state.currentPhoto.albumId = albumId;
+      if (typeof showToast === 'function') showToast(albumId ? 'Foto movida para o álbum' : 'Foto removida do álbum', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  window.photosDeleteAlbum = async (albumId) => {
+    const album = state.albums.find(item => item.id === albumId);
+    if (!album || !confirm(`Excluir o álbum “${album.name}”? As fotos permanecerão disponíveis na galeria.`)) return;
+    try {
+      await request({ action: 'delete-album', albumId });
+      if (state.activeAlbumId === albumId) state.activeAlbumId = null;
+      if (typeof showToast === 'function') showToast('Álbum excluído', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
   };
 
   // ─── FORM HANDLERS ───

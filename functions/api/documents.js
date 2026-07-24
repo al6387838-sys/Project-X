@@ -3,9 +3,12 @@
 // Persistência: Cloudflare KV (metadados/auditoria) + R2 oficial (conteúdo binário).
 import { getCookie, json, verifySession, hasPermission } from '../_auth.js';
 
-function lifeosLogError(env, operation, error, details = {}) {
+async function lifeosLogError(env, operation, error, details = {}) {
   try {
     if (!env?.LIFEOS_KV) return;
+    const raw = await env.LIFEOS_KV.get('error-logs');
+    let previous = [];
+    try { previous = raw ? JSON.parse(raw) : []; } catch { previous = []; }
     const logEntry = {
       timestamp: new Date().toISOString(),
       operation,
@@ -13,8 +16,8 @@ function lifeosLogError(env, operation, error, details = {}) {
       stack: error?.stack?.split('\n').slice(0, 3).join(' | '),
       ...details,
     };
-    env.LIFEOS_KV.put('error-logs', JSON.stringify([logEntry, ...JSON.parse(env.LIFEOS_KV.get('error-logs') || '[]').slice(0, 99)]));
-  } catch { /* silent */ }
+    await env.LIFEOS_KV.put('error-logs', JSON.stringify([logEntry, ...previous].slice(0, 100)));
+  } catch { /* O registro não deve interromper a operação principal. */ }
 }
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
@@ -52,6 +55,10 @@ function now() {
 
 function safeText(value, max = 240) {
   return String(value ?? '').trim().replace(/[\u0000-\u001F\u007F]/g, ' ').slice(0, max);
+}
+
+function safeDocumentContent(value, max = 200000) {
+  return String(value ?? '').replace(/\u0000/g, '').slice(0, max);
 }
 
 function safeFileName(value) {
@@ -136,6 +143,26 @@ async function saveDocuments(kv, userId, docs) {
 
 function findDocument(docs, id) {
   return docs.find((document) => document.id === String(id || '')) || null;
+}
+
+async function findAccessibleDocument(kv, session, docId) {
+  const ownDocs = await getDocuments(kv, session.sub);
+  const ownDocument = findDocument(ownDocs, docId);
+  if (ownDocument) return { document: ownDocument, docs: ownDocs, ownerId: session.sub, permission: 'owner' };
+
+  const shared = await readJson(kv, `docs:shared:${session.sub}`, []);
+  const share = (Array.isArray(shared) ? shared : []).find((entry) => entry.docId === String(docId || ''));
+  if (!share?.ownerId) throw new Error('Documento não encontrado');
+
+  const ownerDocs = await getDocuments(kv, share.ownerId);
+  const document = findDocument(ownerDocs, docId);
+  if (!document || document.deleted) throw new Error('Documento não encontrado');
+  const viewers = document.permissions?.viewers || [];
+  const editors = document.permissions?.editors || [];
+  if (!viewers.includes(session.sub) && !editors.includes(session.sub) && !hasPermission(session, 'admin')) {
+    throw new Error('Sem permissão para acessar este documento');
+  }
+  return { document, docs: ownerDocs, ownerId: share.ownerId, permission: editors.includes(session.sub) ? 'edit' : 'view' };
 }
 
 function documentPayload(request, doc) {
@@ -229,7 +256,7 @@ async function createBlankDocument({ request, kv, bucket, session, body }) {
   const id = generateId();
   const mimeType = 'text/plain;charset=utf-8';
   const storageKey = documentKey(session.sub, id, 1, `${name}.txt`);
-  const content = safeText(body.content || '', 200000);
+  const content = safeDocumentContent(body.content || '');
   await bucket.put(storageKey, content, {
     httpMetadata: { contentType: mimeType },
     customMetadata: { ownerId: session.sub, documentId: id, version: '1', name },
@@ -261,6 +288,7 @@ async function uploadNewVersion({ request, kv, bucket, session, input }) {
   const docs = await getDocuments(kv, session.sub);
   const document = requireDocument(docs, docId);
   assertEditable(document, session);
+  if (document.isFolder) throw new Error('Pastas não possuem versões de arquivo');
   if (document.deleted) throw new Error('Restaure o documento antes de enviar uma nova versão');
   const version = Number(document.version || 0) + 1;
   const storageKey = documentKey(session.sub, document.id, version, safeFileName(file.name));
@@ -340,13 +368,13 @@ export async function onRequestGet({ request, env }) {
       return json(200, { ok: true, stats: { total: active.length, totalSize, favorites: active.filter((document) => document.favorite).length, trash: docs.filter((document) => document.deleted).length, byType, r2Bound: Boolean(bucket) } });
     }
     if (view === 'download') {
-      const document = requireDocument(docs, safeText(url.searchParams.get('docId'), 80));
+      const { document } = await findAccessibleDocument(kv, session, safeText(url.searchParams.get('docId'), 80));
       if (document.deleted) return json(410, { ok: false, error: 'Documento está na lixeira' });
       if (!document.storageKey && !document.storageUrl) return json(503, { ok: false, error: 'Conteúdo do documento pronto para ativação' });
       return json(200, { ok: true, downloadUrl: contentUrl(request, document.id), name: document.name });
     }
     if (view === 'content') {
-      const document = requireDocument(docs, safeText(url.searchParams.get('docId'), 80));
+      const { document } = await findAccessibleDocument(kv, session, safeText(url.searchParams.get('docId'), 80));
       if (document.deleted) return json(410, { ok: false, error: 'Documento está na lixeira' });
       if (!document.storageKey || !bucket) {
         if (document.storageUrl) return Response.redirect(document.storageUrl, 302);
@@ -436,6 +464,38 @@ export async function onRequestPost({ request, env }) {
     const document = requireDocument(docs, body.docId || body.id);
     assertEditable(document, session);
 
+    if (action === 'update-content') {
+      if (document.isFolder) throw new Error('Pastas não possuem conteúdo editável');
+      if (!bucket || !document.storageKey) throw new Error('Armazenamento R2 pronto para ativação');
+      if (!String(document.mimeType || '').startsWith('text/')) throw new Error('A edição interna está disponível apenas para documentos de texto');
+      const content = safeDocumentContent(body.content || '');
+      const version = Number(document.version || 0) + 1;
+      const storageKey = documentKey(session.sub, document.id, version, document.name);
+      await bucket.put(storageKey, content, {
+        httpMetadata: { contentType: document.mimeType || 'text/plain;charset=utf-8' },
+        customMetadata: { ownerId: session.sub, documentId: document.id, version: String(version), name: document.name },
+      });
+      document.version = version;
+      document.size = new TextEncoder().encode(content).byteLength;
+      document.storageKey = storageKey;
+      document.storageUrl = null;
+      document.updatedAt = now();
+      document.updatedBy = session.sub;
+      await Promise.all([
+        saveDocuments(kv, session.sub, docs),
+        appendVersion(kv, session.sub, document.id, {
+          version,
+          storageKey,
+          size: document.size,
+          mimeType: document.mimeType,
+          uploadedBy: session.sub,
+          uploadedAt: document.updatedAt,
+          comment: safeText(body.comment, 500) || 'Conteúdo atualizado',
+        }),
+      ]);
+      await auditLog(kv, session.sub, 'edited', document.id, { version, storageKey });
+      return json(200, { ok: true, document: documentPayload(request, document) });
+    }
     if (action === 'rename') {
       const name = safeFileName(body.name);
       if (!name) throw new Error('Nome obrigatório');
@@ -456,11 +516,50 @@ export async function onRequestPost({ request, env }) {
       return json(200, { ok: true, document: documentPayload(request, document) });
     }
     if (action === 'copy') {
-      const copy = { ...document, id: generateId(), name: `${document.name} (cópia)`, favorite: false, createdAt: now(), updatedAt: now(), createdBy: session.sub, updatedBy: session.sub, version: 1 };
+      if (document.deleted) throw new Error('Restaure o documento antes de copiá-lo');
+      if (document.isFolder) throw new Error('A cópia de pasta deve ser criada manualmente');
+      if (!bucket || !document.storageKey) throw new Error('Armazenamento R2 pronto para ativação');
+      const source = await bucket.get(document.storageKey);
+      if (!source) throw new Error('Conteúdo do documento não encontrado no R2');
+      const copiedId = generateId();
+      const copiedName = safeFileName(`${document.name} (cópia)`);
+      const storageKey = documentKey(session.sub, copiedId, 1, copiedName);
+      await bucket.put(storageKey, source.body, {
+        httpMetadata: { contentType: source.httpMetadata?.contentType || document.mimeType || 'application/octet-stream' },
+        customMetadata: { ownerId: session.sub, documentId: copiedId, version: '1', name: copiedName },
+      });
+      const timestamp = now();
+      const copy = {
+        ...document,
+        id: copiedId,
+        name: copiedName,
+        storageKey,
+        storageUrl: null,
+        favorite: false,
+        deleted: false,
+        version: 1,
+        permissions: { owner: session.sub, viewers: [], editors: [] },
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        createdBy: session.sub,
+        updatedBy: session.sub,
+      };
+      delete copy.deletedAt;
       docs.unshift(copy);
-      await saveDocuments(kv, session.sub, docs);
-      await auditLog(kv, session.sub, 'copied', document.id, { newId: copy.id });
-      return json(200, { ok: true, document: documentPayload(request, copy) });
+      await Promise.all([
+        saveDocuments(kv, session.sub, docs),
+        appendVersion(kv, session.sub, copiedId, {
+          version: 1,
+          storageKey,
+          size: Number(source.size ?? document.size ?? 0),
+          mimeType: copy.mimeType,
+          uploadedBy: session.sub,
+          uploadedAt: timestamp,
+          comment: `Cópia de ${document.name}`,
+        }),
+      ]);
+      await auditLog(kv, session.sub, 'copied', document.id, { newId: copy.id, storageKey });
+      return json(201, { ok: true, document: documentPayload(request, copy) });
     }
     if (action === 'toggle-favorite') {
       document.favorite = !document.favorite;
@@ -500,10 +599,23 @@ export async function onRequestPost({ request, env }) {
       return json(200, { ok: true, permissions: document.permissions });
     }
     if (action === 'delete') {
-      document.deleted = true; document.deletedAt = now(); document.updatedAt = document.deletedAt; document.updatedBy = session.sub;
+      const timestamp = now();
+      let reparented = 0;
+      if (document.isFolder) {
+        const parentId = document.folderId || 'root';
+        docs.forEach((item) => {
+          if (item.folderId === document.id && !item.deleted) {
+            item.folderId = parentId;
+            item.updatedAt = timestamp;
+            item.updatedBy = session.sub;
+            reparented += 1;
+          }
+        });
+      }
+      document.deleted = true; document.deletedAt = timestamp; document.updatedAt = timestamp; document.updatedBy = session.sub;
       await saveDocuments(kv, session.sub, docs);
-      await auditLog(kv, session.sub, 'deleted', document.id, { name: document.name });
-      return json(200, { ok: true, deleted: document.id });
+      await auditLog(kv, session.sub, 'deleted', document.id, { name: document.name, reparented });
+      return json(200, { ok: true, deleted: document.id, reparented });
     }
     if (action === 'restore') {
       if (!document.deleted) throw new Error('O documento já está ativo');
@@ -514,6 +626,19 @@ export async function onRequestPost({ request, env }) {
     }
     if (action === 'permanent-delete') {
       if (!document.deleted && !hasPermission(session, 'admin')) throw new Error('Mova o documento para a lixeira antes da exclusão definitiva');
+      const timestamp = now();
+      let reparented = 0;
+      if (document.isFolder) {
+        const parentId = document.folderId || 'root';
+        docs.forEach((item) => {
+          if (item.folderId === document.id && !item.deleted) {
+            item.folderId = parentId;
+            item.updatedAt = timestamp;
+            item.updatedBy = session.sub;
+            reparented += 1;
+          }
+        });
+      }
       const versions = await readJson(kv, `docs:versions:${session.sub}:${document.id}`, []);
       if (bucket) {
         await Promise.all((Array.isArray(versions) ? versions : []).map((version) => version.storageKey ? bucket.delete(version.storageKey).catch(() => {}) : Promise.resolve()));
@@ -522,8 +647,8 @@ export async function onRequestPost({ request, env }) {
       const index = docs.findIndex((item) => item.id === document.id);
       docs.splice(index, 1);
       await Promise.all([saveDocuments(kv, session.sub, docs), kv.delete(`docs:versions:${session.sub}:${document.id}`)]);
-      await auditLog(kv, session.sub, 'permanent-deleted', document.id, { name: document.name, r2Deleted: Boolean(bucket) });
-      return json(200, { ok: true, deleted: document.id, permanent: true });
+      await auditLog(kv, session.sub, 'permanent-deleted', document.id, { name: document.name, r2Deleted: Boolean(bucket), reparented });
+      return json(200, { ok: true, deleted: document.id, permanent: true, reparented });
     }
     if (action === 'new-version') {
       // Compatibilidade com o contrato anterior baseado em URL externa.

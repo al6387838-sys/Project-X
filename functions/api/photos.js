@@ -4,17 +4,20 @@
 
 import { getCookie, json, verifySession } from '../_auth.js';
 
-function lifeosLogError(env, operation, error, details = {}) {
+async function lifeosLogError(env, operation, error, details = {}) {
   try {
     if (!env?.LIFEOS_KV) return;
+    const raw = await env.LIFEOS_KV.get('error-logs');
+    let previous = [];
+    try { previous = raw ? JSON.parse(raw) : []; } catch { previous = []; }
     const logEntry = {
       timestamp: new Date().toISOString(),
       operation,
       error: error?.message || String(error),
       ...details,
     };
-    env.LIFEOS_KV.put('error-logs', JSON.stringify([logEntry, ...JSON.parse(env.LIFEOS_KV.get('error-logs') || '[]').slice(0, 99)]));
-  } catch { /* silent */ }
+    await env.LIFEOS_KV.put('error-logs', JSON.stringify([logEntry, ...previous].slice(0, 100)));
+  } catch { /* O registro não deve interromper a operação principal. */ }
 }
 
 const MAX_PHOTO_SIZE = 10 * 1024 * 1024; // 10MB per photo
@@ -33,6 +36,22 @@ function now() {
 
 function safeText(value, max = 240) {
   return String(value ?? '').trim().replace(/[\u0000-\u001F\u007F]/g, ' ').slice(0, max);
+}
+
+function safePhotoName(value) {
+  const name = safeText(value || 'foto', 180)
+    .replace(/[\\/:*?"<>|]/g, '-')
+    .replace(/\s+/g, ' ')
+    .replace(/^\.+|\.+$/g, '');
+  return name || 'foto';
+}
+
+function validatePhotoUpload(file) {
+  const mime = String(file.type || '').split(';')[0].trim().toLowerCase();
+  const extension = safePhotoName(file.name).split('.').pop().toLowerCase();
+  if (!ALLOWED_PHOTO_MIMES.has(mime)) throw new Error(`Tipo de imagem não suportado: ${mime}`);
+  if (BLOCKED_PHOTO_EXTENSIONS.has(extension)) throw new Error(`Extensão de imagem não permitida: .${extension}`);
+  return mime;
 }
 
 function photoKey(userId, photoId, name) {
@@ -79,19 +98,28 @@ export async function onRequestGet({ request, env }) {
       ? await verifySession(token, env.LIFEOS_SESSION_SECRET)
       : null;
     if (!session) return json(401, { ok: false, error: 'Sessão expirada' });
+    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Armazenamento de metadados indisponível' });
 
     const url = new URL(request.url);
     const view = safeText(url.searchParams.get('view'), 40) || 'list';
     const albumId = safeText(url.searchParams.get('albumId'), 120);
+    const query = safeText(url.searchParams.get('q'), 120).toLowerCase();
     const limit = Math.min(parseInt(url.searchParams.get('limit') || '50', 10), 200);
     const offset = Math.max(parseInt(url.searchParams.get('offset') || '0', 10), 0);
 
-    // ─── LIST ───
-    if (view === 'list') {
+    // ─── LIST / SEARCH ───
+    if (view === 'list' || view === 'search') {
+      if (view === 'search' && !query) return json(400, { ok: false, error: 'Parâmetro q obrigatório' });
       const photos = await getPhotos(env.LIFEOS_KV, session.sub);
-      const filtered = albumId
-        ? photos.filter(p => p.albumId === albumId && !p.deleted)
-        : photos.filter(p => !p.deleted);
+      const filtered = photos.filter((photo) => {
+        if (photo.deleted) return false;
+        if (albumId && photo.albumId !== albumId) return false;
+        if (!query) return true;
+        return [photo.name, photo.description, photo.location, ...(photo.tags || [])]
+          .join(' ')
+          .toLowerCase()
+          .includes(query);
+      });
       const sorted = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       const page = sorted.slice(offset, offset + limit);
       return json(200, {
@@ -100,6 +128,7 @@ export async function onRequestGet({ request, env }) {
         total: sorted.length,
         offset,
         limit,
+        query: query || undefined,
       });
     }
 
@@ -129,7 +158,7 @@ export async function onRequestGet({ request, env }) {
 
       const headers = new Headers();
       headers.set('content-type', photo.mimeType || 'image/jpeg');
-      headers.set('cache-control', 'public, max-age=86400');
+      headers.set('cache-control', 'private, no-store');
       headers.set('content-disposition', `inline; filename*=UTF-8''${encodeURIComponent(photo.name)}`);
       if (object.size !== undefined) headers.set('content-length', String(object.size));
       return new Response(object.body, { status: 200, headers });
@@ -150,7 +179,7 @@ export async function onRequestGet({ request, env }) {
 
       const headers = new Headers();
       headers.set('content-type', photo.mimeType || 'image/jpeg');
-      headers.set('cache-control', 'public, max-age=86400');
+      headers.set('cache-control', 'private, no-store');
       return new Response(object.body, { status: 200, headers });
     }
 
@@ -187,6 +216,7 @@ export async function onRequestPost({ request, env }) {
       ? await verifySession(token, env.LIFEOS_SESSION_SECRET)
       : null;
     if (!session) return json(401, { ok: false, error: 'Sessão expirada' });
+    if (!env.LIFEOS_KV) return json(503, { ok: false, error: 'Armazenamento de metadados indisponível' });
 
     const contentType = request.headers.get('content-type') || '';
     const bucket = resolveBucket(env);
@@ -222,7 +252,13 @@ export async function onRequestPost({ request, env }) {
     return json(400, { ok: false, error: 'Ação inválida' });
   } catch (error) {
     lifeosLogError(env, 'photos.post', error);
-    return json(500, { ok: false, error: error instanceof Error ? error.message : 'Erro ao processar foto' });
+    const message = error instanceof Error ? error.message : 'Erro ao processar foto';
+    const status = /selecione|excede|não suportado|não permitida|obrigatório|inválid/i.test(message)
+      ? 400
+      : /não encontrada/i.test(message)
+        ? 404
+        : 500;
+    return json(status, { ok: false, error: message });
   }
 }
 
@@ -259,16 +295,12 @@ async function uploadPhoto({ request, kv, bucket, session }) {
     throw new Error('A foto excede o limite de 10 MB');
   }
 
-  const mime = String(file.type || '').split(';')[0].trim().toLowerCase();
-  if (!ALLOWED_PHOTO_MIMES.has(mime)) {
-    throw new Error(`Tipo de imagem não suportado: ${mime}`);
-  }
-
+  const mime = validatePhotoUpload(file);
   if (!bucket) throw new Error('Armazenamento R2 pronto para ativação.');
 
   const photos = await getPhotos(kv, session.sub);
   const id = generateId();
-  const name = safeText(file.name || 'foto', 180);
+  const name = safePhotoName(file.name || 'foto');
   const storageKey = photoKey(session.sub, id, `${id}_${name}`);
 
   await bucket.put(storageKey, file.stream ? file.stream() : await file.arrayBuffer(), {

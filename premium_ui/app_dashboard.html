@@ -2143,7 +2143,7 @@
     'photos-albums': 'photos',
     'command-center': 'dashboard-v2',
     'crm': 'productivity',
-    'document-viewer': 'document-center',
+    'document-viewer': 'documents',
     'documents': 'documents',
     'email': 'email',
     'email-compose': 'email',
@@ -2294,7 +2294,9 @@
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     try {
-      const response = await fetch(`/app/modules/${moduleName}.html`, {
+      // Cloudflare Pages canonicaliza arquivos HTML para rotas sem extensão.
+      // Usar a rota canônica evita um redirecionamento durante o carregamento SPA.
+      const response = await fetch(`/app/modules/${moduleName}`, {
         credentials: 'same-origin',
         signal: controller.signal,
       });
@@ -3695,27 +3697,25 @@
       }
       const grid = document.getElementById('docs-grid');
       if (!grid) return;
-      const allDocs = listData.documents || [];
-      const folderMap = {};
-      allDocs.forEach(d => {
-        const fid = d.folderId || 'root';
-        folderMap[fid] = (folderMap[fid] || 0) + 1;
-      });
+      const records = Array.isArray(listData.documents) ? listData.documents : [];
+      const folders = records.filter(record => record.isFolder);
+      const files = records.filter(record => !record.isFolder);
+      _docsState.folders = folders;
       let html = '';
-      Object.entries(folderMap).forEach(([folderName, count]) => {
-        html += '<div class="doc-folder-card" onclick="docsOpenFolder(\'' + escH(folderName) + '\')">';
+      folders.forEach(folder => {
+        html += '<div class="doc-folder-card" onclick="docsOpenFolder(\'' + escH(folder.id) + '\', \'' + escH(folder.name) + '\')" ondblclick="event.stopPropagation();docsOpenFile(\'' + escH(folder.id) + '\')">';
         html += '<div class="doc-folder-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>';
-        html += '<div class="doc-folder-name">' + escH(folderName) + '</div>';
-        html += '<div class="doc-folder-count">' + count + ' arquivo' + (count !== 1 ? 's' : '') + '</div>';
+        html += '<div class="doc-folder-name">' + escH(folder.name) + '</div>';
+        html += '<div class="doc-folder-count">Pasta persistida</div>';
         html += '</div>';
       });
-      if (allDocs.length === 0 && Object.keys(folderMap).length === 0) {
+      if (records.length === 0) {
         html += '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">';
         html += '<div style="font-size:32px;margin-bottom:8px"><i data-lucide="folder-open" class="pg-icon" aria-hidden="true"></i></div>';
         html += '<div style="font-size:14px">Sem registros ainda. Faça upload de documentos.</div>';
         html += '</div>';
       } else {
-        allDocs.forEach(d => {
+        files.forEach(d => {
           const ext = (d.mimeType || '').split('/').pop() || 'file';
           const extLabel = ext.length > 3 ? ext.slice(0, 3).toUpperCase() : ext.toUpperCase();
           const sizeLabel = d.size ? (d.size < 1024 ? d.size + ' B' : d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
@@ -3791,10 +3791,10 @@
     await docsLoadCurrent();
   }
 
-  async function docsOpenFolder(name) {
-    _docsState.currentFolder = name;
+  async function docsOpenFolder(folderId, folderName) {
+    _docsState.currentFolder = folderId || 'root';
     const bc = document.getElementById('docs-breadcrumb-current');
-    if (bc) bc.textContent = name;
+    if (bc) bc.textContent = folderName || 'Pasta';
     await docsLoadCurrent();
   }
 
@@ -3826,13 +3826,21 @@
     }
   }
 
-  function docsCreateFolder() {
+  async function docsCreateFolder() {
     const name = prompt('Nome da nova pasta:');
     if (!name || !name.trim()) return;
-    _docsState.currentFolder = name.trim();
-    const bc = document.getElementById('docs-breadcrumb-current');
-    if (bc) bc.textContent = name.trim();
-    showToast('Pasta "' + name.trim() + '" selecionada. Faça upload de arquivos para esta pasta.', 'success');
+    try {
+      const res = await fetch('/api/documents', {
+        method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'create-folder', name: name.trim(), parentId: _docsState.currentFolder || 'root' }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Não foi possível criar a pasta');
+      showToast('Pasta "' + name.trim() + '" criada com sucesso', 'success');
+      await docsLoadCurrent();
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Erro ao criar pasta', 'error');
+    }
   }
 
   function docsSearch(event) {
@@ -3874,16 +3882,108 @@
 
   function docShareViewer() {
     if (!_docsState.currentDoc) return;
+    const targetUserId = prompt('E-mail do destinatário:');
+    if (!targetUserId || !targetUserId.trim()) return;
+    const permission = confirm('Deseja permitir edição? Clique em “Cancelar” para compartilhar somente para visualização.') ? 'edit' : 'view';
     (async () => {
       try {
         const res = await fetch('/api/documents', {
           method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ action: 'share', docId: _docsState.currentDoc.id }),
+          body: JSON.stringify({ action: 'share', docId: _docsState.currentDoc.id, targetUserId: targetUserId.trim(), permission }),
         });
         const data = await res.json();
-        if (data.ok) showToast('Link de compartilhamento gerado', 'success');
-        else showToast('Erro ao compartilhar', 'error');
+        if (data.ok) showToast('Documento compartilhado com sucesso', 'success');
+        else showToast(data.error || 'Erro ao compartilhar', 'error');
       } catch (err) { showToast('Erro ao compartilhar', 'error'); }
+    })();
+  }
+
+  function docUploadNewVersion() {
+    const doc = _docsState.currentDoc;
+    if (!doc || doc.isFolder) {
+      showToast('Selecione um documento para enviar uma nova versão', 'info');
+      return;
+    }
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        const form = new FormData();
+        form.append('action', 'new-version');
+        form.append('docId', doc.id);
+        form.append('file', file);
+        form.append('comment', 'Nova versão pelo visualizador');
+        const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', body: form });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Não foi possível enviar a nova versão');
+        _docsState.currentDoc = data.document;
+        const subEl = document.getElementById('doc-viewer-subtitle');
+        const sizeEl = document.getElementById('doc-viewer-size');
+        if (subEl) subEl.textContent = `v${data.document.version} · ${data.document.mimeType || 'arquivo'}`;
+        if (sizeEl) sizeEl.textContent = data.document.size ? (data.document.size < 1048576 ? (data.document.size / 1024).toFixed(0) + ' KB' : (data.document.size / 1048576).toFixed(1) + ' MB') : '0 B';
+        showToast('Nova versão enviada com sucesso', 'success');
+      } catch (err) {
+        showToast(err instanceof Error ? err.message : 'Erro ao enviar nova versão', 'error');
+      }
+    };
+    input.click();
+  }
+
+  function docCopyViewer() {
+    const doc = _docsState.currentDoc;
+    if (!doc || doc.isFolder) {
+      showToast('Selecione um documento para copiar', 'info');
+      return;
+    }
+    (async () => {
+      try {
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'copy', docId: doc.id }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Não foi possível copiar o documento');
+        showToast('Cópia criada com sucesso', 'success');
+        await docsLoadCurrent();
+      } catch (err) {
+        showToast(err instanceof Error ? err.message : 'Erro ao copiar documento', 'error');
+      }
+    })();
+  }
+
+  function docEditViewer() {
+    const doc = _docsState.currentDoc;
+    if (!doc) return;
+    if (!String(doc.mimeType || '').startsWith('text/')) {
+      showToast('A edição interna está disponível para documentos de texto. Para outros formatos, envie uma nova versão.', 'info');
+      return;
+    }
+    (async () => {
+      try {
+        const contentRes = await fetch(doc.downloadUrl, { credentials: 'same-origin' });
+        if (!contentRes.ok) throw new Error('Não foi possível carregar o conteúdo atual');
+        const currentContent = await contentRes.text();
+        const content = prompt('Edite o conteúdo do documento:', currentContent);
+        if (content === null) return;
+        const res = await fetch('/api/documents', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'update-content', docId: doc.id, content, comment: 'Edição pelo visualizador' }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Não foi possível salvar a edição');
+        _docsState.currentDoc = data.document;
+        const titleEl = document.getElementById('doc-viewer-title');
+        const subEl = document.getElementById('doc-viewer-subtitle');
+        const sizeEl = document.getElementById('doc-viewer-size');
+        if (titleEl) titleEl.textContent = data.document.name;
+        if (subEl) subEl.textContent = `v${data.document.version} · ${data.document.mimeType || 'texto'}`;
+        if (sizeEl) sizeEl.textContent = data.document.size ? (data.document.size < 1048576 ? (data.document.size / 1024).toFixed(0) + ' KB' : (data.document.size / 1048576).toFixed(1) + ' MB') : '0 B';
+        showToast('Documento editado e nova versão salva', 'success');
+      } catch (err) {
+        showToast(err instanceof Error ? err.message : 'Erro ao editar documento', 'error');
+      }
     })();
   }
 
