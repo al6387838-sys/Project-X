@@ -1,27 +1,25 @@
 // LifeOS Enterprise — Folders API
+// Cloudflare Pages Function: GET/POST/DELETE /api/folders
 // Storage: KV (LIFEOS_KV) + R2 (LIFEOS_DOCUMENTS)
+
+import { json } from '../_auth.js';
 
 export async function onRequest(request) {
   const env = request.env;
   const path = new URL(request.url).pathname;
 
   // GET /api/folders — Listar pastas
-  if (request.method === 'GET' && path === '/api/folders') {
+  if (request.method === 'GET') {
     try {
       const folders = await env.LIFEOS_KV.get('folders:list', { type: 'json' });
-      return new Response(JSON.stringify({ ok: true, folders: folders || [] }), {
-        headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }
-      });
+      return json(200, { ok: true, folders: folders || [] });
     } catch (e) {
-      return new Response(JSON.stringify({ ok: false, error: e.message }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' }
-      });
+      return json(500, { ok: false, error: e.message });
     }
   }
 
   // POST /api/folders — Criar pasta
-  if (request.method === 'POST' && path === '/api/folders') {
+  if (request.method === 'POST') {
     try {
       const input = await request.json();
       const folders = await env.LIFEOS_KV.get('folders:list', { type: 'json' }) || [];
@@ -34,19 +32,17 @@ export async function onRequest(request) {
       await env.LIFEOS_KV.put('folders:list', JSON.stringify(folders));
       // Criar placeholder no R2
       if (env.LIFEOS_DOCUMENTS) {
-        await env.LIFEOS_DOCUMENTS.put(input.name + '/.folder', new Uint8Array(0), {
-          httpMetadata: { contentType: 'application/x-directory' }
-        });
+        try {
+          await env.LIFEOS_DOCUMENTS.put(input.name + '/.folder', new Uint8Array(0), {
+            httpMetadata: { contentType: 'application/x-directory' }
+          });
+        } catch (r2err) {
+          // Ignorar erro de R2 se não configurado
+        }
       }
-      return new Response(JSON.stringify({ ok: true, folder }), {
-        status: 201,
-        headers: { 'content-type': 'application/json; charset=utf-8' }
-      });
+      return json(201, { ok: true, folder });
     } catch (e) {
-      return new Response(JSON.stringify({ ok: false, error: e.message }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' }
-      });
+      return json(500, { ok: false, error: e.message });
     }
   }
 
@@ -57,19 +53,11 @@ export async function onRequest(request) {
       const folders = await env.LIFEOS_KV.get('folders:list', { type: 'json' }) || [];
       const filtered = folders.filter(f => f.id !== id);
       await env.LIFEOS_KV.put('folders:list', JSON.stringify(filtered));
-      return new Response(JSON.stringify({ ok: true }), {
-        headers: { 'content-type': 'application/json; charset=utf-8' }
-      });
+      return json(200, { ok: true });
     } catch (e) {
-      return new Response(JSON.stringify({ ok: false, error: e.message }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' }
-      });
+      return json(500, { ok: false, error: e.message });
     }
   }
 
-  return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), {
-    status: 405,
-    headers: { 'content-type': 'application/json' }
-  });
+  return json(405, { ok: false, error: 'Método não permitido' });
 }

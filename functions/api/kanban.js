@@ -1,5 +1,17 @@
 // LifeOS Enterprise — Kanban API
+// Cloudflare Pages Function: GET/PUT /api/kanban
 // Storage: KV (LIFEOS_KV)
+
+import { json, verifySession, getCookie } from '../_auth.js';
+
+const DEFAULT_BOARD = {
+  columns: [
+    { id: 'todo', name: 'A fazer', color: '#6366F1' },
+    { id: 'doing', name: 'Em andamento', color: '#F59E0B' },
+    { id: 'done', name: 'Concluído', color: '#10B981' }
+  ],
+  cards: []
+};
 
 export async function onRequest(request) {
   const env = request.env;
@@ -9,22 +21,9 @@ export async function onRequest(request) {
   if (request.method === 'GET') {
     try {
       const board = await env.LIFEOS_KV.get('kanban:board', { type: 'json' });
-      const defaultBoard = {
-        columns: [
-          { id: 'todo', name: 'A fazer', color: '#6366F1' },
-          { id: 'doing', name: 'Em andamento', color: '#F59E0B' },
-          { id: 'done', name: 'Concluído', color: '#10B981' }
-        ],
-        cards: []
-      };
-      return new Response(JSON.stringify({ ok: true, board: board || defaultBoard }), {
-        headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }
-      });
+      return json(200, { ok: true, board: board || DEFAULT_BOARD });
     } catch (e) {
-      return new Response(JSON.stringify({ ok: false, error: e.message }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' }
-      });
+      return json(500, { ok: false, error: e.message });
     }
   }
 
@@ -33,19 +32,11 @@ export async function onRequest(request) {
     try {
       const body = await request.json();
       await env.LIFEOS_KV.put('kanban:board', JSON.stringify(body));
-      return new Response(JSON.stringify({ ok: true }), {
-        headers: { 'content-type': 'application/json; charset=utf-8' }
-      });
+      return json(200, { ok: true });
     } catch (e) {
-      return new Response(JSON.stringify({ ok: false, error: e.message }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' }
-      });
+      return json(500, { ok: false, error: e.message });
     }
   }
 
-  return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), {
-    status: 405,
-    headers: { 'content-type': 'application/json' }
-  });
+  return json(405, { ok: false, error: 'Método não permitido' });
 }
