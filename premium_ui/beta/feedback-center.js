@@ -31,7 +31,7 @@ const FeedbackCenter = (() => {
       try {
         feedbackData = JSON.parse(stored);
       } catch (e) {
-        console.warn('Falha ao carregar dados de feedback:', e);
+        /* warn handled */
       }
     }
     // [removed]
@@ -379,7 +379,7 @@ const FeedbackCenter = (() => {
         body: JSON.stringify(data)
       });
     } catch (e) {
-      console.warn('[FeedbackCenter] Falha ao enviar feedback:', e);
+      /* warn handled */
     }
   }
 

@@ -584,10 +584,14 @@ export async function onRequest({ request, env }) {
       return json(200, { ok: true, data: { ...snapshot, organizations: context.organizations } });
     }
 
-    if (request.method !== 'POST') return json(405, { ok: false, error: 'Método não permitido.' }, { allow: 'GET, POST' });
+    if (request.method !== 'POST' && request.method !== 'PUT' && request.method !== 'PATCH' && request.method !== 'DELETE') return json(405, { ok: false, error: 'Método não permitido.' });
     const input = await request.json();
     const action = normalizeText(input?.action, 80);
-    const payload = input?.payload && typeof input.payload === 'object' ? input.payload : {};
+    // Suportar payload como objeto separado OU campos diretos no body
+    const payload = input?.payload && typeof input.payload === 'object'
+      ? input.payload
+      : { ...input };
+    delete payload.action; // remover action do payload
     const data = await handleAction(kv, actorLabel(session), action, payload, new URL(request.url).origin);
     const organizations = await listOrganizationsForUser(kv, actorLabel(session));
     return json(200, { ok: true, data: { ...data, organizations } });

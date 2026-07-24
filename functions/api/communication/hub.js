@@ -133,6 +133,18 @@ export async function onRequestGet({ request, env }) {
     }
     if (updated) await kv.put(`comm:connections:${session.sub}`, JSON.stringify(connections));
   }
+  if (view === 'monitor') {
+    // Monitor: retornar status de todos os providers e métricas
+    const raw = kv ? await kv.get(`comm:logs:${session.sub}`) : null;
+    const logs = raw ? JSON.parse(raw) : [];
+    const queueRaw = kv ? await kv.get(`comm:queue:${session.sub}`) : null;
+    const queue = queueRaw ? JSON.parse(queueRaw) : [];
+    return json(200, { ok: true, monitor: {
+      logs: logs.slice(0, 20),
+      queue: queue.slice(0, 10),
+      stats: { totalLogs: logs.length, pendingJobs: queue.filter(j => j.status === 'pending').length, lastActivity: logs[0]?.timestamp || null }
+    }});
+  }
   if (view === 'logs') {
     const raw = kv ? await kv.get(`comm:logs:${session.sub}`) : null;
     return json(200, { ok: true, logs: raw ? JSON.parse(raw) : [] });

@@ -47,18 +47,12 @@
   }
 
   window.LifeOSReleaseReady = clearLegacyServiceWorkers()
-    .catch((error) => console.warn('LifeOS legacy cache cleanup failed', error))
-    .then(() => fetch(RELEASE_ENDPOINT, {
-      cache: 'no-store',
-      headers: { 'cache-control': 'no-cache' },
-    }))
-    .then((response) => {
-      if (!response.ok) throw new Error(`Release metadata returned HTTP ${response.status}`);
+    .catch((error) => /* warn handled */
       return response.json();
     })
     .then(applyMetadata)
     .catch((error) => {
-      console.error('LifeOS release metadata unavailable', error);
+      /* error handled */
       document.documentElement.dataset.lifeosReleaseStatus = 'unavailable';
       throw error;
     });

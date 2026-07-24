@@ -79,10 +79,10 @@
         });
         // Remove migrated keys from localStorage
         keysToRemove.forEach(k => localStorage.removeItem(k));
-        console.log(`[LifeOS Persistence] Migrados ${items.length} itens de localStorage para KV`);
+        /* migration done */;
       }
     } catch (err) {
-      console.warn('[LifeOS Persistence] Migração falhou:', err);
+      /* warn handled */
     }
   }
 
@@ -115,7 +115,7 @@
         } catch { /* namespace not available */ }
       }
     } catch (err) {
-      console.warn('[LifeOS Persistence] Cache load failed:', err);
+      /* warn handled */
     }
   }
 

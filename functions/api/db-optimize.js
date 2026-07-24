@@ -308,3 +308,14 @@ export async function onRequestPost({ request, env }) {
 
 // Exportar utilitários para uso em outros módulos
 export { getCached, setCached, invalidateCache, paginate, CACHE_TTL, CACHE_PREFIX };
+
+export async function onRequest({ request, env }) {
+  const method = request.method.toUpperCase();
+  if (method === 'GET') return onRequestGet({ request, env });
+  if (method === 'POST') return onRequestPost({ request, env });
+  if (method === 'PUT') return onRequestPost({ request, env });
+  if (method === 'PATCH') return onRequestPost({ request, env });
+  if (method === 'DELETE') return onRequestPost({ request, env });
+  if (method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+  return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), { status: 405, headers: { 'content-type': 'application/json' } });
+}

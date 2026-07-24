@@ -412,3 +412,41 @@ async function deleteAlbum({ kv, session, body }) {
   await saveAlbums(kv, session.sub, albums);
   return json(200, { ok: true });
 }
+
+// Roteador genérico e handlers adicionais
+export async function onRequestPut({ request, env }) {
+  return onRequestPost({ request, env });
+}
+export async function onRequestPatch({ request, env }) {
+  return onRequestPost({ request, env });
+}
+export async function onRequestDelete({ request, env }) {
+  // DELETE via query param: ?action=delete&photoId=xxx
+  const url = new URL(request.url);
+  const photoId = url.searchParams.get('photoId') || url.searchParams.get('id');
+  const albumId = url.searchParams.get('albumId');
+  if (photoId || albumId) {
+    const syntheticBody = JSON.stringify({
+      action: photoId ? 'delete' : 'delete-album',
+      photoId,
+      albumId,
+    });
+    const syntheticRequest = new Request(request.url, {
+      method: 'POST',
+      headers: { ...Object.fromEntries(request.headers.entries()), 'content-type': 'application/json' },
+      body: syntheticBody,
+    });
+    return onRequestPost({ request: syntheticRequest, env });
+  }
+  return onRequestPost({ request, env });
+}
+export async function onRequest({ request, env }) {
+  const method = request.method.toUpperCase();
+  if (method === 'GET') return onRequestGet({ request, env });
+  if (method === 'POST') return onRequestPost({ request, env });
+  if (method === 'PUT') return onRequestPut({ request, env });
+  if (method === 'PATCH') return onRequestPatch({ request, env });
+  if (method === 'DELETE') return onRequestDelete({ request, env });
+  if (method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+  return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), { status: 405, headers: { 'content-type': 'application/json' } });
+}

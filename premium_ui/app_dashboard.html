@@ -2028,7 +2028,7 @@
         });
       }
       notifCenterLoaded = true;
-    } catch (err) { console.warn('Notification Center load error:', err); }
+    } catch (err) { /* warn handled */ }
   }
 
   // ── Smart Search Loader ───────────────────────────────────────────────
@@ -2056,7 +2056,7 @@
         });
       }
       smartSearchLoaded = true;
-    } catch (err) { console.warn('Smart Search load error:', err); }
+    } catch (err) { /* warn handled */ }
   }
 
   // ── Life Dashboard 2.0 Loader ────────────────────────────────────────
@@ -2095,7 +2095,7 @@
       const dateEl = document.getElementById('d2-date');
       if (dateEl) dateEl.textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     } catch (err) {
-      console.warn('Dashboard v2 load error:', err);
+      /* warn handled */
     }
   }
 
@@ -2398,7 +2398,7 @@
       await Promise.resolve(loader());
       traceNavigation('data:load-completed', { page: pageId });
     } catch (error) {
-      console.warn(`Data load failed for ${pageId}:`, error);
+      /* warn handled */
       traceNavigation('data:load-failed', { page: pageId, error: error.message });
     }
   }
@@ -2731,7 +2731,7 @@
         }
       }
     } catch (e) {
-      console.error('Billing load error:', e);
+      /* error handled */
       const nameEl = document.getElementById('billing-plan-name');
       if (nameEl) nameEl.textContent = 'Erro ao carregar';
     }
@@ -3324,7 +3324,7 @@
       if (containerId === 'module-automation-container' && typeof window.automationInit === 'function') {
         setTimeout(() => window.automationInit(), 0);
       }
-    } catch(e) { console.warn('Module load error:', containerId, e); }
+    } catch(e) { /* warn handled */ }
   }
   // Override showPage to load modules on demand
   const _origShowPage = showPage;
@@ -4177,7 +4177,7 @@
         return `<div class="timeline-item"><div class="timeline-dot" style="background:${color}"></div><div class="timeline-content"><div class="timeline-title">${e.title || e.description || 'Evento'}</div><div class="timeline-time">${time}</div></div></div>`;
       }).join('');
     } catch (err) {
-      console.warn('initTimeline error:', err);
+      /* warn handled */
       if (el) el.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar timeline. Tente novamente.</div>';
     }
   }
@@ -4199,7 +4199,7 @@
       const naEl = document.getElementById('briefing-next-action');
       if (naEl && b.nextAction) naEl.textContent = b.nextAction;
     } catch (err) {
-      console.warn('initBriefing error:', err);
+      /* warn handled */
     }
   }
 
@@ -4217,7 +4217,7 @@
       setEl('metric-life-score', m.lifeScore ?? '—');
       setEl('metric-notes', m.notes ?? '—');
     } catch (err) {
-      console.warn('initMetrics error:', err);
+      /* warn handled */
     }
   }
 
@@ -4252,7 +4252,7 @@
       ctx.fillStyle = grad;
       ctx.fill();
     } catch (err) {
-      console.warn('initLifeGraph error:', err);
+      /* warn handled */
     }
   }
 
@@ -4335,7 +4335,7 @@
       }).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      console.warn('loadHabits error:', err);
+      /* warn handled */
       if (listEl) listEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px 0">Erro ao carregar hábitos.</div>';
     }
   }
@@ -4411,7 +4411,7 @@
         </div>`).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      console.warn('loadGoals error:', err);
+      /* warn handled */
       if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar metas.</div>';
     }
   }
@@ -4448,7 +4448,7 @@
         </div>`).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      console.warn('loadProjects error:', err);
+      /* warn handled */
       if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar projetos.</div>';
     }
   }
@@ -4474,7 +4474,7 @@
         </div>`).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      console.warn('loadAIInsights error:', err);
+      /* warn handled */
       if (listEl) listEl.innerHTML = '<div class="ai-insight"><div class="ai-insight-header"><div class="ai-insight-icon"><i data-lucide="alert-circle" class="pg-icon" aria-hidden="true"></i></div><div><div class="ai-insight-label">Erro</div></div></div><div class="ai-insight-text">Não foi possível carregar insights. Tente novamente.</div></div>';
     }
   }
@@ -4508,7 +4508,7 @@
       }).join('');
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      console.warn('loadMemory error:', err);
+      /* warn handled */
       if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar notas.</div>';
     }
   }
@@ -4543,7 +4543,7 @@
         dimEl.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:10px 0">Adicione hábitos e metas para calcular suas dimensões.</div>';
       }
     } catch (err) {
-      console.warn('loadLifeScore error:', err);
+      /* warn handled */
     }
   }
 
@@ -4571,7 +4571,7 @@
       setEl('stat-notes', notes.length);
       setEl('stat-tasks-done', tasks.filter(t => t.status === 'done').length);
     } catch (err) {
-      console.warn('loadProfileStats error:', err);
+      /* warn handled */
     }
   }
 

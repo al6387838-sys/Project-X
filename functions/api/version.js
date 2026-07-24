@@ -14,7 +14,7 @@ export async function onRequest(context) {
       },
     });
   } catch (error) {
-    console.error('LifeOS release metadata error', error);
+    
     return releaseErrorResponse(error);
   }
 }

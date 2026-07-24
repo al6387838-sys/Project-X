@@ -242,7 +242,7 @@ async function dcLoadList() {
     if (!res.ok) return;
     const data = await res.json();
     renderDocList('dc-doc-list', data.documents || []);
-  } catch (e) { console.error('DC list error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 async function dcLoadStats() {

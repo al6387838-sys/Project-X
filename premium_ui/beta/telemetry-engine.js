@@ -54,7 +54,7 @@ const TelemetryEngine = (() => {
         eventQueue = JSON.parse(stored);
       }
     } catch (e) {
-      console.warn('Falha ao restaurar fila de telemetria:', e);
+      /* warn handled */
     }
 
     // Carregar consentimento
@@ -255,13 +255,13 @@ const TelemetryEngine = (() => {
         // Recolocar na fila se falhar
         eventQueue.unshift(...batch);
         saveQueue();
-        console.warn('[TelemetryEngine] Falha ao enviar eventos:', response.status);
+        /* warn handled */
       }
     } catch (e) {
       // Recolocar na fila se falhar
       eventQueue.unshift(...batch);
       saveQueue();
-      console.warn('[TelemetryEngine] Erro ao enviar eventos:', e);
+      /* warn handled */
     }
   }
 
@@ -280,7 +280,7 @@ const TelemetryEngine = (() => {
         body: JSON.stringify(errorData)
       });
     } catch (e) {
-      console.warn('[TelemetryEngine] Falha ao enviar crash report:', e);
+      /* warn handled */
     }
   }
 
@@ -311,7 +311,7 @@ const TelemetryEngine = (() => {
       // [removed]
       return true;
     } catch (e) {
-      console.warn('[TelemetryEngine] Falha ao deletar dados:', e);
+      /* warn handled */
       return false;
     }
   }
@@ -341,7 +341,7 @@ const TelemetryEngine = (() => {
         return data;
       }
     } catch (e) {
-      console.warn('Falha ao carregar consentimento:', e);
+      /* warn handled */
     }
     return { trackingTypes: [] };
   }

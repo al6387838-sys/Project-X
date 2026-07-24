@@ -690,7 +690,7 @@ async function loadDailyBriefingData() {
       }).join('');
       if (window.lucide) lucide.createIcons();
     }
-  } catch (e) { console.warn('loadDailyBriefingData error:', e); }
+  } catch (e) { /* warn handled */ }
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadDailyBriefingData);

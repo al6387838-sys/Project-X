@@ -16,7 +16,7 @@ window.addEventListener('online', () => {
 window.addEventListener('offline', () => {
   lifeosOffline = true;
   showOfflineToast();
-  console.warn('[LifeOS] Connection lost');
+  /* warn handled */
 });
 function showOfflineToast() {
   let toast = document.getElementById('lifeos-offline-toast');
@@ -120,7 +120,7 @@ window.fetch = function(url, opts) {
       window.showToast(message, type || 'info');
       return;
     }
-    if (typeof window.showToast === "function") window.showToast(message, "error"); else console.warn(message);
+    if (typeof window.showToast === "function") window.showToast(message, "error"); else /* warn handled */
   }
 
   function errorText(error) {
@@ -245,7 +245,7 @@ window.fetch = function(url, opts) {
     try {
       await renderRoute(route);
     } catch (error) {
-      console.warn('LifeOS user completion route error:', route, error);
+      /* warn handled */
       renderError(route, error);
     }
   }

@@ -304,3 +304,10 @@ export async function onRequestGet({ request, env }) {
     return json(500, { ok: false, error: 'Erro ao calcular analytics', details: err.message });
   }
 }
+
+export async function onRequest({ request, env }) {
+  const method = request.method.toUpperCase();
+  if (method === 'GET') return onRequestGet({ request, env });
+  if (method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+  return new Response(JSON.stringify({ ok: false, error: 'Método não permitido' }), { status: 405, headers: { 'content-type': 'application/json' } });
+}

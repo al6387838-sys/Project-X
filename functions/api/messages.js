@@ -364,7 +364,12 @@ export async function onRequestPost({ request, env }) {
 }
 
 export async function onRequest({ request, env }) {
-  if (request.method === 'GET') return onRequestGet({ request, env });
-  if (request.method === 'POST') return onRequestPost({ request, env });
+  const method = request.method.toUpperCase();
+  if (method === 'GET') return onRequestGet({ request, env });
+  if (method === 'POST') return onRequestPost({ request, env });
+  if (method === 'PUT') return onRequestPost({ request, env });
+  if (method === 'PATCH') return onRequestPost({ request, env });
+  if (method === 'DELETE') return onRequestPost({ request, env });
+  if (method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
   return json(405, { ok: false, error: 'Método não permitido' });
 }

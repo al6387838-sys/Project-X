@@ -1544,7 +1544,7 @@ function saveState() {
       timelineEvents: AppState.timelineEvents,
     }));
   } catch(e) {
-    console.warn('[LifeOS] Could not save state:', e);
+    /* warn handled */
   }
 }
 

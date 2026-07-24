@@ -370,7 +370,7 @@ async function applyAction(kv, actor, action, payload) {
 export async function onRequest({ request, env }) {
   try {
     const { actor, kv } = await authenticate(request, env);
-    if (!['GET', 'POST'].includes(request.method)) return json(405, { ok: false, error: 'Método não permitido.' }, { allow: 'GET, POST' });
+    if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'].includes(request.method)) return json(405, { ok: false, error: 'Método não permitido.' });
     if (request.method === 'GET') {
       const requestedOrgId = new URL(request.url).searchParams.get('orgId') || '';
       return json(200, { ok: true, data: await buildData(kv, actor, requestedOrgId) });

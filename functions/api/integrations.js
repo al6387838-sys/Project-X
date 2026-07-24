@@ -296,5 +296,19 @@ export async function onRequest({ request, env }) {
     return json(400, { ok: false, error: 'action inválido. Use: test, connect, sync' });
   }
 
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
+  if (request.method === 'PUT') {
+    // PUT tratado como POST
+    const newReq = new Request(request.url, { method: 'POST', headers: request.headers, body: request.body });
+    return onRequest({ request: newReq, env });
+  }
+  if (request.method === 'PATCH') {
+    const newReq = new Request(request.url, { method: 'POST', headers: request.headers, body: request.body });
+    return onRequest({ request: newReq, env });
+  }
+  if (request.method === 'DELETE') {
+    const newReq = new Request(request.url, { method: 'POST', headers: request.headers, body: request.body });
+    return onRequest({ request: newReq, env });
+  }
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' });
 }

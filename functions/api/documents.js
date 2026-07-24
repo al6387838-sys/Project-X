@@ -671,7 +671,38 @@ export async function onRequestPost({ request, env }) {
 }
 
 export async function onRequest({ request, env }) {
-  if (request.method === 'GET') return onRequestGet({ request, env });
-  if (request.method === 'POST') return onRequestPost({ request, env });
-  return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
+  const method = request.method.toUpperCase();
+  if (method === 'GET') return onRequestGet({ request, env });
+  if (method === 'POST') return onRequestPost({ request, env });
+  if (method === 'PUT') return onRequestPut({ request, env });
+  if (method === 'PATCH') return onRequestPatch({ request, env });
+  if (method === 'DELETE') return onRequestDelete({ request, env });
+  if (method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+  return json(405, { ok: false, error: 'Método não permitido' });
+}
+
+// Handlers adicionais para PUT, PATCH, DELETE via método HTTP direto
+export async function onRequestPut({ request, env }) {
+  // PUT é tratado como POST com action=update-content
+  return onRequestPost({ request, env });
+}
+export async function onRequestPatch({ request, env }) {
+  // PATCH é tratado como POST com action=rename ou action=move
+  return onRequestPost({ request, env });
+}
+export async function onRequestDelete({ request, env }) {
+  // DELETE é tratado como POST com action=delete
+  const url = new URL(request.url);
+  const docId = url.searchParams.get('docId') || url.searchParams.get('id');
+  if (docId) {
+    // Criar um request sintético com body action=delete
+    const syntheticBody = JSON.stringify({ action: 'delete', docId, permanent: url.searchParams.get('permanent') === 'true' });
+    const syntheticRequest = new Request(request.url, {
+      method: 'POST',
+      headers: { ...Object.fromEntries(request.headers.entries()), 'content-type': 'application/json' },
+      body: syntheticBody,
+    });
+    return onRequestPost({ request: syntheticRequest, env });
+  }
+  return onRequestPost({ request, env });
 }

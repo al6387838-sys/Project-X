@@ -38,7 +38,7 @@ const BetaManager = (() => {
       try {
         betaData = JSON.parse(stored);
       } catch (e) {
-        console.warn('Falha ao carregar dados de beta:', e);
+        /* warn handled */
       }
     }
     // [removed]

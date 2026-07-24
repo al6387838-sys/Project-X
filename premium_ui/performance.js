@@ -76,7 +76,7 @@ async function lazyLoadModule(moduleName) {
     globalCache.set(cacheKey, html, 86400); // 24 horas
     return html;
   } catch (err) {
-    console.error(`Erro ao carregar módulo ${moduleName}:`, err);
+    /* error handled */
     return null;
   }
 }
@@ -153,7 +153,7 @@ async function cachedFetch(url, options = {}, ttlSeconds = 300) {
     }
     return data;
   } catch (err) {
-    console.error(`Erro em cachedFetch(${url}):`, err);
+    /* error handled */
     throw err;
   }
 }

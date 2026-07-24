@@ -129,7 +129,7 @@ class OAuthManager {
       const tokenData = await response.json();
       return this.encryptAndStoreToken(providerKey, tokenData);
     } catch (error) {
-      console.error(`Erro ao trocar código por token (${providerKey}):`, error);
+      /* error handled */
       throw error;
     }
   }

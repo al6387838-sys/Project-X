@@ -105,5 +105,10 @@ export async function onRequest({ request, env }) {
     }
     return onRequestGet({ request, env });
   }
+  if (request.method === 'POST') return onRequestGet({ request, env });
+  if (request.method === 'PUT') return onRequestGet({ request, env });
+  if (request.method === 'PATCH') return onRequestGet({ request, env });
+  if (request.method === 'DELETE') return onRequestGet({ request, env });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
   return json(405, { ok: false, error: 'Método não permitido' });
 }

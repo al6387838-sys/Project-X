@@ -61,7 +61,7 @@ export async function sendTransactionalEmail(env, message) {
     else await sendWithSendGrid(env, message);
     return { ok: true };
   } catch (error) {
-    console.error('[LifeOS] Falha no provedor transacional:', error?.message || 'UNKNOWN');
+    
     return { ok: false, error: 'EMAIL_DELIVERY_FAILED' };
   }
 }

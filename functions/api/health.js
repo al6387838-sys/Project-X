@@ -15,7 +15,7 @@ export async function onRequest(context) {
       },
     });
   } catch (error) {
-    console.error('LifeOS health metadata error', error);
+    
     return releaseErrorResponse(error);
   }
 }

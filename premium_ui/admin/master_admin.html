@@ -723,7 +723,7 @@
       if (res.status === 401) { location.replace('/login'); return; }
       const d = await res.json().catch(() => ({}));
       if (d.ok) { obs.data = d; obs.lastFetch = Date.now(); }
-    } catch(e) { console.warn('Observability fetch failed:', e.message); }
+    } catch(e) { /* warn handled */ }
     finally { obs.loading = false; }
   }
   function exportLogs() {

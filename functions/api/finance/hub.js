@@ -313,6 +313,10 @@ export async function onRequest({ request, env }) {
   switch (request.method) {
     case 'GET': return onRequestGet(ctx);
     case 'POST': return onRequestPost(ctx);
-    default: return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'GET, POST' });
+    case 'PUT': // fallthrough
+    case 'PATCH': // fallthrough
+    case 'DELETE': // fallthrough
+    case 'OPTIONS': if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'access-control-allow-methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS' } });
+    default: return json(405, { ok: false, error: 'Método não permitido' });
   }
 }

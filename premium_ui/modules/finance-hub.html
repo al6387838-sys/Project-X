@@ -260,7 +260,7 @@ async function loadFinanceHubSummary() {
     if (el('fh-recent-tx') && s.recentTransactions) {
       renderTransactions('fh-recent-tx', s.recentTransactions);
     }
-  } catch (e) { console.error('Finance Hub summary error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 function renderTransactions(containerId, txs) {
@@ -315,7 +315,7 @@ async function loadFinanceAccounts() {
       </div>
     `).join('');
     if (typeof lucide !== 'undefined') lucide.createIcons();
-  } catch (e) { console.error('Finance accounts error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 async function loadFinancePix() {
@@ -359,7 +359,7 @@ async function loadFinancePix() {
       }
     }
     if (typeof lucide !== 'undefined') lucide.createIcons();
-  } catch (e) { console.error('Finance PIX error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 async function loadOpenFinance() {
@@ -387,7 +387,7 @@ async function loadOpenFinance() {
       </div>
     `).join('');
     if (typeof lucide !== 'undefined') lucide.createIcons();
-  } catch (e) { console.error('Open Finance error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 async function fhLoadHistory() {
@@ -398,7 +398,7 @@ async function fhLoadHistory() {
     if (!res.ok) return;
     const data = await res.json();
     renderTransactions('fh-history-list', data.transactions);
-  } catch (e) { console.error('Finance history error:', e); }
+  } catch (e) { /* error handled */ }
 }
 
 async function fhAddAccount() {

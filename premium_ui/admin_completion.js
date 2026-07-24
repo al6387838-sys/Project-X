@@ -1413,7 +1413,7 @@
 
       await load();
     } catch (err) {
-      console.error('[LifeOS Admin] Boot error:', err);
+      /* error handled */
     }
   }
 

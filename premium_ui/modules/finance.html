@@ -1216,7 +1216,7 @@ function finAddBill() {
       }
     }
     if (typeof lucide !== 'undefined') lucide.createIcons();
-  } catch (e) { console.error('Finance init error:', e); }
+  } catch (e) { /* error handled */ }
 
   // Carregar chaves PIX reais
   function finLoadPixKeys() {

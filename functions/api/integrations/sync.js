@@ -54,7 +54,7 @@ export async function onRequestPost({ request, env }) {
 }
 
 export async function onRequest({ request, env }) {
-  if (request.method === 'POST') return onRequestPost({ request, env });
+  if (request.method === 'POST' || request.method === 'PUT' || request.method === 'PATCH' || request.method === 'DELETE') return onRequestPost({ request, env });
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { allow: 'POST, OPTIONS' } });
   return json(405, { ok: false, error: 'Método não permitido' }, { allow: 'POST, OPTIONS' });
 }

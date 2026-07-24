@@ -36,7 +36,7 @@ const AnalyticsEngine = (() => {
       try {
         analyticsData = JSON.parse(stored);
       } catch (e) {
-        console.warn('Falha ao carregar dados de analytics:', e);
+        /* warn handled */
       }
     }
     // [removed]

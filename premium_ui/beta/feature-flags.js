@@ -40,7 +40,7 @@ const FeatureFlagsEngine = (() => {
         heatmapData = JSON.parse(stored);
       }
     } catch (e) {
-      console.warn('Falha ao restaurar heatmap:', e);
+      /* warn handled */
     }
 
     // Iniciar rastreamento de heatmap

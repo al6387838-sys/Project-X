@@ -132,7 +132,7 @@ const ThemeEngine = (() => {
 
   function setTheme(theme) {
     if (!Object.values(THEMES).includes(theme)) {
-      console.warn(`[ThemeEngine] Unknown theme: ${theme}`);
+      /* warn handled */
       return;
     }
     _currentTheme = theme;

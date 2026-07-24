@@ -112,6 +112,9 @@ const PROTECTED_ROUTES = [
   '/api/timeline', '/api/events', '/api/search', '/api/metrics',
   '/api/collaboration', '/api/platform', '/api/ai',
   '/api/briefing', '/api/life-graph', '/api/dashboard',
+  '/api/folders', '/api/documents', '/api/photos', '/api/agenda', '/api/kanban',
+  '/api/crm', '/api/messages', '/api/comm-hub', '/api/communication',
+  '/api/integrations', '/api/automations', '/api/analytics-pro',
 ];
 
 const ADMIN_ROUTES = [
