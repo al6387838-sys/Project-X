@@ -124,13 +124,23 @@
         <button class="btn btn-ghost" style="padding:8px" id="photo-viewer-fav" title="Favoritar" onclick="photosToggleFavorite()">❤</button>
         <button class="btn btn-ghost" style="padding:8px" title="Editar" onclick="photosEditCurrent()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
         <button class="btn btn-ghost" style="padding:8px" title="Mover para álbum" onclick="photosMoveCurrent()"><i data-lucide="folder-input" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:8px" title="Excluir" onclick="photosDeleteCurrent()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Compartilhar" onclick="photosShareCurrent()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Excluir (lixeira)" onclick="photosDeleteCurrent()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Lixeira" onclick="photosCloseModal('modal-photo-viewer');photosShowTrash()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
         <button class="modal-close" onclick="photosCloseModal('modal-photo-viewer')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="modal-body" style="display:flex;gap:16px;overflow-y:auto">
-      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border-radius:var(--radius-md);overflow:hidden">
-        <img id="photo-viewer-img" src="" style="max-width:100%;max-height:70vh;object-fit:contain" alt="">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg-base);border-radius:var(--radius-md);overflow:hidden;position:relative">
+        <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10">
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosZoomIn()" title="Zoom in"><i data-lucide="zoom-in" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosZoomOut()" title="Zoom out"><i data-lucide="zoom-out" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosZoomReset()" title="Reset zoom">1:1</button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosRotateLeft()" title="Rotacionar esquerda"><i data-lucide="rotate-ccw" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosRotateRight()" title="Rotacionar direita"><i data-lucide="rotate-cw" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosShareCurrent()" title="Compartilhar"><i data-lucide="share-2" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+        </div>
+        <img id="photo-viewer-img" src="" style="max-width:100%;max-height:70vh;object-fit:contain;transition:transform 0.2s" alt="">
       </div>
       <div style="width:260px;flex-shrink:0">
         <div style="font-size:14px;font-weight:600;margin-bottom:8px" id="photo-viewer-name"></div>
@@ -321,11 +331,123 @@
 
   window.photosDeleteCurrent = async () => {
     if (!state.currentPhoto) return;
-    if (!confirm('Excluir esta foto permanentemente?')) return;
+    if (!confirm('Enviar para lixeira? Esta foto poderá ser restaurada.')) return;
     try {
       await request({ action: 'delete-photo', photoId: state.currentPhoto.id });
       photosCloseModal('modal-photo-viewer');
-      if (typeof showToast === 'function') showToast('Foto excluída', 'success');
+      if (typeof showToast === 'function') showToast('Enviada para lixeira', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  // Zoom controls
+  window.photosZoomIn = () => {
+    const img = document.getElementById('photo-viewer-img');
+    if (!img) return;
+    const current = parseFloat(img.dataset.zoom || '1');
+    const next = Math.min(3, current + 0.25);
+    img.dataset.zoom = next;
+    img.style.transform = `scale(${next})`;
+    img.style.cursor = next > 1 ? 'zoom-out' : 'zoom-in';
+  };
+  window.photosZoomOut = () => {
+    const img = document.getElementById('photo-viewer-img');
+    if (!img) return;
+    const current = parseFloat(img.dataset.zoom || '1');
+    const next = Math.max(0.25, current - 0.25);
+    img.dataset.zoom = next;
+    img.style.transform = `scale(${next})`;
+    img.style.cursor = next > 1 ? 'zoom-out' : 'zoom-in';
+  };
+  window.photosZoomReset = () => {
+    const img = document.getElementById('photo-viewer-img');
+    if (!img) return;
+    img.dataset.zoom = '1';
+    img.style.transform = 'scale(1)';
+    img.style.cursor = 'zoom-in';
+  };
+
+  // Rotation
+  window.photosRotateRight = () => {
+    const img = document.getElementById('photo-viewer-img');
+    if (!img) return;
+    const current = parseInt(img.dataset.rotation || '0', 10);
+    const next = (current + 90) % 360;
+    img.dataset.rotation = next;
+    img.style.transform = `scale(${parseFloat(img.dataset.zoom || '1')}) rotate(${next}deg)`;
+  };
+  window.photosRotateLeft = () => {
+    const img = document.getElementById('photo-viewer-img');
+    if (!img) return;
+    const current = parseInt(img.dataset.rotation || '0', 10);
+    const next = ((current - 90) + 360) % 360;
+    img.dataset.rotation = next;
+    img.style.transform = `scale(${parseFloat(img.dataset.zoom || '1')}) rotate(${next}deg)`;
+  };
+
+  // Share
+  window.photosShareCurrent = async () => {
+    if (!state.currentPhoto) return;
+    try {
+      const data = await request({ action: 'share-photo', photoId: state.currentPhoto.id, permission: 'view' });
+      if (data.shareUrl) {
+        await navigator.clipboard.writeText(data.shareUrl);
+        if (typeof showToast === 'function') showToast('Link copiado para a área de transferência', 'success');
+      }
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  // Trash
+  window.photosShowTrash = async () => {
+    try {
+      const data = await fetchPhotos('list');
+      const trashPhotos = (data.photos || []).filter(p => p.deleted);
+      state.photos = trashPhotos;
+      state.view = 'gallery';
+      const gallery = document.getElementById('page-photos');
+      const albums = document.getElementById('page-photos-albums');
+      if (gallery) { gallery.style.display = ''; }
+      if (albums) { albums.style.display = 'none'; }
+      const grid = document.getElementById('photos-gallery');
+      if (!grid) return;
+      if (!trashPhotos.length) {
+        grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Lixeira vazia</div>';
+        return;
+      }
+      grid.innerHTML = trashPhotos.map(p => `
+        <div class="photo-thumb" style="position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);background:var(--bg-elevated);opacity:0.6">
+          <img src="${esc(p.url)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)" loading="lazy">
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
+          <div style="position:absolute;top:6px;left:6px;display:flex;gap:4px">
+            <button style="background:rgba(16,185,129,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosRestoreById('${esc(p.id)}')" title="Restaurar">↩</button>
+            <button style="background:rgba(239,68,68,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosPermanentDelete('${esc(p.id)}')" title="Excluir definitivamente">🗑</button>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      if (typeof showToast === 'function') showToast('Erro ao carregar lixeira', 'error');
+    }
+  };
+
+  window.photosRestoreById = async (photoId) => {
+    try {
+      await request({ action: 'restore-photo', photoId });
+      if (typeof showToast === 'function') showToast('Foto restaurada', 'success');
+      await photosLoad();
+    } catch (err) {
+      if (typeof showToast === 'function') showToast(err.message, 'error');
+    }
+  };
+
+  window.photosPermanentDelete = async (photoId) => {
+    if (!confirm('Excluir permanentemente? Esta ação não pode ser desfeita.')) return;
+    try {
+      await request({ action: 'permanent-delete', photoId });
+      if (typeof showToast === 'function') showToast('Excluída permanentemente', 'success');
       await photosLoad();
     } catch (err) {
       if (typeof showToast === 'function') showToast(err.message, 'error');
@@ -458,6 +580,33 @@
       error.style.display = 'block';
     }
   });
+
+  // ─── DRAG AND DROP ───
+  (function initPhotosDragDrop() {
+    const gallery = document.getElementById('photos-gallery');
+    if (!gallery) return;
+    gallery.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; gallery.style.outline = '2px dashed var(--accent)'; });
+    gallery.addEventListener('dragleave', () => { gallery.style.outline = ''; });
+    gallery.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      gallery.style.outline = '';
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+      try {
+        if (typeof showToast === 'function') showToast(`Enviando ${files.length} foto(s)...`, 'info');
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('action', 'upload');
+          await uploadFiles(formData);
+        }
+        if (typeof showToast === 'function') showToast(`${files.length} foto(s) enviada(s)`, 'success');
+        await photosLoad();
+      } catch (err) {
+        if (typeof showToast === 'function') showToast('Erro ao enviar fotos: ' + err.message, 'error');
+      }
+    });
+  })();
 
   // ─── INIT ───
   photosLoad();

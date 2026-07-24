@@ -371,7 +371,12 @@ function injectResourceHints() {
   });
 }
 if (typeof document !== 'undefined') {
-  const run = () => { initModuleLazyLoad(); prefetchCriticalRoutes(); injectResourceHints(); setInterval(cleanupObsoleteListeners, 60000); };
+  let _cleanupTimer = null;
+  const run = () => {
+    initModuleLazyLoad(); prefetchCriticalRoutes(); injectResourceHints();
+    if (!_cleanupTimer) _cleanupTimer = setInterval(cleanupObsoleteListeners, 60000);
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
+  window.addEventListener('beforeunload', () => { if (_cleanupTimer) clearInterval(_cleanupTimer); });
 }

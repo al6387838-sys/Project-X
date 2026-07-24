@@ -3822,7 +3822,7 @@
       _docsState.folders = folders;
       let html = '';
       folders.forEach(folder => {
-        html += '<div class="doc-folder-card" onclick="docsOpenFolder(\'' + escH(folder.id) + '\', \'' + escH(folder.name) + '\')" ondblclick="event.stopPropagation();docsOpenFile(\'' + escH(folder.id) + '\')">';
+        html += '<div class="doc-folder-card" onclick="docsOpenFolder(\'' + escH(folder.id) + '\', \'' + escH(folder.name) + '\')" ondblclick="event.stopPropagation();docsOpenFile(\'' + escH(folder.id) + '\')" oncontextmenu="event.preventDefault();event.stopPropagation();showDocsContext(event,\'' + escH(folder.id) + '\',true,\'' + escH(folder.name) + '\')">';
         html += '<div class="doc-folder-icon"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i></div>';
         html += '<div class="doc-folder-name">' + escH(folder.name) + '</div>';
         html += '<div class="doc-folder-count">Pasta persistida</div>';
@@ -3840,7 +3840,7 @@
           const sizeLabel = d.size ? (d.size < 1024 ? d.size + ' B' : d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
           const dateLabel = d.createdAt ? new Date(d.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '—';
           const tagHtml = (d.tags || []).map(t => '<span class="doc-tag" style="background:rgba(16,185,129,0.15);color:var(--green)">' + escH(t) + '</span>').join('');
-          html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')">';
+          html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')" oncontextmenu="event.preventDefault();event.stopPropagation();showDocsContext(event,\'' + escH(d.id) + '\',false,\'' + escH(d.name) + '\')">';
           html += '<div class="doc-file-icon" style="background:rgba(239,68,68,0.15);color:var(--red)">' + escH(extLabel) + '</div>';
           html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
           html += '<div class="doc-file-meta">' + sizeLabel + ' · ' + dateLabel + '</div>';
@@ -3938,6 +3938,31 @@
         if (sizeEl) sizeEl.textContent = doc.size ? (doc.size < 1048576 ? (doc.size / 1024).toFixed(0) + ' KB' : (doc.size / 1048576).toFixed(1) + ' MB') : '—';
         if (createdEl) createdEl.textContent = doc.createdAt ? new Date(doc.createdAt).toLocaleDateString('pt-BR') : '—';
         if (favEl) favEl.textContent = doc.favorite ? 'Sim' : 'Não';
+        // Render preview based on mime type
+        const previewEl = document.getElementById('doc-viewer-preview');
+        if (previewEl) {
+          const mt = (doc.mimeType || '').toLowerCase();
+          const url = doc.downloadUrl || '/api/documents/' + doc.id + '/content';
+          if (mt.startsWith('image/')) {
+            previewEl.innerHTML = '<img src="' + escH(url) + '" style="max-width:100%;max-height:500px;object-fit:contain;border-radius:8px" alt="' + escH(doc.name) + '" />';
+          } else if (mt === 'application/pdf') {
+            previewEl.innerHTML = '<iframe src="' + escH(url) + '#toolbar=0" style="width:100%;height:500px;border:none;border-radius:8px"></iframe>';
+          } else if (mt.startsWith('text/') || mt === 'application/json' || (doc.name || '').endsWith('.md')) {
+            try {
+              const cr = await fetch(url, { credentials: 'same-origin' });
+              const txt = await cr.text();
+              previewEl.innerHTML = '<pre style="white-space:pre-wrap;word-wrap:break-word;padding:20px;font-size:13px;color:var(--text-primary);max-height:500px;overflow:auto">' + escH(txt) + '</pre>';
+            } catch {
+              previewEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Nao foi possivel carregar o conteudo</div>';
+            }
+          } else if (mt.includes('spreadsheet') || (doc.name || '').match(/\.xlsx?$/i)) {
+            previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:14px">Planilha Excel</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Baixe para visualizar ou use o editor integrado</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+          } else if (mt.includes('wordprocessing') || mt.includes('document') || (doc.name || '').match(/\.docx?$/i)) {
+            previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:14px">Documento Word</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Baixe para visualizar no Word</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+          } else {
+            previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📄</div><div style="font-size:14px">' + escH(doc.name || 'Documento') + '</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">' + escH(doc.mimeType || 'Tipo desconhecido') + '</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+          }
+        }
       }
       showPage('document-viewer');
     } catch (err) {
@@ -3981,7 +4006,7 @@
           docs.forEach(d => {
             const sizeLabel = d.size ? (d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
             const dateLabel = d.createdAt ? new Date(d.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : '—';
-            html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')">';
+            html += '<div class="doc-file-card" onclick="docsOpenFile(\'' + escH(d.id) + '\')" oncontextmenu="event.preventDefault();event.stopPropagation();showDocsContext(event,\'' + escH(d.id) + '\',false,\'' + escH(d.name) + '\')">';
             html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
             html += '<div class="doc-file-meta">' + sizeLabel + ' · ' + dateLabel + '</div>';
             html += '</div>';
@@ -4180,6 +4205,182 @@
       } catch (err) { showToast('Erro ao excluir', 'error'); }
     })();
   }
+
+  // ═══ DOCUMENT CONTEXT MENU (right-click) ═══
+  function showDocsContext(event, id, isFolder, name) {
+    docsContextClose();
+    const existing = document.getElementById('docs-context-menu');
+    if (existing) existing.remove();
+    const menu = document.createElement('div');
+    menu.id = 'docs-context-menu';
+    menu.style.cssText = 'position:fixed;z-index:9999;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:6px 0;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,0.4)';
+    menu.style.left = Math.min(event.clientX, window.innerWidth - 200) + 'px';
+    menu.style.top = Math.min(event.clientY, window.innerHeight - 280) + 'px';
+    const items = isFolder
+      ? [
+          { label: 'Abrir', icon: '📁', fn: () => docsOpenFolder(id, name) },
+          { label: 'Renomear', icon: '✏️', fn: () => docRenameById(id, name) },
+          { label: 'Copiar', icon: '📋', fn: () => docCopyById(id) },
+          { label: 'Mover', icon: '📦', fn: () => docMoveById(id) },
+          { label: 'Favoritar', icon: '⭐', fn: () => docToggleFavById(id) },
+          { label: 'Excluir', icon: '🗑️', fn: () => docDeleteById(id, name) },
+        ]
+      : [
+          { label: 'Abrir / Visualizar', icon: '👁️', fn: () => docsOpenFile(id) },
+          { label: 'Baixar', icon: '⬇️', fn: () => docDownloadById(id) },
+          { label: 'Compartilhar', icon: '🔗', fn: () => docShareById(id) },
+          { label: 'Renomear', icon: '✏️', fn: () => docRenameById(id, name) },
+          { label: 'Copiar', icon: '📋', fn: () => docCopyById(id) },
+          { label: 'Mover', icon: '📦', fn: () => docMoveById(id) },
+          { label: 'Favoritar', icon: '⭐', fn: () => docToggleFavById(id) },
+          { label: 'Excluir', icon: '🗑️', fn: () => docDeleteById(id, name) },
+        ];
+    menu.innerHTML = items.map(i =>
+      '<div style="padding:8px 16px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-primary);transition:background 0.1s" onmouseover="this.style.background=\'rgba(99,102,241,0.1)\'" onmouseout="this.style.background=\'transparent\'">' +
+      i.icon + ' ' + i.label + '</div>'
+    ).join('');
+    items.forEach((item, idx) => {
+      menu.children[idx].addEventListener('click', () => { item.fn(); docsContextClose(); });
+    });
+    document.body.appendChild(menu);
+    document.addEventListener('click', docsContextClose, { once: true });
+  }
+  function docsContextClose() {
+    const el = document.getElementById('docs-context-menu');
+    if (el) el.remove();
+  }
+  async function docRenameById(id, oldName) {
+    const name = prompt('Novo nome:', oldName);
+    if (!name || !name.trim()) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'rename', docId: id, name: name.trim() }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Renomeado', 'success'); await docsLoadCurrent(); } else showToast('Erro: ' + (data.error || ''), 'error');
+    } catch { showToast('Erro ao renomear', 'error'); }
+  }
+  async function docCopyById(id) {
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'copy', docId: id }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Cópia criada', 'success'); await docsLoadCurrent(); } else showToast('Erro: ' + (data.error || ''), 'error');
+    } catch { showToast('Erro ao copiar', 'error'); }
+  }
+  async function docMoveById(id) {
+    const folder = prompt('Pasta de destino:', 'root');
+    if (!folder) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'move', docId: id, folderId: folder.trim() }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Movido', 'success'); await docsLoadCurrent(); } else showToast('Erro: ' + (data.error || ''), 'error');
+    } catch { showToast('Erro ao mover', 'error'); }
+  }
+  async function docToggleFavById(id) {
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'toggle-favorite', docId: id }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Favorito alterado', 'success'); await docsLoadCurrent(); } else showToast('Erro', 'error');
+    } catch { showToast('Erro ao favoritar', 'error'); }
+  }
+  async function docDeleteById(id, name) {
+    if (!confirm('Excluir "' + name + '"?')) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'delete', docId: id }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Enviado para lixeira', 'success'); await docsLoadCurrent(); } else showToast('Erro: ' + (data.error || ''), 'error');
+    } catch { showToast('Erro ao excluir', 'error'); }
+  }
+  async function docDownloadById(id) {
+    try {
+      const allRes = await fetch('/api/documents?view=all', { credentials: 'same-origin' });
+      const allData = await allRes.json();
+      const doc = (allData.documents || []).find(d => d.id === id);
+      if (doc && doc.downloadUrl) { window.open(doc.downloadUrl, '_blank'); showToast('Download iniciado', 'success'); }
+      else showToast('URL não disponível', 'error');
+    } catch { showToast('Erro ao baixar', 'error'); }
+  }
+  async function docShareById(id) {
+    const email = prompt('E-mail do destinatário:');
+    if (!email || !email.trim()) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'share', docId: id, targetUserId: email.trim(), permission: 'view' }) });
+      const data = await res.json();
+      if (data.ok) showToast('Compartilhado', 'success'); else showToast('Erro: ' + (data.error || ''), 'error');
+    } catch { showToast('Erro ao compartilhar', 'error'); }
+  }
+
+  // ═══ TRASH / RESTORE ═══
+  function docsShowTrash() {
+    (async () => {
+      try {
+        const res = await fetch('/api/documents?view=trash', { credentials: 'same-origin' });
+        const data = await res.json();
+        const grid = document.getElementById('docs-grid');
+        if (!grid) return;
+        const docs = data.documents || [];
+        let html = '<div class="ss-group-header">Lixeira</div>';
+        if (!docs.length) {
+          html += '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Lixeira vazia</div></div>';
+        } else {
+          docs.forEach(d => {
+            const sizeLabel = d.size ? (d.size < 1048576 ? (d.size / 1024).toFixed(0) + ' KB' : (d.size / 1048576).toFixed(1) + ' MB') : '—';
+            html += '<div class="doc-file-card">';
+            html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
+            html += '<div class="doc-file-meta">' + sizeLabel + ' · Excluído em ' + (d.deletedAt ? new Date(d.deletedAt).toLocaleDateString('pt-BR') : '—') + '</div>';
+            html += '<div style="display:flex;gap:6px;margin-top:8px">';
+            html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="docsRestoreDoc(\'' + escH(d.id) + '\')">↩ Restaurar</button>';
+            html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="docsPermanentDelete(\'' + escH(d.id) + '\')">🗑 Excluir definitivamente</button>';
+            html += '</div></div>';
+          });
+        }
+        grid.innerHTML = html;
+        showPage('documents');
+      } catch { showToast('Erro ao carregar lixeira', 'error'); }
+    })();
+  }
+  async function docsRestoreDoc(id) {
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'restore', docId: id }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Restaurado', 'success'); await docsLoadCurrent(); } else showToast('Erro', 'error');
+    } catch { showToast('Erro ao restaurar', 'error'); }
+  }
+  async function docsPermanentDelete(id) {
+    if (!confirm('Excluir permanentemente? Esta ação não pode ser desfeita.')) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'permanent-delete', docId: id }) });
+      const data = await res.json();
+      if (data.ok) { showToast('Excluído permanentemente', 'success'); docsShowTrash(); } else showToast('Erro', 'error');
+    } catch { showToast('Erro ao excluir', 'error'); }
+  }
+
+  // ═══ DRAG AND DROP UPLOAD ═══
+  (function initDocsDragDrop() {
+    const zone = document.getElementById('docs-grid');
+    if (!zone) return;
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; zone.style.outline = '2px dashed var(--accent)'; });
+    zone.addEventListener('dragleave', () => { zone.style.outline = ''; });
+    zone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      zone.style.outline = '';
+      const files = Array.from(e.dataTransfer.files);
+      if (!files.length) return;
+      for (const file of files) {
+        try {
+          showToast('Enviando: ' + file.name, 'info');
+          const fd = new FormData();
+          fd.append('action', 'upload');
+          fd.append('file', file);
+          fd.append('folderId', _docsState.currentFolder || 'root');
+          fd.append('name', file.name);
+          fd.append('mimeType', file.type || 'application/octet-stream');
+          const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', body: fd });
+          const data = await res.json();
+          if (data.ok) showToast(file.name + ' enviado', 'success'); else showToast('Erro: ' + (data.error || ''), 'error');
+        } catch { showToast('Erro ao enviar ' + file.name, 'error'); }
+      }
+      await docsLoadCurrent();
+    });
+  })();
 
     // ═══ KANBAN FUNCTIONS (persist via API) ═══
   let _draggedCard = null;

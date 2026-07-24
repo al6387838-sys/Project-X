@@ -17,9 +17,7 @@
     body { font-family: 'Inter', -apple-system, sans-serif; background: transparent; color: var(--text-primary); font-size: 14px; }
 
     /* ── SEARCH BAR ── */
-    .ss-bar-wrap {
-      position: relative; margin-bottom: 20px;
-    }
+    .ss-bar-wrap { position: relative; margin-bottom: 20px; }
     .ss-bar {
       width: 100%; background: var(--bg-card); border: 1.5px solid var(--border-accent);
       border-radius: var(--radius-lg); padding: 14px 20px 14px 52px;
@@ -40,7 +38,7 @@
     .ss-filter.active { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.4); color: var(--accent-light); }
     .ss-filter-count { background: rgba(99,102,241,0.2); color: var(--accent-light); font-size: 10px; padding: 1px 5px; border-radius: 8px; }
 
-    /* ── RECENT / SUGGESTIONS ── */
+    /* ── RECENT / FAVORITES ── */
     .ss-section { margin-bottom: 24px; }
     .ss-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); margin-bottom: 10px; }
     .ss-recent-tags { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -64,6 +62,11 @@
     .ss-result-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; }
     .ss-result-action { font-size: 11px; color: var(--text-muted); flex-shrink: 0; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; }
 
+    /* ── FAVORITE BUTTON ── */
+    .ss-result-fav { font-size: 13px; color: var(--text-muted); flex-shrink: 0; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.15s; }
+    .ss-result-fav:hover { color: var(--amber); }
+    .ss-result-fav.active { color: var(--amber); }
+
     /* ── GROUP HEADER ── */
     .ss-group-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 12px 16px 6px; display: flex; align-items: center; gap: 8px; }
     .ss-group-divider { flex: 1; height: 1px; background: var(--border); }
@@ -83,17 +86,25 @@
     .ss-key { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 700; color: var(--text-secondary); }
 
     /* ── STATS BAR ── */
-    .ss-stats { display: flex; gap: 16px; padding: 10px 16px; background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--border); }
+    .ss-stats { display: flex; gap: 16px; padding: 10px 16px; background: var(--bg-card); border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--border); flex-wrap: wrap; }
     .ss-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
     .ss-stat-val { font-weight: 700; color: var(--text-primary); }
     .ss-stat-sep { color: var(--border); }
+
+    /* ── SUGGESTIONS ── */
+    .ss-suggestions { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+    .ss-suggestion { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; }
+    .ss-suggestion:hover { border-color: var(--border-accent); background: var(--bg-elevated); }
+    .ss-suggestion-icon { font-size: 16px; color: var(--accent-light); }
+    .ss-suggestion-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .ss-suggestion-type { font-size: 10px; color: var(--text-muted); }
   </style>
 </head>
 <body>
   <!-- SEARCH BAR -->
   <div class="ss-bar-wrap">
     <span class="ss-bar-icon"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></span>
-    <input class="ss-bar" id="ss-input" type="text" placeholder="Buscar em tudo: usuários, documentos, tarefas, módulos..." autocomplete="off" />
+    <input class="ss-bar" id="ss-input" type="text" placeholder="Buscar em tudo: tarefas, documentos, fotos, mensagens, calendário, CRM..." autocomplete="off" />
     <span class="ss-shortcut" id="ss-shortcut-hint">⌘K</span>
     <button class="ss-bar-clear" id="ss-clear" onclick="clearSearch()" title="Limpar"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
   </div>
@@ -101,53 +112,36 @@
   <!-- FILTERS -->
   <div class="ss-filters" id="ss-filters">
     <button class="ss-filter active" data-filter="all" onclick="setFilter('all', this)">Tudo <span class="ss-filter-count" id="fc-all">0</span></button>
-    <button class="ss-filter" data-filter="users" onclick="setFilter('users', this)"><i data-lucide="user-round" class="pg-icon" aria-hidden="true"></i> Usuários</button>
-    <button class="ss-filter" data-filter="orgs" onclick="setFilter('orgs', this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Organizações</button>
-    <button class="ss-filter" data-filter="workspaces" onclick="setFilter('workspaces', this)"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Workspaces</button>
-    <button class="ss-filter" data-filter="documents" onclick="setFilter('documents', this)"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Documentos</button>
     <button class="ss-filter" data-filter="tasks" onclick="setFilter('tasks', this)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Tarefas</button>
+    <button class="ss-filter" data-filter="projects" onclick="setFilter('projects', this)"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Projetos</button>
+    <button class="ss-filter" data-filter="documents" onclick="setFilter('documents', this)"><i data-lucide="file-text" class="pg-icon" aria-hidden="true"></i> Documentos</button>
+    <button class="ss-filter" data-filter="photos" onclick="setFilter('photos', this)"><i data-lucide="image" class="pg-icon" aria-hidden="true"></i> Fotos</button>
+    <button class="ss-filter" data-filter="events" onclick="setFilter('events', this)"><i data-lucide="calendar" class="pg-icon" aria-hidden="true"></i> Calendário</button>
+    <button class="ss-filter" data-filter="crm" onclick="setFilter('crm', this)"><i data-lucide="users" class="pg-icon" aria-hidden="true"></i> CRM</button>
+    <button class="ss-filter" data-filter="messages" onclick="setFilter('messages', this)"><i data-lucide="message-circle" class="pg-icon" aria-hidden="true"></i> Mensagens</button>
     <button class="ss-filter" data-filter="habits" onclick="setFilter('habits', this)"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Hábitos</button>
     <button class="ss-filter" data-filter="goals" onclick="setFilter('goals', this)"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Metas</button>
-    <button class="ss-filter" data-filter="audit" onclick="setFilter('audit', this)"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
-    <button class="ss-filter" data-filter="notifications" onclick="setFilter('notifications', this)"><i data-lucide="bell" class="pg-icon" aria-hidden="true"></i> Notificações</button>
-    <button class="ss-filter" data-filter="modules" onclick="setFilter('modules', this)"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i> Módulos</button>
-    <button class="ss-filter" data-filter="settings" onclick="setFilter('settings', this)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurações</button>
+    <button class="ss-filter" data-filter="finance" onclick="setFilter('finance', this)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Finanças</button>
   </div>
 
   <!-- MAIN AREA -->
   <div id="ss-main">
+    <!-- FAVORITES -->
+    <div class="ss-section" id="ss-favorites-section" style="display:none">
+      <div class="ss-section-title">Favoritos de busca</div>
+      <div class="ss-recent-tags" id="ss-favorites-tags"></div>
+    </div>
+
     <!-- RECENT SEARCHES -->
     <div class="ss-section" id="ss-recent-section">
       <div class="ss-section-title">Buscas recentes</div>
-      <div class="ss-recent-tags" id="ss-recent-tags">
-        <span class="ss-recent-tag" onclick="fillSearch('relatório Q3')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> relatório Q3</span>
-        <span class="ss-recent-tag" onclick="fillSearch('Ana Martins')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ana Martins</span>
-        <span class="ss-recent-tag" onclick="fillSearch('hábitos')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> hábitos</span>
-        <span class="ss-recent-tag" onclick="fillSearch('configurações de segurança')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> configurações de segurança</span>
-        <span class="ss-recent-tag" onclick="fillSearch('fatura novembro')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> fatura novembro</span>
-      </div>
+      <div class="ss-recent-tags" id="ss-recent-tags"></div>
     </div>
 
     <!-- SUGGESTED -->
     <div class="ss-section" id="ss-suggested-section">
-      <div class="ss-section-title">Sugestões</div>
-      <div class="ss-results">
-        <div class="ss-result-item" onclick="navigateTo('modules')">
-          <div class="ss-result-icon" style="background:rgba(99,102,241,0.12)"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="ss-result-content"><div class="ss-result-title">App Ecosystem</div><div class="ss-result-meta">Módulo · Gerenciar apps e integrações</div></div>
-          <span class="ss-result-badge" style="background:rgba(16,185,129,0.1);color:var(--green)">Módulo</span>
-        </div>
-        <div class="ss-result-item" onclick="navigateTo('observability')">
-          <div class="ss-result-icon" style="background:rgba(6,182,212,0.1)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="ss-result-content"><div class="ss-result-title">Observability</div><div class="ss-result-meta">Módulo · Monitoramento e métricas</div></div>
-          <span class="ss-result-badge" style="background:rgba(6,182,212,0.1);color:var(--cyan)">Módulo</span>
-        </div>
-        <div class="ss-result-item" onclick="navigateTo('settings')">
-          <div class="ss-result-icon" style="background:rgba(245,158,11,0.1)"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div>
-          <div class="ss-result-content"><div class="ss-result-title">Enterprise Settings</div><div class="ss-result-meta">Configurações · Segurança, API Keys, Webhooks</div></div>
-          <span class="ss-result-badge" style="background:rgba(245,158,11,0.1);color:var(--amber)">Config</span>
-        </div>
-      </div>
+      <div class="ss-section-title">Acessar módulo</div>
+      <div class="ss-suggestions" id="ss-suggestions"></div>
     </div>
   </div>
 
@@ -156,38 +150,33 @@
     <div class="ss-stats" id="ss-stats"></div>
     <div id="ss-results-list"></div>
     <div class="ss-keyboard-hints">
-      <div class="ss-hint"><span class="ss-key"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i><i data-lucide="arrow-down" class="pg-icon" aria-hidden="true"></i></span> Navegar</div>
+      <div class="ss-hint"><span class="ss-key">↑</span><span class="ss-key">↓</span> Navegar</div>
       <div class="ss-hint"><span class="ss-key">↵</span> Abrir</div>
       <div class="ss-hint"><span class="ss-key">Esc</span> Fechar</div>
-      <div class="ss-hint"><span class="ss-key">⌘K</span> Busca rápida</div>
+      <div class="ss-hint"><span class="ss-key">f</span> Favoritar</div>
     </div>
   </div>
 
   <script>
-    // ── DATA INDEX ──────────────────────────────────────────────────
-    const SEARCH_INDEX = [] /* Phase 200: dados carregados via /api/search */
-
-    // Contrato de provedores para expansão sem alterar a API pública da busca.
-    const FUTURE_SEARCH_SOURCES = Object.freeze({
-      email: { enabled: false, label: 'E-mail', fields: ['subject', 'sender', 'body'], page: 'email' },
-      messages: { enabled: false, label: 'Mensagens', fields: ['channel', 'sender', 'body'], page: 'messages' },
-      finance: { enabled: false, label: 'Finanças', fields: ['description', 'category', 'account'], page: 'finance' }
-    });
-
-    // ── STATE ──
+    // ── STATE ──────────────────────────────────────────────────
     let currentFilter = 'all';
     let currentQuery = '';
     let focusedIndex = -1;
+    let currentResults = [];
     let recentSearches = JSON.parse(localStorage.getItem('lifeos_recent_searches') || '[]');
+    let favorites = JSON.parse(localStorage.getItem('lifeos_search_favorites') || '[]');
+    let lastResults = null;
 
-    // ── INIT ──
+    // ── INIT ──────────────────────────────────────────────────
     const input = document.getElementById('ss-input');
     input.addEventListener('input', debounce(handleSearch, 180));
     input.addEventListener('keydown', handleKeyNav);
     input.focus();
     renderRecentTags();
+    renderFavorites();
+    renderSuggestions();
 
-    // ── SEARCH ──
+    // ── SEARCH HANDLER ───────────────────────────────────────
     function handleSearch() {
       const q = input.value.trim();
       currentQuery = q;
@@ -195,10 +184,7 @@
       const shortcut = document.getElementById('ss-shortcut-hint');
       clearBtn.classList.toggle('visible', q.length > 0);
       shortcut.style.display = q.length > 0 ? 'none' : '';
-      if (!q) {
-        showDefault();
-        return;
-      }
+      if (!q) { showDefault(); return; }
       performSearch(q);
     }
 
@@ -207,60 +193,56 @@
       document.getElementById('ss-results-area').style.display = 'block';
       const listEl = document.getElementById('ss-results-list');
       listEl.innerHTML = '<div class="ss-loading"><div class="ss-spinner"></div> Buscando em seus dados reais...</div>';
-      
+
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&filter=${currentFilter}`, { credentials: 'same-origin' });
         const data = await res.json();
         if (data.ok && data.results) {
-          const results = data.results.map(r => ({
-            title: r.title,
-            meta: r.desc || r.type,
-            type: r.category || 'other',
-            page: r.category === 'notes' ? 'documents' : r.category,
-            icon: r.icon || '🔍',
-            badge: r.type,
-            badgeColor: 'var(--bg-elevated)',
-            badgeText: 'var(--text-secondary)'
-          }));
-          renderResults(results, q);
+          lastResults = data.results;
+          currentResults = data.results;
+          renderResults(data.results, q, data.total);
         } else {
-          renderResults([], q);
+          currentResults = [];
+          renderResults([], q, 0);
         }
       } catch (err) {
-        renderResults([], q);
+        currentResults = [];
+        renderResults([], q, 0);
       }
     }
 
-    function renderResults(results, q) {
+    function renderResults(results, q, total) {
       const statsEl = document.getElementById('ss-stats');
       const listEl = document.getElementById('ss-results-list');
+      // Update filter count
+      document.getElementById('fc-all').textContent = total || results.length;
       // Stats
       const counts = {};
-      results.forEach(r => { counts[r.type] = (counts[r.type] || 0) + 1; });
-      statsEl.innerHTML = `<div class="ss-stat"><span class="ss-stat-val">${results.length}</span> resultado${results.length !== 1 ? 's' : ''}</div>` +
-        Object.entries(counts).map(([k, v]) => `<span class="ss-stat-sep">·</span><div class="ss-stat"><span class="ss-stat-val">${v}</span> ${typeLabel(k)}</div>`).join('');
-      // Update filter counts
-      document.getElementById('fc-all').textContent = results.length;
+      results.forEach(r => { const k = r.category || r.typeLabel || 'outro'; counts[k] = (counts[k] || 0) + 1; });
+      statsEl.innerHTML = `<div class="ss-stat"><span class="ss-stat-val">${total || results.length}</span> resultado${(total || results.length) !== 1 ? 's' : ''}</div>` +
+        Object.entries(counts).map(([k, v]) => `<span class="ss-stat-sep">·</span><div class="ss-stat"><span class="ss-stat-val">${v}</span> ${k}</div>`).join('');
+
       if (!results.length) {
-        listEl.innerHTML = `<div class="ss-empty"><div class="ss-empty-icon">\u{1F50D}</div><div class="ss-empty-title">Nenhum resultado para "${q}"</div><div class="ss-empty-desc">Tente outros termos ou verifique os filtros ativos.</div></div>`;
+        listEl.innerHTML = `<div class="ss-empty"><div class="ss-empty-icon"><i data-lucide="search-x" class="pg-icon" style="width:48px;height:48px"></i></div><div class="ss-empty-title">Nenhum resultado para "${q}"</div><div class="ss-empty-desc">Tente outros termos ou verifique os filtros ativos.</div></div>`;
         return;
       }
-      // Group by type
+      // Group by category
       const groups = {};
-      results.forEach(r => { if (!groups[r.type]) groups[r.type] = []; groups[r.type].push(r); });
+      results.forEach(r => { const k = r.category || 'outro'; if (!groups[k]) groups[k] = []; groups[k].push(r); });
       let html = '';
       Object.entries(groups).forEach(([type, items]) => {
-        html += `<div class="ss-group-header">${typeLabel(type)} <div class="ss-group-divider"></div></div>`;
+        html += `<div class="ss-group-header">${type} <div class="ss-group-divider"></div></div>`;
         items.forEach((item, i) => {
           const highlighted = item.title.replace(new RegExp(`(${escapeRegex(q)})`, 'gi'), '<mark>$1</mark>');
-          html += `<div class="ss-result-item" data-page="${item.page}" onclick="openResult('${item.page}', '${item.title}')">
-            <div class="ss-result-icon" style="background:${item.badgeColor}">${item.icon}</div>
+          const isFav = favorites.some(f => f.id === item.id && f.category === item.category);
+          html += `<div class="ss-result-item" data-page="${item.category}" data-id="${item.id}" data-category="${item.category}" data-title="${escapeAttr(item.title)}" onclick="openResult('${item.category}', '${escapeAttr(item.title)}')">
+            <div class="ss-result-icon" style="background:rgba(99,102,241,0.12)">${item.icon || '<i data-lucide="search" class="pg-icon"></i>'}</div>
             <div class="ss-result-content">
               <div class="ss-result-title">${highlighted}</div>
-              <div class="ss-result-meta">${item.meta}</div>
+              <div class="ss-result-meta">${item.desc || ''}</div>
             </div>
-            <span class="ss-result-badge" style="background:${item.badgeColor};color:${item.badgeText}">${item.badge}</span>
-            <span class="ss-result-action">Abrir \u{2192}</span>
+            <span class="ss-result-fav ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(this, '${item.id}', '${item.category}', '${escapeAttr(item.title)}')" title="Favoritar">${isFav ? '<i data-lucide="star" class="pg-icon" style="color:var(--amber);width:14px;height:14px"></i>' : '<i data-lucide="star" class="pg-icon" style="width:14px;height:14px"></i>'}</span>
+            <span class="ss-result-action">Abrir →</span>
           </div>`;
         });
       });
@@ -268,7 +250,7 @@
       focusedIndex = -1;
     }
 
-    // ── KEYBOARD NAV ──
+    // ── KEYBOARD NAV ───────────────────────────────────────
     function handleKeyNav(e) {
       const items = document.querySelectorAll('.ss-result-item');
       if (e.key === 'ArrowDown') {
@@ -281,6 +263,10 @@
         updateFocus(items);
       } else if (e.key === 'Enter' && focusedIndex >= 0) {
         items[focusedIndex]?.click();
+      } else if (e.key === 'f' && focusedIndex >= 0 && items[focusedIndex]) {
+        const item = items[focusedIndex];
+        const favBtn = item.querySelector('.ss-result-fav');
+        if (favBtn) favBtn.click();
       }
     }
     function updateFocus(items) {
@@ -288,7 +274,7 @@
       if (focusedIndex >= 0) items[focusedIndex]?.scrollIntoView({ block: 'nearest' });
     }
 
-    // ── FILTER ──
+    // ── FILTER ────────────────────────────────────────────
     function setFilter(filter, btn) {
       currentFilter = filter;
       document.querySelectorAll('.ss-filter').forEach(b => b.classList.remove('active'));
@@ -296,55 +282,119 @@
       if (currentQuery) performSearch(currentQuery);
     }
 
-    // ── ACTIONS ──
+    // ── FAVORITES ─────────────────────────────────────────
+    function toggleFavorite(el, id, category, title) {
+      const idx = favorites.findIndex(f => f.id === id && f.category === category);
+      if (idx >= 0) {
+        favorites.splice(idx, 1);
+        el.textContent = '☆';
+        el.classList.remove('active');
+      } else {
+        favorites.push({ id, category, title, addedAt: Date.now() });
+        el.textContent = '★';
+        el.classList.add('active');
+      }
+      try { localStorage.setItem('lifeos_search_favorites', JSON.stringify(favorites)); } catch (_) {}
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      const section = document.getElementById('ss-favorites-section');
+      const container = document.getElementById('ss-favorites-tags');
+      if (!favorites.length) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      container.innerHTML = favorites.map(f =>
+        `<span class="ss-recent-tag" onclick="navigateTo('${f.category}')"><i data-lucide="star" class="pg-icon" aria-hidden="true" style="color:var(--amber)"></i> ${escapeHtml(f.title)} <span style="color:var(--text-muted);font-size:10px">${f.category}</span></span>`
+      ).join('');
+    }
+
+    // ── ACTIONS ──────────────────────────────────────────
     function openResult(page, title) {
       addRecentSearch(title);
-      if (window.parent && window.parent.showPage) {
+      navigateTo(page);
+    }
+
+    function navigateTo(page) {
+      // Try parent window first (embedded in iframe)
+      if (window.parent && typeof window.parent.showPage === 'function') {
         window.parent.showPage(page);
-      } else if (window.showPage) {
+      } else if (typeof window.showPage === 'function') {
         window.showPage(page);
+      } else {
+        // Fallback: try to call the global navigation
+        const event = new CustomEvent('lifeos-navigate', { detail: { page } });
+        document.dispatchEvent(event);
+        // Also try window.location hash for SPA routing
+        window.location.hash = '#/' + page;
       }
     }
-    function navigateTo(page) {
-      if (window.parent && window.parent.showPage) window.parent.showPage(page);
-      else if (window.showPage) window.showPage(page);
-    }
+
     function fillSearch(q) {
       input.value = q;
       input.dispatchEvent(new Event('input'));
       input.focus();
     }
+
     function clearSearch() {
       input.value = '';
       currentQuery = '';
+      currentResults = [];
       document.getElementById('ss-clear').classList.remove('visible');
       document.getElementById('ss-shortcut-hint').style.display = '';
       showDefault();
       input.focus();
     }
+
     function showDefault() {
       document.getElementById('ss-main').style.display = 'block';
       document.getElementById('ss-results-area').style.display = 'none';
+      renderRecentTags();
+      renderFavorites();
     }
 
-    // ── RECENT ──
+    // ── RECENT SEARCHES ──────────────────────────────────
     function addRecentSearch(title) {
       recentSearches = [title, ...recentSearches.filter(r => r !== title)].slice(0, 8);
       try { localStorage.setItem('lifeos_recent_searches', JSON.stringify(recentSearches)); } catch (_) {}
     }
+
     function renderRecentTags() {
       const container = document.getElementById('ss-recent-tags');
-      if (recentSearches.length) {
-        container.innerHTML = recentSearches.map(r => `<span class="ss-recent-tag" onclick="fillSearch('${r.replace(/'/g, "\\'")}')">\u{1F550} ${r}</span>`).join('');
-      }
+      if (!recentSearches.length) { container.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Nenhuma busca recente</span>'; return; }
+      container.innerHTML = recentSearches.map(r =>
+        `<span class="ss-recent-tag" onclick="fillSearch('${escapeAttr(r)}')">🕐 ${escapeHtml(r)}</span>`
+      ).join('');
     }
 
-    // ── UTILS ──
-    function typeLabel(type) {
-      const labels = { users: 'Usuários', orgs: 'Organizações', workspaces: 'Workspaces', documents: 'Documentos', tasks: 'Tarefas', habits: 'Hábitos', goals: 'Metas', audit: 'Auditoria', notifications: 'Notificações', modules: 'Módulos', settings: 'Configurações' };
-      return labels[type] || type;
+    // ── SUGGESTIONS ──────────────────────────────────────
+    function renderSuggestions() {
+      const suggestions = [
+        { title: 'Tarefas', page: 'tasks', icon: '📋' },
+        { title: 'Projetos', page: 'projects', icon: '🚀' },
+        { title: 'Documentos', page: 'documents', icon: '📄' },
+        { title: 'Fotos', page: 'photos', icon: '🖼️' },
+        { title: 'Calendário', page: 'calendar', icon: '📅' },
+        { title: 'CRM', page: 'crm', icon: '👥' },
+        { title: 'Mensagens', page: 'messages', icon: '💬' },
+        { title: 'Finanças', page: 'finance', icon: '💰' },
+        { title: 'Hábitos', page: 'habits', icon: '🔄' },
+        { title: 'Metas', page: 'goals', icon: '🎯' },
+        { title: 'Configurações', page: 'settings', icon: '⚙️' },
+        { title: 'IA Copilot', page: 'ai-copilot', icon: '🤖' },
+      ];
+      const container = document.getElementById('ss-suggestions');
+      container.innerHTML = suggestions.map(s =>
+        `<div class="ss-suggestion" onclick="navigateTo('${s.page}')">
+          <span class="ss-suggestion-icon">${s.icon}</span>
+          <div><div class="ss-suggestion-title">${s.title}</div><div class="ss-suggestion-type">Módulo</div></div>
+        </div>`
+      ).join('');
     }
+
+    // ── UTILS ────────────────────────────────────────────
     function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escapeAttr(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
     function debounce(fn, delay) {
       let t;
       return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), delay); };

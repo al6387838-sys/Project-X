@@ -429,12 +429,14 @@ async function fhAddTransaction() {
   const type = document.getElementById('fh-tx-type')?.value;
   if (!desc || !amount) { if (typeof showToast === 'function') showToast('Preencha todos os campos', 'error'); return; }
   // Usar primeira conta disponível
+  try {
   const accRes = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
   const accData = await accRes.json();
   if (!accData.accounts || accData.accounts.length === 0) {
     if (typeof showToast === 'function') showToast('Adicione uma conta primeiro', 'error'); return;
   }
   const accountId = accData.accounts[0].id;
+  } catch { if (typeof showToast === 'function') showToast('Erro ao carregar contas', 'error'); return; }
   try {
     const res = await fetch('/api/finance/hub', {
       method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',
@@ -475,12 +477,14 @@ async function fhSendPix() {
   const amount = parseFloat(document.getElementById('fh-pix-amount')?.value || '0');
   const description = document.getElementById('fh-pix-desc')?.value?.trim();
   if (!targetKey || !amount) { if (typeof showToast === 'function') showToast('Preencha chave e valor', 'error'); return; }
+  try {
   const accRes = await fetch('/api/finance/hub?view=accounts', { credentials: 'same-origin' });
   const accData = await accRes.json();
   if (!accData.accounts || accData.accounts.length === 0) {
     if (typeof showToast === 'function') showToast('Adicione uma conta primeiro', 'error'); return;
   }
   const accountId = accData.accounts[0].id;
+  } catch { if (typeof showToast === 'function') showToast('Erro ao carregar contas', 'error'); return; }
   try {
     const res = await fetch('/api/finance/hub', {
       method: 'POST', headers: { 'content-type': 'application/json' }, credentials: 'same-origin',

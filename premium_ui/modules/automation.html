@@ -107,7 +107,7 @@
   let _autoTypes=null;
   async function autoFetch(p,o={}){const r=await fetch(p,{credentials:'same-origin',...o});return r.json();}
   function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  window.automationInit=async function(){await automationLoadList();};
+  window.automationInit=async function(){try{await automationLoadList();}catch(err){const c=document.getElementById('automation-list-container');if(c)c.innerHTML='<div style="text-align:center;padding:60px;color:var(--text-muted)">Serviço indisponível. Tente recarregar a página.</div>';}};
   window.automationTab=function(tab){
     ['list','logs','types'].forEach(t=>{
       const b=document.getElementById('auto-tab-'+t);

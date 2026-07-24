@@ -12,6 +12,8 @@ export async function onRequestGet({ env }) {
     env.APPLE_KEY_ID &&
     env.APPLE_PRIVATE_KEY
   );
+  const microsoftConfigured = Boolean(env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET);
+  const metaConfigured = Boolean(env.META_CLIENT_ID && env.META_CLIENT_SECRET);
   const emailConfigured = Boolean(
     env.LIFEOS_SESSION_SECRET &&
     env.LIFEOS_KV
@@ -29,6 +31,8 @@ export async function onRequestGet({ env }) {
       admin: adminConfigured,
       google: googleConfigured,
       apple: appleConfigured,
+      microsoft: microsoftConfigured,
+      meta: metaConfigured,
     },
     // Campos de diagnóstico — sem expor valores reais
     missing: [
@@ -42,6 +46,10 @@ export async function onRequestGet({ env }) {
       !env.APPLE_TEAM_ID && 'APPLE_TEAM_ID',
       !env.APPLE_KEY_ID && 'APPLE_KEY_ID',
       !env.APPLE_PRIVATE_KEY && 'APPLE_PRIVATE_KEY',
+      !env.MICROSOFT_CLIENT_ID && 'MICROSOFT_CLIENT_ID',
+      !env.MICROSOFT_CLIENT_SECRET && 'MICROSOFT_CLIENT_SECRET',
+      !env.META_CLIENT_ID && 'META_CLIENT_ID',
+      !env.META_CLIENT_SECRET && 'META_CLIENT_SECRET',
       !env.EMAIL_FROM && 'EMAIL_FROM',
       !(env.RESEND_API_KEY || env.SENDGRID_API_KEY) && 'RESEND_API_KEY ou SENDGRID_API_KEY',
     ].filter(Boolean),

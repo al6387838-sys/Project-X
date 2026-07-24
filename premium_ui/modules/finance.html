@@ -1341,6 +1341,14 @@ function finAddBill() {
       }).catch(() => {});
   }
   window.finFilterExtract = finFilterExtract;
+} catch (err) {
+  // Non-fatal: render empty state instead of blank screen
+  console.warn('[Finance] Init error:', err.message);
+  const emptyState = document.getElementById('fin-bank-cards-grid');
+  if (emptyState) emptyState.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;grid-column:1/-1">Serviço indisponível. Tente recarregar a página.</div>';
+  const emptyAccounts = document.getElementById('fin-accounts-list');
+  if (emptyAccounts) emptyAccounts.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Indisponível no momento</div>';
+}
 })();
 
 // finSwitchTransfer — alterna entre abas de transferência (TED, PIX, Interna)

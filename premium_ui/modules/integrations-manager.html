@@ -513,13 +513,20 @@
 
     async function authorizeIntegration() {
       try {
-        const res = await fetch('/api/integrations', {
+        const res = await fetch('/api/integrations/connect', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'connect', integrationId: selectedIntegration.id, provider: selectedIntegration.provider }),
+          body: JSON.stringify({
+            provider: selectedIntegration.provider,
+            type: selectedIntegration.scopes?.[0] || 'auth',
+          }),
         });
         const d = await res.json();
-        if (d.ok) {
+        if (d.ok && d.authUrl) {
+          // Redirect to OAuth provider
+          window.location.href = d.authUrl;
+        } else if (d.ok) {
+          // Direct connection (non-OAuth)
           selectedIntegration.status = 'connected';
           selectedIntegration.lastSync = new Date().toLocaleString('pt-BR');
           if (d.token) {
@@ -543,14 +550,34 @@
       }
     }
 
-    function disconnectIntegration(integrationId) {
+    async function disconnectIntegration(integrationId) {
       const integration = integrations.find(i => i.id === integrationId);
       if (!integration) return;
 
       if (confirm(`Desconectar ${integration.name}? Seus dados sincronizados não serão deletados.`)) {
-        integration.status = 'disconnected';
-        integration.lastSync = null;
-        localStorage.removeItem(`integration_${integrationId}`);
+        try {
+          const res = await fetch('/api/integrations/connect', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ provider: integration.provider || integrationId, type: 'disconnect' }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            integration.status = 'disconnected';
+            integration.lastSync = null;
+            localStorage.removeItem(`integration_${integrationId}`);
+            if (typeof showToast === 'function') showToast(`${integration.name} desconectada`, 'success');
+          } else {
+            integration.status = 'disconnected';
+            localStorage.removeItem(`integration_${integrationId}`);
+            if (typeof showToast === 'function') showToast('Desconectada localmente', 'warning');
+          }
+        } catch {
+          integration.status = 'disconnected';
+          localStorage.removeItem(`integration_${integrationId}`);
+          if (typeof showToast === 'function') showToast('Desconectada localmente', 'warning');
+        }
         renderIntegrations();
         updateStats();
       }

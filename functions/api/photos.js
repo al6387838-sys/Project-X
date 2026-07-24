@@ -239,6 +239,15 @@ export async function onRequestPost({ request, env }) {
     if (action === 'delete-photo') {
       return await deletePhoto({ request, kv: env.LIFEOS_KV, bucket, session, body });
     }
+    if (action === 'restore-photo') {
+      return await restorePhoto({ kv: env.LIFEOS_KV, session, body });
+    }
+    if (action === 'permanent-delete') {
+      return await permanentDeletePhoto({ request, kv: env.LIFEOS_KV, bucket, session, body });
+    }
+    if (action === 'share-photo') {
+      return await sharePhoto({ request, kv: env.LIFEOS_KV, bucket, session, body });
+    }
     if (action === 'toggle-favorite') {
       return await toggleFavorite({ kv: env.LIFEOS_KV, session, body });
     }
@@ -367,15 +376,52 @@ async function deletePhoto({ request, kv, bucket, session, body }) {
   const photo = photos.find(p => p.id === safeText(body.photoId, 80));
   if (!photo) throw new Error('Foto não encontrada');
 
+  // Soft delete (moves to trash, does NOT delete from R2)
+  photo.deleted = true;
+  photo.deletedAt = now();
+  photo.updatedAt = now();
+  await savePhotos(kv, session.sub, photos);
+  return json(200, { ok: true });
+}
+
+async function restorePhoto({ kv, session, body }) {
+  const photos = await getPhotos(kv, session.sub);
+  const photo = photos.find(p => p.id === safeText(body.photoId, 80));
+  if (!photo) throw new Error('Foto não encontrada');
+  photo.deleted = false;
+  photo.deletedAt = undefined;
+  photo.updatedAt = now();
+  await savePhotos(kv, session.sub, photos);
+  return json(200, { ok: true });
+}
+
+async function permanentDeletePhoto({ request, kv, bucket, session, body }) {
+  const photos = await getPhotos(kv, session.sub);
+  const idx = photos.findIndex(p => p.id === safeText(body.photoId, 80));
+  if (idx === -1) throw new Error('Foto não encontrada');
+  const photo = photos[idx];
   // Delete from R2
   if (bucket && photo.storageKey) {
     try { await bucket.delete(photo.storageKey); } catch { /* best effort */ }
   }
-
-  photo.deleted = true;
-  photo.updatedAt = now();
+  photos.splice(idx, 1);
   await savePhotos(kv, session.sub, photos);
   return json(200, { ok: true });
+}
+
+async function sharePhoto({ kv, session, body }) {
+  const photos = await getPhotos(kv, session.sub);
+  const photo = photos.find(p => p.id === safeText(body.photoId, 80));
+  if (!photo) throw new Error('Foto não encontrada');
+  // Generate a share link token
+  const shareToken = crypto.randomUUID().replace(/-/g, '').slice(0, 24);
+  photo.shareToken = shareToken;
+  photo.sharePermission = safeText(body.permission, 20) || 'view';
+  photo.shareExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+  photo.updatedAt = now();
+  await savePhotos(kv, session.sub, photos);
+  const url = new URL(request.url);
+  return json(200, { ok: true, shareUrl: `${url.origin}/api/photos?view=content&photoId=${encodeURIComponent(photo.id)}&token=${shareToken}`, shareToken });
 }
 
 async function toggleFavorite({ kv, session, body }) {
@@ -427,7 +473,7 @@ export async function onRequestDelete({ request, env }) {
   const albumId = url.searchParams.get('albumId');
   if (photoId || albumId) {
     const syntheticBody = JSON.stringify({
-      action: photoId ? 'delete' : 'delete-album',
+      action: photoId ? 'delete-photo' : 'delete-album',
       photoId,
       albumId,
     });

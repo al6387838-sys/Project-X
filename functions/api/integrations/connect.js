@@ -31,6 +31,8 @@ export async function onRequestPost({ request, env }) {
     apple: env.APPLE_CLIENT_ID && env.APPLE_PRIVATE_KEY,
     microsoft: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
     outlook: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
+    meta: env.META_CLIENT_ID && env.META_CLIENT_SECRET,
+    facebook: env.META_CLIENT_ID && env.META_CLIENT_SECRET,
   };
 
   const providerKey = provider.toLowerCase();
@@ -91,8 +93,40 @@ export async function onRequestPost({ request, env }) {
       `access_type=offline&prompt=consent`;
   }
 
+  if (providerKey === 'apple' && env.APPLE_CLIENT_ID) {
+    authUrl = `https://appleid.apple.com/auth/authorize?` +
+      `client_id=${encodeURIComponent(env.APPLE_CLIENT_ID)}&` +
+      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/apple')}&` +
+      `response_type=code&` +
+      `response_mode=form_post&` +
+      `scope=${encodeURIComponent('email name')}&` +
+      `state=${encodeURIComponent(state)}`;
+  }
+
+  if ((providerKey === 'meta' || providerKey === 'facebook') && env.META_CLIENT_ID) {
+    authUrl = `https://www.facebook.com/v18.0/dialog/oauth?` +
+      `client_id=${encodeURIComponent(env.META_CLIENT_ID)}&` +
+      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/meta')}&` +
+      `response_type=code&` +
+      `scope=${encodeURIComponent('email,public_profile,user_friends')}&` +
+      `state=${encodeURIComponent(state)}`;
+  }
+
   if (authUrl) {
     return json(200, { ok: true, authUrl, provider, type });
+  }
+
+  // Handle disconnect
+  if (providerKey && type === 'disconnect') {
+    try {
+      const connKey = `oauth:${session.sub}:${providerKey}`;
+      const integKey = `integration:${session.sub}:${providerKey}`;
+      await kv.delete(connKey);
+      await kv.delete(integKey);
+      return json(200, { ok: true, provider: providerKey, disconnected: true });
+    } catch {
+      return json(200, { ok: false, error: 'Erro ao desconectar', provider: providerKey });
+    }
   }
 
   return json(200, {

@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.0.11",
+    "glob": "^13.0.6",
     "lucide": "^0.468.0"
   }
 }
