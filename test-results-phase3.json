@@ -1,0 +1,311 @@
+{
+  "version": "v56.0.0",
+  "buildId": "lifeos-56.0.0-aaa5f6b",
+  "date": "2026-07-24T22:58:23.939Z",
+  "total": 75,
+  "passed": 75,
+  "failed": 0,
+  "coverage": 100,
+  "results": [
+    {
+      "name": "CRM SETUP — criar organização",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks — lista tarefas (vazia)",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — criar tarefa",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks — tarefa criada aparece na lista",
+      "status": "PASS"
+    },
+    {
+      "name": "PUT /api/tasks — editar tarefa",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — add-subtask",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — toggle-subtask",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — add-comment",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — add-attachment",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — complete task",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — reopen task",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks?search= — pesquisa",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks?priority=high — filtro por prioridade",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks?sort=dueDate — ordenação",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — criar tarefa recorrente (frequency)",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — delete-subtask",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/tasks — delete-comment",
+      "status": "PASS"
+    },
+    {
+      "name": "DELETE /api/tasks — excluir tarefa",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/tasks — tarefa excluída não aparece",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — criar contato (lead)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/crm — listar contatos via GET",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — editar contato (prospect)",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — adicionar nota ao contato",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — agendar follow-up",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/crm — histórico do contato via GET",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — criar oportunidade (deal) stage=lead",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — mover deal para stage=proposal",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — editar oportunidade (deal.update)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/crm — listar deals via GET",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — criar compromisso (meeting)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/crm — listar agenda via GET",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — excluir compromisso",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — excluir oportunidade",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/crm — excluir contato",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/crm — contato excluído não aparece",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions — listar transações",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — criar receita",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — criar despesa",
+      "status": "PASS"
+    },
+    {
+      "name": "PUT /api/finance/transactions — editar transação (amount)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions?view=categories — listar categorias",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions?view=cost-centers — listar centros de custo",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — add-category (name)",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — add-cost-center (name)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions?view=report — relatório",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions?view=export-csv — exportação CSV",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/finance/transactions?type=credit — filtro por tipo",
+      "status": "PASS"
+    },
+    {
+      "name": "DELETE /api/finance/transactions — excluir receita",
+      "status": "PASS"
+    },
+    {
+      "name": "DELETE /api/finance/transactions — excluir despesa",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — delete-category (id)",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/finance/transactions — delete-cost-center (id)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications — listar notificações",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — criar notificação",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications — notificação criada aparece na lista",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — mark_read (individual)",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications — notificação marcada como lida",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — mark_read all",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications?view=preferences — carregar preferências",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — save_preferences",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — delete_batch",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications — notificação excluída não aparece",
+      "status": "PASS"
+    },
+    {
+      "name": "POST /api/notifications — clear_read",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications?category=system — filtro por categoria",
+      "status": "PASS"
+    },
+    {
+      "name": "GET /api/notifications?priority=low — filtro por prioridade",
+      "status": "PASS"
+    },
+    {
+      "name": "Stress: 10 GET simultâneas /api/tasks",
+      "status": "PASS"
+    },
+    {
+      "name": "Stress: 10 GET simultâneas /api/notifications",
+      "status": "PASS"
+    },
+    {
+      "name": "Stress: 10 GET simultâneas /api/finance/transactions",
+      "status": "PASS"
+    },
+    {
+      "name": "Stress: 10 GET simultâneas /api/crm",
+      "status": "PASS"
+    },
+    {
+      "name": "Performance: GET /api/tasks < 3000ms",
+      "status": "PASS"
+    },
+    {
+      "name": "Performance: GET /api/notifications < 3000ms",
+      "status": "PASS"
+    },
+    {
+      "name": "Performance: GET /api/finance/transactions < 3000ms",
+      "status": "PASS"
+    },
+    {
+      "name": "Performance: GET /api/crm < 3000ms",
+      "status": "PASS"
+    },
+    {
+      "name": "Tasks: resposta tem ok e tasks",
+      "status": "PASS"
+    },
+    {
+      "name": "Notifications: resposta tem ok e notifications",
+      "status": "PASS"
+    },
+    {
+      "name": "Finance/transactions: resposta tem ok e transactions",
+      "status": "PASS"
+    },
+    {
+      "name": "CRM: resposta GET tem ok e data",
+      "status": "PASS"
+    }
+  ]
+}
