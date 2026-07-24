@@ -1406,13 +1406,156 @@
       <!-- ─── PROJETOS ─── -->
       <div class="page" id="page-projects">
         <div class="page-header">
-          <div><div class="page-title">Projetos</div><div class="page-subtitle">Gerencie seus projetos</div></div>
-          <button class="btn btn-primary" onclick="openNewProjectModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo projeto</button>
+          <div><div class="page-title"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Projetos</div><div class="page-subtitle">Gerencie seus projetos e iniciativas</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost" onclick="projectsShowArchived()" style="font-size:12px"><i data-lucide="archive" class="pg-icon" aria-hidden="true"></i> Arquivados</button>
+            <button class="btn btn-ghost" onclick="loadProjects()" style="font-size:12px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></button>
+            <button class="btn btn-primary" onclick="openNewProjectModal()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Projeto</button>
+          </div>
+        </div>
+        <!-- Filtros -->
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <input type="text" class="form-input" id="projects-search" placeholder="Buscar projetos..." style="flex:1;min-width:200px;font-size:12px" oninput="projectsFilter(this.value)" />
+          <select class="form-input" id="projects-status-filter" style="width:140px;font-size:12px" onchange="loadProjects()">
+            <option value="">Todos</option>
+            <option value="active">Em andamento</option>
+            <option value="done">Concluídos</option>
+            <option value="planning">Planejamento</option>
+          </select>
+        </div>
+        <!-- KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="projects-kpis">
+          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-total">—</div><div class="kpi-label">Total</div></div>
+          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="play-circle" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-active">—</div><div class="kpi-label">Em andamento</div></div>
+          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="check-circle-2" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-done">—</div><div class="kpi-label">Concluídos</div></div>
+          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="archive" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-archived">—</div><div class="kpi-label">Arquivados</div></div>
         </div>
         <div id="projects-grid" class="grid-3">
           <div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text-muted)">
             <div style="font-size:32px;margin-bottom:12px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div>
             <div style="font-size:14px">Carregando projetos...</div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal: Criar/Editar Projeto -->
+      <div class="modal-overlay" id="modal-project-form" style="display:none">
+        <div class="modal-box" style="max-width:540px">
+          <div class="modal-header">
+            <span class="modal-title" id="project-form-title"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> Novo Projeto</span>
+            <button class="modal-close" onclick="projectCloseModal()">&#x2715;</button>
+          </div>
+          <input type="hidden" id="project-form-id" />
+          <div class="form-group">
+            <label class="form-label">Título *</label>
+            <input type="text" class="form-input" id="project-form-title-input" placeholder="Nome do projeto" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Descrição</label>
+            <textarea class="form-input" id="project-form-desc" rows="3" placeholder="Descreva o objetivo do projeto..."></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-input" id="project-form-status">
+                <option value="planning">Planejamento</option>
+                <option value="active">Em andamento</option>
+                <option value="done">Concluído</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prioridade</label>
+              <select class="form-input" id="project-form-priority">
+                <option value="medium">Média</option>
+                <option value="high">Alta</option>
+                <option value="low">Baixa</option>
+                <option value="critical">Crítica</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group">
+              <label class="form-label">Data de início</label>
+              <input type="date" class="form-input" id="project-form-start" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data de entrega</label>
+              <input type="date" class="form-input" id="project-form-due" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tags (separadas por vírgula)</label>
+            <input type="text" class="form-input" id="project-form-tags" placeholder="marketing, produto, 2025..." />
+          </div>
+          <div id="project-form-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn btn-ghost" onclick="projectCloseModal()">Cancelar</button>
+            <button class="btn btn-primary" id="project-form-submit" onclick="projectFormSubmit()">Salvar Projeto</button>
+          </div>
+        </div>
+      </div>
+      <!-- Modal: Compartilhar Projeto -->
+      <div class="modal-overlay" id="modal-project-share" style="display:none">
+        <div class="modal-box" style="max-width:460px">
+          <div class="modal-header">
+            <span class="modal-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar Projeto</span>
+            <button class="modal-close" onclick="document.getElementById('modal-project-share').style.display='none'">&#x2715;</button>
+          </div>
+          <input type="hidden" id="share-project-id" />
+          <div class="form-group">
+            <label class="form-label">Email do colaborador</label>
+            <input type="email" class="form-input" id="share-project-email" placeholder="colaborador@empresa.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Permissão</label>
+            <select class="form-input" id="share-project-permission">
+              <option value="view">Visualizar</option>
+              <option value="edit">Editar</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+          <div id="share-project-link" style="margin-bottom:12px;display:none">
+            <label class="form-label">Link de compartilhamento</label>
+            <div style="display:flex;gap:8px">
+              <input type="text" class="form-input" id="share-project-link-value" readonly style="flex:1;font-size:11px" />
+              <button class="btn btn-ghost" style="font-size:12px" onclick="navigator.clipboard.writeText(document.getElementById('share-project-link-value').value);showToast('Link copiado!','success')">Copiar</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn btn-ghost" onclick="document.getElementById('modal-project-share').style.display='none'">Cancelar</button>
+            <button class="btn btn-primary" onclick="projectShareSubmit()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+          </div>
+        </div>
+      </div>
+      <!-- Modal: Transferir Projeto -->
+      <div class="modal-overlay" id="modal-project-transfer" style="display:none">
+        <div class="modal-box" style="max-width:440px">
+          <div class="modal-header">
+            <span class="modal-title"><i data-lucide="arrow-right-left" class="pg-icon" aria-hidden="true"></i> Transferir Projeto</span>
+            <button class="modal-close" onclick="document.getElementById('modal-project-transfer').style.display='none'">&#x2715;</button>
+          </div>
+          <input type="hidden" id="transfer-project-id" />
+          <div class="form-group">
+            <label class="form-label">Novo proprietário (email)</label>
+            <input type="email" class="form-input" id="transfer-project-email" placeholder="novoproprietario@empresa.com" />
+          </div>
+          <div style="padding:12px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;font-size:12px;color:var(--amber);margin-bottom:12px">
+            ⚠️ Ao transferir, você perderá o controle de proprietário deste projeto.
+          </div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn btn-ghost" onclick="document.getElementById('modal-project-transfer').style.display='none'">Cancelar</button>
+            <button class="btn btn-primary" onclick="projectTransferSubmit()">Transferir</button>
+          </div>
+        </div>
+      </div>
+      <!-- Modal: Histórico do Projeto -->
+      <div class="modal-overlay" id="modal-project-history" style="display:none">
+        <div class="modal-box" style="max-width:560px;max-height:80vh;overflow-y:auto">
+          <div class="modal-header">
+            <span class="modal-title"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico de Alterações</span>
+            <button class="modal-close" onclick="document.getElementById('modal-project-history').style.display='none'">&#x2715;</button>
+          </div>
+          <div id="project-history-list" style="display:flex;flex-direction:column;gap:8px">
+            <div style="text-align:center;padding:20px;color:var(--text-muted)">Carregando histórico...</div>
           </div>
         </div>
       </div>
@@ -3956,9 +4099,42 @@
               previewEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Nao foi possivel carregar o conteudo</div>';
             }
           } else if (mt.includes('spreadsheet') || (doc.name || '').match(/\.xlsx?$/i)) {
-            previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:14px">Planilha Excel</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Baixe para visualizar ou use o editor integrado</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+            previewEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)"><div style="font-size:32px;margin-bottom:8px">📊</div>Carregando planilha...</div>';
+            try {
+              // Tentar renderizar com SheetJS
+              if (!window.XLSX) {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+                document.head.appendChild(s);
+                await new Promise((res, rej) => { s.onload = res; s.onerror = rej; });
+              }
+              const cr = await fetch(url, { credentials: 'same-origin' });
+              const ab = await cr.arrayBuffer();
+              const wb = window.XLSX.read(ab, { type: 'array' });
+              const wsName = wb.SheetNames[0];
+              const ws = wb.Sheets[wsName];
+              const html = window.XLSX.utils.sheet_to_html(ws, { id: 'xlsx-table', editable: false });
+              previewEl.innerHTML = '<div style="overflow:auto;max-height:500px;padding:8px"><style>#xlsx-table{border-collapse:collapse;font-size:12px;width:100%}#xlsx-table td,#xlsx-table th{border:1px solid var(--border);padding:4px 8px;color:var(--text-primary)}</style>' + html + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()">⬇ Baixar Excel</button></div>';
+            } catch {
+              previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:14px">Planilha Excel</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar. Baixe para visualizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+            }
           } else if (mt.includes('wordprocessing') || mt.includes('document') || (doc.name || '').match(/\.docx?$/i)) {
-            previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:14px">Documento Word</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Baixe para visualizar no Word</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+            previewEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)"><div style="font-size:32px;margin-bottom:8px">📝</div>Carregando documento...</div>';
+            try {
+              // Tentar renderizar com mammoth.js
+              if (!window.mammoth) {
+                const s = document.createElement('script');
+                s.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js';
+                document.head.appendChild(s);
+                await new Promise((res, rej) => { s.onload = res; s.onerror = rej; });
+              }
+              const cr = await fetch(url, { credentials: 'same-origin' });
+              const ab = await cr.arrayBuffer();
+              const result = await window.mammoth.convertToHtml({ arrayBuffer: ab });
+              previewEl.innerHTML = '<div style="padding:20px;max-height:500px;overflow:auto;line-height:1.6;color:var(--text-primary);font-size:13px">' + result.value + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()">⬇ Baixar Word</button></div>';
+            } catch {
+              previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:14px">Documento Word</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar. Baixe para visualizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
+            }
           } else {
             previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📄</div><div style="font-size:14px">' + escH(doc.name || 'Documento') + '</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">' + escH(doc.mimeType || 'Tipo desconhecido') + '</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
           }
@@ -4317,7 +4493,7 @@
         const grid = document.getElementById('docs-grid');
         if (!grid) return;
         const docs = data.documents || [];
-        let html = '<div class="ss-group-header">Lixeira</div>';
+        let html = '<div class="ss-group-header" style="display:flex;align-items:center;justify-content:space-between"><span>Lixeira</span><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;color:var(--red)" onclick="docsEmptyTrash()">🗑 Esvaziar Lixeira</button></div>';
         if (!docs.length) {
           html += '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:14px">Lixeira vazia</div></div>';
         } else {
@@ -4353,7 +4529,20 @@
     } catch { showToast('Erro ao excluir', 'error'); }
   }
 
-  // ═══ DRAG AND DROP UPLOAD ═══
+  async function docsEmptyTrash() {
+    if (!confirm('Esvaziar lixeira? Todos os arquivos serão excluídos permanentemente. Esta ação não pode ser desfeita.')) return;
+    try {
+      const res = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'empty-trash' }) });
+      const data = await res.json();
+      if (data.ok) {
+        showToast('Lixeira esvaziada. ' + (data.emptied || 0) + ' arquivo(s) excluídos.', 'success');
+        docsShowTrash();
+      } else {
+        showToast(data.error || 'Erro ao esvaziar lixeira', 'error');
+      }
+    } catch { showToast('Erro ao esvaziar lixeira', 'error'); }
+  }
+    // ═══ DRAG AND DROP UPLOAD ═══
   (function initDocsDragDrop() {
     const zone = document.getElementById('docs-grid');
     if (!zone) return;
@@ -4737,43 +4926,386 @@
   }
 
   // ── loadProjects: carrega projetos reais ──────────────────────────────
+  // ── Projetos: funções completas ──────────────────────────────────────
+  let _projectsData = [];
+
   async function loadProjects() {
     const gridEl = document.getElementById('projects-grid');
     if (!gridEl) return;
     try {
-      const data = await apiFetch('/api/projects');
-      const projects = data.projects || [];
+      const statusFilter = document.getElementById('projects-status-filter')?.value || '';
+      const searchFilter = document.getElementById('projects-search')?.value?.toLowerCase() || '';
+      const params = new URLSearchParams();
+      if (statusFilter) params.set('status', statusFilter);
+      const data = await apiFetch('/api/projects' + (params.toString() ? '?' + params : ''));
+      let projects = data.projects || [];
+      _projectsData = projects;
+      // Filtro de busca local
+      if (searchFilter) {
+        projects = projects.filter(p =>
+          (p.title || '').toLowerCase().includes(searchFilter) ||
+          (p.description || '').toLowerCase().includes(searchFilter) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(searchFilter))
+        );
+      }
+      // KPIs
+      const all = data.projects || [];
+      const setKpi = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setKpi('proj-kpi-total', all.filter(p => p.status !== 'archived').length);
+      setKpi('proj-kpi-active', all.filter(p => p.status === 'active').length);
+      setKpi('proj-kpi-done', all.filter(p => p.status === 'done').length);
+      setKpi('proj-kpi-archived', all.filter(p => p.status === 'archived').length);
+
       if (!projects.length) {
         gridEl.innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:40px 20px">
           <div style="font-size:48px;margin-bottom:16px">🚀</div>
-          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhum projeto cadastrado</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px">Nenhum projeto encontrado</div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Organize suas iniciativas em projetos</div>
           <button class="btn btn-primary" onclick="openNewProjectModal()">+ Criar primeiro projeto</button>
         </div>`;
         return;
       }
-      gridEl.innerHTML = projects.map(p => `
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-            <div style="width:36px;height:36px;border-radius:10px;background:${p.color || '#6366F1'}22;display:flex;align-items:center;justify-content:center;font-size:18px">
+      const statusColors = { active: 'var(--green)', done: 'var(--cyan)', planning: 'var(--amber)', archived: 'var(--text-muted)' };
+      const statusLabels = { active: 'Em andamento', done: 'Concluído', planning: 'Planejamento', archived: 'Arquivado' };
+      const priorityColors = { critical: 'var(--red)', high: 'var(--amber)', medium: 'var(--accent)', low: 'var(--text-muted)' };
+      const priorityLabels = { critical: 'Crítica', high: 'Alta', medium: 'Média', low: 'Baixa' };
+      gridEl.innerHTML = projects.map(p => {
+        const statusColor = statusColors[p.status] || 'var(--accent)';
+        const statusLabel = statusLabels[p.status] || p.status;
+        const priorityColor = priorityColors[p.priority] || 'var(--accent)';
+        const priorityLabel = priorityLabels[p.priority] || p.priority || 'Média';
+        const tags = (p.tags || []).slice(0, 3).map(t => `<span style="font-size:10px;padding:2px 6px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px">${escH(t)}</span>`).join('');
+        const dueDate = p.dueDate ? new Date(p.dueDate).toLocaleDateString('pt-BR', {day:'2-digit',month:'short'}) : null;
+        const autosaveIndicator = p.lastAutoSave ? `<span title="Salvo automaticamente em ${new Date(p.lastAutoSave).toLocaleString('pt-BR')}" style="font-size:10px;color:var(--green)">● Autosalvo</span>` : '';
+        return `<div class="card" style="cursor:default;position:relative">
+          <!-- Header -->
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">
+            <div style="width:38px;height:38px;border-radius:10px;background:${p.color || '#6366F1'}22;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">
               <i data-lucide="${p.icon || 'briefcase-business'}" class="pg-icon" aria-hidden="true"></i>
             </div>
-            <div>
-              <div style="font-size:14px;font-weight:700">${p.title}</div>
-              <div style="font-size:11px;color:var(--text-muted)">${p.status === 'active' ? 'Em andamento' : p.status === 'done' ? 'Concluído' : 'Planejamento'}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(p.title)}</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+                <span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${statusColor}20;color:${statusColor};font-weight:600">${statusLabel}</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:10px;background:${priorityColor}20;color:${priorityColor};font-weight:600">${priorityLabel}</span>
+              </div>
+            </div>
+            <!-- Menu de ações -->
+            <div style="position:relative">
+              <button class="btn btn-ghost" style="padding:4px 6px;font-size:14px" onclick="projectToggleMenu('${escH(p.id)}',event)" title="Mais ações">⋯</button>
+              <div id="proj-menu-${escH(p.id)}" style="display:none;position:absolute;right:0;top:100%;z-index:100;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,0.4);overflow:hidden">
+                <div class="proj-menu-item" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="edit-3" class="pg-icon" aria-hidden="true"></i> Editar</div>
+                <div class="proj-menu-item" onclick="projectDuplicate('${escH(p.id)}')"><i data-lucide="copy" class="pg-icon" aria-hidden="true"></i> Duplicar</div>
+                <div class="proj-menu-item" onclick="projectShare('${escH(p.id)}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</div>
+                <div class="proj-menu-item" onclick="projectHistory('${escH(p.id)}','${escH(p.title)}')"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico</div>
+                <div class="proj-menu-item" onclick="projectTransfer('${escH(p.id)}')"><i data-lucide="arrow-right-left" class="pg-icon" aria-hidden="true"></i> Transferir</div>
+                <div style="border-top:1px solid var(--border)"></div>
+                ${p.status === 'archived'
+                  ? `<div class="proj-menu-item" onclick="projectRestore('${escH(p.id)}')"><i data-lucide="archive-restore" class="pg-icon" aria-hidden="true"></i> Restaurar</div>`
+                  : `<div class="proj-menu-item" onclick="projectArchive('${escH(p.id)}')"><i data-lucide="archive" class="pg-icon" aria-hidden="true"></i> Arquivar</div>`
+                }
+                <div class="proj-menu-item" style="color:var(--red)" onclick="projectDelete('${escH(p.id)}','${escH(p.title)}')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Excluir</div>
+              </div>
             </div>
           </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${p.progress || 0}%;background:${p.color || 'var(--accent)'}"></div></div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-top:8px">${p.taskCount || 0} tarefas · ${p.pendingCount || 0} pendentes</div>
-        </div>`).join('');
+          <!-- Descrição -->
+          ${p.description ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${escH(p.description)}</div>` : ''}
+          <!-- Progresso -->
+          <div style="margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+              <span style="color:var(--text-muted)">Progresso</span>
+              <span style="font-weight:700;color:${statusColor}">${p.progress || 0}%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${p.progress || 0}%;background:${p.color || statusColor}"></div></div>
+          </div>
+          <!-- Meta -->
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-muted);margin-bottom:8px">
+            <span>${p.taskCount || 0} tarefas · ${p.pendingCount || 0} pendentes</span>
+            ${dueDate ? `<span style="color:${new Date(p.dueDate) < new Date() ? 'var(--red)' : 'var(--text-muted)'}">📅 ${dueDate}</span>` : ''}
+          </div>
+          <!-- Tags -->
+          ${tags ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${tags}</div>` : ''}
+          <!-- Autosave -->
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            ${autosaveIndicator}
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:auto" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="edit-3" class="pg-icon" aria-hidden="true"></i> Editar</button>
+          </div>
+        </div>`;
+      }).join('');
+      // Adicionar estilo para menu items
+      if (!document.getElementById('proj-menu-style')) {
+        const style = document.createElement('style');
+        style.id = 'proj-menu-style';
+        style.textContent = '.proj-menu-item{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px;cursor:pointer;transition:background .15s;color:var(--text-secondary)}.proj-menu-item:hover{background:var(--bg-elevated);color:var(--text-primary)}.proj-menu-item .pg-icon{width:14px;height:14px}';
+        document.head.appendChild(style);
+      }
       if (window.lucide) lucide.createIcons();
     } catch (err) {
-      /* warn handled */
       if (gridEl) gridEl.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar projetos.</div>';
     }
   }
 
-  // ── loadAIInsights: carrega insights reais ────────────────────────────
+  function projectToggleMenu(id, e) {
+    e.stopPropagation();
+    const menu = document.getElementById('proj-menu-' + id);
+    if (!menu) return;
+    const isOpen = menu.style.display !== 'none';
+    // Fechar todos os menus
+    document.querySelectorAll('[id^="proj-menu-"]').forEach(m => m.style.display = 'none');
+    if (!isOpen) menu.style.display = 'block';
+  }
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[id^="proj-menu-"]').forEach(m => m.style.display = 'none');
+  });
+
+  function projectsFilter(value) {
+    loadProjects();
+  }
+
+  function projectsShowArchived() {
+    const sel = document.getElementById('projects-status-filter');
+    if (sel) { sel.value = 'archived'; loadProjects(); }
+  }
+
+  function projectCloseModal() {
+    document.getElementById('modal-project-form').style.display = 'none';
+  }
+
+  function openNewProjectModal() {
+    document.getElementById('project-form-id').value = '';
+    document.getElementById('project-form-title').textContent = 'Novo Projeto';
+    document.getElementById('project-form-title-input').value = '';
+    document.getElementById('project-form-desc').value = '';
+    document.getElementById('project-form-status').value = 'planning';
+    document.getElementById('project-form-priority').value = 'medium';
+    document.getElementById('project-form-start').value = '';
+    document.getElementById('project-form-due').value = '';
+    document.getElementById('project-form-tags').value = '';
+    document.getElementById('project-form-error').style.display = 'none';
+    document.getElementById('project-form-submit').textContent = 'Criar Projeto';
+    document.getElementById('modal-project-form').style.display = '';
+  }
+
+  async function projectEdit(id) {
+    const p = _projectsData.find(x => x.id === id);
+    if (!p) { showToast('Projeto não encontrado', 'error'); return; }
+    document.getElementById('project-form-id').value = id;
+    document.getElementById('project-form-title').textContent = 'Editar Projeto';
+    document.getElementById('project-form-title-input').value = p.title || '';
+    document.getElementById('project-form-desc').value = p.description || '';
+    document.getElementById('project-form-status').value = p.status || 'planning';
+    document.getElementById('project-form-priority').value = p.priority || 'medium';
+    document.getElementById('project-form-start').value = p.startDate ? p.startDate.split('T')[0] : '';
+    document.getElementById('project-form-due').value = p.dueDate ? p.dueDate.split('T')[0] : '';
+    document.getElementById('project-form-tags').value = (p.tags || []).join(', ');
+    document.getElementById('project-form-error').style.display = 'none';
+    document.getElementById('project-form-submit').textContent = 'Salvar Alterações';
+    document.getElementById('modal-project-form').style.display = '';
+    // Autosave ao editar
+    _startProjectAutosave(id);
+  }
+
+  let _autosaveTimer = null;
+  function _startProjectAutosave(id) {
+    if (_autosaveTimer) clearInterval(_autosaveTimer);
+    _autosaveTimer = setInterval(async () => {
+      const titleEl = document.getElementById('project-form-title-input');
+      const descEl = document.getElementById('project-form-desc');
+      if (!titleEl || !descEl) return;
+      const currentId = document.getElementById('project-form-id')?.value;
+      if (!currentId || currentId !== id) { clearInterval(_autosaveTimer); return; }
+      try {
+        await fetch('/api/projects', {
+          method: 'POST', credentials: 'same-origin',
+          headers: {'content-type':'application/json'},
+          body: JSON.stringify({ action: 'autosave', id, title: titleEl.value, description: descEl.value })
+        });
+      } catch {}
+    }, 30000); // autosave a cada 30s
+  }
+
+  async function projectFormSubmit() {
+    const id = document.getElementById('project-form-id').value;
+    const title = document.getElementById('project-form-title-input').value.trim();
+    const description = document.getElementById('project-form-desc').value.trim();
+    const status = document.getElementById('project-form-status').value;
+    const priority = document.getElementById('project-form-priority').value;
+    const startDate = document.getElementById('project-form-start').value;
+    const dueDate = document.getElementById('project-form-due').value;
+    const tagsRaw = document.getElementById('project-form-tags').value;
+    const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+    const errEl = document.getElementById('project-form-error');
+    if (!title) { errEl.textContent = 'Título obrigatório'; errEl.style.display = 'block'; return; }
+    const btn = document.getElementById('project-form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+    try {
+      const action = id ? 'edit' : 'create';
+      const payload = { action, title, description, status, priority, tags };
+      if (id) payload.id = id;
+      if (startDate) payload.startDate = startDate;
+      if (dueDate) payload.dueDate = dueDate;
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json();
+      if (d.ok) {
+        projectCloseModal();
+        showToast(id ? 'Projeto atualizado!' : 'Projeto criado!', 'success');
+        if (_autosaveTimer) { clearInterval(_autosaveTimer); _autosaveTimer = null; }
+        loadProjects();
+      } else {
+        errEl.textContent = d.error || 'Erro ao salvar projeto';
+        errEl.style.display = 'block';
+      }
+    } catch(e) {
+      errEl.textContent = 'Erro de conexão';
+      errEl.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = id ? 'Salvar Alterações' : 'Criar Projeto';
+    }
+  }
+
+  async function projectDelete(id, title) {
+    if (!confirm(`Excluir o projeto "${title}"? Esta ação não pode ser desfeita.`)) return;
+    try {
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'delete', id })
+      });
+      const d = await r.json();
+      if (d.ok) { showToast('Projeto excluído', 'success'); loadProjects(); }
+      else showToast(d.error || 'Erro ao excluir', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  async function projectArchive(id) {
+    try {
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'archive', id })
+      });
+      const d = await r.json();
+      if (d.ok) { showToast('Projeto arquivado', 'success'); loadProjects(); }
+      else showToast(d.error || 'Erro ao arquivar', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  async function projectRestore(id) {
+    try {
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'restore', id })
+      });
+      const d = await r.json();
+      if (d.ok) { showToast('Projeto restaurado', 'success'); loadProjects(); }
+      else showToast(d.error || 'Erro ao restaurar', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  async function projectDuplicate(id) {
+    try {
+      showToast('Duplicando projeto...', 'info');
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'duplicate', id })
+      });
+      const d = await r.json();
+      if (d.ok) { showToast('Projeto duplicado!', 'success'); loadProjects(); }
+      else showToast(d.error || 'Erro ao duplicar', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  function projectShare(id) {
+    document.getElementById('share-project-id').value = id;
+    document.getElementById('share-project-email').value = '';
+    document.getElementById('share-project-link').style.display = 'none';
+    document.getElementById('modal-project-share').style.display = '';
+  }
+
+  async function projectShareSubmit() {
+    const id = document.getElementById('share-project-id').value;
+    const email = document.getElementById('share-project-email').value.trim();
+    const permission = document.getElementById('share-project-permission').value;
+    if (!email) { showToast('Email obrigatório', 'error'); return; }
+    try {
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'share', id, email, permission })
+      });
+      const d = await r.json();
+      if (d.ok) {
+        if (d.shareUrl) {
+          document.getElementById('share-project-link-value').value = d.shareUrl;
+          document.getElementById('share-project-link').style.display = 'block';
+        }
+        showToast('Projeto compartilhado com ' + email, 'success');
+      } else showToast(d.error || 'Erro ao compartilhar', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  function projectTransfer(id) {
+    document.getElementById('transfer-project-id').value = id;
+    document.getElementById('transfer-project-email').value = '';
+    document.getElementById('modal-project-transfer').style.display = '';
+  }
+
+  async function projectTransferSubmit() {
+    const id = document.getElementById('transfer-project-id').value;
+    const email = document.getElementById('transfer-project-email').value.trim();
+    if (!email) { showToast('Email obrigatório', 'error'); return; }
+    if (!confirm(`Transferir projeto para ${email}? Você perderá o controle de proprietário.`)) return;
+    try {
+      const r = await fetch('/api/projects', {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'transfer', id, newOwnerId: email })
+      });
+      const d = await r.json();
+      if (d.ok) {
+        document.getElementById('modal-project-transfer').style.display = 'none';
+        showToast('Projeto transferido!', 'success');
+        loadProjects();
+      } else showToast(d.error || 'Erro ao transferir', 'error');
+    } catch { showToast('Erro de conexão', 'error'); }
+  }
+
+  async function projectHistory(id, title) {
+    document.getElementById('modal-project-history').style.display = '';
+    const listEl = document.getElementById('project-history-list');
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">Carregando...</div>';
+    try {
+      const r = await fetch('/api/projects?view=history&id=' + encodeURIComponent(id), { credentials: 'same-origin' });
+      const d = await r.json();
+      const history = d.history || [];
+      if (!history.length) {
+        listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">Nenhuma alteração registrada</div>';
+        return;
+      }
+      listEl.innerHTML = history.map(h => `
+        <div style="padding:10px 12px;border:1px solid var(--border);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;font-weight:600;color:var(--accent-light)">${escH(h.action || 'alteração')}</span>
+            <span style="font-size:11px;color:var(--text-muted)">${h.timestamp ? new Date(h.timestamp).toLocaleString('pt-BR') : '—'}</span>
+          </div>
+          ${h.changes ? `<div style="font-size:11px;color:var(--text-secondary)">${escH(JSON.stringify(h.changes))}</div>` : ''}
+          ${h.userId ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px">Por: ${escH(h.userId)}</div>` : ''}
+        </div>
+      `).join('');
+    } catch {
+      listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">Erro ao carregar histórico</div>';
+    }
+  }
+
+    // ── loadAIInsights: carrega insights reais ────────────────────────────
   async function loadAIInsights(force = false) {
     const listEl = document.getElementById('ai-insights-list');
     if (!listEl) return;

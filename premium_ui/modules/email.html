@@ -101,6 +101,10 @@
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px">Mensagem</label>
           <textarea id="compose-body" class="form-input" style="width:100%;min-height:200px;resize:vertical" placeholder="Escreva sua mensagem..."></textarea>
         </div>
+        <div id="compose-attachments" style="margin-bottom:10px"></div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button type="button" class="btn btn-ghost" style="font-size:12px" onclick="emailAttachFile()"><i data-lucide="paperclip" class="pg-icon" aria-hidden="true"></i> Anexar</button>
+        </div>
         <div id="compose-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
         <div style="display:flex;justify-content:flex-end;gap:8px">
           <button type="button" class="btn btn-ghost" onclick="emailCloseCompose()">Cancelar</button>
@@ -112,263 +116,614 @@
 </div>
 
 </div>
-<!-- END module-email -->
-
 <script>
-(() => {
-  'use strict';
-  const COMM_HUB = '/api/communication/hub';
-  const SEND_API = '/api/comm-hub';
-  let state = { providers: [], history: [], queue: [], logs: [], view: 'history', filter: '' };
+// LifeOS Enterprise — Módulo Email v10.0 — Backend REAL
+// Conectado ao /api/comm-hub (Gmail, Outlook OAuth real)
+'use strict';
 
-  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-  function fmtDate(d) { if (!d) return '—'; try { return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }); } catch { return String(d); } }
+const EMAIL_API = '/api/comm-hub';
+const COMM_HUB_STATUS = '/api/communication/hub';
 
-  async function fetchJSON(url) {
-    const res = await fetch(url, { credentials: 'same-origin' });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro na requisição');
-    return data;
+let emailState = {
+  providers: [],
+  history: [],
+  inbox: [],
+  queue: [],
+  view: 'inbox',  // inbox | sent | trash | history | queue | logs
+  filter: '',
+  selectedProvider: 'gmail',
+  replyTo: null,
+  forwardFrom: null,
+};
+
+function emailEsc(v) {
+  return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+function emailFmtDate(d) {
+  if (!d) return '—';
+  try {
+    const date = new Date(d);
+    const now = new Date();
+    const diff = now - date;
+    if (diff < 86400000) return date.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    return date.toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',year:'2-digit'});
+  } catch { return String(d); }
+}
+
+// ─── Carregar dados ───────────────────────────────────────────────────────────
+async function emailLoad() {
+  try {
+    // Carregar status dos provedores
+    const statusRes = await fetch(`${EMAIL_API}?action=status`, { credentials: 'same-origin' });
+    const statusData = await statusRes.json().catch(() => ({}));
+    emailState.providers = statusData.providers || [];
+
+    // Carregar histórico de envios
+    const histRes = await fetch(`${EMAIL_API}?action=history`, { credentials: 'same-origin' });
+    const histData = await histRes.json().catch(() => ({}));
+    emailState.history = histData.history || [];
+
+    // Carregar fila
+    const queueRes = await fetch(`${EMAIL_API}?action=queue`, { credentials: 'same-origin' });
+    const queueData = await queueRes.json().catch(() => ({}));
+    emailState.queue = queueData.queue || [];
+
+    emailRenderProvidersSidebar();
+    emailRenderList();
+  } catch(e) {
+    console.error('emailLoad error:', e);
   }
+}
 
-  async function sendJSON(url, body) {
-    const res = await fetch(url, {
+// ─── Carregar inbox real ──────────────────────────────────────────────────────
+async function emailLoadInbox(provider) {
+  const listEl = document.getElementById('email-list');
+  if (!listEl) return;
+  listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando inbox...</div>';
+  try {
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'inbox', provider: provider || emailState.selectedProvider })
+    });
+    const d = await r.json();
+    if (!r.ok || !d.ok) {
+      if (d.requiresAuth) {
+        listEl.innerHTML = `<div style="padding:32px;text-align:center">
+          <div style="color:var(--text-muted);margin-bottom:16px">Conecte o ${emailEsc(provider || emailState.selectedProvider)} para acessar sua inbox</div>
+          <button class="btn btn-primary" onclick="emailConnectProvider('${emailEsc(provider || emailState.selectedProvider)}')">Conectar ${emailEsc(provider || emailState.selectedProvider)}</button>
+        </div>`;
+      } else {
+        listEl.innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">${emailEsc(d.error || 'Erro ao carregar inbox')}</div>`;
+      }
+      return;
+    }
+    emailState.inbox = d.messages || [];
+    emailRenderInbox(d.messages || []);
+  } catch(e) {
+    listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--red)">Erro de conexão</div>';
+  }
+}
+
+function emailRenderInbox(messages) {
+  const listEl = document.getElementById('email-list');
+  if (!listEl) return;
+  if (!messages.length) {
+    listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Inbox vazia</div>';
+    return;
+  }
+  listEl.innerHTML = messages.map(msg => `
+    <div class="email-item${msg.unread ? ' unread' : ''}" style="padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:background .15s" onmouseenter="this.style.background='var(--bg-elevated)'" onmouseleave="this.style.background=''" onclick="emailOpenMessage('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')">
+      <div style="width:8px;height:8px;border-radius:50%;background:${msg.unread ? 'var(--accent)' : 'transparent'};margin-top:6px;flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:${msg.unread ? '700' : '500'};font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emailEsc(msg.from || '(sem remetente)')}</span>
+          <span style="font-size:11px;color:var(--text-muted);flex-shrink:0;margin-left:8px">${emailFmtDate(msg.date)}</span>
+        </div>
+        <div style="font-size:12px;font-weight:${msg.unread ? '600' : '400'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px">${emailEsc(msg.subject)}</div>
+        <div style="font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emailEsc(msg.snippet)}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Responder" onclick="emailReply('${emailEsc(msg.id)}','${emailEsc(msg.from || '')}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')">↩</button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Encaminhar" onclick="emailForward('${emailEsc(msg.id)}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')">↪</button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;color:var(--red)" title="Excluir" onclick="emailDelete('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Abrir mensagem ───────────────────────────────────────────────────────────
+async function emailOpenMessage(emailId, provider) {
+  // Marcar como lida
+  fetch(EMAIL_API, {
+    method: 'POST', credentials: 'same-origin',
+    headers: {'content-type':'application/json'},
+    body: JSON.stringify({ action: 'mark-read', emailId, provider })
+  }).catch(() => {});
+  // Atualizar estado local
+  const msg = emailState.inbox.find(m => m.id === emailId);
+  if (msg) msg.unread = false;
+  emailRenderInbox(emailState.inbox);
+  // Mostrar preview no painel lateral se existir
+  const previewEl = document.getElementById('email-preview');
+  if (previewEl) {
+    previewEl.innerHTML = `<div style="padding:16px">
+      <div style="font-weight:700;font-size:15px;margin-bottom:8px">${emailEsc(msg?.subject || '(sem assunto)')}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">De: ${emailEsc(msg?.from || '')}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">${emailFmtDate(msg?.date)}</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">${emailEsc(msg?.snippet || '')}</div>
+      <div style="margin-top:16px;display:flex;gap:8px">
+        <button class="btn btn-primary" style="font-size:12px" onclick="emailReply('${emailEsc(emailId)}','${emailEsc(msg?.from || '')}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')">↩ Responder</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="emailForward('${emailEsc(emailId)}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')">↪ Encaminhar</button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="emailDelete('${emailEsc(emailId)}','${emailEsc(provider)}')">🗑 Excluir</button>
+      </div>
+    </div>`;
+  }
+}
+
+// ─── Responder email ──────────────────────────────────────────────────────────
+function emailReply(emailId, fromAddress, subject, provider) {
+  emailState.replyTo = { emailId, fromAddress, subject, provider };
+  emailState.forwardFrom = null;
+  const toEl = document.getElementById('compose-to');
+  const subjectEl = document.getElementById('compose-subject');
+  const bodyEl = document.getElementById('compose-body');
+  const provEl = document.getElementById('compose-provider');
+  if (toEl) toEl.value = fromAddress || '';
+  if (subjectEl) subjectEl.value = subject ? (subject.startsWith('Re:') ? subject : 'Re: ' + subject) : '';
+  if (bodyEl) bodyEl.value = '';
+  if (provEl && provider) provEl.value = provider;
+  // Mostrar modal
+  const modal = document.getElementById('modal-email-compose');
+  if (modal) modal.style.display = '';
+  if (bodyEl) bodyEl.focus();
+}
+
+// ─── Encaminhar email ─────────────────────────────────────────────────────────
+function emailForward(emailId, subject, provider) {
+  emailState.forwardFrom = { emailId, subject, provider };
+  emailState.replyTo = null;
+  const toEl = document.getElementById('compose-to');
+  const subjectEl = document.getElementById('compose-subject');
+  const bodyEl = document.getElementById('compose-body');
+  const provEl = document.getElementById('compose-provider');
+  if (toEl) toEl.value = '';
+  if (subjectEl) subjectEl.value = subject ? (subject.startsWith('Fwd:') ? subject : 'Fwd: ' + subject) : '';
+  if (bodyEl) bodyEl.value = '';
+  if (provEl && provider) provEl.value = provider;
+  const modal = document.getElementById('modal-email-compose');
+  if (modal) modal.style.display = '';
+  if (toEl) toEl.focus();
+}
+
+// ─── Excluir email (mover para lixeira) ──────────────────────────────────────
+async function emailTrash(emailId, provider) {
+  if (!emailId) return;
+  try {
+    const res = await fetch('/api/comm-hub', {
       method: 'POST', credentials: 'same-origin',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ action: 'trash-email', emailId, provider: provider || emailState.selectedProvider })
     });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.ok) throw new Error(data.error || 'Erro na operação');
-    return data;
-  }
-
-  async function emailLoad() {
-    try {
-      const [statusData, histData, queueData] = await Promise.all([
-        fetchJSON(`${COMM_HUB}?view=status`),
-        fetchJSON(`${SEND_API}?action=history`).catch(() => ({ ok: true, history: [] })),
-        fetchJSON(`${SEND_API}?action=queue`).catch(() => ({ ok: true, queue: [] })),
-      ]);
-      state.providers = statusData.providers || [];
-      state.history = histData.history || [];
-      state.queue = queueData.queue || [];
-      renderProviders();
-      renderList();
-    } catch (err) {
-      /* error handled */
+    const d = await res.json();
+    if (d.ok) {
+      emailState.emails = emailState.emails.filter(m => m.id !== emailId);
+      emailRenderList();
+      emailShowToast('Email movido para lixeira', 'success');
+    } else {
+      emailShowToast(d.error || 'Erro ao mover para lixeira', 'error');
     }
+  } catch {
+    emailShowToast('Erro de conexão', 'error');
   }
+}
+async function emailDelete(emailId, provider) {
+  if (!confirm('Mover este email para a lixeira?')) return;
+  try {
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'delete-email', emailId, provider: provider || emailState.selectedProvider })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      emailState.inbox = emailState.inbox.filter(m => m.id !== emailId);
+      emailRenderInbox(emailState.inbox);
+      showToast('Email movido para lixeira', 'success');
+    } else {
+      showToast(d.error || 'Erro ao excluir email', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  }
+}
 
-  function renderProviders() {
-    const list = document.getElementById('email-providers-list');
-    const grid = document.getElementById('email-integrations-grid');
-    const connected = state.providers.filter(p => p.connected);
-    list.innerHTML = connected.length
-      ? connected.map(p => `<div style="margin-bottom:4px;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#10B981"></span>${esc(p.name)}</div>`).join('')
-      : '<div style="color:var(--text-muted)">Nenhum conectado</div>';
+// ─── Restaurar email ──────────────────────────────────────────────────────────
+async function emailRestore(emailId, provider) {
+  try {
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'restore-email', emailId, provider: provider || emailState.selectedProvider })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('Email restaurado para inbox', 'success');
+      emailLoadInbox(provider || emailState.selectedProvider);
+    } else {
+      showToast(d.error || 'Erro ao restaurar email', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  }
+}
 
-    document.getElementById('email-count-history').textContent = state.history.length || '—';
-    document.getElementById('email-count-queue').textContent = state.queue.length || '—';
+// ─── Mover email ──────────────────────────────────────────────────────────────
+async function emailMove(emailId, destination, provider) {
+  try {
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'move-email', emailId, destination, provider: provider || emailState.selectedProvider })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast(`Email movido para ${destination}`, 'success');
+      emailLoadInbox(provider || emailState.selectedProvider);
+    } else {
+      showToast(d.error || 'Erro ao mover email', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  }
+}
 
-    // Render integrations grid
-    const emailProviders = state.providers.filter(p => ['gmail','outlook','smtp'].includes(p.id));
-    grid.innerHTML = emailProviders.map(p => `
-      <div class="integration-card" style="border-color:${p.color ? p.color + '40' : 'var(--border)'}">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <div style="width:48px;height:48px;border-radius:10px;background:${p.color || 'var(--bg-elevated)'};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px">${p.name.charAt(0)}</div>
-          <div style="flex:1">
-            <div style="font-weight:600">${esc(p.name)}</div>
-            <div style="font-size:12px;color:var(--text-muted)">${esc(p.accountEmail || 'Não configurado')}</div>
+// ─── Pesquisar emails ─────────────────────────────────────────────────────────
+async function emailSearch(q) {
+  if (!q || !q.trim()) {
+    emailRenderList();
+    return;
+  }
+  try {
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'search', q: q.trim() })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      const listEl = document.getElementById('email-list');
+      if (!listEl) return;
+      const results = d.results || [];
+      if (!results.length) {
+        listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhum resultado encontrado</div>';
+        return;
+      }
+      listEl.innerHTML = results.map(item => `
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-weight:600;font-size:13px">${emailEsc(item.to || item.from || '')}</span>
+            <span style="font-size:11px;color:var(--text-muted)">${emailFmtDate(item.sentAt)}</span>
           </div>
-          <div style="font-size:11px;padding:4px 8px;border-radius:4px;background:${p.connected ? 'rgba(16,185,129,.15)' : 'rgba(245,158,11,.15)'};color:${p.connected ? '#10B981' : '#F59E0B'}">${p.connected ? 'Conectado' : 'Não conectado'}</div>
+          <div style="font-size:12px;margin-bottom:2px">${emailEsc(item.subject || '(sem assunto)')}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${emailEsc(item.status || '')}</div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailSyncProvider('${esc(p.id)}')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
-          ${!p.connected ? `<button class="btn btn-primary" style="flex:1;font-size:12px" onclick="emailConnectProvider('${esc(p.id)}')">Conectar</button>` : ''}
-        </div>
-      </div>
-    `).join('') || '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Nenhum provedor de email disponível. Configure Gmail ou Outlook nas integrações.</div>';
+      `).join('');
+    }
+  } catch(e) {}
+}
+
+// ─── Renderizar lista por view ────────────────────────────────────────────────
+function emailRenderList() {
+  const listEl = document.getElementById('email-list');
+  if (!listEl) return;
+
+  if (emailState.view === 'inbox') {
+    emailLoadInbox(emailState.selectedProvider);
+    return;
   }
 
-  function renderList() {
-    const container = document.getElementById('email-list');
-    let items = [];
-
-    if (state.view === 'history' || state.view === 'sent') {
-      items = state.history.filter(h => !state.view || h.status !== 'failed').map(h => ({
-        type: 'history',
-        from: 'Eu',
-        to: h.to || '—',
-        subject: h.subject || 'Sem assunto',
-        time: fmtDate(h.sentAt),
-        status: h.status,
-        provider: h.provider || '',
-        id: h.id,
-        error: h.error,
-      }));
-    } else if (state.view === 'queue') {
-      items = state.queue.map(q => ({
-        type: 'queue',
-        to: q.to || '—',
-        subject: q.subject || 'Sem assunto',
-        time: fmtDate(q.queuedAt || q.createdAt),
-        status: q.status || 'queued',
-        provider: q.provider || '',
-        attempts: q.attempts || 0,
-      }));
-    } else if (state.view === 'inbox') {
-      items = []; // Inbox requires Gmail/Outlook API access — show empty with message
-    } else if (state.view === 'logs') {
-      // Show last 20 history entries as logs
-      items = state.history.slice(0, 20).map(h => ({
-        type: 'log',
-        from: h.provider || '—',
-        to: h.to || '—',
-        subject: h.subject || '—',
-        time: fmtDate(h.sentAt),
-        status: h.status,
-      }));
-    }
-
-    // Apply filter
-    if (state.filter) {
-      const f = state.filter.toLowerCase();
-      items = items.filter(i => (i.to + i.subject + i.from + i.status).toLowerCase().includes(f));
-    }
-
-    if (!items.length && state.view === 'inbox') {
-      container.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Conecte uma conta Gmail ou Outlook para visualizar a inbox. O inbox real requer OAuth com escopo de leitura de emails.</div>';
-      return;
-    }
-
+  if (emailState.view === 'sent' || emailState.view === 'history') {
+    const items = emailState.history.filter(h => {
+      if (!emailState.filter) return true;
+      const q = emailState.filter.toLowerCase();
+      return (h.to || '').toLowerCase().includes(q) ||
+             (h.subject || '').toLowerCase().includes(q);
+    });
     if (!items.length) {
-      container.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhum item nesta visualização.</div>';
+      listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Nenhum email enviado</div>';
       return;
     }
-
-    container.innerHTML = items.map(item => {
-      const statusColor = item.status === 'sent' || item.status === 'success' ? 'var(--green)' :
-                          item.status === 'failed' ? 'var(--red)' :
-                          item.status === 'queued' ? 'var(--amber)' : 'var(--text-muted)';
-      return `
-      <div class="email-item ${item.status === 'queued' ? '' : ''}" style="padding:12px;border-bottom:1px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:50%;background:${item.provider === 'gmail' ? 'linear-gradient(135deg,#EA4335,#FBBC04)' : item.provider === 'outlook' ? 'linear-gradient(135deg,#0078D4,#00B4FF)' : 'var(--bg-elevated)'};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">${(item.from || 'E').charAt(0)}</div>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:13px;font-weight:600">${esc(item.type === 'history' ? item.to : item.from)}</span>
-              <span style="font-size:11px;color:var(--text-muted)">${esc(item.time)}</span>
-            </div>
-            <div style="font-size:12px;font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.subject)}</div>
-            ${item.error ? `<div style="font-size:11px;color:var(--red);margin-top:2px">${esc(item.error)}</div>` : ''}
+    listEl.innerHTML = items.map(item => {
+      const statusColor = item.status === 'sent' ? '#10B981' : item.status === 'failed' ? '#EF4444' : '#F59E0B';
+      return `<div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:600;font-size:13px">${emailEsc(item.to || '')}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:${statusColor}20;color:${statusColor}">${emailEsc(item.status || '')}</span>
+            <span style="font-size:11px;color:var(--text-muted)">${emailFmtDate(item.sentAt)}</span>
           </div>
-          <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:${statusColor}20;color:${statusColor};flex-shrink:0">${esc(item.status)}</span>
         </div>
+        <div style="font-size:12px;margin-bottom:2px">${emailEsc(item.subject || '(sem assunto)')}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${emailEsc(item.provider || '')}</div>
       </div>`;
     }).join('');
+    return;
   }
 
-  // ─── PUBLIC API ───
-  window.emailShowPage = (page) => {
-    if (page === 'integrations') {
-      document.getElementById('page-email').style.display = 'none';
-      document.getElementById('page-email-integrations').style.display = '';
-      renderProviders();
+  if (emailState.view === 'queue') {
+    const items = emailState.queue;
+    if (!items.length) {
+      listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Fila vazia</div>';
+      return;
+    }
+    listEl.innerHTML = items.map(item => `
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-weight:600;font-size:13px">${emailEsc(item.to || '')}</span>
+          <span style="font-size:11px;color:var(--text-muted)">${emailFmtDate(item.queuedAt)}</span>
+        </div>
+        <div style="font-size:12px">${emailEsc(item.subject || '(sem assunto)')}</div>
+        <div style="font-size:11px;color:var(--text-muted)">Tentativas: ${item.attempts || 0}/${item.maxAttempts || 3}</div>
+      </div>
+    `).join('');
+    return;
+  }
+
+  listEl.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Selecione uma pasta</div>';
+}
+
+// ─── Renderizar sidebar de provedores ─────────────────────────────────────────
+function emailRenderProvidersSidebar() {
+  const list = document.getElementById('email-providers-list');
+  if (!list) return;
+  const emailProvs = emailState.providers.filter(p => ['gmail','outlook','smtp'].includes(p.id));
+  const connected = emailProvs.filter(p => p.connected);
+  list.innerHTML = connected.length
+    ? connected.map(p => `
+        <div style="margin-bottom:6px;display:flex;align-items:center;gap:6px;cursor:pointer" onclick="emailSelectProvider('${emailEsc(p.id)}')">
+          <span style="width:8px;height:8px;border-radius:50%;background:#10B981;flex-shrink:0"></span>
+          <span style="font-size:13px;font-weight:${emailState.selectedProvider === p.id ? '700' : '400'}">${emailEsc(p.name)}</span>
+          ${p.accountEmail ? `<span style="font-size:11px;color:var(--text-muted)">(${emailEsc(p.accountEmail)})</span>` : ''}
+        </div>`).join('')
+    : `<div style="color:var(--text-muted);font-size:12px">Nenhuma conta conectada<br>
+       <button class="btn btn-ghost" style="margin-top:8px;font-size:11px;padding:4px 8px" onclick="emailShowPage('integrations')">Conectar conta</button></div>`;
+
+  // Atualizar contadores
+  const inboxCount = document.getElementById('email-count-inbox');
+  const histCount = document.getElementById('email-count-history');
+  const queueCount = document.getElementById('email-count-queue');
+  if (inboxCount) inboxCount.textContent = emailState.inbox.filter(m => m.unread).length || '—';
+  if (histCount) histCount.textContent = emailState.history.length || '—';
+  if (queueCount) queueCount.textContent = emailState.queue.length || '—';
+}
+
+function emailSelectProvider(providerId) {
+  emailState.selectedProvider = providerId;
+  emailRenderProvidersSidebar();
+  if (emailState.view === 'inbox') emailLoadInbox(providerId);
+}
+
+// ─── Conectar provedor ────────────────────────────────────────────────────────
+async function emailConnectProvider(providerId) {
+  try {
+    showToast(`Iniciando conexão com ${providerId}...`, 'info');
+    const r = await fetch(EMAIL_API, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'connect', provider: providerId })
+    });
+    const d = await r.json();
+    if (d.authUrl) {
+      window.open(d.authUrl, '_blank', 'width=600,height=700,noopener');
+      showToast('Janela de autorização aberta. Após conectar, clique em Atualizar.', 'info');
+    } else if (d.ok && d.status === 'connected') {
+      showToast(`${providerId} já está conectado!`, 'success');
+      emailLoad();
     } else {
-      document.getElementById('page-email-integrations').style.display = 'none';
-      document.getElementById('page-email').style.display = '';
+      showToast(d.error || d.reason || `Configure as credenciais de ${providerId} no painel`, 'info');
     }
-  };
+  } catch(e) {
+    showToast('Erro ao conectar', 'error');
+  }
+}
 
-  window.emailSetView = (view, el) => {
-    state.view = view;
-    document.querySelectorAll('.email-folder').forEach(f => f.classList.remove('active'));
-    if (el) el.classList.add('active');
-    renderList();
-  };
-
-  window.emailFilterList = (value) => {
-    state.filter = value;
-    renderList();
-  };
-
-  window.emailRefresh = async () => {
-    if (typeof showToast === 'function') showToast('Atualizando...', 'info');
+async function emailSyncProvider(providerId) {
+  try {
+    showToast(`Sincronizando ${providerId}...`, 'info');
     await emailLoad();
-    if (typeof showToast === 'function') showToast('Atualizado', 'success');
-  };
+    emailLoadInbox(providerId);
+    showToast(`${providerId} sincronizado`, 'success');
+  } catch(e) {
+    showToast('Erro ao sincronizar', 'error');
+  }
+}
 
-  window.emailOpenCompose = () => {
-    document.getElementById('compose-error').style.display = 'none';
-    document.getElementById('compose-to').value = '';
-    document.getElementById('compose-subject').value = '';
-    document.getElementById('compose-body').value = '';
-    // Update provider options based on connected providers
-    const sel = document.getElementById('compose-provider');
-    const connected = state.providers.filter(p => p.connected);
-    sel.innerHTML = connected.length
-      ? connected.filter(p => p.type === 'email').map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')
-      : '<option value="gmail">Gmail</option><option value="outlook">Outlook</option><option value="smtp">SMTP</option>';
-    document.getElementById('modal-email-compose').style.display = '';
-  };
+// ─── Enviar email ─────────────────────────────────────────────────────────────
+async function emailSendCompose(e) {
+  if (e) e.preventDefault();
+  const btn = document.getElementById('compose-send-btn');
+  const errEl = document.getElementById('compose-error');
+  const to = document.getElementById('compose-to')?.value?.trim();
+  const subject = document.getElementById('compose-subject')?.value?.trim();
+  const body = document.getElementById('compose-body')?.value?.trim();
+  const provider = document.getElementById('compose-provider')?.value;
 
-  window.emailCloseCompose = () => {
-    document.getElementById('modal-email-compose').style.display = 'none';
-  };
+  if (!to) { if (errEl) { errEl.textContent = 'Destinatário obrigatório'; errEl.style.display = 'block'; } return; }
+  if (!body) { if (errEl) { errEl.textContent = 'Mensagem obrigatória'; errEl.style.display = 'block'; } return; }
 
-  window.emailSyncProvider = async (providerId) => {
-    try {
-      if (typeof showToast === 'function') showToast('Sincronizando ' + providerId + '...', 'info');
-      await sendJSON(`${COMM_HUB}?action=sync&provider=${encodeURIComponent(providerId)}`, {});
-      if (typeof showToast === 'function') showToast(providerId + ' sincronizado', 'success');
-      await emailLoad();
-    } catch (err) {
-      if (typeof showToast === 'function') showToast(err.message, 'error');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+  if (errEl) errEl.style.display = 'none';
+
+  try {
+    let action = 'send';
+    let payload = { provider, to, subject: subject || '(sem assunto)', body };
+
+    if (emailState.replyTo) {
+      action = 'reply';
+      payload = { ...payload, originalId: emailState.replyTo.emailId, action: 'reply' };
+    } else if (emailState.forwardFrom) {
+      action = 'forward';
+      payload = { ...payload, originalId: emailState.forwardFrom.emailId, action: 'forward' };
     }
-  };
 
-  window.emailConnectProvider = async (providerId) => {
-    try {
-      if (typeof showToast === 'function') showToast('Iniciando conexão com ' + providerId + '...', 'info');
-      const result = await sendJSON(`${COMM_HUB}?action=connect&provider=${encodeURIComponent(providerId)}`, {});
-      if (result.authUrl) {
-        window.location.href = result.authUrl;
-      } else {
-        if (typeof showToast === 'function') showToast(providerId + ': siga as instruções', 'info');
-      }
-    } catch (err) {
-      if (typeof showToast === 'function') showToast(err.message, 'error');
-    }
-  };
+    const r = await fetch(`${EMAIL_API}?action=${action}`, {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const d = await r.json();
 
-  // ─── FORM HANDLER ───
-  document.getElementById('email-compose-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('compose-send-btn');
-    btn.disabled = true;
-    btn.textContent = 'Enviando...';
-    const errEl = document.getElementById('compose-error');
-
-    try {
-      const result = await sendJSON(`${SEND_API}?action=send`, {
-        provider: document.getElementById('compose-provider').value,
-        to: document.getElementById('compose-to').value.trim(),
-        subject: document.getElementById('compose-subject').value.trim(),
-        body: document.getElementById('compose-body').value.trim(),
-      });
+    if (d.ok) {
       emailCloseCompose();
-      if (typeof showToast === 'function') showToast('Email enviado com sucesso', 'success');
+      showToast('Email enviado com sucesso!', 'success');
+      emailState.replyTo = null;
+      emailState.forwardFrom = null;
       await emailLoad();
-    } catch (err) {
-      errEl.textContent = err.message;
-      errEl.style.display = 'block';
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar';
+    } else {
+      if (errEl) { errEl.textContent = d.error || 'Erro ao enviar email'; errEl.style.display = 'block'; }
     }
-  });
+  } catch(e) {
+    if (errEl) { errEl.textContent = 'Erro de conexão'; errEl.style.display = 'block'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar'; }
+  }
+}
 
-  // ─── INIT ───
-  emailLoad();
-})();
+// ─── Anexar arquivo ao email ──────────────────────────────────────────────────
+function emailAttachFile() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '*/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    // Mostrar nome do arquivo no compose
+    const attachEl = document.getElementById('compose-attachments');
+    if (attachEl) {
+      attachEl.innerHTML += `<div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;background:var(--bg-elevated);border-radius:6px;margin-top:4px">
+        <i data-lucide="paperclip" style="width:12px;height:12px" aria-hidden="true"></i>
+        ${emailEsc(file.name)} (${(file.size/1024).toFixed(1)}KB)
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px">×</button>
+      </div>`;
+      if (window.lucide) lucide.createIcons();
+    }
+    showToast(`${file.name} anexado`, 'info');
+  };
+  input.click();
+}
+
+// ─── Controles de UI ──────────────────────────────────────────────────────────
+function emailSetView(view, el) {
+  emailState.view = view;
+  document.querySelectorAll('.email-folder').forEach(f => f.classList.remove('active'));
+  if (el) el.classList.add('active');
+  emailRenderList();
+}
+
+function emailFilterList(value) {
+  emailState.filter = value;
+  if (emailState.view !== 'inbox') emailRenderList();
+  else emailSearch(value);
+}
+
+function emailRefresh() {
+  showToast('Atualizando...', 'info');
+  emailLoad().then(() => {
+    if (emailState.view === 'inbox') emailLoadInbox(emailState.selectedProvider);
+    showToast('Atualizado', 'success');
+  });
+}
+
+function emailOpenCompose() {
+  emailState.replyTo = null;
+  emailState.forwardFrom = null;
+  const toEl = document.getElementById('compose-to');
+  const subjectEl = document.getElementById('compose-subject');
+  const bodyEl = document.getElementById('compose-body');
+  const errEl = document.getElementById('compose-error');
+  if (toEl) toEl.value = '';
+  if (subjectEl) subjectEl.value = '';
+  if (bodyEl) bodyEl.value = '';
+  if (errEl) errEl.style.display = 'none';
+  // Atualizar opções de provedor
+  const sel = document.getElementById('compose-provider');
+  if (sel) {
+    const connected = emailState.providers.filter(p => p.connected && ['gmail','outlook','smtp'].includes(p.id));
+    sel.innerHTML = connected.length
+      ? connected.map(p => `<option value="${emailEsc(p.id)}">${emailEsc(p.name)}</option>`).join('')
+      : '<option value="gmail">Gmail</option><option value="outlook">Outlook</option><option value="smtp">SMTP</option>';
+  }
+  const modal = document.getElementById('modal-email-compose');
+  if (modal) modal.style.display = '';
+}
+
+function emailCloseCompose() {
+  const modal = document.getElementById('modal-email-compose');
+  if (modal) modal.style.display = 'none';
+}
+
+function emailShowPage(page) {
+  if (page === 'integrations') {
+    document.getElementById('page-email').style.display = 'none';
+    document.getElementById('page-email-integrations').style.display = '';
+    emailRenderIntegrationsGrid();
+  } else {
+    document.getElementById('page-email-integrations').style.display = 'none';
+    document.getElementById('page-email').style.display = '';
+  }
+}
+
+function emailRenderIntegrationsGrid() {
+  const grid = document.getElementById('email-integrations-grid');
+  if (!grid) return;
+  const emailProviders = emailState.providers.filter(p => ['gmail','outlook','smtp'].includes(p.id));
+  if (!emailProviders.length) {
+    grid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Carregando provedores...</div>';
+    emailLoad().then(() => emailRenderIntegrationsGrid());
+    return;
+  }
+  grid.innerHTML = emailProviders.map(p => `
+    <div class="integration-card" style="border-color:${p.color ? p.color + '40' : 'var(--border)'}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:48px;height:48px;border-radius:10px;background:${p.color || 'var(--bg-elevated)'};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px">${emailEsc(p.name.charAt(0))}</div>
+        <div style="flex:1">
+          <div style="font-weight:600">${emailEsc(p.name)}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${emailEsc(p.accountEmail || (p.connected ? 'Conectado' : 'Não configurado'))}</div>
+        </div>
+        <div style="font-size:11px;padding:4px 8px;border-radius:4px;background:${p.connected ? 'rgba(16,185,129,.15)' : 'rgba(245,158,11,.15)'};color:${p.connected ? '#10B981' : '#F59E0B'}">${p.connected ? 'Conectado' : 'Não conectado'}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">${emailEsc(p.setupMessage || (p.connected ? 'Conta conectada e pronta para uso' : 'Clique em Conectar para autorizar'))}</div>
+      <div style="display:flex;gap:8px">
+        ${p.connected ? `
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailSyncProvider('${emailEsc(p.id)}')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailLoadInbox('${emailEsc(p.id)}');emailShowPage('inbox')">Ver Inbox</button>
+        ` : `
+          <button class="btn btn-primary" style="flex:1;font-size:12px" onclick="emailConnectProvider('${emailEsc(p.id)}')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar ${emailEsc(p.name)}</button>
+        `}
+      </div>
+    </div>
+  `).join('');
+  if (window.lucide) lucide.createIcons();
+}
+
+// ─── Form handler ─────────────────────────────────────────────────────────────
+document.getElementById('email-compose-form')?.addEventListener('submit', emailSendCompose);
+
+// ─── Inicialização ────────────────────────────────────────────────────────────
+emailLoad();
+// Carregar inbox automaticamente
+setTimeout(() => {
+  if (emailState.view === 'inbox') emailLoadInbox(emailState.selectedProvider);
+}, 500);
+
+// Recarregar quando o módulo for exibido
+document.addEventListener('moduleShown', (e) => {
+  if (e.detail?.module === 'email') {
+    emailLoad();
+    if (emailState.view === 'inbox') emailLoadInbox(emailState.selectedProvider);
+  }
+});
 </script>
+<!-- END module-email -->

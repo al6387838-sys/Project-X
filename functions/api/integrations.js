@@ -293,7 +293,127 @@ export async function onRequest({ request, env }) {
       await kv?.put(connKey, JSON.stringify(conn));
       return json(200, { ok: true, message: 'Sincronização concluída', integrationId: integId });
     }
-    return json(400, { ok: false, error: 'action inválido. Use: test, connect, sync' });
+    if (action === 'disconnect') {
+      if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
+      const connKey = `integration:${session.userId}:${integrationId}`;
+      // Remover token OAuth se existir
+      const tokenKey = `oauth:token:${session.userId}:${integrationId}`;
+      await kv?.delete(connKey);
+      await kv?.delete(tokenKey);
+      // Log da desconexão
+      try {
+        const auditKey = `audit:${session.userId}`;
+        const auditRaw = await kv?.get(auditKey);
+        const audit = auditRaw ? JSON.parse(auditRaw) : [];
+        audit.unshift({ timestamp: new Date().toISOString(), action: 'disconnect', integrationId, userId: session.userId });
+        await kv?.put(auditKey, JSON.stringify(audit.slice(0, 100)));
+      } catch {}
+      return json(200, { ok: true, message: `${integrationId} desconectado com sucesso`, integrationId });
+    }
+    if (action === 'refresh-token') {
+      if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
+      const tokenKey = `oauth:token:${session.userId}:${integrationId}`;
+      const tokenRaw = await kv?.get(tokenKey);
+      if (!tokenRaw) return json(400, { ok: false, error: 'Token não encontrado. Reconecte a integração.' });
+      const tokenData = JSON.parse(tokenRaw);
+      if (!tokenData.refresh_token) return json(400, { ok: false, error: 'Refresh token não disponível' });
+      // Tentar renovar o token baseado no provider
+      const integration = INTEGRATIONS[integrationId];
+      if (!integration) return json(404, { ok: false, error: 'Integração não encontrada' });
+      try {
+        let refreshUrl, params;
+        if (integrationId === 'google_oauth' || integrationId === 'gmail_api') {
+          refreshUrl = 'https://oauth2.googleapis.com/token';
+          params = new URLSearchParams({ grant_type: 'refresh_token', refresh_token: tokenData.refresh_token, client_id: env.GOOGLE_CLIENT_ID || '', client_secret: env.GOOGLE_CLIENT_SECRET || '' });
+        } else if (integrationId === 'microsoft_365') {
+          refreshUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+          params = new URLSearchParams({ grant_type: 'refresh_token', refresh_token: tokenData.refresh_token, client_id: env.MICROSOFT_CLIENT_ID || '', client_secret: env.MICROSOFT_CLIENT_SECRET || '', scope: 'offline_access Mail.Read Mail.Send' });
+        } else {
+          return json(400, { ok: false, error: 'Renovação automática não suportada para este provider. Reconecte manualmente.' });
+        }
+        const r = await fetch(refreshUrl, { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: params });
+        const newToken = await r.json();
+        if (newToken.access_token) {
+          const updated = { ...tokenData, access_token: newToken.access_token, expires_at: Date.now() + (newToken.expires_in || 3600) * 1000 };
+          if (newToken.refresh_token) updated.refresh_token = newToken.refresh_token;
+          await kv?.put(tokenKey, JSON.stringify(updated));
+          return json(200, { ok: true, message: 'Token renovado com sucesso', expiresIn: newToken.expires_in });
+        } else {
+          return json(400, { ok: false, error: newToken.error_description || 'Falha ao renovar token. Reconecte a integração.' });
+        }
+      } catch(e) {
+        return json(500, { ok: false, error: 'Erro ao renovar token: ' + e.message });
+      }
+    }
+    if (action === 'oauth-url') {
+      if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
+      const integration = INTEGRATIONS[integrationId];
+      if (!integration) return json(404, { ok: false, error: 'Integração não encontrada' });
+      const baseUrl = new URL(request.url).origin;
+      const redirectUri = `${baseUrl}/api/oauth/callback/${integrationId}`;
+      const state = btoa(JSON.stringify({ userId: session.userId, integrationId, ts: Date.now() }));
+      let authUrl = null;
+      if (integrationId === 'google_oauth' || integrationId === 'gmail_api') {
+        if (!env.GOOGLE_CLIENT_ID) return json(400, { ok: false, error: 'GOOGLE_CLIENT_ID não configurado', setupRequired: true });
+        const scopes = integrationId === 'gmail_api' ? 'openid email profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send' : 'openid email profile';
+        authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(env.GOOGLE_CLIENT_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scopes)}&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`;
+      } else if (integrationId === 'microsoft_365') {
+        if (!env.MICROSOFT_CLIENT_ID) return json(400, { ok: false, error: 'MICROSOFT_CLIENT_ID não configurado', setupRequired: true });
+        authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${encodeURIComponent(env.MICROSOFT_CLIENT_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent('openid email profile offline_access Mail.Read Mail.Send')}&state=${encodeURIComponent(state)}`;
+      } else if (integrationId === 'whatsapp_business') {
+        if (!env.WHATSAPP_APP_ID) return json(400, { ok: false, error: 'WHATSAPP_APP_ID não configurado', setupRequired: true });
+        authUrl = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${encodeURIComponent(env.WHATSAPP_APP_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=whatsapp_business_messaging&state=${encodeURIComponent(state)}`;
+      } else if (integrationId === 'stripe') {
+        if (!env.STRIPE_SECRET_KEY) return json(400, { ok: false, error: 'STRIPE_SECRET_KEY não configurado', setupRequired: true });
+        // Stripe usa API key, não OAuth - verificar se a chave é válida
+        try {
+          const r = await fetch('https://api.stripe.com/v1/balance', { headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` } });
+          const d = await r.json();
+          if (d.object === 'balance') {
+            const connKey = `integration:${session.userId}:stripe`;
+            await kv?.put(connKey, JSON.stringify({ integrationId: 'stripe', userId: session.userId, connectedAt: new Date().toISOString(), status: 'connected' }));
+            return json(200, { ok: true, status: 'connected', message: 'Stripe conectado via API Key' });
+          }
+        } catch {}
+        return json(400, { ok: false, error: 'Chave Stripe inválida', setupRequired: true });
+      } else if (integrationId === 'mercado_pago') {
+        if (!env.MERCADO_PAGO_ACCESS_TOKEN) return json(400, { ok: false, error: 'MERCADO_PAGO_ACCESS_TOKEN não configurado', setupRequired: true });
+        try {
+          const r = await fetch('https://api.mercadopago.com/v1/account/bank_report/config', { headers: { 'Authorization': `Bearer ${env.MERCADO_PAGO_ACCESS_TOKEN}` } });
+          if (r.status !== 401) {
+            const connKey = `integration:${session.userId}:mercado_pago`;
+            await kv?.put(connKey, JSON.stringify({ integrationId: 'mercado_pago', userId: session.userId, connectedAt: new Date().toISOString(), status: 'connected' }));
+            return json(200, { ok: true, status: 'connected', message: 'Mercado Pago conectado via Access Token' });
+          }
+        } catch {}
+        return json(400, { ok: false, error: 'Token Mercado Pago inválido', setupRequired: true });
+      }
+      if (authUrl) {
+        await kv?.put(`oauth:state:${state}`, JSON.stringify({ userId: session.userId, integrationId, redirectUri }), { expirationTtl: 600 });
+        return json(200, { ok: true, authUrl, integrationId });
+      }
+      // Integrações sem OAuth (API key based)
+      const status = checkIntegrationStatus(integrationId, env);
+      if (status.configured) {
+        const connKey = `integration:${session.userId}:${integrationId}`;
+        await kv?.put(connKey, JSON.stringify({ integrationId, userId: session.userId, connectedAt: new Date().toISOString(), status: 'connected' }));
+        return json(200, { ok: true, status: 'connected', message: `${integration.name} conectado via API Key` });
+      }
+      return json(400, { ok: false, error: 'Integração não configurada. Configure as variáveis de ambiente.', missingKeys: status.missingKeys, setupRequired: true });
+    }
+    if (action === 'check-status') {
+      if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
+      const connKey = `integration:${session.userId}:${integrationId}`;
+      const connRaw = await kv?.get(connKey);
+      const conn = connRaw ? JSON.parse(connRaw) : null;
+      const tokenKey = `oauth:token:${session.userId}:${integrationId}`;
+      const tokenRaw = await kv?.get(tokenKey);
+      const token = tokenRaw ? JSON.parse(tokenRaw) : null;
+      const isConnected = !!(conn?.status === 'connected');
+      const tokenExpired = token?.expires_at ? Date.now() > token.expires_at : false;
+      return json(200, { ok: true, integrationId, connected: isConnected, lastSync: conn?.lastSync || null, tokenExpired, hasRefreshToken: !!(token?.refresh_token) });
+    }
+    return json(400, { ok: false, error: 'action inválido. Use: test, connect, disconnect, sync, refresh-token, oauth-url, check-status' });
   }
 
   if (request.method === 'PUT') {

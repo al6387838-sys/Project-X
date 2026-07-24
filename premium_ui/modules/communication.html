@@ -443,210 +443,674 @@
   </div>
 </div>
 
+<!-- Modal: Nova Conversa -->
+<div class="modal-overlay" id="modal-new-message">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title"><i data-lucide="message-square-plus" class="pg-icon" aria-hidden="true"></i> Nova Conversa</span>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Título da Conversa</label>
+      <input type="text" class="form-input" id="new-conv-title" placeholder="Ex: Projeto Alpha, Suporte Cliente..." />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Participantes (e-mails separados por vírgula)</label>
+      <input type="text" class="form-input" id="new-conv-participants" placeholder="joao@empresa.com, maria@empresa.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Canal</label>
+      <select class="form-input" id="new-conv-channel">
+        <option value="internal">Interno (LifeOS)</option>
+        <option value="whatsapp">WhatsApp Business</option>
+        <option value="slack">Slack</option>
+        <option value="teams">Microsoft Teams</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="btn-create-conv" style="width:100%;justify-content:center" onclick="msgCreateConversation()">Criar Conversa</button>
+  </div>
+</div>
+<!-- Barra de edição de mensagem -->
+<div id="msg-edit-bar" style="display:none;padding:8px 12px;background:rgba(99,102,241,0.1);border-top:1px solid rgba(99,102,241,0.3);align-items:center;gap:8px;font-size:12px">
+  <i data-lucide="edit-3" style="width:14px;height:14px;color:var(--accent)" aria-hidden="true"></i>
+  <span style="color:var(--text-secondary)">Editando:</span>
+  <span id="msg-edit-preview" style="color:var(--text-primary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+  <button class="btn btn-ghost" style="padding:2px 8px;font-size:11px" onclick="msgCancelEdit()">Cancelar</button>
+</div>
 <script>
-// Phase 133 — Communication Connectors — Real API
-async function loadCommunicationConnectors() {
-  try {
-    const res = await fetch('/api/connectors/communication', { credentials: 'same-origin' });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (!data.ok) return;
-    for (const connector of data.connectors) {
-      const statusEl = document.getElementById(`status-${connector.id}`);
-      const btnEl = document.getElementById(`btn-${connector.id}`);
-      if (statusEl) {
-        if (connector.connected) {
-          statusEl.className = 'integration-status connected';
-          statusEl.innerHTML = '<i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado';
-          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Configurar'; btnEl.onclick = () => showPage(`comm-${connector.id}`); }
-        } else if (connector.setupRequired) {
-          statusEl.className = 'integration-status pending';
-          statusEl.innerHTML = '<i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Requer configuração';
-          if (btnEl) { btnEl.className = 'btn btn-ghost'; btnEl.textContent = 'Ver instruções'; btnEl.onclick = () => showConnectorSetup(connector); }
-        } else {
-          statusEl.className = 'integration-status pending';
-          statusEl.innerHTML = '<i data-lucide="circle" class="pg-icon" aria-hidden="true"></i> Não conectado';
-          if (btnEl) { btnEl.className = 'btn btn-primary'; btnEl.textContent = 'Conectar'; }
-        }
-      }
-    }
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-  } catch (_) { /* ignorar */ }
+// LifeOS Enterprise — Módulo Mensagens v9.0 — Backend REAL
+// Conectado ao /api/messages (Cloudflare KV + R2)
+'use strict';
+
+// ─── Estado global do módulo ──────────────────────────────────────────────────
+let msgState = {
+  conversations: [],
+  currentConvId: null,
+  currentMessages: [],
+  searchQuery: '',
+  filterChannel: 'all',
+  pollingInterval: null,
+  lastPollTime: null,
+  editingMessageId: null,
+  attachmentPending: null,
+};
+
+function escHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 }
 
-function showConnectorSetup(connector) {
-  const msg = connector.setupInstructions || 'Configure as credenciais nas variáveis de ambiente do Cloudflare Pages.';
-  showToast(connector.name + ' — Configure as credenciais no Cloudflare Dashboard', 'warning');
+function msgFormatTime(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    const now = new Date();
+    const diff = now - d;
+    if (diff < 60000) return 'agora';
+    if (diff < 3600000) return `${Math.floor(diff/60000)}m`;
+    if (diff < 86400000) return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+  } catch { return ''; }
 }
 
-async function connectCommunication(provider) {
+function msgAvatarInitials(name) {
+  if (!name) return '??';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  return name.slice(0,2).toUpperCase();
+}
+
+// ─── Carregar conversas ───────────────────────────────────────────────────────
+async function loadConversations() {
+  const list = document.getElementById('msg-conv-list');
+  if (!list) return;
   try {
-    const res = await fetch('/api/connectors/communication', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      credentials: 'same-origin',
-      body: JSON.stringify({ action: 'connect', provider }),
-    });
-    const data = await res.json();
-    if (data.setup_required) {
-      showConnectorSetup({ name: provider, setupInstructions: data.instructions });
+    const url = msgState.searchQuery
+      ? `/api/messages?view=search&q=${encodeURIComponent(msgState.searchQuery)}`
+      : '/api/messages?view=conversations';
+    const r = await fetch(url, { credentials: 'same-origin' });
+    const d = await r.json();
+    if (!r.ok || !d.ok) {
+      list.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:16px">Erro ao carregar conversas.</div>`;
       return;
     }
-    if (data.authUrl) {
-      window.location.href = data.authUrl;
-    } else {
-      if (typeof showToast === 'function') showToast('Erro ao iniciar conexão', 'error');
-    }
-  } catch (err) {
-    if (typeof showToast === 'function') showToast('Erro de conexão', 'error');
+    const convs = d.conversations || d.results || [];
+    msgState.conversations = convs;
+    renderConversationList(convs);
+  } catch(e) {
+    list.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:16px">Erro de conexão.</div>`;
   }
 }
 
-// Verificar resultado de callback OAuth
-const urlParams = new URLSearchParams(window.location.search);
-const connSuccess = urlParams.get('connector_success');
-const connError = urlParams.get('connector_error');
-if (connSuccess && typeof showToast === 'function') {
-  showToast(`${connSuccess} conectado com sucesso!`, 'success');
-  loadCommunicationConnectors();
-}
-if (connError && typeof showToast === 'function') {
-  showToast(`Erro ao conectar: ${connError}`, 'error');
+function renderConversationList(convs) {
+  const list = document.getElementById('msg-conv-list');
+  if (!list) return;
+  const filtered = msgState.filterChannel === 'all'
+    ? convs
+    : convs.filter(c => (c.channel || c.provider || '') === msgState.filterChannel);
+  if (!filtered.length) {
+    list.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa encontrada.<br><br><button class="btn btn-primary" style="width:100%" onclick="openModal('modal-new-message')">+ Nova Conversa</button></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(c => {
+    const isActive = c.id === msgState.currentConvId;
+    const initials = msgAvatarInitials(c.title || c.name || c.id);
+    const colors = ['#6366F1','#8B5CF6','#EC4899','#10B981','#F59E0B','#3B82F6'];
+    const color = colors[Math.abs(c.id.charCodeAt(0)) % colors.length];
+    return `<div class="msg-conv-item${isActive?' active':''}" data-conv-id="${escHtml(c.id)}" onclick="msgOpenConv('${escHtml(c.id)}')">
+      <div class="msg-conv-avatar" style="background:${color}">${escHtml(initials)}</div>
+      <div class="msg-conv-info">
+        <div class="msg-conv-name">${escHtml(c.title || c.name || 'Conversa')}</div>
+        <div class="msg-conv-preview">${c.deleted ? '<em>Mensagem apagada</em>' : escHtml(c.lastMessage || 'Sem mensagens')}</div>
+      </div>
+      <div class="msg-conv-meta">
+        <div class="msg-conv-time">${msgFormatTime(c.updatedAt || c.lastAt)}</div>
+        ${(c.unread || 0) > 0 ? `<div class="msg-conv-unread">${c.unread}</div>` : ''}
+        ${c.pinned ? '<div style="font-size:10px;color:var(--accent)">📌</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// Carregar status ao inicializar
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadCommunicationConnectors);
-} else {
-  loadCommunicationConnectors();
+// ─── Abrir conversa ───────────────────────────────────────────────────────────
+async function msgOpenConv(convId) {
+  msgState.currentConvId = convId;
+  const conv = msgState.conversations.find(c => c.id === convId);
+  // Atualizar header
+  const nameEl = document.getElementById('chat-name');
+  const statusEl = document.getElementById('chat-status');
+  const avatarEl = document.getElementById('chat-avatar');
+  if (nameEl) nameEl.textContent = conv?.title || conv?.name || 'Conversa';
+  if (statusEl) statusEl.textContent = conv?.participants?.join(', ') || 'Conversa direta';
+  if (avatarEl) avatarEl.textContent = msgAvatarInitials(conv?.title || conv?.name || '??');
+  // Destacar na lista
+  document.querySelectorAll('.msg-conv-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.convId === convId);
+  });
+  // Carregar mensagens
+  await loadMessages(convId);
+  // Marcar como lida
+  if ((conv?.unread || 0) > 0) {
+    fetch('/api/messages', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'mark-read', convId })
+    }).then(() => {
+      if (conv) conv.unread = 0;
+      renderConversationList(msgState.conversations);
+    }).catch(() => {});
+  }
+  // Iniciar polling
+  msgStartPolling(convId);
 }
 
-  // Conectar redes sociais via API real (OAuth)
-  async function commConnectSocial(provider) {
-    showToast('Iniciando conexão com ' + provider + '...', 'info');
+async function loadMessages(convId) {
+  const chatArea = document.getElementById('chat-messages');
+  if (!chatArea) return;
+  chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center">Carregando mensagens...</div>';
+  try {
+    const r = await fetch(`/api/messages?view=conversation&convId=${encodeURIComponent(convId)}`, { credentials: 'same-origin' });
+    const d = await r.json();
+    if (!r.ok || !d.ok) {
+      chatArea.innerHTML = '<div style="color:var(--red);font-size:13px;padding:16px">Erro ao carregar mensagens.</div>';
+      return;
+    }
+    msgState.currentMessages = d.messages || [];
+    renderMessages(msgState.currentMessages);
+  } catch(e) {
+    chatArea.innerHTML = '<div style="color:var(--red);font-size:13px;padding:16px">Erro de conexão.</div>';
+  }
+}
+
+function renderMessages(messages) {
+  const chatArea = document.getElementById('chat-messages');
+  if (!chatArea) return;
+  if (!messages.length) {
+    chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center">Nenhuma mensagem. Seja o primeiro a escrever!</div>';
+    return;
+  }
+  chatArea.innerHTML = messages.map(msg => {
+    if (msg.deleted) {
+      return `<div style="text-align:center;margin:8px 0"><span style="font-size:12px;color:var(--text-muted);font-style:italic">Mensagem apagada</span></div>`;
+    }
+    const isSent = msg.sentBy === (window.currentUser?.id || window.currentUser?.sub);
+    const side = isSent ? 'sent' : 'received';
+    const attachmentsHtml = (msg.attachments || []).map(att => `
+      <div style="margin-top:6px;padding:8px;background:rgba(255,255,255,0.1);border-radius:8px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="msgDownloadAttachment('${escHtml(att.storageKey)}','${escHtml(att.name)}')">
+        <i data-lucide="paperclip" style="width:14px;height:14px" aria-hidden="true"></i>
+        <span style="font-size:12px">${escHtml(att.name)}</span>
+        <span style="font-size:11px;opacity:0.7">${att.size ? (att.size/1024).toFixed(1)+'KB' : ''}</span>
+      </div>`).join('');
+    const editedBadge = msg.editedAt ? '<span style="font-size:10px;opacity:0.6;margin-left:4px">(editado)</span>' : '';
+    const actionsHtml = isSent ? `
+      <div class="msg-actions" style="display:none;gap:4px;margin-top:4px;justify-content:flex-end">
+        <button class="btn btn-ghost" style="padding:2px 6px;font-size:11px" onclick="msgEditMessage('${escHtml(msg.id)}','${escHtml(msg.text || '')}')">Editar</button>
+        <button class="btn btn-ghost" style="padding:2px 6px;font-size:11px;color:var(--red)" onclick="msgDeleteMessage('${escHtml(msg.id)}')">Excluir</button>
+      </div>` : '';
+    return `<div class="msg-bubble ${side}" data-msg-id="${escHtml(msg.id)}" onmouseenter="this.querySelector('.msg-actions')&&(this.querySelector('.msg-actions').style.display='flex')" onmouseleave="this.querySelector('.msg-actions')&&(this.querySelector('.msg-actions').style.display='none')">
+      <div class="msg-bubble-text">${escHtml(msg.text || '')}${editedBadge}</div>
+      ${attachmentsHtml}
+      <div class="msg-bubble-time">${msgFormatTime(msg.createdAt)}</div>
+      ${actionsHtml}
+    </div>`;
+  }).join('');
+  chatArea.scrollTop = chatArea.scrollHeight;
+  if (window.lucide) lucide.createIcons();
+}
+
+// ─── Enviar mensagem ──────────────────────────────────────────────────────────
+async function msgSend() {
+  const inp = document.getElementById('msg-input');
+  if (!inp || !inp.value.trim()) return;
+  if (!msgState.currentConvId) {
+    showToast('Selecione uma conversa primeiro', 'warning');
+    return;
+  }
+  const text = inp.value.trim();
+  inp.value = '';
+  inp.style.height = '42px';
+  // Otimismo: adicionar mensagem localmente
+  const tempId = 'temp_' + Date.now();
+  const tempMsg = {
+    id: tempId, text, sentBy: window.currentUser?.id || window.currentUser?.sub,
+    createdAt: new Date().toISOString(), sending: true
+  };
+  msgState.currentMessages.push(tempMsg);
+  renderMessages(msgState.currentMessages);
+  try {
+    const r = await fetch('/api/messages', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'send', convId: msgState.currentConvId, text })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      // Substituir mensagem temporária
+      const idx = msgState.currentMessages.findIndex(m => m.id === tempId);
+      if (idx !== -1) {
+        msgState.currentMessages[idx] = { ...tempMsg, id: d.messageId || tempId, sending: false };
+        renderMessages(msgState.currentMessages);
+      }
+      // Atualizar conversa na lista
+      const conv = msgState.conversations.find(c => c.id === msgState.currentConvId);
+      if (conv) { conv.lastMessage = text; conv.updatedAt = new Date().toISOString(); }
+      renderConversationList(msgState.conversations);
+    } else {
+      showToast(d.error || 'Erro ao enviar mensagem', 'error');
+      msgState.currentMessages = msgState.currentMessages.filter(m => m.id !== tempId);
+      renderMessages(msgState.currentMessages);
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+    msgState.currentMessages = msgState.currentMessages.filter(m => m.id !== tempId);
+    renderMessages(msgState.currentMessages);
+  }
+}
+
+function msgHandleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    msgSend();
+  }
+  // Auto-resize textarea
+  const ta = e.target;
+  ta.style.height = '42px';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+}
+
+// ─── Editar mensagem ──────────────────────────────────────────────────────────
+function msgEditMessage(messageId, currentText) {
+  msgState.editingMessageId = messageId;
+  const inp = document.getElementById('msg-input');
+  if (inp) {
+    inp.value = currentText;
+    inp.focus();
+    inp.placeholder = 'Editando mensagem... (Enter para salvar, Esc para cancelar)';
+  }
+  // Mostrar indicador de edição
+  const editBar = document.getElementById('msg-edit-bar');
+  if (editBar) {
+    editBar.style.display = 'flex';
+    editBar.querySelector('#msg-edit-preview').textContent = currentText.slice(0, 60) + (currentText.length > 60 ? '...' : '');
+  }
+}
+
+async function msgConfirmEdit() {
+  if (!msgState.editingMessageId) return;
+  const inp = document.getElementById('msg-input');
+  if (!inp || !inp.value.trim()) return;
+  const newText = inp.value.trim();
+  try {
+    const r = await fetch('/api/messages', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'edit', convId: msgState.currentConvId, messageId: msgState.editingMessageId, text: newText })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      const msg = msgState.currentMessages.find(m => m.id === msgState.editingMessageId);
+      if (msg) { msg.text = newText; msg.editedAt = new Date().toISOString(); }
+      renderMessages(msgState.currentMessages);
+      showToast('Mensagem editada', 'success');
+    } else {
+      showToast(d.error || 'Erro ao editar', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  }
+  msgCancelEdit();
+}
+
+function msgCancelEdit() {
+  msgState.editingMessageId = null;
+  const inp = document.getElementById('msg-input');
+  if (inp) { inp.value = ''; inp.placeholder = 'Digite uma mensagem...'; }
+  const editBar = document.getElementById('msg-edit-bar');
+  if (editBar) editBar.style.display = 'none';
+}
+
+// ─── Excluir mensagem ─────────────────────────────────────────────────────────
+async function msgDeleteMessage(messageId) {
+  if (!confirm('Excluir esta mensagem?')) return;
+  try {
+    const r = await fetch('/api/messages', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'delete-message', convId: msgState.currentConvId, messageId })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      const msg = msgState.currentMessages.find(m => m.id === messageId);
+      if (msg) { msg.deleted = true; msg.text = ''; }
+      renderMessages(msgState.currentMessages);
+      showToast('Mensagem excluída', 'success');
+    } else {
+      showToast(d.error || 'Erro ao excluir', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  }
+}
+
+// ─── Criar conversa ───────────────────────────────────────────────────────────
+async function msgCreateConversation() {
+  const titleEl = document.getElementById('new-conv-title');
+  const participantsEl = document.getElementById('new-conv-participants');
+  const channelEl = document.getElementById('new-conv-channel');
+  const title = titleEl?.value?.trim();
+  const participants = (participantsEl?.value || '').split(',').map(s => s.trim()).filter(Boolean);
+  const channel = channelEl?.value || 'internal';
+  if (!title) { showToast('Título da conversa obrigatório', 'warning'); return; }
+  const btn = document.getElementById('btn-create-conv');
+  if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
+  try {
+    const r = await fetch('/api/messages', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'create', title, participants, channel })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      closeModal();
+      if (titleEl) titleEl.value = '';
+      if (participantsEl) participantsEl.value = '';
+      await loadConversations();
+      if (d.conversation?.id) await msgOpenConv(d.conversation.id);
+      showToast('Conversa criada!', 'success');
+    } else {
+      showToast(d.error || 'Erro ao criar conversa', 'error');
+    }
+  } catch(e) {
+    showToast('Erro de conexão', 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Criar Conversa'; }
+  }
+}
+
+// ─── Pesquisar mensagens ──────────────────────────────────────────────────────
+function msgSearch(q) {
+  msgState.searchQuery = q || '';
+  loadConversations();
+}
+
+// ─── Filtrar por canal ────────────────────────────────────────────────────────
+function msgFilter(channel, btn) {
+  msgState.filterChannel = channel;
+  document.querySelectorAll('.msg-filter').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderConversationList(msgState.conversations);
+}
+
+// ─── Anexar arquivo ───────────────────────────────────────────────────────────
+function commAttachFile() {
+  if (!msgState.currentConvId) {
+    showToast('Selecione uma conversa primeiro', 'warning');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '*/*';
+  input.multiple = false;
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) {
+      showToast('Arquivo excede o limite de 25 MB', 'error');
+      return;
+    }
+    showToast(`Enviando ${file.name}...`, 'info');
+    const formData = new FormData();
+    formData.append('action', 'upload-attachment');
+    formData.append('convId', msgState.currentConvId);
+    formData.append('file', file);
     try {
-      const r = await fetch('/api/integrations/connect', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ provider, type: 'social' })
+      const r = await fetch('/api/messages', {
+        method: 'POST', credentials: 'same-origin', body: formData
       });
       const d = await r.json();
-      if (d.ok && d.authUrl) {
-        window.open(d.authUrl, '_blank', 'width=600,height=700');
+      if (d.ok) {
+        showToast(`${file.name} enviado!`, 'success');
+        await loadMessages(msgState.currentConvId);
       } else {
-        showToast(d.error || 'Serviço aguardando configuração.', 'info');
+        showToast(d.error || 'Erro ao enviar arquivo', 'error');
       }
-    } catch (_) {
-      showToast('Erro de conexão. Tente novamente.', 'error');
+    } catch(e) {
+      showToast('Erro ao enviar arquivo', 'error');
     }
-  }
+  };
+  input.click();
+}
 
-  function commAttachFile() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.jpg,.jpeg,.png,.pdf,.doc,.docx,.txt,.zip';
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      showToast('Arquivo selecionado: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)', 'info');
-      // O arquivo será enviado junto com a mensagem
-    };
-    input.click();
+function commAttachImage() {
+  if (!msgState.currentConvId) {
+    showToast('Selecione uma conversa primeiro', 'warning');
+    return;
   }
-  function commInsertEmoji() {
-    const emojis = ['😊','👍','❤️','🎉','🔥','✅','📌','💡','⚡','🚀'];
-    const msgInput = document.getElementById('msg-input') || document.querySelector('textarea[placeholder]');
-    if (msgInput) {
-      const emoji = emojis[Math.floor(Date.now() % emojis.length)];
-      msgInput.value += emoji;
-      msgInput.focus();
-    } else {
-      showToast('Selecione uma conversa primeiro', 'warning');
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) {
+      showToast('Imagem excede o limite de 25 MB', 'error');
+      return;
     }
-  }
-
-  // ═══ Carregar conversas reais do /api/communication/hub ═══
-  async function loadConversations() {
-    const list = document.getElementById('msg-conv-list');
-    if (!list) return;
+    showToast(`Enviando imagem ${file.name}...`, 'info');
+    const formData = new FormData();
+    formData.append('action', 'upload-attachment');
+    formData.append('convId', msgState.currentConvId);
+    formData.append('file', file);
     try {
-      const r = await fetch('/api/communication/hub', { credentials: 'same-origin' });
+      const r = await fetch('/api/messages', {
+        method: 'POST', credentials: 'same-origin', body: formData
+      });
       const d = await r.json();
-      if (!r.ok || !d.ok || !d.providers || !d.providers.length) {
-        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor de comunicação para começar.</div>';
-        return;
+      if (d.ok) {
+        showToast(`Imagem enviada!`, 'success');
+        await loadMessages(msgState.currentConvId);
+      } else {
+        showToast(d.error || 'Erro ao enviar imagem', 'error');
       }
-      const conversations = [];
-      for (const prov of d.providers) {
-        if (prov.connected && prov.conversations) {
-          for (const conv of prov.conversations) {
-            conversations.push({ ...conv, provider: prov.id, providerName: prov.name });
-          }
+    } catch(e) {
+      showToast('Erro ao enviar imagem', 'error');
+    }
+  };
+  input.click();
+}
+
+function commInsertEmoji() {
+  const emojis = ['😀','😂','❤️','👍','🎉','🔥','✅','💡','⚡','🚀','🙏','💪'];
+  const inp = document.getElementById('msg-input');
+  if (inp && msgState.currentConvId) {
+    const emoji = emojis[Math.floor(Date.now() % emojis.length)];
+    const pos = inp.selectionStart || inp.value.length;
+    inp.value = inp.value.slice(0, pos) + emoji + inp.value.slice(pos);
+    inp.focus();
+    inp.selectionStart = inp.selectionEnd = pos + emoji.length;
+  } else {
+    showToast('Selecione uma conversa primeiro', 'warning');
+  }
+}
+
+// ─── Download de anexo ────────────────────────────────────────────────────────
+async function msgDownloadAttachment(storageKey, fileName) {
+  try {
+    showToast('Preparando download...', 'info');
+    const r = await fetch(`/api/documents?action=download&key=${encodeURIComponent(storageKey)}`, { credentials: 'same-origin' });
+    if (!r.ok) { showToast('Erro ao baixar arquivo', 'error'); return; }
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fileName || 'arquivo';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    showToast('Erro ao baixar arquivo', 'error');
+  }
+}
+
+// ─── Polling em tempo real ────────────────────────────────────────────────────
+function msgStartPolling(convId) {
+  if (msgState.pollingInterval) clearInterval(msgState.pollingInterval);
+  msgState.pollingInterval = setInterval(async () => {
+    if (!msgState.currentConvId || document.hidden) return;
+    try {
+      const r = await fetch(`/api/messages?view=conversation&convId=${encodeURIComponent(msgState.currentConvId)}`, { credentials: 'same-origin' });
+      const d = await r.json();
+      if (d.ok && d.messages) {
+        const newCount = d.messages.length;
+        const oldCount = msgState.currentMessages.length;
+        if (newCount !== oldCount) {
+          msgState.currentMessages = d.messages;
+          renderMessages(d.messages);
         }
       }
-      if (!conversations.length) {
-        list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Nenhuma conversa disponível. Conecte um provedor para sincronizar conversas.</div>';
-        return;
-      }
-      list.innerHTML = conversations.map((c, i) => `
-        <div class="msg-conv-item ${i === 0 ? 'active' : ''}" onclick="msgOpenConv(this,'${escHtml(c.name || c.id)}','${escHtml(c.provider)}')">
-          <div class="msg-conv-avatar">${(c.name || c.id || '?').slice(0,2).toUpperCase()}</div>
-          <div class="msg-conv-info">
-            <div class="msg-conv-name">${escHtml(c.name || c.id)}</div>
-            <div class="msg-conv-preview">${escHtml(c.lastMessage || 'Sem mensagens')}</div>
-          </div>
-          <div class="msg-conv-meta">
-            <div class="msg-conv-time">${c.lastAt ? new Date(c.lastAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : ''}</div>
-            ${c.unread ? `<div class="msg-conv-unread">${c.unread}</div>` : ''}
-          </div>
-        </div>
-      `).join('');
-    } catch (_) {
-      list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Erro ao carregar conversas.</div>';
-    }
-  }
-  function msgOpenConv(el, name, provider) {
-    document.querySelectorAll('.msg-conv-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('chat-name').textContent = name;
-    document.getElementById('chat-status').textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
-    const chatArea = document.getElementById('chat-messages');
-    if (chatArea) chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px">Selecione uma mensagem para ver a conversa.</div>';
-  }
-  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
-  // Carregar conversas ao iniciar
-  loadConversations();
-  async function msgSend() {
-    const inp = document.getElementById("msg-input") || document.querySelector("textarea[placeholder]");
-    if (!inp || !inp.value.trim()) return;
-    const text = inp.value.trim();
-    const chatName = document.getElementById("chat-name")?.textContent || "Geral";
-    const chatArea = document.getElementById("chat-messages");
-    if (chatArea) {
-      const div = document.createElement("div");
-      div.style.cssText = "display:flex;flex-direction:column;align-items:flex-end;margin-bottom:12px";
-      div.innerHTML = `<div class="msg-bubble sent" style="background:var(--accent);color:#fff;padding:10px 14px;border-radius:14px 14px 2px 14px;max-width:80%"><div class="msg-bubble-text" style="font-size:13px">${text}</div><div class="msg-bubble-time" style="font-size:10px;opacity:0.7;margin-top:4px;text-align:right">Enviando...</div></div>`;
-      chatArea.appendChild(div);
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }
-    inp.value = "";
-    try {
-      const res = await fetch("/api/messages", {
-        method: "POST", credentials: "same-origin",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ action: "send", conversationId: chatName.toLowerCase(), text })
-      });
-      const data = await res.json();
-      if (data.ok && chatArea) {
-        const lastTime = chatArea.lastElementChild.querySelector(".msg-bubble-time");
-        if (lastTime) lastTime.textContent = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-      } else if (data.error) {
-        showToast(data.error, "error");
-      }
-    } catch (err) {
-      showToast("Erro ao enviar mensagem", "error");
-    }
-  }
-</script>
+    } catch(e) {}
+  }, 5000);
+}
 
+// ─── Ações de conversa ────────────────────────────────────────────────────────
+async function msgPinConv(convId) {
+  const r = await fetch('/api/messages', {
+    method: 'POST', credentials: 'same-origin',
+    headers: {'content-type':'application/json'},
+    body: JSON.stringify({ action: 'pin', convId: convId || msgState.currentConvId })
+  });
+  const d = await r.json();
+  if (d.ok) {
+    const conv = msgState.conversations.find(c => c.id === (convId || msgState.currentConvId));
+    if (conv) conv.pinned = d.pinned;
+    renderConversationList(msgState.conversations);
+    showToast(d.pinned ? 'Conversa fixada' : 'Conversa desafixada', 'success');
+  }
+}
+
+async function msgArchiveConv(convId) {
+  const r = await fetch('/api/messages', {
+    method: 'POST', credentials: 'same-origin',
+    headers: {'content-type':'application/json'},
+    body: JSON.stringify({ action: 'archive', convId: convId || msgState.currentConvId })
+  });
+  const d = await r.json();
+  if (d.ok) {
+    await loadConversations();
+    showToast(d.archived ? 'Conversa arquivada' : 'Conversa restaurada', 'success');
+  }
+}
+
+async function msgDeleteConv(convId) {
+  if (!confirm('Excluir esta conversa permanentemente?')) return;
+  const r = await fetch('/api/messages', {
+    method: 'POST', credentials: 'same-origin',
+    headers: {'content-type':'application/json'},
+    body: JSON.stringify({ action: 'delete', convId: convId || msgState.currentConvId })
+  });
+  const d = await r.json();
+  if (d.ok) {
+    msgState.currentConvId = null;
+    msgState.currentMessages = [];
+    const chatArea = document.getElementById('chat-messages');
+    if (chatArea) chatArea.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;text-align:center">Selecione uma conversa</div>';
+    await loadConversations();
+    showToast('Conversa excluída', 'success');
+  }
+}
+
+// ─── Integrações de comunicação ───────────────────────────────────────────────
+async function connectCommunication(provider) {
+  try {
+    const r = await fetch('/api/comm-hub', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'connect', provider })
+    });
+    const d = await r.json();
+    if (d.ok && d.authUrl) {
+      window.open(d.authUrl, '_blank', 'width=600,height=700');
+    } else if (d.ok && d.status === 'connected') {
+      showToast(`${provider} já conectado!`, 'success');
+    } else {
+      showToast(d.error || d.reason || `Configure as credenciais de ${provider} no painel`, 'info');
+    }
+  } catch(e) {
+    showToast('Erro ao conectar', 'error');
+  }
+}
+
+async function commConnectSocial(platform) {
+  showToast(`Integração ${platform} via API oficial — configure as credenciais no painel de integrações`, 'info');
+}
+
+async function loadCommunicationConnectors() {
+  try {
+    const r = await fetch('/api/comm-hub?action=status', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (!d.ok || !d.providers) return;
+    for (const prov of d.providers) {
+      const statusEl = document.getElementById(`status-${prov.id}`);
+      const btnEl = document.getElementById(`btn-${prov.id}`);
+      if (statusEl) {
+        statusEl.className = `integration-status ${prov.connected ? 'connected' : prov.configured ? 'warning' : 'pending'}`;
+        statusEl.innerHTML = prov.connected
+          ? `<i data-lucide="check-circle" style="width:12px;height:12px" aria-hidden="true"></i> Conectado${prov.accountEmail ? ' — ' + escHtml(prov.accountEmail) : ''}`
+          : prov.configured
+          ? `<i data-lucide="alert-circle" style="width:12px;height:12px" aria-hidden="true"></i> Configurado — não conectado`
+          : `<i data-lucide="circle" style="width:12px;height:12px" aria-hidden="true"></i> Aguardando credenciais`;
+      }
+      if (btnEl) {
+        btnEl.textContent = prov.connected ? 'Desconectar' : 'Conectar';
+        btnEl.onclick = prov.connected
+          ? () => disconnectCommunication(prov.id)
+          : () => connectCommunication(prov.id);
+      }
+    }
+    if (window.lucide) lucide.createIcons();
+  } catch(e) {}
+}
+
+async function disconnectCommunication(provider) {
+  if (!confirm(`Desconectar ${provider}?`)) return;
+  try {
+    const r = await fetch('/api/comm-hub', {
+      method: 'POST', credentials: 'same-origin',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify({ action: 'disconnect', provider })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast(`${provider} desconectado`, 'success');
+      loadCommunicationConnectors();
+    } else {
+      showToast(d.error || 'Erro ao desconectar', 'error');
+    }
+  } catch(e) {
+    showToast('Erro ao desconectar', 'error');
+  }
+}
+
+// ─── Inicialização ────────────────────────────────────────────────────────────
+// Adicionar input de busca ao sidebar
+(function initMsgSearch() {
+  const searchInput = document.querySelector('#page-messages input[placeholder*="Buscar"]');
+  if (searchInput) {
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => msgSearch(e.target.value), 400);
+    });
+  }
+})();
+
+// Carregar conversas ao inicializar
+loadConversations();
+loadCommunicationConnectors();
+
+// Recarregar quando o módulo for exibido
+document.addEventListener('moduleShown', (e) => {
+  if (e.detail?.module === 'communication') {
+    loadConversations();
+    loadCommunicationConnectors();
+  }
+});
+</script>
 <!-- END module-communication -->

@@ -427,6 +427,289 @@ export async function onRequestPost({ request, env }) {
     if (filterStatus) results = results.filter(h => h.status === filterStatus);
     return json(200, { ok: true, results: results.slice(0, 100), total: results.length });
   }
+  // ─── INBOX (Gmail/Outlook real) ───────────────────────────────────────────────
+  if (action === 'inbox') {
+    const provider = body.provider || 'gmail';
+    const connRaw = await kv.get(`comm:connections:${session.sub}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[provider];
+    if (!conn?.accessToken) {
+      return json(400, { ok: false, error: `Conecte o ${provider} primeiro para acessar a inbox.`, requiresAuth: true, provider });
+    }
+    try {
+      let messages = [];
+      if (provider === 'gmail') {
+        const listRes = await fetch('https://www.googleapis.com/gmail/v1/users/me/messages?maxResults=20&labelIds=INBOX', {
+          headers: { Authorization: `Bearer ${conn.accessToken}` }
+        });
+        if (!listRes.ok) {
+          if (listRes.status === 401) return json(401, { ok: false, error: 'Token expirado. Reconecte o Gmail.', requiresReauth: true, provider });
+          return json(listRes.status, { ok: false, error: 'Erro ao acessar Gmail' });
+        }
+        const listData = await listRes.json();
+        const msgIds = (listData.messages || []).slice(0, 20);
+        messages = await Promise.all(msgIds.map(async (m) => {
+          const msgRes = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`, {
+            headers: { Authorization: `Bearer ${conn.accessToken}` }
+          });
+          if (!msgRes.ok) return null;
+          const msg = await msgRes.json();
+          const headers = msg.payload?.headers || [];
+          const getH = (name) => (headers.find(h => h.name.toLowerCase() === name.toLowerCase()) || {}).value || '';
+          return {
+            id: msg.id, threadId: msg.threadId,
+            from: getH('From'), subject: getH('Subject') || '(sem assunto)',
+            date: getH('Date'), snippet: msg.snippet || '',
+            unread: (msg.labelIds || []).includes('UNREAD'),
+            provider: 'gmail', labels: msg.labelIds || [],
+          };
+        }));
+        messages = messages.filter(Boolean);
+      } else if (provider === 'outlook') {
+        const listRes = await fetch('https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$top=20&$select=id,from,subject,receivedDateTime,bodyPreview,isRead', {
+          headers: { Authorization: `Bearer ${conn.accessToken}` }
+        });
+        if (!listRes.ok) {
+          if (listRes.status === 401) return json(401, { ok: false, error: 'Token expirado. Reconecte o Outlook.', requiresReauth: true, provider });
+          return json(listRes.status, { ok: false, error: 'Erro ao acessar Outlook' });
+        }
+        const listData = await listRes.json();
+        messages = (listData.value || []).map(m => ({
+          id: m.id, from: m.from?.emailAddress?.address || '',
+          subject: m.subject || '(sem assunto)', date: m.receivedDateTime,
+          snippet: m.bodyPreview || '', unread: !m.isRead, provider: 'outlook',
+        }));
+      }
+      return json(200, { ok: true, messages, total: messages.length, provider });
+    } catch (err) {
+      return json(500, { ok: false, error: 'Erro ao buscar inbox: ' + (err.message || 'desconhecido') });
+    }
+  }
+
+  // ─── DELETE EMAIL ─────────────────────────────────────────────────────────────
+  if (action === 'delete-email') {
+    const { emailId, provider: emailProvider } = body;
+    if (!emailId) return json(400, { ok: false, error: 'emailId obrigatório' });
+    const prov = emailProvider || 'gmail';
+    const connRaw = await kv.get(`comm:connections:${session.sub}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[prov];
+    if (!conn?.accessToken) return json(400, { ok: false, error: `Conecte o ${prov} primeiro.`, requiresAuth: true });
+    try {
+      if (prov === 'gmail') {
+        const res = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${emailId}/trash`, {
+          method: 'POST', headers: { Authorization: `Bearer ${conn.accessToken}` }
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao mover para lixeira' });
+        return json(200, { ok: true, deleted: emailId, provider: prov, action: 'trashed' });
+      } else if (prov === 'outlook') {
+        const res = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${emailId}/move`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destinationId: 'deleteditems' })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao mover para lixeira' });
+        return json(200, { ok: true, deleted: emailId, provider: prov, action: 'trashed' });
+      }
+      return json(400, { ok: false, error: 'Provider não suportado para delete' });
+    } catch { return json(500, { ok: false, error: 'Erro ao deletar email' }); }
+  }
+
+  // ─── RESTORE EMAIL ────────────────────────────────────────────────────────────
+  if (action === 'restore-email') {
+    const { emailId, provider: emailProvider } = body;
+    if (!emailId) return json(400, { ok: false, error: 'emailId obrigatório' });
+    const prov = emailProvider || 'gmail';
+    const connRaw = await kv.get(`comm:connections:${session.sub}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[prov];
+    if (!conn?.accessToken) return json(400, { ok: false, error: `Conecte o ${prov} primeiro.`, requiresAuth: true });
+    try {
+      if (prov === 'gmail') {
+        const res = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${emailId}/untrash`, {
+          method: 'POST', headers: { Authorization: `Bearer ${conn.accessToken}` }
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao restaurar email' });
+        return json(200, { ok: true, restored: emailId, provider: prov });
+      } else if (prov === 'outlook') {
+        const res = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${emailId}/move`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destinationId: 'inbox' })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao restaurar email' });
+        return json(200, { ok: true, restored: emailId, provider: prov });
+      }
+      return json(400, { ok: false, error: 'Provider não suportado para restore' });
+    } catch { return json(500, { ok: false, error: 'Erro ao restaurar email' }); }
+  }
+
+  // ─── MOVE EMAIL ───────────────────────────────────────────────────────────────
+  if (action === 'move-email') {
+    const { emailId, provider: emailProvider, destination } = body;
+    if (!emailId || !destination) return json(400, { ok: false, error: 'emailId e destination obrigatórios' });
+    const prov = emailProvider || 'gmail';
+    const connRaw = await kv.get(`comm:connections:${session.sub}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[prov];
+    if (!conn?.accessToken) return json(400, { ok: false, error: `Conecte o ${prov} primeiro.`, requiresAuth: true });
+    try {
+      if (prov === 'gmail') {
+        const labelMap = { trash: 'TRASH', spam: 'SPAM', inbox: 'INBOX', starred: 'STARRED' };
+        const addLabel = labelMap[destination] || destination.toUpperCase();
+        const res = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${emailId}/modify`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ addLabelIds: [addLabel], removeLabelIds: destination !== 'inbox' ? ['INBOX'] : [] })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao mover email' });
+        return json(200, { ok: true, moved: emailId, destination, provider: prov });
+      } else if (prov === 'outlook') {
+        const folderMap = { trash: 'deleteditems', spam: 'junkemail', inbox: 'inbox', sent: 'sentitems' };
+        const folderId = folderMap[destination] || destination;
+        const res = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${emailId}/move`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destinationId: folderId })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao mover email' });
+        return json(200, { ok: true, moved: emailId, destination, provider: prov });
+      }
+      return json(400, { ok: false, error: 'Provider não suportado para move' });
+    } catch { return json(500, { ok: false, error: 'Erro ao mover email' }); }
+  }
+
+  // ─── MARK READ/UNREAD ─────────────────────────────────────────────────────────
+  if (action === 'connect') {
+    // Iniciar OAuth para Gmail ou Outlook
+    const provider = body.provider || 'gmail';
+    const baseUrl = new URL(request.url).origin;
+    const redirectUri = `${baseUrl}/api/communication/callback/${provider}`;
+    const state = btoa(JSON.stringify({ userId: session.userId, provider, ts: Date.now() }));
+    let authUrl = null;
+    if (provider === 'gmail') {
+      if (!env.GOOGLE_CLIENT_ID) return json(400, { ok: false, error: 'GOOGLE_CLIENT_ID não configurado', setupRequired: true });
+      authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(env.GOOGLE_CLIENT_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent('openid email profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify')}&access_type=offline&prompt=consent&state=${encodeURIComponent(state)}`;
+    } else if (provider === 'outlook') {
+      if (!env.MICROSOFT_CLIENT_ID) return json(400, { ok: false, error: 'MICROSOFT_CLIENT_ID não configurado', setupRequired: true });
+      authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${encodeURIComponent(env.MICROSOFT_CLIENT_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent('openid email profile offline_access Mail.Read Mail.Send Mail.ReadWrite')}&state=${encodeURIComponent(state)}`;
+    }
+    if (authUrl) {
+      await kv?.put(`comm:oauth:state:${state}`, JSON.stringify({ userId: session.userId, provider }), { expirationTtl: 600 });
+      return json(200, { ok: true, authUrl, provider });
+    }
+    // Verificar se já conectado
+    const connRaw = await kv?.get(`comm:connections:${session.userId}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    if (connections[provider]) {
+      return json(200, { ok: true, status: 'connected', provider });
+    }
+    return json(400, { ok: false, error: 'Provider não suportado ou não configurado', provider });
+  }
+  if (action === 'send-email') {
+    // Alias para 'send' com provider explícito
+    const provider = body.provider || 'gmail';
+    const connRaw = await kv?.get(`comm:connections:${session.userId}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[provider];
+    if (!conn?.accessToken) return json(401, { ok: false, error: `${provider} não conectado. Conecte primeiro.` });
+    // Usar o mesmo fluxo de 'send'
+    body.action = 'send';
+    // Fall through to send handler
+  }
+  if (action === 'trash-email') {
+    const emailId = body.emailId || body.id;
+    const provider = body.provider || 'gmail';
+    if (!emailId) return json(400, { ok: false, error: 'emailId obrigatório' });
+    const connRaw = await kv?.get(`comm:connections:${session.userId}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[provider];
+    if (!conn?.accessToken) return json(401, { ok: false, error: `${provider} não conectado` });
+    try {
+      let trashRes;
+      if (provider === 'gmail') {
+        trashRes = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}/trash`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${conn.accessToken}` }
+        });
+      } else if (provider === 'outlook') {
+        trashRes = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${emailId}/move`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${conn.accessToken}`, 'content-type': 'application/json' },
+          body: JSON.stringify({ destinationId: 'deleteditems' })
+        });
+      }
+      if (trashRes && (trashRes.ok || trashRes.status === 200)) {
+        return json(200, { ok: true, message: 'Email movido para lixeira', emailId });
+      }
+      return json(400, { ok: false, error: 'Erro ao mover para lixeira' });
+    } catch(e) {
+      return json(500, { ok: false, error: 'Erro ao mover para lixeira: ' + e.message });
+    }
+  }
+  if (action === 'search-emails') {
+    const q = body.q || body.query || '';
+    const provider = body.provider || 'gmail';
+    if (!q) return json(400, { ok: false, error: 'query obrigatória' });
+    const connRaw = await kv?.get(`comm:connections:${session.userId}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[provider];
+    if (!conn?.accessToken) return json(401, { ok: false, error: `${provider} não conectado` });
+    try {
+      let emails = [];
+      if (provider === 'gmail') {
+        const searchRes = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(q)}&maxResults=20`, {
+          headers: { 'Authorization': `Bearer ${conn.accessToken}` }
+        });
+        const searchData = await searchRes.json();
+        if (searchData.messages) {
+          emails = searchData.messages.map(m => ({ id: m.id, threadId: m.threadId }));
+        }
+      } else if (provider === 'outlook') {
+        const searchRes = await fetch(`https://graph.microsoft.com/v1.0/me/messages?$search="${encodeURIComponent(q)}"&$top=20`, {
+          headers: { 'Authorization': `Bearer ${conn.accessToken}` }
+        });
+        const searchData = await searchRes.json();
+        if (searchData.value) {
+          emails = searchData.value.map(m => ({ id: m.id, subject: m.subject, from: m.from?.emailAddress?.address, date: m.receivedDateTime }));
+        }
+      }
+      return json(200, { ok: true, emails, query: q, provider });
+    } catch(e) {
+      return json(500, { ok: false, error: 'Erro na busca: ' + e.message });
+    }
+  }
+    if (action === 'mark-read' || action === 'mark-unread') {
+    const { emailId, provider: emailProvider } = body;
+    if (!emailId) return json(400, { ok: false, error: 'emailId obrigatório' });
+    const prov = emailProvider || 'gmail';
+    const connRaw = await kv.get(`comm:connections:${session.sub}`);
+    const connections = connRaw ? JSON.parse(connRaw) : {};
+    const conn = connections[prov];
+    if (!conn?.accessToken) return json(400, { ok: false, error: `Conecte o ${prov} primeiro.`, requiresAuth: true });
+    const markRead = action === 'mark-read';
+    try {
+      if (prov === 'gmail') {
+        const res = await fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${emailId}/modify`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(markRead ? { removeLabelIds: ['UNREAD'] } : { addLabelIds: ['UNREAD'] })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao marcar email' });
+        return json(200, { ok: true, emailId, read: markRead, provider: prov });
+      } else if (prov === 'outlook') {
+        const res = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${emailId}`, {
+          method: 'PATCH',
+          headers: { Authorization: `Bearer ${conn.accessToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isRead: markRead })
+        });
+        if (!res.ok) return json(res.status, { ok: false, error: 'Erro ao marcar email' });
+        return json(200, { ok: true, emailId, read: markRead, provider: prov });
+      }
+      return json(400, { ok: false, error: 'Provider não suportado' });
+    } catch { return json(500, { ok: false, error: 'Erro ao marcar email' }); }
+  }
+
   return json(400, { ok: false, error: 'Ação desconhecida' });
 }
 

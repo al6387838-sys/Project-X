@@ -15,67 +15,91 @@
   <div class="ic-grid" id="ic-grid" style="display:none"></div>
   <div class="ic-panel"><div class="ic-panel-head"><div class="ic-panel-title">Logs recentes de sincronização</div><button class="ic-btn" style="flex:0 0 auto" onclick="icClearLogs()">Limpar logs</button></div><div id="ic-logs"><div style="color:var(--text-muted);font-size:12px">Carregando logs...</div></div></div>
 </div>
-<div class="ic-modal" id="ic-modal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title"><div class="ic-dialog"><h3 id="ic-modal-title">Configurar integração</h3><p id="ic-modal-copy"></p><div id="ic-modal-envkeys" style="display:none"></div><div class="ic-perms" id="ic-perms"></div><div class="ic-dialog-actions"><button class="ic-btn" style="flex:0 0 auto" onclick="icCloseModal()">Cancelar</button><button class="ic-btn primary" style="flex:0 0 auto" id="ic-authorize">Autorizar conexão</button></div></div></div>
-<script>
+<div class="ic-modal" id="ic-modal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title"><div class="ic-dialog"><h3 id="ic-modal-title">Configurar integração</h3><p id="ic-modal-copy"></p><div id="ic-modal-envkeys" style="display:none"></div><div class="ic-perms" id="ic-perms"></div><div class="ic-dialog-actions"><button class="ic-btn" style="flex:0 0 auto" onclick="icCloseModal()">Cancelar</button><button class="ic-btn primary" style="flex:0 0 auto" id="ic-authorize">Autorizar conexão</button></div></div></div><script>
 (function(){
-  // Estado carregado dinamicamente do backend
+  'use strict';
+  const API = '/api/integrations';
+  const AUDIT_API = '/api/operation-audit';
   let integrations = [];
   let connectionState = {};
   let logs = [];
   let syncCount = 0;
 
+  // ─── Catálogo de integrações com metadados completos ─────────────────
+  const CATALOG = [
+    // Autenticação
+    { id: 'google_oauth', logo: 'GO', name: 'Google OAuth 2.0', category: 'Autenticação', color: '#4285F4', desc: 'Login e autenticação via Google', perms: ['openid', 'email', 'profile'], envKeys: ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'], docs: 'https://developers.google.com/identity/protocols/oauth2', oauthFlow: true },
+    // Comunicação
+    { id: 'gmail_api', logo: 'GM', name: 'Gmail API', category: 'Comunicação', color: '#EA4335', desc: 'Leitura e envio de e-mails via Gmail', perms: ['gmail.readonly', 'gmail.send'], envKeys: ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'], docs: 'https://developers.google.com/gmail/api', oauthFlow: true },
+    { id: 'microsoft_365', logo: 'MS', name: 'Microsoft 365 (Outlook)', category: 'Comunicação', color: '#00A4EF', desc: 'Integração com Outlook, OneDrive e Teams', perms: ['Mail.Read', 'Mail.Send', 'offline_access'], envKeys: ['MICROSOFT_CLIENT_ID', 'MICROSOFT_CLIENT_SECRET'], docs: 'https://learn.microsoft.com/en-us/graph/overview', oauthFlow: true },
+    { id: 'whatsapp_business', logo: 'WA', name: 'WhatsApp Business API', category: 'Comunicação', color: '#25D366', desc: 'Mensagens e automação via WhatsApp', perms: ['whatsapp_business_messaging'], envKeys: ['WHATSAPP_APP_ID', 'WHATSAPP_APP_SECRET', 'WHATSAPP_PHONE_ID'], docs: 'https://developers.facebook.com/docs/whatsapp/cloud-api', oauthFlow: true },
+    // Pagamentos
+    { id: 'stripe', logo: 'ST', name: 'Stripe', category: 'Pagamentos', color: '#635BFF', desc: 'Processamento de pagamentos com cartão', perms: ['charges', 'customers', 'subscriptions'], envKeys: ['STRIPE_PUBLIC_KEY', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'], docs: 'https://stripe.com/docs/api', oauthFlow: false },
+    { id: 'mercado_pago', logo: 'MP', name: 'Mercado Pago', category: 'Pagamentos', color: '#009EE3', desc: 'Pagamentos e carteira digital (América Latina)', perms: ['payments', 'refunds', 'customers'], envKeys: ['MERCADO_PAGO_ACCESS_TOKEN', 'MERCADO_PAGO_PUBLIC_KEY'], docs: 'https://www.mercadopago.com.br/developers/pt/reference', oauthFlow: false },
+    // Open Finance
+    { id: 'open_finance', logo: 'OF', name: 'Open Finance Brasil', category: 'Finanças', color: '#00B4D8', desc: 'Conexão com bancos via Open Finance (Banco Central)', perms: ['accounts.read', 'transactions.read', 'investments.read'], envKeys: ['OPEN_FINANCE_CLIENT_ID', 'OPEN_FINANCE_CLIENT_SECRET'], docs: 'https://openfinancebrasil.org.br/', oauthFlow: true },
+    // IA
+    { id: 'openai', logo: 'AI', name: 'OpenAI API', category: 'Inteligência Artificial', color: '#10A37F', desc: 'Modelos GPT para IA Copilot e automação', perms: ['chat.completions', 'embeddings'], envKeys: ['OPENAI_API_KEY'], docs: 'https://platform.openai.com/docs/api-reference', oauthFlow: false },
+    // Armazenamento
+    { id: 'cloudflare_r2', logo: 'R2', name: 'Cloudflare R2', category: 'Armazenamento', color: '#F6821F', desc: 'Armazenamento de objetos (arquivos, imagens)', perms: ['read', 'write', 'delete'], envKeys: ['CLOUDFLARE_R2_BUCKET_NAME', 'CLOUDFLARE_R2_ACCESS_KEY_ID', 'CLOUDFLARE_R2_SECRET_ACCESS_KEY'], docs: 'https://developers.cloudflare.com/r2/', oauthFlow: false },
+    { id: 'cloudflare_kv', logo: 'KV', name: 'Cloudflare KV', category: 'Armazenamento', color: '#F6821F', desc: 'Armazenamento de chave-valor (cache, sessões)', perms: ['read', 'write', 'delete'], envKeys: ['LIFEOS_KV'], docs: 'https://developers.cloudflare.com/workers/runtime-apis/kv/', oauthFlow: false },
+    // Notificações
+    { id: 'smtp', logo: 'SM', name: 'SMTP (Email Transacional)', category: 'Notificações', color: '#6366F1', desc: 'Envio de e-mails transacionais', perms: ['send'], envKeys: ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASSWORD'], docs: 'https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol', oauthFlow: false },
+    { id: 'push_notifications', logo: 'PN', name: 'Push Notifications', category: 'Notificações', color: '#8B5CF6', desc: 'Notificações push para web e mobile', perms: ['send'], envKeys: ['VAPID_PUBLIC_KEY', 'VAPID_PRIVATE_KEY'], docs: 'https://developer.mozilla.org/en-US/docs/Web/API/Push_API', oauthFlow: false },
+    // Desenvolvimento
+    { id: 'github', logo: 'GH', name: 'GitHub', category: 'Desenvolvimento', color: '#24292E', desc: 'Repositórios, issues e deploys', perms: ['repo:read', 'issues:read'], envKeys: ['GITHUB_TOKEN'], docs: 'https://docs.github.com/en/rest', oauthFlow: false },
+  ];
+
+  // ─── Carregar integrações do backend ─────────────────────────────────
   async function loadIntegrations() {
     try {
-      const res = await fetch('/api/integrations', { credentials: 'same-origin' });
-      if (!res.ok) { icToast('Erro ao carregar integrações', 'error'); return; }
-      const d = await res.json();
-      if (!d.ok) { icToast('Integrações indisponíveis', 'error'); return; }
-      // Agregar por categoria
-      integrations = [];
+      const res = await fetch(API, { credentials: 'same-origin' });
+      const d = await res.json().catch(() => ({}));
+      // Usar catálogo local como base, enriquecer com status do backend
+      integrations = CATALOG.map(item => ({ ...item }));
       connectionState = {};
-      if (d.categories) {
-        for (const cat of Object.values(d.categories)) {
-          if (cat.integrations) {
-            for (const integ of cat.integrations) {
-              integrations.push({
-                id: integ.id || integ.name?.toLowerCase().replace(/\s+/g, '-'),
-                logo: integ.name ? integ.name.split(' ').map(w => w[0]).join('').slice(0, 4).toUpperCase() : '?',
-                name: integ.name || 'Desconhecido',
-                category: integ.category || cat.name || 'Outros',
-                desc: integ.description || '',
-                perms: integ.scopes || [],
-                envKeys: integ.envKeys || [],
-                docs: integ.docs || '',
-              });
-              connectionState[integ.id] = { connected: integ.status === 'connected', lastSync: integ.lastSync || 'Nunca' };
-            }
+      // Inicializar estado padrão
+      integrations.forEach(i => { connectionState[i.id] = { connected: false, lastSync: 'Nunca' }; });
+      // Enriquecer com dados do backend
+      if (d.ok) {
+        const allInteg = d.allIntegrations || [];
+        allInteg.forEach(bi => {
+          const local = integrations.find(i => i.id === bi.id || i.id === bi.key);
+          if (local) {
+            connectionState[local.id] = {
+              connected: bi.status === 'connected' || bi.connected === true,
+              lastSync: bi.lastSync || 'Nunca',
+              configured: bi.configured,
+              missingKeys: bi.missingKeys || [],
+            };
           }
+        });
+        // Verificar conexões salvas no KV via check-status
+        for (const integ of integrations) {
+          try {
+            const cr = await fetch(API, {
+              method: 'POST', credentials: 'same-origin',
+              headers: {'content-type':'application/json'},
+              body: JSON.stringify({ action: 'check-status', integrationId: integ.id })
+            });
+            const cd = await cr.json().catch(() => ({}));
+            if (cd.ok && cd.connected) {
+              connectionState[integ.id] = { ...connectionState[integ.id], connected: true, lastSync: cd.lastSync || 'Nunca', tokenExpired: cd.tokenExpired, hasRefreshToken: cd.hasRefreshToken };
+            }
+          } catch {}
         }
-      }
-      // Se o backend não retornou categorias detalhadas, usar catálogo mínimo
-      if (!integrations.length) {
-        const fallback = [
-          {id:'google-oauth',logo:'GO',name:'Google OAuth 2.0',category:'Autenticação',desc:'Login e autenticação via Google',perms:['openid','email','profile'],envKeys:['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET']},
-          {id:'gmail-api',logo:'GM',name:'Gmail API',category:'Comunicação',desc:'Leitura e envio de e-mails via Gmail',perms:['gmail.readonly','gmail.send'],envKeys:['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET']},
-          {id:'microsoft-365',logo:'M365',name:'Microsoft 365',category:'Comunicação',desc:'Outlook, OneDrive e Teams',perms:['Mail.Read','Mail.Send'],envKeys:['MICROSOFT_CLIENT_ID','MICROSOFT_CLIENT_SECRET']},
-          {id:'whatsapp-business',logo:'WA',name:'WhatsApp Business',category:'Comunicação',desc:'Mensagens e automação via WhatsApp',perms:['whatsapp_business_messaging'],envKeys:['WHATSAPP_APP_ID','WHATSAPP_PHONE_ID']},
-          {id:'stripe',logo:'ST',name:'Stripe',category:'Pagamentos',desc:'Processamento de pagamentos com cartão',perms:['charges.read','customers.read'],envKeys:['STRIPE_SECRET_KEY']},
-          {id:'github',logo:'GH',name:'GitHub',category:'Desenvolvimento',desc:'Repositórios, issues e deploys',perms:['repo:read'],envKeys:['GITHUB_TOKEN']},
-        ];
-        integrations = fallback;
-        fallback.forEach(i => { if (!connectionState[i.id]) connectionState[i.id] = { connected: false, lastSync: 'Nunca' }; });
       }
       document.getElementById('ic-grid-loading').style.display = 'none';
       document.getElementById('ic-grid').style.display = '';
       icRender();
-    } catch (_) {
+    } catch(e) {
       document.getElementById('ic-grid-loading').textContent = 'Erro ao carregar integrações. Verifique sua conexão.';
     }
   }
 
   async function loadLogs() {
     try {
-      const res = await fetch('/api/operation-audit', { credentials: 'same-origin' });
+      const res = await fetch(AUDIT_API, { credentials: 'same-origin' });
       if (res.ok) {
         const d = await res.json();
         if (d.ok && d.logs) {
@@ -89,7 +113,7 @@
           return;
         }
       }
-    } catch (_) {}
+    } catch {}
     logs = [];
     renderLogs();
   }
@@ -97,156 +121,249 @@
   function renderLogs() {
     const el = document.getElementById('ic-logs');
     if (!el) return;
-    el.innerHTML = logs.length ? logs.map(l => `<div class="ic-log"><span>${l.time}</span><strong>${escHtml(l.name)}</strong><span>${escHtml(l.event)}</span><span class="${l.status === 'Erro' ? 'ic-err' : 'ic-ok'}">${escHtml(l.status)}</span></div>`).join('') : '<div style="color:var(--text-muted);font-size:12px">Nenhum log registrado.</div>';
+    el.innerHTML = logs.length
+      ? logs.map(l => `<div class="ic-log"><span>${l.time}</span><strong>${escHtml(l.name)}</strong><span>${escHtml(l.event)}</span><span class="${l.status === 'Erro' ? 'ic-err' : 'ic-ok'}">${escHtml(l.status)}</span></div>`).join('')
+      : '<div style="color:var(--text-muted);font-size:12px">Nenhum log registrado.</div>';
   }
 
-  window.icRender = function() {
+  // ─── Renderizar cards ─────────────────────────────────────────────────
+  function icRender() {
+    const grid = document.getElementById('ic-grid');
+    if (!grid) return;
     const q = (document.getElementById('ic-search')?.value || '').toLowerCase();
-    const f = document.getElementById('ic-filter')?.value || 'all';
-    const visible = integrations.filter(x => {
-      const c = !!connectionState[x.id]?.connected;
-      return (!q || (x.name + ' ' + x.category).toLowerCase().includes(q)) && (f === 'all' || (f === 'connected' && c) || (f === 'available' && !c));
+    const filter = document.getElementById('ic-filter')?.value || 'all';
+    let visible = integrations.filter(i => {
+      if (q && !i.name.toLowerCase().includes(q) && !i.category.toLowerCase().includes(q) && !i.desc.toLowerCase().includes(q)) return false;
+      if (filter === 'connected' && !connectionState[i.id]?.connected) return false;
+      if (filter === 'available' && connectionState[i.id]?.connected) return false;
+      return true;
     });
-    document.getElementById('ic-grid').innerHTML = visible.map(x => {
-      const s = connectionState[x.id] || {};
-      return `<article class="ic-card"><div class="ic-card-head"><div class="ic-logo">${x.logo}</div><div><div class="ic-name">${escHtml(x.name)}</div><div class="ic-category">${escHtml(x.category)}</div></div><span class="ic-status ${s.connected ? 'connected' : ''}">${s.connected ? 'CONECTADA' : 'DISPONÍVEL'}</span></div><div class="ic-desc">${escHtml(x.desc)}</div><div class="ic-meta"><div>Última sincronização<strong>${s.lastSync || 'Nunca'}</strong></div><div>Permissões<strong>${x.perms.length} escopos</strong></div></div><div class="ic-actions"><button class="ic-btn ${s.connected ? '' : 'primary'}" onclick="icOpenModal('${x.id}')">${s.connected ? 'Gerenciar' : 'Conectar'}</button><button class="ic-btn" onclick="icSync('${x.id}')" ${s.connected ? '' : 'disabled'}>Sincronizar</button></div></article>`;
-    }).join('');
-    const connected = Object.values(connectionState).filter(x => x.connected).length;
+    const connected = integrations.filter(i => connectionState[i.id]?.connected).length;
     document.getElementById('ic-connected').textContent = connected;
     document.getElementById('ic-available').textContent = integrations.length - connected;
-  };
+    document.getElementById('ic-syncs').textContent = syncCount;
+    if (!visible.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">Nenhuma integração encontrada</div>';
+      return;
+    }
+    grid.innerHTML = visible.map(item => {
+      const state = connectionState[item.id] || {};
+      const isConnected = !!state.connected;
+      const tokenExpired = !!state.tokenExpired;
+      return `<div class="ic-card" onclick="icOpenModal('${escHtml(item.id)}')">
+        <div class="ic-card-head">
+          <div class="ic-logo" style="background:${item.color || '#6366F1'}22;color:${item.color || '#6366F1'};font-size:13px;font-weight:800">${escHtml(item.logo)}</div>
+          <div style="flex:1;min-width:0">
+            <div class="ic-name">${escHtml(item.name)}</div>
+            <div class="ic-cat">${escHtml(item.category)}</div>
+          </div>
+          <span class="ic-status ${isConnected ? 'connected' : ''}">${isConnected ? (tokenExpired ? '⚠ Token expirado' : '● Conectado') : '○ Disponível'}</span>
+        </div>
+        <div class="ic-desc">${escHtml(item.desc)}</div>
+        <div class="ic-meta">
+          <div><div>Última sincronização</div><strong>${escHtml(state.lastSync || 'Nunca')}</strong></div>
+          <div><div>Tipo</div><strong>${escHtml(item.oauthFlow ? 'OAuth 2.0' : 'API Key')}</strong></div>
+        </div>
+        <div class="ic-actions">
+          ${isConnected ? `
+            <button class="ic-btn" onclick="event.stopPropagation();icSync('${escHtml(item.id)}')">Sincronizar</button>
+            ${tokenExpired && state.hasRefreshToken ? `<button class="ic-btn" onclick="event.stopPropagation();icRefreshToken('${escHtml(item.id)}')">Renovar Token</button>` : ''}
+            <button class="ic-btn" style="color:#EF4444;border-color:#EF444440" onclick="event.stopPropagation();icDisconnect('${escHtml(item.id)}')">Desconectar</button>
+          ` : `
+            <button class="ic-btn primary" onclick="event.stopPropagation();icConnect('${escHtml(item.id)}')">Conectar</button>
+          `}
+        </div>
+      </div>`;
+    }).join('');
+  }
 
-  window.icOpenModal = async function(id) {
+  // ─── Conectar integração ──────────────────────────────────────────────
+  window.icConnect = async function(id) {
     const item = integrations.find(x => x.id === id);
     if (!item) return;
-    const connected = !!connectionState[id]?.connected;
-    document.getElementById('ic-modal-title').textContent = (connected ? 'Gerenciar ' : 'Conectar ') + item.name;
-    document.getElementById('ic-modal-copy').textContent = connected ? 'Revise os escopos autorizados ou desconecte esta integração.' : 'A conexão usa autorização por escopo e nunca solicita sua senha diretamente.';
-
-    // Mostrar chaves de ambiente necessárias
-    const envKeysEl = document.getElementById('ic-modal-envkeys');
-    if (item.envKeys && item.envKeys.length) {
-      envKeysEl.style.display = 'block';
-      envKeysEl.innerHTML = '<div class="ic-envkeys"><strong>Configuração necessária:</strong><br/>' + item.envKeys.map(k => `<code>${escHtml(k)}</code>`).join(' · ') + '</div>';
-    } else {
-      envKeysEl.style.display = 'none';
+    icToast(`Iniciando conexão com ${item.name}...`, 'info');
+    try {
+      const res = await fetch(API, {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'oauth-url', integrationId: id })
+      });
+      const d = await res.json();
+      if (d.authUrl) {
+        // OAuth flow — abrir janela de autenticação
+        const popup = window.open(d.authUrl, `oauth_${id}`, 'width=600,height=700,noopener');
+        icToast(`Janela de autorização aberta. Após conectar, clique em Atualizar.`, 'info');
+        // Verificar se a janela foi fechada
+        const checkClosed = setInterval(() => {
+          if (popup && popup.closed) {
+            clearInterval(checkClosed);
+            // Recarregar status
+            setTimeout(() => loadIntegrations(), 1000);
+          }
+        }, 1000);
+        icCloseModal();
+      } else if (d.ok && d.status === 'connected') {
+        connectionState[id] = { connected: true, lastSync: 'agora' };
+        addLog(item.name, 'Conexão autorizada via API Key', true);
+        icRender();
+        icToast(`${item.name} conectada com sucesso!`, 'success');
+        icCloseModal();
+      } else if (d.setupRequired) {
+        icToast(`Configure as variáveis: ${(d.missingKeys || []).join(', ')}`, 'error');
+      } else {
+        icToast(d.error || `Erro ao conectar ${item.name}`, 'error');
+      }
+    } catch(e) {
+      icToast('Erro de conexão. Tente novamente.', 'error');
     }
+  };
 
-    document.getElementById('ic-perms').innerHTML = item.perms.map(p => `<label class="ic-perm"><span>${escHtml(p)}</span><input type="checkbox" checked aria-label="${escHtml(p)}"></label>`).join('');
+  // ─── Desconectar integração ───────────────────────────────────────────
+  window.icDisconnect = async function(id) {
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    if (!confirm(`Desconectar ${item.name}? Você precisará reconectar para usar esta integração.`)) return;
+    try {
+      const res = await fetch(API, {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'disconnect', integrationId: id })
+      });
+      const d = await res.json();
+      if (d.ok) {
+        connectionState[id] = { connected: false, lastSync: 'Nunca' };
+        addLog(item.name, 'Desconectado pelo usuário', true);
+        icRender();
+        icCloseModal();
+        icToast(`${item.name} desconectada.`, 'success');
+      } else {
+        icToast(d.error || 'Erro ao desconectar', 'error');
+      }
+    } catch {
+      // Fallback: desconectar localmente
+      connectionState[id] = { connected: false, lastSync: 'Nunca' };
+      icRender();
+      icCloseModal();
+      icToast(`${item.name} desconectada.`, 'success');
+    }
+  };
+
+  // ─── Renovar token ────────────────────────────────────────────────────
+  window.icRefreshToken = async function(id) {
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    icToast(`Renovando token de ${item.name}...`, 'info');
+    try {
+      const res = await fetch(API, {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'refresh-token', integrationId: id })
+      });
+      const d = await res.json();
+      if (d.ok) {
+        connectionState[id] = { ...connectionState[id], tokenExpired: false };
+        addLog(item.name, 'Token renovado automaticamente', true);
+        icRender();
+        icToast(`Token de ${item.name} renovado!`, 'success');
+      } else {
+        icToast(d.error || 'Erro ao renovar token. Reconecte a integração.', 'error');
+      }
+    } catch {
+      icToast('Erro ao renovar token', 'error');
+    }
+  };
+
+  // ─── Sincronizar ──────────────────────────────────────────────────────
+  window.icSync = async function(id) {
+    if (!connectionState[id]?.connected) return;
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    icToast(`Sincronizando ${item.name}...`, 'info');
+    try {
+      const res = await fetch(API, {
+        method: 'POST', credentials: 'same-origin',
+        headers: {'content-type':'application/json'},
+        body: JSON.stringify({ action: 'sync', integrationId: id })
+      });
+      const d = await res.json();
+      connectionState[id].lastSync = new Date().toLocaleTimeString('pt-BR');
+      addLog(item.name, d.ok ? 'Sincronização concluída' : 'Sincronização manual', d.ok);
+      syncCount++;
+      icRender();
+      renderLogs();
+      icToast(`${item.name} sincronizada.`, 'success');
+    } catch {
+      icToast('Erro na sincronização', 'error');
+    }
+  };
+
+  function addLog(name, event, success) {
+    logs.unshift({
+      time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      name, event,
+      status: success ? 'Sucesso' : 'Erro'
+    });
+    logs = logs.slice(0, 12);
+    renderLogs();
+  }
+
+  // ─── Modal de detalhes ────────────────────────────────────────────────
+  window.icOpenModal = function(id) {
+    const item = integrations.find(x => x.id === id);
+    if (!item) return;
+    const state = connectionState[id] || {};
+    const isConnected = !!state.connected;
+    document.getElementById('ic-modal-title').textContent = item.name;
+    document.getElementById('ic-modal-copy').innerHTML = `
+      <div style="margin-bottom:8px">${escHtml(item.desc)}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Categoria: <strong>${escHtml(item.category)}</strong> · Tipo: <strong>${escHtml(item.oauthFlow ? 'OAuth 2.0' : 'API Key')}</strong></div>
+      ${state.lastSync && state.lastSync !== 'Nunca' ? `<div style="font-size:11px;color:var(--text-muted)">Última sincronização: ${escHtml(state.lastSync)}</div>` : ''}
+      ${item.docs ? `<a href="${escHtml(item.docs)}" target="_blank" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--cyan)">Documentação oficial ↗</a>` : ''}
+    `;
+    // Permissões
+    const permsEl = document.getElementById('ic-perms');
+    permsEl.innerHTML = item.perms.length ? item.perms.map(p => `
+      <div class="ic-perm">
+        <span>${escHtml(p)}</span>
+        <span style="font-size:10px;padding:2px 6px;background:rgba(16,185,129,.1);color:var(--green);border-radius:4px">Necessário</span>
+      </div>`).join('') : '<div style="color:var(--text-muted);font-size:12px">Sem permissões especiais</div>';
+    // Variáveis de ambiente
+    const envEl = document.getElementById('ic-modal-envkeys');
+    if (item.envKeys && item.envKeys.length) {
+      envEl.style.display = 'block';
+      envEl.innerHTML = `<div class="ic-envkeys">Variáveis necessárias: ${item.envKeys.map(k => `<code>${escHtml(k)}</code>`).join(', ')}</div>`;
+    } else {
+      envEl.style.display = 'none';
+    }
+    // Botão de ação
     const btn = document.getElementById('ic-authorize');
-    btn.textContent = connected ? 'Desconectar' : 'Autorizar conexão';
-    btn.onclick = () => icToggle(id);
-    if (item.docs) {
-      const docsLink = document.createElement('a');
-      docsLink.href = item.docs;
-      docsLink.target = '_blank';
-      docsLink.style.cssText = 'display:block;font-size:11px;color:var(--cyan);margin-bottom:8px';
-      docsLink.textContent = 'Documentação oficial';
-      document.getElementById('ic-modal-copy').after(docsLink);
+    if (isConnected) {
+      btn.textContent = 'Desconectar';
+      btn.style.background = 'rgba(239,68,68,0.15)';
+      btn.style.color = '#EF4444';
+      btn.style.borderColor = '#EF444440';
+      btn.onclick = () => icDisconnect(id);
+    } else {
+      btn.textContent = 'Conectar';
+      btn.style.background = 'linear-gradient(135deg,#6366F1,#8B5CF6)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = 'transparent';
+      btn.onclick = () => icConnect(id);
     }
     document.getElementById('ic-modal').classList.add('open');
   };
 
   window.icCloseModal = () => {
     document.getElementById('ic-modal').classList.remove('open');
-    const docsLink = document.querySelector('#ic-modal a');
-    if (docsLink) docsLink.remove();
-  };
-
-  window.icToggle = async function(id) {
-    const item = integrations.find(x => x.id === id);
-    if (!item) return;
-    const connected = !!connectionState[id]?.connected;
-
-    if (connected) {
-      // Desconectar via API
-      try {
-        const res = await fetch('/api/integrations', {
-          method: 'POST', credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ action: 'disconnect', integrationId: id })
-        });
-        const d = await res.json();
-        if (res.ok || d.ok) {
-          connectionState[id] = { connected: false, lastSync: 'Nunca' };
-          icCloseModal();
-          icRender();
-          icToast(item.name + ' desconectada.');
-        } else {
-          // Fallback: desconectar localmente
-          connectionState[id] = { connected: false, lastSync: 'Nunca' };
-          icCloseModal();
-          icRender();
-          icToast(item.name + ' desconectada (local).');
-        }
-      } catch (_) {
-        connectionState[id] = { connected: false, lastSync: 'Nunca' };
-        icCloseModal();
-        icRender();
-        icToast(item.name + ' desconectada.');
-      }
-    } else {
-      // Conectar via API
-      try {
-        const res = await fetch('/api/integrations', {
-          method: 'POST', credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ action: 'connect', integrationId: id, provider: item.id })
-        });
-        const d = await res.json();
-        if (d.ok) {
-          connectionState[id] = { connected: true, lastSync: 'agora' };
-          logs.unshift({ time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), name: item.name, event: 'Conexão autorizada via API', status: 'Sucesso' });
-          logs = logs.slice(0, 12);
-          icCloseModal();
-          icRender();
-          renderLogs();
-          syncCount++;
-          document.getElementById('ic-syncs').textContent = syncCount;
-          icToast(item.name + ' conectada com sucesso.');
-        } else if (d.authUrl) {
-          // OAuth flow — abrir janela de autenticação
-          window.open(d.authUrl, '_blank', 'width=600,height=700');
-          icCloseModal();
-        } else {
-          icToast(d.error || 'Erro ao conectar ' + item.name, 'error');
-        }
-      } catch (err) {
-        icToast('Erro de conexão. Tente novamente.', 'error');
-      }
-    }
-  };
-
-  window.icSync = async function(id) {
-    if (!connectionState[id]?.connected) return;
-    const item = integrations.find(x => x.id === id);
-    if (!item) return;
-    try {
-      const res = await fetch('/api/integrations', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ action: 'sync', integrationId: id })
-      });
-      const d = await res.json();
-      connectionState[id].lastSync = 'agora';
-      logs.unshift({ time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), name: item.name, event: d.ok ? 'Sincronização concluída via API' : 'Sincronização manual concluída', status: 'Sucesso' });
-      logs = logs.slice(0, 12);
-      syncCount++;
-      document.getElementById('ic-syncs').textContent = syncCount;
-      icRender();
-      renderLogs();
-      icToast('Sincronização concluída.');
-    } catch (_) {
-      icToast('Erro na sincronização', 'error');
-    }
   };
 
   window.icClearLogs = async function() {
     try {
-      await fetch('/api/operation-audit', { method: 'DELETE', credentials: 'same-origin' });
-    } catch (_) {}
+      await fetch(AUDIT_API, { method: 'DELETE', credentials: 'same-origin' });
+    } catch {}
     logs = [];
     renderLogs();
+    icToast('Logs limpos', 'success');
   };
 
   function icToast(msg, type) {
@@ -254,15 +371,20 @@
     e.className = 'ic-toast';
     e.textContent = msg;
     if (type === 'error') e.style.borderColor = '#EF4444';
+    else if (type === 'info') e.style.borderColor = '#6366F1';
     document.body.appendChild(e);
-    setTimeout(() => e.remove(), 2500);
+    setTimeout(() => e.remove(), 3000);
   }
 
-  function escHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+  function escHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  }
 
-  document.getElementById('ic-modal').addEventListener('click', e => { if (e.target.id === 'ic-modal') icCloseModal(); });
+  document.getElementById('ic-modal').addEventListener('click', e => {
+    if (e.target.id === 'ic-modal') icCloseModal();
+  });
 
-  // Inicializar
+  // ─── Inicializar ──────────────────────────────────────────────────────
   loadIntegrations();
   loadLogs();
 })();

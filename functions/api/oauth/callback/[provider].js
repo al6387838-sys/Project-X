@@ -28,7 +28,16 @@ async function verifySession(token, secret) {
 
 export async function onRequest({ request, env, params }) {
   const url = new URL(request.url);
-  const provider = params?.provider || url.pathname.split('/').pop();
+  let provider = params?.provider || url.pathname.split('/').pop();
+  // Mapear integrationId para provider OAuth
+  const PROVIDER_MAP = {
+    'google_oauth': 'google',
+    'gmail_api': 'google',
+    'microsoft_365': 'microsoft',
+    'whatsapp_business': 'meta',
+    'open_finance': 'openfinance',
+  };
+  if (PROVIDER_MAP[provider]) provider = PROVIDER_MAP[provider];
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
   const error = url.searchParams.get('error');
@@ -135,6 +144,29 @@ export async function onRequest({ request, env, params }) {
     }
   } catch (tokenErr) {
     // Token exchange failed, but we still store the code
+  }
+  // Open Finance Brasil (Banco Central) - OAuth 2.0
+  if (provider === 'openfinance' && env.OPEN_FINANCE_CLIENT_ID) {
+    try {
+      const tokenRes = await fetch('https://auth.openfinancebrasil.org.br/oauth2/token', {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: env.OPEN_FINANCE_CLIENT_ID,
+          client_secret: env.OPEN_FINANCE_CLIENT_SECRET || '',
+          code,
+          grant_type: 'authorization_code',
+          redirect_uri: `${url.origin}/api/oauth/callback/openfinance`,
+        }),
+      });
+      const tokenData = await tokenRes.json();
+      if (tokenData.access_token) {
+        tokens.accessToken = tokenData.access_token;
+        tokens.refreshToken = tokenData.refresh_token || null;
+        tokens.expiresAt = new Date(Date.now() + (tokenData.expires_in || 3600) * 1000).toISOString();
+        tokens.scope = tokenData.scope || '';
+      }
+    } catch {}
   }
 
   // Store the OAuth connection in KV

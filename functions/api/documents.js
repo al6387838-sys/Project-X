@@ -662,6 +662,26 @@ export async function onRequestPost({ request, env }) {
       await auditLog(kv, session.sub, 'new-version', document.id, { version, legacyUrl: Boolean(document.storageUrl) });
       return json(200, { ok: true, document: documentPayload(request, document) });
     }
+    if (action === 'empty-trash') {
+      // Esvaziar lixeira: deletar permanentemente todos os documentos na lixeira
+      const timestamp = now();
+      const trashed = docs.filter(d => d.deleted);
+      if (!trashed.length) return json(200, { ok: true, emptied: 0, message: 'Lixeira já está vazia' });
+      let r2Deleted = 0;
+      for (const doc of trashed) {
+        if (bucket) {
+          const versions = await readJson(kv, `docs:versions:${session.sub}:${doc.id}`, []);
+          await Promise.all((Array.isArray(versions) ? versions : []).map(v => v.storageKey ? bucket.delete(v.storageKey).catch(() => {}) : Promise.resolve()));
+          if (doc.storageKey) await bucket.delete(doc.storageKey).catch(() => {});
+          r2Deleted++;
+        }
+        await kv.delete(`docs:versions:${session.sub}:${doc.id}`);
+      }
+      const remaining = docs.filter(d => !d.deleted);
+      await saveDocuments(kv, session.sub, remaining);
+      await auditLog(kv, session.sub, 'empty-trash', 'all', { count: trashed.length, r2Deleted });
+      return json(200, { ok: true, emptied: trashed.length, r2Deleted });
+    }
     return json(400, { ok: false, error: 'Ação inválida' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro ao processar documento';
