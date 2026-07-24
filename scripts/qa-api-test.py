@@ -134,7 +134,7 @@ else: FAIL += 1; print(f"    Erro: {data_resp.get('error')}")
 if org_id and ws_id:
     code = api("POST", "/api/crm", data={
         "action": "contact.create",
-        "organizationId": org_id,
+        "orgId": org_id,
         "workspaceId": ws_id,
         "name": "João Silva QA",
         "email": "joao@qa.com"
@@ -147,12 +147,21 @@ if org_id and ws_id:
     else: FAIL += 1; print(f"    Erro: {data_resp.get('error')}")
 
 print("\n[7] Teste de Messages")
-code = api("POST", "/api/messages", data={"action": "send", "to": "user2", "content": "Olá QA!"}, headers=auth, full=True)
+# Criar conversa primeiro, depois enviar mensagem
+code = api("POST", "/api/messages", data={"action": "create", "title": "Conversa QA", "participant": "user2"}, headers=auth, full=True)
 data_resp = json.loads(code)
-msg_ok = data_resp.get('ok')
-print(f"  {'✓' if msg_ok else '✗'} Enviar mensagem: ok={msg_ok}")
-if msg_ok: PASS += 1
+conv_ok = data_resp.get('ok')
+conv_id = data_resp.get('conversation', {}).get('id')
+print(f"  {'✓' if conv_ok else '✗'} Criar conversa: ok={conv_ok}")
+if conv_ok: PASS += 1
 else: FAIL += 1; print(f"    Erro: {data_resp.get('error')}")
+if conv_id:
+    code = api("POST", "/api/messages", data={"action": "send", "convId": conv_id, "text": "Olá QA! Teste."}, headers=auth, full=True)
+    data_resp = json.loads(code)
+    msg_ok = data_resp.get('ok')
+    print(f"  {'✓' if msg_ok else '✗'} Enviar mensagem: ok={msg_ok}")
+    if msg_ok: PASS += 1
+    else: FAIL += 1; print(f"    Erro: {data_resp.get('error')}")
 
 print("\n[8] Teste de Integrations")
 check("Listar integrações (GET)", "GET", "/api/integrations", headers=auth)
