@@ -45,9 +45,9 @@
           <div style="font-size:12px;color:var(--text-muted)" id="chat-status">Selecione uma conversa para iniciar</div>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="showToast('Chamada de voz: funcionalidade disponível com integração VoIP configurada','info')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="padding:8px" title="Chamada de vídeo" onclick="showToast('Chamada de vídeo: funcionalidade disponível com integração WebRTC configurada','info')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="padding:8px" title="Informações" onclick="showToast('Perfil do contato','info')"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i>️</button>
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de voz" onclick="commInitiateCall('voice')"><i data-lucide="phone" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Chamada de vídeo" onclick="commInitiateCall('video')"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="padding:8px" title="Informações" onclick="commShowContactInfo()"><i data-lucide="info" class="pg-icon" aria-hidden="true"></i>️</button>
         </div>
       </div>
 
@@ -1112,5 +1112,16 @@ document.addEventListener('moduleShown', (e) => {
     loadCommunicationConnectors();
   }
 });
+
+  // ─── Call helpers ─────────────────────────────────────────────────────────
+  function commInitiateCall(type) {
+    const label = type === 'video' ? 'vídeo' : 'voz';
+    if (typeof window.showToast === 'function') window.showToast('Chamada de ' + label + ': configure VoIP/WebRTC nas Integrações', 'info');
+    if (typeof showPage === 'function') setTimeout(() => showPage('integration-center'), 1500);
+  }
+  function commShowContactInfo() {
+    const name = document.querySelector('.comm-contact-name, .comm-active-contact')?.textContent?.trim() || 'Contato';
+    if (typeof window.showToast === 'function') window.showToast('Perfil: ' + name, 'info');
+  }
 </script>
 <!-- END module-communication -->

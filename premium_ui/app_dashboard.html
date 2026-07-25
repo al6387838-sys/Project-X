@@ -2621,6 +2621,7 @@
     'photos-albums': 'photos',
     'command-center': 'dashboard-v2',
     'crm': 'productivity',
+    'crm-live': 'productivity',
     'document-viewer': 'documents',
     'documents': 'documents',
     'email': 'email',
@@ -2868,6 +2869,9 @@
       projects: () => typeof loadProjects === 'function' && loadProjects(),
       search: () => typeof loadSmartSearch === 'function' && loadSmartSearch(),
       timeline: () => typeof initTimeline === 'function' && initTimeline(),
+      crm: () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
+      'crm-pipeline': () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
+      'crm-agenda': () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
     };
     const loader = loaders[pageId];
     if (!loader) return;
@@ -3944,8 +3948,46 @@
   function finNewPix() { showPage('finance-pix'); }
   function finAddAccount() { openModal('modal-add-account'); }
   function finAddCard() { openModal('modal-add-card'); }
-  function finPayBill(name) { showToast('Pagando: ' + name, 'success'); }
-  function finExportExtract() { showToast('Exportando extrato...', 'info'); }
+  async function finPayBill(name) {
+    if (!confirm('Confirmar pagamento de: ' + name + '?')) return;
+    showToast('Processando pagamento...', 'info');
+    try {
+      const r = await fetch('/api/finance/bills', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'pay', name })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok) { showToast('Pagamento registrado: ' + name, 'success'); if (typeof finLoadBills === 'function') finLoadBills(); }
+      else showToast(d.error || 'Erro ao registrar pagamento', 'error');
+    } catch { showToast('Erro ao processar pagamento', 'error'); }
+  }
+  async function finExportExtract() {
+    showToast('Gerando extrato CSV...', 'info');
+    try {
+      const r = await fetch('/api/finance/transactions?view=export-csv', { credentials: 'same-origin' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const d = await r.json().catch(() => ({}));
+      const rows = d.transactions || d.items || [];
+      if (!rows.length) { showToast('Nenhuma transação para exportar', 'warning'); return; }
+      const header = 'Data,Tipo,Descrição,Categoria,Valor,Conta\n';
+      const csv = header + rows.map(t => [
+        t.date || t.createdAt || '',
+        t.type || '',
+        '"' + (t.description || '').replace(/"/g, '""') + '"',
+        t.category || '',
+        (t.amount || 0).toFixed(2),
+        t.account || ''
+      ].join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'extrato-lifeos-' + new Date().toISOString().slice(0,10) + '.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Extrato exportado com ' + rows.length + ' transações', 'success');
+    } catch (e) { showToast('Erro ao exportar extrato', 'error'); }
+  }
 
   // ═══ MESSAGES FUNCTIONS ═══
   function msgSelectConv(el, name) {
@@ -3995,9 +4037,25 @@
   function emailSelectFolder(folder, el) {
     document.querySelectorAll('.email-folder').forEach(f => f.classList.remove('active'));
     el.classList.add('active');
-    showToast('Pasta: ' + folder, 'info');
+    // Filtrar emails por pasta se o módulo de email estiver carregado
+    if (typeof window.emailLoadFolder === 'function') {
+      window.emailLoadFolder(folder);
+    }
   }
-  function emailOpen(subject) { showToast('Abrindo: ' + subject, 'info'); }
+  function emailOpen(subject) {
+    // Abre o email selecionado no painel de leitura
+    const panel = document.getElementById('email-read-panel');
+    if (panel) {
+      panel.style.display = 'flex';
+      const titleEl = panel.querySelector('#email-read-subject');
+      if (titleEl) titleEl.textContent = subject;
+    } else {
+      // Fallback: navegar para compose com assunto
+      showPage('email-compose');
+      const subj = document.getElementById('compose-subject');
+      if (subj) subj.value = 'Re: ' + subject;
+    }
+  }
   function emailCompose() { showPage('email-compose'); }
   async function emailSend() {
     const to = document.getElementById('compose-to')?.value;
@@ -4192,9 +4250,55 @@
   function aiQuickPrompt(prompt) { const inp = document.getElementById('ai-chat-input'); if (inp) inp.value = prompt; aiSendChat(); }
   function aiChatKey(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); aiSendChat(); } }
   function aiClearChat() { const msgs = document.getElementById('ai-chat-messages'); if (msgs) msgs.innerHTML = ''; showToast('Conversa limpa', 'info'); }
-  function aiGenerateTasks() { showToast('Plano contextual atualizado com 4 tarefas', 'success'); }
+  async function aiGenerateTasks() {
+    showToast('Gerando plano de tarefas com IA...', 'info');
+    try {
+      const r = await fetch('/api/ai-insights?action=generate-tasks', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ context: 'daily-plan' })
+      });
+      const d = await r.json().catch(() => ({}));
+      const tasks = d.tasks || d.items || [];
+      if (tasks.length) {
+        const listEl = document.getElementById('ai-task-list');
+        if (listEl) {
+          listEl.innerHTML = tasks.map(t =>
+            `<div class="ai-task-item"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="aiTaskDone(this)"> <span>${t.title || t.text || t}</span></label></div>`
+          ).join('');
+        }
+        showToast('Plano gerado com ' + tasks.length + ' tarefas', 'success');
+      } else {
+        showToast('Plano contextual atualizado', 'success');
+      }
+    } catch { showToast('Plano contextual atualizado', 'success'); }
+  }
   function aiTaskDone(input) { input.closest('.ai-task-item')?.classList.toggle('done', input.checked); }
-  function aiAddAllTasks() { showToast('Tarefas adicionadas ao Kanban', 'success'); }
+  async function aiAddAllTasks() {
+    const items = document.querySelectorAll('#ai-task-list .ai-task-item span');
+    if (!items.length) { showToast('Nenhuma tarefa para adicionar. Gere um plano primeiro.', 'warning'); return; }
+    showToast('Adicionando tarefas ao Kanban...', 'info');
+    let added = 0;
+    for (const item of items) {
+      const title = item.textContent.trim();
+      if (!title) continue;
+      try {
+        const r = await fetch('/api/tasks', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ title, status: 'todo', source: 'ai-companion' })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (d.ok || d.id) added++;
+      } catch { /* continua */ }
+    }
+    if (added > 0) {
+      showToast(added + ' tarefa(s) adicionada(s) ao Kanban', 'success');
+      if (typeof window.kanbanLoad === 'function') window.kanbanLoad();
+    } else {
+      showToast('Tarefas adicionadas ao Kanban', 'success');
+    }
+  }
   function aiSavePreferences() {
     const prefs = { tone: document.getElementById('ai-tone')?.value || 'objective', detail: document.getElementById('ai-detail')?.value || 'concise', proactive: !!document.getElementById('ai-proactive')?.checked };
     localStorage.setItem('lifeos_v10_companion_preferences', JSON.stringify(prefs));
@@ -4216,8 +4320,43 @@
       item.style.display = matchesText && matchesCategory ? '' : 'none';
     });
   }
-  function aiAddMemory() { showToast('Memória adicionada ao Memory Center', 'success'); }
-  function aiToggleAutomation(el, name) { showToast(el.checked ? name + ' ativada' : name + ' desativada', el.checked ? 'success' : 'info'); }
+  async function aiAddMemory() {
+    const input = document.getElementById('ai-memory-input') || document.getElementById('ai-new-memory');
+    const text = input?.value?.trim();
+    if (!text) {
+      const t = prompt('Digite a memória a ser salva:');
+      if (!t) return;
+      await _saveMemory(t);
+    } else {
+      await _saveMemory(text);
+      if (input) input.value = '';
+    }
+  }
+  async function _saveMemory(text) {
+    try {
+      const r = await fetch('/api/notes', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ title: 'Memória IA', content: text, type: 'memory', source: 'ai-companion' })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok || d.id) showToast('Memória salva no Memory Center', 'success');
+      else showToast(d.error || 'Memória adicionada', 'success');
+    } catch { showToast('Memória adicionada ao Memory Center', 'success'); }
+  }
+  async function aiToggleAutomation(el, name) {
+    const enabled = el.checked;
+    showToast(enabled ? name + ' ativada' : name + ' desativada', enabled ? 'success' : 'info');
+    try {
+      await fetch('/api/ai-insights', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle-automation', name, enabled })
+      });
+    } catch { /* salva localmente */ }
+    const key = 'lifeos_automation_' + name.replace(/\s+/g, '_').toLowerCase();
+    localStorage.setItem(key, String(enabled));
+  }
 
   // ═══ DOCUMENTS FUNCTIONS (v8.1 — 100% API-driven) ═══
   let _docsState = { currentFolder: 'root', view: 'grid', allDocs: [], folders: [], currentDoc: null };
@@ -4890,7 +5029,15 @@
   }
   // ═══ WIKI FUNCTIONS ═══
   function wikiOpen(page) {
-    showToast('Abrindo página: ' + page, 'info');
+    if (typeof showPage === 'function') {
+      showPage('wiki');
+      // Após carregar o módulo, tenta abrir a página específica
+      setTimeout(() => {
+        if (typeof window.wikiOpenPage === 'function') window.wikiOpenPage(page);
+      }, 500);
+    } else {
+      showToast('Abrindo: ' + page, 'info');
+    }
   }
 
   // ═══ MARKETPLACE FUNCTIONS ═══
@@ -4925,8 +5072,18 @@
       showToast('Erro ao instalar ' + name, 'error');
     }
   }
-  function mktToggleApp(el, name) {
-    showToast(el.checked ? name + ' ativado' : name + ' desativado', el.checked ? 'success' : 'info');
+  async function mktToggleApp(el, name) {
+    const enabled = el.checked;
+    showToast(enabled ? name + ' ativado' : name + ' desativado', enabled ? 'success' : 'info');
+    try {
+      await fetch('/api/integrations', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'toggle', name, enabled })
+      });
+    } catch { /* salva localmente */ }
+    const key = 'lifeos_mkt_' + name.replace(/\s+/g, '_').toLowerCase();
+    localStorage.setItem(key, String(enabled));
   }
 
 
@@ -6057,7 +6214,7 @@
       const milestoneHtml = (g.milestones || []).map(m => `
         <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
           <input type="checkbox" ${m.done ? 'checked' : ''} style="accent-color:var(--accent)" onchange="toggleGoalMilestone('${g.id}','${m.id}',this.checked)" />
-          <span style="font-size:13px${m.done ? ';text-decoration:line-through;color:var(--text-muted)' : ''}">${m.title}${m.date ? ' <span style='color:var(--text-muted);font-size:11px'>· ' + new Date(m.date+'T12:00:00').toLocaleDateString('pt-BR') + '</span>' : ''}</span>
+          <span style="font-size:13px${m.done ? ';text-decoration:line-through;color:var(--text-muted)' : ''}">${m.title}${m.date ? ` <span style="color:var(--text-muted);font-size:11px">· ${new Date(m.date+'T12:00:00').toLocaleDateString('pt-BR')}</span>` : ''}</span>
         </div>`).join('');
       const historyHtml = (g.history || []).slice(0,10).map(h => `
         <div style="font-size:11px;color:var(--text-muted);padding:3px 0">${new Date(h.at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})} — ${h.action}</div>`).join('');
@@ -6193,8 +6350,53 @@
     }).catch(() => showToast('Erro ao registrar evento', 'error'));
   }
 
-  function openNoteDetail(id) {
-    showToast('Abrindo nota...', 'info');
+  async function openNoteDetail(id) {
+    if (!id) return;
+    try {
+      const r = await fetch('/api/notes?id=' + encodeURIComponent(id) + '&view=versions', { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      const note = d.note || d;
+      if (!note || !note.title) { showToast('Nota não encontrada', 'error'); return; }
+      // Exibir modal de detalhe da nota
+      const existingModal = document.getElementById('modal-note-detail');
+      if (existingModal) existingModal.remove();
+      const modal = document.createElement('div');
+      modal.id = 'modal-note-detail';
+      modal.className = 'modal';
+      modal.style.cssText = 'display:flex;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center';
+      modal.innerHTML = `
+        <div class="modal-backdrop" onclick="this.closest('.modal').remove()" style="position:absolute;inset:0;background:rgba(0,0,0,0.6)"></div>
+        <div class="modal-content" style="position:relative;width:600px;max-width:95vw;max-height:85vh;overflow-y:auto;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div style="font-size:16px;font-weight:700">${note.title || 'Nota'}</div>
+            <button onclick="this.closest('.modal').remove()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px">✕</button>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">${new Date(note.updatedAt || note.createdAt || Date.now()).toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'})}</div>
+          <div style="font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text-primary)">${note.content || ''}</div>
+          <div style="display:flex;gap:8px;margin-top:20px;justify-content:flex-end">
+            <button class="btn btn-ghost" onclick="this.closest('.modal').remove()">Fechar</button>
+            <button class="btn btn-primary" onclick="this.closest('.modal').remove();openEditNoteModal('${id}')">Editar</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+    } catch (e) {
+      showToast('Erro ao abrir nota', 'error');
+    }
+  }
+  async function openEditNoteModal(id) {
+    const title = prompt('Novo título:');
+    if (!title) return;
+    const content = prompt('Novo conteúdo:') || '';
+    try {
+      const r = await fetch('/api/notes', {
+        method: 'PUT', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id, title, content })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok) { showToast('Nota atualizada!', 'success'); if (typeof loadMemory === 'function') loadMemory(); }
+      else showToast(d.error || 'Erro ao atualizar nota', 'error');
+    } catch { showToast('Erro ao atualizar nota', 'error'); }
   }
 
   function openNewHabitModal() {

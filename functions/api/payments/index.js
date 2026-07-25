@@ -103,7 +103,7 @@ function flattenObject(obj, prefix = '') {
 
 // ─── Mercado Pago helper ──────────────────────────────────────────────────────
 async function mpRequest(method, path, body, accessToken) {
-  if (!accessToken) throw new Error('MP_ACCESS_TOKEN não configurado');
+  if (!accessToken) throw new Error('MERCADOPAGO_ACCESS_TOKEN não configurado');
   const url = `https://api.mercadopago.com${path}`;
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
@@ -268,7 +268,7 @@ export async function onRequestPost({ request, env }) {
     if (!plan) return json(400, { ok: false, error: 'Plano inválido' });
     if (plan.id === 'free') return json(400, { ok: false, error: 'Plano free não requer checkout' });
 
-    const mpToken = env.MP_ACCESS_TOKEN;
+    const mpToken = env.MERCADOPAGO_ACCESS_TOKEN;
     if (!mpToken) {
       const pending = {
         id: generateId(),
@@ -285,9 +285,9 @@ export async function onRequestPost({ request, env }) {
       return json(202, {
         ok: false,
         pending: true,
-        message: 'Configure MP_ACCESS_TOKEN nas variáveis de ambiente do Cloudflare Pages para ativar pagamentos via Mercado Pago.',
+        message: 'Configure MERCADOPAGO_ACCESS_TOKEN nas variáveis de ambiente do Cloudflare Pages para ativar pagamentos via Mercado Pago.',
         pendingId: pending.id,
-        requiredEnvVars: ['MP_ACCESS_TOKEN', `MP_PLAN_${planId.toUpperCase()}`],
+        requiredEnvVars: ['MERCADOPAGO_ACCESS_TOKEN', `MP_PLAN_${planId.toUpperCase()}`],
       });
     }
 

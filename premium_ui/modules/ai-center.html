@@ -495,7 +495,7 @@
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Baseado no seu histórico, uma caminhada de 20 min às 7h aumentaria seu Life Score em +4 pontos e melhoraria seu humor nas reuniões matinais.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Hábito adicionado: Caminhada matinal!','success')"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Adicionar hábito</button>
-            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="aiDismissRecommendation(this)">Ignorar</button>
           </div>
         </div>
       </div>
@@ -511,7 +511,7 @@
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">{subscription_unused} Cancelar economizaria {unused_savings}/mês = {unused_annual}/ano.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showPage('finance-subscriptions')">Ver assinaturas</button>
-            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação adiada por 30 dias','info')">Adiar 30 dias</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="aiSnoozeRecommendation(this, 30)">Adiar 30 dias</button>
           </div>
         </div>
       </div>
@@ -527,7 +527,7 @@
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Você tem 3h livres na sexta-feira. Completar o módulo de APIs do curso aumentaria sua empregabilidade em +15%.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Tarefa adicionada para sexta!','success')">Agendar para sexta</button>
-            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Recomendação ignorada','info')">Ignorar</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="aiDismissRecommendation(this)">Ignorar</button>
           </div>
         </div>
       </div>
@@ -543,7 +543,7 @@
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Mantenha contato com pessoas importantes. Um check-in rápido pode fortalecer seus relacionamentos.</div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-primary" style="font-size:12px" onclick="showPage('messages')">Enviar mensagem</button>
-            <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Lembrete criado para amanhã','info')">Lembrar amanhã</button>
+            <button class="btn btn-ghost" style="font-size:12px" onclick="aiSnoozeRecommendation(this, 1)">Lembrar amanhã</button>
           </div>
         </div>
       </div>
@@ -585,19 +585,19 @@
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-weight:600;font-size:13px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Tarefa automática</div><div style="font-size:11px;color:var(--text-muted)">Emails com "urgente" viram tarefas</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-weight:600;font-size:13px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Eventos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Blocos de foco</div><div style="font-size:11px;color:var(--text-muted)">Cria blocos de prep antes de reuniões</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-weight:600;font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Gastos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Categorização</div><div style="font-size:11px;color:var(--text-muted)">Categoriza transações automaticamente</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
           <div><div style="font-weight:600;font-size:13px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Docs <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Pasta correta</div><div style="font-size:11px;color:var(--text-muted)">Organiza documentos por tipo e projeto</div></div>
-          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Regra ' + (this.checked ? 'ativada' : 'desativada'),'info')"><span class="toggle-slider"></span></label>
+          <label class="toggle-switch"><input type="checkbox" onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
       </div>
     </div>
@@ -755,5 +755,46 @@ if (document.readyState === 'loading') {
     }
   } catch {}
 })();
+
+  // ─── Recommendation helpers ───────────────────────────────────────────────
+  function aiDismissRecommendation(btn) {
+    const card = btn.closest('[class*="card"],[class*="recommendation"],[style*="border"]');
+    if (card) {
+      card.style.opacity = '0';
+      card.style.transition = 'opacity 0.3s';
+      setTimeout(() => card.remove(), 300);
+    }
+    if (typeof window.showToast === 'function') window.showToast('Recomendação ignorada', 'info');
+    // Salvar preferência
+    fetch('/api/ai-insights', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'dismiss-recommendation' })
+    }).catch(() => {});
+  }
+  function aiSnoozeRecommendation(btn, days) {
+    const card = btn.closest('[class*="card"],[class*="recommendation"],[style*="border"]');
+    if (card) {
+      card.style.opacity = '0.4';
+      card.style.transition = 'opacity 0.3s';
+    }
+    const msg = days === 1 ? 'Lembrete criado para amanhã' : 'Recomendação adiada por ' + days + ' dias';
+    if (typeof window.showToast === 'function') window.showToast(msg, 'success');
+    fetch('/api/ai-insights', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'snooze-recommendation', days })
+    }).catch(() => {});
+  }
+  function aiToggleRule(el) {
+    const enabled = el.checked;
+    const label = el.closest('label')?.nextElementSibling?.textContent?.trim() || 'Regra';
+    if (typeof window.showToast === 'function') window.showToast('Regra ' + (enabled ? 'ativada' : 'desativada'), enabled ? 'success' : 'info');
+    fetch('/api/ai-insights', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'toggle-rule', label, enabled })
+    }).catch(() => {});
+  }
 </script>
 <!-- END module-ai-center -->

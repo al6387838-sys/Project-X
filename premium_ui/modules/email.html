@@ -708,6 +708,15 @@ function emailRenderIntegrationsGrid() {
   if (window.lucide) lucide.createIcons();
 }
 
+// ─── API pública do módulo (chamada pelo dashboard) ────────────────────────────────────────────────────
+window.emailLoadFolder = function(folder) {
+  const viewMap = { inbox: 'inbox', sent: 'sent', drafts: 'queue', trash: 'history', all: 'history', logs: 'logs' };
+  const view = viewMap[(folder || '').toLowerCase()] || 'inbox';
+  const folderEl = document.querySelector('.email-folder');
+  emailSetView(view, folderEl);
+  if (view === 'inbox') emailLoadInbox(emailState.selectedProvider);
+};
+
 // ─── Form handler ─────────────────────────────────────────────────────────────
 document.getElementById('email-compose-form')?.addEventListener('submit', emailSendCompose);
 

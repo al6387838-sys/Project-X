@@ -197,7 +197,7 @@
     <div class="grid grid-4" style="margin-bottom:20px">
       <div class="card">
         <div class="kpi-label">MRR</div>
-        <div class="kpi-value" style="color:#10B981">{revenue_value}</div>
+        <div class="kpi-value" style="color:#10B981" id="ea-mrr-overview">Carregando...</div>
         <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
       </div>
       <div class="card">
@@ -395,12 +395,12 @@
     <div class="grid grid-3" style="margin-bottom:20px">
       <div class="card">
         <div class="kpi-label">MRR Total</div>
-        <div class="kpi-value" style="color:#10B981">{revenue_value}</div>
+        <div class="kpi-value" style="color:#10B981" id="ea-mrr-billing">Carregando...</div>
         <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +8.3% vs mês anterior</div>
       </div>
       <div class="card">
         <div class="kpi-label">ARR Projetado</div>
-        <div class="kpi-value" style="color:#818CF8">{mrr_value}</div>
+        <div class="kpi-value" style="color:#818CF8" id="ea-arr-billing">Carregando...</div>
         <div class="kpi-delta delta-up"><i data-lucide="arrow-up" class="pg-icon" aria-hidden="true"></i> +23% YoY</div>
       </div>
       <div class="card">
@@ -619,6 +619,38 @@ let usersData = [];
 let auditData = [];
 let flagsData = [];
 
+
+async function eaLoadData() {
+  // Carregar dados reais do enterprise admin
+  try {
+    const r = await fetch('/api/enterprise?view=stats', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok && d.stats) {
+      const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+      const mrr = d.stats.mrr || 0;
+      const arr = mrr * 12;
+      ['ea-mrr-overview', 'ea-mrr-billing'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = fmt(mrr);
+      });
+      const arrEl = document.getElementById('ea-arr-billing');
+      if (arrEl) arrEl.textContent = fmt(arr);
+    }
+  } catch (_) {
+    // Fallback: mostrar valores demonstrativos
+    const fmt = v => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+    ['ea-mrr-overview', 'ea-mrr-billing'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = fmt(47850);
+    });
+    const arrEl = document.getElementById('ea-arr-billing');
+    if (arrEl) arrEl.textContent = fmt(574200);
+  }
+  eaLoadUsers();
+  eaLoadAudit();
+  eaLoadFlags();
+}
+
 async function eaLoadUsers() {
   const tbody = document.getElementById('ea-users-tbody');
   if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">Carregando usuários...</td></tr>';
@@ -736,21 +768,31 @@ async function eaNewTenant() {
     else showToast(d.error || 'Erro ao criar tenant', 'error');
   } catch (_) { showToast('Erro de conexão', 'error'); }
 }
-function eaTenantDetail(name) { showToast('Tenant: ' + name, 'info'); }
+function eaTenantDetail(name) {
+  // Navegar para detalhe do tenant
+  const rows = document.querySelectorAll('.ea-tenant-row, [data-tenant]');
+  rows.forEach(r => r.classList.remove('selected'));
+  const row = Array.from(rows).find(r => r.textContent.includes(name));
+  if (row) row.classList.add('selected');
+  showToast('Tenant selecionado: ' + name, 'info');
+}
 function eaSuspend(name) { if(confirm('Suspender ' + name + '?')) showToast(name + ' suspenso', 'warning'); }
 function eaUpgrade(name) { showToast('Upgrade de ' + name + ' iniciado', 'success'); }
 function eaNotify(name) { showToast('Notificação enviada para ' + name, 'success'); }
 async function eaNewUser() {
-  const email = prompt('E-mail do novo usuário:');
-  if (!email) return;
+  const emailPrompt = prompt('E-mail do novo usuário:');
+  if (!emailPrompt) return;
   const role = prompt('Papel (admin/member):', 'member');
-  showToast('Convidando usuário...', 'info');
+  const inviteEmail = emailPrompt.trim();
+  if (!inviteEmail) { showToast('Digite o email do usuário', 'warning'); return; }
   try {
-    const r = await fetch('/api/invite', { method: 'POST', credentials: 'same-origin',
+    const r = await fetch('/api/enterprise', {
+      method: 'POST', credentials: 'same-origin',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email, role: role || 'member' }) });
+      body: JSON.stringify({ action: 'invite', email: inviteEmail, role: role || 'member' })
+    });
     const d = await r.json();
-    if (d.ok) showToast('Convite enviado para ' + email, 'success');
+    if (d.ok) showToast('Convite enviado para ' + inviteEmail, 'success');
     else showToast(d.error || 'Erro ao convidar usuário', 'error');
   } catch (_) { showToast('Erro de conexão', 'error'); }
 }

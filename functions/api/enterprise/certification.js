@@ -43,8 +43,8 @@ const CERTIFICATION_CHECKS = [
   { id: 'bill-stripe-public',    category: 'billing',       name: 'Stripe Public Key',         envKey: 'STRIPE_PUBLIC_KEY',             critical: false },
   { id: 'bill-stripe-secret',    category: 'billing',       name: 'Stripe Secret Key',         envKey: 'STRIPE_SECRET_KEY',             critical: false },
   { id: 'bill-stripe-webhook',   category: 'billing',       name: 'Stripe Webhook Secret',     envKey: 'STRIPE_WEBHOOK_SECRET',         critical: false },
-  { id: 'bill-mp-token',         category: 'billing',       name: 'Mercado Pago Access Token', envKey: 'MERCADO_PAGO_ACCESS_TOKEN',     critical: false },
-  { id: 'bill-mp-public',        category: 'billing',       name: 'Mercado Pago Public Key',   envKey: 'MERCADO_PAGO_PUBLIC_KEY',       critical: false },
+  { id: 'bill-mp-token',         category: 'billing',       name: 'Mercado Pago Access Token', envKey: 'MERCADOPAGO_ACCESS_TOKEN',     critical: false },
+  { id: 'bill-mp-public',        category: 'billing',       name: 'Mercado Pago Public Key',   envKey: 'MERCADOPAGO_PUBLIC_KEY',       critical: false },
   // IA
   { id: 'ai-openai-key',         category: 'ai',            name: 'OpenAI API Key',            envKey: 'OPENAI_API_KEY',                critical: false },
   // Email transacional

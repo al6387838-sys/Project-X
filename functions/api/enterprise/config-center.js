@@ -10,7 +10,7 @@ const SERVICES = [
   { id: 'outlook',         name: 'Outlook API',       envKeys: ['MICROSOFT_CLIENT_ID', 'MICROSOFT_CLIENT_SECRET'], category: 'comm' },
   { id: 'whatsapp',        name: 'WhatsApp Business', envKeys: ['WHATSAPP_APP_ID', 'WHATSAPP_APP_SECRET', 'WHATSAPP_PHONE_ID'], category: 'comm' },
   { id: 'stripe',          name: 'Stripe',            envKeys: ['STRIPE_PUBLIC_KEY', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'], category: 'billing' },
-  { id: 'mercado-pago',    name: 'Mercado Pago',      envKeys: ['MERCADO_PAGO_ACCESS_TOKEN', 'MERCADO_PAGO_PUBLIC_KEY'], category: 'billing' },
+  { id: 'mercado-pago',    name: 'Mercado Pago',      envKeys: ['MERCADOPAGO_ACCESS_TOKEN', 'MERCADOPAGO_PUBLIC_KEY'], category: 'billing' },
   { id: 'openai',          name: 'OpenAI',            envKeys: ['OPENAI_API_KEY'], category: 'ai' },
   { id: 'cloudflare-r2',   name: 'Cloudflare R2',     envKeys: ['R2_BUCKET', 'R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY'], category: 'storage' },
   { id: 'cloudflare-kv',   name: 'Cloudflare KV',     kvCheck: true, category: 'storage' },

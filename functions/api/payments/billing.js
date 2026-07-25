@@ -18,7 +18,7 @@ function getPlanStatus(planId, env) {
   const plan = PLANS[planId];
   if (!plan) return null;
   const stripeConfigured = !!(env.STRIPE_PUBLIC_KEY && env.STRIPE_SECRET_KEY);
-  const mpConfigured = !!(env.MERCADO_PAGO_ACCESS_TOKEN && env.MERCADO_PAGO_PUBLIC_KEY);
+  const mpConfigured = !!(env.MERCADOPAGO_ACCESS_TOKEN && env.MERCADOPAGO_PUBLIC_KEY);
   return {
     ...plan,
     available: true,
@@ -42,7 +42,7 @@ async function stripeRequest(method, path, body, apiKey) {
 }
 
 async function mpRequest(method, path, body, token) {
-  if (!token) throw new Error('MERCADO_PAGO_ACCESS_TOKEN não configurado. Serviço aguardando configuração.');
+  if (!token) throw new Error('MERCADOPAGO_ACCESS_TOKEN não configurado. Serviço aguardando configuração.');
   const res = await fetch(`https://api.mercadopago.com${path}`, {
     method,
     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': genId() },
@@ -106,7 +106,7 @@ export async function onRequestGet({ request, env }) {
   const invRaw = kv ? await kv.get(`payments:invoices:${session.sub}`) : null;
   const invoices = invRaw ? JSON.parse(invRaw) : [];
   const stripeConfigured = !!(env.STRIPE_PUBLIC_KEY && env.STRIPE_SECRET_KEY);
-  const mpConfigured = !!(env.MERCADO_PAGO_ACCESS_TOKEN && env.MERCADO_PAGO_PUBLIC_KEY);
+  const mpConfigured = !!(env.MERCADOPAGO_ACCESS_TOKEN && env.MERCADOPAGO_PUBLIC_KEY);
   return json(200, {
     ok: true,
     subscription: sub,
@@ -115,7 +115,7 @@ export async function onRequestGet({ request, env }) {
       stripeConfigured,
       mercadoPagoConfigured: mpConfigured,
       stripeSetupMessage: stripeConfigured ? null : 'Serviço aguardando configuração. Configure: STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET',
-      mpSetupMessage: mpConfigured ? null : 'Serviço aguardando configuração. Configure: MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_PUBLIC_KEY',
+      mpSetupMessage: mpConfigured ? null : 'Serviço aguardando configuração. Configure: MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_PUBLIC_KEY',
     },
     recentInvoices: invoices.slice(0, 5),
     totalPaid: invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (i.amount || 0), 0),
@@ -162,7 +162,7 @@ export async function onRequestPost({ request, env }) {
   if (action === 'create-checkout-mp') {
     const { planId, successUrl, failureUrl, pendingUrl } = body;
     if (!planId || !PLANS[planId]) return json(400, { ok: false, error: 'Plano inválido' });
-    if (!env.MERCADO_PAGO_ACCESS_TOKEN) return json(400, { ok: false, error: 'Serviço aguardando configuração. Configure: MERCADO_PAGO_ACCESS_TOKEN' });
+    if (!env.MERCADOPAGO_ACCESS_TOKEN) return json(400, { ok: false, error: 'Serviço aguardando configuração. Configure: MERCADOPAGO_ACCESS_TOKEN' });
     const plan = PLANS[planId];
     try {
       const pref = await mpRequest('POST', '/checkout/preferences', {
@@ -175,7 +175,7 @@ export async function onRequestPost({ request, env }) {
         auto_return: 'approved',
         external_reference: `${session.sub}:${planId}`,
         metadata: { userId: session.sub, planId },
-      }, env.MERCADO_PAGO_ACCESS_TOKEN);
+      }, env.MERCADOPAGO_ACCESS_TOKEN);
       await addHistory(kv, session.sub, { type: 'checkout_initiated', provider: 'mercadopago', planId });
       return json(200, { ok: true, checkoutUrl: pref.init_point, preferenceId: pref.id });
     } catch (e) {

@@ -775,7 +775,12 @@ async function lhAddGoal() {
     else showToast(d.error || 'Erro ao criar meta', 'error');
   } catch (_) { showToast('Erro de conexão', 'error'); }
 }
-function lhAreaDetail(area) { showToast('Área: ' + area, 'info'); }
+function lhAreaDetail(area) {
+  // Filtrar conteúdo por área de vida
+  const cards = document.querySelectorAll('[data-area]');
+  cards.forEach(c => c.style.opacity = c.dataset.area === area || !area ? '1' : '0.3');
+  if (typeof window.showToast === 'function') window.showToast('Área: ' + area, 'info');
+}
 
 function showToast(msg, type) {
   if (window.showToast) { window.showToast(msg, type); return; }

@@ -191,7 +191,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   // ─── Mercado Pago Webhook ───
-  const mpToken = env.MP_ACCESS_TOKEN;
+  const mpToken = env.MERCADOPAGO_ACCESS_TOKEN;
   try {
     const event = JSON.parse(body);
     if (event.type === 'payment' || event.action) {

@@ -315,7 +315,16 @@
     var target=document.getElementById('identity-'+tab+'-tab');
     if(target) target.style.display='block';
   };
-  window.identityToggleView=function(v){ showToast('Visualização: '+v,'info'); };
+  window.identityToggleView=function(v){
+  // Alternar entre visualizações de identidade
+  document.querySelectorAll('[data-view]').forEach(el => {
+    el.style.display = el.dataset.view === v ? '' : 'none';
+  });
+  document.querySelectorAll('[onclick*="identityToggleView"]').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.toLowerCase().includes(v.toLowerCase()));
+  });
+  if (typeof window.showToast === 'function') window.showToast('Visualização: ' + v, 'info');
+};
   window.identityNewProfile=function(){ openModal('modal-new-profile'); };
   window.identityEditProfile=function(){
     const name=prompt('Nome do perfil:');

@@ -165,7 +165,7 @@
       if (habitsContainer) {
         const habits = b.habits || [];
         if (!habits.length) {
-          habitsContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum hábito ativo. <a href="#" onclick="showPage('habits');return false;" style="color:var(--accent)">Criar hábito</a></div>';
+          habitsContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum hábito ativo. <a href="#" onclick="showPage(&quot;habits&quot;);return false;" style="color:var(--accent)">Criar hábito</a></div>';
         } else {
           habitsContainer.innerHTML = habits.map(h => `
             <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleHabitReal('${h.id}',this)">
@@ -180,7 +180,7 @@
       if (goalsContainer) {
         const goals = b.goals || [];
         if (!goals.length) {
-          goalsContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhuma meta ativa. <a href="#" onclick="showPage('goals');return false;" style="color:var(--accent)">Criar meta</a></div>';
+          goalsContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhuma meta ativa. <a href="#" onclick="showPage(&quot;goals&quot;);return false;" style="color:var(--accent)">Criar meta</a></div>';
         } else {
           goalsContainer.innerHTML = goals.map(g => `
             <div style="padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showPage('goals')">
@@ -199,7 +199,7 @@
       if (agendaContainer) {
         const agenda = b.agenda || [];
         if (!agenda.length) {
-          agendaContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum evento hoje. <a href="#" onclick="showPage('agenda');return false;" style="color:var(--accent)">Adicionar evento</a></div>';
+          agendaContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum evento hoje. <a href="#" onclick="showPage(&quot;agenda&quot;);return false;" style="color:var(--accent)">Adicionar evento</a></div>';
         } else {
           agendaContainer.innerHTML = agenda.map(e => `
             <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showPage('agenda')">
@@ -245,7 +245,7 @@
       if (projContainer) {
         const projs = b.recentProjects || [];
         if (!projs.length) {
-          projContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum projeto ativo. <a href="#" onclick="showPage('projects');return false;" style="color:var(--accent)">Criar projeto</a></div>';
+          projContainer.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:16px 0">Nenhum projeto ativo. <a href="#" onclick="showPage(&quot;projects&quot;);return false;" style="color:var(--accent)">Criar projeto</a></div>';
         } else {
           projContainer.innerHTML = projs.map(p => `
             <div style="padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showPage('projects')">

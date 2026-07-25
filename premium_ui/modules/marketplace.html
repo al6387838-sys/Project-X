@@ -197,8 +197,8 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'WhatsApp')"><span class="toggle-slider"></span></label>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do WhatsApp','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="mktOpenSettings('WhatsApp')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="mktUninstallApp(this)"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="mkt-installed-item">
@@ -209,8 +209,8 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'Telegram')"><span class="toggle-slider"></span></label>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Telegram','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="mktOpenSettings('Telegram')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="mktUninstallApp(this)"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
     <div class="mkt-installed-item">
@@ -221,8 +221,8 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <label class="toggle-switch"><input type="checkbox" checked onchange="mktToggleApp(this,'Slack')"><span class="toggle-slider"></span></label>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="showToast('Configurações do Slack','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="showToast('App desinstalado','warning')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="mktOpenSettings('Slack')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="mktUninstallApp(this)"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
   </div>
@@ -307,5 +307,36 @@
     if (typeof window.showPage === 'function') setTimeout(function(){ window.showPage('settings'); }, 1500);
   };
 })();
+
+  // ─── Marketplace helpers ──────────────────────────────────────────────────
+  function mktOpenSettings(appName) {
+    if (typeof showPage === 'function') {
+      showPage('integration-center');
+    } else {
+      const msg = 'Configure ' + appName + ' em: Configurações > Integrações';
+      if (typeof window.showToast === 'function') window.showToast(msg, 'info');
+    }
+  }
+  async function mktUninstallApp(btn) {
+    const card = btn.closest('.mkt-installed-item');
+    const name = card?.querySelector('[style*="font-weight:700"]')?.textContent?.trim() || 'App';
+    if (!confirm('Desinstalar ' + name + '?')) return;
+    try {
+      const r = await fetch('/api/integrations', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'uninstall', name })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok || r.ok) {
+        card?.remove();
+        if (typeof window.showToast === 'function') window.showToast(name + ' desinstalado', 'success');
+      } else {
+        if (typeof window.showToast === 'function') window.showToast(d.error || 'Erro ao desinstalar', 'error');
+      }
+    } catch {
+      if (typeof window.showToast === 'function') window.showToast('Erro ao desinstalar ' + name, 'error');
+    }
+  }
 </script>
 <!-- END module-marketplace -->

@@ -13,15 +13,22 @@ function getCookie(cookieHeader) {
 async function verifySession(token, secret) {
   if (!token || !secret) return null;
   try {
-    const [headerB64, payloadB64, sigB64] = token.split('.');
-    if (!headerB64 || !payloadB64 || !sigB64) return null;
+    if (!/^[A-Za-z0-9\-_=]+\.[A-Za-z0-9\-_=]+$/.test(token)) return null;
+    const dotIdx = token.lastIndexOf('.');
+    if (dotIdx < 0) return null;
+    const payload = token.slice(0, dotIdx);
+    const suppliedSig = token.slice(dotIdx + 1);
     const enc = new TextEncoder();
-    const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-    const data = enc.encode(`${headerB64}.${payloadB64}`);
-    const sig = Uint8Array.from(atob(sigB64.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-    const valid = await crypto.subtle.verify('HMAC', key, sig, data);
-    if (!valid) return null;
-    return JSON.parse(atob(payloadB64));
+    const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+    const expectedSigBuf = await crypto.subtle.sign('HMAC', key, enc.encode(payload));
+    const expectedSig = btoa(String.fromCharCode(...new Uint8Array(expectedSigBuf)))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    if (expectedSig !== suppliedSig) return null;
+    const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const data = JSON.parse(decoded);
+    if (!data.sub || !data.exp) return null;
+    if (data.exp <= Date.now()) return null;
+    return data;
   } catch { return null; }
 }
 

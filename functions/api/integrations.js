@@ -81,7 +81,7 @@ const INTEGRATIONS = {
     category: 'payments',
     name: 'Mercado Pago',
     description: 'Pagamentos e carteira digital (América Latina)',
-    envKeys: ['MERCADO_PAGO_ACCESS_TOKEN', 'MERCADO_PAGO_PUBLIC_KEY'],
+    envKeys: ['MERCADOPAGO_ACCESS_TOKEN', 'MERCADOPAGO_PUBLIC_KEY'],
     icon: 'credit-card',
     docs: 'https://www.mercadopago.com.br/developers/pt/reference',
     scopes: ['payments', 'refunds'],
@@ -377,9 +377,9 @@ export async function onRequest({ request, env }) {
         } catch {}
         return json(400, { ok: false, error: 'Chave Stripe inválida', setupRequired: true });
       } else if (integrationId === 'mercado_pago') {
-        if (!env.MERCADO_PAGO_ACCESS_TOKEN) return json(400, { ok: false, error: 'MERCADO_PAGO_ACCESS_TOKEN não configurado', setupRequired: true });
+        if (!env.MERCADOPAGO_ACCESS_TOKEN) return json(400, { ok: false, error: 'MERCADOPAGO_ACCESS_TOKEN não configurado', setupRequired: true });
         try {
-          const r = await fetch('https://api.mercadopago.com/v1/account/bank_report/config', { headers: { 'Authorization': `Bearer ${env.MERCADO_PAGO_ACCESS_TOKEN}` } });
+          const r = await fetch('https://api.mercadopago.com/v1/account/bank_report/config', { headers: { 'Authorization': `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` } });
           if (r.status !== 401) {
             const connKey = `integration:${session.userId}:mercado_pago`;
             await kv?.put(connKey, JSON.stringify({ integrationId: 'mercado_pago', userId: session.userId, connectedAt: new Date().toISOString(), status: 'connected' }));

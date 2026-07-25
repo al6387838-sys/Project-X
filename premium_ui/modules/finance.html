@@ -631,7 +631,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('finance')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-ghost" onclick="showToast('Exportando fluxo de caixa...','info')"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar</button>
+      <button class="btn btn-ghost" onclick="finExportCashflow()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar</button>
     </div>
   </div>
   <div class="grid-4" style="margin-bottom:20px">
@@ -827,7 +827,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('finance')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="showToast('Iniciando conexão Open Finance...','info')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Conectar Banco</button>
+      <button class="btn btn-primary" onclick="finConnectOpenFinance()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Conectar Banco</button>
     </div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
@@ -857,7 +857,7 @@
         <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 5 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Bradesco...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Bradesco')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(131,0,131,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -866,7 +866,7 @@
         <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 2 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Nubank...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Nubank')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(0,100,0,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -875,7 +875,7 @@
         <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 8 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Itaú...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Itaú')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(0,0,200,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -884,10 +884,10 @@
         <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 15 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showToast('Sincronizando Caixa...','info')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Caixa')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
     </div>
 
-    <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="showToast('Iniciando conexão Open Finance...','info')">
+    <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="finConnectOpenFinance()">
       <div style="font-size:32px;margin-bottom:8px"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i></div>
       <div style="font-weight:600;font-size:14px">Adicionar Instituição</div>
       <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mais de 200 bancos disponíveis</div>
@@ -1341,14 +1341,6 @@ function finAddBill() {
       }).catch(() => {});
   }
   window.finFilterExtract = finFilterExtract;
-} catch (err) {
-  // Non-fatal: render empty state instead of blank screen
-  // Non-fatal init error — handled gracefully
-  const emptyState = document.getElementById('fin-bank-cards-grid');
-  if (emptyState) emptyState.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px;grid-column:1/-1">Serviço indisponível. Tente recarregar a página.</div>';
-  const emptyAccounts = document.getElementById('fin-accounts-list');
-  if (emptyAccounts) emptyAccounts.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Indisponível no momento</div>';
-}
 })();
 
 // finSwitchTransfer — alterna entre abas de transferência (TED, PIX, Interna)
@@ -1878,5 +1870,50 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     }
   }, 500);
 })();
+
+  // ─── Open Finance helpers ─────────────────────────────────────────────────
+  async function finExportCashflow() {
+    toast('Gerando exportação do fluxo de caixa...', 'info');
+    try {
+      const r = await fetch('/api/finance/transactions?view=report', { credentials: 'same-origin' });
+      const d = await r.json().catch(() => ({}));
+      const rows = d.report?.byMonth || [];
+      if (!rows.length) { toast('Nenhum dado disponível para exportar', 'warning'); return; }
+      const header = 'Mês,Receitas,Despesas,Saldo\n';
+      const csv = header + rows.map(m => [m.month, m.income.toFixed(2), m.expenses.toFixed(2), (m.income - m.expenses).toFixed(2)].join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'cashflow-lifeos-' + new Date().toISOString().slice(0,10) + '.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('Fluxo de caixa exportado', 'success');
+    } catch { toast('Erro ao exportar fluxo de caixa', 'error'); }
+  }
+  async function finConnectOpenFinance() {
+    try {
+      const r = await fetch('/api/finance/open-finance', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'connect' })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.authUrl) { window.open(d.authUrl, '_blank', 'width=600,height=700,noopener'); }
+      else toast(d.message || 'Configure Open Finance nas Integrações', 'info');
+    } catch { toast('Configure Open Finance nas Integrações', 'info'); }
+  }
+  async function finSyncBank(bankName) {
+    toast('Sincronizando ' + bankName + '...', 'info');
+    try {
+      const r = await fetch('/api/finance/open-finance', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', bank: bankName })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (d.ok) toast(bankName + ' sincronizado com sucesso', 'success');
+      else toast(d.error || 'Sincronização pendente de configuração', 'info');
+    } catch { toast('Erro ao sincronizar ' + bankName, 'error'); }
+  }
 </script>
 <!-- END module-finance -->
