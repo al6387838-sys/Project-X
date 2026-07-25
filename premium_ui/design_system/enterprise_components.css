@@ -695,6 +695,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.60);
   backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
   display: flex;
   align-items: center;
   justify-content: center;

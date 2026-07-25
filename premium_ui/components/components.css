@@ -156,6 +156,7 @@
   background: var(--gradient-glass);
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
   border: 1px solid var(--border-default);
   color: var(--text-primary);
 }
@@ -202,6 +203,7 @@
 .card-glass {
   background: var(--bg-glass);
   backdrop-filter: blur(var(--blur-xl));
+  -webkit-backdrop-filter: blur(var(--blur-xl));
   -webkit-backdrop-filter: blur(var(--blur-xl));
   border: 1px solid var(--border-default);
   box-shadow: var(--elevation-glass);
@@ -486,6 +488,7 @@
   inset: 0;
   background: rgba(0,0,0,0.70);
   backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
   z-index: var(--z-modal);
   display: flex;
@@ -1117,16 +1120,19 @@
   background: var(--bg-glass);
   backdrop-filter: blur(var(--blur-xl));
   -webkit-backdrop-filter: blur(var(--blur-xl));
+  -webkit-backdrop-filter: blur(var(--blur-xl));
   border: 1px solid var(--border-default);
 }
 
 .glass-sm {
   backdrop-filter: blur(var(--blur-md));
   -webkit-backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
 }
 
 .glass-strong {
   backdrop-filter: blur(var(--blur-3xl));
+  -webkit-backdrop-filter: blur(var(--blur-3xl));
   -webkit-backdrop-filter: blur(var(--blur-3xl));
 }
 

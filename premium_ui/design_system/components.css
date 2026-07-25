@@ -539,6 +539,7 @@
 .lifeos-card-glass {
   background: var(--bg-glass);
   backdrop-filter: blur(var(--blur-lg));
+  -webkit-backdrop-filter: blur(var(--blur-lg));
   border: 1px solid var(--border-subtle);
   box-shadow: var(--elevation-glass);
 }
@@ -657,6 +658,7 @@
   inset: 0;
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
   z-index: var(--z-modal);
   display: flex;
   align-items: center;

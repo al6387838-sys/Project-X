@@ -6,37 +6,37 @@
 <div class="page" id="page-finance">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Finance</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Finance</div>
       <div class="page-subtitle">Visão geral financeira consolidada</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('finance-accounts')">Contas</button>
-      <button class="btn btn-primary" onclick="showPage('finance-transfer')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Transferência</button>
+      <button class="btn btn-primary" onclick="showPage('finance-transfer')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Transferência</button>
     </div>
   </div>
 
   <!-- KPIs -->
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
       <div class="kpi-value" id="fin-saldo-total">—</div>
       <div class="kpi-label">Saldo Total</div>
       <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
       <div class="kpi-value" id="fin-despesas">—</div>
       <div class="kpi-label">Despesas do Mês</div>
       <div class="kpi-trend down">Carregando...</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
       <div class="kpi-value" id="fin-receitas">—</div>
       <div class="kpi-label">Receitas do Mês</div>
       <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div>
       <div class="kpi-value" id="fin-investimentos">—</div>
       <div class="kpi-label">Investimentos</div>
       <div class="kpi-trend up">Carregando...</div>
@@ -53,7 +53,7 @@
       <div id="fin-accounts-list">
         <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando contas...</div>
       </div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-account')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar Conta</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-account')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar Conta</button>
     </div>
 
     <!-- Cartões -->
@@ -78,7 +78,7 @@
       <div id="fin-bills-list">
         <div style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px">Carregando contas a pagar...</div>
       </div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-bill')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar Conta</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="openModal('modal-add-bill')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar Conta</button>
     </div>
 
     <!-- Assinaturas Recorrentes -->
@@ -102,12 +102,12 @@
 <div class="page" id="page-finance-accounts">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Contas Bancárias</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Contas Bancárias</div>
       <div class="page-subtitle">Gerencie suas contas e saldos</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-account')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Conta</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-account')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Conta</button>
     </div>
   </div>
   <div id="fin-bank-cards-grid" class="grid-3" style="margin-bottom:20px">
@@ -116,7 +116,7 @@
   <!-- Open Finance Banner -->
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));border-color:rgba(99,102,241,0.3)">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="font-size:32px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <div style="font-size:32px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
       <div style="flex:1">
         <div style="font-weight:700;margin-bottom:4px">Open Finance — Conexão Automática</div>
         <div style="font-size:13px;color:var(--text-secondary)">Conecte automaticamente suas contas bancárias via Open Finance do Banco Central. Saldos e extratos sincronizados em tempo real.</div>
@@ -130,10 +130,10 @@
 <div class="page" id="page-finance-pix">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> PIX</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> PIX</div>
       <div class="page-subtitle">Transferências instantâneas</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
     <div class="card">
@@ -156,14 +156,14 @@
           <option value="">Carregando contas...</option>
         </select>
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="finSendPix()">Confirmar PIX <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></button>
+      <button class="btn btn-primary" style="width:100%" onclick="finSendPix()">Confirmar PIX <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></button>
     </div>
     <div class="card">
       <div class="card-title">Minhas Chaves PIX</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div id="fin-pix-keys-list"><div style="color:var(--text-muted);font-size:12px;padding:8px">Carregando chaves PIX...</div></div>
       </div>
-      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="finAddPixKey()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Cadastrar Chave</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:12px;font-size:12px" onclick="finAddPixKey()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Cadastrar Chave</button>
       <div class="card-title" style="margin-top:20px">PIX Recentes</div>
       <div style="display:flex;flex-direction:column;gap:8px" id="fin-pix-recent-list">
         <div style="color:var(--text-muted);font-size:12px;padding:8px">Carregando transações PIX...</div>
@@ -176,11 +176,11 @@
 <div class="page" id="page-finance-extract">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Extrato</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Extrato</div>
       <div class="page-subtitle">Histórico de transações</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
       <select class="form-input" style="width:auto;padding:8px 12px;font-size:13px" onchange="finFilterExtract(this.value)">
         <option value="all">Todas as contas</option>
         <option value="nubank">Nubank</option>
@@ -207,10 +207,10 @@
 <div class="page" id="page-finance-transfer">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Transferência</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Transferência</div>
       <div class="page-subtitle">TED, DOC e entre contas</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div style="max-width:560px;margin:0 auto">
     <div class="card">
@@ -272,12 +272,12 @@
 <div class="page" id="page-finance-cards">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Cartões</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Cartões</div>
       <div class="page-subtitle">Gerencie seus cartões de crédito e débito</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-card')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Cartão</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-card')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Cartão</button>
     </div>
   </div>
   <div id="fin-cards-featured" class="grid-2" style="margin-bottom:20px">
@@ -289,11 +289,11 @@
 <div class="page" id="page-finance-invoice">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> Fatura</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> Fatura</div>
       <div class="page-subtitle" id="fin-invoice-subtitle">Fatura do Cartão</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance-cards')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-cards')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
       <button class="btn btn-primary" onclick="finPayBill()">Pagar Fatura</button>
     </div>
   </div>
@@ -325,12 +325,12 @@
 <div class="page" id="page-finance-bills">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Contas a Pagar</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Contas a Pagar</div>
       <div class="page-subtitle">Vencimentos e pagamentos</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-bill')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Conta</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-bill')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Conta</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
@@ -374,7 +374,7 @@
         <div class="fin-bill-status-dot" style="background:var(--green)"></div>
         <div style="flex:1"><div style="font-weight:600">Condomínio</div><div style="font-size:11px;color:var(--text-muted)">Pago: 05/07/2026 · Recorrente mensal</div></div>
         <div style="font-weight:700;color:var(--green);margin-right:16px">—</div>
-        <span style="font-size:12px;color:var(--green);font-weight:600"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Pago</span>
+        <span style="font-size:12px;color:var(--green);font-weight:600"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Pago</span>
       </div>
     </div>
   </div>
@@ -384,35 +384,35 @@
 <div class="page" id="page-finance-investments">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Investimentos</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Investimentos</div>
       <div class="page-subtitle">Carteira e performance</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
       <button class="btn btn-primary" onclick="finConnectBroker()">Conectar Corretora</button>
     </div>
   </div>
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
       <div class="kpi-value">—</div>
       <div class="kpi-label">Patrimônio Total</div>
       <div class="kpi-trend up">Carregando...</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div>
       <div class="kpi-value">—</div>
       <div class="kpi-label">Rendimento 2026</div>
       <div class="kpi-trend up">+—</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
       <div class="kpi-value">14,2%</div>
       <div class="kpi-label">Rentabilidade</div>
       <div class="kpi-trend up">vs CDI: 142%</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
       <div class="kpi-value">—</div>
       <div class="kpi-label">Aporte Mensal</div>
       <div class="kpi-trend up">Meta: —</div>
@@ -432,10 +432,10 @@
     <div class="card">
       <div class="card-title">Metas de Investimento</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Reserva de Emergência</span><span class="goal-pct">80%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Entrada Apartamento</span><span class="goal-pct">32%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:32%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Viagem Europa</span><span class="goal-pct">60%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> Pós-graduação</span><span class="goal-pct">15%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Reserva de Emergência</span><span class="goal-pct">80%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Entrada Apartamento</span><span class="goal-pct">32%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:32%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Viagem Europa</span><span class="goal-pct">60%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:60%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+        <div class="goal-item"><div class="goal-header"><span class="goal-name"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> Pós-graduação</span><span class="goal-pct">15%</span></div><div class="goal-desc">— de —</div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--cyan),#22D3EE)"></div></div></div>
       </div>
     </div>
   </div>
@@ -445,40 +445,40 @@
 <div class="page" id="page-finance-planning">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Planejamento Financeiro</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Planejamento Financeiro</div>
       <div class="page-subtitle">Orçamento e controle de gastos</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="grid-2" style="margin-bottom:20px">
     <div class="card">
       <div class="card-title">Orçamento Mensal — Julho 2026</div>
       <div style="display:flex;flex-direction:column;gap:12px">
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Moradia</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:98%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Alimentação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Transporte</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:63%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Lazer</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Saúde</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
-        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Educação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--green)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Moradia</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:98%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Alimentação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),#FCD34D)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Transporte</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:63%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Lazer</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),#F87171)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Saúde</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%;background:linear-gradient(90deg,var(--green),#34D399)"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Educação</span><span style="font-size:12px;color:var(--text-muted)">— / —</span></div><div class="progress-bar"><div class="progress-fill" style="width:0%;background:var(--green)"></div></div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">Fluxo de Caixa — Próximos 30 dias</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px;border-left:3px solid var(--green)">
-          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect x="2" y="6" width="20" height="14" rx="2"/></svg> Salário previsto</span><span style="color:var(--green);font-weight:700">+—</span>
+          <span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect x="2" y="6" width="20" height="14" rx="2"/></svg> Salário previsto</span><span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px;border-left:3px solid var(--green)">
-          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Aluguel recebido</span><span style="color:var(--green);font-weight:700">+—</span>
+          <span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Aluguel recebido</span><span style="color:var(--green);font-weight:700">+—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Aluguel pagar</span><span style="color:var(--red);font-weight:700">-—</span>
+          <span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Aluguel pagar</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Fatura Cartão</span><span style="color:var(--red);font-weight:700">-—</span>
+          <span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Fatura Cartão</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(239,68,68,0.1);border-radius:8px;border-left:3px solid var(--red)">
-          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Investimento</span><span style="color:var(--red);font-weight:700">-—</span>
+          <span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Investimento</span><span style="color:var(--red);font-weight:700">-—</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-elevated);border-radius:8px;border:1px solid var(--border-accent);margin-top:8px">
           <span style="font-weight:700">Saldo Projetado</span><span style="color:var(--green);font-weight:800;font-size:16px">—</span>
@@ -492,12 +492,12 @@
 <div class="page" id="page-finance-subscriptions">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Assinaturas</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Assinaturas</div>
       <div class="page-subtitle">Serviços recorrentes</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-subscription')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Assinatura</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-subscription')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Assinatura</button>
     </div>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
@@ -507,11 +507,11 @@
   </div>
   <div class="card">
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px" id="fin-subs-full">
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Spotify Premium</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Netflix Standard</div><div class="fin-sub-card-cycle">Mensal · Próx: 05/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">iCloud 200GB</div><div class="fin-sub-card-cycle">Mensal · Próx: 12/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">ChatGPT Plus</div><div class="fin-sub-card-cycle">Mensal · Próx: 18/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
-      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Smart Fit Black</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Spotify Premium</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Netflix Standard</div><div class="fin-sub-card-cycle">Mensal · Próx: 05/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">iCloud 200GB</div><div class="fin-sub-card-cycle">Mensal · Próx: 12/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">ChatGPT Plus</div><div class="fin-sub-card-cycle">Mensal · Próx: 18/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
+      <div class="fin-sub-card"><div class="fin-sub-card-icon"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div><div class="fin-sub-card-info"><div class="fin-sub-card-name">Smart Fit Black</div><div class="fin-sub-card-cycle">Mensal · Próx: 01/08</div></div><div class="fin-sub-card-amount">—/mês</div><button class="btn btn-ghost" style="font-size:11px" onclick="showToast('Assinatura cancelada','warning')">Cancelar</button></div>
     </div>
   </div>
 </div>
@@ -521,12 +521,12 @@
 <div class="page" id="page-finance-goals">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Metas Financeiras</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Metas Financeiras</div>
       <div class="page-subtitle">Acompanhe seus objetivos financeiros</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-goal')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Meta</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-goal')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Meta</button>
     </div>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
@@ -538,7 +538,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
           <div>
             <div style="font-weight:700;font-size:15px">Entrada do Apartamento</div>
             <div style="font-size:12px;color:var(--text-secondary)">Prazo: Dezembro 2026</div>
@@ -559,7 +559,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
           <div>
             <div style="font-weight:700;font-size:15px">Viagem Europa</div>
             <div style="font-size:12px;color:var(--text-secondary)">Prazo: Julho 2027</div>
@@ -580,7 +580,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
           <div>
             <div style="font-weight:700;font-size:15px">Reserva de Emergência</div>
             <div style="font-size:12px;color:var(--text-secondary)">Prazo: Março 2027</div>
@@ -601,7 +601,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="display:flex;align-items:center;gap:12px">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
           <div>
             <div style="font-weight:700;font-size:15px">Carteira de Investimentos</div>
             <div style="font-size:12px;color:var(--text-secondary)">Prazo: Dezembro 2027</div>
@@ -626,12 +626,12 @@
 <div class="page" id="page-finance-cashflow">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Fluxo de Caixa</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Fluxo de Caixa</div>
       <div class="page-subtitle">Entradas e saídas projetadas</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-ghost" onclick="finExportCashflow()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="finExportCashflow()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar</button>
     </div>
   </div>
   <div class="grid-4" style="margin-bottom:20px">
@@ -642,7 +642,7 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title" style="margin-bottom:16px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Calendário de Pagamentos — Julho</div>
+      <div class="card-title" style="margin-bottom:16px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Calendário de Pagamentos — Julho</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
           <div><div style="font-weight:600;font-size:13px">Salário</div><div style="font-size:11px;color:var(--text-muted)">01/07 · Recorrente</div></div>
@@ -675,7 +675,7 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title" style="margin-bottom:16px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Projeção 6 Meses</div>
+      <div class="card-title" style="margin-bottom:16px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Projeção 6 Meses</div>
       <div style="display:flex;flex-direction:column;gap:6px">
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:60px;font-size:12px;color:var(--text-secondary)">Jul</div>
@@ -726,12 +726,12 @@
 <div class="page" id="page-finance-budget">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Orçamento</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Orçamento</div>
       <div class="page-subtitle">Controle de gastos por categoria</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-budget')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Categoria</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-budget')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Categoria</button>
     </div>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
@@ -744,7 +744,7 @@
     <div style="display:flex;flex-direction:column;gap:14px">
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span style="font-weight:600;font-size:13px">Moradia</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span style="font-weight:600;font-size:13px">Moradia</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--amber)">(93%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -753,7 +753,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Alimentação</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Alimentação</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(65%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -762,7 +762,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Transporte</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Transporte</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(70%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -771,7 +771,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Lazer e Entretenimento</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Lazer e Entretenimento</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--red)">(106%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -780,7 +780,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Saúde e Bem-estar</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Saúde e Bem-estar</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(64%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -789,7 +789,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Educação</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><span style="font-weight:600;font-size:13px">Educação</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(45%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -798,7 +798,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span><span style="font-weight:600;font-size:13px">Assinaturas</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span><span style="font-weight:600;font-size:13px">Assinaturas</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(77%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -807,7 +807,7 @@
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-          <div style="display:flex;align-items:center;gap:8px"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><span style="font-weight:600;font-size:13px">Investimentos</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><span style="font-weight:600;font-size:13px">Investimentos</span></div>
           <div style="font-size:12px;color:var(--text-secondary)">— / — <span style="color:var(--green)">(55%)</span></div>
         </div>
         <div style="background:var(--bg-elevated);border-radius:6px;height:8px;overflow:hidden">
@@ -822,17 +822,17 @@
 <div class="page" id="page-finance-openfinance">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Open Finance</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Open Finance</div>
       <div class="page-subtitle">Conecte todas as suas instituições financeiras</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
-      <button class="btn btn-primary" onclick="finConnectOpenFinance()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Conectar Banco</button>
+      <button class="btn btn-ghost" onclick="showPage('finance')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="finConnectOpenFinance()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Conectar Banco</button>
     </div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.3)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.3)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
       <div style="flex:1">
         <div style="font-weight:700;font-size:16px">Open Finance Brasil — Ativo</div>
         <div style="font-size:13px;color:var(--text-secondary)">Regulamentado pelo Banco Central · Dados criptografados · Consentimento gerenciado</div>
@@ -854,41 +854,41 @@
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#830000,#CC0000);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">B</div>
         <div><div style="font-weight:700">Bradesco</div><div style="font-size:11px;color:var(--text-muted)">2 contas · 1 cartão</div></div>
-        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 5 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Bradesco')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Bradesco')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(131,0,131,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#820080,#B300B3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">N</div>
         <div><div style="font-weight:700">Nubank</div><div style="font-size:11px;color:var(--text-muted)">1 conta · 2 cartões</div></div>
-        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 2 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Nubank')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Nubank')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(0,100,0,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#006400,#008000);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">I</div>
         <div><div style="font-weight:700">Itaú</div><div style="font-size:11px;color:var(--text-muted)">2 contas · 1 cartão</div></div>
-        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 8 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Itaú')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Itaú')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
     </div>
     <div class="card" style="border-color:rgba(0,0,200,0.3)">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#0000C8,#0000FF);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">C</div>
         <div><div style="font-weight:700">Caixa Econômica</div><div style="font-size:11px;color:var(--text-muted)">1 conta poupança</div></div>
-        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
+        <div style="margin-left:auto"><span style="font-size:11px;padding:3px 8px;background:rgba(16,185,129,0.15);color:var(--green);border-radius:20px;font-weight:600"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Ativo</span></div>
       </div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Última sincronização: há 15 min</div>
-      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Caixa')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
+      <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="finSyncBank('Caixa')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
     </div>
 
     <div class="card" style="border:2px dashed var(--border);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="finConnectOpenFinance()">
-      <div style="font-size:32px;margin-bottom:8px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
+      <div style="font-size:32px;margin-bottom:8px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></div>
       <div style="font-weight:600;font-size:14px">Adicionar Instituição</div>
       <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Mais de 200 bancos disponíveis</div>
     </div>
@@ -1359,13 +1359,13 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-transactions">
   <div class="page-header" style="flex-wrap:wrap;gap:8px">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações</div>
       <div class="page-subtitle">Receitas e despesas com persistência real</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-ghost" onclick="showPage('finance-reports')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios</button>
-      <button class="btn btn-ghost" onclick="finExportCSV()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar CSV</button>
-      <button class="btn btn-primary" onclick="finOpenNewTransaction()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Lançamento</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-reports')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios</button>
+      <button class="btn btn-ghost" onclick="finExportCSV()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar CSV</button>
+      <button class="btn btn-primary" onclick="finOpenNewTransaction()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Lançamento</button>
     </div>
   </div>
   <div class="card" style="margin-bottom:16px">
@@ -1393,12 +1393,12 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-reports">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios</div>
       <div class="page-subtitle">Análise financeira por categoria, centro de custo e período</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance-transactions')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações</button>
-      <button class="btn btn-ghost" onclick="finExportCSV()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar CSV</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-transactions')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações</button>
+      <button class="btn btn-ghost" onclick="finExportCSV()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar CSV</button>
     </div>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
@@ -1415,10 +1415,10 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-categories">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg> Categorias</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg> Categorias</div>
       <div class="page-subtitle">Categorias de receitas e despesas</div>
     </div>
-    <button class="btn btn-primary" onclick="finOpenNewCategory()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Categoria</button>
+    <button class="btn btn-primary" onclick="finOpenNewCategory()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Categoria</button>
   </div>
   <div id="fin-categories-content"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando categorias...</div></div>
 </div>
@@ -1427,10 +1427,10 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-cost-centers">
   <div class="page-header">
     <div>
-      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg> Centros de Custo</div>
+      <div class="page-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg> Centros de Custo</div>
       <div class="page-subtitle">Organize despesas por centro de custo</div>
     </div>
-    <button class="btn btn-primary" onclick="finOpenNewCostCenter()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Centro</button>
+    <button class="btn btn-primary" onclick="finOpenNewCostCenter()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Centro</button>
   </div>
   <div id="fin-cost-centers-content"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando centros de custo...</div></div>
 </div>
@@ -1440,15 +1440,15 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
   <div class="modal-backdrop" onclick="finCloseTransaction()"></div>
   <div class="modal-content" style="width:520px;max-width:95vw;max-height:90vh;overflow-y:auto">
     <div class="modal-header">
-      <div class="modal-title" id="fin-tx-modal-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Lançamento</div>
-      <button class="modal-close" onclick="finCloseTransaction()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      <div class="modal-title" id="fin-tx-modal-title"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Lançamento</div>
+      <button class="modal-close" onclick="finCloseTransaction()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <form id="fin-tx-form" autocomplete="off">
         <input type="hidden" id="fin-tx-edit-id">
         <div style="display:flex;gap:8px;margin-bottom:12px">
-          <button type="button" id="fin-tx-btn-credit" class="btn btn-primary" style="flex:1" onclick="finSetTxType('credit')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg> Receita</button>
-          <button type="button" id="fin-tx-btn-debit" class="btn btn-ghost" style="flex:1" onclick="finSetTxType('debit')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg> Despesa</button>
+          <button type="button" id="fin-tx-btn-credit" class="btn btn-primary" style="flex:1" onclick="finSetTxType('credit')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg> Receita</button>
+          <button type="button" id="fin-tx-btn-debit" class="btn btn-ghost" style="flex:1" onclick="finSetTxType('debit')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg> Despesa</button>
         </div>
         <input type="hidden" id="fin-tx-type-val" value="credit">
         <div style="margin-bottom:12px">
@@ -1601,7 +1601,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     var pg = document.getElementById('fin-tx-pagination');
     if (pg) {
       var total = finTxState.total, offset = finTxState.offset, limit = finTxState.limit;
-      pg.innerHTML = '<span>Mostrando ' + (offset + 1) + '–' + Math.min(offset + limit, total) + ' de ' + total + '</span><div style="display:flex;gap:8px">' + (offset > 0 ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(-1)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Anterior</button>' : '') + (offset + limit < total ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(1)">Próximo <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>' : '') + '</div>';
+      pg.innerHTML = '<span>Mostrando ' + (offset + 1) + '–' + Math.min(offset + limit, total) + ' de ' + total + '</span><div style="display:flex;gap:8px">' + (offset > 0 ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(-1)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Anterior</button>' : '') + (offset + limit < total ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(1)">Próximo <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>' : '') + '</div>';
     }
     window.refreshIcons?.();
   }
@@ -1623,7 +1623,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     var editId = document.getElementById('fin-tx-edit-id');
     if (editId) editId.value = '';
     var title = document.getElementById('fin-tx-modal-title');
-    if (title) title.innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Lançamento';
+    if (title) title.innerHTML = '<svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Novo Lançamento';
     var form = document.getElementById('fin-tx-form');
     if (form) form.reset();
     var dateEl = document.getElementById('fin-tx-date');
@@ -1665,7 +1665,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     var editId = document.getElementById('fin-tx-edit-id');
     if (editId) editId.value = t.id;
     var title = document.getElementById('fin-tx-modal-title');
-    if (title) title.innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg> Editar Lançamento';
+    if (title) title.innerHTML = '<svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg> Editar Lançamento';
     var descEl = document.getElementById('fin-tx-desc');
     if (descEl) descEl.value = t.description || '';
     var amtEl = document.getElementById('fin-tx-amount');
@@ -1764,7 +1764,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
       var byCatHtml = Object.entries(r.byCategory || {}).sort(function(a, b) { return (b[1].expenses + b[1].income) - (a[1].expenses + a[1].income); }).map(function(e) {
         return '<tr><td style="padding:6px 8px;font-size:12px">' + esc(e[0]) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--green);text-align:right">' + esc(fmt(e[1].income)) + '</td><td style="padding:6px 8px;font-size:12px;color:var(--red);text-align:right">' + esc(fmt(e[1].expenses)) + '</td><td style="padding:6px 8px;font-size:11px;color:var(--text-muted);text-align:right">' + e[1].count + '</td></tr>';
       }).join('');
-      el.innerHTML = '<div class="grid-4" style="margin-bottom:20px"><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.income)) + '</div><div class="kpi-label">Total Receitas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(239,68,68,.15);color:var(--red)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.expenses)) + '</div><div class="kpi-label">Total Despesas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></div><div class="kpi-value" style="font-size:20px;color:' + (r.net >= 0 ? 'var(--green)' : 'var(--red)') + '">' + esc(fmt(r.net)) + '</div><div class="kpi-label">Saldo do Período</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg></div><div class="kpi-value">' + r.count + '</div><div class="kpi-label">Lançamentos</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Mês</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">MÊS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">SALDO</th></tr></thead><tbody>' + (byMonthHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Categoria</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">CATEGORIA</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">QTD</th></tr></thead><tbody>' + (byCatHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div></div>';
+      el.innerHTML = '<div class="grid-4" style="margin-bottom:20px"><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.income)) + '</div><div class="kpi-label">Total Receitas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(239,68,68,.15);color:var(--red)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></div><div class="kpi-value" style="font-size:20px">' + esc(fmt(r.expenses)) + '</div><div class="kpi-label">Total Despesas</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></div><div class="kpi-value" style="font-size:20px;color:' + (r.net >= 0 ? 'var(--green)' : 'var(--red)') + '">' + esc(fmt(r.net)) + '</div><div class="kpi-label">Saldo do Período</div></div><div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg></div><div class="kpi-value">' + r.count + '</div><div class="kpi-label">Lançamentos</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Mês</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">MÊS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">SALDO</th></tr></thead><tbody>' + (byMonthHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div><div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Por Categoria</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;font-size:11px;color:var(--text-muted)">CATEGORIA</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">RECEITAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">DESPESAS</th><th style="text-align:right;padding:6px 8px;font-size:11px;color:var(--text-muted)">QTD</th></tr></thead><tbody>' + (byCatHtml || '<tr><td colspan="4" style="padding:16px;text-align:center;color:var(--text-muted)">Sem dados</td></tr>') + '</tbody></table></div></div>';
       window.refreshIcons?.();
     }).catch(function(err) { el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--red)">Erro: ' + esc(err.message) + '</div>'; });
   };
@@ -1857,13 +1857,13 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
       var txBtn = document.createElement('button');
       txBtn.id = 'fin-dash-tx-btn';
       txBtn.className = 'btn btn-ghost';
-      txBtn.innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações';
+      txBtn.innerHTML = '<svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg> Transações';
       txBtn.onclick = function() { window.showPage('finance-transactions'); };
       finDashHeader.insertBefore(txBtn, finDashHeader.firstChild);
       var repBtn = document.createElement('button');
       repBtn.id = 'fin-dash-rep-btn';
       repBtn.className = 'btn btn-ghost';
-      repBtn.innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios';
+      repBtn.innerHTML = '<svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Relatórios';
       repBtn.onclick = function() { window.showPage('finance-reports'); };
       finDashHeader.insertBefore(repBtn, finDashHeader.firstChild);
       window.refreshIcons?.();

@@ -275,7 +275,7 @@
     .topbar {
       height: var(--topbar-height);
       background: rgba(8,8,16,0.85);
-      backdrop-filter: blur(var(--blur-xl));
+      -webkit-backdrop-filter: blur(var(--blur-xl)); backdrop-filter: blur(var(--blur-xl));
       -webkit-backdrop-filter: blur(var(--blur-xl));
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
@@ -2027,7 +2027,7 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
       z-index: var(--z-modal);
       display: none;
       align-items: flex-start;
@@ -2128,7 +2128,7 @@
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
       z-index: var(--z-modal);
       display: none;
       align-items: center;
@@ -2431,7 +2431,7 @@
     </div>
     <div class="command-results" id="command-results"></div>
     <div class="command-footer">
-      <span><kbd><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></kbd> navegar</span>
+      <span><kbd><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></kbd> navegar</span>
       <span><kbd>↵</kbd> selecionar</span>
       <span><kbd>Esc</kbd> fechar</span>
     </div>
@@ -2752,7 +2752,7 @@
                 <div class="score-label">Score</div>
               </div>
             </div>
-            <div class="score-trend" id="score-trend"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +4.2 esta semana</div>
+            <div class="score-trend" id="score-trend"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +4.2 esta semana</div>
           </div>
         </div>
 
@@ -2762,7 +2762,7 @@
             <div class="kpi-accent" style="background:var(--gradient-primary);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(99,102,241,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-              <span class="kpi-delta kpi-delta-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 4.2</span>
+              <span class="kpi-delta kpi-delta-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 4.2</span>
             </div>
             <div class="kpi-value" id="kpi-score">--</div>
             <div class="kpi-label">Life Score</div>
@@ -2772,7 +2772,7 @@
             <div class="kpi-accent" style="background:var(--gradient-success);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(16,185,129,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9"/></svg></div>
-              <span class="kpi-delta kpi-delta-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 2 novas</span>
+              <span class="kpi-delta kpi-delta-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 2 novas</span>
             </div>
             <div class="kpi-value" id="kpi-missions">0</div>
             <div class="kpi-label">Missões Ativas</div>
@@ -2782,7 +2782,7 @@
             <div class="kpi-accent" style="background:var(--gradient-warning);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(245,158,11,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 12 12c0-1.38-.5-2-1.5-2H11c-.5 0-1-.45-1-1V8c0-.5.45-1 1-1h1c1 0 2-1 2-2s-1-2-2-2c-1.38 0-3 .5-3 1.5 0 .5.5 1.5 1.5 2-1 0-2 .5-2 1.5V12c0 1 .5 2 2 2s1.5.5 1.5 2-1 2-2 2-2.5-.5-2.5-1.5c0-1 .5-1.5 1.5-1.5"/></svg></div>
-              <span class="kpi-delta kpi-delta-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> Recorde</span>
+              <span class="kpi-delta kpi-delta-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> Recorde</span>
             </div>
             <div class="kpi-value" id="kpi-streak">—</div>
             <div class="kpi-label">Dias Consecutivos</div>
@@ -2792,7 +2792,7 @@
             <div class="kpi-accent" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);"></div>
             <div class="kpi-card-top">
               <div class="kpi-icon" style="background:rgba(139,92,246,0.12);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-              <span class="kpi-delta kpi-delta-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 3 hoje</span>
+              <span class="kpi-delta kpi-delta-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> 3 hoje</span>
             </div>
             <div class="kpi-value" id="kpi-insights">12</div>
             <div class="kpi-label">Insights</div>
@@ -2811,7 +2811,7 @@
                   <div class="widget-title">Prioridades do Dia</div>
                   <div class="widget-subtitle" id="priorities-date"></div>
                 </div>
-                <button class="btn btn-ghost btn-sm" onclick="openNewMissionModal()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
+                <button class="btn btn-ghost btn-sm" onclick="openNewMissionModal()"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
               </div>
               <div id="priorities-list"></div>
             </div>
@@ -2958,7 +2958,7 @@
 
             <!-- Reminders -->
             <div class="companion-panel-card">
-              <div class="companion-panel-title"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/><path d="M6.38 18.7 4 21"/><path d="M17.64 18.67 20 21"/></svg></span> Lembretes</div>
+              <div class="companion-panel-title"><span><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/><path d="M6.38 18.7 4 21"/><path d="M17.64 18.67 20 21"/></svg></span> Lembretes</div>
               <div id="companion-reminders">
                 <div class="reminder-item">
                   <span class="reminder-time">09:00</span>
@@ -3015,7 +3015,7 @@
           <button class="chip chip-interactive chip-active" onclick="filterMissions('all',this)">Todas</button>
           <button class="chip chip-interactive" onclick="filterMissions('active',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Ativas</button>
           <button class="chip chip-interactive" onclick="filterMissions('completed',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Concluídas</button>
-          <button class="chip chip-interactive" onclick="filterMissions('paused',this)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg> Pausadas</button>
+          <button class="chip chip-interactive" onclick="filterMissions('paused',this)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg> Pausadas</button>
         </div>
         <div class="missions-layout">
           <div id="missions-grid" class="flex-col gap-4"></div>
@@ -3130,17 +3130,17 @@
           <div class="analytics-card animate-fade-in delay-50">
             <div class="analytics-card-title">Life Score Médio</div>
             <div class="analytics-value gradient-text" id="metrics-avg-score">--</div>
-            <div class="analytics-change analytics-change-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +12% vs período anterior</div>
+            <div class="analytics-change analytics-change-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +12% vs período anterior</div>
           </div>
           <div class="analytics-card animate-fade-in delay-100">
             <div class="analytics-card-title">Missões Concluídas</div>
             <div class="analytics-value" id="metrics-completed">0</div>
-            <div class="analytics-change analytics-change-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +3 este mês</div>
+            <div class="analytics-change analytics-change-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +3 este mês</div>
           </div>
           <div class="analytics-card animate-fade-in delay-150">
             <div class="analytics-card-title">Taxa de Hábitos</div>
             <div class="analytics-value" id="metrics-habit-rate">--</div>
-            <div class="analytics-change analytics-change-up"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +8% vs semana passada</div>
+            <div class="analytics-change analytics-change-up"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg> +8% vs semana passada</div>
           </div>
         </div>
 
@@ -3217,7 +3217,7 @@
             <button class="settings-nav-item" onclick="showSettingsSection('privacy',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Privacidade</button>
             <button class="settings-nav-item" onclick="showSettingsSection('security',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Segurança e MFA</button>
             <button class="settings-nav-item" onclick="showSettingsSection('enterprise',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Enterprise</button>
-            <button class="settings-nav-item" onclick="showSettingsSection('about',this)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> Sobre</button>
+            <button class="settings-nav-item" onclick="showSettingsSection('about',this)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> Sobre</button>
             <button class="settings-nav-item" onclick="lifeosLogout()" style="color:var(--color-danger-400);margin-top:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Encerrar Sessão</button>
           </nav>
           <div class="settings-content" id="settings-content-area">

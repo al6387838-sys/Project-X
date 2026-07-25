@@ -829,6 +829,7 @@ code {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
 }
 .card-header {
@@ -1255,6 +1256,7 @@ code {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-xl);
   min-width: 320px;
@@ -1310,6 +1312,7 @@ code {
   inset: 0;
   background: rgba(0,0,0,0.65);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: var(--z-modal);
   display: flex;
@@ -1380,6 +1383,7 @@ code {
   min-width: 200px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -1624,6 +1628,7 @@ code {
   inset: 0;
   background: rgba(7,7,15,0.7);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1686,6 +1691,7 @@ code {
   inset: 0;
   background: rgba(0,0,0,0.60);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: var(--z-modal);
   display: flex;
   align-items: flex-start;
@@ -1698,6 +1704,7 @@ code {
   max-width: 600px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
   -webkit-backdrop-filter: var(--glass-blur-lg);
   border: 1px solid var(--glass-border-top);
   border-radius: var(--radius-2xl);
@@ -1771,6 +1778,7 @@ code {
   width: 380px;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);

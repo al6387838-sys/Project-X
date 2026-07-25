@@ -38,9 +38,19 @@ const copyHtml = async (from, to) => {
   const raw = await readFile(resolve(source, from), 'utf8');
   // Substituir query strings de versão antiga por release atual (cache-busting SSOT)
   const withVersionBust = raw.replace(/(\.css|\.js)\?v=[\d.]+/g, `$1?v=${release.slice(1)}`);
-  const withReleaseClient = withVersionBust.includes('/version-display.js')
+  // Garantir que o icon-svg-renderer está presente (corrige bug de ícones/círculos)
+  const withIconRenderer = withVersionBust.includes('/vendor/icon-svg-renderer.js')
     ? withVersionBust
-    : withVersionBust.replace(/<\/head>/i, '  <script src="/version-display.js" defer></script>\n</head>');
+    : withVersionBust.replace(
+        /(<script[^>]+\/precision_graphite\.js[^>]*><\/script>)/i,
+        '<script src="/vendor/icon-svg-renderer.js" defer></script>\n  $1'
+      );
+  const withFinalHtml = withIconRenderer.includes('/vendor/icon-svg-renderer.js')
+    ? withIconRenderer
+    : withIconRenderer.replace(/<\/head>/i, '  <script src="/vendor/icon-svg-renderer.js" defer></script>\n</head>');
+  const withReleaseClient = withFinalHtml.includes('/version-display.js')
+    ? withFinalHtml
+    : withFinalHtml.replace(/<\/head>/i, '  <script src="/version-display.js" defer></script>\n</head>');
   try {
     const minified = await minify(withReleaseClient, MINIFY_OPTIONS);
     await writeFile(target, minified);
