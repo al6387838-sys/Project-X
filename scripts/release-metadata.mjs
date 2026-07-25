@@ -33,14 +33,18 @@ export function currentCommit() {
 export async function createReleaseMetadata({ builtAt = new Date().toISOString() } = {}) {
   const { release } = await loadReleaseConfig();
   const commit = currentCommit();
+  // deployId: usa CF_PAGES_COMMIT_SHA se disponível (Cloudflare Pages CI), caso contrário deriva do commit local
+  const cfCommit = process.env.CF_PAGES_COMMIT_SHA || '';
+  const deployId = cfCommit ? `cf-${cfCommit.slice(0, 12)}` : `local-${commit.slice(0, 12)}`;
 
   return Object.freeze({
     release,
     version: release,
     buildId: `lifeos-${release.slice(1)}-${commit.slice(0, 12)}`,
     commit,
+    deployId,
     builtAt,
-    environment: 'production',
+    environment: process.env.CF_PAGES ? 'production' : 'local',
     platform: 'cloudflare-pages',
   });
 }

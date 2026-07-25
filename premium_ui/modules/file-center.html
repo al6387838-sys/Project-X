@@ -1,127 +1,1362 @@
-<!-- LifeOS Enterprise — Enterprise File Center -->
+<!-- LifeOS Enterprise — Enterprise File Center v2.0 -->
 <div id="module-file-center" style="display:none">
-  <div class="page" id="page-file-center">
-    <div class="page-header">
-      <div>
-        <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Enterprise File Center</div>
-        <div class="page-subtitle">Documentos persistidos, versões e compartilhamento</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE: MAIN FILE CENTER
+═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-file-center">
+  <div class="page-header">
+    <div>
+      <div class="page-title">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+        Enterprise File Center
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-ghost" type="button" onclick="fcView('grid')" id="fc-btn-grid" aria-label="Visualização em grade"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></button>
-        <button class="btn btn-ghost" type="button" onclick="fcView('list')" id="fc-btn-list" aria-label="Visualização em lista"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg></button>
-        <button class="btn btn-primary" type="button" onclick="fcUpload()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Registrar documento</button>
-      </div>
+      <div class="page-subtitle">Documentos, fotos, pastas e compartilhamento persistidos no R2</div>
     </div>
-
-    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-      <input type="search" class="form-input" placeholder="Buscar arquivos, tags e descrições..." style="flex:1;min-width:220px" id="fc-search" aria-label="Buscar arquivos" />
-      <select class="form-input" style="width:auto" id="fc-type-filter" aria-label="Filtrar por tipo"><option value="">Todos os tipos</option><option value="application/pdf">PDF</option><option value="application/msword">Word</option><option value="application/vnd.ms-excel">Planilhas</option><option value="image/">Imagens</option></select>
-      <button class="btn btn-ghost" type="button" onclick="fcLoad()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Atualizar</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn btn-ghost" type="button" onclick="fcView('grid')" id="fc-btn-grid" title="Grade" aria-label="Visualização em grade">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcView('list')" id="fc-btn-list" title="Lista" aria-label="Visualização em lista">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg>
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcShowSection('trash')" id="fc-btn-trash" title="Lixeira" aria-label="Lixeira">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcShowSection('favorites')" id="fc-btn-fav" title="Favoritos" aria-label="Favoritos">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcCreateFolder()" title="Nova pasta" aria-label="Criar nova pasta">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v6"/><path d="M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+        Nova Pasta
+      </button>
+      <button class="btn btn-primary" type="button" onclick="fcUpload()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload
+      </button>
     </div>
-
-    <div class="grid-4" style="margin-bottom:20px">
-      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/></svg></div><div class="kpi-value" id="fc-stat-total">—</div><div class="kpi-label">Documentos</div></div>
-      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div><div class="kpi-value" id="fc-stat-favorites">—</div><div class="kpi-label">Favoritos</div></div>
-      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg></div><div class="kpi-value" id="fc-stat-size">—</div><div class="kpi-label">Armazenamento usado</div></div>
-      <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(6,182,212,.15);color:var(--cyan)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="kpi-value" id="fc-stat-shared">—</div><div class="kpi-label">Compartilhados</div></div>
-    </div>
-
-    <div class="card" id="fc-content" style="min-height:220px"><div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando documentos persistidos...</div></div>
   </div>
 
-  <div class="page" id="page-file-viewer" style="display:none">
-    <div class="page-header">
-      <div><div class="page-title" id="fc-viewer-title">Documento</div><div class="page-subtitle" id="fc-viewer-subtitle">Informações do documento</div></div>
-      <div style="display:flex;gap:8px"><button class="btn btn-ghost" type="button" onclick="fcBack()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button><button class="btn btn-ghost" type="button" onclick="fcOpenVersions()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg> Versões</button><button class="btn btn-primary" type="button" onclick="fcShare()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Compartilhar</button></div>
+  <!-- KPIs — Single Source of Truth: /api/documents?view=stats -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(99,102,241,.15);color:var(--accent)">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/></svg>
+      </div>
+      <div class="kpi-value" id="fc-stat-total">—</div>
+      <div class="kpi-label">Documentos</div>
     </div>
-    <div class="card" id="fc-viewer-content" style="min-height:220px"></div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(245,158,11,.15);color:var(--amber)">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+      </div>
+      <div class="kpi-value" id="fc-stat-favorites">—</div>
+      <div class="kpi-label">Favoritos</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(16,185,129,.15);color:var(--green)">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>
+      </div>
+      <div class="kpi-value" id="fc-stat-size">—</div>
+      <div class="kpi-label">Armazenamento</div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-icon" style="background:rgba(239,68,68,.15);color:var(--red)">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <div class="kpi-value" id="fc-stat-trash">—</div>
+      <div class="kpi-label">Na Lixeira</div>
+    </div>
   </div>
 
-  <div class="modal" id="fc-upload-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-upload-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Registrar documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-upload-modal')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><form id="fc-upload-form" style="display:grid;gap:12px;padding:20px"><label class="form-label">Nome do documento<input class="form-input" id="fc-upload-name" required maxlength="180" placeholder="Nome do documento" /></label><label class="form-label">Descrição (opcional)<input class="form-input" id="fc-upload-description" maxlength="500" placeholder="Descrição do documento" /></label><label class="form-label">Etiquetas (separadas por vírgula)<input class="form-input" id="fc-upload-tags" maxlength="300" placeholder="financeiro, contrato" /></label><label class="form-label">Tipo MIME<select class="form-input" id="fc-upload-mime"><option value="application/pdf">PDF</option><option value="application/msword">Word</option><option value="application/vnd.ms-excel">Planilha</option><option value="application/vnd.ms-powerpoint">Apresentação</option><option value="image/jpeg">Imagem</option><option value="text/plain">Texto</option></select></label><div id="fc-upload-error" style="display:none;color:var(--red);font-size:12px"></div><button class="btn btn-primary" type="submit">Registrar documento</button></form></div></div>
+  <!-- Barra de busca e filtros -->
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <input type="search" class="form-input" placeholder="Buscar arquivos, tags e descrições..." style="flex:1;min-width:220px" id="fc-search" aria-label="Buscar arquivos" oninput="fcApplyFilters()" />
+    <select class="form-input" style="width:auto" id="fc-type-filter" aria-label="Filtrar por tipo" onchange="fcApplyFilters()">
+      <option value="">Todos os tipos</option>
+      <option value="pdf">PDF</option>
+      <option value="image">Imagens</option>
+      <option value="word">Word / DOCX</option>
+      <option value="excel">Excel / XLSX</option>
+      <option value="text">Texto</option>
+      <option value="video">Vídeo</option>
+      <option value="folder">Pastas</option>
+    </select>
+    <button class="btn btn-ghost" type="button" onclick="fcLoad()" title="Atualizar" aria-label="Atualizar lista">
+      <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+    </button>
+  </div>
 
-  <div class="modal" id="fc-share-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-share-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Compartilhar documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-share-modal')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><form id="fc-share-form" style="display:grid;gap:12px;padding:20px"><label class="form-label">E-mail da pessoa<input class="form-input" id="fc-share-email" type="email" required placeholder="usuario@empresa.com" /></label><label class="form-label">Permissão<select class="form-input" id="fc-share-permission"><option value="view">Visualizar</option><option value="edit">Editar</option></select></label><div id="fc-share-error" style="display:none;color:var(--red);font-size:12px"></div><button class="btn btn-primary" type="submit">Compartilhar</button></form></div></div>
+  <!-- Breadcrumb de navegação de pastas -->
+  <div id="fc-breadcrumb" style="display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:13px;flex-wrap:wrap">
+    <span style="color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:4px" onclick="fcGoRoot()">
+      <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+      Meus Arquivos
+    </span>
+    <span id="fc-breadcrumb-trail"></span>
+  </div>
 
-  <div class="modal" id="fc-versions-modal" style="display:none"><div class="modal-overlay" onclick="fcCloseModal('fc-versions-modal')"></div><div class="modal-content"><div class="modal-header"><div class="modal-title">Versões do documento</div><button class="modal-close" type="button" onclick="fcCloseModal('fc-versions-modal')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><div id="fc-versions-content" style="display:grid;gap:8px;padding:20px"></div></div></div>
+  <!-- Seção ativa (main / favorites / trash) -->
+  <div id="fc-section-label" style="display:none;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--text-secondary)"></div>
 
+  <!-- Drop zone + conteúdo principal -->
+  <div class="card" id="fc-content" style="min-height:220px;position:relative"
+       ondragover="event.preventDefault();event.currentTarget.classList.add('fc-drag-over')"
+       ondragleave="event.currentTarget.classList.remove('fc-drag-over')"
+       ondrop="fcHandleDrop(event)">
+    <div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando arquivos...</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE: FILE VIEWER
+═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-file-viewer" style="display:none">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="fc-viewer-title">Arquivo</div>
+      <div class="page-subtitle" id="fc-viewer-subtitle">Informações do arquivo</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" type="button" onclick="fcBackToList()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Voltar
+      </button>
+      <button class="btn btn-ghost" type="button" id="fc-viewer-fav-btn" onclick="fcToggleFavoriteActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+        <span id="fc-viewer-fav-label">Favoritar</span>
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcRenameActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+        Renomear
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcDownloadActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcShareActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Compartilhar
+      </button>
+      <button class="btn btn-ghost" type="button" onclick="fcDeleteActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Excluir
+      </button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr minmax(240px,300px);gap:16px">
+    <!-- Preview -->
+    <div class="card" id="fc-viewer-preview" style="min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden"></div>
+    <!-- Metadados -->
+    <aside class="card" style="padding:16px;align-self:start">
+      <div style="font-size:13px;font-weight:800;margin-bottom:12px">Informações</div>
+      <div style="display:grid;gap:8px;font-size:12px">
+        <div>Tipo: <strong id="fc-meta-type">—</strong></div>
+        <div>Tamanho: <strong id="fc-meta-size">—</strong></div>
+        <div>Versão: <strong id="fc-meta-version">—</strong></div>
+        <div>Criado: <strong id="fc-meta-created">—</strong></div>
+        <div>Atualizado: <strong id="fc-meta-updated">—</strong></div>
+        <div>Favorito: <strong id="fc-meta-favorite">—</strong></div>
+      </div>
+      <div style="font-size:12px;font-weight:800;margin:16px 0 8px">Etiquetas</div>
+      <div id="fc-meta-tags" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+      <div style="font-size:12px;font-weight:800;margin:16px 0 8px">Descrição</div>
+      <div id="fc-meta-description" style="font-size:12px;color:var(--text-secondary)"></div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-ghost" type="button" onclick="fcVersionsActive()" style="font-size:12px;justify-content:flex-start">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+          Ver versões
+        </button>
+        <button class="btn btn-ghost" type="button" onclick="fcCopyActive()" style="font-size:12px;justify-content:flex-start">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar arquivo
+        </button>
+        <button class="btn btn-ghost" type="button" onclick="fcMoveActive()" style="font-size:12px;justify-content:flex-start">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+          Mover para pasta
+        </button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: UPLOAD
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-upload-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-upload-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-upload-modal')"></div>
+  <div class="modal-content" style="max-width:520px">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-upload-modal-title">Upload de Arquivos</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-upload-modal')" aria-label="Fechar">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px">
+      <!-- Drop zone -->
+      <div id="fc-drop-zone" style="border:2px dashed var(--border);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s"
+           onclick="document.getElementById('fc-file-input').click()"
+           ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='rgba(99,102,241,.06)'"
+           ondragleave="this.style.borderColor='';this.style.background=''"
+           ondrop="fcHandleDropZone(event)">
+        <svg style="width:36px;height:36px;color:var(--accent);margin-bottom:10px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">Arraste arquivos aqui</div>
+        <div style="font-size:12px;color:var(--text-muted)">ou clique para selecionar · Múltiplos arquivos · Máx. 25 MB cada</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:4px">PDF, DOCX, XLSX, TXT, PNG, JPG, JPEG, WEBP, GIF, MP4</div>
+        <input type="file" id="fc-file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.md,.png,.jpg,.jpeg,.webp,.gif,.mp4,.csv,.ppt,.pptx" style="display:none" onchange="fcHandleFileSelect(event)" />
+      </div>
+      <!-- Lista de arquivos selecionados -->
+      <div id="fc-upload-file-list" style="margin-top:12px;display:grid;gap:6px"></div>
+      <!-- Metadados opcionais -->
+      <div style="margin-top:16px;display:grid;gap:10px">
+        <label class="form-label">
+          Descrição (opcional)
+          <input class="form-input" id="fc-upload-description" maxlength="500" placeholder="Descrição dos arquivos" />
+        </label>
+        <label class="form-label">
+          Etiquetas (separadas por vírgula)
+          <input class="form-input" id="fc-upload-tags" maxlength="300" placeholder="financeiro, contrato, 2025" />
+        </label>
+      </div>
+      <div id="fc-upload-progress" style="display:none;margin-top:12px">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px" id="fc-upload-progress-label">Enviando...</div>
+        <div style="height:4px;background:var(--border);border-radius:2px"><div id="fc-upload-progress-bar" style="height:4px;background:var(--accent);border-radius:2px;width:0%;transition:width .3s"></div></div>
+      </div>
+      <div id="fc-upload-error" style="display:none;color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-primary" type="button" id="fc-upload-submit" onclick="fcSubmitUpload()" style="flex:1">
+          <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Enviar Arquivos
+        </button>
+        <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-upload-modal')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: COMPARTILHAR
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-share-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-share-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-share-modal')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-share-modal-title">Compartilhar Arquivo</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-share-modal')" aria-label="Fechar">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <form id="fc-share-form" style="display:grid;gap:12px;padding:20px" onsubmit="fcSubmitShare(event)">
+      <label class="form-label">
+        E-mail do destinatário
+        <input class="form-input" id="fc-share-email" type="email" required placeholder="usuario@empresa.com" />
+      </label>
+      <label class="form-label">
+        Permissão
+        <select class="form-input" id="fc-share-permission">
+          <option value="view">Visualizar</option>
+          <option value="edit">Editar</option>
+        </select>
+      </label>
+      <div id="fc-share-error" style="display:none;color:var(--red);font-size:12px"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" type="submit" style="flex:1">Compartilhar</button>
+        <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-share-modal')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: VERSÕES
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-versions-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-versions-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-versions-modal')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-versions-modal-title">Versões do Arquivo</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-versions-modal')" aria-label="Fechar">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div id="fc-versions-content" style="display:grid;gap:8px;padding:20px;max-height:400px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: MOVER PARA PASTA
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-move-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-move-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-move-modal')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-move-modal-title">Mover para Pasta</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-move-modal')" aria-label="Fechar">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px">
+      <div id="fc-move-folder-list" style="display:grid;gap:6px;max-height:300px;overflow-y:auto;margin-bottom:16px"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-move-modal')" style="flex:1">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: CRIAR PASTA
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-folder-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-folder-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-folder-modal')"></div>
+  <div class="modal-content" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-folder-modal-title">Nova Pasta</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-folder-modal')" aria-label="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label class="form-label" for="fc-folder-name-input">Nome da pasta</label>
+      <input class="form-input" id="fc-folder-name-input" type="text" maxlength="120" placeholder="Ex: Contratos 2025" autocomplete="off" />
+      <div id="fc-folder-error" style="display:none;color:var(--red);font-size:12px;margin-top:6px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" id="fc-folder-ok" onclick="fcCreateFolderConfirm()" style="flex:1">Criar Pasta</button>
+      <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-folder-modal')" style="flex:1">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: RENOMEAR ARQUIVO/PASTA
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-rename-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-rename-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-rename-modal')"></div>
+  <div class="modal-content" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-rename-modal-title">Renomear</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-rename-modal')" aria-label="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label class="form-label" for="fc-rename-input">Novo nome</label>
+      <input class="form-input" id="fc-rename-input" type="text" maxlength="180" placeholder="Nome do arquivo ou pasta" autocomplete="off" />
+      <div id="fc-rename-error" style="display:none;color:var(--red);font-size:12px;margin-top:6px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" id="fc-rename-ok" onclick="fcRenameConfirm()" style="flex:1">Renomear</button>
+      <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-rename-modal')" style="flex:1">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: CONFIRMAÇÃO DE EXCLUSÃO PERMANENTE
+═══════════════════════════════════════════════════════════════ -->
+<div class="modal" id="fc-confirm-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="fc-confirm-modal-title">
+  <div class="modal-overlay" onclick="fcCloseModal('fc-confirm-modal')"></div>
+  <div class="modal-content" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title" id="fc-confirm-modal-title">Confirmar Exclusão</div>
+      <button class="modal-close" type="button" onclick="fcCloseModal('fc-confirm-modal')" aria-label="Fechar">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div style="padding:20px">
+      <p id="fc-confirm-message" style="font-size:14px;color:var(--text-secondary);margin-bottom:20px"></p>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" type="button" onclick="fcCloseModal('fc-confirm-modal')" style="flex:1">Cancelar</button>
+        <button class="btn" type="button" id="fc-confirm-ok" style="flex:1;background:var(--red);color:#fff;border-color:var(--red)">Excluir permanentemente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ESTILOS DO FILE CENTER
+═══════════════════════════════════════════════════════════════ -->
+<style>
+#fc-content.fc-drag-over {
+  border: 2px dashed var(--accent) !important;
+  background: rgba(99,102,241,.04);
+}
+.fc-item-card {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  transition: border-color .15s, box-shadow .15s;
+  position: relative;
+}
+.fc-item-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(99,102,241,.12);
+}
+.fc-item-card.fc-selected {
+  border-color: var(--accent);
+  background: rgba(99,102,241,.06);
+}
+.fc-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+.fc-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+.fc-item-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.fc-item-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.fc-item-card:hover .fc-item-actions {
+  opacity: 1;
+}
+.fc-action-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: background .15s, color .15s;
+}
+.fc-action-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.fc-action-btn.fc-fav-active {
+  color: var(--amber);
+}
+.fc-grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  padding: 16px;
+}
+.fc-list-view {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+.fc-list-view .fc-item-card {
+  border-radius: 8px;
+}
+.fc-list-view .fc-item-name {
+  max-width: none;
+}
+.fc-grid-view .fc-item-card {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px;
+}
+.fc-grid-view .fc-item-icon {
+  width: 44px;
+  height: 44px;
+}
+.fc-grid-view .fc-item-name {
+  max-width: 100%;
+}
+.fc-grid-view .fc-item-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+}
+.fc-grid-view .fc-item-card:hover .fc-item-actions {
+  opacity: 1;
+}
+.fc-trash-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — FILE CENTER ENTERPRISE v2.0
+═══════════════════════════════════════════════════════════════ -->
 <script>
 (() => {
   'use strict';
   if (window.LifeOSFileCenter) return;
-  const state = { documents: [], filtered: [], view: 'grid', active: null, stats: { total: 0, favorites: 0, totalSize: 0, shared: 0 } };
-  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-  const size = (bytes) => { const value = Number(bytes) || 0; if (!value) return '0 B'; if (value < 1024) return `${value} B`; if (value < 1024 ** 2) return `${(value / 1024).toFixed(1)} KB`; return `${(value / 1024 ** 2).toFixed(2)} MB`; };
-  const formatDate = (value) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString('pt-BR'); };
-  const toast = (message, type = 'info') => { if (typeof window.showToast === 'function') window.showToast(message, type); else showToast?.(message, type); };
-  const ICON_SVG = window.__LIFEOS_ICONS__ || {};
-  const ICON_FALLBACK = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>';
-  const icon = (mime) => {
-    const name = mime?.includes('pdf') ? 'file-text' : mime?.includes('image') ? 'image' : mime?.includes('sheet') || mime?.includes('excel') ? 'file-spreadsheet' : mime?.includes('presentation') ? 'file-presentation' : 'file';
-    return ICON_SVG[name] || ICON_FALLBACK;
+
+  /* ── Utilitários ── */
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtSize = (b) => { const n = Number(b) || 0; if (!n) return '0 B'; if (n < 1024) return `${n} B`; if (n < 1048576) return `${(n/1024).toFixed(1)} KB`; return `${(n/1048576).toFixed(2)} MB`; };
+  const fmtDate = (v) => { const d = new Date(v); return isNaN(d) ? '—' : d.toLocaleDateString('pt-BR'); };
+  const toast = (msg, type = 'info') => { if (typeof window.showToast === 'function') window.showToast(msg, type); };
+  const icons = () => { try { window.refreshIcons?.(); } catch (_) {} };
+
+  /* ── Estado central — Single Source of Truth ── */
+  const S = {
+    view: 'grid',         // 'grid' | 'list'
+    section: 'main',      // 'main' | 'favorites' | 'trash'
+    currentFolder: 'root',
+    folderStack: [],      // [{id, name}]
+    allDocs: [],          // todos os docs ativos (sem deleted)
+    trashDocs: [],        // docs deleted
+    stats: { total: 0, favorites: 0, totalSize: 0, trash: 0 },
+    active: null,         // doc aberto no viewer
+    pendingFiles: [],     // File[] aguardando upload
+    pendingConfirm: null, // fn a executar após confirmação
   };
 
-  const refreshIcons = () => { try { if (typeof window.refreshIcons === 'function') window.refreshIcons(); } catch (_) {} };
-  const updateStats = () => {
-    const set = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
-    set('fc-stat-total', state.stats.total ?? state.documents.length);
-    set('fc-stat-favorites', state.stats.favorites ?? 0);
-    set('fc-stat-size', size(state.stats.totalSize));
-    set('fc-stat-shared', state.stats.shared ?? 0);
-  };
-  const applyFilters = () => {
-    const query = document.getElementById('fc-search')?.value?.trim().toLowerCase() || '';
-    const mime = document.getElementById('fc-type-filter')?.value || '';
-    state.filtered = state.documents.filter((document) => {
-      const haystack = [document.name, document.description, ...(document.tags || [])].join(' ').toLowerCase();
-      return (!query || haystack.includes(query)) && (!mime || String(document.mimeType || '').includes(mime));
+  /* ── Mapa de ícones por MIME ── */
+  function mimeIcon(mime, name) {
+    const m = String(mime || '').toLowerCase();
+    const n = String(name || '').toLowerCase();
+    if (m.includes('pdf') || n.endsWith('.pdf')) return { label: 'PDF', bg: 'rgba(239,68,68,.15)', color: 'var(--red)' };
+    if (m.startsWith('image/') || /\.(png|jpg|jpeg|webp|gif|svg)$/.test(n)) return { label: 'IMG', bg: 'rgba(16,185,129,.15)', color: 'var(--green)' };
+    if (m.includes('spreadsheet') || m.includes('excel') || /\.xlsx?$/.test(n)) return { label: 'XLS', bg: 'rgba(16,185,129,.15)', color: 'var(--green)' };
+    if (m.includes('presentation') || m.includes('powerpoint') || /\.pptx?$/.test(n)) return { label: 'PPT', bg: 'rgba(245,158,11,.15)', color: 'var(--amber)' };
+    if (m.includes('word') || m.includes('document') || /\.docx?$/.test(n)) return { label: 'DOC', bg: 'rgba(99,102,241,.15)', color: 'var(--accent)' };
+    if (m.startsWith('text/') || /\.(txt|md|csv|json)$/.test(n)) return { label: 'TXT', bg: 'rgba(6,182,212,.15)', color: 'var(--cyan)' };
+    if (m.startsWith('video/') || /\.mp4$/.test(n)) return { label: 'MP4', bg: 'rgba(139,92,246,.15)', color: 'var(--purple)' };
+    if (m === 'application/x-directory' || m.includes('folder')) return { label: '📁', bg: 'rgba(245,158,11,.15)', color: 'var(--amber)' };
+    return { label: 'FILE', bg: 'rgba(99,102,241,.1)', color: 'var(--accent)' };
+  }
+
+  /* ── API helpers ── */
+  async function apiGet(params) {
+    const q = new URLSearchParams(params).toString();
+    const r = await fetch(`/api/documents?${q}`, { credentials: 'same-origin' });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'Erro ao carregar dados');
+    return d;
+  }
+  async function apiPost(body) {
+    const r = await fetch('/api/documents', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
     });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'Operação falhou');
+    return d;
+  }
+  async function apiUpload(formData) {
+    const r = await fetch('/api/documents', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData,
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'Upload falhou');
+    return d;
+  }
+
+  /* ── Carregar dados — SSOT ── */
+  window.fcLoad = async () => {
+    const root = document.getElementById('fc-content');
+    if (root) root.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando arquivos...</div>';
+    try {
+      const folderId = S.currentFolder || 'root';
+      const [listData, statsData, trashData] = await Promise.all([
+        apiGet({ view: 'all' }),
+        apiGet({ view: 'stats' }),
+        apiGet({ view: 'trash' }),
+      ]);
+      S.allDocs = Array.isArray(listData.documents) ? listData.documents : [];
+      S.trashDocs = Array.isArray(trashData.documents) ? trashData.documents : [];
+      S.stats = statsData.stats || { total: S.allDocs.length, favorites: 0, totalSize: 0, trash: S.trashDocs.length };
+      S.stats.trash = S.trashDocs.length; // garantir SSOT
+      fcUpdateStats();
+      fcRender();
+    } catch (err) {
+      if (root) root.innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">${esc(err.message)}<div style="margin-top:12px"><button class="btn btn-ghost" type="button" onclick="fcLoad()">Tentar novamente</button></div></div>`;
+    }
   };
-  const render = () => {
-    applyFilters();
+
+  /* ── Atualizar KPIs — SSOT ── */
+  function fcUpdateStats() {
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('fc-stat-total', S.stats.total ?? S.allDocs.filter(d => !d.isFolder).length);
+    set('fc-stat-favorites', S.stats.favorites ?? 0);
+    set('fc-stat-size', fmtSize(S.stats.totalSize));
+    set('fc-stat-trash', S.stats.trash ?? S.trashDocs.length);
+  }
+
+  /* ── Renderizar conteúdo ── */
+  function fcRender() {
     const root = document.getElementById('fc-content');
     if (!root) return;
-    if (!state.filtered.length) {
-      const filtered = state.documents.length > 0;
-      root.innerHTML = `<div style="padding:42px 20px;text-align:center"><svg  style="width:32px;height:32px;color:var(--text-muted);margin-bottom:10px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg><div style="font-size:15px;font-weight:700;margin-bottom:7px">${filtered ? 'Nenhum documento corresponde aos filtros.' : 'Nenhum documento registrado.'}</div><div style="font-size:13px;color:var(--text-muted);margin:0 auto 16px;max-width:480px">${filtered ? 'Ajuste a busca ou os filtros para localizar documentos persistidos.' : 'Registre o primeiro documento para começar a organizar seu acervo.'}</div>${filtered ? '<button class="btn btn-ghost" type="button" onclick="fcClearFilters()">Limpar filtros</button>' : '<button class="btn btn-primary" type="button" onclick="fcUpload()">Registrar documento</button>'}</div>`;
-      refreshIcons(); return;
+
+    let docs = [];
+    let sectionLabel = '';
+
+    if (S.section === 'trash') {
+      docs = S.trashDocs;
+      sectionLabel = '🗑️ Lixeira';
+    } else if (S.section === 'favorites') {
+      docs = S.allDocs.filter(d => d.favorite);
+      sectionLabel = '⭐ Favoritos';
+    } else {
+      // Filtrar por pasta atual
+      docs = S.allDocs.filter(d => (d.folderId || 'root') === (S.currentFolder || 'root'));
     }
-    const cards = state.filtered.map((document) => `<article class="card" style="padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer" ondblclick="fcOpenFile('${esc(document.id)}')"><div style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(99,102,241,.14);color:var(--accent)"><i data-lucide="${icon(document.mimeType)}" class="pg-icon" aria-hidden="true"></i></div><div style="min-width:0;flex:1"><div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(document.name)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px">${size(document.size)} · v${esc(document.version || 1)} · ${formatDate(document.updatedAt)}</div>${document.tags?.length ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${document.tags.map((tag) => `<span style="font-size:10px;padding:2px 6px;background:rgba(99,102,241,.12);border-radius:4px">${esc(tag)}</span>`).join('')}</div>` : ''}</div><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost" style="padding:4px 8px" onclick="event.stopPropagation();fcToggleFavorite('${esc(document.id)}')" aria-label="Alternar favorito"><svg  class="pg-icon" style="color:${document.favorite ? 'var(--amber)' : 'var(--text-muted)'}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></button><button type="button" class="btn btn-ghost" style="padding:4px 8px" onclick="event.stopPropagation();fcOpenFile('${esc(document.id)}')" aria-label="Abrir documento"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button></div></article>`).join('');
-    root.innerHTML = state.view === 'grid' ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">${cards}</div>` : `<div style="display:grid;gap:8px">${cards}</div>`;
-    refreshIcons();
+
+    // Aplicar filtros de busca e tipo
+    const query = (document.getElementById('fc-search')?.value || '').trim().toLowerCase();
+    const typeFilter = document.getElementById('fc-type-filter')?.value || '';
+    if (query || typeFilter) {
+      docs = docs.filter(d => {
+        const haystack = [d.name, d.description, ...(d.tags || [])].join(' ').toLowerCase();
+        const matchQuery = !query || haystack.includes(query);
+        let matchType = true;
+        if (typeFilter) {
+          const m = String(d.mimeType || '').toLowerCase();
+          const n = String(d.name || '').toLowerCase();
+          if (typeFilter === 'pdf') matchType = m.includes('pdf') || n.endsWith('.pdf');
+          else if (typeFilter === 'image') matchType = m.startsWith('image/');
+          else if (typeFilter === 'word') matchType = m.includes('word') || m.includes('document') || /\.docx?$/.test(n);
+          else if (typeFilter === 'excel') matchType = m.includes('spreadsheet') || m.includes('excel') || /\.xlsx?$/.test(n);
+          else if (typeFilter === 'text') matchType = m.startsWith('text/') || /\.(txt|md|csv)$/.test(n);
+          else if (typeFilter === 'video') matchType = m.startsWith('video/') || n.endsWith('.mp4');
+          else if (typeFilter === 'folder') matchType = d.isFolder;
+        }
+        return matchQuery && matchType;
+      });
+    }
+
+    // Label de seção
+    const labelEl = document.getElementById('fc-section-label');
+    if (labelEl) {
+      if (sectionLabel) {
+        labelEl.textContent = sectionLabel;
+        labelEl.style.display = 'block';
+      } else {
+        labelEl.style.display = 'none';
+      }
+    }
+
+    // Banner da lixeira
+    let trashBanner = '';
+    if (S.section === 'trash' && S.trashDocs.length > 0) {
+      trashBanner = `<div class="fc-trash-banner">
+        <span>${S.trashDocs.length} arquivo(s) na lixeira</span>
+        <button class="btn btn-ghost" type="button" onclick="fcEmptyTrash()" style="font-size:12px;color:var(--red)">Esvaziar lixeira</button>
+      </div>`;
+    }
+
+    if (!docs.length) {
+      const isFiltered = query || typeFilter;
+      root.innerHTML = `${trashBanner}<div style="padding:42px 20px;text-align:center">
+        <div style="font-size:32px;margin-bottom:10px">${S.section === 'trash' ? '🗑️' : S.section === 'favorites' ? '⭐' : '📁'}</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:7px">${isFiltered ? 'Nenhum arquivo corresponde aos filtros.' : S.section === 'trash' ? 'Lixeira vazia.' : S.section === 'favorites' ? 'Nenhum favorito ainda.' : 'Nenhum arquivo nesta pasta.'}</div>
+        <div style="font-size:13px;color:var(--text-muted);margin:0 auto 16px;max-width:480px">${isFiltered ? 'Ajuste a busca ou os filtros.' : S.section === 'main' ? 'Faça upload de arquivos para começar.' : ''}</div>
+        ${isFiltered ? '<button class="btn btn-ghost" type="button" onclick="fcClearFilters()">Limpar filtros</button>' : S.section === 'main' ? '<button class="btn btn-primary" type="button" onclick="fcUpload()">Upload de Arquivos</button>' : ''}
+      </div>`;
+      icons(); return;
+    }
+
+    const viewClass = S.view === 'list' ? 'fc-list-view' : 'fc-grid-view';
+    const cards = docs.map(d => fcRenderItem(d)).join('');
+    root.innerHTML = `${trashBanner}<div class="${viewClass}">${cards}</div>`;
+    icons();
+  }
+
+  function fcRenderItem(d) {
+    const { label, bg, color } = mimeIcon(d.mimeType, d.name);
+    const isFolder = d.isFolder;
+    const isTrash = S.section === 'trash';
+    const isFav = d.favorite;
+    const sizeLabel = isFolder ? 'Pasta' : fmtSize(d.size);
+    const dateLabel = fmtDate(d.updatedAt || d.createdAt);
+    const tagsHtml = (d.tags || []).slice(0, 3).map(t => `<span style="padding:2px 6px;background:rgba(99,102,241,.1);border-radius:4px;font-size:10px;color:var(--accent)">${esc(t)}</span>`).join('');
+
+    let actions = '';
+    if (isTrash) {
+      actions = `
+        <button class="fc-action-btn" type="button" onclick="event.stopPropagation();fcRestore('${esc(d.id)}')" title="Restaurar" aria-label="Restaurar">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        </button>
+        <button class="fc-action-btn" type="button" onclick="event.stopPropagation();fcPermanentDelete('${esc(d.id)}','${esc(d.name)}')" title="Excluir permanentemente" aria-label="Excluir permanentemente" style="color:var(--red)">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>`;
+    } else if (!isFolder) {
+      actions = `
+        <button class="fc-action-btn ${isFav ? 'fc-fav-active' : ''}" type="button" onclick="event.stopPropagation();fcToggleFavorite('${esc(d.id)}')" title="${isFav ? 'Remover dos favoritos' : 'Favoritar'}" aria-label="${isFav ? 'Remover dos favoritos' : 'Favoritar'}">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${isFav ? 'var(--amber)' : 'none'}" stroke="${isFav ? 'var(--amber)' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+        </button>
+        <button class="fc-action-btn" type="button" onclick="event.stopPropagation();fcDownload('${esc(d.id)}','${esc(d.name)}')" title="Download" aria-label="Download">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <button class="fc-action-btn" type="button" onclick="event.stopPropagation();fcDeleteItem('${esc(d.id)}')" title="Mover para lixeira" aria-label="Excluir" style="color:var(--red)">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>`;
+    } else {
+      actions = `
+        <button class="fc-action-btn" type="button" onclick="event.stopPropagation();fcDeleteItem('${esc(d.id)}')" title="Excluir pasta" aria-label="Excluir pasta" style="color:var(--red)">
+          <svg style="width:14px;height:14px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>`;
+    }
+
+    const clickHandler = isFolder
+      ? `onclick="fcOpenFolder('${esc(d.id)}','${esc(d.name)}')" ondblclick="event.stopPropagation()"`
+      : isTrash
+        ? `onclick="fcOpenViewer('${esc(d.id)}')" ondblclick="event.stopPropagation()"`
+        : `onclick="fcOpenViewer('${esc(d.id)}')" ondblclick="event.stopPropagation()"`;
+
+    return `<article class="fc-item-card" ${clickHandler} draggable="${!isTrash && !isFolder}" ondragstart="fcDragStart(event,'${esc(d.id)}')" data-id="${esc(d.id)}">
+      <div class="fc-item-icon" style="background:${bg};color:${color}">${label}</div>
+      <div style="flex:1;min-width:0">
+        <div class="fc-item-name" title="${esc(d.name)}">${esc(d.name)}</div>
+        <div class="fc-item-meta">${esc(sizeLabel)} · ${esc(dateLabel)}</div>
+        ${tagsHtml ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${tagsHtml}</div>` : ''}
+      </div>
+      <div class="fc-item-actions">${actions}</div>
+    </article>`;
+  }
+
+  /* ── Navegação de pastas ── */
+  window.fcGoRoot = () => {
+    S.currentFolder = 'root';
+    S.folderStack = [];
+    S.section = 'main';
+    fcUpdateBreadcrumb();
+    fcRender();
   };
-  const request = async (body) => {
-    const response = await fetch('/api/documents', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.ok) throw new Error(data.error || 'Não foi possível concluir a operação.');
-    return data;
+  window.fcOpenFolder = (id, name) => {
+    S.folderStack.push({ id: S.currentFolder, name: S.folderStack.length === 0 ? 'Meus Arquivos' : (S.folderStack[S.folderStack.length - 1]?.name || '') });
+    S.currentFolder = id;
+    S.section = 'main';
+    fcUpdateBreadcrumb();
+    fcRender();
   };
-  window.fcLoad = async () => {
-    const root = document.getElementById('fc-content'); if (root) root.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando documentos persistidos...</div>';
+  function fcUpdateBreadcrumb() {
+    const trail = document.getElementById('fc-breadcrumb-trail');
+    if (!trail) return;
+    if (S.folderStack.length === 0) { trail.innerHTML = ''; return; }
+    const crumbs = S.folderStack.map((f, i) =>
+      `<span style="color:var(--text-muted)"> / </span><span style="color:var(--accent);cursor:pointer" onclick="fcJumpBreadcrumb(${i})">${esc(f.name || 'Pasta')}</span>`
+    ).join('');
+    trail.innerHTML = crumbs;
+  }
+  window.fcJumpBreadcrumb = (idx) => {
+    const target = S.folderStack[idx];
+    if (!target) return;
+    S.currentFolder = target.id;
+    S.folderStack = S.folderStack.slice(0, idx);
+    S.section = 'main';
+    fcUpdateBreadcrumb();
+    fcRender();
+  };
+
+  /* ── Seções ── */
+  window.fcShowSection = (section) => {
+    S.section = section;
+    const labelEl = document.getElementById('fc-section-label');
+    if (labelEl) labelEl.style.display = 'block';
+    fcRender();
+  };
+
+  /* ── Filtros ── */
+  window.fcApplyFilters = () => fcRender();
+  window.fcClearFilters = () => {
+    const s = document.getElementById('fc-search');
+    const t = document.getElementById('fc-type-filter');
+    if (s) s.value = '';
+    if (t) t.value = '';
+    fcRender();
+  };
+
+  /* ── Vista ── */
+  window.fcView = (v) => {
+    S.view = v === 'list' ? 'list' : 'grid';
+    document.getElementById('fc-btn-grid')?.classList.toggle('btn-primary', S.view === 'grid');
+    document.getElementById('fc-btn-list')?.classList.toggle('btn-primary', S.view === 'list');
+    fcRender();
+  };
+
+  /* ── Upload ── */
+  window.fcUpload = () => {
+    S.pendingFiles = [];
+    const list = document.getElementById('fc-upload-file-list');
+    if (list) list.innerHTML = '';
+    const err = document.getElementById('fc-upload-error');
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    const prog = document.getElementById('fc-upload-progress');
+    if (prog) prog.style.display = 'none';
+    fcOpenModal('fc-upload-modal');
+  };
+  window.fcHandleFileSelect = (e) => {
+    const files = Array.from(e.target.files || []);
+    fcAddPendingFiles(files);
+  };
+  window.fcHandleDropZone = (e) => {
+    e.preventDefault();
+    const dz = document.getElementById('fc-drop-zone');
+    if (dz) { dz.style.borderColor = ''; dz.style.background = ''; }
+    const files = Array.from(e.dataTransfer?.files || []);
+    fcAddPendingFiles(files);
+  };
+  function fcAddPendingFiles(files) {
+    S.pendingFiles = [...S.pendingFiles, ...files];
+    const list = document.getElementById('fc-upload-file-list');
+    if (!list) return;
+    list.innerHTML = S.pendingFiles.map((f, i) => {
+      const { label, bg, color } = mimeIcon(f.type, f.name);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px">
+        <div style="width:32px;height:32px;border-radius:6px;background:${bg};color:${color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">${label}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(f.name)}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${fmtSize(f.size)}</div>
+        </div>
+        <button type="button" onclick="fcRemovePendingFile(${i})" style="border:none;background:transparent;cursor:pointer;color:var(--text-muted);padding:4px" aria-label="Remover">✕</button>
+      </div>`;
+    }).join('');
+  }
+  window.fcRemovePendingFile = (i) => {
+    S.pendingFiles.splice(i, 1);
+    fcAddPendingFiles([]);
+  };
+  window.fcSubmitUpload = async () => {
+    if (!S.pendingFiles.length) {
+      const err = document.getElementById('fc-upload-error');
+      if (err) { err.textContent = 'Selecione pelo menos um arquivo.'; err.style.display = 'block'; }
+      return;
+    }
+    const btn = document.getElementById('fc-upload-submit');
+    const prog = document.getElementById('fc-upload-progress');
+    const progBar = document.getElementById('fc-upload-progress-bar');
+    const progLabel = document.getElementById('fc-upload-progress-label');
+    const err = document.getElementById('fc-upload-error');
+    if (btn) btn.disabled = true;
+    if (prog) prog.style.display = 'block';
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    const desc = document.getElementById('fc-upload-description')?.value?.trim() || '';
+    const tags = document.getElementById('fc-upload-tags')?.value?.trim() || '';
+    let uploaded = 0;
+    let failed = 0;
+    for (let i = 0; i < S.pendingFiles.length; i++) {
+      const file = S.pendingFiles[i];
+      if (progLabel) progLabel.textContent = `Enviando ${i + 1}/${S.pendingFiles.length}: ${file.name}`;
+      if (progBar) progBar.style.width = `${Math.round(((i) / S.pendingFiles.length) * 100)}%`;
+      try {
+        const fd = new FormData();
+        fd.append('action', 'upload');
+        fd.append('file', file);
+        fd.append('folderId', S.currentFolder || 'root');
+        fd.append('description', desc);
+        fd.append('tags', tags);
+        await apiUpload(fd);
+        uploaded++;
+      } catch (e) {
+        failed++;
+        console.warn('Upload failed:', file.name, e.message);
+      }
+    }
+    if (progBar) progBar.style.width = '100%';
+    if (btn) btn.disabled = false;
+    if (uploaded > 0) {
+      fcCloseModal('fc-upload-modal');
+      toast(`${uploaded} arquivo(s) enviado(s) com sucesso.`, 'success');
+      await window.fcLoad();
+    }
+    if (failed > 0) {
+      const errEl = document.getElementById('fc-upload-error');
+      if (errEl) { errEl.textContent = `${failed} arquivo(s) falharam no upload. Verifique o tamanho e tipo.`; errEl.style.display = 'block'; }
+    }
+  };
+
+  /* ── Drag & Drop na área principal ── */
+  window.fcHandleDrop = async (e) => {
+    e.preventDefault();
+    const root = document.getElementById('fc-content');
+    if (root) root.classList.remove('fc-drag-over');
+    const files = Array.from(e.dataTransfer?.files || []);
+    if (files.length) {
+      S.pendingFiles = files;
+      const desc = '';
+      const tags = '';
+      let uploaded = 0;
+      for (const file of files) {
+        try {
+          const fd = new FormData();
+          fd.append('action', 'upload');
+          fd.append('file', file);
+          fd.append('folderId', S.currentFolder || 'root');
+          await apiUpload(fd);
+          uploaded++;
+        } catch (err) {
+          toast(`Erro ao enviar ${file.name}: ${err.message}`, 'error');
+        }
+      }
+      if (uploaded > 0) {
+        toast(`${uploaded} arquivo(s) enviado(s).`, 'success');
+        await window.fcLoad();
+      }
+    }
+  };
+
+  /* ── Drag de item para pasta ── */
+  let _dragId = null;
+  window.fcDragStart = (e, id) => {
+    _dragId = id;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  /* ── Criar pasta ── */
+  window.fcCreateFolder = () => {
+    const input = document.getElementById('fc-folder-name-input');
+    const errEl = document.getElementById('fc-folder-error');
+    if (input) input.value = '';
+    if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+    fcOpenModal('fc-folder-modal');
+    setTimeout(() => { input?.focus(); }, 80);
+  };
+  window.fcCreateFolderConfirm = async () => {
+    const input = document.getElementById('fc-folder-name-input');
+    const errEl = document.getElementById('fc-folder-error');
+    const name = (input?.value || '').trim();
+    if (!name) { if (errEl) { errEl.textContent = 'Nome obrigatório.'; errEl.style.display = 'block'; } return; }
+    const btn = document.getElementById('fc-folder-ok');
+    if (btn) { btn.disabled = true; btn.textContent = 'Criando...'; }
     try {
-      const [listResponse, statsResponse, sharedResponse] = await Promise.all([fetch('/api/documents?view=list', { credentials: 'same-origin' }), fetch('/api/documents?view=stats', { credentials: 'same-origin' }), fetch('/api/documents?view=shared', { credentials: 'same-origin' })]);
-      const [list, stats, shared] = await Promise.all([listResponse.json(), statsResponse.json(), sharedResponse.json()]);
-      if (!listResponse.ok || !list.ok) throw new Error(list.error || 'Não foi possível carregar os documentos.');
-      state.documents = Array.isArray(list.documents) ? list.documents : [];
-      state.stats = stats.ok ? { ...(stats.stats || {}), shared: Array.isArray(shared.shared) ? shared.shared.length : 0 } : { total: state.documents.length, favorites: 0, totalSize: 0, shared: 0 };
-      updateStats(); render();
-    } catch (error) {
-      if (root) root.innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">${esc(error instanceof Error ? error.message : 'Não foi possível carregar os documentos.')}<div style="margin-top:12px"><button class="btn btn-ghost" type="button" onclick="fcLoad()">Tentar novamente</button></div></div>`;
+      await apiPost({ action: 'create-folder', name, parentId: S.currentFolder || 'root' });
+      fcCloseModal('fc-folder-modal');
+      toast('Pasta criada.', 'success');
+      await window.fcLoad();
+    } catch (err) {
+      if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Criar Pasta'; }
     }
   };
-  window.fcView = (view) => { state.view = view === 'list' ? 'list' : 'grid'; document.getElementById('fc-btn-grid')?.classList.toggle('btn-primary', state.view === 'grid'); document.getElementById('fc-btn-list')?.classList.toggle('btn-primary', state.view === 'list'); render(); };
-  window.fcClearFilters = () => { const search = document.getElementById('fc-search'); const type = document.getElementById('fc-type-filter'); if (search) search.value = ''; if (type) type.value = ''; render(); };
-  window.fcOpenFile = (id) => { const record = state.documents.find((item) => item.id === id); if (!record) return; state.active = record; const main = document.getElementById('page-file-center'); const viewer = document.getElementById('page-file-viewer'); if (main) main.style.display = 'none'; if (viewer) viewer.style.display = 'block'; const title = document.getElementById('fc-viewer-title'); const subtitle = document.getElementById('fc-viewer-subtitle'); const content = document.getElementById('fc-viewer-content'); if (title) title.textContent = state.active.name; if (subtitle) subtitle.textContent = `${size(state.active.size)} · v${state.active.version || 1} · ${formatDate(state.active.updatedAt)}`; if (content) content.innerHTML = `<div style="display:grid;grid-template-columns:1fr minmax(240px,320px);gap:16px"><div style="min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--border);border-radius:10px;padding:24px"><div><i data-lucide="${icon(state.active.mimeType)}" style="width:52px;height:52px;color:var(--accent);margin-bottom:12px" aria-hidden="true"></i><div style="font-size:16px;font-weight:800">${esc(state.active.name)}</div><div style="font-size:13px;color:var(--text-muted);margin-top:8px">${esc(state.active.description || 'Nenhuma descrição fornecida.')}</div></div></div><aside class="card" style="padding:16px"><div style="font-size:13px;font-weight:800;margin-bottom:12px">Informações</div><div style="display:grid;gap:8px;font-size:12px"><div>Tipo: <strong>${esc(state.active.mimeType || 'Não informado')}</strong></div><div>Tamanho: <strong>${size(state.active.size)}</strong></div><div>Versão: <strong>v${esc(state.active.version || 1)}</strong></div><div>Atualizado: <strong>${formatDate(state.active.updatedAt)}</strong></div></div><div style="font-size:12px;font-weight:800;margin:16px 0 8px">Etiquetas</div>${state.active.tags?.length ? `<div style="display:flex;gap:5px;flex-wrap:wrap">${state.active.tags.map((tag) => `<span style="padding:3px 7px;background:rgba(99,102,241,.12);border-radius:4px;font-size:11px">${esc(tag)}</span>`).join('')}</div>` : '<div style="font-size:12px;color:var(--text-muted)">Sem etiquetas.</div>'}</aside></div>`; refreshIcons(); };
-  window.fcBack = () => { document.getElementById('page-file-viewer').style.display = 'none'; document.getElementById('page-file-center').style.display = 'block'; };
-  window.fcOpenModal = (id) => { const modal = document.getElementById(id); if (modal) modal.style.display = 'flex'; };
-  window.fcCloseModal = (id) => { const modal = document.getElementById(id); if (modal) modal.style.display = 'none'; };
-  window.fcUpload = () => window.fcOpenModal('fc-upload-modal');
-  window.fcShare = () => { if (!state.active) { toast('Abra um documento para compartilhá-lo.', 'info'); return; } window.fcOpenModal('fc-share-modal'); };
-  window.fcOpenVersions = async () => { if (!state.active) { toast('Abra um documento para consultar versões.', 'info'); return; } const root = document.getElementById('fc-versions-content'); root.innerHTML = '<div style="color:var(--text-muted)">Carregando versões...</div>'; window.fcOpenModal('fc-versions-modal'); try { const response = await fetch(`/api/documents?view=versions&docId=${encodeURIComponent(state.active.id)}`, { credentials: 'same-origin' }); const data = await response.json(); const versions = data.versions || []; root.innerHTML = versions.length ? versions.map((version, index) => `<div class="card" style="padding:12px"><strong>v${esc(version.version)}</strong>${index === 0 ? ' <span style="color:var(--green);font-size:11px">Atual</span>' : ''}<div style="font-size:12px;color:var(--text-muted);margin-top:4px">${esc(version.comment || 'Sem comentário')} · ${formatDate(version.uploadedAt)} · ${size(version.size)}</div></div>`).join('') : '<div style="color:var(--text-muted)">Nenhuma versão registrada.</div>'; } catch (_) { root.innerHTML = '<div style="color:var(--red)">Não foi possível carregar as versões.</div>'; } };
-  window.fcToggleFavorite = async (id) => { try { await request({ action: 'toggle-favorite', docId: id }); await window.fcLoad(); } catch (error) { toast(error.message, 'error'); } };
-  document.getElementById('fc-upload-form')?.addEventListener('submit', async (event) => { event.preventDefault(); const error = document.getElementById('fc-upload-error'); try { await request({ action: 'upload', name: document.getElementById('fc-upload-name').value.trim(), description: document.getElementById('fc-upload-description').value.trim(), tags: document.getElementById('fc-upload-tags').value.split(',').map((item) => item.trim()).filter(Boolean), mimeType: document.getElementById('fc-upload-mime').value }); window.fcCloseModal('fc-upload-modal'); event.currentTarget.reset(); await window.fcLoad(); toast('Documento registrado.', 'success'); } catch (exception) { error.textContent = exception.message; error.style.display = 'block'; } });
-  document.getElementById('fc-share-form')?.addEventListener('submit', async (event) => { event.preventDefault(); const error = document.getElementById('fc-share-error'); try { await request({ action: 'share', docId: state.active.id, targetUser: document.getElementById('fc-share-email').value.trim(), permission: document.getElementById('fc-share-permission').value }); window.fcCloseModal('fc-share-modal'); event.currentTarget.reset(); toast('Documento compartilhado.', 'success'); } catch (exception) { error.textContent = exception.message; error.style.display = 'block'; } });
-  document.getElementById('fc-search')?.addEventListener('input', render);
-  document.getElementById('fc-type-filter')?.addEventListener('change', render);
-  window.LifeOSFileCenter = { load: window.fcLoad, state };
+
+  /* ── Favoritar ── */
+  window.fcToggleFavorite = async (id) => {
+    try {
+      await apiPost({ action: 'toggle-favorite', docId: id });
+      await window.fcLoad();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  /* ── Download ── */
+  window.fcDownload = async (id, name) => {
+    try {
+      const a = document.createElement('a');
+      a.href = `/api/documents?view=content&docId=${encodeURIComponent(id)}&dl=1`;
+      a.download = name || 'arquivo';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      toast('Erro ao iniciar download.', 'error');
+    }
+  };
+
+  /* ── Excluir (mover para lixeira) ── */
+  window.fcDeleteItem = async (id) => {
+    try {
+      await apiPost({ action: 'delete', docId: id });
+      toast('Movido para a lixeira.', 'success');
+      if (S.active?.id === id) fcBackToList();
+      await window.fcLoad();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  /* ── Restaurar da lixeira ── */
+  window.fcRestore = async (id) => {
+    try {
+      await apiPost({ action: 'restore', docId: id });
+      toast('Arquivo restaurado.', 'success');
+      await window.fcLoad();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  /* ── Exclusão permanente ── */
+  window.fcPermanentDelete = (id, name) => {
+    const msg = document.getElementById('fc-confirm-message');
+    if (msg) msg.textContent = `Excluir permanentemente "${name}"? Esta ação não pode ser desfeita.`;
+    const okBtn = document.getElementById('fc-confirm-ok');
+    if (okBtn) {
+      okBtn.onclick = async () => {
+        fcCloseModal('fc-confirm-modal');
+        try {
+          await apiPost({ action: 'permanent-delete', docId: id });
+          toast('Arquivo excluído permanentemente.', 'success');
+          await window.fcLoad();
+        } catch (err) {
+          toast(err.message, 'error');
+        }
+      };
+    }
+    fcOpenModal('fc-confirm-modal');
+  };
+
+  /* ── Esvaziar lixeira ── */
+  window.fcEmptyTrash = () => {
+    const msg = document.getElementById('fc-confirm-message');
+    if (msg) msg.textContent = `Esvaziar a lixeira? Todos os ${S.trashDocs.length} arquivo(s) serão excluídos permanentemente. Esta ação não pode ser desfeita.`;
+    const okBtn = document.getElementById('fc-confirm-ok');
+    if (okBtn) {
+      okBtn.textContent = 'Esvaziar lixeira';
+      okBtn.onclick = async () => {
+        fcCloseModal('fc-confirm-modal');
+        try {
+          await apiPost({ action: 'empty-trash' });
+          toast('Lixeira esvaziada.', 'success');
+          await window.fcLoad();
+        } catch (err) {
+          toast(err.message, 'error');
+        }
+      };
+    }
+    fcOpenModal('fc-confirm-modal');
+  };
+
+  /* ── Viewer ── */
+  window.fcOpenViewer = (id) => {
+    const doc = [...S.allDocs, ...S.trashDocs].find(d => d.id === id);
+    if (!doc) return;
+    S.active = doc;
+    // Atualizar header
+    const title = document.getElementById('fc-viewer-title');
+    const subtitle = document.getElementById('fc-viewer-subtitle');
+    if (title) title.textContent = doc.name;
+    if (subtitle) subtitle.textContent = `${fmtSize(doc.size)} · v${doc.version || 1} · ${fmtDate(doc.updatedAt)}`;
+    // Metadados
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('fc-meta-type', doc.mimeType || '—');
+    set('fc-meta-size', fmtSize(doc.size));
+    set('fc-meta-version', `v${doc.version || 1}`);
+    set('fc-meta-created', fmtDate(doc.createdAt));
+    set('fc-meta-updated', fmtDate(doc.updatedAt));
+    set('fc-meta-favorite', doc.favorite ? 'Sim' : 'Não');
+    const tagsEl = document.getElementById('fc-meta-tags');
+    if (tagsEl) tagsEl.innerHTML = (doc.tags || []).length ? doc.tags.map(t => `<span style="padding:3px 7px;background:rgba(99,102,241,.12);border-radius:4px;font-size:11px">${esc(t)}</span>`).join('') : '<span style="font-size:12px;color:var(--text-muted)">Sem etiquetas</span>';
+    const descEl = document.getElementById('fc-meta-description');
+    if (descEl) descEl.textContent = doc.description || 'Sem descrição.';
+    // Botão favorito
+    const favBtn = document.getElementById('fc-viewer-fav-btn');
+    const favLabel = document.getElementById('fc-viewer-fav-label');
+    if (favBtn) favBtn.classList.toggle('fc-fav-active', doc.favorite);
+    if (favLabel) favLabel.textContent = doc.favorite ? 'Desfavoritar' : 'Favoritar';
+    // Preview
+    fcRenderPreview(doc);
+    // Mostrar viewer
+    document.getElementById('page-file-center').style.display = 'none';
+    document.getElementById('page-file-viewer').style.display = 'block';
+    icons();
+  };
+
+  async function fcRenderPreview(doc) {
+    const el = document.getElementById('fc-viewer-preview');
+    if (!el) return;
+    const mt = String(doc.mimeType || '').toLowerCase();
+    const name = String(doc.name || '').toLowerCase();
+    const url = doc.downloadUrl || `/api/documents?view=content&docId=${encodeURIComponent(doc.id)}`;
+
+    if (!doc.downloadUrl && !doc.storageKey && !doc.storageUrl) {
+      el.innerHTML = `<div style="text-align:center;padding:40px">
+        <div style="font-size:48px;margin-bottom:12px">📄</div>
+        <div style="font-size:14px;font-weight:700">${esc(doc.name)}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:8px">Arquivo sem conteúdo armazenado no R2.</div>
+      </div>`;
+      return;
+    }
+
+    // Imagens
+    if (mt.startsWith('image/') || /\.(png|jpg|jpeg|webp|gif)$/.test(name)) {
+      el.innerHTML = `<img src="${esc(url)}" style="max-width:100%;max-height:600px;object-fit:contain;border-radius:8px;display:block;margin:auto" alt="${esc(doc.name)}" loading="lazy" />`;
+      return;
+    }
+    // PDF
+    if (mt === 'application/pdf' || name.endsWith('.pdf')) {
+      el.innerHTML = `<iframe src="${esc(url)}#toolbar=0&view=FitH" style="width:100%;height:600px;border:none;border-radius:8px" title="${esc(doc.name)}"></iframe>`;
+      return;
+    }
+    // Texto / Markdown / JSON / CSV
+    if (mt.startsWith('text/') || mt === 'application/json' || /\.(txt|md|csv|json)$/.test(name)) {
+      el.innerHTML = '<div style="padding:20px;color:var(--text-muted)">Carregando...</div>';
+      try {
+        const r = await fetch(url, { credentials: 'same-origin' });
+        const txt = await r.text();
+        el.innerHTML = `<pre style="white-space:pre-wrap;word-wrap:break-word;padding:20px;font-size:13px;color:var(--text-primary);max-height:600px;overflow:auto;margin:0;line-height:1.6">${esc(txt)}</pre>`;
+      } catch {
+        el.innerHTML = '<div style="padding:20px;color:var(--text-muted)">Não foi possível carregar o conteúdo.</div>';
+      }
+      return;
+    }
+    // XLSX / Excel
+    if (mt.includes('spreadsheet') || mt.includes('excel') || /\.xlsx?$/.test(name)) {
+      el.innerHTML = '<div style="padding:20px;color:var(--text-muted)">Carregando planilha...</div>';
+      try {
+        if (!window.XLSX) {
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+            s.onload = res; s.onerror = rej;
+            document.head.appendChild(s);
+          });
+        }
+        const r = await fetch(url, { credentials: 'same-origin' });
+        const ab = await r.arrayBuffer();
+        const wb = window.XLSX.read(ab, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const html = window.XLSX.utils.sheet_to_html(ws);
+        el.innerHTML = `<div style="padding:12px;max-height:600px;overflow:auto"><style>#xlsx-table,#xlsx-table td,#xlsx-table th{border:1px solid var(--border);padding:4px 8px;color:var(--text-primary);font-size:12px}</style>${html}</div>`;
+      } catch {
+        el.innerHTML = `<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:14px">Planilha Excel</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="fcDownloadActive()">Download</button></div>`;
+      }
+      return;
+    }
+    // DOCX / Word
+    if (mt.includes('word') || mt.includes('document') || /\.docx?$/.test(name)) {
+      el.innerHTML = '<div style="padding:20px;color:var(--text-muted)">Carregando documento Word...</div>';
+      try {
+        if (!window.mammoth) {
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js';
+            s.onload = res; s.onerror = rej;
+            document.head.appendChild(s);
+          });
+        }
+        const r = await fetch(url, { credentials: 'same-origin' });
+        const ab = await r.arrayBuffer();
+        const result = await window.mammoth.convertToHtml({ arrayBuffer: ab });
+        el.innerHTML = `<div style="padding:20px;max-height:600px;overflow:auto;line-height:1.6;color:var(--text-primary);font-size:13px">${result.value}</div>`;
+      } catch {
+        el.innerHTML = `<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:14px">Documento Word</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="fcDownloadActive()">Download</button></div>`;
+      }
+      return;
+    }
+    // Vídeo MP4
+    if (mt.startsWith('video/') || name.endsWith('.mp4')) {
+      el.innerHTML = `<video controls style="max-width:100%;max-height:600px;border-radius:8px;display:block;margin:auto" preload="metadata"><source src="${esc(url)}" type="${esc(doc.mimeType || 'video/mp4')}">Seu navegador não suporta vídeo HTML5.</video>`;
+      return;
+    }
+    // Fallback genérico
+    el.innerHTML = `<div style="text-align:center;padding:40px">
+      <div style="font-size:48px;margin-bottom:12px">📄</div>
+      <div style="font-size:14px;font-weight:700">${esc(doc.name)}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:8px">${esc(doc.mimeType || 'Tipo desconhecido')}</div>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="fcDownloadActive()">
+        <svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </button>
+    </div>`;
+  }
+
+  window.fcBackToList = () => {
+    S.active = null;
+    document.getElementById('page-file-viewer').style.display = 'none';
+    document.getElementById('page-file-center').style.display = 'block';
+  };
+
+  window.fcToggleFavoriteActive = async () => {
+    if (!S.active) return;
+    try {
+      await apiPost({ action: 'toggle-favorite', docId: S.active.id });
+      S.active.favorite = !S.active.favorite;
+      const favBtn = document.getElementById('fc-viewer-fav-btn');
+      const favLabel = document.getElementById('fc-viewer-fav-label');
+      const metaFav = document.getElementById('fc-meta-favorite');
+      if (favBtn) favBtn.classList.toggle('fc-fav-active', S.active.favorite);
+      if (favLabel) favLabel.textContent = S.active.favorite ? 'Desfavoritar' : 'Favoritar';
+      if (metaFav) metaFav.textContent = S.active.favorite ? 'Sim' : 'Não';
+      toast(S.active.favorite ? 'Adicionado aos favoritos.' : 'Removido dos favoritos.', 'success');
+      // Atualizar stats sem reload completo
+      if (S.active.favorite) S.stats.favorites = (S.stats.favorites || 0) + 1;
+      else S.stats.favorites = Math.max(0, (S.stats.favorites || 1) - 1);
+      fcUpdateStats();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  window.fcRenameActive = () => {
+    if (!S.active) { toast('Abra um arquivo para renomeá-lo.', 'info'); return; }
+    const input = document.getElementById('fc-rename-input');
+    const errEl = document.getElementById('fc-rename-error');
+    if (input) { input.value = S.active.name; }
+    if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+    const title = document.getElementById('fc-rename-modal-title');
+    if (title) title.textContent = `Renomear: ${S.active.name}`;
+    fcOpenModal('fc-rename-modal');
+    setTimeout(() => { input?.select(); }, 80);
+  };
+  window.fcRenameConfirm = async () => {
+    if (!S.active) return;
+    const input = document.getElementById('fc-rename-input');
+    const errEl = document.getElementById('fc-rename-error');
+    const name = (input?.value || '').trim();
+    if (!name) { if (errEl) { errEl.textContent = 'Nome obrigatório.'; errEl.style.display = 'block'; } return; }
+    if (name === S.active.name) { fcCloseModal('fc-rename-modal'); return; }
+    const btn = document.getElementById('fc-rename-ok');
+    if (btn) { btn.disabled = true; btn.textContent = 'Renomeando...'; }
+    try {
+      await apiPost({ action: 'rename', docId: S.active.id, name });
+      S.active.name = name;
+      const viewerTitle = document.getElementById('fc-viewer-title');
+      if (viewerTitle) viewerTitle.textContent = name;
+      fcCloseModal('fc-rename-modal');
+      toast('Arquivo renomeado.', 'success');
+      await window.fcLoad();
+    } catch (err) {
+      if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Renomear'; }
+    }
+  };
+
+  window.fcDownloadActive = () => {
+    if (!S.active) return;
+    fcDownload(S.active.id, S.active.name);
+  };
+
+  window.fcShareActive = () => {
+    if (!S.active) { toast('Abra um arquivo para compartilhá-lo.', 'info'); return; }
+    const err = document.getElementById('fc-share-error');
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    fcOpenModal('fc-share-modal');
+  };
+
+  window.fcSubmitShare = async (e) => {
+    e.preventDefault();
+    if (!S.active) return;
+    const email = document.getElementById('fc-share-email')?.value?.trim();
+    const permission = document.getElementById('fc-share-permission')?.value || 'view';
+    const err = document.getElementById('fc-share-error');
+    try {
+      await apiPost({ action: 'share', docId: S.active.id, targetUserId: email, permission });
+      fcCloseModal('fc-share-modal');
+      document.getElementById('fc-share-form')?.reset();
+      toast('Arquivo compartilhado com sucesso.', 'success');
+    } catch (error) {
+      if (err) { err.textContent = error.message; err.style.display = 'block'; }
+    }
+  };
+
+  window.fcDeleteActive = async () => {
+    if (!S.active) return;
+    await fcDeleteItem(S.active.id);
+    fcBackToList();
+  };
+
+  window.fcCopyActive = async () => {
+    if (!S.active) return;
+    try {
+      await apiPost({ action: 'copy', docId: S.active.id });
+      toast('Arquivo copiado.', 'success');
+      await window.fcLoad();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  window.fcMoveActive = () => {
+    if (!S.active) return;
+    const folders = S.allDocs.filter(d => d.isFolder);
+    const list = document.getElementById('fc-move-folder-list');
+    if (!list) return;
+    if (!folders.length) {
+      list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">Nenhuma pasta criada. Crie uma pasta primeiro.</div>';
+    } else {
+      list.innerHTML = `
+        <div class="fc-item-card" onclick="fcMoveToFolder('root')" style="cursor:pointer">
+          <div class="fc-item-icon" style="background:rgba(245,158,11,.15);color:var(--amber)">📁</div>
+          <div><div class="fc-item-name">Raiz (Meus Arquivos)</div></div>
+        </div>
+        ${folders.map(f => `<div class="fc-item-card" onclick="fcMoveToFolder('${esc(f.id)}')" style="cursor:pointer">
+          <div class="fc-item-icon" style="background:rgba(245,158,11,.15);color:var(--amber)">📁</div>
+          <div><div class="fc-item-name">${esc(f.name)}</div></div>
+        </div>`).join('')}`;
+    }
+    fcOpenModal('fc-move-modal');
+  };
+
+  window.fcMoveToFolder = async (folderId) => {
+    if (!S.active) return;
+    fcCloseModal('fc-move-modal');
+    try {
+      await apiPost({ action: 'move', docId: S.active.id, folderId });
+      S.active.folderId = folderId;
+      toast('Arquivo movido.', 'success');
+      await window.fcLoad();
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+
+  window.fcVersionsActive = async () => {
+    if (!S.active) return;
+    const root = document.getElementById('fc-versions-content');
+    if (root) root.innerHTML = '<div style="color:var(--text-muted);padding:8px">Carregando versões...</div>';
+    fcOpenModal('fc-versions-modal');
+    try {
+      const data = await apiGet({ view: 'versions', docId: S.active.id });
+      const versions = data.versions || [];
+      if (!root) return;
+      root.innerHTML = versions.length
+        ? versions.map((v, i) => `<div class="card" style="padding:12px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <strong>v${esc(v.version)}</strong>
+              ${i === 0 ? '<span style="color:var(--green);font-size:11px;padding:2px 6px;background:rgba(16,185,129,.1);border-radius:4px">Atual</span>' : ''}
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">${esc(v.comment || 'Sem comentário')} · ${fmtDate(v.uploadedAt)} · ${fmtSize(v.size)}</div>
+          </div>`).join('')
+        : '<div style="color:var(--text-muted);padding:8px">Nenhuma versão registrada.</div>';
+    } catch {
+      const root2 = document.getElementById('fc-versions-content');
+      if (root2) root2.innerHTML = '<div style="color:var(--red);padding:8px">Não foi possível carregar as versões.</div>';
+    }
+  };
+
+  /* ── Modais ── */
+  window.fcOpenModal = (id) => { const m = document.getElementById(id); if (m) m.style.display = 'flex'; };
+  window.fcCloseModal = (id) => { const m = document.getElementById(id); if (m) m.style.display = 'none'; };
+
+  /* ── Inicialização ── */
+  window.LifeOSFileCenter = { load: window.fcLoad, state: S };
   window.setTimeout(window.fcLoad, 0);
 })();
 </script>

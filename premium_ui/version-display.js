@@ -33,6 +33,13 @@
     document.querySelectorAll('[data-lifeos-commit]').forEach((element) => {
       element.textContent = commit;
     });
+    document.querySelectorAll('[data-lifeos-deploy]').forEach((element) => {
+      element.textContent = String(metadata.deployId || '—');
+    });
+    document.querySelectorAll('[data-lifeos-built-at]').forEach((element) => {
+      const d = new Date(metadata.builtAt || '');
+      element.textContent = isNaN(d) ? '—' : d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    });
 
     document.querySelectorAll('[data-lifeos-title-prefix]').forEach((element) => {
       element.textContent = `${element.dataset.lifeosTitlePrefix} ${release}`;
@@ -47,7 +54,10 @@
   }
 
   window.LifeOSReleaseReady = clearLegacyServiceWorkers()
-    .catch((error) => /* warn handled */
+    .catch(() => { /* service worker cleanup errors are non-fatal */ })
+    .then(() => fetch(RELEASE_ENDPOINT, { cache: 'no-store' }))
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     })
     .then(applyMetadata)

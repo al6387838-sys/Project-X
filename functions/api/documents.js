@@ -383,8 +383,13 @@ export async function onRequestGet({ request, env }) {
       const object = await bucket.get(document.storageKey);
       if (!object) return json(404, { ok: false, error: 'Conteúdo do documento não encontrado no R2' });
       const headers = new Headers();
-      headers.set('content-type', object.httpMetadata?.contentType || document.mimeType || 'application/octet-stream');
-      headers.set('content-disposition', `attachment; filename*=UTF-8''${encodeURIComponent(document.name)}`);
+      const contentType = object.httpMetadata?.contentType || document.mimeType || 'application/octet-stream';
+      headers.set('content-type', contentType);
+      // Usar inline para tipos que suportam preview no browser (PDF, imagens, texto, vídeo)
+      const isInlineType = /^(image\/|text\/|video\/|application\/pdf)/.test(contentType);
+      const forceDownload = url.searchParams.get('dl') === '1';
+      const disposition = (!forceDownload && isInlineType) ? 'inline' : 'attachment';
+      headers.set('content-disposition', `${disposition}; filename*=UTF-8''${encodeURIComponent(document.name)}`);
       headers.set('cache-control', 'private, no-store');
       if (object.size !== undefined) headers.set('content-length', String(object.size));
       return new Response(object.body, { status: 200, headers });

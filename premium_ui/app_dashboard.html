@@ -1314,6 +1314,8 @@
         <div>Release <strong data-lifeos-release style="color:var(--accent-light)">Release indisponível</strong></div>
         <div>Build <span data-lifeos-build>Build indisponível</span></div>
         <div>Commit <span data-lifeos-commit>Commit indisponível</span></div>
+        <div>Deploy <span data-lifeos-deploy>—</span></div>
+        <div>Built at <span data-lifeos-built-at>—</span></div>
       </div>
     </div>
   </aside>
@@ -2872,6 +2874,12 @@
       crm: () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
       'crm-pipeline': () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
       'crm-agenda': () => typeof window.LifeOSCRM?.load === 'function' && window.LifeOSCRM.load(),
+      'file-center': () => typeof window.fcLoad === 'function' && window.fcLoad(),
+      'file-browse': () => typeof window.fcLoad === 'function' && window.fcLoad(),
+      'file-search': () => typeof window.fcLoad === 'function' && window.fcLoad(),
+      'file-shared': () => typeof window.fcLoad === 'function' && window.fcLoad(),
+      'file-versions': () => typeof window.fcLoad === 'function' && window.fcLoad(),
+      'file-viewer': () => typeof window.fcLoad === 'function' && window.fcLoad(),
     };
     const loader = loaders[pageId];
     if (!loader) return;
@@ -3818,6 +3826,7 @@
     'file-search': 'module-file-center-container',
     'file-shared': 'module-file-center-container',
     'file-versions': 'module-file-center-container',
+    'file-viewer': 'module-file-center-container',
     'automation': 'module-automation-container',
     'automation-flows': 'module-automation-container',
     'automation-scheduler': 'module-automation-container',
@@ -3877,6 +3886,9 @@
       });
       _legacyLoadedModules.add(containerId);
       if (containerId === 'module-ai-center-container' && file !== 'modules/live-surface') setTimeout(aiLoadPreferences, 0);
+      if (containerId === 'module-file-center-container' && typeof window.fcLoad === 'function') {
+        setTimeout(() => window.fcLoad(), 0);
+      }
       if (containerId === 'module-automation-container' && typeof window.automationInit === 'function') {
         setTimeout(() => window.automationInit(), 0);
       }
