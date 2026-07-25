@@ -189,9 +189,9 @@
         <div class="ai-chat-meta">LifeOS AI Pro · GPT-4o · Contexto: 4 mensagens</div>
       </div>
       <div class="ai-chat-actions">
-        <button class="ai-btn-icon" title="Exportar" onclick="aiExport()">⬇</button>
-        <button class="ai-btn-icon" title="Compartilhar" onclick="aiShare()">↗</button>
-        <button class="ai-btn-icon" title="Limpar" onclick="aiClear()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="ai-btn-icon" title="Exportar" onclick="aiExport()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="ai-btn-icon" title="Compartilhar" onclick="aiShare()"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="ai-btn-icon" title="Limpar" onclick="aiClear()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
 
@@ -211,7 +211,7 @@
       <div class="ai-input-wrap">
         <div class="ai-input-tools">
           <button class="ai-input-tool" title="Anexar arquivo" onclick="aiAttach()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="ai-input-tool" title="Contexto LifeOS" onclick="aiContext()"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="ai-input-tool" title="Contexto LifeOS" onclick="aiContext()"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i></button>
           <button class="ai-input-tool" title="Voz" onclick="aiVoice()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></button>
         </div>
         <textarea class="ai-textarea" id="ai-input" placeholder="Pergunte qualquer coisa ao seu AI Copilot..." rows="1" onkeydown="aiKeydown(event)" oninput="aiInputResize(this)"></textarea>
@@ -358,7 +358,7 @@ function renderMessages() {
           ${msg.role === 'ai' ? `
             <div class="ai-msg-actions">
               <button class="ai-msg-action" onclick="aiCopy(this)">\u{1F4CB} Copiar</button>
-              <button class="ai-msg-action" onclick="aiRegenerate()">↻ Regenerar</button>
+              <button class="ai-msg-action" onclick="aiRegenerate()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Regenerar</button>
             </div>
           ` : ''}
         </div>

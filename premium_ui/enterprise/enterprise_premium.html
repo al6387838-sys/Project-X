@@ -622,7 +622,7 @@
       <div class="nav-section">
         <div class="nav-section-label">Organização</div>
         <button class="nav-item" data-view="organization" type="button">
-          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>
+          <span class="nav-item-icon" aria-hidden="true"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i></span>
           <span class="nav-item-label">Organização</span>
         </button>
         <button class="nav-item" data-view="members" type="button">
@@ -690,7 +690,7 @@
           <div class="user-name" id="sidebar-user-name">Carregando…</div>
           <div class="user-role" id="sidebar-user-role">Administrador</div>
         </div>
-        <button class="user-logout" id="logout-btn" type="button" aria-label="Encerrar sessão" title="Encerrar sessão">⏻</button>
+        <button class="user-logout" id="logout-btn" type="button" aria-label="Encerrar sessão" title="Encerrar sessão"><i data-lucide="power" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
 
@@ -716,7 +716,7 @@
       <button class="topbar-icon-btn" id="notif-btn" type="button" aria-label="Notificações">
         <i data-lucide="bell" class="pg-icon" aria-hidden="true"></i><span class="notif-dot" id="notif-dot" style="display:none" aria-hidden="true"></span>
       </button>
-      <button class="topbar-btn" type="button" id="export-btn">⬇ Exportar</button>
+      <button class="topbar-btn" type="button" id="export-btn"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar</button>
       <button class="topbar-btn primary" type="button" id="new-action-btn"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova ação</button>
     </header>
 
@@ -1110,7 +1110,7 @@
           </div>
           <div class="card-footer" style="display:flex;justify-content:space-between;align-items:center">
             <span style="font-size:11px;color:var(--text-tertiary)">Nenhum valor de infraestrutura é estimado</span>
-            <button class="btn btn-sm btn-secondary" data-action="system.refresh" type="button">↻ Verificar</button>
+            <button class="btn btn-sm btn-secondary" data-action="system.refresh" type="button"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Verificar</button>
           </div>
         </div>
       </div>
@@ -1253,7 +1253,7 @@
     if (!org.id) {
       document.getElementById('organization-content').innerHTML = `
         <div class="page-header"><h1 class="page-title">Organização</h1><p class="page-subtitle">Crie sua organização para começar a colaborar com dados persistidos.</p></div>
-        <div class="empty-state" style="padding:56px 24px"><div class="empty-state-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Nenhuma organização criada</div><div class="empty-state-desc">A primeira organização cria também o workspace protegido Principal e registra a atividade no histórico.</div><button class="btn btn-primary" data-action="organization.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar organização</button></div>`;
+        <div class="empty-state" style="padding:56px 24px"><div class="empty-state-icon"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Nenhuma organização criada</div><div class="empty-state-desc">A primeira organização cria também o workspace protegido Principal e registra a atividade no histórico.</div><button class="btn btn-primary" data-action="organization.create" type="button"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar organização</button></div>`;
       if (window.lucide) window.lucide.createIcons();
       return;
     }
@@ -1569,7 +1569,7 @@
                   <td>${esc(inv.description||'Assinatura LifeOS Enterprise')}</td>
                   <td style="font-weight:600;color:var(--text-primary)">${money(inv.amount)}</td>
                   <td>${statusBadge(inv.status||'paid')}</td>
-                  <td><button class="btn btn-sm btn-ghost" data-action="invoice.download" data-id="${esc(inv.id)}" type="button">⬇ PDF</button></td>
+                  <td><button class="btn btn-sm btn-ghost" data-action="invoice.download" data-id="${esc(inv.id)}" type="button"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> PDF</button></td>
                 </tr>
               `).join('')}
             </tbody>
@@ -1590,7 +1590,7 @@
           <h1 class="page-title">Auditoria & Compliance</h1>
           <p class="page-subtitle">${audit.length} de ${allAudit.length} eventos.</p>
         </div>
-        <button class="btn btn-secondary" data-action="audit.export" type="button">⬇ Exportar CSV</button>
+        <button class="btn btn-secondary" data-action="audit.export" type="button"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
       </div>
       <div class="card">
         <div class="card-header">
@@ -1684,7 +1684,7 @@
                 <div><div class="stat-label" style="margin-bottom:7px">Permissões autorizadas</div><div style="display:flex;gap:6px;flex-wrap:wrap">${permissions.length ? permissions.map(permission => `<span class="badge badge-neutral">${esc(permission)}</span>`).join('') : '<span class="text-muted">Nenhuma permissão selecionada.</span>'}</div></div>
               ` : `<div class="empty-state" style="padding:14px 10px"><div class="empty-state-title">Configuração necessária</div><div class="empty-state-desc">Nenhuma conta, permissão ou evento de conexão foi registrado.</div></div>`}
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
-                <button class="btn ${integration.configured?'btn-secondary':'btn-primary'}" data-action="integration.configure.open" data-id="${meta.id}" type="button"><i data-lucide="settings-2" class="pg-icon" aria-hidden="true"></i>${integration.configured?'Configurar':'Configurar integração'}</button>
+                <button class="btn ${integration.configured?'btn-secondary':'btn-primary'}" data-action="integration.configure.open" data-id="${meta.id}" type="button"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i>${integration.configured?'Configurar':'Configurar integração'}</button>
                 ${integration.configured ? `<button class="btn ${integration.connected?'btn-secondary':'btn-primary'}" data-action="${integration.connected?'integration.disconnect':'integration.reconnect'}" data-id="${meta.id}" type="button"><i data-lucide="${integration.connected?'unplug':'refresh-cw'}" class="pg-icon" aria-hidden="true"></i>${integration.connected?'Desconectar':'Reconectar'}</button><button class="btn btn-ghost" data-action="integration.history.open" data-id="${meta.id}" type="button"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i>Histórico</button>` : ''}
               </div>
             </div>

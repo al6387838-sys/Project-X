@@ -139,7 +139,7 @@
   }
 
   function onboardingView() {
-    return `<div class="page-header"><div><div class="page-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> CRM Enterprise</div><div class="page-subtitle">Crie uma organização para iniciar o espaço comercial colaborativo.</div></div></div>
+    return `<div class="page-header"><div><div class="page-title"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i> CRM Enterprise</div><div class="page-subtitle">Crie uma organização para iniciar o espaço comercial colaborativo.</div></div></div>
       <div class="card" style="max-width:700px;padding:28px"><div style="font-size:18px;font-weight:800;margin-bottom:8px">Seu CRM está pronto para uma organização real</div><p style="margin:0 0 18px;color:var(--text-secondary);font-size:13px;line-height:1.6">Clientes, oportunidades, agenda e histórico serão armazenados somente após a criação de uma organização e de seu workspace inicial.</p><button class="btn btn-primary" data-action="create-organization"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Criar organização</button></div>`;
   }
 

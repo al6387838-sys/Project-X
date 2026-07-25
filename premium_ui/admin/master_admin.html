@@ -202,14 +202,14 @@
       <div class="nav-section">
         <div class="nav-section-label">Gerenciamento</div>
         <button class="nav-item" data-view="members" type="button"><span class="nav-item-icon"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></span>Membros</button>
-        <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></span>Organizações</button>
+        <button class="nav-item" data-view="organizations" type="button"><span class="nav-item-icon"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i></span>Organizações</button>
         <button class="nav-item" data-view="billing" type="button"><span class="nav-item-icon"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i></span>Billing</button>
         <button class="nav-item" data-view="plans" type="button"><span class="nav-item-icon"><i data-lucide="layers" class="pg-icon" aria-hidden="true"></i></span>Planos</button>
       </div>
       <div class="nav-section">
         <div class="nav-section-label">Sistema</div>
         <button class="nav-item" data-view="audit" type="button"><span class="nav-item-icon"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i></span>Auditoria</button>
-        <button class="nav-item" data-view="metrics" type="button"><span class="nav-item-icon"><i data-lucide="bar-chart-3" class="pg-icon" aria-hidden="true"></i></span>Métricas</button>
+        <button class="nav-item" data-view="metrics" type="button"><span class="nav-item-icon"><i data-lucide="chart-bar-stacked" class="pg-icon" aria-hidden="true"></i></span>Métricas</button>
         <button class="nav-item" data-view="system" type="button"><span class="nav-item-icon"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></span>Sistema</button>
         <button class="nav-item" data-view="queue" type="button"><span class="nav-item-icon"><i data-lucide="list-ordered" class="pg-icon" aria-hidden="true"></i></span>Fila de Tarefas</button>
         <button class="nav-item" data-view="integrations-monitor" type="button"><span class="nav-item-icon"><i data-lucide="plug" class="pg-icon" aria-hidden="true"></i></span>Integrações</button>
@@ -235,7 +235,7 @@
           <div class="user-name" id="admin-user-name">Admin</div>
           <div class="user-role">Super Admin</div>
         </div>
-        <button class="logout-btn" id="logout-btn" type="button" title="Encerrar sessão">⏻</button>
+        <button class="logout-btn" id="logout-btn" type="button" title="Encerrar sessão"><i data-lucide="power" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
   </aside>
@@ -246,7 +246,7 @@
       <span class="topbar-title" id="topbar-title">Master Admin Panel</span>
       <div class="topbar-spacer"></div>
       <span class="topbar-badge"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> ADMIN RESTRITO</span>
-      <button class="btn btn-secondary" id="refresh-btn" type="button">↻ Atualizar</button>
+      <button class="btn btn-secondary" id="refresh-btn" type="button"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
     </header>
     <div class="content" id="content">
       <div class="empty-state"><div class="empty-state-icon"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i></div><div class="empty-state-title">Carregando…</div></div>
@@ -482,7 +482,7 @@
                   <td>${esc(inv.description||'Assinatura LifeOS Enterprise')}</td>
                   <td style="font-weight:600;color:var(--text-primary)">${money(inv.amount)}</td>
                   <td>${statusBadge(inv.status||'paid')}</td>
-                  <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button">⬇ PDF</button></td>
+                  <td><button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:11px" type="button"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> PDF</button></td>
                 </tr>
               `).join('') : `<tr><td colspan="5"><div class="empty-state" style="padding:24px"><div class="empty-state-icon">\u{1F4B3}</div><div class="empty-state-title">Sem faturas</div></div></td></tr>`}
             </tbody>
@@ -497,7 +497,7 @@
     document.getElementById('content').innerHTML = `
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
         <div><h1 class="page-title">Log de Auditoria</h1><p class="page-sub">${audit.length} eventos registrados.</p></div>
-        <button class="btn btn-secondary" data-action="audit.export" type="button">⬇ Exportar CSV</button>
+        <button class="btn btn-secondary" data-action="audit.export" type="button"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
       </div>
       <div class="card">
         <div class="table-wrap">
@@ -650,7 +650,7 @@
         <div class="kpi-card"><div class="kpi-val" style="color:#F43F5E">${tasks.filter(t=>t.status==='failed').length}</div><div class="kpi-label">Com falha</div></div>
       </div>
       <div class="card">
-        <div class="card-header"><span class="card-title">Tarefas Recentes</span><button class="btn btn-secondary" type="button" onclick="location.reload()">↻ Atualizar</button></div>
+        <div class="card-header"><span class="card-title">Tarefas Recentes</span><button class="btn btn-secondary" type="button" onclick="location.reload()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button></div>
         <div class="table-wrap">
           <table class="table">
             <thead><tr><th>ID</th><th>Tarefa</th><th>Status</th><th>Início</th><th>Tentativas</th></tr></thead>
@@ -752,7 +752,7 @@
         <h1 class="page-title">System Health</h1>
         <p class="page-sub">Monitoramento enterprise em tempo real — atualizado em ${new Date(d.timestamp).toLocaleTimeString('pt-BR')}</p>
         <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn btn-secondary" data-action="health.refresh" type="button">↻ Atualizar</button>
+          <button class="btn btn-secondary" data-action="health.refresh" type="button"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
         </div>
       </div>
       <div class="kpi-grid">
@@ -830,8 +830,8 @@
         <h1 class="page-title">Logs Estruturados</h1>
         <p class="page-sub">Auditoria centralizada de eventos da plataforma.</p>
         <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn btn-secondary" data-action="logs.refresh" type="button">↻ Atualizar</button>
-          <button class="btn btn-secondary" data-action="logs.export" type="button">⬇ Exportar CSV</button>
+          <button class="btn btn-secondary" data-action="logs.refresh" type="button"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+          <button class="btn btn-secondary" data-action="logs.export" type="button"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
         </div>
       </div>
       <div class="card">

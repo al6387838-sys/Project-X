@@ -121,11 +121,11 @@
     <div class="modal-header">
       <div class="modal-title" id="photo-viewer-title">Foto</div>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-ghost" style="padding:8px" id="photo-viewer-fav" title="Favoritar" onclick="photosToggleFavorite()">❤</button>
+        <button class="btn btn-ghost" style="padding:8px" id="photo-viewer-fav" title="Favoritar" onclick="photosToggleFavorite()"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></button>
         <button class="btn btn-ghost" style="padding:8px" title="Editar" onclick="photosEditCurrent()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
         <button class="btn btn-ghost" style="padding:8px" title="Mover para álbum" onclick="photosMoveCurrent()"><i data-lucide="folder-input" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:8px" title="Compartilhar" onclick="photosShareCurrent()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:8px" title="Excluir (lixeira)" onclick="photosDeleteCurrent()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Compartilhar" onclick="photosShareCurrent()"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" title="Excluir (lixeira)" onclick="photosDeleteCurrent()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
         <button class="btn btn-ghost" style="padding:8px" title="Lixeira" onclick="photosCloseModal('modal-photo-viewer');photosShowTrash()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
         <button class="modal-close" onclick="photosCloseModal('modal-photo-viewer')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       </div>
@@ -138,7 +138,7 @@
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosZoomReset()" title="Reset zoom">1:1</button>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosRotateLeft()" title="Rotacionar esquerda"><i data-lucide="rotate-ccw" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosRotateRight()" title="Rotacionar direita"><i data-lucide="rotate-cw" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
-          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosShareCurrent()" title="Compartilhar"><i data-lucide="share-2" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="photosShareCurrent()" title="Compartilhar"><i data-lucide="share" class="pg-icon" aria-hidden="true" style="width:14px;height:14px"></i></button>
         </div>
         <img id="photo-viewer-img" src="" style="max-width:100%;max-height:70vh;object-fit:contain;transition:transform 0.2s" alt="">
       </div>
@@ -232,7 +232,7 @@
     grid.innerHTML = galleryPhotos.map(p => `
       <div class="photo-thumb" style="position:relative;aspect-ratio:1;border-radius:var(--radius-md);overflow:hidden;cursor:pointer;border:1px solid var(--border);background:var(--bg-elevated)" onclick="photosOpenViewer('${esc(p.id)}')">
         <img src="${esc(p.url)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
-        ${p.favorite ? '<div style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,.8);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">❤</div>' : ''}
+        ${p.favorite ? '<div style="position:absolute;top:6px;right:6px;background:rgba(239,68,68,.8);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px"><i data-lucide="heart" class="pg-icon" aria-hidden="true"></i></div>' : ''}
         <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
       </div>
     `).join('');
@@ -252,7 +252,7 @@
         <div style="aspect-ratio:16/9;background:var(--bg-elevated);border-radius:var(--radius-md);overflow:hidden;margin-bottom:8px;position:relative">
           ${cover ? `<img src="${esc(cover.url)}" alt="" style="width:100%;height:100%;object-fit:cover">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted)"><i data-lucide="image" class="pg-icon" style="width:32px;height:32px"></i></div>'}
         </div>
-        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:14px;font-weight:600;flex:1">${esc(a.name)}</div><button class="btn btn-ghost" type="button" style="padding:3px 6px;color:var(--red)" onclick="event.stopPropagation();photosDeleteAlbum('${esc(a.id)}')" title="Excluir álbum"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:14px;font-weight:600;flex:1">${esc(a.name)}</div><button class="btn btn-ghost" type="button" style="padding:3px 6px;color:var(--red)" onclick="event.stopPropagation();photosDeleteAlbum('${esc(a.id)}')" title="Excluir álbum"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button></div>
         <div style="font-size:11px;color:var(--text-muted)">${albumPhotos.length} foto(s) · ${esc(a.description || 'Sem descrição')}</div>
       </div>`;
     }).join('');
@@ -423,8 +423,8 @@
           <img src="${esc(p.url)}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%)" loading="lazy">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div>
           <div style="position:absolute;top:6px;left:6px;display:flex;gap:4px">
-            <button style="background:rgba(16,185,129,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosRestoreById('${esc(p.id)}')" title="Restaurar">↩</button>
-            <button style="background:rgba(239,68,68,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosPermanentDelete('${esc(p.id)}')" title="Excluir definitivamente">🗑</button>
+            <button style="background:rgba(16,185,129,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosRestoreById('${esc(p.id)}')" title="Restaurar"><i data-lucide="reply" class="pg-icon" aria-hidden="true"></i></button>
+            <button style="background:rgba(239,68,68,.9);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px" onclick="photosPermanentDelete('${esc(p.id)}')" title="Excluir definitivamente"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
           </div>
         </div>
       `).join('');

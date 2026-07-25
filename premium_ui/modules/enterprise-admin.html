@@ -166,7 +166,7 @@
     <p class="ea-subtitle">Gestão completa de tenants, usuários, billing e sistema</p>
   </div>
   <div style="display:flex;gap:8px">
-    <button class="btn btn-ghost" onclick="eaExport()">⬇ Exportar</button>
+    <button class="btn btn-ghost" onclick="eaExport()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar</button>
     <button class="btn btn-danger" onclick="eaEmergency()"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Emergência</button>
   </div>
 </div>
@@ -181,7 +181,7 @@
 <!-- TABS -->
 <div class="ea-tabs">
   <button class="ea-tab active" onclick="eaTab('overview',this)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Visão Geral</button>
-  <button class="ea-tab" onclick="eaTab('tenants',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Tenants</button>
+  <button class="ea-tab" onclick="eaTab('tenants',this)"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i> Tenants</button>
   <button class="ea-tab" onclick="eaTab('users',this)"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Usuários</button>
   <button class="ea-tab" onclick="eaTab('billing',this)"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Billing</button>
   <button class="ea-tab" onclick="eaTab('security',this)"><i data-lucide="lock-keyhole" class="pg-icon" aria-hidden="true"></i> Segurança</button>
@@ -306,7 +306,7 @@
   <div class="ea-panel" id="ea-tenants">
     <div class="card">
       <div class="card-header">
-        <div class="card-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Gestão de Tenants</div>
+        <div class="card-title"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i> Gestão de Tenants</div>
         <div style="display:flex;gap:8px">
           <input type="text" class="form-input" placeholder=" Buscar tenant..." style="width:200px;padding:7px 12px" />
           <button class="btn btn-primary" onclick="eaNewTenant()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Tenant</button>
@@ -586,7 +586,7 @@
           <select class="form-input form-select" style="width:140px;padding:6px 12px;font-size:12px">
             <option>Todos os eventos</option><option>Autenticação</option><option>Admin</option><option>Billing</option><option>Segurança</option>
           </select>
-          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px" onclick="eaExportAudit()">⬇ Exportar</button>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px" onclick="eaExportAudit()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar</button>
         </div>
       </div>
       <table class="ea-table">

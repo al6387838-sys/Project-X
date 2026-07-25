@@ -26,7 +26,7 @@
           <button class="msg-filter" onclick="msgFilter('telegram',this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> TG</button>
           <button class="msg-filter" onclick="msgFilter('slack',this)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> SL</button>
           <button class="msg-filter" onclick="msgFilter('discord',this)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> DC</button>
-          <button class="msg-filter" onclick="msgFilter('teams',this)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> MS</button>
+          <button class="msg-filter" onclick="msgFilter('teams',this)"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i> MS</button>
         </div>
       </div>
       <!-- Lista de conversas — carregada dinamicamente -->
@@ -121,7 +121,7 @@
       <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="showToast('Conectando Discord...','info')">Conectar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(98,100,167,0.3)">
-      <div class="integration-icon" style="background:linear-gradient(135deg,#6264A7,#464775)"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="integration-icon" style="background:linear-gradient(135deg,#6264A7,#464775)"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i></div>
       <div class="integration-name">Microsoft Teams</div>
       <div class="integration-desc">Canais e chats corporativos via Microsoft Graph API</div>
       <div class="integration-status connected"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Conectado</div>
@@ -247,7 +247,7 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Abrindo configurações do bot...','info')"><i data-lucide="settings" class="pg-icon" aria-hidden="true"></i> Configurar Comandos</button>
-        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Webhook configurado!','success')"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Configurar Webhook</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Webhook configurado!','success')"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Configurar Webhook</button>
         <button class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:8px" onclick="showToast('Testando bot...','info')"><i data-lucide="flask-conical" class="pg-icon" aria-hidden="true"></i> Testar Bot</button>
       </div>
     </div>
@@ -347,7 +347,7 @@
 <div class="page" id="page-comm-teams">
   <div class="page-header">
     <div>
-      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i></div> Microsoft Teams</div>
+      <div class="page-title" style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6264A7,#464775);display:flex;align-items:center;justify-content:center;font-size:16px"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i></div> Microsoft Teams</div>
       <div class="page-subtitle">Canais corporativos via Microsoft Graph API</div>
     </div>
     <button class="btn btn-ghost" onclick="showPage('messages-integrations')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
@@ -472,7 +472,7 @@
 </div>
 <!-- Barra de edição de mensagem -->
 <div id="msg-edit-bar" style="display:none;padding:8px 12px;background:rgba(99,102,241,0.1);border-top:1px solid rgba(99,102,241,0.3);align-items:center;gap:8px;font-size:12px">
-  <i data-lucide="edit-3" style="width:14px;height:14px;color:var(--accent)" aria-hidden="true"></i>
+  <i data-lucide="pencil" style="width:14px;height:14px;color:var(--accent)" aria-hidden="true"></i>
   <span style="color:var(--text-secondary)">Editando:</span>
   <span id="msg-edit-preview" style="color:var(--text-primary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
   <button class="btn btn-ghost" style="padding:2px 8px;font-size:11px" onclick="msgCancelEdit()">Cancelar</button>

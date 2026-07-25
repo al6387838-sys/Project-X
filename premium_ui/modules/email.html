@@ -46,7 +46,7 @@
     <div style="display:flex;flex-direction:column">
       <div style="padding:10px;border-bottom:1px solid var(--border);display:flex;gap:8px">
         <input type="text" class="form-input" id="email-search" placeholder=" Buscar no histórico..." style="flex:1;font-size:12px" oninput="emailFilterList(this.value)" />
-        <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()">↻</button>
+        <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></button>
       </div>
       <div style="flex:1;overflow-y:auto" id="email-list">
         <div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando emails...</div>
@@ -225,9 +225,9 @@ function emailRenderInbox(messages) {
         <div style="font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emailEsc(msg.snippet)}</div>
       </div>
       <div style="display:flex;gap:4px;flex-shrink:0" onclick="event.stopPropagation()">
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Responder" onclick="emailReply('${emailEsc(msg.id)}','${emailEsc(msg.from || '')}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')">↩</button>
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Encaminhar" onclick="emailForward('${emailEsc(msg.id)}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')">↪</button>
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;color:var(--red)" title="Excluir" onclick="emailDelete('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')">🗑</button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Responder" onclick="emailReply('${emailEsc(msg.id)}','${emailEsc(msg.from || '')}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="reply" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Encaminhar" onclick="emailForward('${emailEsc(msg.id)}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="forward" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;color:var(--red)" title="Excluir" onclick="emailDelete('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
       </div>
     </div>
   `).join('');
@@ -254,9 +254,9 @@ async function emailOpenMessage(emailId, provider) {
       <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">${emailFmtDate(msg?.date)}</div>
       <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">${emailEsc(msg?.snippet || '')}</div>
       <div style="margin-top:16px;display:flex;gap:8px">
-        <button class="btn btn-primary" style="font-size:12px" onclick="emailReply('${emailEsc(emailId)}','${emailEsc(msg?.from || '')}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')">↩ Responder</button>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="emailForward('${emailEsc(emailId)}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')">↪ Encaminhar</button>
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="emailDelete('${emailEsc(emailId)}','${emailEsc(provider)}')">🗑 Excluir</button>
+        <button class="btn btn-primary" style="font-size:12px" onclick="emailReply('${emailEsc(emailId)}','${emailEsc(msg?.from || '')}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><i data-lucide="reply" class="pg-icon" aria-hidden="true"></i> Responder</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="emailForward('${emailEsc(emailId)}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><i data-lucide="forward" class="pg-icon" aria-hidden="true"></i> Encaminhar</button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="emailDelete('${emailEsc(emailId)}','${emailEsc(provider)}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Excluir</button>
       </div>
     </div>`;
   }
@@ -605,7 +605,7 @@ function emailAttachFile() {
       attachEl.innerHTML += `<div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;background:var(--bg-elevated);border-radius:6px;margin-top:4px">
         <i data-lucide="paperclip" style="width:12px;height:12px" aria-hidden="true"></i>
         ${emailEsc(file.name)} (${(file.size/1024).toFixed(1)}KB)
-        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px">×</button>
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
       </div>`;
       if (window.lucide) lucide.createIcons();
     }

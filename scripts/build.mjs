@@ -102,6 +102,8 @@ await copy('services/oauth-manager.js', 'services/oauth-manager.js');
 await copy('modules/communication-hub.html', 'modules/communication-hub.html');
 await copy('modules/finance-hub.html', 'modules/finance-hub.html');
 await copy('modules/document-center.html', 'modules/document-center.html');
+await copy('modules/live-surface.html', 'modules/live-surface.html');
+await copy('modules/onboarding-flow.html', 'modules/onboarding-flow.html');
 
 // Rotas principais
 await copyHtml('landing.html', 'index.html');

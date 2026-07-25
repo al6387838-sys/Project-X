@@ -116,7 +116,7 @@
   <!-- Open Finance Banner -->
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));border-color:rgba(99,102,241,0.3)">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="font-size:32px"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="font-size:32px"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i></div>
       <div style="flex:1">
         <div style="font-weight:700;margin-bottom:4px">Open Finance — Conexão Automática</div>
         <div style="font-size:13px;color:var(--text-secondary)">Conecte automaticamente suas contas bancárias via Open Finance do Banco Central. Saldos e extratos sincronizados em tempo real.</div>
@@ -822,7 +822,7 @@
 <div class="page" id="page-finance-openfinance">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i> Open Finance</div>
+      <div class="page-title"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Open Finance</div>
       <div class="page-subtitle">Conecte todas as suas instituições financeiras</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -832,7 +832,7 @@
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(6,182,212,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.3)"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.3)"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i></div>
       <div style="flex:1">
         <div style="font-weight:700;font-size:16px">Open Finance Brasil — Ativo</div>
         <div style="font-size:13px;color:var(--text-secondary)">Regulamentado pelo Banco Central · Dados criptografados · Consentimento gerenciado</div>
@@ -1363,7 +1363,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
       <div class="page-subtitle">Receitas e despesas com persistência real</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-ghost" onclick="showPage('finance-reports')"><i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-reports')"><i data-lucide="chart-column" class="pg-icon" aria-hidden="true"></i> Relatórios</button>
       <button class="btn btn-ghost" onclick="finExportCSV()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar CSV</button>
       <button class="btn btn-primary" onclick="finOpenNewTransaction()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Lançamento</button>
     </div>
@@ -1393,7 +1393,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-reports">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios</div>
+      <div class="page-title"><i data-lucide="chart-column" class="pg-icon" aria-hidden="true"></i> Relatórios</div>
       <div class="page-subtitle">Análise financeira por categoria, centro de custo e período</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -1427,7 +1427,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
 <div class="page" id="page-finance-cost-centers">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="building-2" class="pg-icon" aria-hidden="true"></i> Centros de Custo</div>
+      <div class="page-title"><i data-lucide="building" class="pg-icon" aria-hidden="true"></i> Centros de Custo</div>
       <div class="page-subtitle">Organize despesas por centro de custo</div>
     </div>
     <button class="btn btn-primary" onclick="finOpenNewCostCenter()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Novo Centro</button>
@@ -1601,7 +1601,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
     var pg = document.getElementById('fin-tx-pagination');
     if (pg) {
       var total = finTxState.total, offset = finTxState.offset, limit = finTxState.limit;
-      pg.innerHTML = '<span>Mostrando ' + (offset + 1) + '–' + Math.min(offset + limit, total) + ' de ' + total + '</span><div style="display:flex;gap:8px">' + (offset > 0 ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(-1)">← Anterior</button>' : '') + (offset + limit < total ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(1)">Próximo →</button>' : '') + '</div>';
+      pg.innerHTML = '<span>Mostrando ' + (offset + 1) + '–' + Math.min(offset + limit, total) + ' de ' + total + '</span><div style="display:flex;gap:8px">' + (offset > 0 ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(-1)"><i data-lucide="chevron-left" class="pg-icon" aria-hidden="true"></i> Anterior</button>' : '') + (offset + limit < total ? '<button class="btn btn-ghost" style="font-size:11px" onclick="finTxPage(1)">Próximo <i data-lucide="chevron-right" class="pg-icon" aria-hidden="true"></i></button>' : '') + '</div>';
     }
     if (typeof lucide !== 'undefined') lucide.createIcons();
   }
@@ -1863,7 +1863,7 @@ window.finSwitchTransfer = function finSwitchTransfer(type) {
       var repBtn = document.createElement('button');
       repBtn.id = 'fin-dash-rep-btn';
       repBtn.className = 'btn btn-ghost';
-      repBtn.innerHTML = '<i data-lucide="bar-chart-2" class="pg-icon" aria-hidden="true"></i> Relatórios';
+      repBtn.innerHTML = '<i data-lucide="chart-column" class="pg-icon" aria-hidden="true"></i> Relatórios';
       repBtn.onclick = function() { window.showPage('finance-reports'); };
       finDashHeader.insertBefore(repBtn, finDashHeader.firstChild);
       if (typeof lucide !== 'undefined') lucide.createIcons();

@@ -11,7 +11,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('document-center-favorites')"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Favoritos</button>
-      <button class="btn btn-ghost" onclick="showPage('document-center-shared')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhados</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-shared')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhados</button>
       <button class="btn btn-ghost" onclick="showPage('document-center-audit')"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
       <button class="btn btn-primary" onclick="openModal('modal-doc-upload')"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload</button>
     </div>
@@ -55,7 +55,7 @@
       <div class="kpi-label">Armazenamento Usado</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></div>
       <div class="kpi-value" id="dc-stat-shared">—</div>
       <div class="kpi-label">Compartilhados</div>
     </div>
@@ -89,7 +89,7 @@
 <div class="page" id="page-document-center-shared">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhados Comigo</div>
+      <div class="page-title"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhados Comigo</div>
       <div class="page-subtitle">Documentos que outros usuários compartilharam com você</div>
     </div>
     <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
@@ -137,7 +137,7 @@
 <div class="modal" id="modal-doc-upload" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-doc-upload')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload de Documento</div><button class="modal-close" onclick="closeModal('modal-doc-upload')">×</button></div>
+    <div class="modal-header"><div class="modal-title"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload de Documento</div><button class="modal-close" onclick="closeModal('modal-doc-upload')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <div>
         <label class="form-label">Nome do documento</label>
@@ -178,7 +178,7 @@
 <div class="modal" id="modal-doc-share" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-doc-share')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar Documento</div><button class="modal-close" onclick="closeModal('modal-doc-share')">×</button></div>
+    <div class="modal-header"><div class="modal-title"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar Documento</div><button class="modal-close" onclick="closeModal('modal-doc-share')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <input type="hidden" id="share-doc-id" />
       <div><label class="form-label">Usuário (e-mail)</label><input type="email" class="form-input" id="share-target-user" placeholder="usuario@empresa.com" /></div>
@@ -188,7 +188,7 @@
           <option value="edit">Editar</option>
         </select>
       </div>
-      <button class="btn btn-primary" onclick="dcShareDocument()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+      <button class="btn btn-primary" onclick="dcShareDocument()"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
     </div>
   </div>
 </div>
@@ -375,8 +375,8 @@ function renderDocList(containerId, docs) {
             <i data-lucide="${d.favorite ? 'star' : 'star'}" style="color:${d.favorite ? 'var(--amber)' : 'var(--text-muted)'}" aria-hidden="true"></i>
           </button>
           <button class="btn btn-ghost" style="font-size:11px" onclick="dcLoadVersions('${d.id}','${d.name.replace(/'/g, "\\'")}')"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="font-size:11px" onclick="dcOpenShare('${d.id}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcDeleteDoc('${d.id}')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcOpenShare('${d.id}')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcDeleteDoc('${d.id}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
         </div>
       </div>
     `;

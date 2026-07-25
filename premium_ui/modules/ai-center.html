@@ -78,7 +78,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div class="card-title" style="margin:0"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Tarefas Sugeridas pela IA</div>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="aiGenerateTasks()">↻ Gerar</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="aiGenerateTasks()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Gerar</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px" id="ai-tasks-list">
         <div class="ai-task-item">
@@ -215,7 +215,7 @@
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-ghost" onclick="aiClearChat()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Limpar</button>
+      <button class="btn btn-ghost" onclick="aiClearChat()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Limpar</button>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">

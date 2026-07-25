@@ -540,7 +540,7 @@ window.fetch = function(url, opts) {
     item.dataset.lifeosWorkspaceLink = 'true';
     item.setAttribute('role', 'button');
     item.tabIndex = 0;
-    item.innerHTML = '<div class="nav-icon"><i data-lucide="layers-3" class="pg-icon" aria-hidden="true"></i></div><span>Workspace</span>';
+    item.innerHTML = '<div class="nav-icon"><i data-lucide="layers" class="pg-icon" aria-hidden="true"></i></div><span>Workspace</span>';
     const openWorkspace = (event) => {
       event?.preventDefault();
       void navigate('workspace');

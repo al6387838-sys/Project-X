@@ -1096,7 +1096,7 @@
   <link rel="stylesheet" href="/enterprise/enterprise_app.css" />
 <link rel="stylesheet" href="/precision_graphite.css" data-visual-system="precision-graphite" />
   <script src="/persistence.js" defer></script>
-  <!-- LifeOS Enterprise — Error Boundary Global v56.0.0 -->
+  <!-- LifeOS Enterprise — Error Boundary Global v56.1.0 -->
   <script>
   (function(){
     'use strict';
@@ -1111,7 +1111,7 @@
         +'<div style="font-size:14px;color:#8892A4;max-width:400px">'+(msg||'Ocorreu um erro inesperado.')+'</div>'
         +(detail?'<div style="font-size:11px;color:#4A5568;font-family:monospace;max-width:500px;word-break:break-all">'+detail+'</div>':'')
         +'<div style="display:flex;gap:12px;margin-top:8px">'
-        +'<button onclick="location.reload()" style="padding:10px 24px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer">↺ Recarregar</button>'
+        +'<button onclick="location.reload()" style="padding:10px 24px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Recarregar</button>'
         +'<button onclick="location.replace(\'/login\')" style="padding:10px 24px;border-radius:8px;background:rgba(255,255,255,0.08);color:#F0F4FF;border:1px solid rgba(255,255,255,0.12);font-size:14px;font-weight:600;cursor:pointer">→ Login</button>'
         +'</div>';
       (document.body||document.documentElement).appendChild(el);
@@ -1211,7 +1211,7 @@
         <div class="nav-icon"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><span>Orçamento</span>
       </div>
       <div class="nav-item" role="button" tabindex="0" onclick="showPage('finance-openfinance')">
-        <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Open Finance</span>
+        <div class="nav-icon"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i></div><span>Open Finance</span>
       </div>
       <div class="nav-section-label">Comunicação</div>
       <div class="nav-item" role="button" tabindex="0" onclick="showPage('messages')">
@@ -1254,7 +1254,7 @@
         <div class="nav-icon"><i data-lucide="blocks" class="pg-icon" aria-hidden="true"></i></div><span>App Ecosystem</span>
       </div>
       <div class="nav-item" role="button" tabindex="0" onclick="showPage('integration-center')">
-        <div class="nav-icon"><i data-lucide="link-2" class="pg-icon" aria-hidden="true"></i></div><span>Central de Integrações</span>
+        <div class="nav-icon"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i></div><span>Central de Integrações</span>
         <span class="nav-badge" style="background:rgba(99,102,241,0.2);color:var(--accent-light);font-size:9px">NEW</span>
       </div>
       <div class="nav-item" role="button" tabindex="0" onclick="showPage('personal-hub')">
@@ -1480,7 +1480,7 @@
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="projects-kpis">
           <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-total">—</div><div class="kpi-label">Total</div></div>
           <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="play-circle" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-active">—</div><div class="kpi-label">Em andamento</div></div>
-          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="check-circle-2" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-done">—</div><div class="kpi-label">Concluídos</div></div>
+          <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-done">—</div><div class="kpi-label">Concluídos</div></div>
           <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="archive" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value" id="proj-kpi-archived">—</div><div class="kpi-label">Arquivados</div></div>
         </div>
         <div id="projects-grid" class="grid-3">
@@ -1550,7 +1550,7 @@
       <div class="modal-overlay" id="modal-project-share" style="display:none">
         <div class="modal-box" style="max-width:460px">
           <div class="modal-header">
-            <span class="modal-title"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar Projeto</span>
+            <span class="modal-title"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar Projeto</span>
             <button class="modal-close" onclick="document.getElementById('modal-project-share').style.display='none'">&#x2715;</button>
           </div>
           <input type="hidden" id="share-project-id" />
@@ -1575,7 +1575,7 @@
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end">
             <button class="btn btn-ghost" onclick="document.getElementById('modal-project-share').style.display='none'">Cancelar</button>
-            <button class="btn btn-primary" onclick="projectShareSubmit()"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+            <button class="btn btn-primary" onclick="projectShareSubmit()"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
           </div>
         </div>
       </div>
@@ -1689,7 +1689,7 @@
           <div><div class="page-title">Central de Notificações</div><div class="page-subtitle" id="nc-subtitle">Carregando...</div></div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-ghost" onclick="ncMarkAllRead()"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Marcar todas lidas</button>
-            <button class="btn btn-ghost" onclick="ncClearHistory()"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Limpar histórico</button>
+            <button class="btn btn-ghost" onclick="ncClearHistory()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Limpar histórico</button>
           </div>
         </div>
         <div id="nc-container"></div>
@@ -4543,7 +4543,7 @@
               const wsName = wb.SheetNames[0];
               const ws = wb.Sheets[wsName];
               const html = window.XLSX.utils.sheet_to_html(ws, { id: 'xlsx-table', editable: false });
-              previewEl.innerHTML = '<div style="overflow:auto;max-height:500px;padding:8px"><style>#xlsx-table{border-collapse:collapse;font-size:12px;width:100%}#xlsx-table td,#xlsx-table th{border:1px solid var(--border);padding:4px 8px;color:var(--text-primary)}</style>' + html + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()">⬇ Baixar Excel</button></div>';
+              previewEl.innerHTML = '<div style="overflow:auto;max-height:500px;padding:8px"><style>#xlsx-table{border-collapse:collapse;font-size:12px;width:100%}#xlsx-table td,#xlsx-table th{border:1px solid var(--border);padding:4px 8px;color:var(--text-primary)}</style>' + html + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar Excel</button></div>';
             } catch {
               previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:14px">Planilha Excel</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar. Baixe para visualizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
             }
@@ -4560,7 +4560,7 @@
               const cr = await fetch(url, { credentials: 'same-origin' });
               const ab = await cr.arrayBuffer();
               const result = await window.mammoth.convertToHtml({ arrayBuffer: ab });
-              previewEl.innerHTML = '<div style="padding:20px;max-height:500px;overflow:auto;line-height:1.6;color:var(--text-primary);font-size:13px">' + result.value + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()">⬇ Baixar Word</button></div>';
+              previewEl.innerHTML = '<div style="padding:20px;max-height:500px;overflow:auto;line-height:1.6;color:var(--text-primary);font-size:13px">' + result.value + '</div><div style="text-align:center;margin-top:8px"><button class="btn btn-ghost" style="font-size:11px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar Word</button></div>';
             } catch {
               previewEl.innerHTML = '<div style="text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">📝</div><div style="font-size:14px">Documento Word</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">Não foi possível renderizar. Baixe para visualizar.</div><button class="btn btn-primary" style="margin-top:16px" onclick="docDownloadViewer()"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Baixar</button></div>';
             }
@@ -4932,7 +4932,7 @@
             html += '<div class="doc-file-name">' + escH(d.name) + '</div>';
             html += '<div class="doc-file-meta">' + sizeLabel + ' · Excluído em ' + (d.deletedAt ? new Date(d.deletedAt).toLocaleDateString('pt-BR') : '—') + '</div>';
             html += '<div style="display:flex;gap:6px;margin-top:8px">';
-            html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="docsRestoreDoc(\'' + escH(d.id) + '\')">↩ Restaurar</button>';
+            html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="docsRestoreDoc(\'' + escH(d.id) + '\')"><i data-lucide="rotate-ccw" class="pg-icon" aria-hidden="true"></i> Restaurar</button>';
             html += '<button class="btn btn-ghost" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="docsPermanentDelete(\'' + escH(d.id) + '\')">🗑 Excluir definitivamente</button>';
             html += '</div></div>';
           });
@@ -5261,7 +5261,7 @@
         <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">${e.endTime ? e.time + '–' + e.endTime : ''} ${e.location ? '· 📍 ' + e.location : ''} ${e.repeat && e.repeat !== 'none' ? '· 🔄' : ''} ${e.reminder ? '· 🔔' : ''}</div>
         ${e.description ? '<div style="font-size:11px;color:var(--text-muted);margin-top:3px">' + e.description.slice(0, 80) + (e.description.length > 80 ? '...' : '') + '</div>' : ''}
       </div>
-      <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();deleteEvent('${e.id}')">✕</button>
+      <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();deleteEvent('${e.id}')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
     </div>`;
   }
   function renderWeekView(events, from, to) {
@@ -5440,7 +5440,7 @@
           </div>
           <span class="habit-streak" style="color:${streakColor}"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> ${h.streak || 0}d</span>
           <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="openEditHabitModal(${JSON.stringify(h).replace(/"/g,'&quot;')})"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;color:var(--red)" onclick="deleteHabit('${h.id}')">✕</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;color:var(--red)" onclick="deleteHabit('${h.id}')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
         </div>`;
       }).join('');
       if (window.lucide) lucide.createIcons();
@@ -5522,7 +5522,7 @@
             <div style="font-size:15px;font-weight:700;flex:1">${g.title}</div>
             <div style="display:flex;gap:4px;flex-shrink:0">
               <button class="btn btn-ghost" style="font-size:11px;padding:2px 6px" onclick="event.stopPropagation();openEditGoalModal(${JSON.stringify(g).replace(/"/g,'&quot;')})"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i></button>
-              <button class="btn btn-ghost" style="font-size:11px;padding:2px 6px;color:var(--red)" onclick="event.stopPropagation();deleteGoal('${g.id}')">✕</button>
+              <button class="btn btn-ghost" style="font-size:11px;padding:2px 6px;color:var(--red)" onclick="event.stopPropagation();deleteGoal('${g.id}')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
             </div>
           </div>
           ${g.description ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">${g.description.slice(0,80)}${g.description.length > 80 ? '...' : ''}</div>` : ''}
@@ -5610,11 +5610,11 @@
             </div>
             <!-- Menu de ações -->
             <div style="position:relative">
-              <button class="btn btn-ghost" style="padding:4px 6px;font-size:14px" onclick="projectToggleMenu('${escH(p.id)}',event)" title="Mais ações">⋯</button>
+              <button class="btn btn-ghost" style="padding:4px 6px;font-size:14px" onclick="projectToggleMenu('${escH(p.id)}',event)" title="Mais ações"><i data-lucide="ellipsis" class="pg-icon" aria-hidden="true"></i></button>
               <div id="proj-menu-${escH(p.id)}" style="display:none;position:absolute;right:0;top:100%;z-index:100;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,0.4);overflow:hidden">
-                <div class="proj-menu-item" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="edit-3" class="pg-icon" aria-hidden="true"></i> Editar</div>
+                <div class="proj-menu-item" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</div>
                 <div class="proj-menu-item" onclick="projectDuplicate('${escH(p.id)}')"><i data-lucide="copy" class="pg-icon" aria-hidden="true"></i> Duplicar</div>
-                <div class="proj-menu-item" onclick="projectShare('${escH(p.id)}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</div>
+                <div class="proj-menu-item" onclick="projectShare('${escH(p.id)}')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar</div>
                 <div class="proj-menu-item" onclick="projectHistory('${escH(p.id)}','${escH(p.title)}')"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico</div>
                 <div class="proj-menu-item" onclick="projectTransfer('${escH(p.id)}')"><i data-lucide="arrow-right-left" class="pg-icon" aria-hidden="true"></i> Transferir</div>
                 <div style="border-top:1px solid var(--border)"></div>
@@ -5622,7 +5622,7 @@
                   ? `<div class="proj-menu-item" onclick="projectRestore('${escH(p.id)}')"><i data-lucide="archive-restore" class="pg-icon" aria-hidden="true"></i> Restaurar</div>`
                   : `<div class="proj-menu-item" onclick="projectArchive('${escH(p.id)}')"><i data-lucide="archive" class="pg-icon" aria-hidden="true"></i> Arquivar</div>`
                 }
-                <div class="proj-menu-item" style="color:var(--red)" onclick="projectDelete('${escH(p.id)}','${escH(p.title)}')"><i data-lucide="trash-2" class="pg-icon" aria-hidden="true"></i> Excluir</div>
+                <div class="proj-menu-item" style="color:var(--red)" onclick="projectDelete('${escH(p.id)}','${escH(p.title)}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Excluir</div>
               </div>
             </div>
           </div>
@@ -5646,7 +5646,7 @@
           <!-- Autosave -->
           <div style="display:flex;justify-content:space-between;align-items:center">
             ${autosaveIndicator}
-            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:auto" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="edit-3" class="pg-icon" aria-hidden="true"></i> Editar</button>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:auto" onclick="projectEdit('${escH(p.id)}')"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Editar</button>
           </div>
         </div>`;
       }).join('');
@@ -6230,7 +6230,7 @@
         <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
           <input type="number" class="form-input" id="goal-detail-progress" value="${g.progress || 0}" min="0" max="100" style="width:80px;font-size:12px" placeholder="%" />
           <button class="btn btn-ghost" style="font-size:12px" onclick="updateGoalProgress('${g.id}')">Atualizar progresso</button>
-          <button class="btn btn-ghost" style="font-size:12px" onclick="shareGoal('${g.id}')"><i data-lucide="share-2" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+          <button class="btn btn-ghost" style="font-size:12px" onclick="shareGoal('${g.id}')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
         </div>
         ${g.subtasks && g.subtasks.length > 0 ? '<div style="margin-bottom:16px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Subtarefas</div>' + subtaskHtml + '</div>' : ''}
         ${g.milestones && g.milestones.length > 0 ? '<div style="margin-bottom:16px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Marcos</div>' + milestoneHtml + '</div>' : ''}
@@ -6369,7 +6369,7 @@
         <div class="modal-content" style="position:relative;width:600px;max-width:95vw;max-height:85vh;overflow-y:auto;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
             <div style="font-size:16px;font-weight:700">${note.title || 'Nota'}</div>
-            <button onclick="this.closest('.modal').remove()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px">✕</button>
+            <button onclick="this.closest('.modal').remove()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
           </div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">${new Date(note.updatedAt || note.createdAt || Date.now()).toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'})}</div>
           <div style="font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text-primary)">${note.content || ''}</div>

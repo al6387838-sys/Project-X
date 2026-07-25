@@ -206,7 +206,7 @@
       </div>
       <div class="im-filters">
         <button class="im-filter active" onclick="imFilter('all',this)">Todos</button>
-        <button class="im-filter" onclick="imFilter('featured',this)">⭐ Destaque</button>
+        <button class="im-filter" onclick="imFilter('featured',this)"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Destaque</button>
         <button class="im-filter" onclick="imFilter('new',this)"><i data-lucide="badge-plus" class="pg-icon" aria-hidden="true"></i> Novos</button>
         <button class="im-filter" onclick="imFilter('popular',this)"><i data-lucide="flame" class="pg-icon" aria-hidden="true"></i> Populares</button>
       </div>
@@ -218,7 +218,7 @@
       <div class="im-section-sub">Integrações mais usadas pelos usuários LifeOS Enterprise</div>
       <div class="im-featured">
         <div class="im-featured-card" onclick="imOpenModal('google-workspace')" style="border-color:rgba(66,133,244,0.2)">
-          <div class="im-featured-badge badge-featured">⭐ Destaque</div>
+          <div class="im-featured-badge badge-featured"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Destaque</div>
           <div class="im-app-logo" style="background:rgba(66,133,244,0.1)"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
           <div class="im-app-name">Google Workspace</div>
           <div class="im-app-desc">Gmail, Drive, Calendar, Meet e Docs integrados ao seu fluxo de trabalho LifeOS</div>
@@ -392,7 +392,7 @@ function renderConnected() {
         <div class="im-conn-sync">Última sync: ${item.lastSync ? new Date(item.lastSync).toLocaleString("pt-BR") : "—"}</div>
       </div>
       <div class="im-conn-actions">
-        <button class="btn-sm btn-sm-ghost" onclick="imSync('${item.id}')">↻ Sync</button>
+        <button class="btn-sm btn-sm-ghost" onclick="imSync('${item.id}')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sync</button>
         <button class="btn-sm btn-sm-ghost" onclick="imOpenModal('${item.id}')">\u{2699} Config</button>
         <button class="btn-sm btn-sm-danger" onclick="imDisconnect('${item.id}')">Desconectar</button>
       </div>

@@ -23,9 +23,9 @@
       <!-- Mini calendário -->
       <div class="card" style="padding:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(-1)">‹</button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(-1)"><i data-lucide="chevron-left" class="pg-icon" aria-hidden="true"></i></button>
           <div style="font-size:13px;font-weight:700" id="cal-mini-title">Carregando...</div>
-          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(1)">›</button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" onclick="calNavMonth(1)"><i data-lucide="chevron-right" class="pg-icon" aria-hidden="true"></i></button>
         </div>
         <div class="cal-mini-grid" id="cal-mini-grid">
           <div class="cal-mini-dow">D</div><div class="cal-mini-dow">S</div><div class="cal-mini-dow">T</div><div class="cal-mini-dow">Q</div><div class="cal-mini-dow">Q</div><div class="cal-mini-dow">S</div><div class="cal-mini-dow">S</div>
@@ -54,13 +54,13 @@
       <!-- Navegação do mês -->
       <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
         <div style="display:flex;align-items:center;gap:8px">
-          <button class="btn btn-ghost" style="padding:6px 10px" onclick="calNavMonth(-1)">‹ Anterior</button>
+          <button class="btn btn-ghost" style="padding:6px 10px" onclick="calNavMonth(-1)"><i data-lucide="chevron-left" class="pg-icon" aria-hidden="true"></i> Anterior</button>
           <button class="btn btn-ghost" style="padding:6px 10px" onclick="calGoToday()">Hoje</button>
-          <button class="btn btn-ghost" style="padding:6px 10px" onclick="calNavMonth(1)">Próximo ›</button>
+          <button class="btn btn-ghost" style="padding:6px 10px" onclick="calNavMonth(1)">Próximo <i data-lucide="chevron-right" class="pg-icon" aria-hidden="true"></i></button>
         </div>
         <div style="font-size:18px;font-weight:700" id="cal-main-title">Carregando...</div>
         <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost" style="font-size:12px;padding:6px 10px" id="cal-sync-btn" onclick="calSyncAll()">↻ Sincronizar</button>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 10px" id="cal-sync-btn" onclick="calSyncAll()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
         </div>
       </div>
 
