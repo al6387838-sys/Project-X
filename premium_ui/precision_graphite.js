@@ -1,10 +1,11 @@
 /* LifeOS Enterprise — Precision Graphite icon and polish adapter.
-   Presentation-only: no business logic, persistence, auth or routing changes. */
+   Presentation-only: no business logic, persistence, auth or routing changes.
+   Now uses inline SVG icons (icon-svg-renderer.js) instead of Lucide UMD. */
 (() => {
   'use strict';
 
-  const SCRIPT_SELECTOR = 'script[data-pg-lucide]';
-  const LUCIDE_SRC = '/vendor/lucide.min.js';
+  const SCRIPT_SELECTOR = 'script[data-pg-icons]';
+  const ICON_RENDERER_SRC = '/vendor/icon-svg-renderer.js';
   const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'OPTION', 'CODE', 'PRE']);
   const ICON_PATTERN = /(?:[\u{1F1E6}-\u{1F1FF}]{2}|[\u{1F300}-\u{1FAFF}]|[\u2600-\u27BF])(?:\uFE0F|\uFE0E)?(?:\u200D(?:[\u{1F300}-\u{1FAFF}]|[\u2600-\u27BF])(?:\uFE0F|\uFE0E)?)*|[\u{231A}\u{23F1}\u{23F0}\u{231B}\u{25B6}\u{23F8}\u{23F9}\u{23ED}\u{23EE}\u{2139}\u{2328}\u{25C8}\u{25C7}\u{25CE}\u{25EC}\u{25A0}\u{25CF}\u{D7}]|[\u{2190}\u{2192}\u{2191}\u{2193}\u{2713}\u{2714}\u{2715}\u{2716}\u{2717}\u{2718}\u{26A0}]/gu;
 
@@ -148,13 +149,35 @@
     root.querySelectorAll('button:not([type])').forEach((button) => button.setAttribute('type', 'button'));
   }
 
-  function renderLucide(root = document) {
-    if (!window.lucide || typeof window.lucide.createIcons !== 'function') return;
-    window.lucide.createIcons({
-      attrs: { 'aria-hidden': 'true', focusable: 'false' },
-      nameAttr: 'data-lucide'
-    });
-    root.documentElement?.setAttribute('data-pg-icons-ready', 'true');
+  /**
+   * Render icons using the inline SVG renderer.
+   * Calls refreshIcons() if available, otherwise falls back to manual replacement.
+   */
+  function renderIcons(root = document) {
+    if (typeof window.refreshIcons === 'function') {
+      window.refreshIcons(root);
+      root.documentElement?.setAttribute('data-pg-icons-ready', 'true');
+    } else {
+      // Fallback: manually replace data-lucide elements with inline SVGs
+      const ICONS_MAP = window.__LIFEOS_ICONS__ || {};
+      root.querySelectorAll('[data-lucide]').forEach((el) => {
+        const name = el.getAttribute('data-lucide');
+        if (!name || name.includes('$')) return;
+        const svg = ICONS_MAP[name];
+        if (!svg) return;
+        const attrs = [...el.attributes]
+          .filter(a => a.name !== 'data-lucide')
+          .map(a => `${a.name}="${a.value.replace(/"/g, '&quot;')}"`)
+          .join(' ');
+        if ((el.tagName === 'I' || el.tagName === 'SPAN') && !el.children.length) {
+          el.outerHTML = svg.replace('<svg ', `<svg ${attrs} `);
+        } else {
+          el.removeAttribute('data-lucide');
+          el.innerHTML = svg;
+        }
+      });
+      root.documentElement?.setAttribute('data-pg-icons-ready', 'true');
+    }
   }
 
   function polish(root = document) {
@@ -163,20 +186,25 @@
     normalizeControlSymbols(root);
     applySemanticIcons(root);
     normalizeAccessibility(root);
-    renderLucide(document);
+    renderIcons(document);
   }
 
-  function loadLucide() {
-    if (window.lucide) {
+  function loadIconRenderer() {
+    if (window.__ICON_SVG_RENDERER__) {
       polish(document);
       return;
     }
     if (document.querySelector(SCRIPT_SELECTOR)) return;
     const script = document.createElement('script');
-    script.src = LUCIDE_SRC;
+    script.src = ICON_RENDERER_SRC;
     script.defer = true;
-    script.dataset.pgLucide = 'true';
+    script.dataset.pgIcons = 'true';
     script.addEventListener('load', () => polish(document), { once: true });
+    script.addEventListener('error', () => {
+      // If renderer fails to load, try manual fallback
+      console.warn('Icon renderer failed to load, using fallback');
+      polish(document);
+    }, { once: true });
     document.head.append(script);
   }
 
@@ -193,7 +221,7 @@
   function start() {
     document.documentElement.dataset.visualSystem = 'precision-graphite';
     polish(document);
-    loadLucide();
+    loadIconRenderer();
     observer.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 

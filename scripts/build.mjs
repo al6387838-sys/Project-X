@@ -53,7 +53,7 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
 const productionAssets = [
-  'precision_graphite.css', 'precision_graphite.js', 'vendor/lucide.min.js',
+  'precision_graphite.css', 'precision_graphite.js', 'vendor/icon-svg-renderer.js',
   'black_diamond.css', 'black_diamond.js', 'performance.js', 'version-display.js',
   'design_system/variables.css', 'design_system/enterprise_identity.css',
   'design_system/enterprise_components.css', 'design_system/enterprise_v4.css',

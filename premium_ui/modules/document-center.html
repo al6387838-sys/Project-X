@@ -6,21 +6,21 @@
 <div class="page" id="page-document-center">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="folder-open" class="pg-icon" aria-hidden="true"></i> Document Center</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Document Center</div>
       <div class="page-subtitle">Gestão completa de documentos — versionamento e auditoria</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('document-center-favorites')"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Favoritos</button>
-      <button class="btn btn-ghost" onclick="showPage('document-center-shared')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhados</button>
-      <button class="btn btn-ghost" onclick="showPage('document-center-audit')"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria</button>
-      <button class="btn btn-primary" onclick="openModal('modal-doc-upload')"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-favorites')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> Favoritos</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-shared')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Compartilhados</button>
+      <button class="btn btn-ghost" onclick="showPage('document-center-audit')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Auditoria</button>
+      <button class="btn btn-primary" onclick="openModal('modal-doc-upload')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload</button>
     </div>
   </div>
 
   <!-- Busca e filtros -->
   <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
     <div style="flex:1;min-width:200px;position:relative">
-      <i data-lucide="search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:16px;height:16px" aria-hidden="true"></i>
+      <svg  style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:16px;height:16px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       <input type="text" class="form-input" id="doc-search-input" placeholder="Buscar documentos, tags, conteúdo..." style="padding-left:34px" oninput="dcSearch(this.value)" />
     </div>
     <select class="form-input" id="doc-filter-type" style="width:auto" onchange="dcLoadList()">
@@ -32,30 +32,30 @@
       <option value="jpg">Imagem</option>
     </select>
     <div style="display:flex;gap:4px">
-      <button class="btn btn-ghost" id="dc-view-grid" onclick="dcSetView('grid')"><i data-lucide="layout-grid" class="pg-icon" aria-hidden="true"></i></button>
-      <button class="btn btn-ghost" id="dc-view-list" onclick="dcSetView('list')"><i data-lucide="list" class="pg-icon" aria-hidden="true"></i></button>
+      <button class="btn btn-ghost" id="dc-view-grid" onclick="dcSetView('grid')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></button>
+      <button class="btn btn-ghost" id="dc-view-list" onclick="dcSetView('list')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></svg></button>
     </div>
   </div>
 
   <!-- Stats -->
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="files" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/></svg></div>
       <div class="kpi-value" id="dc-stat-total">—</div>
       <div class="kpi-label">Total de Documentos</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
       <div class="kpi-value" id="dc-stat-favs">—</div>
       <div class="kpi-label">Favoritos</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="hard-drive" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg></div>
       <div class="kpi-value" id="dc-stat-size">—</div>
       <div class="kpi-label">Armazenamento Usado</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(6,182,212,0.15);color:var(--cyan)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div>
       <div class="kpi-value" id="dc-stat-shared">—</div>
       <div class="kpi-label">Compartilhados</div>
     </div>
@@ -73,10 +73,10 @@
 <div class="page" id="page-document-center-favorites">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="star" class="pg-icon" aria-hidden="true"></i> Documentos Favoritos</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg> Documentos Favoritos</div>
       <div class="page-subtitle">Seus documentos marcados como favoritos</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card">
     <div id="dc-favorites-list" style="display:flex;flex-direction:column;gap:8px">
@@ -89,10 +89,10 @@
 <div class="page" id="page-document-center-shared">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhados Comigo</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Compartilhados Comigo</div>
       <div class="page-subtitle">Documentos que outros usuários compartilharam com você</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card">
     <div id="dc-shared-list" style="display:flex;flex-direction:column;gap:8px">
@@ -105,10 +105,10 @@
 <div class="page" id="page-document-center-audit">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i> Auditoria de Documentos</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Auditoria de Documentos</div>
       <div class="page-subtitle">Histórico completo de alterações e acessos</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card">
     <div id="dc-audit-list" style="display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto">
@@ -121,10 +121,10 @@
 <div class="page" id="page-document-versions">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i> Versões do Documento</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg> Versões do Documento</div>
       <div class="page-subtitle" id="dc-versions-subtitle">Histórico de versões</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('document-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('document-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card">
     <div id="dc-versions-list" style="display:flex;flex-direction:column;gap:8px">
@@ -137,7 +137,7 @@
 <div class="modal" id="modal-doc-upload" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-doc-upload')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Upload de Documento</div><button class="modal-close" onclick="closeModal('modal-doc-upload')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
+    <div class="modal-header"><div class="modal-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload de Documento</div><button class="modal-close" onclick="closeModal('modal-doc-upload')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <div>
         <label class="form-label">Nome do documento</label>
@@ -165,11 +165,11 @@
         </select>
       </div>
       <div style="padding:24px;border:2px dashed var(--border);border-radius:10px;text-align:center;color:var(--text-muted)">
-        <i data-lucide="cloud-upload" style="width:32px;height:32px;margin-bottom:8px" aria-hidden="true"></i>
+        <svg  style="width:32px;height:32px;margin-bottom:8px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8"/><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="m8 17 4-4 4 4"/></svg>
         <div style="font-size:13px">Arraste arquivos aqui ou clique para selecionar</div>
         <div style="font-size:11px;margin-top:4px">Máx. 10 MB · PDF, Word, Excel, Imagens</div>
       </div>
-      <button class="btn btn-primary" onclick="dcUploadDocument()"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i> Registrar Documento</button>
+      <button class="btn btn-primary" onclick="dcUploadDocument()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Registrar Documento</button>
     </div>
   </div>
 </div>
@@ -178,7 +178,7 @@
 <div class="modal" id="modal-doc-share" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-doc-share')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar Documento</div><button class="modal-close" onclick="closeModal('modal-doc-share')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
+    <div class="modal-header"><div class="modal-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Compartilhar Documento</div><button class="modal-close" onclick="closeModal('modal-doc-share')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <input type="hidden" id="share-doc-id" />
       <div><label class="form-label">Usuário (e-mail)</label><input type="email" class="form-input" id="share-target-user" placeholder="usuario@empresa.com" /></div>
@@ -188,7 +188,7 @@
           <option value="edit">Editar</option>
         </select>
       </div>
-      <button class="btn btn-primary" onclick="dcShareDocument()"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i> Compartilhar</button>
+      <button class="btn btn-primary" onclick="dcShareDocument()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Compartilhar</button>
     </div>
   </div>
 </div>
@@ -280,7 +280,7 @@ async function dcLoadShared() {
     }
     el.innerHTML = shared.map(s => `
       <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg-elevated);border-radius:8px">
-        <i data-lucide="file" style="color:var(--accent)" aria-hidden="true"></i>
+        <svg  style="color:var(--accent)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600">${s.docName}</div>
           <div style="font-size:11px;color:var(--text-muted)">Por ${s.ownerId} · ${new Date(s.sharedAt).toLocaleDateString('pt-BR')} · ${s.permission === 'edit' ? 'Pode editar' : 'Somente visualizar'}</div>
@@ -290,7 +290,7 @@ async function dcLoadShared() {
         </span>
       </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   } catch {}
 }
 
@@ -374,14 +374,14 @@ function renderDocList(containerId, docs) {
           <button class="btn btn-ghost" style="font-size:11px" onclick="dcToggleFavorite('${d.id}')" title="${d.favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}">
             <i data-lucide="${d.favorite ? 'star' : 'star'}" style="color:${d.favorite ? 'var(--amber)' : 'var(--text-muted)'}" aria-hidden="true"></i>
           </button>
-          <button class="btn btn-ghost" style="font-size:11px" onclick="dcLoadVersions('${d.id}','${d.name.replace(/'/g, "\\'")}')"><i data-lucide="git-branch" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="font-size:11px" onclick="dcOpenShare('${d.id}')"><i data-lucide="share" class="pg-icon" aria-hidden="true"></i></button>
-          <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcDeleteDoc('${d.id}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcLoadVersions('${d.id}','${d.name.replace(/'/g, "\\'")}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></button>
+          <button class="btn btn-ghost" style="font-size:11px" onclick="dcOpenShare('${d.id}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
+          <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcDeleteDoc('${d.id}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
         </div>
       </div>
     `;
   }).join('');
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  window.refreshIcons?.();
 }
 
 async function dcUploadDocument() {
@@ -563,7 +563,7 @@ async function dcLoadTrash() {
         <button class="btn btn-ghost" style="font-size:11px;color:var(--red)" onclick="dcPermanentDelete('${d.id}')">Excluir</button>
       </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   } catch {}
 }
 async function dcPermanentDelete(docId) {

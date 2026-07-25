@@ -6,36 +6,36 @@
 <div class="page" id="page-finance-hub">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="landmark" class="pg-icon" aria-hidden="true"></i> Finance Hub</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg> Finance Hub</div>
       <div class="page-subtitle">Gestão financeira completa — dados reais</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance-hub-accounts')"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Contas</button>
-      <button class="btn btn-ghost" onclick="showPage('finance-hub-pix')"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> PIX</button>
-      <button class="btn btn-ghost" onclick="showPage('finance-hub-openfinance')"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Open Finance</button>
-      <button class="btn btn-primary" onclick="showPage('finance-hub-history')"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-accounts')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Contas</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-pix')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> PIX</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub-openfinance')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Open Finance</button>
+      <button class="btn btn-primary" onclick="showPage('finance-hub-history')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Histórico</button>
     </div>
   </div>
 
   <!-- KPIs reais -->
   <div class="grid-4" style="margin-bottom:20px">
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="banknote" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></div>
       <div class="kpi-value" id="fh-saldo-total">—</div>
       <div class="kpi-label">Saldo Total</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
       <div class="kpi-value" id="fh-receitas">—</div>
       <div class="kpi-label">Receitas do Mês</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(239,68,68,0.15);color:var(--red)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
       <div class="kpi-value" id="fh-despesas">—</div>
       <div class="kpi-label">Despesas do Mês</div>
     </div>
     <div class="card kpi-card">
-      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i></div>
+      <div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
       <div class="kpi-value" id="fh-saldo-mes">—</div>
       <div class="kpi-label">Saldo do Mês</div>
     </div>
@@ -44,7 +44,7 @@
   <!-- Transações recentes -->
   <div class="card" style="margin-bottom:20px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <div class="card-title" style="margin:0"><i data-lucide="clock" class="pg-icon" aria-hidden="true"></i> Transações Recentes</div>
+      <div class="card-title" style="margin:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Transações Recentes</div>
       <button class="btn btn-ghost" style="font-size:12px" onclick="showPage('finance-hub-history')">Ver todas</button>
     </div>
     <div id="fh-recent-tx" style="display:flex;flex-direction:column;gap:8px">
@@ -54,7 +54,7 @@
 
   <!-- Adicionar transação manual -->
   <div class="card">
-    <div class="card-title" style="margin-bottom:16px"><i data-lucide="plus-circle" class="pg-icon" aria-hidden="true"></i> Registrar Transação</div>
+    <div class="card-title" style="margin-bottom:16px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Registrar Transação</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end">
       <div>
         <label class="form-label">Descrição</label>
@@ -71,7 +71,7 @@
           <option value="credit">Crédito (entrada)</option>
         </select>
       </div>
-      <button class="btn btn-primary" onclick="fhAddTransaction()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="btn btn-primary" onclick="fhAddTransaction()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
     </div>
   </div>
 </div>
@@ -80,12 +80,12 @@
 <div class="page" id="page-finance-hub-accounts">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="credit-card" class="pg-icon" aria-hidden="true"></i> Contas Bancárias</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Contas Bancárias</div>
       <div class="page-subtitle">Gerencie suas contas e cartões</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-account')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Conta</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-account')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Conta</button>
     </div>
   </div>
   <div id="fh-accounts-list" style="display:flex;flex-direction:column;gap:12px">
@@ -97,10 +97,10 @@
 <div class="page" id="page-finance-hub-pix">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> PIX</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> PIX</div>
       <div class="page-subtitle">Chaves, pagamentos e recebimentos</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
 
   <div class="grid-2" style="margin-bottom:20px">
@@ -108,7 +108,7 @@
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
         <div class="card-title" style="margin:0">Minhas Chaves PIX</div>
-        <button class="btn btn-primary" style="font-size:12px" onclick="openModal('modal-add-pix-key')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+        <button class="btn btn-primary" style="font-size:12px" onclick="openModal('modal-add-pix-key')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
       </div>
       <div id="fh-pix-keys" style="display:flex;flex-direction:column;gap:8px">
         <div style="text-align:center;padding:16px;color:var(--text-muted)">Carregando...</div>
@@ -131,7 +131,7 @@
           <label class="form-label">Descrição (opcional)</label>
           <input type="text" class="form-input" id="fh-pix-desc" placeholder="Motivo do pagamento" />
         </div>
-        <button class="btn btn-primary" onclick="fhSendPix()"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Enviar PIX</button>
+        <button class="btn btn-primary" onclick="fhSendPix()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Enviar PIX</button>
       </div>
     </div>
   </div>
@@ -149,14 +149,14 @@
 <div class="page" id="page-finance-hub-openfinance">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="link" class="pg-icon" aria-hidden="true"></i> Open Finance</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Open Finance</div>
       <div class="page-subtitle">Conecte suas instituições financeiras — Open Finance Brasil</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('finance-hub')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(16,185,129,0.06),rgba(99,102,241,0.06));border-color:rgba(16,185,129,0.2);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:14px">
-      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center"><i data-lucide="shield-check" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
       <div>
         <div style="font-weight:700">Open Finance Brasil — Padrão Oficial</div>
         <div style="font-size:13px;color:var(--text-secondary)">Conexão segura via OAuth 2.0 · Dados criptografados · Revogação a qualquer momento</div>
@@ -172,11 +172,11 @@
 <div class="page" id="page-finance-hub-history">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="history" class="pg-icon" aria-hidden="true"></i> Histórico Financeiro</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> Histórico Financeiro</div>
       <div class="page-subtitle">Todas as transações registradas</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+      <button class="btn btn-ghost" onclick="showPage('finance-hub')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
       <select class="form-input" id="fh-hist-type" onchange="fhLoadHistory()" style="width:auto">
         <option value="">Todos</option>
         <option value="credit">Entradas</option>
@@ -195,7 +195,7 @@
 <div class="modal" id="modal-add-account" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-add-account')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Nova Conta Bancária</div><button class="modal-close" onclick="closeModal('modal-add-account')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
+    <div class="modal-header"><div class="modal-title">Nova Conta Bancária</div><button class="modal-close" onclick="closeModal('modal-add-account')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <div><label class="form-label">Nome da conta</label><input type="text" class="form-input" id="acc-name" placeholder="Ex: Conta Corrente Nubank" /></div>
       <div><label class="form-label">Tipo</label>
@@ -217,7 +217,7 @@
 <div class="modal" id="modal-add-pix-key" style="display:none">
   <div class="modal-overlay" onclick="closeModal('modal-add-pix-key')"></div>
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Nova Chave PIX</div><button class="modal-close" onclick="closeModal('modal-add-pix-key')"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button></div>
+    <div class="modal-header"><div class="modal-title">Nova Chave PIX</div><button class="modal-close" onclick="closeModal('modal-add-pix-key')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div style="display:flex;flex-direction:column;gap:12px;padding:20px">
       <div><label class="form-label">Tipo de chave</label>
         <select class="form-input" id="pix-key-type">
@@ -284,7 +284,7 @@ function renderTransactions(containerId, txs) {
       </div>
     </div>
   `).join('');
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  window.refreshIcons?.();
 }
 
 async function loadFinanceAccounts() {
@@ -302,7 +302,7 @@ async function loadFinanceAccounts() {
     el.innerHTML = data.accounts.map(a => `
       <div class="card" style="display:flex;align-items:center;gap:14px">
         <div style="width:48px;height:48px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center">
-          <i data-lucide="credit-card" style="color:var(--accent)" aria-hidden="true"></i>
+          <svg  style="color:var(--accent)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         </div>
         <div style="flex:1">
           <div style="font-weight:700;font-size:15px">${a.name}</div>
@@ -314,7 +314,7 @@ async function loadFinanceAccounts() {
         </div>
       </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   } catch (e) { /* error handled */ }
 }
 
@@ -331,7 +331,7 @@ async function loadFinancePix() {
       } else {
         keysEl.innerHTML = data.keys.map(k => `
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
-            <i data-lucide="zap" style="color:var(--green)" aria-hidden="true"></i>
+            <svg  style="color:var(--green)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
             <div style="flex:1">
               <div style="font-size:12px;color:var(--text-muted)">${k.type.toUpperCase()}</div>
               <div style="font-size:13px;font-weight:600">${k.value}</div>
@@ -346,7 +346,7 @@ async function loadFinancePix() {
       } else {
         histEl.innerHTML = data.history.map(h => `
           <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-elevated);border-radius:8px">
-            <i data-lucide="zap" style="color:${h.type === 'payment' ? 'var(--red)' : 'var(--green)'}" aria-hidden="true"></i>
+            <svg  style="color:${h.type === 'payment' ? 'var(--red)' : 'var(--green)'}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
             <div style="flex:1">
               <div style="font-size:13px;font-weight:600">${h.description}</div>
               <div style="font-size:11px;color:var(--text-muted)">${new Date(h.date).toLocaleString('pt-BR')} · ${h.targetKey}</div>
@@ -358,7 +358,7 @@ async function loadFinancePix() {
         `).join('');
       }
     }
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   } catch (e) { /* error handled */ }
 }
 
@@ -380,13 +380,13 @@ async function loadOpenFinance() {
             <div style="font-size:11px;color:var(--text-muted)">${inst.connected ? `Conectado · ${inst.lastSync ? new Date(inst.lastSync).toLocaleDateString('pt-BR') : 'nunca sincronizado'}` : 'Não conectado'}</div>
           </div>
           ${inst.connected
-            ? '<span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Ativo</span>'
+            ? '<span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Ativo</span>'
             : `<button class="btn btn-primary" style="font-size:12px" onclick="fhConnectBank('${inst.id}')">Conectar</button>`
           }
         </div>
       </div>
     `).join('');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   } catch (e) { /* error handled */ }
 }
 

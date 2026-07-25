@@ -96,7 +96,7 @@ function preloadCritical() {
   const criticalResources = [
     { href: '/black_diamond.css', as: 'style' },
     { href: '/precision_graphite.js', as: 'script' },
-    { href: '/vendor/lucide.min.js', as: 'script' },
+    { href: '/vendor/icon-svg-renderer.js', as: 'script' },
   ];
 
   criticalResources.forEach(resource => {

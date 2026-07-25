@@ -6,7 +6,7 @@
 <div class="page" id="page-kanban">
   <div class="page-header" style="flex-wrap:wrap;gap:8px">
     <div>
-      <div class="page-title"><i data-lucide="kanban" class="pg-icon" aria-hidden="true"></i> Tarefas</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/></svg> Tarefas</div>
       <div class="page-subtitle">Quadro Kanban — arraste para mover</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -24,30 +24,30 @@
         <option value="priority">Por prioridade</option>
         <option value="title">Por título</option>
       </select>
-      <button class="btn btn-ghost" onclick="showPage('gantt')"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Gantt</button>
-      <button class="btn btn-primary" onclick="taskOpenNew()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
+      <button class="btn btn-ghost" onclick="showPage('gantt')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Gantt</button>
+      <button class="btn btn-primary" onclick="taskOpenNew()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tarefa</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;height:calc(100vh - 200px);overflow-x:auto">
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--text-muted)"><span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Backlog</span><span class="kanban-count" id="kanban-count-backlog">—</span></div>
+      <div class="kanban-col-header" style="border-top-color:var(--text-muted)"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Backlog</span><span class="kanban-count" id="kanban-count-backlog">—</span></div>
       <div class="kanban-cards" id="kanban-backlog" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'todo')"></div>
-      <button class="kanban-add-btn" onclick="taskOpenNew('todo')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('todo')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
     </div>
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--accent)"><span><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Em Progresso</span><span class="kanban-count" id="kanban-count-progress">—</span></div>
+      <div class="kanban-col-header" style="border-top-color:var(--accent)"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Em Progresso</span><span class="kanban-count" id="kanban-count-progress">—</span></div>
       <div class="kanban-cards" id="kanban-progress" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'progress')"></div>
-      <button class="kanban-add-btn" onclick="taskOpenNew('progress')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('progress')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
     </div>
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--amber)"><span><i data-lucide="eye" class="pg-icon" aria-hidden="true"></i> Revisão</span><span class="kanban-count" id="kanban-count-review">—</span></div>
+      <div class="kanban-col-header" style="border-top-color:var(--amber)"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg> Revisão</span><span class="kanban-count" id="kanban-count-review">—</span></div>
       <div class="kanban-cards" id="kanban-review" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'review')"></div>
-      <button class="kanban-add-btn" onclick="taskOpenNew('review')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('review')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
     </div>
     <div class="kanban-col">
-      <div class="kanban-col-header" style="border-top-color:var(--green)"><span><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Concluído</span><span class="kanban-count" id="kanban-count-done">—</span></div>
+      <div class="kanban-col-header" style="border-top-color:var(--green)"><span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Concluído</span><span class="kanban-count" id="kanban-count-done">—</span></div>
       <div class="kanban-cards" id="kanban-done" ondragover="kanbanDragOver(event)" ondrop="kanbanDrop(event,'done')"></div>
-      <button class="kanban-add-btn" onclick="taskOpenNew('done')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+      <button class="kanban-add-btn" onclick="taskOpenNew('done')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
     </div>
   </div>
 </div>
@@ -56,12 +56,12 @@
 <div class="page" id="page-gantt">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Gantt</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Gantt</div>
       <div class="page-subtitle">Cronograma visual do projeto</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('kanban')"><i data-lucide="kanban" class="pg-icon" aria-hidden="true"></i> Kanban</button>
-      <button class="btn btn-primary" onclick="taskOpenNew()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Tarefa</button>
+      <button class="btn btn-ghost" onclick="showPage('kanban')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/></svg> Kanban</button>
+      <button class="btn btn-primary" onclick="taskOpenNew()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Tarefa</button>
     </div>
   </div>
   <div class="card" style="overflow-x:auto">
@@ -86,10 +86,10 @@
 <div class="page" id="page-wiki">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="book-open" class="pg-icon" aria-hidden="true"></i> Wiki</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> Wiki</div>
       <div class="page-subtitle">Base de conhecimento da equipe</div>
     </div>
-    <button class="btn btn-primary" onclick="wikiNewPage()"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Página</button>
+    <button class="btn btn-primary" onclick="wikiNewPage()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Página</button>
   </div>
   <div id="wiki-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
     <div style="padding:32px;text-align:center;color:var(--text-muted);grid-column:1/-1">Carregando wiki...</div>
@@ -101,8 +101,8 @@
   <div class="modal-backdrop" onclick="taskCloseModal()"></div>
   <div class="modal-content" style="width:600px;max-width:95vw;max-height:90vh;overflow-y:auto">
     <div class="modal-header">
-      <div class="modal-title" id="modal-task-title"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa</div>
-      <button class="modal-close" onclick="taskCloseModal()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      <div class="modal-title" id="modal-task-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Tarefa</div>
+      <button class="modal-close" onclick="taskCloseModal()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <form id="task-form" autocomplete="off">
@@ -185,9 +185,9 @@
     <div class="modal-header">
       <div class="modal-title" id="task-detail-title">Detalhes da Tarefa</div>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost" onclick="taskEditFromDetail()" title="Editar"><i data-lucide="edit" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="color:var(--red)" onclick="taskDeleteFromDetail()" title="Excluir"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="modal-close" onclick="taskCloseDetail()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" onclick="taskEditFromDetail()" title="Editar"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+        <button class="btn btn-ghost" style="color:var(--red)" onclick="taskDeleteFromDetail()" title="Excluir"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+        <button class="modal-close" onclick="taskCloseDetail()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
     </div>
     <div class="modal-body" id="task-detail-body">
@@ -304,14 +304,14 @@
         const subtasksTotal = (t.subtasks || []).length;
         const tags = (t.tags || []).slice(0, 3).map(tag => `<span class="kanban-tag" style="background:rgba(99,102,241,.12);color:var(--accent);font-size:10px;padding:2px 6px;border-radius:4px">${esc(tag)}</span>`).join('');
         const assignees = (t.assignees || []).slice(0, 2).map(a => `<span style="font-size:10px;background:var(--bg-elevated);padding:2px 6px;border-radius:10px;color:var(--text-secondary)">${esc(a)}</span>`).join('');
-        const recurrenceIcon = t.recurrence ? '<i data-lucide="repeat" style="width:10px;height:10px;color:var(--text-muted)" aria-hidden="true"></i>' : '';
+        const recurrenceIcon = t.recurrence ? '<svg  style="width:10px;height:10px;color:var(--text-muted)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>' : '';
         return `<div class="kanban-card" draggable="true" ondragstart="kanbanDragStart(event,'${esc(t.id)}')" onclick="taskOpenDetail('${esc(t.id)}')" style="cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
             <div style="font-size:13px;font-weight:600;line-height:1.3;flex:1">${esc(t.title)}</div>
             <div style="display:flex;gap:4px;flex-shrink:0">
               ${recurrenceIcon}
               <button onclick="event.stopPropagation();taskComplete('${esc(t.id)}','${esc(t.status)}')" title="${t.status === 'done' ? 'Reabrir' : 'Concluir'}" style="background:none;border:none;cursor:pointer;padding:2px;color:${t.status === 'done' ? 'var(--green)' : 'var(--text-muted)'}"><i data-lucide="${t.status === 'done' ? 'circle-check' : 'circle'}" style="width:14px;height:14px" aria-hidden="true"></i></button>
-              <button onclick="event.stopPropagation();taskDelete('${esc(t.id)}')" title="Excluir" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--text-muted)"><i data-lucide="trash" style="width:12px;height:12px" aria-hidden="true"></i></button>
+              <button onclick="event.stopPropagation();taskDelete('${esc(t.id)}')" title="Excluir" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--text-muted)"><svg  style="width:12px;height:12px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
             </div>
           </div>
           ${t.description ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.description)}</div>` : ''}
@@ -325,7 +325,7 @@
         </div>`;
       }).join('');
     }
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   }
 
   function renderGantt() {
@@ -376,21 +376,21 @@
         <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
           <button onclick="taskToggleSubtask('${esc(t.id)}','${esc(s.id)}')" style="background:none;border:none;cursor:pointer;color:${s.done ? 'var(--green)' : 'var(--text-muted)'}"><i data-lucide="${s.done ? 'circle-check' : 'circle'}" style="width:14px;height:14px" aria-hidden="true"></i></button>
           <span style="flex:1;font-size:13px;${s.done ? 'text-decoration:line-through;color:var(--text-muted)' : ''}">${esc(s.title)}</span>
-          <button onclick="taskDeleteSubtask('${esc(t.id)}','${esc(s.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><i data-lucide="x" style="width:12px;height:12px" aria-hidden="true"></i></button>
+          <button onclick="taskDeleteSubtask('${esc(t.id)}','${esc(s.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><svg  style="width:12px;height:12px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
         </div>`).join('');
       const commentsHtml = (t.comments || []).map(c => `
         <div style="padding:8px;background:var(--bg-elevated);border-radius:6px;margin-bottom:6px">
           <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${esc(c.author)} · ${fmtDate(c.createdAt)}</div>
           <div style="font-size:13px">${esc(c.text)}</div>
-          <button onclick="taskDeleteComment('${esc(t.id)}','${esc(c.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:11px;margin-top:4px"><i data-lucide="trash" style="width:10px;height:10px" aria-hidden="true"></i> Excluir</button>
+          <button onclick="taskDeleteComment('${esc(t.id)}','${esc(c.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:11px;margin-top:4px"><svg  style="width:10px;height:10px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Excluir</button>
         </div>`).join('');
       const historyHtml = (t.history || []).slice(0, 10).map(h => `
         <div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--border);color:var(--text-muted)">${esc(h.detail)} · ${fmtDate(h.createdAt)}</div>`).join('');
       const attachHtml = (t.attachments || []).map(a => `
         <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
-          <i data-lucide="paperclip" style="width:12px;height:12px;color:var(--text-muted)" aria-hidden="true"></i>
+          <svg  style="width:12px;height:12px;color:var(--text-muted)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.234 20.252 21 12.3"/><path d="m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486"/></svg>
           <a href="${esc(a.url)}" target="_blank" style="font-size:12px;color:var(--accent);flex:1">${esc(a.name)}</a>
-          <button onclick="taskDeleteAttachment('${esc(t.id)}','${esc(a.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><i data-lucide="x" style="width:12px;height:12px" aria-hidden="true"></i></button>
+          <button onclick="taskDeleteAttachment('${esc(t.id)}','${esc(a.id)}')" style="background:none;border:none;cursor:pointer;color:var(--text-muted)"><svg  style="width:12px;height:12px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
         </div>`).join('');
       const recurrenceText = t.recurrence ? `${({ daily: 'Diária', weekly: 'Semanal', biweekly: 'Quinzenal', monthly: 'Mensal', yearly: 'Anual' }[t.recurrence.frequency] || t.recurrence.frequency)}${t.recurrence.endDate ? ` até ${fmtDate(t.recurrence.endDate)}` : ''}` : 'Sem recorrência';
       document.getElementById('task-detail-body').innerHTML = `
@@ -408,7 +408,7 @@
           <div id="detail-subtasks">${subtasksHtml || '<div style="font-size:12px;color:var(--text-muted)">Nenhuma subtarefa</div>'}</div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <input type="text" id="new-subtask-input" class="form-input" style="flex:1;font-size:12px" placeholder="Nova subtarefa..." maxlength="200">
-            <button class="btn btn-ghost" onclick="taskAddSubtask('${esc(t.id)}')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar</button>
+            <button class="btn btn-ghost" onclick="taskAddSubtask('${esc(t.id)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar</button>
           </div>
         </div>
         <div style="margin-bottom:16px">
@@ -416,7 +416,7 @@
           <div id="detail-comments">${commentsHtml || '<div style="font-size:12px;color:var(--text-muted)">Nenhum comentário</div>'}</div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <input type="text" id="new-comment-input" class="form-input" style="flex:1;font-size:12px" placeholder="Adicionar comentário..." maxlength="2000">
-            <button class="btn btn-ghost" onclick="taskAddComment('${esc(t.id)}')"><i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar</button>
+            <button class="btn btn-ghost" onclick="taskAddComment('${esc(t.id)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg> Enviar</button>
           </div>
         </div>
         <div style="margin-bottom:16px">
@@ -425,12 +425,12 @@
           <div style="display:flex;gap:8px;margin-top:8px">
             <input type="text" id="new-attach-name" class="form-input" style="flex:1;font-size:12px" placeholder="Nome do arquivo" maxlength="200">
             <input type="url" id="new-attach-url" class="form-input" style="flex:1;font-size:12px" placeholder="URL do arquivo" maxlength="2000">
-            <button class="btn btn-ghost" onclick="taskAddAttachment('${esc(t.id)}')"><i data-lucide="paperclip" class="pg-icon" aria-hidden="true"></i> Anexar</button>
+            <button class="btn btn-ghost" onclick="taskAddAttachment('${esc(t.id)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.234 20.252 21 12.3"/><path d="m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486"/></svg> Anexar</button>
           </div>
         </div>
         ${historyHtml ? `<div><div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:8px">HISTÓRICO</div><div>${historyHtml}</div></div>` : ''}
       `;
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+      window.refreshIcons?.();
     } catch (err) {
       document.getElementById('task-detail-body').innerHTML = `<div style="padding:32px;text-align:center;color:var(--red)">Erro ao carregar: ${esc(err.message)}</div>`;
     }
@@ -534,18 +534,18 @@
     const form = document.getElementById('task-form');
     form.reset();
     document.getElementById('task-edit-id').value = '';
-    document.getElementById('modal-task-title').innerHTML = '<i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Tarefa';
+    document.getElementById('modal-task-title').innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Tarefa';
     document.getElementById('task-submit-btn').textContent = 'Criar Tarefa';
     document.getElementById('task-form-error').style.display = 'none';
     if (defaultStatus) document.getElementById('task-status').value = defaultStatus;
     document.getElementById('modal-task').style.display = '';
     document.getElementById('task-title').focus();
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   };
 
   function taskOpenEdit(t) {
     document.getElementById('task-edit-id').value = t.id;
-    document.getElementById('modal-task-title').innerHTML = '<i data-lucide="edit" class="pg-icon" aria-hidden="true"></i> Editar Tarefa';
+    document.getElementById('modal-task-title').innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg> Editar Tarefa';
     document.getElementById('task-submit-btn').textContent = 'Salvar Alterações';
     document.getElementById('task-title').value = t.title || '';
     document.getElementById('task-desc').value = t.description || '';
@@ -561,7 +561,7 @@
     if (t.recurrence && t.recurrence.endDate) document.getElementById('task-recurrence-enddate').value = t.recurrence.endDate;
     document.getElementById('task-form-error').style.display = 'none';
     document.getElementById('modal-task').style.display = '';
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    window.refreshIcons?.();
   }
 
   window.taskCloseModal = function() {

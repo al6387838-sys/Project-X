@@ -6,12 +6,12 @@
 <div class="page" id="page-email">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email</div>
       <div class="page-subtitle">Inbox unificada — seus emails e envio direto</div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost" onclick="emailShowPage('integrations')">Contas</button>
-      <button class="btn btn-primary" onclick="emailOpenCompose()"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Novo Email</button>
+      <button class="btn btn-primary" onclick="emailOpenCompose()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> Novo Email</button>
     </div>
   </div>
 
@@ -25,19 +25,19 @@
       <!-- Pastas -->
       <div style="flex:1;overflow-y:auto;padding:8px">
         <div class="email-folder active" onclick="emailSetView('history',this)">
-          <span><i data-lucide="clock" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1;margin-left:8px">Histórico</span><span class="email-count" id="email-count-history">—</span>
+          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span style="flex:1;margin-left:8px">Histórico</span><span class="email-count" id="email-count-history">—</span>
         </div>
         <div class="email-folder" onclick="emailSetView('inbox',this)">
-          <span><i data-lucide="download" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1;margin-left:8px">Inbox</span><span class="email-count" id="email-count-inbox">—</span>
+          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span><span style="flex:1;margin-left:8px">Inbox</span><span class="email-count" id="email-count-inbox">—</span>
         </div>
         <div class="email-folder" onclick="emailSetView('sent',this)">
-          <span><i data-lucide="upload" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1;margin-left:8px">Enviados</span>
+          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span><span style="flex:1;margin-left:8px">Enviados</span>
         </div>
         <div class="email-folder" onclick="emailSetView('queue',this)">
-          <span><i data-lucide="loader" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1;margin-left:8px">Fila</span><span class="email-count" id="email-count-queue">—</span>
+          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg></span><span style="flex:1;margin-left:8px">Fila</span><span class="email-count" id="email-count-queue">—</span>
         </div>
         <div class="email-folder" onclick="emailSetView('logs',this)">
-          <span><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></span><span style="flex:1;margin-left:8px">Logs</span>
+          <span><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></span><span style="flex:1;margin-left:8px">Logs</span>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
     <div style="display:flex;flex-direction:column">
       <div style="padding:10px;border-bottom:1px solid var(--border);display:flex;gap:8px">
         <input type="text" class="form-input" id="email-search" placeholder=" Buscar no histórico..." style="flex:1;font-size:12px" oninput="emailFilterList(this.value)" />
-        <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:8px" onclick="emailRefresh()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
       </div>
       <div style="flex:1;overflow-y:auto" id="email-list">
         <div style="padding:32px;text-align:center;color:var(--text-muted)">Carregando emails...</div>
@@ -59,7 +59,7 @@
 <div class="page" id="page-email-integrations" style="display:none">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Contas de Email</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Contas de Email</div>
       <div class="page-subtitle">Gerencie suas contas e provedores de email</div>
     </div>
     <div style="display:flex;gap:8px">
@@ -76,8 +76,8 @@
   <div class="modal-backdrop" onclick="emailCloseCompose()"></div>
   <div class="modal-content" style="width:600px;max-width:90vw">
     <div class="modal-header">
-      <div class="modal-title"><i data-lucide="pencil" class="pg-icon" aria-hidden="true"></i> Novo Email</div>
-      <button class="modal-close" onclick="emailCloseCompose()"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+      <div class="modal-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> Novo Email</div>
+      <button class="modal-close" onclick="emailCloseCompose()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
     </div>
     <div class="modal-body">
       <form id="email-compose-form">
@@ -103,12 +103,12 @@
         </div>
         <div id="compose-attachments" style="margin-bottom:10px"></div>
         <div style="display:flex;gap:8px;margin-bottom:10px">
-          <button type="button" class="btn btn-ghost" style="font-size:12px" onclick="emailAttachFile()"><i data-lucide="paperclip" class="pg-icon" aria-hidden="true"></i> Anexar</button>
+          <button type="button" class="btn btn-ghost" style="font-size:12px" onclick="emailAttachFile()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.234 20.252 21 12.3"/><path d="m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486"/></svg> Anexar</button>
         </div>
         <div id="compose-error" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none"></div>
         <div style="display:flex;justify-content:flex-end;gap:8px">
           <button type="button" class="btn btn-ghost" onclick="emailCloseCompose()">Cancelar</button>
-          <button type="submit" class="btn btn-primary" id="compose-send-btn"><i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar</button>
+          <button type="submit" class="btn btn-primary" id="compose-send-btn"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg> Enviar</button>
         </div>
       </form>
     </div>
@@ -225,9 +225,9 @@ function emailRenderInbox(messages) {
         <div style="font-size:11px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${emailEsc(msg.snippet)}</div>
       </div>
       <div style="display:flex;gap:4px;flex-shrink:0" onclick="event.stopPropagation()">
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Responder" onclick="emailReply('${emailEsc(msg.id)}','${emailEsc(msg.from || '')}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="reply" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Encaminhar" onclick="emailForward('${emailEsc(msg.id)}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="forward" class="pg-icon" aria-hidden="true"></i></button>
-        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;color:var(--red)" title="Excluir" onclick="emailDelete('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i></button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Responder" onclick="emailReply('${emailEsc(msg.id)}','${emailEsc(msg.from || '')}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg></button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px" title="Encaminhar" onclick="emailForward('${emailEsc(msg.id)}','${emailEsc(msg.subject || '')}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 17 20 12 15 7"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg></button>
+        <button class="btn btn-ghost" style="padding:4px 6px;font-size:11px;color:var(--red)" title="Excluir" onclick="emailDelete('${emailEsc(msg.id)}','${emailEsc(msg.provider || emailState.selectedProvider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
       </div>
     </div>
   `).join('');
@@ -254,9 +254,9 @@ async function emailOpenMessage(emailId, provider) {
       <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">${emailFmtDate(msg?.date)}</div>
       <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">${emailEsc(msg?.snippet || '')}</div>
       <div style="margin-top:16px;display:flex;gap:8px">
-        <button class="btn btn-primary" style="font-size:12px" onclick="emailReply('${emailEsc(emailId)}','${emailEsc(msg?.from || '')}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><i data-lucide="reply" class="pg-icon" aria-hidden="true"></i> Responder</button>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="emailForward('${emailEsc(emailId)}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><i data-lucide="forward" class="pg-icon" aria-hidden="true"></i> Encaminhar</button>
-        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="emailDelete('${emailEsc(emailId)}','${emailEsc(provider)}')"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Excluir</button>
+        <button class="btn btn-primary" style="font-size:12px" onclick="emailReply('${emailEsc(emailId)}','${emailEsc(msg?.from || '')}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg> Responder</button>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="emailForward('${emailEsc(emailId)}','${emailEsc(msg?.subject || '')}','${emailEsc(provider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 17 20 12 15 7"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg> Encaminhar</button>
+        <button class="btn btn-ghost" style="font-size:12px;color:var(--red)" onclick="emailDelete('${emailEsc(emailId)}','${emailEsc(provider)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Excluir</button>
       </div>
     </div>`;
   }
@@ -587,7 +587,7 @@ async function emailSendCompose(e) {
   } catch(e) {
     if (errEl) { errEl.textContent = 'Erro de conexão'; errEl.style.display = 'block'; }
   } finally {
-    if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="pg-icon" aria-hidden="true"></i> Enviar'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg> Enviar'; }
   }
 }
 
@@ -603,11 +603,11 @@ function emailAttachFile() {
     const attachEl = document.getElementById('compose-attachments');
     if (attachEl) {
       attachEl.innerHTML += `<div style="display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;background:var(--bg-elevated);border-radius:6px;margin-top:4px">
-        <i data-lucide="paperclip" style="width:12px;height:12px" aria-hidden="true"></i>
+        <svg  style="width:12px;height:12px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.234 20.252 21 12.3"/><path d="m16 6-8.414 8.586a2 2 0 0 0 0 2.828 2 2 0 0 0 2.828 0l8.414-8.586a4 4 0 0 0 0-5.656 4 4 0 0 0-5.656 0l-8.415 8.585a6 6 0 1 0 8.486 8.486"/></svg>
         ${emailEsc(file.name)} (${(file.size/1024).toFixed(1)}KB)
-        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px"><i data-lucide="x" class="pg-icon" aria-hidden="true"></i></button>
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>`;
-      if (window.lucide) lucide.createIcons();
+      window.refreshIcons?.();
     }
     showToast(`${file.name} anexado`, 'info');
   };
@@ -697,15 +697,15 @@ function emailRenderIntegrationsGrid() {
       <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">${emailEsc(p.setupMessage || (p.connected ? 'Conta conectada e pronta para uso' : 'Clique em Conectar para autorizar'))}</div>
       <div style="display:flex;gap:8px">
         ${p.connected ? `
-          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailSyncProvider('${emailEsc(p.id)}')"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Sincronizar</button>
+          <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailSyncProvider('${emailEsc(p.id)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
           <button class="btn btn-ghost" style="flex:1;font-size:12px" onclick="emailLoadInbox('${emailEsc(p.id)}');emailShowPage('inbox')">Ver Inbox</button>
         ` : `
-          <button class="btn btn-primary" style="flex:1;font-size:12px" onclick="emailConnectProvider('${emailEsc(p.id)}')"><i data-lucide="plug-zap" class="pg-icon" aria-hidden="true"></i> Conectar ${emailEsc(p.name)}</button>
+          <button class="btn btn-primary" style="flex:1;font-size:12px" onclick="emailConnectProvider('${emailEsc(p.id)}')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></svg> Conectar ${emailEsc(p.name)}</button>
         `}
       </div>
     </div>
   `).join('');
-  if (window.lucide) lucide.createIcons();
+  window.refreshIcons?.();
 }
 
 // ─── API pública do módulo (chamada pelo dashboard) ────────────────────────────────────────────────────

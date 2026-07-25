@@ -122,10 +122,10 @@ function renderOverview() {
       </div>
       <div class="page-actions">
         <button class="btn btn-secondary" onclick="exportReport()">
-          <i data-lucide="download"></i> Exportar
+          <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar
         </button>
         <button class="btn btn-primary" onclick="showSection('ceo', document.querySelector('[onclick*=ceo]'))">
-          <i data-lucide="target"></i> CEO View
+          <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> CEO View
         </button>
       </div>
     </div>
@@ -161,7 +161,7 @@ function renderOverview() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Usuários Ativos</div>
-          <div class="metric-icon"><i data-lucide="users"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.empresa.usuarios_ativos)}</div>
         <div class="metric-footer">
@@ -172,7 +172,7 @@ function renderOverview() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">MRR</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="trending-up"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         </div>
         <div class="metric-value">R$ ${(d.empresa.receita_mrr/1000).toFixed(1)}<span>k</span></div>
         <div class="metric-footer">
@@ -183,7 +183,7 @@ function renderOverview() {
       <div class="metric-card" style="--metric-color:#3B82F6">
         <div class="metric-header">
           <div class="metric-label">Uptime 30d</div>
-          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><i data-lucide="activity"></i></div>
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
         </div>
         <div class="metric-value">${d.plataforma.uptime_30d}<span>%</span></div>
         <div class="metric-footer">
@@ -194,7 +194,7 @@ function renderOverview() {
       <div class="metric-card" style="--metric-color:#8B5CF6">
         <div class="metric-header">
           <div class="metric-label">Waitlist</div>
-          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><i data-lucide="list-ordered"></i></div>
+          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.empresa.waitlist)}</div>
         <div class="metric-footer">
@@ -207,7 +207,7 @@ function renderOverview() {
     <div class="grid-3">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="cpu"></i> Status dos Módulos</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg> Status dos Módulos</div>
         </div>
         ${[
           ['Life Kernel',       'online'],
@@ -226,7 +226,7 @@ function renderOverview() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="bell"></i> Alertas Ativos</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg> Alertas Ativos</div>
           <span class="card-action">Ver todos</span>
         </div>
         ${d.plataforma.alertas.map(a => `
@@ -243,7 +243,7 @@ function renderOverview() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="zap"></i> Performance Rápida</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Performance Rápida</div>
         </div>
         <div class="stat-row"><span class="stat-key">Latência P50</span><span class="stat-val">${d.plataforma.latencia_p50}ms</span></div>
         <div class="stat-row"><span class="stat-key">Latência P95</span><span class="stat-val">${d.plataforma.latencia_p95}ms</span></div>
@@ -260,7 +260,7 @@ function renderOverview() {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="bar-chart-2"></i> Crescimento de Usuários</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Crescimento de Usuários</div>
           <span class="card-action">Detalhes</span>
         </div>
         <div class="chart-container" style="height:180px">
@@ -269,7 +269,7 @@ function renderOverview() {
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="dollar-sign"></i> Evolução do MRR</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Evolução do MRR</div>
           <span class="card-action">Detalhes</span>
         </div>
         <div class="chart-container" style="height:180px">
@@ -282,7 +282,7 @@ function renderOverview() {
   setTimeout(() => {
     renderLineChart('chart-overview-users', DATA.empresa.historico_usuarios, '#6366F1', 'Usuários');
     renderLineChart('chart-overview-mrr', DATA.empresa.historico_mrr, '#10B981', 'MRR (R$)');
-    lucide.createIcons();
+    window.refreshIcons?.();
   }, 50);
 }
 
@@ -297,8 +297,8 @@ function renderEmpresa() {
         <div class="page-subtitle">Métricas de negócio, usuários, receita e crescimento</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="filter"></i> Período</button>
-        <button class="btn btn-primary"><i data-lucide="download"></i> Relatório</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Período</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Relatório</button>
       </div>
     </div>
 
@@ -306,7 +306,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Usuários Cadastrados</div>
-          <div class="metric-icon"><i data-lucide="user-plus"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.usuarios_cadastrados)}</div>
         <div class="metric-footer">${trendHTML('+' + d.crescimento_usuarios + '%')}<span class="metric-period">30 dias</span></div>
@@ -314,7 +314,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">Usuários Ativos</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="users"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.usuarios_ativos)}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ ${((d.usuarios_ativos/d.usuarios_cadastrados)*100).toFixed(1)}%</span><span class="metric-period">taxa de ativação</span></div>
@@ -322,7 +322,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#8B5CF6">
         <div class="metric-header">
           <div class="metric-label">Beta Testers</div>
-          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><i data-lucide="flask-conical"></i></div>
+          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg></div>
         </div>
         <div class="metric-value">${d.beta_testers}</div>
         <div class="metric-footer"><span class="metric-trend neutral">→ Estável</span><span class="metric-period">programa beta</span></div>
@@ -330,7 +330,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#F59E0B">
         <div class="metric-header">
           <div class="metric-label">Waitlist</div>
-          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><i data-lucide="list-ordered"></i></div>
+          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.waitlist)}</div>
         <div class="metric-footer">${trendHTML('+' + d.crescimento_waitlist + '%')}<span class="metric-period">30 dias</span></div>
@@ -341,7 +341,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">MRR</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="trending-up"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         </div>
         <div class="metric-value">R$ ${(d.receita_mrr/1000).toFixed(1)}<span>k</span></div>
         <div class="metric-footer">${trendHTML('+' + d.crescimento_receita + '%')}<span class="metric-period">30 dias</span></div>
@@ -349,7 +349,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">ARR</div>
-          <div class="metric-icon"><i data-lucide="bar-chart"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
         </div>
         <div class="metric-value">R$ ${(d.receita_arr/1000).toFixed(0)}<span>k</span></div>
         <div class="metric-footer">${trendHTML('+' + d.crescimento_receita + '%')}<span class="metric-period">anualizado</span></div>
@@ -357,7 +357,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#3B82F6">
         <div class="metric-header">
           <div class="metric-label">Assinaturas Ativas</div>
-          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><i data-lucide="credit-card"></i></div>
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
         </div>
         <div class="metric-value">${d.assinaturas_ativas}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ +12</span><span class="metric-period">este mês</span></div>
@@ -365,7 +365,7 @@ function renderEmpresa() {
       <div class="metric-card" style="--metric-color:#F43F5E">
         <div class="metric-header">
           <div class="metric-label">Churn Rate</div>
-          <div class="metric-icon" style="background:rgba(244,63,94,0.12);color:#F43F5E"><i data-lucide="user-minus"></i></div>
+          <div class="metric-icon" style="background:rgba(244,63,94,0.12);color:#F43F5E"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
         </div>
         <div class="metric-value">${d.churn_rate}<span>%</span></div>
         <div class="metric-footer"><span class="metric-trend up">↓ -0.3%</span><span class="metric-period">melhora</span></div>
@@ -375,7 +375,7 @@ function renderEmpresa() {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="pie-chart"></i> Distribuição de Planos</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"/><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/></svg> Distribuição de Planos</div>
         </div>
         <div style="display:flex;gap:20px;align-items:center">
           <div class="chart-container" style="height:180px;width:180px;flex-shrink:0">
@@ -400,7 +400,7 @@ function renderEmpresa() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="trending-up"></i> Crescimento MRR</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Crescimento MRR</div>
         </div>
         <div class="chart-container" style="height:180px">
           <canvas id="chart-mrr-empresa"></canvas>
@@ -411,7 +411,7 @@ function renderEmpresa() {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="users"></i> Crescimento de Usuários</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Crescimento de Usuários</div>
         </div>
         <div class="chart-container" style="height:160px">
           <canvas id="chart-users-empresa"></canvas>
@@ -419,7 +419,7 @@ function renderEmpresa() {
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="list-ordered"></i> Waitlist Growth</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg> Waitlist Growth</div>
         </div>
         <div class="chart-container" style="height:160px">
           <canvas id="chart-waitlist"></canvas>
@@ -433,7 +433,7 @@ function renderEmpresa() {
     renderLineChart('chart-mrr-empresa', d.historico_mrr, '#10B981', 'MRR');
     renderLineChart('chart-users-empresa', d.historico_usuarios, '#6366F1', 'Usuários');
     renderLineChart('chart-waitlist', d.historico_waitlist, '#F59E0B', 'Waitlist');
-    lucide.createIcons();
+    window.refreshIcons?.();
   }, 50);
 }
 
@@ -448,8 +448,8 @@ function renderProduto() {
         <div class="page-subtitle">Versão atual, roadmap, funcionalidades e qualidade do código</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="git-branch"></i> Changelog</button>
-        <button class="btn btn-primary"><i data-lucide="rocket"></i> Deploy</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg> Changelog</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> Deploy</button>
       </div>
     </div>
 
@@ -466,7 +466,7 @@ function renderProduto() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">Testes Passando</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="check-circle-2"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>
         </div>
         <div class="metric-value">${d.testes_passando}<span>/${d.testes_total}</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ 100%</span><span class="metric-period">pass rate</span></div>
@@ -474,7 +474,7 @@ function renderProduto() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Cobertura de Código</div>
-          <div class="metric-icon"><i data-lucide="code-2"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg></div>
         </div>
         <div class="metric-value">${d.cobertura_codigo}<span>%</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ Alta</span><span class="metric-period">cobertura</span></div>
@@ -482,7 +482,7 @@ function renderProduto() {
       <div class="metric-card" style="--metric-color:#F59E0B">
         <div class="metric-header">
           <div class="metric-label">Bugs Abertos</div>
-          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><i data-lucide="bug"></i></div>
+          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg></div>
         </div>
         <div class="metric-value">${d.bugs_abertos}</div>
         <div class="metric-footer"><span class="metric-trend up">↓ 0 críticos</span><span class="metric-period">todos menores</span></div>
@@ -490,7 +490,7 @@ function renderProduto() {
       <div class="metric-card" style="--metric-color:#8B5CF6">
         <div class="metric-header">
           <div class="metric-label">Sprint Atual</div>
-          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><i data-lucide="layers"></i></div>
+          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></div>
         </div>
         <div class="metric-value">${d.sprint_atual}</div>
         <div class="metric-footer"><span class="metric-trend neutral">→ Em andamento</span></div>
@@ -500,7 +500,7 @@ function renderProduto() {
     <div class="grid-3-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="map"></i> Roadmap</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg> Roadmap</div>
         </div>
         ${d.roadmap.map(r => `
           <div class="roadmap-item">
@@ -517,12 +517,12 @@ function renderProduto() {
       <div>
         <div class="card" style="margin-bottom:16px">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="check-square"></i> Funcionalidades Concluídas</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5"/><path d="m9 11 3 3L22 4"/></svg> Funcionalidades Concluídas</div>
             <span class="badge badge-success">${d.features_concluidas.length}</span>
           </div>
           ${d.features_concluidas.map(f => `
             <div class="feature-item">
-              <div class="feature-check done"><i data-lucide="check"></i></div>
+              <div class="feature-check done"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
               <span class="feature-name done">${f.nome}</span>
               <span class="feature-tag ${f.tag}">${f.tag}</span>
             </div>
@@ -531,13 +531,13 @@ function renderProduto() {
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="loader"></i> Em Desenvolvimento</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg> Em Desenvolvimento</div>
             <span class="badge badge-neutral">${d.features_em_dev.length}</span>
           </div>
           ${d.features_em_dev.map(f => `
             <div class="feature-item" style="flex-direction:column;align-items:flex-start;gap:6px">
               <div style="display:flex;align-items:center;gap:8px;width:100%">
-                <div class="feature-check wip"><i data-lucide="loader-2"></i></div>
+                <div class="feature-check wip"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></div>
                 <span class="feature-name" style="flex:1">${f.nome}</span>
                 <span class="feature-tag ${f.tag}">${f.tag}</span>
                 <span style="font-size:11px;font-weight:700;color:#818CF8">${f.prog}%</span>
@@ -554,7 +554,7 @@ function renderProduto() {
     </div>
   `;
 
-  setTimeout(() => lucide.createIcons(), 50);
+  setTimeout(() => window.refreshIcons?.(), 50);
 }
 
 // ---- IA ----
@@ -568,8 +568,8 @@ function renderIA() {
         <div class="page-subtitle">Status do Companion, missões executadas, aprendizado e SIG</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="refresh-cw"></i> Sincronizar</button>
-        <button class="btn btn-primary"><i data-lucide="brain-circuit"></i> Console IA</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Sincronizar</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg> Console IA</button>
       </div>
     </div>
 
@@ -577,7 +577,7 @@ function renderIA() {
       <div class="metric-card" style="--metric-color:#8B5CF6">
         <div class="metric-header">
           <div class="metric-label">Missões Executadas</div>
-          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><i data-lucide="zap"></i></div>
+          <div class="metric-icon" style="background:rgba(139,92,246,0.12);color:#8B5CF6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.missoes_executadas)}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ ${d.missoes_hoje} hoje</span><span class="metric-period">total</span></div>
@@ -585,7 +585,7 @@ function renderIA() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">Taxa de Sucesso</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="check-circle"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg></div>
         </div>
         <div class="metric-value">${d.taxa_sucesso}<span>%</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ Excelente</span><span class="metric-period">missões</span></div>
@@ -593,7 +593,7 @@ function renderIA() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Ciclos de Aprendizado</div>
-          <div class="metric-icon"><i data-lucide="graduation-cap"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.aprendizado_ciclos)}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ ${d.aprendizado_precisao}%</span><span class="metric-period">precisão</span></div>
@@ -601,7 +601,7 @@ function renderIA() {
       <div class="metric-card" style="--metric-color:#3B82F6">
         <div class="metric-header">
           <div class="metric-label">Tokens / Mês</div>
-          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><i data-lucide="cpu"></i></div>
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></div>
         </div>
         <div class="metric-value">${(d.tokens_consumidos_mes/1_000_000).toFixed(1)}<span>M</span></div>
         <div class="metric-footer"><span class="metric-trend neutral">→ Normal</span><span class="metric-period">consumo</span></div>
@@ -612,7 +612,7 @@ function renderIA() {
       <div>
         <div class="card companion-status-card" style="margin-bottom:16px">
           <div class="companion-orb">
-            <i data-lucide="brain-circuit"></i>
+            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M9 13a4.5 4.5 0 0 0 3-4"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M12 13h4"/><path d="M12 18h6a2 2 0 0 1 2 2v1"/><path d="M12 8h8"/><path d="M16 8V5a2 2 0 0 1 2-2"/><circle cx="16" cy="13" r=".5"/><circle cx="18" cy="3" r=".5"/><circle cx="20" cy="21" r=".5"/><circle cx="20" cy="8" r=".5"/></svg>
           </div>
           <div class="companion-name">LifeOS Companion</div>
           <div class="companion-model">${d.companion_model}</div>
@@ -627,7 +627,7 @@ function renderIA() {
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="database"></i> SIG — Sistema de Inteligência</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg> SIG — Sistema de Inteligência</div>
           </div>
           <div style="display:flex;justify-content:center;margin-bottom:12px">
             <span class="badge badge-success"><span class="badge-dot"></span>${d.sig_status}</span>
@@ -642,7 +642,7 @@ function renderIA() {
       <div>
         <div class="card" style="margin-bottom:16px">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="layers"></i> Modelos Ativos</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg> Modelos Ativos</div>
           </div>
           <table class="data-table">
             <thead>
@@ -668,7 +668,7 @@ function renderIA() {
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="activity"></i> Missões por Hora (últimas 8h)</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg> Missões por Hora (últimas 8h)</div>
           </div>
           <div class="chart-container" style="height:160px">
             <canvas id="chart-missoes"></canvas>
@@ -679,7 +679,7 @@ function renderIA() {
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title"><i data-lucide="graduation-cap"></i> Aprendizado Contínuo</div>
+        <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> Aprendizado Contínuo</div>
       </div>
       <div class="grid-4" style="margin-bottom:0">
         <div>
@@ -708,7 +708,7 @@ function renderIA() {
 
   setTimeout(() => {
     renderBarChart('chart-missoes', ['13h','14h','15h','16h','17h','18h','19h','20h'], d.historico_missoes, '#8B5CF6', 'Missões');
-    lucide.createIcons();
+    window.refreshIcons?.();
   }, 50);
 }
 
@@ -860,8 +860,8 @@ function renderPlataforma() {
         <div class="page-subtitle">Performance, disponibilidade, logs e alertas do sistema</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="terminal"></i> Console</button>
-        <button class="btn btn-primary"><i data-lucide="external-link"></i> Grafana</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg> Console</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg> Grafana</button>
       </div>
     </div>
 
@@ -869,7 +869,7 @@ function renderPlataforma() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">Uptime 30 dias</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="activity"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
         </div>
         <div class="metric-value">${d.uptime_30d}<span>%</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ SLA 99.9%</span><span class="metric-period">cumprido</span></div>
@@ -877,7 +877,7 @@ function renderPlataforma() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Latência P95</div>
-          <div class="metric-icon"><i data-lucide="timer"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2" x2="14" y2="2"/><line x1="12" y1="14" x2="15" y2="11"/><circle cx="12" cy="14" r="8"/></svg></div>
         </div>
         <div class="metric-value">${d.latencia_p95}<span>ms</span></div>
         <div class="metric-footer"><span class="metric-trend up">↓ Abaixo do limite</span></div>
@@ -885,7 +885,7 @@ function renderPlataforma() {
       <div class="metric-card" style="--metric-color:#F59E0B">
         <div class="metric-header">
           <div class="metric-label">Taxa de Erros</div>
-          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><i data-lucide="alert-triangle"></i></div>
+          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
         </div>
         <div class="metric-value">${d.taxa_erros}<span>%</span></div>
         <div class="metric-footer"><span class="metric-trend up">↓ Baixo</span><span class="metric-period">< 0.1% meta</span></div>
@@ -893,7 +893,7 @@ function renderPlataforma() {
       <div class="metric-card" style="--metric-color:#3B82F6">
         <div class="metric-header">
           <div class="metric-label">Requests / Dia</div>
-          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><i data-lucide="bar-chart-2"></i></div>
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         </div>
         <div class="metric-value">${(d.requests_dia/1000).toFixed(0)}<span>k</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ Normal</span><span class="metric-period">hoje</span></div>
@@ -903,7 +903,7 @@ function renderPlataforma() {
     <div class="grid-3">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="cpu"></i> Recursos do Sistema</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg> Recursos do Sistema</div>
         </div>
         <div style="margin-bottom:14px">
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
@@ -935,7 +935,7 @@ function renderPlataforma() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="server"></i> Status dos Serviços</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg> Status dos Serviços</div>
         </div>
         ${d.servicos.map(s => `
           <div class="stat-row">
@@ -950,7 +950,7 @@ function renderPlataforma() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="bell"></i> Alertas</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg> Alertas</div>
         </div>
         ${d.alertas.map(a => `
           <div class="alert-item ${a.nivel}" style="margin-bottom:8px">
@@ -970,7 +970,7 @@ function renderPlataforma() {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="timer"></i> Latência (últimas 12h)</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2" x2="14" y2="2"/><line x1="12" y1="14" x2="15" y2="11"/><circle cx="12" cy="14" r="8"/></svg> Latência (últimas 12h)</div>
         </div>
         <div class="chart-container" style="height:160px">
           <canvas id="chart-latencia"></canvas>
@@ -978,7 +978,7 @@ function renderPlataforma() {
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="scroll-text"></i> Logs Recentes</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg> Logs Recentes</div>
           <span class="card-action">Ver todos</span>
         </div>
         <div class="log-list">
@@ -998,7 +998,7 @@ function renderPlataforma() {
 
   setTimeout(() => {
     renderLineChart('chart-latencia', d.historico_latencia, '#6366F1', 'Latência ms');
-    lucide.createIcons();
+    window.refreshIcons?.();
   }, 50);
 }
 
@@ -1015,8 +1015,8 @@ function renderSeguranca() {
         <div class="page-subtitle">Eventos de segurança, auditoria, logins suspeitos e integridade</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="file-text"></i> Relatório</button>
-        <button class="btn btn-primary"><i data-lucide="shield"></i> Auditoria</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> Relatório</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Auditoria</button>
       </div>
     </div>
 
@@ -1024,7 +1024,7 @@ function renderSeguranca() {
       <div class="metric-card" style="--metric-color:#10B981">
         <div class="metric-header">
           <div class="metric-label">Score de Segurança</div>
-          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><i data-lucide="shield-check"></i></div>
+          <div class="metric-icon" style="background:rgba(16,185,129,0.12);color:#10B981"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
         </div>
         <div class="metric-value">${d.score}<span>/100</span></div>
         <div class="metric-footer"><span class="metric-trend up">↑ ${d.nivel}</span><span class="metric-period">nível</span></div>
@@ -1032,7 +1032,7 @@ function renderSeguranca() {
       <div class="metric-card" style="--metric-color:#6366F1">
         <div class="metric-header">
           <div class="metric-label">Eventos (30d)</div>
-          <div class="metric-icon"><i data-lucide="activity"></i></div>
+          <div class="metric-icon"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
         </div>
         <div class="metric-value">${formatNumber(d.eventos_30d)}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ 0 críticos</span></div>
@@ -1040,7 +1040,7 @@ function renderSeguranca() {
       <div class="metric-card" style="--metric-color:#F59E0B">
         <div class="metric-header">
           <div class="metric-label">Logins Suspeitos</div>
-          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><i data-lucide="user-x"></i></div>
+          <div class="metric-icon" style="background:rgba(245,158,11,0.12);color:#F59E0B"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="22" y2="13"/><line x1="22" y1="8" x2="17" y2="13"/></svg></div>
         </div>
         <div class="metric-value">${d.logins_suspeitos}</div>
         <div class="metric-footer"><span class="metric-trend neutral">→ Monitorando</span></div>
@@ -1048,7 +1048,7 @@ function renderSeguranca() {
       <div class="metric-card" style="--metric-color:#3B82F6">
         <div class="metric-header">
           <div class="metric-label">IPs Bloqueados</div>
-          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><i data-lucide="ban"></i></div>
+          <div class="metric-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg></div>
         </div>
         <div class="metric-value">${d.ips_bloqueados}</div>
         <div class="metric-footer"><span class="metric-trend up">↑ Rate limiting</span></div>
@@ -1058,7 +1058,7 @@ function renderSeguranca() {
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="shield"></i> Score & Integridade</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Score & Integridade</div>
         </div>
         <div style="display:flex;gap:20px;align-items:center;margin-bottom:16px">
           <div class="security-score-ring">
@@ -1091,7 +1091,7 @@ function renderSeguranca() {
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="shield-alert"></i> Políticas de Segurança</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg> Políticas de Segurança</div>
         </div>
         ${d.politicas.map(p => `
           <div class="stat-row">
@@ -1104,7 +1104,7 @@ function renderSeguranca() {
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title"><i data-lucide="scroll-text"></i> Log de Eventos de Segurança</div>
+        <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg> Log de Eventos de Segurança</div>
         <span class="card-action">Exportar</span>
       </div>
       <table class="data-table">
@@ -1130,7 +1130,7 @@ function renderSeguranca() {
     </div>
   `;
 
-  setTimeout(() => lucide.createIcons(), 50);
+  setTimeout(() => window.refreshIcons?.(), 50);
 }
 
 /* ============================================================
@@ -1146,8 +1146,8 @@ function renderCEO() {
         <div class="page-subtitle">KPIs estratégicos, OKRs, próximos releases e métricas executivas</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-secondary"><i data-lucide="file-text"></i> Board Report</button>
-        <button class="btn btn-primary"><i data-lucide="presentation"></i> All-Hands</button>
+        <button class="btn btn-secondary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> Board Report</button>
+        <button class="btn btn-primary"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg> All-Hands</button>
       </div>
     </div>
 
@@ -1172,7 +1172,7 @@ function renderCEO() {
           <div class="metric-header">
             <div class="metric-label">${k.nome}</div>
             <div class="metric-icon" style="background:rgba(99,102,241,0.12);color:#6366F1">
-              <i data-lucide="bar-chart-2"></i>
+              <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             </div>
           </div>
           <div class="metric-value" style="font-size:22px">${k.valor}</div>
@@ -1184,7 +1184,7 @@ function renderCEO() {
     <div class="grid-2-1">
       <div class="card">
         <div class="card-header">
-          <div class="card-title"><i data-lucide="target"></i> OKRs — Q3 2026</div>
+          <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> OKRs — Q3 2026</div>
           <span class="badge badge-neutral">Ciclo Ativo</span>
         </div>
         ${d.okrs.map(o => `
@@ -1212,7 +1212,7 @@ function renderCEO() {
       <div>
         <div class="card" style="margin-bottom:16px">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="rocket"></i> Próximos Releases</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg> Próximos Releases</div>
           </div>
           ${d.proximos_releases.map(r => `
             <div class="roadmap-item">
@@ -1230,7 +1230,7 @@ function renderCEO() {
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title"><i data-lucide="bar-chart"></i> Unit Economics</div>
+            <div class="card-title"><svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> Unit Economics</div>
           </div>
           <div class="stat-row"><span class="stat-key">LTV</span><span class="stat-val">R$ ${d.metricas_estrategicas.ltv}</span></div>
           <div class="stat-row"><span class="stat-key">CAC</span><span class="stat-val">R$ ${d.metricas_estrategicas.cac}</span></div>
@@ -1245,7 +1245,7 @@ function renderCEO() {
     </div>
   `;
 
-  setTimeout(() => lucide.createIcons(), 50);
+  setTimeout(() => window.refreshIcons?.(), 50);
 }
 
 /* ============================================================
@@ -1305,7 +1305,7 @@ function toggleSidebar() {
   sidebar.classList.toggle('collapsed', STATE.sidebarCollapsed);
   if (icon) {
     icon.setAttribute('data-lucide', STATE.sidebarCollapsed ? 'chevron-right' : 'chevron-left');
-    lucide.createIcons();
+    window.refreshIcons?.();
   }
 }
 
@@ -1349,7 +1349,7 @@ function exportReport() {
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   // Inicializar ícones
-  lucide.createIcons();
+  window.refreshIcons?.();
   // Iniciar relógio
   updateClock();
   setInterval(updateClock, 1000);

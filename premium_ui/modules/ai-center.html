@@ -18,7 +18,7 @@
   <!-- Status da IA -->
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.1));border-color:rgba(99,102,241,0.3);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.4)"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(99,102,241,0.4)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div>
       <div style="flex:1">
         <div style="font-weight:700;font-size:16px">Companion AI — Contexto ativo</div>
         <div style="font-size:13px;color:var(--text-secondary)">Memory Center conectado · 847 memórias indexadas · Preferências aplicadas · Última análise: há 2 minutos</div>
@@ -54,7 +54,7 @@
   <div class="grid-2" style="margin-bottom:20px">
     <!-- Insights do dia -->
     <div class="card">
-      <div class="card-title"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Insights de Hoje</div>
+      <div class="card-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Insights de Hoje</div>
       <div style="display:flex;flex-direction:column;gap:10px" id="ai-insights-list">
         <div class="ai-insight-item" style="border-left-color:var(--green)">
           <div class="ai-insight-title">Produtividade em alta</div>
@@ -77,8 +77,8 @@
     <!-- Tarefas geradas por IA -->
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div class="card-title" style="margin:0"><i data-lucide="target" class="pg-icon" aria-hidden="true"></i> Tarefas Sugeridas pela IA</div>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="aiGenerateTasks()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Gerar</button>
+        <div class="card-title" style="margin:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Tarefas Sugeridas pela IA</div>
+        <button class="btn btn-ghost" style="font-size:12px" onclick="aiGenerateTasks()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Gerar</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:8px" id="ai-tasks-list">
         <div class="ai-task-item">
@@ -123,19 +123,19 @@
     <div class="card-title">Recomendações contextuais e planos sugeridos</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
       <div class="ai-rec-card" style="border-color:rgba(16,185,129,0.3)">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-size:24px;margin-bottom:8px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
         <div style="font-weight:600;margin-bottom:4px">Otimize seu treino</div>
         <div style="font-size:12px;color:var(--text-secondary)">Baseado no seu histórico, treinar às 7h aumenta sua produtividade em 34% no dia.</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showToast('Lembrete de treino configurado para 7h','success')">Configurar Lembrete</button>
       </div>
       <div class="ai-rec-card" style="border-color:rgba(99,102,241,0.3)">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-size:24px;margin-bottom:8px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg></div>
         <div style="font-weight:600;margin-bottom:4px" id="ai-rec-savings">Economia potencial</div>
         <div style="font-size:12px;color:var(--text-secondary)" id="ai-rec-subscription">Carregando análise de assinaturas...</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showPage('finance-subscriptions')">Ver Assinaturas</button>
       </div>
       <div class="ai-rec-card" style="border-color:rgba(245,158,11,0.3)">
-        <div style="font-size:24px;margin-bottom:8px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="font-size:24px;margin-bottom:8px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
         <div style="font-weight:600;margin-bottom:4px">Leitura recomendada</div>
         <div style="font-size:12px;color:var(--text-secondary)">Baseado nos seus dados reais de leitura e aprendizadoames Clear — alinhado com suas metas de hábitos.</div>
         <button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="showToast('Livro adicionado à lista de leitura','success')">Adicionar à Lista</button>
@@ -152,16 +152,16 @@
       <div class="page-subtitle">Memórias explicáveis, com origem, relevância e controle do usuário</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-add-memory')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Adicionar Memória</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-add-memory')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Adicionar Memória</button>
     </div>
   </div>
 
   <div class="grid-4" style="margin-bottom:20px">
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><i data-lucide="brain" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">847</div><div class="kpi-label">Total de Memórias</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">23</div><div class="kpi-label">Adicionadas hoje</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><i data-lucide="search" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">156</div><div class="kpi-label">Consultadas hoje</div></div>
-    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div><div class="kpi-value">94%</div><div class="kpi-label">Relevância média</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(99,102,241,0.15);color:var(--accent)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></svg></div><div class="kpi-value">847</div><div class="kpi-label">Total de Memórias</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(16,185,129,0.15);color:var(--green)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg></div><div class="kpi-value">23</div><div class="kpi-label">Adicionadas hoje</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(245,158,11,0.15);color:var(--amber)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><div class="kpi-value">156</div><div class="kpi-label">Consultadas hoje</div></div>
+    <div class="card kpi-card"><div class="kpi-icon" style="background:rgba(139,92,246,0.15);color:var(--purple)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div><div class="kpi-value">94%</div><div class="kpi-label">Relevância média</div></div>
   </div>
 
   <div class="card">
@@ -214,23 +214,23 @@
       <div class="page-subtitle">Converse com contexto do seu calendário, metas, hábitos e memórias autorizadas</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-ghost" onclick="aiClearChat()"><i data-lucide="trash" class="pg-icon" aria-hidden="true"></i> Limpar</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="aiClearChat()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Limpar</button>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
     <!-- Mensagens do chat -->
     <div style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px" id="ai-chat-messages">
       <div class="ai-chat-msg ai">
-        <div class="ai-chat-avatar"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i></div>
+        <div class="ai-chat-avatar"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div>
         <div class="ai-chat-bubble">
           <p>Olá! Sou o Companion AI. Uso somente as fontes autorizadas no LifeOS e explico quais memórias influenciaram cada recomendação.</p>
           <p style="margin-top:8px">Como posso ajudar você hoje?</p>
           <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap">
-            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Qual é meu saldo total?')"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Saldo total</button>
-            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Quais são meus próximos eventos?')"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Próximos eventos</button>
-            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Gere tarefas para hoje')"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Gerar tarefas</button>
-            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Analise meus hábitos')"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Analisar hábitos</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Qual é meu saldo total?')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Saldo total</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Quais são meus próximos eventos?')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Próximos eventos</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Gere tarefas para hoje')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Gerar tarefas</button>
+            <button class="btn btn-ghost" style="font-size:11px" onclick="aiQuickPrompt('Analise meus hábitos')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Analisar hábitos</button>
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@
     <!-- Input do chat -->
     <div style="padding:16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end">
       <textarea id="ai-chat-input" placeholder="Peça um plano, uma recomendação ou uma análise contextual..." style="flex:1;background:var(--bg-elevated);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text-primary);font-family:inherit;font-size:14px;resize:none;height:48px;max-height:150px;outline:none;transition:border-color 0.2s" onkeydown="aiChatKey(event)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-      <button class="btn btn-primary" style="padding:12px 16px;flex-shrink:0" onclick="aiChatSend()"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i> Enviar</button>
+      <button class="btn btn-primary" style="padding:12px 16px;flex-shrink:0" onclick="aiChatSend()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg> Enviar</button>
     </div>
   </div>
 </div>
@@ -247,20 +247,20 @@
 <div class="page" id="page-ai-automations">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Automações</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Automações</div>
       <div class="page-subtitle">Fluxos automáticos inteligentes</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="openModal('modal-new-automation')"><i data-lucide="plus" class="pg-icon" aria-hidden="true"></i> Nova Automação</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="openModal('modal-new-automation')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Nova Automação</button>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px">
     <div class="automation-card active">
       <div class="automation-status" style="background:var(--green)"></div>
       <div style="flex:1">
-        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Tarefa automática</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Quando receber email com "urgente" no assunto <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Criar tarefa de alta prioridade no Kanban</div>
+        <div style="font-weight:700;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Tarefa automática</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quando receber email com "urgente" no assunto <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Criar tarefa de alta prioridade no Kanban</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 23 vezes · Última: há 2h</div>
       </div>
       <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
@@ -268,8 +268,8 @@
     <div class="automation-card active">
       <div class="automation-status" style="background:var(--green)"></div>
       <div style="flex:1">
-        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Alerta de gastos</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Quando gasto mensal ultrapassar 80% do orçamento <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Notificar e sugerir revisão</div>
+        <div style="font-weight:700;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Alerta de gastos</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Quando gasto mensal ultrapassar 80% do orçamento <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Notificar e sugerir revisão</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 3 vezes · Última: 12 Jul</div>
       </div>
       <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
@@ -277,8 +277,8 @@
     <div class="automation-card active">
       <div class="automation-status" style="background:var(--green)"></div>
       <div style="flex:1">
-        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Briefing diário</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Todo dia às 8h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Gerar resumo do dia: eventos, tarefas, finanças e insights</div>
+        <div style="font-weight:700;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Briefing diário</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Todo dia às 8h <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Gerar resumo do dia: eventos, tarefas, finanças e insights</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Executada 14 vezes · Última: hoje 08:00</div>
       </div>
       <label class="toggle-switch"><input type="checkbox" checked onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
@@ -286,8 +286,8 @@
     <div class="automation-card">
       <div class="automation-status" style="background:var(--text-muted)"></div>
       <div style="flex:1">
-        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Lembrete de treino</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Seg, Qua e Sex às 6:30h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Notificar sobre treino programado</div>
+        <div style="font-weight:700;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg> Lembrete de treino</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Seg, Qua e Sex às 6:30h <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Notificar sobre treino programado</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Pausada · Última: 08 Jul</div>
       </div>
       <label class="toggle-switch"><input type="checkbox" onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
@@ -295,8 +295,8 @@
     <div class="automation-card">
       <div class="automation-status" style="background:var(--text-muted)"></div>
       <div style="flex:1">
-        <div style="font-weight:700;margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Relatório semanal</div>
-        <div style="font-size:12px;color:var(--text-secondary)">Todo domingo às 20h <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Gerar relatório semanal de produtividade, finanças e saúde</div>
+        <div style="font-weight:700;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Relatório semanal</div>
+        <div style="font-size:12px;color:var(--text-secondary)">Todo domingo às 20h <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Gerar relatório semanal de produtividade, finanças e saúde</div>
         <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Pausada · Nunca executada</div>
       </div>
       <label class="toggle-switch"><input type="checkbox" onchange="automationToggle(this)"><span class="toggle-slider"></span></label>
@@ -310,17 +310,17 @@
 <div class="page" id="page-ai-daily">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i> Resumo Diário</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg> Resumo Diário</div>
       <div class="page-subtitle">Briefing inteligente do seu dia — gerado pela IA</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-primary" onclick="aiCenterRefreshBriefing()"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Atualizar</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-primary" onclick="aiCenterRefreshBriefing()"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Atualizar</button>
     </div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.06));border-color:rgba(245,158,11,0.25);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FCD34D);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="sun" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FCD34D);display:flex;align-items:center;justify-content:center;font-size:20px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></div>
       <div>
         <div style="font-weight:700;font-size:16px">Bom dia! Seu briefing de hoje</div>
         <div style="font-size:12px;color:var(--text-secondary)">Quarta-feira, 15 de Julho de 2026 · Gerado às 08:00</div>
@@ -347,28 +347,28 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Prioridades do Dia</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Prioridades do Dia</div>
       <div style="display:flex;flex-direction:column;gap:10px" data-briefing-priorities>
-        <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px"><i data-lucide="loader" class="pg-icon" aria-hidden="true"></i> Carregando prioridades reais...</div>
+        <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg> Carregando prioridades reais...</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Insights da IA para Hoje</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg> Insights da IA para Hoje</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border:1px solid rgba(99,102,241,0.15)">
-          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Produtividade</div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Produtividade</div>
           <div style="font-size:13px;color:var(--text-secondary)" id="ai-prod-insight">Seu pico de foco é entre 9h–11h. Reserve esse período para suas tarefas de maior impacto.</div>
         </div>
         <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border:1px solid rgba(16,185,129,0.15)">
-          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Financeiro</div>
+          <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Financeiro</div>
           <div style="font-size:13px;color:var(--text-secondary)" class="ai-reminder-text">Carregando lembretes financeiros...</div>
         </div>
         <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
-          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> Saúde</div>
+          <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg> Saúde</div>
           <div style="font-size:13px;color:var(--text-secondary)" id="ai-health-insight">Registre seu sono e hidratação no módulo Saúde para receber insights personalizados.</div>
         </div>
         <div style="padding:12px;background:rgba(6,182,212,0.08);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
-          <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i> Hábitos</div>
+          <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg> Hábitos</div>
           <div style="font-size:13px;color:var(--text-secondary)" id="ai-habits-insight">Carregando análise de hábitos...</div>
         </div>
       </div>
@@ -380,17 +380,17 @@
 <div class="page" id="page-ai-weekly">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Resumo Semanal</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Resumo Semanal</div>
       <div class="page-subtitle">Análise completa da semana — gerada pela IA</div>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
-      <button class="btn btn-ghost" onclick="showToast('Exportando relatório...','info')"><i data-lucide="download" class="pg-icon" aria-hidden="true"></i> Exportar PDF</button>
+      <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
+      <button class="btn btn-ghost" onclick="showToast('Exportando relatório...','info')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exportar PDF</button>
     </div>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(139,92,246,0.08));border-color:rgba(99,102,241,0.25);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div style="width:40px;height:40px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:20px"><i data-lucide="chart-no-axes-combined" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-size:20px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg></div>
       <div>
         <div style="font-weight:700;font-size:16px">Semana 28 — 07 a 13 de Julho de 2026</div>
         <div style="font-size:12px;color:var(--text-secondary)">Análise gerada em 13/07 às 20:00 · 847 pontos de dados analisados</div>
@@ -421,47 +421,47 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="trending-up" class="pg-icon" aria-hidden="true"></i> Performance por Área</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Performance por Área</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-1-name">Saúde</span></span><span style="font-weight:700;color:var(--green)" id="ai-area-1-score">—</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg> <span id="ai-area-1-name">Saúde</span></span><span style="font-weight:700;color:var(--green)" id="ai-area-1-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:92%;background:linear-gradient(90deg,var(--green),#34D399);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="briefcase-business" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-2-name">Produtividade</span></span><span style="font-weight:700;color:var(--accent)" id="ai-area-2-score">—</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect x="2" y="6" width="20" height="14" rx="2"/></svg> <span id="ai-area-2-name">Produtividade</span></span><span style="font-weight:700;color:var(--accent)" id="ai-area-2-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:88%;background:linear-gradient(90deg,var(--accent),#818CF8);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-3-name">Finanças</span></span><span style="font-weight:700;color:var(--amber)" id="ai-area-3-score">—</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> <span id="ai-area-3-name">Finanças</span></span><span style="font-weight:700;color:var(--amber)" id="ai-area-3-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:74%;background:linear-gradient(90deg,var(--amber),#FCD34D);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="graduation-cap" class="pg-icon" aria-hidden="true"></i> <span id="ai-area-4-name">Aprendizado</span></span><span style="font-weight:700;color:var(--cyan)" id="ai-area-4-score">—</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg> <span id="ai-area-4-name">Aprendizado</span></span><span style="font-weight:700;color:var(--cyan)" id="ai-area-4-score">—</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:81%;background:linear-gradient(90deg,var(--cyan),#67E8F9);border-radius:4px"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i> Relacionamentos</span><span style="font-weight:700;color:var(--pink)">69%</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg> Relacionamentos</span><span style="font-weight:700;color:var(--pink)">69%</span></div>
           <div style="background:var(--bg-elevated);border-radius:4px;height:6px"><div style="height:100%;width:69%;background:linear-gradient(90deg,var(--pink),#F9A8D4);border-radius:4px"></div></div>
         </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="bot" class="pg-icon" aria-hidden="true"></i> Recomendações da IA</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg> Recomendações da IA</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;border-left:3px solid var(--green)">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i> Continue assim</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> Continue assim</div>
           <div style="font-size:12px;color:var(--text-secondary)">Sua consistência nos hábitos de saúde está excelente. Mantenha o treino 3x por semana.</div>
         </div>
         <div style="padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;border-left:3px solid var(--amber)">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="triangle-alert" class="pg-icon" aria-hidden="true"></i> Atenção necessária</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Atenção necessária</div>
           <div style="font-size:12px;color:var(--text-secondary)">Gastos com lazer ultrapassaram o orçamento em 6%. Revise suas assinaturas na próxima semana.</div>
         </div>
         <div style="padding:12px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid var(--accent)">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Oportunidade</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Oportunidade</div>
           <div style="font-size:12px;color:var(--text-secondary)">Você tem 3h livres na sexta-feira. Ideal para avançar no curso de Python que está parado há 2 semanas.</div>
         </div>
         <div style="padding:12px;background:rgba(239,68,68,0.08);border-radius:8px;border-left:3px solid var(--red)">
-          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><i data-lucide="siren" class="pg-icon" aria-hidden="true"></i> Alerta</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1"/><path d="M18.5 4.5 18 5"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.929 4.929.707.707"/><path d="M12 12v6"/></svg> Alerta</div>
           <div style="font-size:12px;color:var(--text-secondary)">Meta "Viagem Europa" está 8% abaixo do ritmo necessário. Considere aumentar o aporte mensal.</div>
         </div>
       </div>
@@ -473,10 +473,10 @@
 <div class="page" id="page-ai-recommendations">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="lightbulb" class="pg-icon" aria-hidden="true"></i> Recomendações Inteligentes</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Recomendações Inteligentes</div>
       <div class="page-subtitle">Sugestões personalizadas baseadas nos seus padrões</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="grid-3" style="margin-bottom:20px">
     <div class="card" style="text-align:center"><div style="font-size:11px;color:var(--text-muted)">Recomendações Ativas</div><div style="font-size:28px;font-weight:800;color:var(--accent)">12</div></div>
@@ -486,7 +486,7 @@
   <div style="display:flex;flex-direction:column;gap:14px">
     <div class="card" style="border-color:rgba(16,185,129,0.3)">
       <div style="display:flex;align-items:flex-start;gap:14px">
-        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="activity" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></div>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
             <div style="font-weight:700;font-size:15px">Adicionar caminhada matinal</div>
@@ -494,7 +494,7 @@
           </div>
           <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Baseado no seu histórico, uma caminhada de 20 min às 7h aumentaria seu Life Score em +4 pontos e melhoraria seu humor nas reuniões matinais.</div>
           <div style="display:flex;gap:8px">
-            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Hábito adicionado: Caminhada matinal!','success')"><i data-lucide="check" class="pg-icon" aria-hidden="true"></i> Adicionar hábito</button>
+            <button class="btn btn-primary" style="font-size:12px" onclick="showToast('Hábito adicionado: Caminhada matinal!','success')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Adicionar hábito</button>
             <button class="btn btn-ghost" style="font-size:12px" onclick="aiDismissRecommendation(this)">Ignorar</button>
           </div>
         </div>
@@ -502,7 +502,7 @@
     </div>
     <div class="card" style="border-color:rgba(245,158,11,0.3)">
       <div style="display:flex;align-items:flex-start;gap:14px">
-        <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg></div>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
             <div style="font-weight:700;font-size:15px">Cancelar assinatura subutilizada</div>
@@ -518,7 +518,7 @@
     </div>
     <div class="card" style="border-color:rgba(99,102,241,0.3)">
       <div style="display:flex;align-items:flex-start;gap:14px">
-        <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
             <div style="font-weight:700;font-size:15px">Retomar curso de Python</div>
@@ -534,7 +534,7 @@
     </div>
     <div class="card" style="border-color:rgba(6,182,212,0.3)">
       <div style="display:flex;align-items:flex-start;gap:14px">
-        <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i data-lucide="users-round" class="pg-icon" aria-hidden="true"></i></div>
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg></div>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
             <div style="font-weight:700;font-size:15px">Conectar-se com contatos importantes</div>
@@ -555,14 +555,14 @@
 <div class="page" id="page-ai-organize">
   <div class="page-header">
     <div>
-      <div class="page-title"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i> Organização Automática</div>
+      <div class="page-title"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Organização Automática</div>
       <div class="page-subtitle">A IA organiza sua vida digital automaticamente</div>
     </div>
-    <button class="btn btn-ghost" onclick="showPage('ai-center')"><i data-lucide="arrow-left" class="pg-icon" aria-hidden="true"></i> Voltar</button>
+    <button class="btn btn-ghost" onclick="showPage('ai-center')"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="card" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(99,102,241,0.08));border-color:rgba(139,92,246,0.25);margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:16px">
-      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#6366F1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(139,92,246,0.3)"><i data-lucide="zap" class="pg-icon" aria-hidden="true"></i></div>
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#6366F1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(139,92,246,0.3)"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
       <div style="flex:1">
         <div style="font-weight:700;font-size:16px">Auto-Organização Ativa</div>
         <div style="font-size:13px;color:var(--text-secondary)">A IA monitora e organiza continuamente seus dados · Última execução: há 3 min</div>
@@ -581,28 +581,28 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="refresh-cw" class="pg-icon" aria-hidden="true"></i> Regras de Organização</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Regras de Organização</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px"><i data-lucide="mail" class="pg-icon" aria-hidden="true"></i> Email <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Tarefa automática</div><div style="font-size:11px;color:var(--text-muted)">Emails com "urgente" viram tarefas</div></div>
+          <div><div style="font-weight:600;font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Tarefa automática</div><div style="font-size:11px;color:var(--text-muted)">Emails com "urgente" viram tarefas</div></div>
           <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px"><i data-lucide="calendar-days" class="pg-icon" aria-hidden="true"></i> Eventos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Blocos de foco</div><div style="font-size:11px;color:var(--text-muted)">Cria blocos de prep antes de reuniões</div></div>
+          <div><div style="font-weight:600;font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg> Eventos <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Blocos de foco</div><div style="font-size:11px;color:var(--text-muted)">Cria blocos de prep antes de reuniões</div></div>
           <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px"><i data-lucide="wallet-cards" class="pg-icon" aria-hidden="true"></i> Gastos <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Categorização</div><div style="font-size:11px;color:var(--text-muted)">Categoriza transações automaticamente</div></div>
+          <div><div style="font-weight:600;font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2"/><path d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"/></svg> Gastos <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Categorização</div><div style="font-size:11px;color:var(--text-muted)">Categoriza transações automaticamente</div></div>
           <label class="toggle-switch"><input type="checkbox" checked onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px"><i data-lucide="folder" class="pg-icon" aria-hidden="true"></i> Docs <i data-lucide="arrow-right" class="pg-icon" aria-hidden="true"></i> Pasta correta</div><div style="font-size:11px;color:var(--text-muted)">Organiza documentos por tipo e projeto</div></div>
+          <div><div style="font-weight:600;font-size:13px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Docs <svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Pasta correta</div><div style="font-size:11px;color:var(--text-muted)">Organiza documentos por tipo e projeto</div></div>
           <label class="toggle-switch"><input type="checkbox" onchange="aiToggleRule(this)"><span class="toggle-slider"></span></label>
         </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title" style="margin-bottom:14px"><i data-lucide="clipboard-list" class="pg-icon" aria-hidden="true"></i> Log de Ações Recentes</div>
+      <div class="card-title" style="margin-bottom:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Log de Ações Recentes</div>
       <div style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto" data-ai-action-log>
         <div style="color:var(--text-muted);font-size:12px;padding:8px">Carregando ações recentes...</div>
       </div>
@@ -640,7 +640,7 @@
         if (container) {
           container.innerHTML = d.actions.map(a => `
             <div style="display:flex;gap:10px;padding:8px;background:var(--bg-elevated);border-radius:6px">
-              <span style="font-size:14px"><i data-lucide="circle-check" class="pg-icon" aria-hidden="true"></i></span>
+              <span style="font-size:14px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
               <div><div style="font-size:12px;font-weight:600">${a.title || a.action}</div>
               <div style="font-size:11px;color:var(--text-muted)">${a.module || ''} · ${a.relativeTime || 'recente'}</div></div>
             </div>
@@ -686,9 +686,9 @@ async function loadDailyBriefingData() {
       const colors = { high: 'var(--red)', medium: 'var(--amber)', low: 'var(--accent)' };
       prioContainer.innerHTML = b.priorities.map(p => {
         const color = colors[p.priority] || 'var(--accent)';
-        return `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid ${color}"><span style="font-size:16px"><i data-lucide="circle-dot" class="pg-icon" aria-hidden="true"></i></span><div style="flex:1"><div style="font-weight:600;font-size:13px">${p.title}</div><div style="font-size:11px;color:var(--text-muted)">${p.meta || ''}</div></div></div>`;
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(99,102,241,0.08);border-radius:8px;border-left:3px solid ${color}"><span style="font-size:16px"><svg  class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span><div style="flex:1"><div style="font-weight:600;font-size:13px">${p.title}</div><div style="font-size:11px;color:var(--text-muted)">${p.meta || ''}</div></div></div>`;
       }).join('');
-      if (window.lucide) lucide.createIcons();
+      window.refreshIcons?.();
     }
   } catch (e) { /* warn handled */ }
 }
