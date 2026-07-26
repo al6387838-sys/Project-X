@@ -137,15 +137,93 @@ async function executeAction(kv, userId, action, context, env) {
         break;
       }
       case 'send_email': {
-        const configured = !!(env?.SMTP_HOST);
-        result.status = configured ? 'queued' : 'pending_credentials';
-        result.reason = configured ? 'E-mail enfileirado para envio' : 'Aguardando configuração SMTP (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)';
+        // Envio REAL via Resend ou SendGrid
+        const emailTo = action.params?.to || context.data?.email;
+        const emailSubject = action.params?.subject || 'Notificação LifeOS';
+        const emailBody = action.params?.body || context.data?.message || '';
+        if (!emailTo) { result.status = 'skipped'; result.reason = 'Destinatário não fornecido'; break; }
+        try {
+          let sent = false;
+          if (env?.RESEND_API_KEY) {
+            const resp = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                from: env.EMAIL_FROM || `LifeOS <${env.SMTP_USER || 'noreply@lifeos.app'}>`,
+                to: [emailTo],
+                subject: emailSubject,
+                html: emailBody,
+              }),
+            });
+            sent = resp.ok;
+            if (resp.ok) {
+              const data = await resp.json();
+              result.messageId = data.id;
+            }
+          }
+          if (!sent && env?.SENDGRID_API_KEY) {
+            const from = String(env.EMAIL_FROM || env.SMTP_USER || '');
+            const match = from.match(/^(.*?)\s*<([^>]+)>$/);
+            const fromPayload = match ? { name: match[1].trim(), email: match[2] } : { email: from };
+            const resp = await fetch('https://api.sendgrid.com/v3/mail/send', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${env.SENDGRID_API_KEY}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                personalizations: [{ to: [{ email: emailTo }] }],
+                from: fromPayload,
+                subject: emailSubject,
+                content: [{ type: 'text/html', value: emailBody }],
+              }),
+            });
+            sent = resp.ok || resp.status === 202;
+          }
+          result.status = sent ? 'success' : 'failed';
+          result.reason = sent ? 'E-mail enviado com sucesso' : 'Nenhum provedor SMTP configurado (configure RESEND_API_KEY ou SENDGRID_API_KEY)';
+        } catch (fetchErr) {
+          result.status = 'failed';
+          result.reason = 'Erro ao enviar e-mail: ' + fetchErr.message;
+        }
         break;
       }
       case 'send_whatsapp': {
-        const configured = !!(env?.WHATSAPP_APP_ID);
-        result.status = configured ? 'queued' : 'pending_credentials';
-        result.reason = configured ? 'Mensagem enfileirada' : 'Aguardando configuração WhatsApp (WHATSAPP_APP_ID, WHATSAPP_APP_SECRET, WHATSAPP_PHONE_ID)';
+        // Envio REAL via WhatsApp Cloud API
+        const waTo = action.params?.to || context.data?.phone;
+        const waBody = action.params?.body || context.data?.message || '';
+        const waType = action.params?.type || 'text';
+        const waMediaUrl = action.params?.mediaUrl || context.data?.mediaUrl || null;
+        if (!waTo) { result.status = 'skipped'; result.reason = 'Número de telefone não fornecido'; break; }
+        if (!env?.WHATSAPP_PHONE_ID || !env?.WHATSAPP_ACCESS_TOKEN) {
+          result.status = 'pending_credentials';
+          result.reason = 'Aguardando configuração WhatsApp (WHATSAPP_PHONE_ID, WHATSAPP_ACCESS_TOKEN)';
+          break;
+        }
+        try {
+          const payload = {
+            messaging_product: 'whatsapp',
+            to: waTo,
+            type: waType,
+          };
+          if (waType === 'image') payload.image = { link: waMediaUrl, caption: waBody };
+          else if (waType === 'document') payload.document = { link: waMediaUrl, filename: action.params?.fileName, caption: waBody };
+          else payload.text = { body: waBody };
+
+          const resp = await fetch(`https://graph.facebook.com/v18.0/${env.WHATSAPP_PHONE_ID}/messages`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await resp.json();
+          if (resp.ok) {
+            result.status = 'success';
+            result.messageId = data.messages?.[0]?.id;
+          } else {
+            result.status = 'failed';
+            result.reason = data.error?.message || 'Erro WhatsApp Cloud API';
+          }
+        } catch (fetchErr) {
+          result.status = 'failed';
+          result.reason = 'Erro ao enviar WhatsApp: ' + fetchErr.message;
+        }
         break;
       }
       default:

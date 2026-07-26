@@ -1,6 +1,6 @@
-// LifeOS Enterprise — Communication Hub OAuth Callback v2.0
+// LifeOS Enterprise — Communication Hub OAuth Callback v3.0
 // Cloudflare Pages Function: GET /api/communication/callback/[provider]
-// Phase 140 — Real Communication Hub
+// Phase 270 — Communication Callback Real (FINAL)
 import { getCookie, json, verifySession } from '../../../_auth.js';
 
 const TOKEN_ENDPOINTS = {

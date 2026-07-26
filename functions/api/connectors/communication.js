@@ -10,7 +10,7 @@ const PROVIDERS = {
     authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
     tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
     scopes: ['whatsapp_business_messaging', 'whatsapp_business_management'],
-    envKeys: ['WHATSAPP_APP_ID', 'WHATSAPP_APP_SECRET'],
+    envKeys: ['WHATSAPP_APP_ID', 'WHATSAPP_ACCESS_TOKEN', 'WHATSAPP_PHONE_ID'],
     icon: 'smartphone',
     color: '#25D366',
   },

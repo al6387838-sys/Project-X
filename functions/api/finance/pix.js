@@ -207,10 +207,33 @@ export async function onRequestPost({ request, env }) {
         return json(400, { ok: false, error: 'Pagamento já processado' });
       }
 
-      // Em produção: chamar API Open Finance para processar pagamento
-      // Por ora: registrar no histórico como "aguardando processamento"
+      // Processar pagamento via API Open Finance (se disponível) ou registrar
       payment.status = 'processing';
       payment.confirmedAt = new Date().toISOString();
+      // Tentar confirmar via API
+      try {
+        const tokenKey = `oauth:token:${session.sub}:open_finance`;
+        const tokenRaw = await env.LIFEOS_KV.get(tokenKey);
+        const tokenData = tokenRaw ? JSON.parse(tokenRaw) : null;
+        if (tokenData?.access_token) {
+          const pixRes = await fetch('https://api.openfinancebrasil.org.br/open-banking/payments/v1/pix-transfers', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${tokenData.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              paymentInitiationId: payment.paymentInitiationId,
+              transactionIdentification: payment.txId || crypto.randomUUID().slice(0, 32).toUpperCase(),
+            }),
+          });
+          if (pixRes.ok) {
+            payment.status = 'completed';
+            const pixData = await pixRes.json();
+            payment.apiResponse = pixData;
+          }
+        }
+      } catch { /* API call failed, payment remains in processing state */ }
 
       // Adicionar ao histórico
       const histRaw = await env.LIFEOS_KV.get(`pix:history:${session.sub}`);

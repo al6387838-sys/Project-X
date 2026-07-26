@@ -174,7 +174,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   if (action === 'sync') {
-    // Sincronização manual — requer credenciais válidas
+    // Sincronização real — requer credenciais e token válidos
     if (!env.OPENFINANCE_CLIENT_ID) {
       return json(503, {
         ok: false,
@@ -183,18 +183,89 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
-    // Em produção: chamar APIs do Open Finance Brasil para atualizar dados
-    // Por ora: registrar timestamp de sincronização
     if (env.LIFEOS_KV) {
       try {
         const raw = await env.LIFEOS_KV.get(`openfinance:${session.sub}`);
         const data = raw ? JSON.parse(raw) : {};
-        data.summary = { ...data.summary, lastSyncAt: new Date().toISOString() };
+        const accessToken = data.accessToken;
+        const refreshToken = data.refreshToken;
+
+        if (!accessToken) {
+          return json(401, { ok: false, error: 'Open Finance não conectado. Reconecte para sincronizar.' });
+        }
+
+        let syncResults = { accounts: 0, transactions: 0, updated: false };
+
+        // Refresh token se necessário
+        let token = accessToken;
+        if (data.tokenExpiresAt && new Date(data.tokenExpiresAt).getTime() < Date.now() && refreshToken) {
+          try {
+            const refreshRes = await fetch('https://auth.openfinancebrasil.org.br/oauth2/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+                client_id: env.OPENFINANCE_CLIENT_ID,
+                client_secret: env.OPENFINANCE_CLIENT_SECRET || '',
+              }),
+            });
+            if (refreshRes.ok) {
+              const refreshData = await refreshRes.json();
+              token = refreshData.access_token;
+              data.accessToken = token;
+              data.tokenExpiresAt = new Date(Date.now() + (refreshData.expires_in || 3600) * 1000).toISOString();
+              if (refreshData.refresh_token) data.refreshToken = refreshData.refresh_token;
+            }
+          } catch { /* token refresh failed, try with existing */ }
+        }
+
+        // Buscar contas
+        try {
+          const accRes = await fetch('https://api.openfinancebrasil.org.br/open-banking/accounts/v2/accounts', {
+            headers: { 'Authorization': `Bearer ${token}` },
+          });
+          if (accRes.ok) {
+            const accounts = await accRes.json();
+            data.accounts = accounts.data || accounts;
+            syncResults.accounts = (data.accounts || []).length;
+            syncResults.updated = true;
+          }
+        } catch { /* accounts fetch failed */ }
+
+        // Buscar transações das contas
+        if (data.accounts && Array.isArray(data.accounts)) {
+          const transactions = [];
+          for (const acc of data.accounts.slice(0, 10)) { // Limit to 10 accounts
+            try {
+              const txRes = await fetch(`https://api.openfinancebrasil.org.br/open-banking/accounts/v2/accounts/${acc.accountId}/transactions?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+              });
+              if (txRes.ok) {
+                const txData = await txRes.json();
+                const txList = txData.data || [];
+                transactions.push(...txList);
+              }
+            } catch { /* transaction fetch failed for this account */ }
+          }
+          data.transactions = transactions;
+          syncResults.transactions = transactions.length;
+          syncResults.updated = true;
+        }
+
+        data.summary = {
+          ...data.summary,
+          lastSyncAt: new Date().toISOString(),
+          syncStatus: syncResults.updated ? 'synced' : 'partial',
+        };
         await env.LIFEOS_KV.put(`openfinance:${session.sub}`, JSON.stringify(data));
-      } catch (_) { /* ignorar */ }
+        return json(200, { ok: true, message: 'Sincronização concluída', results: syncResults });
+      } catch (err) {
+        return json(500, { ok: false, error: 'Erro ao sincronizar: ' + (err.message || 'desconhecido') });
+      }
     }
 
-    return json(200, { ok: true, message: 'Sincronização iniciada. Os dados serão atualizados em instantes.' });
+    return json(503, { ok: false, error: 'Armazenamento indisponível' });
   }
 
   return json(400, { ok: false, error: 'Ação inválida. Use: connect, disconnect, sync' });

@@ -283,18 +283,18 @@ export async function onRequestPost({ request, env }) {
       return json(400, { ok: false, error: 'Instituição inválida' });
     }
 
-    const openFinanceClientId = env.OPEN_FINANCE_CLIENT_ID;
+    const openFinanceClientId = env.OPENFINANCE_CLIENT_ID;
     if (!openFinanceClientId) {
       return json(400, {
         ok: false,
         error: 'Open Finance não configurado',
-        setupInstructions: 'Configure OPEN_FINANCE_CLIENT_ID e OPEN_FINANCE_CLIENT_SECRET nas variáveis de ambiente do Cloudflare Pages.',
+        setupInstructions: 'Configure OPENFINANCE_CLIENT_ID e OPENFINANCE_CLIENT_SECRET nas variáveis de ambiente do Cloudflare Pages.',
       });
     }
 
     const state = btoa(JSON.stringify({ institutionId, userId: session.sub, ts: Date.now() }));
     const redirectUri = `${new URL(request.url).origin}/api/finance/open-finance/callback`;
-    const authUrl = `https://openfinance.brasil.gov.br/oauth2/authorize?` +
+    const authUrl = `https://auth.openfinancebrasil.org.br/oauth2/authorize?` +
       `client_id=${openFinanceClientId}&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
       `response_type=code&` +

@@ -125,15 +125,76 @@ async function handleStripeEvent(event, kv) {
   }
 }
 
-async function handleMercadoPagoEvent(event, kv) {
+async function verifyMercadoPagoSignature(requestBody, signature, secret) {
+  if (!secret || !signature) return false;
+  try {
+    // Mercado Pago usa header x-signature com formato: t=TIMESTAMP,v1=SIGNATURE
+    const parts = typeof signature === 'string' ? signature.split(',') : [];
+    const ts = parts.find(p => p.startsWith('t='))?.split('=')[1];
+    const v1 = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+    if (!ts || !v1) return false;
+
+    // Verificar timestamp (max 5 min)
+    if (Date.now() - parseInt(ts) * 1000 > 5 * 60 * 1000) return false;
+
+    // Verificar assinatura HMAC-SHA256
+    const signedPayload = `${ts}:${requestBody}`;
+    const key = await crypto.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
+    const computed = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+    return computed === v1;
+  } catch { return false; }
+}
+
+async function handleMercadoPagoEvent(event, kv, env) {
   const { action, data } = event;
 
   if (action === 'payment.created' || action === 'payment.updated') {
     const paymentId = data?.id;
     if (!paymentId) return;
 
-    // Buscar detalhes do pagamento no MP
-    // (em produção, buscaria via API; aqui registramos o evento)
+    // Buscar detalhes do pagamento na API do MP
+    try {
+      const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+        headers: { 'Authorization': `Bearer ${env.MERCADOPAGO_ACCESS_TOKEN}` }
+      });
+      if (mpRes.ok) {
+        const payment = await mpRes.json();
+        const userId = payment.metadata?.userId || payment.external_reference;
+        if (userId) {
+          const subRaw = await kv.get(`payments:subscription:${userId}`);
+          if (subRaw) {
+            const sub = JSON.parse(subRaw);
+            sub.status = payment.status === 'approved' ? 'active' : payment.status === 'rejected' ? 'cancelled' : sub.status;
+            await kv.put(`payments:subscription:${userId}`, JSON.stringify(sub));
+          }
+          if (payment.status === 'approved') {
+            const invoice = {
+              id: generateId(),
+              userId,
+              mpPaymentId: paymentId,
+              amount: payment.transaction_amount,
+              currency: (payment.currency_id || 'BRL').toUpperCase(),
+              status: 'paid',
+              description: `Pagamento Mercado Pago — ${paymentId}`,
+              paidAt: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
+            };
+            const invRaw = await kv.get(`payments:invoices:${userId}`);
+            const invoices = invRaw ? JSON.parse(invRaw) : [];
+            invoices.unshift(invoice);
+            await kv.put(`payments:invoices:${userId}`, JSON.stringify(invoices.slice(0, 100)));
+          }
+        }
+      }
+    } catch { /* API call failed, still log event */ }
+
     const histEntry = {
       id: generateId(),
       type: 'mp-event',
@@ -144,7 +205,6 @@ async function handleMercadoPagoEvent(event, kv) {
       timestamp: new Date().toISOString(),
     };
 
-    // Salvar em log global de webhooks
     const logRaw = await kv.get('payments:webhook-log');
     const log = logRaw ? JSON.parse(logRaw) : [];
     log.unshift(histEntry);
@@ -191,14 +251,35 @@ export async function onRequestPost({ request, env }) {
   }
 
   // ─── Mercado Pago Webhook ───
-  const mpToken = env.MERCADOPAGO_ACCESS_TOKEN;
-  try {
-    const event = JSON.parse(body);
-    if (event.type === 'payment' || event.action) {
-      await handleMercadoPagoEvent(event, kv);
-      return json(200, { ok: true, received: true });
+  const mpSignature = request.headers.get('x-signature');
+  const mpMpSignature = request.headers.get('x-signature-id');
+  const mpConfig = env.MERCADOPAGO_WEBHOOK_SECRET || env.MERCADOPAGO_APP_ID;
+  if (mpSignature || mpMpSignature) {
+    // Verificar assinatura do webhook MP
+    const secret = env.MERCADOPAGO_WEBHOOK_SECRET;
+    if (secret) {
+      const valid = await verifyMercadoPagoSignature(body, mpSignature || mpMpSignature, secret);
+      if (!valid) return json(400, { ok: false, error: 'Assinatura Mercado Pago inválida' });
     }
-  } catch { /* ignorar */ }
+    try {
+      const event = JSON.parse(body);
+      if (event.type === 'payment' || event.action) {
+        await handleMercadoPagoEvent(event, kv, env);
+        return json(200, { ok: true, received: true });
+      }
+    } catch (err) {
+      return json(400, { ok: false, error: 'Evento Mercado Pago inválido' });
+    }
+  } else if (mpConfig) {
+    // Fallback: se não há assinatura mas há config MP, aceitar (modo dev)
+    try {
+      const event = JSON.parse(body);
+      if (event.type === 'payment' || event.action) {
+        await handleMercadoPagoEvent(event, kv, env);
+        return json(200, { ok: true, received: true });
+      }
+    } catch { /* ignorar */ }
+  }
 
   return json(400, { ok: false, error: 'Webhook não reconhecido' });
 }

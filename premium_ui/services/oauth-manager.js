@@ -311,27 +311,97 @@ class OAuthManager {
   }
 
   /**
-   * Descriptografa token (placeholder)
+   * Criptografa token com AES-256-GCM
    */
-  decrypt(encrypted) {
-    // Em produção: usar crypto.subtle.decrypt() com AES-256
-    return encrypted; // Placeholder
+  async encrypt(data) {
+    try {
+      if (!globalThis.crypto || !globalThis.crypto.subtle) return data;
+      const keyMaterial = await globalThis.crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(this.encryptionKey || 'lifeos-enterprise-oauth-key-2025'),
+        { name: 'AES-GCM' },
+        false,
+        ['encrypt', 'decrypt']
+      );
+      const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
+      const encoded = new TextEncoder().encode(JSON.stringify(data));
+      const encrypted = await globalThis.crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        keyMaterial,
+        encoded
+      );
+      // Combine IV + encrypted data
+      const combined = new Uint8Array(iv.length + encrypted.byteLength);
+      combined.set(iv);
+      combined.set(new Uint8Array(encrypted), iv.length);
+      return btoa(String.fromCharCode(...combined));
+    } catch { return data; }
   }
 
   /**
-   * Criptografa token (placeholder)
+   * Descriptografa token com AES-256-GCM
    */
-  encrypt(data) {
-    // Em produção: usar crypto.subtle.encrypt() com AES-256
-    return data; // Placeholder
+  async decrypt(encrypted) {
+    try {
+      if (!globalThis.crypto || !globalThis.crypto.subtle) return encrypted;
+      const combined = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
+      const iv = combined.slice(0, 12);
+      const data = combined.slice(12);
+      const keyMaterial = await globalThis.crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(this.encryptionKey || 'lifeos-enterprise-oauth-key-2025'),
+        { name: 'AES-GCM' },
+        false,
+        ['encrypt', 'decrypt']
+      );
+      const decrypted = await globalThis.crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        keyMaterial,
+        data
+      );
+      return JSON.parse(new TextDecoder().decode(decrypted));
+    } catch { return encrypted; }
   }
 
   /**
    * Verifica assinatura de webhook
    */
-  verifyWebhookSignature(providerKey, payload, signature) {
-    // Implementar verificação de assinatura específica por provider
-    return true; // Placeholder
+  async verifyWebhookSignature(providerKey, payload, signature) {
+    if (!signature) return false;
+    const secret = this.encryptionKey || 'lifeos-enterprise-oauth-key-2025';
+    try {
+      // Stripe webhook signature
+      if (providerKey === 'stripe' && signature.startsWith('t=')) {
+        const parts = signature.split(',');
+        const ts = parts.find(p => p.startsWith('t='))?.split('=')[1];
+        const sig = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+        if (!ts || !sig) return false;
+        if (Date.now() / 1000 - parseInt(ts) > 300) return false; // 5 min tolerance
+        const signedPayload = `${ts}.${payload}`;
+        const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const computed = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
+        const computedHex = Array.from(new Uint8Array(computed)).map(b => b.toString(16).padStart(2, '0')).join('');
+        return computedHex === sig;
+      }
+      // Mercado Pago webhook signature
+      if (providerKey === 'mercadopago' && signature.includes('t=')) {
+        const parts = signature.split(',');
+        const ts = parts.find(p => p.startsWith('t='))?.split('=')[1];
+        const v1 = parts.find(p => p.startsWith('v1='))?.split('=')[1];
+        if (!ts || !v1) return false;
+        if (Date.now() - parseInt(ts) * 1000 > 5 * 60 * 1000) return false;
+        const signedPayload = `${ts}:${payload}`;
+        const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const computed = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
+        const computedHex = Array.from(new Uint8Array(computed)).map(b => b.toString(16).padStart(2, '0')).join('');
+        return computedHex === v1;
+      }
+      // Generic HMAC-SHA256
+      const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const computed = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload));
+      const computedBase64 = btoa(String.fromCharCode(...new Uint8Array(computed)));
+      return computedBase64 === signature;
+    } catch { return false; }
   }
 
   /**

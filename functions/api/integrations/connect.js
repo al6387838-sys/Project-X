@@ -1,6 +1,7 @@
-// LifeOS Enterprise — Integrations Connect v1.0
+// LifeOS Enterprise — Integrations Connect v2.0
 // Cloudflare Pages Function: POST /api/integrations/connect
 // Delega para /api/integrations com action=connect
+// Phase 270 — Connect Real (FINAL): redirect_uri dinâmico, kv definido, env keys consistentes
 import { getCookie, json, verifySession } from '../../_auth.js';
 
 export async function onRequestPost({ request, env }) {
@@ -8,6 +9,7 @@ export async function onRequestPost({ request, env }) {
     return json(503, { ok: false, error: 'Serviço temporariamente indisponível.' });
   }
 
+  const kv = env.LIFEOS_KV;
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
   if (!token) return json(401, { ok: false, error: 'Não autenticado' });
@@ -25,10 +27,12 @@ export async function onRequestPost({ request, env }) {
   const { provider, type } = body;
   if (!provider) return json(400, { ok: false, error: 'provider é obrigatório' });
 
+  const origin = new URL(request.url).origin;
+
   // Verificar se o provider OAuth está configurado
   const oauthProviders = {
     google: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET,
-    apple: env.APPLE_CLIENT_ID && env.APPLE_PRIVATE_KEY,
+    apple: env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET,
     microsoft: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
     outlook: env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET,
     meta: env.META_CLIENT_ID && env.META_CLIENT_SECRET,
@@ -70,7 +74,7 @@ export async function onRequestPost({ request, env }) {
 
     authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${encodeURIComponent(env.GOOGLE_CLIENT_ID)}&` +
-      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/google')}&` +
+      `redirect_uri=${encodeURIComponent(`${origin}/api/oauth/callback/google`)}&` +
       `response_type=code&` +
       `scope=${encodeURIComponent(scope)}&` +
       `state=${encodeURIComponent(state)}&` +
@@ -86,7 +90,7 @@ export async function onRequestPost({ request, env }) {
 
     authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?` +
       `client_id=${encodeURIComponent(env.MICROSOFT_CLIENT_ID)}&` +
-      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/microsoft')}&` +
+      `redirect_uri=${encodeURIComponent(`${origin}/api/oauth/callback/microsoft`)}&` +
       `response_type=code&` +
       `scope=${encodeURIComponent(scope)}&` +
       `state=${encodeURIComponent(state)}&` +
@@ -96,7 +100,7 @@ export async function onRequestPost({ request, env }) {
   if (providerKey === 'apple' && env.APPLE_CLIENT_ID) {
     authUrl = `https://appleid.apple.com/auth/authorize?` +
       `client_id=${encodeURIComponent(env.APPLE_CLIENT_ID)}&` +
-      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/apple')}&` +
+      `redirect_uri=${encodeURIComponent(`${origin}/api/oauth/callback/apple`)}&` +
       `response_type=code&` +
       `response_mode=form_post&` +
       `scope=${encodeURIComponent('email name')}&` +
@@ -106,13 +110,15 @@ export async function onRequestPost({ request, env }) {
   if ((providerKey === 'meta' || providerKey === 'facebook') && env.META_CLIENT_ID) {
     authUrl = `https://www.facebook.com/v18.0/dialog/oauth?` +
       `client_id=${encodeURIComponent(env.META_CLIENT_ID)}&` +
-      `redirect_uri=${encodeURIComponent('https://lifeos-enterprise.pages.dev/api/oauth/callback/meta')}&` +
+      `redirect_uri=${encodeURIComponent(`${origin}/api/oauth/callback/meta`)}&` +
       `response_type=code&` +
       `scope=${encodeURIComponent('email,public_profile,user_friends')}&` +
       `state=${encodeURIComponent(state)}`;
   }
 
   if (authUrl) {
+    // Salvar state no KV para validação no callback
+    await kv.put(`oauth:state:${state}`, JSON.stringify({ userId: session.sub, provider: providerKey, type, redirectUri: `${origin}/api/oauth/callback/${providerKey}` }), { expirationTtl: 600 });
     return json(200, { ok: true, authUrl, provider, type });
   }
 
