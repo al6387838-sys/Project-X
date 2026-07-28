@@ -1,3 +1,4 @@
+console.log("Node version:", process.version); console.log("CWD:", process.cwd());
 // LifeOS Enterprise — Production Build Script
 // Target: Cloudflare Pages
 // Release, build ID e commit são derivados exclusivamente de config/release.json.
