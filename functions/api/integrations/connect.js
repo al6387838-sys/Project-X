@@ -1,7 +1,10 @@
-// LifeOS Enterprise — Integrations Connect v2.0
+// LifeOS Enterprise — Integrations Connect v3.0
 // Cloudflare Pages Function: POST /api/integrations/connect
-// Delega para /api/integrations com action=connect
-// Phase 270 — Connect Real (FINAL): redirect_uri dinâmico, kv definido, env keys consistentes
+// Phase 066 — Google Ecosystem Activation
+// Correções:
+//   - Escopos Google Calendar incluem openid email profile (necessário para refresh token)
+//   - Escopos Gmail incluem gmail.modify (necessário para marcar como lido, mover para lixeira)
+//   - Disconnect limpa todas as chaves KV relacionadas (google_oauth, gmail_api, google)
 import { getCookie, json, verifySession } from '../../_auth.js';
 
 export async function onRequestPost({ request, env }) {
@@ -66,11 +69,17 @@ export async function onRequestPost({ request, env }) {
   const state = btoa(JSON.stringify({ provider, type, userId: session.sub, ts: Date.now() }));
 
   if (providerKey === 'google') {
-    const scope = type === 'calendar'
-      ? 'https://www.googleapis.com/auth/calendar'
-      : type === 'email'
-      ? 'https://mail.google.com/'
-      : 'https://www.googleapis.com/auth/userinfo.email';
+    // Escopos mínimos sempre incluem openid email profile para garantir refresh_token
+    // e identificação do usuário. Escopos adicionais por tipo.
+    let scope;
+    if (type === 'calendar') {
+      scope = 'openid email profile https://www.googleapis.com/auth/calendar';
+    } else if (type === 'email') {
+      scope = 'openid email profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify';
+    } else {
+      // Tipo genérico: apenas autenticação + perfil
+      scope = 'openid email profile';
+    }
 
     authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${encodeURIComponent(env.GOOGLE_CLIENT_ID)}&` +
@@ -83,10 +92,10 @@ export async function onRequestPost({ request, env }) {
 
   if ((providerKey === 'microsoft' || providerKey === 'outlook') && env.MICROSOFT_CLIENT_ID) {
     const scope = type === 'calendar'
-      ? 'https://graph.microsoft.com/calendars.read'
+      ? 'openid email profile offline_access https://graph.microsoft.com/Calendars.ReadWrite'
       : type === 'email'
-      ? 'Mail.Read Mail.Send offline_access User.Read'
-      : 'User.Read offline_access';
+      ? 'openid email profile offline_access Mail.Read Mail.Send Mail.ReadWrite User.Read'
+      : 'openid email profile offline_access User.Read';
 
     authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?` +
       `client_id=${encodeURIComponent(env.MICROSOFT_CLIENT_ID)}&` +
@@ -94,7 +103,7 @@ export async function onRequestPost({ request, env }) {
       `response_type=code&` +
       `scope=${encodeURIComponent(scope)}&` +
       `state=${encodeURIComponent(state)}&` +
-      `access_type=offline&prompt=consent`;
+      `prompt=consent`;
   }
 
   if (providerKey === 'apple' && env.APPLE_CLIENT_ID) {
@@ -125,10 +134,24 @@ export async function onRequestPost({ request, env }) {
   // Handle disconnect
   if (providerKey && type === 'disconnect') {
     try {
-      const connKey = `oauth:${session.sub}:${providerKey}`;
-      const integKey = `integration:${session.sub}:${providerKey}`;
-      await kv.delete(connKey);
-      await kv.delete(integKey);
+      // Para Google, limpar todas as chaves relacionadas
+      const keysToDelete = providerKey === 'google'
+        ? [
+            `oauth:${session.sub}:google`,
+            `oauth:token:${session.sub}:google_oauth`,
+            `oauth:token:${session.sub}:gmail_api`,
+            `integration:${session.sub}:google`,
+            `integration:${session.sub}:google_oauth`,
+            `integration:${session.sub}:gmail_api`,
+          ]
+        : [
+            `oauth:${session.sub}:${providerKey}`,
+            `integration:${session.sub}:${providerKey}`,
+          ];
+
+      for (const key of keysToDelete) {
+        await kv.delete(key).catch(() => {});
+      }
       return json(200, { ok: true, provider: providerKey, disconnected: true });
     } catch {
       return json(200, { ok: false, error: 'Erro ao desconectar', provider: providerKey });

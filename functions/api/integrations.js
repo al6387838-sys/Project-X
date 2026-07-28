@@ -363,11 +363,22 @@ export async function onRequest({ request, env }) {
     }
     if (action === 'disconnect') {
       if (!integrationId) return json(400, { ok: false, error: 'integrationId obrigatório' });
-      const connKey = `integration:${session.userId}:${integrationId}`;
-      // Remover token OAuth se existir
-      const tokenKey = `oauth:token:${session.userId}:${integrationId}`;
-      await kv?.delete(connKey);
-      await kv?.delete(tokenKey);
+      // Phase 066: Para Google, limpar todas as chaves relacionadas
+      const isGoogle = integrationId === 'google_oauth' || integrationId === 'gmail_api';
+      const keysToDelete = isGoogle
+        ? [
+            `integration:${session.userId}:google_oauth`,
+            `integration:${session.userId}:gmail_api`,
+            `integration:${session.userId}:google`,
+            `oauth:token:${session.userId}:google_oauth`,
+            `oauth:token:${session.userId}:gmail_api`,
+            `oauth:${session.userId}:google`,
+          ]
+        : [
+            `integration:${session.userId}:${integrationId}`,
+            `oauth:token:${session.userId}:${integrationId}`,
+          ];
+      for (const k of keysToDelete) { await kv?.delete(k).catch(() => {}); }
       // Log da desconexão
       try {
         const auditKey = `audit:${session.userId}`;

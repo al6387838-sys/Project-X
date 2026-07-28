@@ -152,8 +152,76 @@ export async function onRequestPost({ request, env }) {
   // ── Ação: Sincronizar com Google Calendar ────────────────────────────────
   if (action === 'google-sync') {
     try {
-      const integRaw = await kv.get(`integration:${session.sub}:google_oauth`);
-      const integ = integRaw ? JSON.parse(integRaw) : null;
+      // Buscar token em múltiplas chaves KV (compatibilidade com diferentes fluxos OAuth)
+      // Phase 066: corrige inconsistência entre oauth/callback e events.js
+      const integKeys = [
+        `integration:${session.sub}:google_oauth`,
+        `integration:${session.sub}:google`,
+        `integration:${session.sub}:gmail_api`,
+      ];
+      let integ = null;
+      for (const ikey of integKeys) {
+        const raw = await kv.get(ikey);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.accessToken) { integ = parsed; break; }
+        }
+      }
+      // Fallback: tentar chaves oauth:token: (formato do sync.js)
+      if (!integ || !integ.accessToken) {
+        const tokenKeys = [
+          `oauth:token:${session.sub}:google_oauth`,
+          `oauth:token:${session.sub}:gmail_api`,
+          `oauth:${session.sub}:google`,
+        ];
+        for (const tkey of tokenKeys) {
+          const raw = await kv.get(tkey);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            const at = parsed.accessToken || parsed.access_token;
+            if (at) {
+              integ = {
+                accessToken: at,
+                refreshToken: parsed.refreshToken || parsed.refresh_token || null,
+                expiresAt: parsed.expiresAt || (parsed.expires_at ? new Date(parsed.expires_at).toISOString() : null),
+              };
+              break;
+            }
+          }
+        }
+      }
+      // Auto-refresh se token expirado e refresh_token disponível
+      if (integ && integ.refreshToken && integ.expiresAt && new Date(integ.expiresAt) < new Date()) {
+        try {
+          const refreshRes = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+              grant_type: 'refresh_token',
+              refresh_token: integ.refreshToken,
+              client_id: env.GOOGLE_CLIENT_ID || '',
+              client_secret: env.GOOGLE_CLIENT_SECRET || '',
+            }),
+          });
+          if (refreshRes.ok) {
+            const newToken = await refreshRes.json();
+            if (newToken.access_token) {
+              integ.accessToken = newToken.access_token;
+              integ.expiresAt = new Date(Date.now() + (newToken.expires_in || 3600) * 1000).toISOString();
+              // Atualizar todas as chaves KV com o novo token
+              for (const ikey of integKeys) {
+                const raw = await kv.get(ikey);
+                if (raw) {
+                  const d = JSON.parse(raw);
+                  d.accessToken = integ.accessToken;
+                  d.expiresAt = integ.expiresAt;
+                  await kv.put(ikey, JSON.stringify(d));
+                }
+              }
+            }
+          }
+        } catch { /* ignorar erro de refresh */ }
+      }
       if (!integ || !integ.accessToken) {
         return json(400, { ok: false, error: 'Google Calendar não conectado. Conecte em Integrações.' });
       }
