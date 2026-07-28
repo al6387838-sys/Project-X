@@ -73,7 +73,17 @@ async function applyRateLimit(kv, ip, pathname) {
 }
 
 // CSRF protection: state-changing requests must have valid origin or X-Requested-With header
+// Webhook routes (WhatsApp, payments, etc.) are exempted — external providers don't send CSRF tokens
+const WEBHOOK_PATHS = [
+  '/api/webhooks/whatsapp',
+  '/api/payments/webhook',
+];
+function isWebhookRoute(url) {
+  return WEBHOOK_PATHS.some(p => url.pathname === p || url.pathname.startsWith(p + '/'));
+}
 function validateCsrf(request, url) {
+  // Exempt webhook routes from CSRF validation
+  if (isWebhookRoute(url)) return true;
   if (['GET', 'HEAD', 'OPTIONS'].includes(request.method)) return true;
   const xrw = request.headers.get('x-requested-with');
   if (xrw === 'XMLHttpRequest') return true;

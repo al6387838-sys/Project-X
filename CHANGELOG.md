@@ -2,6 +2,44 @@
 
 All notable changes to LifeOS will be documented in this file.
 
+## [50.0.0] — 2026-07-28
+### Release: LIFEOS ENTERPRISE v50.0.0 — Phase 750 (WhatsApp Cloud API Integration)
+Esta release introduz a integração nativa e em tempo real com o WhatsApp Business Cloud API, transformando o Communication Hub em uma central omnichannel completa. Todas as funcionalidades do WhatsApp (envio, recebimento, mídia, status de entrega e templates) foram implementadas, testadas (88/88 testes passando) e integradas à arquitetura de persistência existente.
+
+| Controle | Resultado |
+|---|---:|
+| Webhook Handler (Inbound) | Implementado e validado |
+| Envio de Mídia e Texto | Integrado via Graph API v18.0 |
+| Sincronização de Status (Delivery/Read) | Correlacionada com histórico |
+| Persistência de Conversas | Compatível com namespace `msg:conversations:{userId}` |
+| Segurança e Sanitização | CSRF Bypass exclusivo para webhooks; inputs sanitizados |
+| Testes de Validação (Suite) | 88/88 (100% Aprovado) |
+
+#### Novos Arquivos
+**`functions/api/webhooks/whatsapp.js`**
+- Webhook handler oficial para validação GET e processamento POST de eventos da Meta.
+- Suporte a todos os tipos de mensagens inbound (texto, mídia, localização, interações, contatos, reações).
+- Criação automática de conversas e persistência de mensagens no KV.
+
+**`functions/api/whatsapp-bridge.js`**
+- Módulo de ponte entre a interface de comunicação e a Graph API.
+- Gerenciamento de envio de mensagens, templates e download de mídia.
+- Interface REST para consulta de status, conexão e listagem de conversas.
+
+**`functions/api/webhooks/whatsapp-media.js`**
+- Proxy seguro para download de anexos de mídia da Cloud API.
+- Validação de autenticação e armazenamento em R2.
+
+#### Modificações na Arquitetura
+**`functions/_middleware.js`**
+- Adicionada isenção de validação CSRF para rotas de webhook (`/api/webhooks/*`), permitindo que provedores externos (Meta) enviem eventos de forma segura.
+
+**`premium_ui/modules/communication.html`**
+- Substituição de dados estáticos na aba WhatsApp por carregamento dinâmico via API.
+- Implementação de funções JavaScript para monitoramento de status da conexão (`whatsappRefreshStatus`) e desconexão.
+
+---
+
 ## [46.0.1] — 2026-07-21
 ### Release: LIFEOS ENTERPRISE v46.0.1 — Phases 331–336 (Data Integrity & Launch Certification)
 
@@ -34,7 +72,6 @@ Esta release conclui o ciclo de auditoria de integridade de dados e certificaç�
 - Carregamento dinâmico de mensagens recentes via `/api/communication/hub?view=recent`.
 
 ---
-
 
 ## [19.0.0] — 2026-07-16
 

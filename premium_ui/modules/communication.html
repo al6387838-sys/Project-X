@@ -92,12 +92,12 @@
     <button class="btn btn-ghost" onclick="showPage('messages')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Voltar</button>
   </div>
   <div class="grid-3">
-    <div class="integration-card" id="card-whatsapp" style="border-color:rgba(37,211,102,0.3)">
+    <div class="integration-card" id="card-whatsapp" style="border-color:rgba(37,211,102,0.3)" onclick="showPage('comm-whatsapp')">
       <div class="integration-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
       <div class="integration-name">WhatsApp Business</div>
-      <div class="integration-desc">Mensagens empresariais via WhatsApp Business API oficial</div>
+      <div class="integration-desc">Mensagens empresariais via WhatsApp Cloud API oficial</div>
       <div class="integration-status pending" id="status-whatsapp"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> Verificando...</div>
-      <button class="btn btn-primary" id="btn-whatsapp" style="width:100%;margin-top:8px" onclick="connectCommunication('whatsapp')">Conectar</button>
+      <button class="btn btn-primary" id="btn-whatsapp" style="width:100%;margin-top:8px" onclick="event.stopPropagation();showPage('comm-whatsapp')">Configurar</button>
     </div>
     <div class="integration-card" style="border-color:rgba(0,136,204,0.3)">
       <div class="integration-icon" style="background:linear-gradient(135deg,#0088CC,#229ED9)"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></div>
@@ -158,47 +158,45 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
-      <div style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(37,211,102,0.08);border-radius:10px;border:1px solid rgba(37,211,102,0.2);margin-bottom:16px">
-        <div style="width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(37,211,102,0.6)"></div>
+      <div id="whatsapp-connection-status" style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(37,211,102,0.08);border-radius:10px;border:1px solid rgba(37,211,102,0.2);margin-bottom:16px">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--text-muted);box-shadow:0 0 8px rgba(0,0,0,0.2)" id="wa-status-dot"></div>
         <div>
-          <div style="font-weight:700">Conectado via WhatsApp Business API</div>
-          <div style="font-size:12px;color:var(--text-secondary)">Número: +55 (11) 99999-0000 · Verificado</div>
+          <div style="font-weight:700" id="wa-status-text">Verificando...</div>
+          <div style="font-size:12px;color:var(--text-secondary)" id="wa-status-detail">Carregando status...</div>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:10px" id="wa-stats">
         <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
-          <span style="font-size:13px;color:var(--text-secondary)">Mensagens hoje</span>
-          <span style="font-weight:700">47</span>
+          <span style="font-size:13px;color:var(--text-secondary)">Conversas WhatsApp</span>
+          <span style="font-weight:700" id="wa-conv-count">0</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
-          <span style="font-size:13px;color:var(--text-secondary)">Conversas ativas</span>
-          <span style="font-weight:700">12</span>
+          <span style="font-size:13px;color:var(--text-secondary)">Mensagens recebidas hoje</span>
+          <span style="font-weight:700" id="wa-msg-count">0</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg-elevated);border-radius:8px">
-          <span style="font-size:13px;color:var(--text-secondary)">Taxa de resposta</span>
-          <span style="font-weight:700;color:var(--green)">94%</span>
+          <span style="font-size:13px;color:var(--text-secondary)">Webhook</span>
+          <span style="font-weight:700;color:var(--green)" id="wa-webhook-status">Verificando...</span>
         </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title" style="margin-bottom:16px">Configurações</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px">Respostas Automáticas</div><div style="font-size:11px;color:var(--text-muted)">Responder mensagens fora do horário</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Respostas automáticas ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+      <div class="card-title" style="margin-bottom:16px">Configuração WhatsApp Cloud API</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="whatsapp-config-panel">
+        <div style="padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:6px">Número de Telefone (Phone ID)</div>
+          <div style="font-size:12px;color:var(--text-secondary)" id="wa-phone-display">Não configurado</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px">Notificações Push</div><div style="font-size:11px;color:var(--text-muted)">Alertas de novas mensagens</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Notificações ' + (this.checked ? 'ativadas' : 'desativadas'), 'info')"><span class="toggle-slider"></span></label>
+        <div style="padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:6px">Webhook URL</div>
+          <div style="font-size:11px;color:var(--text-secondary);word-break:break-all" id="wa-webhook-url">Carregando...</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px">Sincronização de Contatos</div><div style="font-size:11px;color:var(--text-muted)">Importar contatos do WhatsApp</div></div>
-          <label class="toggle-switch"><input type="checkbox" onchange="showToast('Sincronização ' + (this.checked ? 'ativada' : 'desativada'), 'info')"><span class="toggle-slider"></span></label>
+        <div style="padding:12px;background:var(--bg-elevated);border-radius:8px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:8px">Variáveis Cloudflare necessárias</div>
+          <div id="wa-missing-keys" style="font-size:11px;color:var(--amber)">Verificando...</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--bg-elevated);border-radius:8px">
-          <div><div style="font-weight:600;font-size:13px">Webhook Ativo</div><div style="font-size:11px;color:var(--text-muted)">Receber eventos em tempo real</div></div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="showToast('Webhook ' + (this.checked ? 'ativado' : 'desativado'), 'info')"><span class="toggle-slider"></span></label>
-        </div>
+        <button class="btn btn-primary" style="width:100%" onclick="whatsappRefreshStatus()">Verificar Token</button>
+        <button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="whatsappDisconnect()">Desconectar</button>
       </div>
     </div>
   </div>
@@ -1088,6 +1086,81 @@ async function disconnectCommunication(provider) {
   }
 }
 
+// ─── WhatsApp Status Dinâmico ──────────────────────────────────────────────────
+async function whatsappRefreshStatus() {
+  try {
+    const r = await fetch('/api/whatsapp-bridge?action=status', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (!d.ok || !d.status) return;
+    const s = d.status;
+    // Atualizar dot
+    const dot = document.getElementById('wa-status-dot');
+    if (dot) {
+      dot.style.background = s.connected ? 'var(--green)' : s.configured ? 'var(--amber)' : 'var(--red)';
+      dot.style.boxShadow = s.connected ? '0 0 8px rgba(37,211,102,0.6)' : s.configured ? '0 0 8px rgba(245,158,11,0.6)' : 'none';
+    }
+    // Atualizar texto
+    const textEl = document.getElementById('wa-status-text');
+    if (textEl) textEl.textContent = s.connected ? 'Conectado' : s.configured ? 'Configurado (aguardando token)' : 'Não configurado';
+    const detailEl = document.getElementById('wa-status-detail');
+    if (detailEl) detailEl.textContent = s.connected ? `Número: ${s.accountName || s.phoneId || 'Verificado'}` : s.configured ? 'Token válido — aguardando ativação' : 'Configure no Cloudflare Pages';
+    // Phone display
+    const phoneEl = document.getElementById('wa-phone-display');
+    if (phoneEl) phoneEl.textContent = s.phoneId || 'Não configurado';
+    // Missing keys
+    const keysEl = document.getElementById('wa-missing-keys');
+    if (keysEl) {
+      if (s.missingKeys && s.missingKeys.length) {
+        keysEl.textContent = 'Faltam: ' + s.missingKeys.join(', ');
+        keysEl.style.color = 'var(--red)';
+      } else {
+        keysEl.textContent = 'Todas as variáveis configuradas';
+        keysEl.style.color = 'var(--green)';
+      }
+    }
+    // Webhook URL
+    const whEl = document.getElementById('wa-webhook-url');
+    if (whEl) whEl.textContent = s.webhookUrl || 'Configure WHATSAPP_VERIFY_TOKEN no Cloudflare';
+    const whStatusEl = document.getElementById('wa-webhook-status');
+    if (whStatusEl) {
+      whStatusEl.textContent = s.connected ? 'Ativo' : 'Verificando';
+      whStatusEl.style.color = s.connected ? 'var(--green)' : 'var(--amber)';
+    }
+  } catch(e) {}
+}
+
+async function loadWhatsAppConversations() {
+  try {
+    const r = await fetch('/api/whatsapp-bridge?action=conversations', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok) {
+      const el = document.getElementById('wa-conv-count');
+      if (el) el.textContent = d.total || 0;
+    }
+  } catch(e) {}
+}
+
+async function whatsappDisconnect() {
+  if (!confirm('Desconectar WhatsApp?\nIsso removerá a conexão local mas não revoga o token no Meta.')) return;
+  try {
+    const r = await fetch('/api/whatsapp-bridge?action=disconnect', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('WhatsApp desconectado', 'success');
+      whatsappRefreshStatus();
+      loadCommunicationConnectors();
+    } else {
+      showToast(d.error || 'Erro ao desconectar', 'error');
+    }
+  } catch(e) {
+    showToast('Erro ao desconectar', 'error');
+  }
+}
+
 // ─── Inicialização ────────────────────────────────────────────────────────────
 // Adicionar input de busca ao sidebar
 (function initMsgSearch() {
@@ -1110,6 +1183,21 @@ document.addEventListener('moduleShown', (e) => {
   if (e.detail?.module === 'communication') {
     loadConversations();
     loadCommunicationConnectors();
+    whatsappRefreshStatus();
+    loadWhatsAppConversations();
+  }
+});
+
+// Carregar WhatsApp ao mostrar página específica
+document.addEventListener('moduleShown', (e) => {
+  if (e.detail?.module === 'communication') {
+    setTimeout(() => {
+      const waPage = document.getElementById('page-comm-whatsapp');
+      if (waPage && waPage.style.display !== 'none') {
+        whatsappRefreshStatus();
+        loadWhatsAppConversations();
+      }
+    }, 300);
   }
 });
 
