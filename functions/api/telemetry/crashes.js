@@ -10,7 +10,7 @@ function getCookie(cookieHeader) {
   return match ? match[1] : null;
 }
 
-async function verifySession(token, secret) {
+async function verifySession(token, secret, env.LIFEOS_KV) {
   if (!token || !secret) return null;
   try {
     if (!/^[A-Za-z0-9\-_=]+\.[A-Za-z0-9\-_=]+$/.test(token)) return null;
@@ -43,7 +43,7 @@ export async function onRequest({ request, env }) {
     const kv = env.LIFEOS_KV;
     const secret = env.LIFEOS_SESSION_SECRET;
     const token = getCookie(request.headers.get('cookie'));
-    const session = await verifySession(token, secret);
+    const session = await verifySession(token, secret, env.LIFEOS_KV);
 
     let body = {};
     try { body = await request.json(); } catch { /* */ }
@@ -73,7 +73,7 @@ export async function onRequest({ request, env }) {
     const kv = env.LIFEOS_KV;
     const secret = env.LIFEOS_SESSION_SECRET;
     const token = getCookie(request.headers.get('cookie'));
-    const session = await verifySession(token, secret);
+    const session = await verifySession(token, secret, env.LIFEOS_KV);
     if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
     const key = `telemetry:crashes:${session.sub}`;

@@ -11,7 +11,7 @@ function getCookie(cookieHeader) {
   return match ? match[1] : null;
 }
 
-async function verifySession(token, secret) {
+async function verifySession(token, secret, env.LIFEOS_KV) {
   if (!token || !secret) return null;
   try {
     // Token format: payload.sig (2 parts)
@@ -38,7 +38,7 @@ export async function onRequestGet({ request, env }) {
   const kv = env.LIFEOS_KV;
   const secret = env.LIFEOS_SESSION_SECRET;
   const token = getCookie(request.headers.get('cookie'));
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
   const raw = kv ? await kv.get(`feedback:${session.sub}`) : null;
@@ -50,7 +50,7 @@ export async function onRequestPost({ request, env }) {
   const kv = env.LIFEOS_KV;
   const secret = env.LIFEOS_SESSION_SECRET;
   const token = getCookie(request.headers.get('cookie'));
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
   let body = {};

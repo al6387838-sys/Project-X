@@ -88,7 +88,7 @@ export async function onRequest({ request, env, params }) {
   // If no userId from state, try cookie
   if (!userId && secret) {
     const token = getCookie(request.headers.get('cookie'));
-    const session = await verifySession(token, secret);
+    const session = await verifySession(token, secret, env.LIFEOS_KV);
     if (session?.sub) userId = session.sub;
   }
 

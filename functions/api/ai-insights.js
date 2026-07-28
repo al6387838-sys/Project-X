@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env }) {
   if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
   const kv = env.LIFEOS_KV;
   const insights = [];
@@ -93,7 +93,7 @@ export async function onRequest({ request, env }) {
       const secret = env.LIFEOS_SESSION_SECRET;
       if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
       const token = getCookie(request.headers.get('cookie'));
-      const session = await verifySession(token, secret);
+      const session = await verifySession(token, secret, env.LIFEOS_KV);
       if (!session) return json(401, { ok: false, error: 'Não autenticado' });
       const kv = env.LIFEOS_KV;
       const limit = parseInt(url.searchParams.get('limit') || '5', 10);

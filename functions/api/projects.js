@@ -24,7 +24,7 @@ async function getAuth(request, env) {
   if (!token) return { error: json(401, { ok: false, error: 'Não autenticado' }) };
   let session;
   try {
-    session = await verifySession(token, secret);
+    session = await verifySession(token, secret, env.LIFEOS_KV);
   } catch {
     return { error: json(401, { ok: false, error: 'Sessão inválida' }) };
   }

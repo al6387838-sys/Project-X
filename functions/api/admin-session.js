@@ -1,5 +1,6 @@
-// LifeOS Enterprise — Admin Session Check
+// LifeOS Enterprise — Admin Session Check v7.1
 // Cloudflare Pages Function: GET /api/admin-session
+// v7.1: passa LIFEOS_KV ao verifySession para verificar blocklist de revogação
 
 import { getCookie, json, verifySession } from '../_auth.js';
 
@@ -9,8 +10,7 @@ export async function onRequestGet({ request, env }) {
 
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
-
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Sessão inválida ou expirada' });
 
   return json(200, {

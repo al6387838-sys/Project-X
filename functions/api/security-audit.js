@@ -267,7 +267,7 @@ export async function onRequestGet({ request, env }) {
   if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
   if (!hasPermission(session, 'admin')) return json(403, { ok: false, error: 'Acesso restrito a administradores' });
 
@@ -365,7 +365,7 @@ export async function onRequestPost({ request, env }) {
   if (!secret) return json(503, { ok: false, error: 'Serviço indisponível' });
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
   if (!hasPermission(session, 'admin')) return json(403, { ok: false, error: 'Acesso restrito' });
 

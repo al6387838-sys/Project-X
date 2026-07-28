@@ -37,7 +37,7 @@ export async function onRequestGet({ request, env }) {
 
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
   let settings = { ...DEFAULT_SETTINGS };
@@ -60,7 +60,7 @@ export async function onRequestPost({ request, env }) {
 
   const cookieHeader = request.headers.get('cookie');
   const token = getCookie(cookieHeader);
-  const session = await verifySession(token, secret);
+  const session = await verifySession(token, secret, env.LIFEOS_KV);
   if (!session) return json(401, { ok: false, error: 'Não autenticado' });
 
   let input = {};
