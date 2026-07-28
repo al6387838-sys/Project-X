@@ -21,6 +21,16 @@
 #   OU
 #   wrangler secret put SENDGRID_API_KEY
 #   wrangler secret put EMAIL_FROM
+#
+# WhatsApp Cloud API (v50.0.0 — Phase 750):
+#   wrangler secret put WHATSAPP_ACCESS_TOKEN
+#   wrangler secret put WHATSAPP_PHONE_ID
+#   wrangler secret put WHATSAPP_APP_ID
+#   wrangler secret put WHATSAPP_APP_SECRET
+#   wrangler secret put WHATSAPP_VERIFY_TOKEN   (ex: "lifeos-whatsapp-verify")
+#
+# Webhook URL (registrar no Meta Developers):
+#   https://<seu-dominio>/api/webhooks/whatsapp
 # ─────────────────────────────────────────────────────────────────────────────
 name = "lifeos-enterprise"
 compatibility_date = "2024-09-23"
