@@ -434,9 +434,45 @@
   <div class="card" id="outlook-status-card">
     <div class="card-title" style="margin-bottom:16px">Status da Conexão</div>
     <div id="outlook-status-content" style="padding:16px;background:rgba(0,120,212,0.08);border-radius:10px;border:1px solid rgba(0,120,212,0.2)">
-      <div style="font-weight:600;margin-bottom:8px">Outlook não conectado</div>
-      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Conecte sua conta Microsoft para ler e enviar e-mails via Outlook.</div>
-      <button class="btn btn-primary" onclick="connectCommunication('outlook')"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></svg> Conectar Outlook</button>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div id="ms-status-dot" style="width:10px;height:10px;border-radius:50%;background:var(--amber)"></div>
+        <span id="ms-status-text" style="font-weight:600">Verificando...</span>
+      </div>
+      <div id="ms-status-detail" style="font-size:13px;color:var(--text-secondary);margin-bottom:4px">Carregando status...</div>
+      <div id="ms-profile-display" style="font-size:13px;color:var(--text-primary);margin-bottom:12px;font-weight:500"></div>
+      <div id="ms-configured-status" style="font-size:12px;color:var(--text-secondary);margin-bottom:16px"></div>
+      <div id="ms-actions">
+        <button class="btn btn-primary" id="ms-btn-connect" onclick="msConnect()" style="margin-right:8px"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/><path d="m2 22 3-3"/><path d="M7.5 13.5 10 11"/><path d="M10.5 16.5 13 14"/><path d="m18 3-4 4h6l-4 4"/></svg> Conectar Microsoft</button>
+        <button class="btn btn-ghost" id="ms-btn-refresh" onclick="msRefreshStatus()" style="margin-right:8px">Atualizar</button>
+        <button class="btn btn-ghost" id="ms-btn-disconnect" onclick="msDisconnect()" style="color:var(--red);display:none">Desconectar</button>
+      </div>
+    </div>
+  </div>
+  <!-- Microsoft Features Grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+    <div class="card" style="cursor:pointer" onclick="showPage('email');emailLoadFolder('inbox')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,120,212,0.1);display:flex;align-items:center;justify-content:center"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+        <div><div style="font-weight:600;font-size:14px">Outlook Mail</div><div style="font-size:12px;color:var(--text-secondary)">Inbox, Envio, Rascunhos, Favoritos</div></div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="showPage('calendar')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,120,212,0.1);display:flex;align-items:center;justify-content:center"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></div>
+        <div><div style="font-weight:600;font-size:14px">Outlook Calendar</div><div style="font-size:12px;color:var(--text-secondary)">Eventos, Convites, Sync</div></div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="showPage('onedrive')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,120,212,0.1);display:flex;align-items:center;justify-content:center"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 10.5a3 3 0 0 0-1 5.83"/><path d="M19.5 10.5a3.5 3.5 0 1 0-3.48-4"/><path d="M8 15h9.5a2.5 2.5 0 0 0 0-5H6.5"/><path d="M6.5 10.5a3 3 0 0 0 .5 5.83"/></svg></div>
+        <div><div style="font-weight:600;font-size:14px">OneDrive</div><div style="font-size:12px;color:var(--text-secondary)">Arquivos, Compartilhamento, Busca</div></div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="showPage('teams')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,120,212,0.1);display:flex;align-items:center;justify-content:center"><svg class="pg-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0078D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div style="font-weight:600;font-size:14px">Microsoft Teams</div><div style="font-size:12px;color:var(--text-secondary)">Equipes, Canais, Mensagens</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1086,6 +1122,82 @@ async function disconnectCommunication(provider) {
   }
 }
 
+// ─── Microsoft Status Dinâmico ─────────────────────────────────────────────────
+async function msRefreshStatus() {
+  try {
+    const r = await fetch('/api/microsoft?action=status', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (!d.ok) return;
+    // Dot
+    const dot = document.getElementById('ms-status-dot');
+    if (dot) {
+      dot.style.background = d.connected ? 'var(--green)' : d.configured ? 'var(--amber)' : 'var(--red)';
+      dot.style.boxShadow = d.connected ? '0 0 8px rgba(37,211,102,0.6)' : d.configured ? '0 0 8px rgba(245,158,11,0.6)' : 'none';
+    }
+    // Text
+    const textEl = document.getElementById('ms-status-text');
+    if (textEl) textEl.textContent = d.connected ? 'Conectado' : d.configured ? 'Configurado (aguardando OAuth)' : 'Não configurado';
+    // Detail
+    const detailEl = document.getElementById('ms-status-detail');
+    if (detailEl) {
+      if (d.connected) detailEl.textContent = `Sincronizando: ${d.profile?.displayName || d.profile?.mail || 'Microsoft 365'}`;
+      else if (d.configured) detailEl.textContent = 'Variáveis configuradas — clique em Conectar para autorizar';
+      else detailEl.textContent = 'Configure MICROSOFT_CLIENT_ID e MICROSOFT_CLIENT_SECRET no Cloudflare';
+    }
+    // Profile
+    const profileEl = document.getElementById('ms-profile-display');
+    if (profileEl) profileEl.textContent = d.profile ? `${d.profile.displayName} (${d.profile.mail})` : '';
+    // Configured status
+    const configEl = document.getElementById('ms-configured-status');
+    if (configEl) {
+      if (d.configured) configEl.textContent = 'Credenciais: configuradas ✓';
+      else configEl.textContent = 'Credenciais: faltando variáveis de ambiente';
+      configEl.style.color = d.configured ? 'var(--green)' : 'var(--red)';
+    }
+    // Buttons
+    const btnConnect = document.getElementById('ms-btn-connect');
+    const btnDisconnect = document.getElementById('ms-btn-disconnect');
+    if (btnConnect) btnConnect.style.display = d.connected ? 'none' : 'inline-flex';
+    if (btnDisconnect) btnDisconnect.style.display = d.connected ? 'inline-flex' : 'none';
+  } catch(e) {}
+}
+
+async function msConnect() {
+  try {
+    const r = await fetch('/api/microsoft?action=oauth-url', { credentials: 'same-origin' });
+    const d = await r.json();
+    if (d.ok && d.authUrl) {
+      window.open(d.authUrl, '_blank', 'width=600,height=700');
+      setTimeout(() => msRefreshStatus(), 5000);
+    } else {
+      showToast(d.error || 'Configure MICROSOFT_CLIENT_ID no Cloudflare', 'info');
+    }
+  } catch(e) {
+    showToast('Erro ao conectar Microsoft', 'error');
+  }
+}
+
+async function msDisconnect() {
+  if (!confirm('Desconectar Microsoft?\nIsso removerá a conexão local. Tokens no Azure AD podem ser revogados separadamente.')) return;
+  try {
+    const r = await fetch('/api/microsoft', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action: 'disconnect' })
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast('Microsoft desconectado', 'success');
+      msRefreshStatus();
+      loadCommunicationConnectors();
+    } else {
+      showToast(d.error || 'Erro ao desconectar', 'error');
+    }
+  } catch(e) {
+    showToast('Erro ao desconectar', 'error');
+  }
+}
+
 // ─── WhatsApp Status Dinâmico ──────────────────────────────────────────────────
 async function whatsappRefreshStatus() {
   try {
@@ -1185,6 +1297,7 @@ document.addEventListener('moduleShown', (e) => {
     loadCommunicationConnectors();
     whatsappRefreshStatus();
     loadWhatsAppConversations();
+    msRefreshStatus();
   }
 });
 
@@ -1196,6 +1309,10 @@ document.addEventListener('moduleShown', (e) => {
       if (waPage && waPage.style.display !== 'none') {
         whatsappRefreshStatus();
         loadWhatsAppConversations();
+      }
+      const outlookPage = document.getElementById('page-comm-outlook');
+      if (outlookPage && outlookPage.style.display !== 'none') {
+        msRefreshStatus();
       }
     }, 300);
   }

@@ -2,6 +2,38 @@
 
 All notable changes to LifeOS will be documented in this file.
 
+## [51.0.0] — 2026-07-28
+### Release: LIFEOS ENTERPRISE v51.0.0 — Phase 751 (Microsoft Ecosystem Enterprise Integration)
+Esta release introduz a integração completa com o Microsoft Ecosystem via Microsoft Graph API, incluindo Outlook Mail, Outlook Calendar, OneDrive e Microsoft Teams. A integração utiliza OAuth 2.0 com refresh automático de tokens, retry logic, e uma arquitetura de client unificado modular.
+
+| Controle | Resultado |
+|---|---:|
+| Microsoft Graph API Client | Módulo unificado com 4 sub-módulos (MAIL, CALENDAR, ONEDRIVE, TEAMS) |
+| OAuth 2.0 Microsoft | Login, refresh, expiração, reautorização, revogação, multiusuário |
+| Outlook Mail | Inbox, sent, drafts, trash, favorites, search, read, reply, forward, attachments, send |
+| Outlook Calendar | Eventos, convites, aceitar, recusar, reagendar, sync bidirecional |
+| OneDrive | Upload, download, pastas, compartilhamento, favoritos, pesquisa, permissões |
+| Microsoft Teams | Equipes, canais, mensagens, compartilhamento, arquivos, tabs |
+| Communication Hub | Status dinâmico, sincronização, erro, OAuth status |
+| Testes de Validação (Suite) | 106/106 (100% Aprovado) |
+
+#### Novos Arquivos
+**`functions/api/microsoft/graph-client.js`**
+- Cliente unificado para Microsoft Graph API com auto-refresh de tokens, retry logic e 4 módulos especializados.
+
+**`functions/api/microsoft.js`**
+- Endpoint REST completo para todas as operações Microsoft (50+ actions).
+
+**`tests/microsoft-integration.test.js`**
+- Suite de testes enterprise com 106 verificações em 12 categorias.
+
+#### Arquivos Modificados
+- `premium_ui/modules/communication.html` — Status dinâmico Microsoft, grid de features, funções `msRefreshStatus()`, `msConnect()`, `msDisconnect()`
+
+#### Variáveis Cloudflare Necessárias
+- `MICROSOFT_CLIENT_ID`
+- `MICROSOFT_CLIENT_SECRET`
+
 ## [50.0.0] — 2026-07-28
 ### Release: LIFEOS ENTERPRISE v50.0.0 — Phase 750 (WhatsApp Cloud API Integration)
 Esta release introduz a integração nativa e em tempo real com o WhatsApp Business Cloud API, transformando o Communication Hub em uma central omnichannel completa. Todas as funcionalidades do WhatsApp (envio, recebimento, mídia, status de entrega e templates) foram implementadas, testadas (88/88 testes passando) e integradas à arquitetura de persistência existente.
