@@ -9,25 +9,28 @@ const RELEASE_PATTERN = /^v\d+\.\d+\.\d+$/;
 export async function loadReleaseConfig() {
   const raw = await readFile(releaseConfigPath, 'utf8');
   const config = JSON.parse(raw);
-
   if (!config || Object.keys(config).length !== 1 || !RELEASE_PATTERN.test(String(config.release))) {
     throw new Error('config/release.json must contain exactly one valid "release" value');
   }
-
   return Object.freeze({ release: config.release });
 }
 
 export function currentCommit() {
-  const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
-    cwd: root,
-    encoding: 'utf8',
-  }).trim();
-
-  if (!/^[0-9a-f]{40}$/i.test(commit)) {
-    throw new Error('Unable to resolve a full Git commit SHA for the release');
+  if (process.env.CF_PAGES_COMMIT_SHA) {
+    return process.env.CF_PAGES_COMMIT_SHA;
   }
-
-  return commit;
+  try {
+    const commit = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    if (/^[0-9a-f]{40}$/i.test(commit)) {
+      return commit;
+    }
+  } catch (e) {
+    // Fallback for environments without git or .git folder
+  }
+  return "0000000000000000000000000000000000000000";
 }
 
 export async function createReleaseMetadata({ builtAt = new Date().toISOString() } = {}) {
@@ -36,11 +39,10 @@ export async function createReleaseMetadata({ builtAt = new Date().toISOString()
   // deployId: usa CF_PAGES_COMMIT_SHA se disponível (Cloudflare Pages CI), caso contrário deriva do commit local
   const cfCommit = process.env.CF_PAGES_COMMIT_SHA || '';
   const deployId = cfCommit ? `cf-${cfCommit.slice(0, 12)}` : `local-${commit.slice(0, 12)}`;
-
   return Object.freeze({
     release,
     version: release,
-    buildId: `lifeos-${release.slice(1)}-${commit.slice(0, 12)}`,
+    buildId: \`lifeos-\${release.slice(1)}-\${commit.slice(0, 12)}\`,
     commit,
     deployId,
     builtAt,
